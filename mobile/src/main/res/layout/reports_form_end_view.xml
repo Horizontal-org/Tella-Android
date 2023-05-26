@@ -60,7 +60,6 @@
             app:trackColor="@color/wa_white"
             app:indicatorColor="@color/wa_green"
             android:minHeight="3dp"
-            android:theme="@style/ProgressBarTheme"
             android:visibility="visible" />
 
         <TextView
