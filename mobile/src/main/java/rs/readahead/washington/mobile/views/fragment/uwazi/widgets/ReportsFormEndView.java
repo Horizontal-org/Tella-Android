@@ -2,18 +2,17 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.hzontal.utils.MediaFile;
 
 import org.hzontal.shared_ui.submission.SubmittingItem;
@@ -37,7 +36,7 @@ public class ReportsFormEndView extends FrameLayout {
     TextView formStatusTextView;
     TextView formSizeView;
     String title;
-    ProgressBar totalProgress;
+    LinearProgressIndicator totalProgress;
     long formSize = 0L;
     private ReportInstance instance;
     private boolean previewUploaded;
@@ -148,12 +147,7 @@ public class ReportsFormEndView extends FrameLayout {
         }
 
         Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            totalProgress.setProgress(percentComplete, true);
-        } else {
-            totalProgress.setProgress(percentComplete);
-        }
+        totalProgress.setProgressCompat(percentComplete, true);
         setFormSizeLabel(instance, percentComplete);
     }
 

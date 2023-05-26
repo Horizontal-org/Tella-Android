@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/wa_purple"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -49,15 +50,17 @@
             android:textColor="@color/wa_white"
             tools:text="15MB" />
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/totalProgress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_gravity="center_vertical"
-            android:max="100"
-            android:minHeight="3dp"
             android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:max="100"
+            app:trackColor="@color/wa_white"
+            app:indicatorColor="@color/wa_green"
+            android:minHeight="3dp"
+            android:theme="@style/ProgressBarTheme"
             android:visibility="visible" />
 
         <TextView
@@ -73,7 +76,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/wa_white_20"/>
+            android:background="@color/wa_white_20" />
 
 
         <LinearLayout
