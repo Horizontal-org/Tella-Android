@@ -12,9 +12,9 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
@@ -23,7 +23,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     FragmentReportsListBinding::inflate
 ) {
     private val viewModel by viewModels<ReportsViewModel>()
-    private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
+    private val entityAdapter: EntityAdapter by lazy { EntityAdapter(isOutbox = true) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,6 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.reports.adapter
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +11,14 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
 
-class EntityAdapter : RecyclerView.Adapter<EntityAdapter.EntityViewHolder>() {
+class EntityAdapter(private val isOutbox: Boolean = false) :
+    RecyclerView.Adapter<EntityAdapter.EntityViewHolder>() {
 
-    private var submitted: MutableList<Any> = ArrayList()
+    private var submitted: List<Any> = ArrayList()
 
-    @SuppressLint("NotifyDataSetChanged")
+
     fun setEntities(submitted: List<Any>) {
-        this.submitted = submitted.toMutableList()
+        this.submitted = submitted
         notifyDataSetChanged()
     }
 
@@ -36,71 +37,59 @@ class EntityAdapter : RecyclerView.Adapter<EntityAdapter.EntityViewHolder>() {
     }
 
     inner class EntityViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        private lateinit var submittedItem: SubmittedItem
+        private val submittedItem: SubmittedItem = itemView.findViewById(R.id.submittedItem)
 
         fun bind(entityRow: ViewEntityTemplateItem) {
-            submittedItem = view.findViewById(R.id.submittedItem)
-            submittedItem.apply {
+            with(submittedItem) {
                 setName(entityRow.title)
-                setDates(entityRow.updated)
+                setDates(entityRow.updated, context)
                 setOrganization(null)
-                if (entityRow.status == EntityStatus.SUBMITTED) {
-                    setSubmittedIcon()
-                } else if (entityRow.status == EntityStatus.SUBMISSION_ERROR) {
-                    setSubmitErrorIcon()
-                } else if (entityRow.status == EntityStatus.FINALIZED || entityRow.status == EntityStatus.SUBMISSION_PENDING || entityRow.status == EntityStatus.SUBMISSION_PARTIAL_PARTS) {
-                    setPendingIcon()
-                }else {
-                    submittedItem.setIconDrawable(null)
-                }
+                setIconByStatus(entityRow.status)
                 setOnClickListener { entityRow.onOpenEntityClicked() }
                 popClickListener = { entityRow.onMoreClicked() }
             }
         }
 
-        private fun setDates(timestamp: Long) {
-            submittedItem.setUpdated(
-                Util.getElapsedTimeFromTimestamp(
-                    timestamp,
-                    submittedItem.context
+        private fun SubmittedItem.setIconByStatus(status: EntityStatus) {
+            val drawableResId = when (status) {
+                EntityStatus.SUBMITTED -> R.drawable.ic_check_circle
+                EntityStatus.SUBMISSION_ERROR -> R.drawable.ic_error
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS -> R.drawable.ic_watch_later_orange_24dp
+                else -> null
+            }
+            drawableResId?.let { drawbleId ->
+                val tintedDrawable = ViewUtil.getTintedDrawable(
+                    context, drawbleId,
+                    getIconTintByStatus(status)
                 )
-            )
+                setIconDrawable(tintedDrawable)
+            } ?: setIconDrawable(null)
         }
 
-        private fun setSubmittedIcon() {
-            val drawable = ViewUtil.getTintedDrawable(
-                submittedItem.context,
-                R.drawable.ic_check_circle,
-                R.color.wa_green
-            )
-            if (drawable != null) {
-                submittedItem.setIconDrawable(drawable)
+        private fun getIconTintByStatus(status: EntityStatus): Int {
+            return when (status) {
+                EntityStatus.SUBMITTED -> R.color.wa_green
+                EntityStatus.SUBMISSION_ERROR -> R.color.wa_red
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS -> R.color.dark_orange
+                else -> -1 // Provide a default color if needed
             }
         }
 
-        private fun setSubmitErrorIcon() {
-            val drawable =
-                ViewUtil.getTintedDrawable(
-                    submittedItem.context,
-                    R.drawable.ic_error,
-                    R.color.wa_red
-                )
-
-            if (drawable != null) {
-                submittedItem.setIconDrawable(drawable)
+        private fun setDates(timestamp: Long, context: Context) {
+            val elapsedTime = Util.getElapsedTimeFromTimestamp(timestamp, context)
+            val updatedText = if (isOutbox) {
+                context.getString(R.string.Modified_Label) + " " + elapsedTime.lowercase()
+            } else {
+                elapsedTime
             }
+            submittedItem.setUpdated(updatedText)
         }
 
-        private fun setPendingIcon() {
-            val drawable = ViewUtil.getTintedDrawable(
-                submittedItem.context,
-                R.drawable.ic_watch_later_orange_24dp,
-                R.color.dark_orange
-            )
-            if (drawable != null) {
-                submittedItem.setIconDrawable(drawable)
-            }
-        }
+
     }
 
     override fun getItemCount() = submitted.size

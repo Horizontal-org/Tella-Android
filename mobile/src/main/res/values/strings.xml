@@ -743,4 +743,5 @@ button to add a new template.</string>
     <string name="Report_Deleted_Confirmation" > %s has been deleted.</string>
     <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
     <string name="Send_Action_Label" >SEND</string>
+    <string name="Modified_Label">Modified</string>
 </resources>
