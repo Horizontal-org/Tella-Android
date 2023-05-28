@@ -21,7 +21,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dropdown_recycler"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_dropdownlist"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,8 +29,5 @@
         app:layout_constraintTop_toBottomOf="@+id/dropdown_panel"
         tools:itemCount="10"
         tools:listitem="@layout/layout_item_dropdown" />
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
