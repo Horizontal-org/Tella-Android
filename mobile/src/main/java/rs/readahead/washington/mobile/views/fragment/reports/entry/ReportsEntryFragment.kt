@@ -85,7 +85,7 @@ class ReportsEntryFragment :
         binding?.toolbar?.backClickListener = {
             exitOrSave()
         }
-        highLightSubmitButton()
+
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
                 reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
@@ -100,6 +100,8 @@ class ReportsEntryFragment :
             isNewDraft = false
         }
         checkIsNewDraftEntry()
+        highLightSubmitButton()
+        highLightButtonOutBoxButton()
     }
 
     private fun exitOrSave() {
@@ -175,22 +177,15 @@ class ReportsEntryFragment :
     }
 
     private fun highLightButtonOutBoxButton() {
-        if (isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
-                .isNotEmpty())
-        ) {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
+        val isSubmitEnabled = isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles().isNotEmpty())
 
-            binding?.sendLaterBtn?.setOnClickListener {
-                saveReportAsOutbox()
-            }
-            binding?.sendReportBtn?.setOnClickListener {
-                saveReportAsPending()
-            }
-        } else {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
-            binding?.sendReportBtn?.setOnClickListener(null)
-            binding?.sendLaterBtn?.setOnClickListener {}
-        }
+        binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.setOnClickListener{if (isSubmitEnabled) { saveReportAsOutbox() } else { showSubmitReportErrorSnackBar() }}
+        binding?.sendReportBtn?.setOnClickListener{if (isSubmitEnabled) { saveReportAsPending() } else { showSubmitReportErrorSnackBar() }}
+    }
+
+    private fun showSubmitReportErrorSnackBar() {
+        DialogUtils.showBottomMessage(baseActivity, getString(R.string.Snackbar_Submit_Report_Error), false)
     }
 
     private fun saveReportAsDraft(exitAfterSave: Boolean) {

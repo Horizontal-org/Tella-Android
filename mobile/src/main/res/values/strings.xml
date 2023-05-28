@@ -744,4 +744,6 @@ button to add a new template.</string>
     <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
     <string name="Send_Action_Label" >SEND</string>
     <string name="Modified_Label">Modified</string>
+    <string name="Snackbar_Submit_Report_Error">To submit a report, please type in a title and either add a description or attach a file.</string>
+
 </resources>
