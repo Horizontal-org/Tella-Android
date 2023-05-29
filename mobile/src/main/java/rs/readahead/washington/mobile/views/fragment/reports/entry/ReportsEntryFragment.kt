@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.invisible
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
+import rs.readahead.washington.mobile.views.activity.CameraActivity.CAPTURE_WITH_AUTO_UPLOAD
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
@@ -177,15 +178,33 @@ class ReportsEntryFragment :
     }
 
     private fun highLightButtonOutBoxButton() {
-        val isSubmitEnabled = isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles().isNotEmpty())
+        val isSubmitEnabled =
+            isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+                .isNotEmpty())
 
         binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
-        binding?.sendLaterBtn?.setOnClickListener{if (isSubmitEnabled) { saveReportAsOutbox() } else { showSubmitReportErrorSnackBar() }}
-        binding?.sendReportBtn?.setOnClickListener{if (isSubmitEnabled) { saveReportAsPending() } else { showSubmitReportErrorSnackBar() }}
+        binding?.sendLaterBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
+                saveReportAsOutbox()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
+        }
+        binding?.sendReportBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
+                saveReportAsPending()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
+        }
     }
 
     private fun showSubmitReportErrorSnackBar() {
-        DialogUtils.showBottomMessage(baseActivity, getString(R.string.Snackbar_Submit_Report_Error), false)
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.Snackbar_Submit_Report_Error),
+            false
+        )
     }
 
     private fun saveReportAsDraft(exitAfterSave: Boolean) {
@@ -341,13 +360,14 @@ class ReportsEntryFragment :
 
     private fun showCameraActivity() {
         try {
-            //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
-            baseActivity.startActivityForResult(
-                Intent(context, CameraActivity::class.java).putExtra(
-                    CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name
-                ), C.MEDIA_FILE_ID
-            )
-        } catch (e: Exception) {
+            val intent = Intent(context, CameraActivity::class.java)
+            intent.apply {
+                putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name)
+                putExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+            }
+
+            baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
+        } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
