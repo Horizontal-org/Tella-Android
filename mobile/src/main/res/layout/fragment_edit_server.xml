@@ -1,187 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:background="@color/wa_purple">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/space_cadet"
+            app:arrowBackIcon="@drawable/ic_close_white"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
+            app:startTitle="@string/Setting_Reports_Edit_Connection" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_light_purple_background"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/collect_form_padding_vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/serverNameLabel"
-            style="@style/Tella_Main_White_Text.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:gravity="start"
-            android:paddingVertical="2dp"
-            android:text="@string/settings.docu_field_server.name"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/serverNameTv"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:padding="2dp"
-            android:text="@string/settings.docu_field_server.name"
-            android:visibility="gone" />
-
-        <View
-            style="@style/SettingsMainShadowLine"
-            android:layout_marginVertical="@dimen/collect_form_padding_vertical"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/serverUrlLabel"
-            style="@style/Tella_Main_White_Text.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:gravity="start"
-            android:padding="2dp"
-            android:text="@string/settings.docu_field_server.url"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/serverUrlTv"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:padding="2dp"
-            android:text="@string/settings.docu_field_server.name"
-            android:visibility="gone" />
-
-        <View
-            style="@style/SettingsMainShadowLine"
-            android:layout_marginVertical="@dimen/collect_form_padding_vertical"
-
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/userNameLabel"
-            style="@style/Tella_Main_White_Text.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:gravity="start"
-            android:padding="2dp"
-            android:text="@string/settings.docu_field_username"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/userNameTv"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/collect_form_padding_vertical"
-            android:padding="2dp"
-            android:text="@string/settings.docu_field_username"
-
-            android:visibility="gone" />
-
-        <View
-            style="@style/SettingsMainShadowLine"
-            android:layout_marginTop="@dimen/collect_form_padding_vertical"
-            android:visibility="gone" />
-
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/auto_report_switch"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/containerScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:explainText="@string/Setting_Reports_Auto_Report_Description"
-            app:titleText="@string/Setting_Reports_Auto_Report" />
+            android:layout_height="0dp"
+            android:layout_weight="0.8">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/space_cadet"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <LinearLayout
+                    android:id="@+id/credentialsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_light_purple_background"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/collect_form_padding_vertical"
+                    app:layout_constraintBottom_toTopOf="@id/container"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/serverNameLabel"
+                        style="@style/Tella_Main_White_Text.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:gravity="start"
+                        android:paddingVertical="2dp"
+                        android:text="@string/Setting_Reports_Connection_Name"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/serverNameTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:padding="2dp"
+                        tools:text="@string/Setting_Reports_Connection_Name" />
+
+                    <View
+                        style="@style/SettingsMainShadowLine"
+                        android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
+
+                    <TextView
+                        android:id="@+id/serverUrlLabel"
+                        style="@style/Tella_Main_White_Text.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:gravity="start"
+                        android:padding="2dp"
+                        android:text="@string/settings.docu_field_server.url"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/serverUrlTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:padding="2dp"
+                        android:text="@string/settings.docu_field_server.name" />
+
+                    <View
+                        style="@style/SettingsMainShadowLine"
+                        android:layout_marginVertical="@dimen/collect_form_padding_vertical"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/userNameLabel"
+                        style="@style/Tella_Main_White_Text.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:gravity="start"
+                        android:padding="2dp"
+                        android:text="@string/settings.docu_field_username"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/userNameTv"
+                        style="@style/Tella_Main_White_Text.Meduim"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                        android:padding="2dp"
+                        android:text="@string/settings.docu_field_username"
+
+                        />
+
+                    <Space
+                        android:id="@+id/space"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_horizontal_medium_margin"
+                    android:background="@drawable/rounded_light_purple_background"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/collect_form_padding_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/credentialsContainer"
+                    tools:layout_editor_absoluteX="16dp">
+
+                    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                        android:id="@+id/auto_report_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:explainText="@string/Setting_Reports_Auto_Report_Description"
+                        app:titleText="@string/Setting_Reports_Auto_Report" />
+
+                    <View
+                        android:id="@+id/auto_delete_separator"
+                        style="@style/SettingsMainShadowLine"
+                        android:layout_marginTop="@dimen/collect_form_padding_vertical"
+                         />
+
+                    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                        android:id="@+id/auto_delete_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:explainText="@string/Setting_Reports_Auto_Delete_Description"
+                        app:titleText="@string/Setting_Reports_Auto_Delete" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/auto_delete_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="auto_delete_separator,auto_delete_switch" />
+
+                    <View
+                        style="@style/SettingsMainShadowLine"
+                        android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+
+                    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                        android:id="@+id/background_upload_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:explainText="@string/Setting_Reports_Background_Upload_Description"
+                        app:titleText="@string/Setting_Reports_Background_Upload" />
 
 
-        <View
-            android:id="@+id/auto_delete_separator"
-            style="@style/SettingsMainShadowLine"
-            android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+                </LinearLayout>
 
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/auto_delete_switch"
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/share_verification_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_light_purple_background"
+                    android:visibility="gone"
+                    app:explainText="@string/Setting_Reports_Share_Information_Description"
+                    app:layout_constraintTop_toBottomOf="@+id/container"
+                    app:titleText="@string/Setting_Reports_Share_Information_Title" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:explainText="@string/Setting_Reports_Auto_Delete_Description"
-            app:titleText="@string/Setting_Reports_Auto_Delete" />
+            android:layout_height="0dp"
+            android:layout_marginBottom="24dp"
+            android:layout_weight="0.1"
+            android:gravity="end"
+            android:orientation="horizontal">
 
-        <View
-            style="@style/SettingsMainShadowLine"
-            android:layout_marginTop="@dimen/collect_form_padding_vertical" />
+            <Button
+                android:id="@+id/cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/cancel_button_background"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="@string/action_cancel"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/wa_white"
+                android:textSize="17sp" />
 
-        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-            android:id="@+id/background_upload_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:explainText="@string/Setting_Reports_Background_Upload_Description"
-            app:titleText="@string/Setting_Reports_Background_Upload" />
-
+            <Button
+                android:id="@+id/next"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:background="@drawable/action_button_background"
+                android:maxLines="1"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:text="@string/action_save"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/wa_white"
+                android:textSize="17sp" />
+        </LinearLayout>
     </LinearLayout>
 
-
-    <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-        android:id="@+id/share_verification_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/rounded_light_purple_background"
-        app:explainText="@string/Setting_Reports_Share_Information_Description"
-        app:layout_constraintTop_toBottomOf="@+id/container"
-        app:titleText="@string/Setting_Reports_Share_Information_Title" />
-
-    <Button
-        android:id="@+id/cancel"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/cancel_button_background"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/action_cancel"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/next" />
-
-    <Button
-        android:id="@+id/next"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@drawable/action_button_background"
-        android:maxLines="1"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/action_save"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/wa_white"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

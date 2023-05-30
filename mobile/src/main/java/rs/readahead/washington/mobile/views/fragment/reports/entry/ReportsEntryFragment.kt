@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.invisible
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
+import rs.readahead.washington.mobile.views.activity.CameraActivity.CAPTURE_WITH_AUTO_UPLOAD
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
@@ -85,7 +86,7 @@ class ReportsEntryFragment :
         binding?.toolbar?.backClickListener = {
             exitOrSave()
         }
-        highLightSubmitButton()
+
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
                 reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
@@ -100,6 +101,8 @@ class ReportsEntryFragment :
             isNewDraft = false
         }
         checkIsNewDraftEntry()
+        highLightSubmitButton()
+        highLightButtonOutBoxButton()
     }
 
     private fun exitOrSave() {
@@ -175,22 +178,33 @@ class ReportsEntryFragment :
     }
 
     private fun highLightButtonOutBoxButton() {
-        if (isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+        val isSubmitEnabled =
+            isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty())
-        ) {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
 
-            binding?.sendLaterBtn?.setOnClickListener {
+        binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
                 saveReportAsOutbox()
+            } else {
+                showSubmitReportErrorSnackBar()
             }
-            binding?.sendReportBtn?.setOnClickListener {
-                saveReportAsPending()
-            }
-        } else {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
-            binding?.sendReportBtn?.setOnClickListener(null)
-            binding?.sendLaterBtn?.setOnClickListener {}
         }
+        binding?.sendReportBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
+                saveReportAsPending()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
+        }
+    }
+
+    private fun showSubmitReportErrorSnackBar() {
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.Snackbar_Submit_Report_Error),
+            false
+        )
     }
 
     private fun saveReportAsDraft(exitAfterSave: Boolean) {
@@ -346,13 +360,14 @@ class ReportsEntryFragment :
 
     private fun showCameraActivity() {
         try {
-            //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
-            baseActivity.startActivityForResult(
-                Intent(context, CameraActivity::class.java).putExtra(
-                    CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name
-                ), C.MEDIA_FILE_ID
-            )
-        } catch (e: Exception) {
+            val intent = Intent(context, CameraActivity::class.java)
+            intent.apply {
+                putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name)
+                putExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+            }
+
+            baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
+        } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
@@ -360,7 +375,8 @@ class ReportsEntryFragment :
     private fun importMedia() {
         baseActivity.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
-                activity, "*/*", null, C.IMPORT_FILE
+                activity, "image/* video/* audio/*",
+                arrayOf("image/*", "video/*", "audio/*"), C.IMPORT_FILE
             )
         }
     }

@@ -69,6 +69,14 @@ class ReportsFragment :
     private fun initData() {
         viewModel.listServers()
 
+        viewModel.serversList.observe(viewLifecycleOwner, { servers ->
+
+            if (servers.any { server -> server.isActivatedBackgroundUpload }) {
+                scheduleWorker()
+            }
+
+        })
+
         SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
             when (position) {
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(

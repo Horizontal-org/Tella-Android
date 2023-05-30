@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.util.ConnectionLiveData
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -31,7 +30,6 @@ class ReportsSendFragment :
     private var reportInstance: ReportInstance? = null
     private var isFromOutbox = false
     private var isFromDraft = false
-    private lateinit var connectionLiveData: ConnectionLiveData
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
@@ -39,13 +37,7 @@ class ReportsSendFragment :
     }
 
     private fun initData() {
-        connectionLiveData = ConnectionLiveData(baseActivity)
-
-        connectionLiveData.observe(viewLifecycleOwner) { isOnline ->
-            checkAndSubmitEntity(isOnline)
-        }
-        checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
-
+       checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
 
         with(viewModel) {
             reportProcess.observe(viewLifecycleOwner) { progress ->
@@ -82,7 +74,7 @@ class ReportsSendFragment :
                             handleBackButton()
                         }
                         else -> {
-                            instanceProgress.postValue(null)
+
                         }
                     }
                 }

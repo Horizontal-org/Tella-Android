@@ -360,7 +360,7 @@ class ReportsViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         dispose()
+        reportsRepository.cleanup()
     }
-
 }
 

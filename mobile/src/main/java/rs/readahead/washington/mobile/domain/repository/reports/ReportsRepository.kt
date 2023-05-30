@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.domain.repository.reports
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Flowable
@@ -48,4 +47,6 @@ interface ReportsRepository {
     fun getReportProgress(): MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>
 
     fun geInstanceProgress(): MutableLiveData<ReportInstance>
+
+    fun cleanup()
 }
