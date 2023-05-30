@@ -137,6 +137,7 @@
                     android:layout_marginTop="@dimen/activity_horizontal_medium_margin"
                     android:background="@drawable/rounded_light_purple_background"
                     android:orientation="vertical"
+                    android:animateLayoutChanges="true"
                     android:paddingTop="@dimen/collect_form_padding_vertical"
                     app:layout_constraintTop_toBottomOf="@id/credentialsContainer"
                     tools:layout_editor_absoluteX="16dp">
