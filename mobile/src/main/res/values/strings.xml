@@ -540,7 +540,7 @@ button to add a new template.</string>
  that are ready to send will appear here.</string>
     <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
     <string name="Uwazi_Action_Save_Draft">Save draft</string>
-    <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+    <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to delete this draft?</string>
     <string name="Uwazi_Form_MediaHeader">Attached file</string>
     <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
     <string name="Uwazi_Action_EditDraft">Edit draft</string>
