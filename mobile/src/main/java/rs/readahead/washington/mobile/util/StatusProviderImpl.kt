@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -7,43 +8,61 @@ import android.net.NetworkCapabilities
 import android.os.Build
 
 /**
+ * A StatusProvider implementation that provides network connectivity status.
+ * This class requires an Android Application Context to access the Connectivity Manager.
  *
- * This class implements [StatusProvider] and provides configurations required on runtime.
- *
- * @constructor Creates a ConfigProvider using the Android Application context.
- * @param context the Android Application context.
+ * @property context the Android Application context.
  */
-class StatusProviderImpl(val context: Context) : StatusProvider {
+class StatusProviderImpl(private val context: Context) : StatusProvider {
+
+    companion object {
+        private const val NETWORK_TYPE_WIFI = ConnectivityManager.TYPE_WIFI
+        private const val NETWORK_TYPE_MOBILE = ConnectivityManager.TYPE_MOBILE
+    }
 
     /**
-     * This function uses [ConnectivityManager]  to check active Network Capabilities to know
-     * the Android phone network connectivity status.
+     * Determines if the device is currently online.
+     * Uses the Connectivity Manager to check if the device is currently connected
+     * to a network (cellular, Wi-Fi, or Ethernet).
      *
-     * @return is the phone connected to a network through cellular or WiFi.
+     * @return true if the device is currently connected to a network, false otherwise.
      */
-    @Suppress("ReturnCount")
     override fun isOnline(): Boolean {
-        val cm: ConnectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-                ?: return false
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+            ?: return false
 
-        if (Build.VERSION.SDK_INT < 23) {
-            val ni = cm.activeNetworkInfo
-
-            if (ni != null) {
-                return ni.isConnected && (ni.type == ConnectivityManager.TYPE_WIFI || ni.type == ConnectivityManager.TYPE_MOBILE)
-            }
-        } else {
-            val activeNetwork: Network = cm.activeNetwork ?: return false
-
-            val networkCapabilities: NetworkCapabilities =
-                cm.getNetworkCapabilities(activeNetwork) ?: return false
-
-            return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        return when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> isOnlineLegacy(cm)
+            else -> isOnlineModern(cm)
         }
+    }
 
-        return false
+    /**
+     * For Android versions less than Marshmallow, checks if the device is currently online.
+     *
+     * @param cm Connectivity Manager to check network connectivity.
+     * @return true if the device is currently connected to a network, false otherwise.
+     */
+    private fun isOnlineLegacy(cm: ConnectivityManager): Boolean {
+        val ni = cm.activeNetworkInfo ?: return false
+        return ni.isConnected && (ni.type == NETWORK_TYPE_WIFI || ni.type == NETWORK_TYPE_MOBILE)
+    }
+
+    /**
+     * For Android versions Marshmallow and later, checks if the device is currently online.
+     *
+     * @param cm Connectivity Manager to check network connectivity.
+     * @return true if the device is currently connected to a network, false otherwise.
+     */
+    @SuppressLint("NewApi")
+    private fun isOnlineModern(cm: ConnectivityManager): Boolean {
+        val activeNetwork: Network = cm.activeNetwork ?: return false
+        val networkCapabilities = cm.getNetworkCapabilities(activeNetwork) ?: return false
+
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
 }
+
+
