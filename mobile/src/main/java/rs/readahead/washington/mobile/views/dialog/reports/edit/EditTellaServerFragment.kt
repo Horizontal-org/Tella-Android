@@ -30,7 +30,6 @@ class EditTellaServerFragment :
     }
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
 
-
     companion object {
         const val TAG = "EditTellaServerFragment"
 

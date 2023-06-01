@@ -144,18 +144,16 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     private fun renderList() {
         adapterScope.launch {
-            items =
-                connections + improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
-            withContext(Dispatchers.Main) {
-                submitList(null);
-                submitList(items);
+            items = connections + improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
+            withContext(Dispatchers.Main.immediate) {
+                submitList(items)
             }
         }
     }
 
     private fun renderListAfterward() {
-        items = emptyList()
         adapterScope.launch {
+            items = emptyList()
             if (Preferences.isShowFavoriteForms()) {
                 items = items + favoriteForms
             }
@@ -164,8 +162,11 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
             if (Preferences.isShowFavoriteTemplates()) {
                 items = items + favoriteTemplates
+
             }
-            items = items + titles + actions
+            items = items + titles
+            items = items + actions
+
             withContext(Dispatchers.Main) {
                 submitList(items)
             }
