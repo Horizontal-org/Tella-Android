@@ -554,7 +554,7 @@
   <string name="Project_Url_Screen_Title" >Enter project URL</string>
   <string name="Report_Dialog_Draft_Title" >Exit report?</string>
   <string name="Report_Server_Already_Exist_Error" >You are already connected to this project. Please enter another URL.</string>
-  <string name="Report_Deleted_Confirmation" > %s has been deleted.</string>
+  <string name="Report_Deleted_Confirmation" >  \"%s\ " has been deleted.</string>
   <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
   <string name="Send_Action_Label" >SEND</string>
 </resources>

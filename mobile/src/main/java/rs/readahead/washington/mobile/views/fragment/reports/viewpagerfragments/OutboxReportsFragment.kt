@@ -64,6 +64,11 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
                 viewModel.listOutbox()
             }
         }

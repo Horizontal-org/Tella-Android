@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -63,10 +64,16 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ),baseActivity
+                )
                 viewModel.listOutbox()
             }
         }
     }
+
 
     private fun showSubmittedMenu(instance: ReportInstance) {
         BottomSheetUtils.showEditDeleteMenuSheet(
