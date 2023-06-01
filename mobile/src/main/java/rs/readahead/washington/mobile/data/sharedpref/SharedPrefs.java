@@ -51,6 +51,7 @@ public class SharedPrefs {
     static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
     static final String LOCK_TIMEOUT = "lock_timeout";
     static final String MUTE_CAMERA_SHUTTER = "mute_camera_shutter";
+    static final String KEEP_EXIF = "keep_exif";
     static final String SET_SECURITY_SCREEN = "set_security_screen";
     static final String SHOW_FAVORITE_FORMS = "show_favorite_forms";
     static final String SHOW_FAVORITE_TEMPLATES = "show_favorite_Templates";

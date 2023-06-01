@@ -37,8 +37,9 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="10dp"
+        android:contentDescription="@string/action_remove"
         android:src="@drawable/ic_close_white_24dp"
-        tools:ignore="ContentDescription" />
+        />
 
     <RelativeLayout
         android:id="@+id/videoInfo"

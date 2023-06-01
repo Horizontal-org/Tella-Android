@@ -79,7 +79,6 @@ class SecuritySettings : BaseFragment() {
             Preferences.setDeleteServerSettingsActive(isChecked)
         }
 
-
         val deleteTella = binding.deleteTella
         deleteTella.isChecked = Preferences.isUninstallOnPanic()
         deleteTella.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -93,16 +92,28 @@ class SecuritySettings : BaseFragment() {
 
         val silentCameraTellaSwitch = binding.cameraSilentSwitch
         silentCameraTellaSwitch.mSwitch.isChecked = Preferences.isShutterMute()
-        silentCameraTellaSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            Preferences.setShutterMute(isChecked)
+        silentCameraTellaSwitch.mSwitch.apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                Preferences.setShutterMute(isChecked)
+            }
         }
 
         val enableSecurityScreen = binding.securityScreenSwitch
         enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
-        enableSecurityScreen.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            enableSecurityScreen.isChecked = isChecked
-            Preferences.setSecurityScreenEnabled(isChecked)
+        enableSecurityScreen.mSwitch.apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                Preferences.setSecurityScreenEnabled(isChecked)
+            }
         }
+
+        val keepExifTellaSwitch = binding.keepExifSwitch
+        keepExifTellaSwitch.mSwitch.isChecked = Preferences.isKeepExif()
+        keepExifTellaSwitch.mSwitch.apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                Preferences.setKeepExif(isChecked)
+            }
+        }
+
 
         /*val bypassCensorshipTellaSwitch =
             view.findViewById<TellaSwitchWithMessage>(R.id.bypass_censorship_switch)

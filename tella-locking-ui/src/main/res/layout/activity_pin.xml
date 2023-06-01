@@ -7,7 +7,7 @@
     android:background="@color/space_cadet">
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,6 +16,7 @@
         android:paddingEnd="15dp"
         android:src="@drawable/icon_left"
         android:visibility="gone"
+        android:contentDescription="@string/action_go_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,12 +57,13 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:elevation="5dp"
+        android:contentDescription="@string/action_show_pin"
         app:layout_constraintBottom_toBottomOf="@id/pin_eye"
         app:layout_constraintEnd_toEndOf="@id/pin_eye"
         app:layout_constraintStart_toStartOf="@id/pin_eye"
         app:layout_constraintTop_toTopOf="@id/pin_eye" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/pin_eye"
         android:layout_width="22dp"
         android:layout_height="15dp"
@@ -71,6 +73,7 @@
         android:elevation="2dp"
         android:focusable="true"
         android:padding="3dp"
+        android:contentDescription="@string/action_show_pin"
         app:layout_constraintBottom_toBottomOf="@id/pin_editText"
         app:layout_constraintEnd_toEndOf="@id/pin_editText"
         app:layout_constraintTop_toTopOf="@id/pin_editText" />
@@ -81,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColorHint="@color/dark_purple"
         app:layout_constraintBottom_toTopOf="@+id/pin_lock_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin_msgTV"

@@ -97,6 +97,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
         selectButton.setOnClickListener(v -> showSelectFilesSheet());
 
         clearButton = addButton(R.drawable.ic_cancel_rounded);
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());

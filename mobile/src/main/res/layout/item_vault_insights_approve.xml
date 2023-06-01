@@ -18,7 +18,8 @@
         android:src="@drawable/ic_close_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/action_cancel"
+         />
 
     <ImageView
         android:id="@+id/img_improve"
@@ -28,7 +29,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+
+         />
 
     <TextView
         android:id="@+id/tv_help_improve"

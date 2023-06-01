@@ -6,7 +6,6 @@
     <string name="collect.form_exit.unsaved_dialog.title">Exit form?</string>
     <string name="verification_prompt_dialog_title">Enable GPS?</string>
     <string name="collect_tab.title_blank">Blank</string>
-    <string name="action_cancel">Cancel</string>
     <string name="settings_menu.item_contact">Contact us</string>
     <string name="collect_dialog.text_download.progress">Downloading the form</string>
     <string name="collect_toast_download.completed">Download completed</string>
@@ -745,5 +744,47 @@ button to add a new template.</string>
     <string name="Send_Action_Label" >SEND</string>
     <string name="Modified_Label">Modified</string>
     <string name="Snackbar_Submit_Report_Error">To submit a report, please type in a title and either add a description or attach a file.</string>
+
+    <!-- content description -->
+    <string name="action_open_settings">open settings</string>
+    <string name="action_refresh">refresh</string>
+    <string name="action_check">check</string>
+    <string name="action_show_location">show location</string>
+    <string name="action_fast_rewind">fast rewind</string>
+    <string name="action_fast_forward">fast forward</string>
+    <string name="action_open_bottom_sheet">open bottom sheet</string>
+    <string name="action_add">add</string>
+    <string name="action_go_next">go next</string>
+    <string name="action_move">move </string>
+    <string name="action_favorite">favorite</string>
+    <string name="action_unfavorite">unfavorite</string>
+    <string name="action_select">select</string>
+    <string name="action_unselect">unselect</string>
+    <string name="action_show_photo">show photo</string>
+    <string name="action_help">help</string>
+    <string name="action_download">download</string>
+    <string name="action_choose_resolution">choose resolution</string>
+    <string name="action_hide_gridview">hide grid view</string>
+    <string name="action_show_gridview">show grid view</string>
+    <string name="action_switch_to_front_camera">switch to front camera</string>
+    <string name="action_switch_to_back_camera">switch to back camera</string>
+    <string name="action_disable_flash">disable flash</string>
+    <string name="action_enable_flash">enable flash</string>
+    <string name="action_open_gallery">open gallery</string>
+    <string name="action_pause">pause</string>
+    <string name="action_go_to_audio_library">Go to Audio library</string>
+    <string name="action_display_gridView">display in gridView</string>
+    <string name="action_display_list">display in list</string>
+    <string name="quick_exit_action">quick exit</string>
+    <string name="action_zoom">zoom</string>
+    <string name="action_edit_recording_name">edit recording name</string>
+    <string name="action_create_new_folder">create new folder</string>
+    <string name="action_quick_delete">quick delete</string>
+    <!-- theme strings -->
+    <string name="orange_theme">orange theme</string>
+    <string name="blue_theme">blue theme</string>
+    <string name="green_theme">green theme</string>
+    <string name="yellow_theme">yellow theme</string>
+
 
 </resources>

@@ -71,6 +71,7 @@ public class UwaziDateWidget extends UwaziQuestionWidget {
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
         clearButton.setOnClickListener(v -> clearAnswer());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
 
         addDateView(linearLayout);
         clearAnswer();

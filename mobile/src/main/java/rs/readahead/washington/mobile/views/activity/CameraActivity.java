@@ -417,6 +417,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
         setPhotoActive();
         captureButton.displayPhotoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
         cameraView.setMode(Mode.PICTURE);
         mode = CameraMode.PHOTO;
 
@@ -440,6 +441,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         cameraView.setMode(Mode.VIDEO);
         turnFlashDown();
         captureButton.displayVideoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
         setVideoActive();
         mode = CameraMode.VIDEO;
 
@@ -451,20 +453,26 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             cameraView.setGrid(Grid.OFF);
             gridButton.displayGridOff();
+            gridButton.setContentDescription(getString(R.string.action_show_gridview));
         } else {
             cameraView.setGrid(Grid.DRAW_3X3);
             gridButton.displayGridOn();
+            gridButton.setContentDescription(getString(R.string.action_hide_gridview));
         }
     }
 
     void onSwitchClicked() {
         if (cameraView.getFacing() == Facing.BACK) {
-            cameraView.setFacing(Facing.FRONT);
-            switchButton.displayFrontCamera();
+            switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
-            cameraView.setFacing(Facing.BACK);
-            switchButton.displayBackCamera();
+            switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
         }
+    }
+
+    private void switchCamera(Facing facing, int contentDescriptionResId) {
+        cameraView.setFacing(facing);
+        switchButton.displayCamera(facing);
+        switchButton.setContentDescription(getString(contentDescriptionResId));
     }
 
     void onPreviewClicked() {
@@ -507,18 +515,24 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void showConfirmVideoView(final File video) {
-        captureButton.displayVideoButton();
+        displayVideoCaptureButton();
         durationView.stop();
         presenter.addMp4Video(video, currentRootParent);
     }
 
+    /* handle display settings for the video capture button.*/
+    private void displayVideoCaptureButton() {
+        captureButton.displayVideoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video));
+    }
+
     private void setupCameraView() {
         if (mode == CameraMode.PHOTO) {
-            cameraView.setMode(Mode.PICTURE);
-            captureButton.displayPhotoButton();
+            setCameraMode(Mode.PICTURE);
+            displayPhotoCaptureButton();
         } else {
-            cameraView.setMode(Mode.VIDEO);
-            captureButton.displayVideoButton();
+            setCameraMode(Mode.VIDEO);
+            displayVideoCaptureButton();
         }
 
         //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
@@ -590,6 +604,17 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         });
     }
 
+    /* handle the behavior of setting the camera mode.*/
+    private void setCameraMode(Mode mode) {
+        cameraView.setMode(mode);
+    }
+
+    /* handle display settings for the photo capture button.*/
+    private void displayPhotoCaptureButton() {
+        captureButton.displayPhotoButton();
+        captureButton.setContentDescription(getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo));
+    }
+
     private void setupCameraModeButton() {
         if (cameraView.getMode() == Mode.PICTURE) {
             setPhotoActive();
@@ -601,16 +626,18 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private void setUpCameraGridButton() {
         if (cameraView.getGrid() == Grid.DRAW_3X3) {
             gridButton.displayGridOn();
+            gridButton.setContentDescription(getString(R.string.action_hide_gridview));
         } else {
             gridButton.displayGridOff();
+            gridButton.setContentDescription(getString(R.string.action_show_gridview));
         }
     }
 
     private void setupCameraSwitchButton() {
-        if (cameraView.getFacing() == Facing.FRONT) {
-            switchButton.displayFrontCamera();
+        if (cameraView.getFacing() == Facing.BACK) {
+            switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
-            switchButton.displayBackCamera();
+            switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
         }
     }
 
@@ -625,8 +652,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
             flashButton.displayFlashAuto();
         } else if (cameraView.getFlash() == Flash.OFF) {
             flashButton.displayFlashOff();
+            flashButton.setContentDescription(getString(R.string.action_enable_flash));
         } else {
             flashButton.displayFlashOn();
+            flashButton.setContentDescription(getString(R.string.action_disable_flash));
         }
 
         flashButton.setOnClickListener(view -> {

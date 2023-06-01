@@ -121,6 +121,7 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
+
                     //Cancel action
                     actionCancel.text = cancelLabel
                     actionCancel.setOnClickListener { vaultActionSheet.dismiss() }
@@ -151,6 +152,7 @@ object VaultSheetUtils {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
+
                     renameEditText.requestFocus()
                     //Cancel action
                     actionCancel.text = cancelLabel

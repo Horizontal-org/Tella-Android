@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResult
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -199,7 +200,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
 
-    fun hastRecordingPermissions(context: Context): Boolean {
+    private fun hastRecordingPermissions(context: Context): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.RECORD_AUDIO
@@ -380,21 +381,26 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun disableRecord() {
-        mRecord.background =
-            AppCompatResources.getDrawable(requireContext(), R.drawable.red_circle_background)
-        mRecord.setImageResource(R.drawable.stop_white)
+        mRecord.apply {
+            background =
+                AppCompatResources.getDrawable(requireContext(), R.drawable.red_circle_background)
+            setImageResource(R.drawable.stop_white)
+            contentDescription = getString(R.string.action_stop)
+        }
         redDot.visibility = View.VISIBLE
         animator?.target = redDot
         animator?.start()
     }
 
     private fun enableRecord() {
-        mRecord.background =
-            AppCompatResources.getDrawable(
+        mRecord.apply {
+            background = ContextCompat.getDrawable(
                 requireContext(),
                 R.drawable.audio_record_button_background
             )
-        mRecord.setImageResource(R.drawable.ic_mic_white)
+            setImageResource(R.drawable.ic_mic_white)
+            contentDescription = getString(R.string.action_record)
+        }
         redDot.visibility = View.GONE
         animator?.end()
     }

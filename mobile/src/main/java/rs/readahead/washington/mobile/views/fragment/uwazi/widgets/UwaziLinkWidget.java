@@ -48,6 +48,7 @@ public class UwaziLinkWidget extends UwaziQuestionWidget {
         urlText.setText(R.string.Uwazi_WidgetSubtitle_URL);
 
         label = new EditText(context);
+        label.setHint(R.string.Uwazi_WidgetSubtitle_URL);
         label.setTextColor(getResources().getColor(R.color.wa_white_80));
         label.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
                 PorterDuff.Mode.SRC_ATOP);

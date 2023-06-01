@@ -167,7 +167,7 @@
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_vault_title"
-                            android:contentDescription="help"
+                            android:contentDescription="@string/action_help"
                             android:src="@drawable/orange_help_24"
                             android:textColor="@color/wa_white" />
 
@@ -207,7 +207,7 @@
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_forms_title"
-                            android:contentDescription="help"
+                            android:contentDescription="@string/action_help"
                             android:src="@drawable/orange_help_24"
                             android:textColor="@color/wa_white" />
 
@@ -248,7 +248,7 @@
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_server_settings_title"
-                            android:contentDescription="help"
+                            android:contentDescription="@string/action_help"
                             android:src="@drawable/orange_help_24" />
 
                         <CheckBox
@@ -287,7 +287,7 @@
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_tella_title"
-                            android:contentDescription="help"
+                            android:contentDescription="@string/action_help"
                             android:src="@drawable/orange_help_24"
                             android:textColor="@color/wa_white" />
 
@@ -302,6 +302,19 @@
                 </LinearLayout>
             </LinearLayout>
 
+
+            <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                android:id="@+id/keep_exif_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                app:explainText="@string/settings.sec_keep.exif_expl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/quick_exit_options_layout"
+                app:titleText="@string/settings.sec_keep.exif_switch" />
+
             <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                 android:id="@+id/camera_silent_switch"
                 android:layout_width="match_parent"
@@ -311,7 +324,7 @@
                 app:explainText="@string/settings.sec_camera.mute_expl"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/quick_exit_options_layout"
+                app:layout_constraintTop_toBottomOf="@+id/keep_exif_switch"
                 app:titleText="@string/settings.sec_camera.mute_switch" />
 
             <org.hzontal.shared_ui.switches.TellaSwitchWithMessage

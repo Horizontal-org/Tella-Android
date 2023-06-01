@@ -47,15 +47,18 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
+                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
                 passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
+                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
             else -> {
                 passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
                 passwordEditText.onChange {
                     passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 }
@@ -67,7 +70,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(password.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
             override fun onReady(mainKey: MainKey) {
                 Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
-                TellaKeysUI.getMainKeyHolder().set(mainKey);
+                TellaKeysUI.getMainKeyHolder().set(mainKey)
                 onSuccessfulUnlock()
                 finish()
             }
@@ -82,6 +85,6 @@ class PasswordUnlockActivity : BasePasswordActivity() {
 
     override fun onFailureSetPassword(error: String) {
         passwordMsgTextView.text = error
-        passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error));
+        passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
     }
 }
