@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_light_purple_background"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     android:paddingTop="@dimen/collect_form_padding_vertical"
                     app:layout_constraintBottom_toTopOf="@id/container"
                     app:layout_constraintTop_toTopOf="parent">

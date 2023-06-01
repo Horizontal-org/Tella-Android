@@ -9,16 +9,25 @@ import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
+import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
+
+internal const val EDIT_MODE_KEY = "edit_mode_key"
 
 @AndroidEntryPoint
 class EditTellaServerFragment :
     BaseBindingFragment<FragmentEditServerBinding>(FragmentEditServerBinding::inflate) {
 
-    private lateinit var reportServer: TellaReportServer
+    private val reportServer: TellaReportServer by lazy {
+        Gson().fromJson(requireArguments().getString(OBJECT_KEY), TellaReportServer::class.java)
+    }
+    private val isEditMode: Boolean by lazy {
+        requireArguments().getBoolean(EDIT_MODE_KEY)
+    }
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
 
 
@@ -26,10 +35,12 @@ class EditTellaServerFragment :
         const val TAG = "EditTellaServerFragment"
 
         @JvmStatic
-        fun newInstance(server: TellaReportServer): EditTellaServerFragment {
+        fun newInstance(server: TellaReportServer, isEditMode: Boolean = false): EditTellaServerFragment {
             val editTellaServerFragment = EditTellaServerFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
+            val args = Bundle().apply {
+                putString(OBJECT_KEY, Gson().toJson(server))
+                putBoolean(EDIT_MODE_KEY, isEditMode)
+            }
             editTellaServerFragment.arguments = args
             return editTellaServerFragment
         }
@@ -68,9 +79,6 @@ class EditTellaServerFragment :
 
 
     private fun initView() {
-        arguments?.getString(OBJECT_KEY)?.let {
-            reportServer = Gson().fromJson(it, TellaReportServer::class.java)
-        }
         reportServer.apply {
             binding?.apply {
                 serverNameTv.text = name.orEmpty()
@@ -82,14 +90,25 @@ class EditTellaServerFragment :
                 autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
             }
         }
+        if (isEditMode) {
+            binding?.credentialsContainer?.show()
+        }
     }
 
     private fun initListeners() {
         binding?.apply {
             cancel.setOnClickListener { baseActivity.finish() }
             next.setOnClickListener {
-                SharedLiveData.updateReportsServer.postValue(reportServer)
-                baseActivity.finish()
+                if (isEditMode) {
+                    SharedLiveData.updateReportsServer.postValue(reportServer)
+                    baseActivity.finish()
+                } else {
+                    baseActivity.addFragment(
+                        SuccessfulSetServerFragment.newInstance(copyFields(reportServer)),
+                        R.id.container
+                    )
+                }
+
             }
 
             autoDeleteSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -113,4 +132,18 @@ class EditTellaServerFragment :
                 reportServer.isActivatedMetadata = isChecked
             }
         }
-    }}
+    }
+
+    private fun copyFields(server: TellaReportServer): TellaReportServer {
+        server.url = reportServer.url
+        server.username = reportServer.username
+        server.password = reportServer.password
+        server.name = reportServer.name
+        server.isActivatedMetadata = reportServer.isActivatedMetadata
+        server.isActivatedBackgroundUpload = reportServer.isActivatedBackgroundUpload
+        server.isAutoUpload = reportServer.isAutoUpload
+        server.isAutoDelete = reportServer.isAutoDelete
+        return server
+    }
+
+}

@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
+import rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment
 import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
 
 internal const val OBJECT_SLUG = "os"
@@ -80,7 +81,7 @@ class LoginReportsFragment :
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
             KeyboardUtil.hideKeyboard(baseActivity)
             baseActivity.addFragment(
-                ServerAdvancedSettingsFragment.newInstance(server), R.id.container
+                EditTellaServerFragment.newInstance(server,false), R.id.container
             )
         }
 
