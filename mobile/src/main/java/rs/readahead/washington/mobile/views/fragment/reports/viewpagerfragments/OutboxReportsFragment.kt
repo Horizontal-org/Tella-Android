@@ -64,6 +64,11 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
                 viewModel.listOutbox()
             }
         }
@@ -86,8 +91,8 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Delete_Report_Confirmation),
-            requireContext().getString(R.string.action_remove),
+            requireContext().resources.getString(R.string.Delete_Submitted_Report_Confirmation),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )

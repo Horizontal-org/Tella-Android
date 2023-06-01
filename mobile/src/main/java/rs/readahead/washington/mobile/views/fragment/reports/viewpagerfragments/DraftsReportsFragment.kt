@@ -64,6 +64,11 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
                 viewModel.listDrafts()
             }
         }
@@ -74,7 +79,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             requireActivity().supportFragmentManager,
             instance.title,
             getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.Delete_Report),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -86,8 +91,8 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
+            requireContext().resources.getString(R.string.Delete_Report_Confirmation),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }

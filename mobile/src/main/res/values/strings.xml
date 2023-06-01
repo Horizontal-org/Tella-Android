@@ -539,7 +539,7 @@ button to add a new template.</string>
  that are ready to send will appear here.</string>
     <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
     <string name="Uwazi_Action_Save_Draft">Save draft</string>
-    <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+    <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to delete this draft?</string>
     <string name="Uwazi_Form_MediaHeader">Attached file</string>
     <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
     <string name="Uwazi_Action_EditDraft">Edit draft</string>
@@ -731,7 +731,7 @@ button to add a new template.</string>
     <string name="File_Uploaded_on" >Uploaded on</string>
     <string name="File_Uploaded" >uploaded</string>
     <string name="Delete_Report_Confirmation" >Are you sure you want to delete this report? </string>
-    <string name="Delete_Submitted_Report_Confirmation" >Are you sure you want to delete this sent report from your records? </string>
+    <string name="Delete_Submitted_Report_Confirmation">Are you sure you want to delete this sent report from your records? The files that have been uploaded will remain on the server.</string>
     <string name="View_Report" >View </string>
     <string name="Delete_Report" >Delete </string>
     <string name="Paused_Report" >Paused </string>
@@ -739,7 +739,7 @@ button to add a new template.</string>
     <string name="Project_Url_Screen_Title" >Enter project URL</string>
     <string name="Report_Dialog_Draft_Title" >Exit report?</string>
     <string name="Report_Server_Already_Exist_Error" >You are already connected to this project. Please enter another URL.</string>
-    <string name="Report_Deleted_Confirmation" > %s has been deleted.</string>
+    <string name="Report_Deleted_Confirmation" >\"%s\" has been deleted.</string>
     <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
     <string name="Send_Action_Label" >SEND</string>
     <string name="Modified_Label">Modified</string>
