@@ -470,54 +470,6 @@ conectarse a un servidor</string>
     <string name="Uwazi_Submitted_Entities_Empty_Description">No tiene entidades enviadas.</string>
     <string name="Uwazi_Outbox_Entities_Empty_Description">Su bandeja de salida está actualmente vacía. Las entidades
  que están listas para enviar aparecerán aquí.</string>
-  <string name="Uwazi_Draft_Entities_Empty_Description">No tiene entidades de borrador.</string>
-  <string name="Uwazi_Action_Save_Draft">Guardar borrador</string>
-  <string name="Uwazi_Subtitle_RemoveDraft">¿Está seguro de que desea eliminar este borrador?</string>
-  <string name="Uwazi_Form_MediaHeader">Archivo adjunto</string>
-  <string name="Uwazi_EntryInstance_SavedInfo">La entidad se guarda como borrador.</string>
-  <string name="Uwazi_Action_EditDraft">Editar borrador</string>
-  <string name="Uwazi_Action_RemoveDraft">Borrar el borrador</string>
-  <string name="Uwazi_Submitted_Entity_Header_Title">Resumen</string>
-  <string name="Uwazi_Action_ViewEntity">Ver entidad</string>
-  <string name="Uwazi_Action_DeleteEntity">Borrar entidad</string>
-  <string name="Uwazi_WidgetSubtitle_DateFrom">Desde</string>
-  <string name="Uwazi_WidgetSubtitle_DateTo">A</string>
-  <string name="Uwazi_WidgetSubtitle_Label">Etiqueta</string>
-  <string name="Uwazi_WidgetSubtitle_URL">URL</string>
-  <string name="Uwazi_Info_NotValidURL">Esta no es una URL válida</string>
-  <string name="Uwazi_Subtitle_MarkdownSupported">Compatible con Markdown</string>
-  <string name="Uwazi_Entry_Validation_MandatoryFields">Debes rellenar los campos obligatorios</string>
-  <string name="Uwazi_Entry_Validation_MandatoryTitle">Debes rellenar el título</string>
-  <string name="Uwazi_Submit_Later">Enviar más tarde</string>
-  <string name="Uwazi_WidgetMultiDate_AddDate">Añadir otra fecha</string>
-  <string name="Uwazi_WidgetMultiDate_AddDateRange">Agregar otro rango de fechas</string>
-  <string name="Uwazi_WidgetDateRange_Constraint">La segunda fecha del rango debe ser posterior a la primera</string>
-  <string name="Uwazi_MiltiFileWidget_AddMoreFiles">Añade más archivos</string>
-  <string name="Uwazi_MiltiFileWidget_Show">Mostrar archivos</string>
-  <string name="Uwazi_MiltiFileWidget_Hide">Ocultar archivos</string>
-  <string name="Uwazi_MiltiFileWidget_Help">Seleccione tantos archivos como desee</string>
-  <string name="Uwazi_WidgetMedia_Select_Text">Seleccionar archivo de audio o vídeo</string>
-  <string name="Uwazi_WidgetMedia_Select_Photos_Text">Seleccionar fotos</string>
-  <string name="Uwazi_WidgetMedia_Description_Text">Adjuntar un archivo de vídeo o audio</string>
-  <string name="Uwazi_WidgetImage_Select_Text">Seleccionar archivo de imagen</string>
-  <string name="Uwazi_WidgetImage_Select_Description_Text">Adjuntar un archivo de imagen</string>
-  <string name="Uwazi_WidgetMedia_Take_Video">Tomar video desde la cámara</string>
-  <string name="Uwazi_WidgetMedia_Take_Photo">Tomar la foto desde la cámara</string>
-  <string name="Uwazi_WidgetMedia_Select_From_Tella">Seleccione entre los archivos de Tella</string>
-  <string name="Uwazi_WidgetMedia_Select_From_Device">Seleccione desde su dispositivo</string>
-  <string name="Uwazi_Widget_Sheet_Description">Elige cómo desea agregar archivos</string>
-  <string name="Uwazi_Entity_Error_Response_Mandatory">Este campo es obligatorio.</string>
-  <string name="Uwazi_Server_Title">Servidor : </string>
-  <string name="Uwazi_Template_Title">Plantilla : </string>
-  <string name="Uwazi_MiltiFileWidget_SelectFiles">Seleccionar archivos</string>
-  <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Seleccionar archivos PDF</string>
-  <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Documentos primarios</string>
-  <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Adjunte tantos archivos PDF como desee</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Elige cómo quieres añadir los archivos PDF</string>
-  <string name="Uwazi_MiltiFileWidget_SupportingFiles">Archivos de apoyo</string>
-  <string name="Uwazi_Drafts_Header_Text">Estos son sus borradores de entidades. Pulse sobre una entidad para seguir trabajando en ella.</string>
-  <string name="Uwazi_Submitted_Header_Text">Estas son entidades que ha enviado con éxito.</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Elige cómo desea agregar archivos</string>
   <string-array name="Uwazi_Language_Array">
     <item>Inglés</item>
   </string-array>
@@ -631,35 +583,6 @@ conectarse a un servidor</string>
     <string name="Uwazi_Drafts_Header_Text">Estos son sus borradores de entidades. Pulse sobre una entidad para seguir trabajando en ella.</string>
     <string name="Uwazi_Submitted_Header_Text">Estas son entidades que ha enviado con éxito.</string>
     <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Elige cómo desea agregar archivos</string>
-    <string-array name="Uwazi_Language_Array">
-        <item>Inglés</item>
-    </string-array>
-    <string-array name="Uwazi_Language_Array_Translated">
-        <item>Inglés</item>
-        <item>Árabe</item>
-        <item>Francés</item>
-    </string-array>
-    <string name="Util_ellapsedTime_Year">Hace más de un año</string>
-    <plurals name="Util_ellapsedTime_Months">
-        <item quantity="one">Hace un mes</item>
-        <item quantity="other">Hace %d meses</item>
-    </plurals>
-    <plurals name="Util_ellapsedTime_Weeks">
-        <item quantity="one">Hace una semana</item>
-        <item quantity="other">Hace %d semanas</item>
-    </plurals>
-    <plurals name="Util_ellapsedTime_Days">
-        <item quantity="one">Hace un dia</item>
-        <item quantity="other">Hace %d dia</item>
-    </plurals>
-    <plurals name="Util_ellapsedTime_Hours">
-        <item quantity="one">Hace una hora</item>
-        <item quantity="other">Hace %d horas</item>
-    </plurals>
-    <plurals name="Util_ellapsedTime_Minutes">
-        <item quantity="one">Hace un minuto</item>
-        <item quantity="other">Hace %d minutos</item>
-    </plurals>
     <string name="Util_ellapsedTime_Seconds">Hace unos segundos</string>
     <string name="Donwload_Templates_Title_Description">Estas son las plantillas disponibles en las instancias de Uwazi a las que está conectado.</string>
     <string name="Uwazi_Templates_HeaderMessage">Estas son las plantillas de Uwazi que puedes rellenar.</string>

@@ -781,10 +781,12 @@ button to add a new template.</string>
     <string name="action_create_new_folder">create new folder</string>
     <string name="action_quick_delete">quick delete</string>
     <!-- theme strings -->
-    <string name="orange_theme">orange theme</string>
-    <string name="blue_theme">blue theme</string>
-    <string name="green_theme">green theme</string>
-    <string name="yellow_theme">yellow theme</string>
+    <string name="orange_theme" translatable="false">orange theme</string>
+    <string name="blue_theme" translatable="false">blue theme</string>
+    <string name="green_theme" translatable="false">green theme</string>
+    <string name="yellow_theme" translatable="false">yellow theme</string>
 
+    <string name="settings.sec_keep.exif_switch" translatable="false">Preserve metadata when importing</string>
+    <string name="settings.sec_keep.exif_expl" translatable="false">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
 
 </resources>
