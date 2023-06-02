@@ -634,7 +634,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void setupCameraSwitchButton() {
-        if (cameraView.getFacing() == Facing.BACK) {
+        if (cameraView.getFacing() == Facing.FRONT) {
             switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
             switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
