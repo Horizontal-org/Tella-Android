@@ -9,17 +9,19 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
+import rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment
 import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
-import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
 internal const val OBJECT_SLUG = "os"
 
@@ -77,8 +79,9 @@ class LoginReportsFragment :
         }
 
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
+            KeyboardUtil.hideKeyboard(baseActivity)
             baseActivity.addFragment(
-                SuccessfulSetServerFragment.newInstance(server), R.id.container
+                EditTellaServerFragment.newInstance(server,false), R.id.container
             )
         }
 

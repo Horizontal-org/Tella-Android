@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFrag
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
+
 @AndroidEntryPoint
 public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
@@ -201,8 +202,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     public void onCreatedTUServer(TellaReportServer server) {
         servers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
-
         tuServers.add(server);
+        saveAutoUploadServer(server);
        /* if (tuServers.size() == 1) {
             binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
@@ -288,12 +289,25 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
+        saveAutoUploadServer(server);
+        Preferences.setAutoDelete(server.isAutoDelete());
+        if (server.isAutoUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
+        }
         if (i != -1) {
             servers.set(i, server);
+            Preferences.setAutoUpload(isAutoUploadEnabled(servers));
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
             showToast(R.string.settings_docu_toast_server_updated);
         }
+    }
+
+    private boolean isAutoUploadEnabled(List<Server> servers) {
+        return servers.stream()
+                .filter(server -> server instanceof TellaReportServer)
+                .map(server -> (TellaReportServer) server)
+                .anyMatch(TellaReportServer::isAutoUpload);
     }
 
     @Override
@@ -758,6 +772,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
             DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
+
+    private void saveAutoUploadServer(TellaReportServer server) {
+        if (server.isActivatedBackgroundUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
         }
     }
 }

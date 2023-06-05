@@ -13,7 +13,7 @@ class D {
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 10;
+    static final int DATABASE_VERSION = 11;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
@@ -54,6 +54,8 @@ class D {
     static final String C_ACCESS_TOKEN = "c_access_token";
     static final String C_ACTIVATED_METADATA = "c_activated_metadata";
     static final String C_BACKGROUND_UPLOAD = "c_background_upload";
+    static final String C_AUTO_UPLOAD = "c_auto_upload";
+    static final String C_AUTO_DELETE = "c_auto_delete";
     static final String C_PROJECT_ID = "c_project_id";
     static final String C_PROJECT_NAME = "c_project_name";
     static final String C_PROJECT_SLUG = "c_project_slug";

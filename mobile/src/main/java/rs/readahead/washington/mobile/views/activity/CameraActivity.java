@@ -45,7 +45,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import rs.readahead.washington.mobile.MyApplication;
@@ -78,6 +77,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private final static int CLICK_MODE_DELAY = 2000;
     public static String CAMERA_MODE = "cm";
     public static String INTENT_MODE = "im";
+    public static String CAPTURE_WITH_AUTO_UPLOAD = "capture_with_auto_upload";
     CameraView cameraView;
     CameraGridButton gridButton;
     CameraSwitchButton switchButton;
@@ -107,6 +107,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     private long lastClickTime = System.currentTimeMillis();
     private String currentRootParent = null;
     private ActivityCameraBinding binding;
+    private boolean captureWithAutoUpload = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,6 +138,10 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
         if (getIntent().hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
             currentRootParent = getIntent().getStringExtra(VAULT_CURRENT_ROOT_PARENT);
+        }
+
+        if (getIntent().hasExtra(CAPTURE_WITH_AUTO_UPLOAD)) {
+            captureWithAutoUpload = getIntent().getBooleanExtra(CAPTURE_WITH_AUTO_UPLOAD, false);
         }
 
         setupCameraView();
@@ -243,7 +248,9 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
         } else {
             returnIntent(bundle);
         }
-
+        if (captureWithAutoUpload) {
+            scheduleFileUpload(capturedMediaFile);
+        }
         MyApplication.bus().post(new CaptureEvent());
     }
 
@@ -255,7 +262,6 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     @Override
     public void onMetadataAttached(VaultFile vaultFile) {
         returnIntent(vaultFile);
-        //scheduleFileUpload(capturedMediaFile);
     }
 
     private void returnIntent(VaultFile vaultFile) {
@@ -628,7 +634,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     }
 
     private void setupCameraSwitchButton() {
-        if (cameraView.getFacing() == Facing.BACK) {
+        if (cameraView.getFacing() == Facing.FRONT) {
             switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera);
         } else {
             switchCamera(Facing.BACK, R.string.action_switch_to_front_camera);
@@ -739,10 +745,7 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     private void scheduleFileUpload(VaultFile vaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            List<VaultFile> upload = Collections.singletonList(vaultFile);
-            uploadPresenter.scheduleUploadMediaFiles(upload);
-        } else {
-            onMediaFilesUploadScheduled();
+            uploadPresenter.scheduleUploadReportFiles(vaultFile, Preferences.getAutoUploadServerId());
         }
     }
 

@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -51,7 +51,7 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                     binding?.textViewEmpty?.hide()
                 }
             }
-            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showDraftsMenu(instance)
             }
 
@@ -59,22 +59,27 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 openEntityInstance(instance)
             }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
                 viewModel.listDrafts()
             }
         }
     }
 
-    private fun showDraftsMenu(instance: ReportFormInstance) {
+    private fun showDraftsMenu(instance: ReportInstance) {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
             getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.Delete_Report),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -86,19 +91,19 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
+            requireContext().resources.getString(R.string.Delete_Report_Confirmation),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }
 
-    private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
-        viewModel.getReportBundle(reportFormInstance)
+    private fun loadEntityInstance(reportInstance: ReportInstance) {
+        viewModel.getReportBundle(reportInstance)
     }
 
-    private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
+    private fun openEntityInstance(reportInstance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         nav().navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
     }
 

@@ -58,7 +58,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
@@ -70,6 +70,7 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepos
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
@@ -256,6 +257,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable scheduleUploadReport(FormMediaFile mediaFile, Long serverId) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            scheduledReportUploadDB(mediaFile, serverId);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
     public Single<List<CollectForm>> listBlankForms() {
         return Single.fromCallable(() -> dataSource.getBlankCollectForms())
                 .compose(applySchedulers());
@@ -366,16 +375,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    /*TODO FINISH THIS Ahlem*/
-    public Completable scheduleUploadReportFiles(final List<VaultFile> vaultFiles, long uploadServerId, boolean metadata) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            scheduleUploadMediaFilesWithPriorityDb(vaultFiles, uploadServerId, metadata);
-            return null;
-        }).compose(applyCompletableSchedulers());
-    }
 
     @Override
-    public Completable scheduleUploadReportInstances(List<ReportFormInstance> reportFormInstances) {
+    public Completable scheduleUploadReportInstances(List<ReportInstance> reportInstances) {
         return null;
     }
 
@@ -420,7 +422,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    public Single<List<FormMediaFile>> getReportMediaFiles(ReportFormInstance instance) {
+    public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
         return Single.fromCallable(() -> getReportMediaFilesDB(instance))
                 .compose(applySchedulers());
     }
@@ -460,7 +462,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return files;
     }
 
-    private List<FormMediaFile> getReportMediaFilesDB(final ReportFormInstance instance) {
+    private List<FormMediaFile> getReportMediaFilesDB(final ReportInstance instance) {
         Cursor cursor = null;
         List<FormMediaFile> files = new ArrayList<>();
 
@@ -490,7 +492,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return files;
     }
 
-    public Single<List<ReportFormInstance>> getFileUploadReportBundles(final UploadStatus status) {
+    public Single<List<ReportInstance>> getFileUploadReportBundles(final UploadStatus status) {
         return null;
     }
 
@@ -565,6 +567,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_PASSWORD,
                             D.C_CHECKED,
                             D.C_ACCESS_TOKEN,
+                            D.C_AUTO_UPLOAD,
+                            D.C_AUTO_DELETE,
                             D.C_ACTIVATED_METADATA,
                             D.C_BACKGROUND_UPLOAD,
                             D.C_PROJECT_SLUG,
@@ -645,23 +649,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         try (
                 Cursor cursor = database.query(
-                D.T_TELLA_UPLOAD_SERVER,
-                new String[]{
-                        D.C_ID,
-                        D.C_NAME,
-                        D.C_URL,
-                        D.C_USERNAME,
-                        D.C_PASSWORD,
-                        D.C_CHECKED,
-                        D.C_ACCESS_TOKEN,
-                        D.C_ACTIVATED_METADATA,
-                        D.C_BACKGROUND_UPLOAD,
-                        D.C_PROJECT_SLUG,
-                        D.C_PROJECT_NAME,
-                        D.C_PROJECT_ID},
-                D.C_ID + "= ?",
-                new String[]{Long.toString(id)},
-                null, null, null, null)) {
+                        D.T_TELLA_UPLOAD_SERVER,
+                        new String[]{
+                                D.C_ID,
+                                D.C_NAME,
+                                D.C_URL,
+                                D.C_USERNAME,
+                                D.C_PASSWORD,
+                                D.C_CHECKED,
+                                D.C_ACCESS_TOKEN,
+                                D.C_AUTO_UPLOAD,
+                                D.C_AUTO_DELETE,
+                                D.C_ACTIVATED_METADATA,
+                                D.C_BACKGROUND_UPLOAD,
+                                D.C_PROJECT_SLUG,
+                                D.C_PROJECT_NAME,
+                                D.C_PROJECT_ID},
+                        D.C_ID + "= ?",
+                        new String[]{Long.toString(id)},
+                        null, null, null, null)) {
 
             if (cursor.moveToFirst()) {
                 return cursorToTellaUploadServer(cursor);
@@ -940,12 +946,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_PROJECT_ID, server.getProjectId());
         values.put(D.C_PROJECT_NAME, server.getProjectName());
         values.put(D.C_PROJECT_SLUG, server.getProjectSlug());
-        values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
         values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
         values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -1289,46 +1296,92 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
     }
 
-    /*TODO: Current (0,1)
 
-Capture -> create / update
+    private void scheduledReportUploadDB(FormMediaFile mediaFile, Long serverId) {
+        Cursor cursor = null;
+        ReportInstance reportInstance = null;
 
-Filtre list -> filter list where current equal 1
-E5er wahed les fichiers (verification created  < 30 minutes))
--> update
-
-Else create (
-update let 0,current wahed did 1)
-*/
-    private void scheduleUploadReportFilesDb(ReportFormInstance report, long uploadServerId, boolean metadata) {
         try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE +
+                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_CURRENT_UPLOAD,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE,
+                            D.C_REPORT_API_ID,
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_CURRENT_UPLOAD + " = 1",
+                    null, null,
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
 
-           /* long set = calculateCurrentFileUploadSet();
-            int retries = getMaxRetries(); //make sure that these files are taken first from the set
-            int manualUpload = 1;
+            if (cursor == null || cursor.getColumnCount() == 0) {
+                ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                updateTellaReportsFormInstance(newReportInstance);
+            } else {
+                getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
+            }
 
-            for (VaultFile vaultFile : report.getWidgetMediaFiles()) {
-                ContentValues values = new ContentValues();
-                values.put(D.C_MEDIA_FILE_ID, vaultFile.id);
-                values.put(D.C_UPDATED, Util.currentTimestamp());
-                values.put(D.C_CREATED, Util.currentTimestamp());
-                values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
-                values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
-                values.put(D.C_MANUAL_UPLOAD, manualUpload);
-                values.put(D.C_REPORT_INSTANCE_ID, report.getId());
-                values.put(D.C_SIZE, vaultFile.size);
-                values.put(D.C_SET, set);
-                values.put(D.C_RETRY_COUNT, retries);
-
-                database.insertWithOnConflict(
-                        D.T_REPORT_FILES_UPLOAD,
-                        null,
-                        values,
-                        SQLiteDatabase.CONFLICT_REPLACE);
-            }*/
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
+
+    }
+
+    private ReportInstance getLastScheduledReportFromCursor(Cursor cursor, FormMediaFile mediaFile, Long serverId) {
+        List<ReportInstance> instances = new ArrayList<>();
+        ReportInstance reportInstance;
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            ReportInstance instance = cursorToReportFormInstance(cursor);
+            instances.add(instance);
+        }
+
+        if (!instances.isEmpty()) {
+            ReportInstance currentInstance = instances.get(0);
+
+            if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
+                currentInstance.setCurrent(0);
+                currentInstance.setStatus(EntityStatus.SUBMITTED);
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,null));
+                updateTellaReportsFormInstance(currentInstance);
+                ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                reportInstance = updateTellaReportsFormInstance(newReportInstance);
+            } else {
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
+                currentInstance.setStatus(EntityStatus.SCHEDULED);
+                reportInstance = updateTellaReportsFormInstance(currentInstance);
+            }
+        } else {
+            ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+            newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance,mediaFile));
+            reportInstance = updateTellaReportsFormInstance(newReportInstance);
+        }
+        return reportInstance;
+    }
+
+    private List<FormMediaFile> getReportFiles(ReportInstance instance,@Nullable FormMediaFile mediaFile){
+        List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
+        if (mediaFile != null){
+            mediaFiles.add(mediaFile);
+        }
+
+        return mediaFiles;
     }
 
     private void scheduleUploadMediaFilesDb(List<VaultFile> vaultFiles) {
@@ -2150,6 +2203,10 @@ update let 0,current wahed did 1)
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
 
         database.update(D.T_TELLA_UPLOAD_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
 
@@ -2251,6 +2308,8 @@ update let 0,current wahed did 1)
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
         server.setAccessToken(cursor.getString(cursor.getColumnIndexOrThrow(D.C_ACCESS_TOKEN)));
         server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
+        server.setAutoUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_UPLOAD)) > 0);
+        server.setAutoDelete(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_DELETE)) > 0);
         server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
         server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
         server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));
@@ -2414,12 +2473,12 @@ update let 0,current wahed did 1)
 
     @NonNull
     @Override
-    public Single<ReportFormInstance> saveInstance(@NonNull ReportFormInstance instance) {
+    public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
         return Single.fromCallable(() -> updateTellaReportsFormInstance(instance))
                 .compose(applySchedulers());
     }
 
-    private ReportFormInstance updateTellaReportsFormInstance(ReportFormInstance instance) {
+    private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
         try {
             int statusOrdinal;
             ContentValues values = new ContentValues();
@@ -2432,6 +2491,7 @@ update let 0,current wahed did 1)
             values.put(D.C_TITLE, instance.getTitle());
             values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
             values.put(D.C_UPDATED, Util.currentTimestamp());
+            values.put(D.C_CURRENT_UPLOAD, instance.getCurrent());
             values.put(D.C_REPORT_API_ID, instance.getReportApiId());
 
             //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
@@ -2482,9 +2542,9 @@ update let 0,current wahed did 1)
         return instance;
     }
 
-    private List<ReportFormInstance> getReportFormInstances(EntityStatus[] statuses) {
+    private List<ReportInstance> getReportFormInstances(EntityStatus[] statuses) {
         Cursor cursor = null;
-        List<ReportFormInstance> instances = new ArrayList<>();
+        List<ReportInstance> instances = new ArrayList<>();
 
         List<String> s = new ArrayList<>(statuses.length);
         for (EntityStatus status : statuses) {
@@ -2504,6 +2564,7 @@ update let 0,current wahed did 1)
                             D.C_REPORT_SERVER_ID,
                             D.C_STATUS,
                             D.C_UPDATED,
+                            D.C_CURRENT_UPLOAD,
                             //   D.C_METADATA,
                             D.C_DESCRIPTION_TEXT,
                             D.C_TITLE,
@@ -2519,7 +2580,7 @@ update let 0,current wahed did 1)
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportFormInstance instance = cursorToReportFormInstance(cursor);
+                ReportInstance instance = cursorToReportFormInstance(cursor);
                 instances.add(instance);
             }
         } catch (Exception e) {
@@ -2534,9 +2595,9 @@ update let 0,current wahed did 1)
     }
 
 
-    private List<ReportFormInstance> getCurrentUploadReportFormInstance(int current) {
+    private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
         Cursor cursor = null;
-        List<ReportFormInstance> instances = new ArrayList<>();
+        List<ReportInstance> instances = new ArrayList<>();
 
         try {
 
@@ -2565,7 +2626,7 @@ update let 0,current wahed did 1)
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportFormInstance instance = cursorToReportFormInstance(cursor);
+                ReportInstance instance = cursorToReportFormInstance(cursor);
                 instances.add(instance);
             }
         } catch (Exception e) {
@@ -2579,8 +2640,8 @@ update let 0,current wahed did 1)
         return instances;
     }
 
-    private ReportFormInstance cursorToReportFormInstance(Cursor cursor) {
-        ReportFormInstance instance = new ReportFormInstance();
+    private ReportInstance cursorToReportFormInstance(Cursor cursor) {
+        ReportInstance instance = new ReportInstance();
         instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_TELLA_UPLOAD_INSTANCE_ID)));
         instance.setServerId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_REPORT_SERVER_ID)));
         int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
@@ -2589,27 +2650,29 @@ update let 0,current wahed did 1)
         instance.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TITLE)));
         instance.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
         instance.setReportApiId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_REPORT_API_ID)));
+        instance.setCurrent(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CURRENT_UPLOAD)));
         return instance;
     }
 
-    private List<ReportFormInstance> getDraftReportInstances() {
+    private List<ReportInstance> getDraftReportInstances() {
         return getReportFormInstances(new EntityStatus[]{
                 EntityStatus.UNKNOWN,
                 EntityStatus.DRAFT
         });
     }
 
-    private List<ReportFormInstance> getOutboxReportInstances() {
+    private List<ReportInstance> getOutboxReportInstances() {
         return getReportFormInstances(new EntityStatus[]{
                 EntityStatus.FINALIZED,
                 EntityStatus.SUBMISSION_ERROR,
                 EntityStatus.SUBMISSION_PENDING,
                 EntityStatus.SUBMISSION_PARTIAL_PARTS,
-                EntityStatus.PAUSED
+                EntityStatus.SUBMISSION_IN_PROGRESS,
+                EntityStatus.SCHEDULED
         });
     }
 
-    private List<ReportFormInstance> getSubmittedReportInstances() {
+    private List<ReportInstance> getSubmittedReportInstances() {
         return getReportFormInstances(new EntityStatus[]{
                 EntityStatus.SUBMITTED
         });
@@ -2626,21 +2689,21 @@ update let 0,current wahed did 1)
 
     @NonNull
     @Override
-    public Single<List<ReportFormInstance>> listDraftReportInstances() {
+    public Single<List<ReportInstance>> listDraftReportInstances() {
         return Single.fromCallable(this::getDraftReportInstances)
                 .compose(applySchedulers());
     }
 
     @Nullable
     @Override
-    public Single<List<ReportFormInstance>> listOutboxReportInstances() {
+    public Single<List<ReportInstance>> listOutboxReportInstances() {
         return Single.fromCallable(this::getOutboxReportInstances)
                 .compose(applySchedulers());
     }
 
     @Nullable
     @Override
-    public Single<List<ReportFormInstance>> listSubmittedReportInstances() {
+    public Single<List<ReportInstance>> listSubmittedReportInstances() {
         return Single.fromCallable(this::getSubmittedReportInstances)
                 .compose(applySchedulers());
     }
@@ -2665,6 +2728,7 @@ update let 0,current wahed did 1)
                             cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
                             D.C_REPORT_SERVER_ID,
                             D.C_REPORT_API_ID,
+                            D.C_CURRENT_UPLOAD,
                             D.C_STATUS,
                             D.C_UPDATED,
                             D.C_METADATA,
@@ -2677,7 +2741,7 @@ update let 0,current wahed did 1)
             cursor = database.rawQuery(query, new String[]{Long.toString(id)});
 
             if (cursor.moveToFirst()) {
-                ReportFormInstance instance = cursorToReportFormInstance(cursor);
+                ReportInstance instance = cursorToReportFormInstance(cursor);
                 bundle.setInstance(instance);
 
                 List<String> vaultFileIds = getReportInstanceFileIds(instance.getId());
@@ -2737,7 +2801,7 @@ update let 0,current wahed did 1)
 
     @NonNull
     @Override
-    public Single<List<ReportFormInstance>> listAllReportInstances() {
+    public Single<List<ReportInstance>> listAllReportInstances() {
         return null;
     }
 

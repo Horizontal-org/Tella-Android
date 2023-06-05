@@ -48,28 +48,37 @@
             android:paddingHorizontal="@dimen/tella_main_vertical"
             android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/filterNameTv"
-                style="@style/Tella_Main_White_Text.Small"
-                android:textSize="13sp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Vault_Filter_Name"
-                android:contentDescription="@string/gallery_subheading_sort.by"
+                android:id="@+id/filterGroup"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginHorizontal="10dp"
-                android:src="@drawable/ic_arrow_up_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/filterNameTv"
                 app:layout_constraintTop_toTopOf="parent"
+                android:layout_gravity="bottom"
+                android:clickable="true"
+                android:focusable="true"
+               >
 
-                />
+                <TextView
+                    android:id="@+id/filterNameTv"
+                    style="@style/Tella_Main_White_Text.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:text="@string/Vault_Filter_Name"
+                    android:textSize="13sp" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/filterNameImg"
+                    android:layout_toEndOf="@id/filterNameTv"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_arrow_up_white"
+                    android:layout_alignBaseline="@id/filterNameTv" />
+            </LinearLayout>
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/checkBoxList"

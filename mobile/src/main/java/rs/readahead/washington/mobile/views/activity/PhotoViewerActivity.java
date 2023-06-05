@@ -415,7 +415,7 @@ public class PhotoViewerActivity extends BaseLockActivity implements
                         menu.findItem(R.id.menu_item_more).setVisible(false);
                         menu.findItem(R.id.menu_item_metadata).setVisible(false);
                         invalidateOptionsMenu();
-                        addFragment(new VaultInfoFragment().newInstance(vaultFile, false), R.id.photo_viewer_container);
+                        addFragment(VaultInfoFragment.newInstance(vaultFile, false), R.id.content);
                     }
 
                     @Override

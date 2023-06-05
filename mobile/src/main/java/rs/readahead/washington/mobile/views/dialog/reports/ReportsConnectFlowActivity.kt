@@ -30,7 +30,7 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
             intent.getStringExtra(OBJECT_KEY)?.let { reportServer ->
                 val server = Gson().fromJson(reportServer, TellaReportServer::class.java)
                 addFragment(
-                    EditTellaServerFragment.newInstance(server),
+                    EditTellaServerFragment.newInstance(server,true),
                     R.id.container
                 )
             }

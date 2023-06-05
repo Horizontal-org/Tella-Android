@@ -10,9 +10,11 @@ public class TellaJobCreator implements JobCreator {
         switch (tag) {
             case PendingFormSendJob.TAG:
                 return new PendingFormSendJob();
-
             case TellaUploadJob.TAG:
                 return new TellaUploadJob();
+
+            case TellaRequestUploadJob.TAG:
+                return new TellaRequestUploadJob();
 
             default:
                 return null;

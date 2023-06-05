@@ -14,8 +14,7 @@ import javax.inject.Inject
 class ReportsConnectFlowViewModel @Inject constructor(
     private val useCase: CheckReportsServerUseCase,
     private val getReportsServersUseCase: GetReportsServersUseCase,
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -25,6 +24,8 @@ class ReportsConnectFlowViewModel @Inject constructor(
     val authenticationSuccess: LiveData<TellaReportServer> get() = _authenticationSuccess
     private val _serverAlreadyExist = MutableLiveData<Boolean>()
     val serverAlreadyExist: LiveData<Boolean> get() = _serverAlreadyExist
+    private val _doesAutoUploadActivated = MutableLiveData<Boolean>()
+    val doesAutoUploadActivated: LiveData<Boolean> get() = _doesAutoUploadActivated
 
     fun listServers(serverUrl: String) {
         _progress.postValue(true)
@@ -33,6 +34,20 @@ class ReportsConnectFlowViewModel @Inject constructor(
                 _serverAlreadyExist.postValue(false)
             } else {
                 _serverAlreadyExist.postValue(result.any { server -> server.url + "p" + "/${server.projectSlug}" == serverUrl })
+            }
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+    }
+
+    fun listAutoReports() {
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            if (result.isEmpty()) {
+                _doesAutoUploadActivated.postValue(false)
+            } else {
+                _doesAutoUploadActivated.postValue(result.any { server -> server.isAutoUpload })
             }
         }, onError = {
             _error.postValue(it)

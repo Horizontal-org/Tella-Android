@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -12,8 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
+//import androidx.hilt.work.HiltWorkerFactory;
+import androidx.hilt.work.HiltWorkerFactory;
 import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
+import androidx.work.Configuration;
+//import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
 import com.evernote.android.job.JobManager;
@@ -43,6 +46,8 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -65,7 +70,7 @@ import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivi
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback , Configuration.Provider {
     public static Vault vault;
     public static RxVault rxVault;
     private static TellaBus bus;
@@ -76,6 +81,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static KeyDataSource keyDataSource;
     private static CleanInsights cleanInsights;
     private final Long start = System.currentTimeMillis();
+   @Inject
+    public HiltWorkerFactory workerFactory;
     Vault.Config vaultConfig;
 
     public static void startMainActivity(@NonNull Context context) {
@@ -180,8 +187,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                 .setMinimumLoggingLevel(android.util.Log.INFO)
                 .build();*/
 
-       //initialize WorkManager
-      //  WorkManager.initialize(this, myConfig);
+        //initialize WorkManager
+        //  WorkManager.initialize(this, myConfig);
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -198,9 +205,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         MediaFileHandler.init(this);
         MediaFileHandler.emptyTmp(this);
 
-        // evernote jobs
-        JobManager.create(this).addJobCreator(new TellaJobCreator());
-        //JobManager.instance().cancelAll(); // for testing, kill them all for now..
+        /* evernote jobs */
+     //    JobManager.create(this).addJobCreator(new TellaJobCreator());
+       //  JobManager.instance().cancelAll(); // for testing, kill them all for now..
 
         // Collect
         PropertyManager mgr = new PropertyManager();
@@ -323,16 +330,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return unlockRegistry;
     }
 
-  /*  private void initCleanInsights() {
-        if (Preferences.hasAcceptedImprovements()) {
-            try {
-                cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-*/
+    /*  private void initCleanInsights() {
+          if (Preferences.hasAcceptedImprovements()) {
+              try {
+                  cleanInsights = createCleanInsightsInstance(getApplicationContext(), Preferences.getTimeAcceptedImprovements());
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+  */
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
@@ -350,4 +357,12 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         persistCleanInsights();
     }
 
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder()
+                .setMinimumLoggingLevel(android.util.Log.DEBUG)
+                .setWorkerFactory(workerFactory)
+                .build();
+    }
 }

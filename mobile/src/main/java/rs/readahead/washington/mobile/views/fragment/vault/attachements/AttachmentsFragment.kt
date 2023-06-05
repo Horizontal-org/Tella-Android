@@ -70,7 +70,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
-import rs.readahead.washington.mobile.views.fragment.vault.info.VAULT_FILE_INFO_TOOLBAR
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
 
 
@@ -96,6 +96,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
     private lateinit var listCheck: ImageView
     private lateinit var gridCheck: ImageView
     private lateinit var filterNameTv: TextView
+    private lateinit var filterGroup: LinearLayout
     private lateinit var cancelMove: TextView
     private lateinit var moveHere: TextView
     private lateinit var emptyViewMsgContainer: LinearLayout
@@ -200,6 +201,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         toolbar = view.findViewById(R.id.toolbar)
         root = view.findViewById(R.id.root)
         appBar = view.findViewById(R.id.appbar)
+        filterGroup = view.findViewById(R.id.filterGroup)
 
         if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             appBar.outlineProvider = null
@@ -226,10 +228,10 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
         listCheck.setOnClickListener(this)
         gridCheck.setOnClickListener(this)
         checkBoxList.setOnClickListener(this)
-        filterNameTv.setOnClickListener(this)
         moveHere.setOnClickListener(null)
         moveFab.setOnClickListener(this)
         cancelMove.setOnClickListener(this)
+        filterGroup.setOnClickListener(this)
     }
 
     private fun initData() {
@@ -288,93 +290,97 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.gridCheck -> {
-                setGridView()
-            }
-            R.id.listCheck -> {
-                gridCheck.toggleVisibility(true)
-                listCheck.toggleVisibility(false)
-                gridLayoutManager.spanCount = 1
-                attachmentsAdapter.setLayoutManager(gridLayoutManager)
-                attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
-                attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
-            }
-            R.id.checkBoxList -> {
-                handleSelectMode()
-            }
-            R.id.filterNameTv -> {
-                handleSortSheet()
-            }
-            R.id.fab_button -> {
-                VaultSheetUtils.showVaultManageFilesSheet(baseActivity.supportFragmentManager,
-                    getString(R.string.Vault_TakePhotoVideo_SheetAction),
-                    getString(R.string.Vault_RecordAudio_SheetAction),
-                    getString(R.string.Vault_Import_SheetAction),
-                    getString(R.string.Vault_CreateFolder_SheetAction),
-                    getString(R.string.Vault_ManageFiles_SheetTitle),
-                    filterType != FilterType.OTHERS,
-                    filterType == FilterType.ALL,
-                    action = object : VaultSheetUtils.IVaultManageFiles {
-                        override fun goToCamera() {
-                            val intent = Intent(activity, CameraActivity::class.java)
-                            intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                            baseActivity.startActivity(intent)
-                        }
+            R.id.gridCheck -> setGridView()
+            R.id.listCheck -> setListView()
+            R.id.checkBoxList -> handleSelectMode()
+            R.id.filterGroup -> handleSortSheet()
+            R.id.fab_button -> handleFabButtonClick()
+            R.id.fab_move_button -> handleFabMoveButtonClick()
+            R.id.moveHere -> handleMoveHereClick()
+            R.id.cancelMove -> handleCancelMoveClick()
+        }
+    }
 
-                        override fun goToRecorder() {
-                            bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                            nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
-                        }
+    private fun setListView() {
+        gridCheck.toggleVisibility(true)
+        listCheck.toggleVisibility(false)
+        gridLayoutManager.spanCount = 1
+        attachmentsAdapter.setLayoutManager(gridLayoutManager)
+        attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
+        attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
+    }
 
-                        override fun chooseImportAndDelete() {
-                            showChooseImportSheet(baseActivity.supportFragmentManager,
-                                getString(R.string.Vault_ImportDelete_SheetAction),
-                                getString(R.string.Vault_deleteFileImported_SheetDesc),
-                                getString(R.string.Vault_Delete_Original),
-                                getString(R.string.Vault_Keep_Original),
-                                importConsumer = object : ActionConfirmed {
-                                    override fun accept(isConfirmed: Boolean) {
-                                        //first step in importing files
-                                        importAndDelete = false
-                                        baseActivity.maybeChangeTemporaryTimeout {
-                                            MediaFileHandler.startImportFiles(
-                                                activity, true, getCurrentType()
-                                            )
-                                        }
-                                    }
-                                },
-                                importAndDeleteConsumer = object : ActionConfirmed {
-                                    override fun accept(isConfirmed: Boolean) {
-                                        importAndDelete = true
-                                        baseActivity.maybeChangeTemporaryTimeout {
-                                            MediaFileHandler.startImportFiles(
-                                                activity, true, getCurrentType()
-                                            )
-                                        }
-                                    }
+    private fun handleFabButtonClick() {
+        VaultSheetUtils.showVaultManageFilesSheet(
+            baseActivity.supportFragmentManager,
+            getString(R.string.Vault_TakePhotoVideo_SheetAction),
+            getString(R.string.Vault_RecordAudio_SheetAction),
+            getString(R.string.Vault_Import_SheetAction),
+            getString(R.string.Vault_CreateFolder_SheetAction),
+            getString(R.string.Vault_ManageFiles_SheetTitle),
+            filterType != FilterType.OTHERS,
+            filterType == FilterType.ALL,
+            action = createVaultManageFilesAction()
+        )
+    }
 
-                                })
-                        }
-
-
-                        override fun createFolder() {
-                            VaultSheetUtils.showVaultRenameSheet(
-                                baseActivity.supportFragmentManager,
-                                getString(R.string.Vault_CreateFolder_SheetAction),
-                                getString(R.string.action_cancel),
-                                getString(R.string.action_ok),
-                                requireActivity(),
-                                null
-                            ) {
-                                currentRootID?.let { root ->
-                                    attachmentsPresenter.createFolder(it, root)
-                                }
-                            }
-                        }
-                    })
+    private fun handleFabMoveButtonClick() {
+        VaultSheetUtils.showVaultBlueRenameSheet(
+            baseActivity.supportFragmentManager,
+            getString(R.string.Vault_CreateFolder_SheetAction),
+            getString(R.string.action_cancel),
+            getString(R.string.action_ok),
+            requireActivity(),
+            null
+        ) {
+            currentRootID?.let { root ->
+                attachmentsPresenter.createFolder(it, root)
             }
-            R.id.fab_move_button -> {
-                VaultSheetUtils.showVaultBlueRenameSheet(
+        }
+    }
+
+    private fun handleMoveHereClick() {
+        if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+            attachmentsPresenter.moveFiles(
+                currentRootID, attachmentsAdapter.selectedMediaFiles
+            )
+        }
+    }
+
+    private fun handleCancelMoveClick() {
+        isMoveModeEnabled = false
+        enableMoveTheme(enable = false)
+        selectMode = SelectMode.SELECT_ALL
+        handleSelectMode()
+    }
+
+    private fun createVaultManageFilesAction(): VaultSheetUtils.IVaultManageFiles {
+        return object : VaultSheetUtils.IVaultManageFiles {
+            override fun goToCamera() {
+                val intent = Intent(activity, CameraActivity::class.java)
+                intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                baseActivity.startActivity(intent)
+            }
+
+            override fun goToRecorder() {
+                bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
+            }
+
+            override fun chooseImportAndDelete() {
+                showChooseImportSheet(
+                    baseActivity.supportFragmentManager,
+                    getString(R.string.Vault_ImportDelete_SheetAction),
+                    getString(R.string.Vault_deleteFileImported_SheetDesc),
+                    getString(R.string.Vault_Delete_Original),
+                    getString(R.string.Vault_Keep_Original),
+                    importConsumer = createImportActionConfirmed(),
+                    importAndDeleteConsumer = createImportAndDeleteActionConfirmed()
+                )
+            }
+
+            override fun createFolder() {
+                VaultSheetUtils.showVaultRenameSheet(
                     baseActivity.supportFragmentManager,
                     getString(R.string.Vault_CreateFolder_SheetAction),
                     getString(R.string.action_cancel),
@@ -387,53 +393,56 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
                     }
                 }
             }
-            R.id.moveHere -> {
-                if (attachmentsAdapter.selectedMediaFiles.size > 0) {
-                    attachmentsPresenter.moveFiles(
-                        currentRootID, attachmentsAdapter.selectedMediaFiles
+        }
+    }
+
+    private fun createImportActionConfirmed(): ActionConfirmed {
+        return object : ActionConfirmed {
+            override fun accept(isConfirmed: Boolean) {
+                // First step in importing files
+                importAndDelete = false
+                baseActivity.maybeChangeTemporaryTimeout {
+                    MediaFileHandler.startImportFiles(
+                        activity, true, getCurrentType()
                     )
                 }
             }
-            R.id.cancelMove -> {
-                isMoveModeEnabled = false
-                enableMoveTheme(enable = false)
-                selectMode = SelectMode.SELECT_ALL
-                handleSelectMode()
+        }
+    }
+
+    private fun createImportAndDeleteActionConfirmed(): ActionConfirmed {
+        return object : ActionConfirmed {
+            override fun accept(isConfirmed: Boolean) {
+                importAndDelete = true
+                baseActivity.maybeChangeTemporaryTimeout {
+                    MediaFileHandler.startImportFiles(
+                        activity, true, getCurrentType()
+                    )
+                }
             }
         }
     }
 
     private fun handleSelectMode() {
         changeSelectMode()
-
         attachmentsAdapter.enableSelectMode(isListCheckOn)
         updateAttachmentsToolbar(isListCheckOn)
 
-        val checkBoxDrawable = when (selectMode) {
+        when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 attachmentsAdapter.clearSelected()
                 enableMoveTheme(false)
-                R.drawable.ic_check
+                checkBoxList.setCheckDrawable(R.drawable.ic_check, baseActivity)
             }
-            SelectMode.ONE_SELECTION -> R.drawable.ic_check_box_off
+            SelectMode.ONE_SELECTION -> {
+                checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, baseActivity)
+            }
             SelectMode.SELECT_ALL -> {
+                checkBoxList.setCheckDrawable(R.drawable.ic_check_box_on, baseActivity)
                 attachmentsAdapter.selectAll()
-                R.drawable.ic_check_box_on
             }
         }
-
-        checkBoxDrawable.let {
-            checkBoxList.setImageDrawable(ContextCompat.getDrawable(baseActivity, it))
-        }
-
-        val contentDescriptionResId = if (selectMode == SelectMode.SELECT_ALL) {
-            R.string.action_unselect
-        } else {
-            R.string.action_select
-        }
-        checkBoxList.contentDescription = getString(contentDescriptionResId)
     }
-
 
     private fun changeSelectMode() {
         when (selectMode) {

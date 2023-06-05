@@ -28,6 +28,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.AudioCapturePresenter
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
@@ -44,6 +45,7 @@ import java.util.concurrent.TimeUnit
 const val TIME_FORMAT: String = "%02d:%02d"
 const val COLLECT_ENTRY = "collect_entry"
 const val REPORT_ENTRY = "report_entry"
+private const val UPDATE_SPACE_TIME_MS: Long = 60000
 
 class MicFragment : MetadataBaseLockFragment(),
     IAudioCapturePresenterContract.IView,
@@ -55,8 +57,6 @@ class MicFragment : MetadataBaseLockFragment(),
     private var isCollect: Boolean = false
     private var isReport: Boolean = false
     private var notRecording = false
-
-    private val UPDATE_SPACE_TIME_MS: Long = 60000
     private var lastUpdateTime: Long = 0
 
     // handling MediaFile
@@ -64,6 +64,8 @@ class MicFragment : MetadataBaseLockFragment(),
 
     // recording
     private val presenter by lazy { AudioCapturePresenter(this) }
+
+    private val uploadPresenter by lazy { TellaFileUploadSchedulePresenter(this) }
 
     private val bundle by lazy { Bundle() }
 
@@ -78,14 +80,14 @@ class MicFragment : MetadataBaseLockFragment(),
             }
     }
 
-    lateinit var metadataAttacher: MetadataAttacher
-    lateinit var mRecord: ImageButton
-    lateinit var mPlay: ImageButton
-    lateinit var mPause: ImageButton
-    lateinit var mTimer: TextView
-    lateinit var freeSpace: TextView
-    lateinit var redDot: ImageView
-    lateinit var recordingName: TextView
+    private lateinit var metadataAttacher: MetadataAttacher
+    private lateinit var mRecord: ImageButton
+    private lateinit var mPlay: ImageButton
+    private lateinit var mPause: ImageButton
+    private lateinit var mTimer: TextView
+    private lateinit var freeSpace: TextView
+    private lateinit var redDot: ImageView
+    private lateinit var recordingName: TextView
     private var currentRootParent: String? = null
 
     override fun onCreateView(
@@ -216,7 +218,7 @@ class MicFragment : MetadataBaseLockFragment(),
         )
     }
 
-    fun handleRecord() {
+    private fun handleRecord() {
         notRecording = false
         if (presenter.isAudioRecorder) {   //first start or restart
             disablePlay()
@@ -258,7 +260,10 @@ class MicFragment : MetadataBaseLockFragment(),
 
         if (!Preferences.isAnonymousMode()) {
             activity.attachMediaFileMetadata(vaultFile, metadataAttacher)
-        } else onMetadataAttached(vaultFile)
+        } else {
+            onMetadataAttached(vaultFile)
+        }
+        scheduleFileUpload(vaultFile)
     }
 
     override fun onAddError(error: Throwable?) {
@@ -279,7 +284,15 @@ class MicFragment : MetadataBaseLockFragment(),
     override fun onMetadataAttached(vaultFile: VaultFile?) {
         mTimer.text = timeToString(0)
         maybeReturnCollectRecording(vaultFile)
-        //scheduleFileUpload(handlingMediaFile)
+    }
+
+    private fun scheduleFileUpload(vaultFile: VaultFile) {
+        if (Preferences.isAutoUploadEnabled()) {
+            uploadPresenter.scheduleUploadReportFiles(
+                vaultFile,
+                Preferences.getAutoUploadServerId()
+            )
+        }
     }
 
     private fun maybeReturnCollectRecording(vaultFile: VaultFile?) {
@@ -473,7 +486,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun updateRecordingName(name: String) {
-        recordingName.setText(name)
+        recordingName.text = name
     }
 
     private fun initData() {

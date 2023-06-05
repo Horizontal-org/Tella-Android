@@ -470,7 +470,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerControlView.Visibili
                     toolbar.menu.findItem(R.id.menu_item_more).isVisible = false
                     toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                     invalidateOptionsMenu()
-                    vaultFile?.let { VaultInfoFragment().newInstance(it, false) }
+                    vaultFile?.let {  VaultInfoFragment.newInstance(it, false) }
                         ?.let { addFragment(it, R.id.container) }
                 }
 

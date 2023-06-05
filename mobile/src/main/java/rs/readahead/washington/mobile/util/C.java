@@ -41,4 +41,6 @@ public class C {
 
     //An hour in milliseconds
     public static final long UPLOAD_SET_DURATION = 3600000;
+
+    public static final long UPLOAD_REPORT_DURATION = 1800000;
 }
