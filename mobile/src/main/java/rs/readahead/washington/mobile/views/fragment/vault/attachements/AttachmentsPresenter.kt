@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.vault.attachements
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -21,12 +20,13 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFiles
 import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDirectories
 
-class AttachmentsPresenter : ViewModel() {
+class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
+    IAttachmentsPresenter.IPresenter {
     private val disposables = CompositeDisposable()
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     val counterData = MutableLiveData<Int>()
 
-     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
+    override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         MyApplication.rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->

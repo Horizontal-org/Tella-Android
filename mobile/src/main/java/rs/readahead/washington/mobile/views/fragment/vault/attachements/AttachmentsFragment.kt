@@ -57,26 +57,26 @@ import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity.VIEW_PH
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.getCurrentType
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.hasStoragePermissions
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.setToolbarLabel
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.PICKER_FILE_REQUEST_CODE
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.SelectMode
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
 import timber.log.Timber
 
 
-class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>(FragmentVaultAttachmentsBinding::inflate), View.OnClickListener, IGalleryVaultHandler,
+class AttachmentsFragment :
+    BaseBindingFragment<FragmentVaultAttachmentsBinding>(FragmentVaultAttachmentsBinding::inflate),
+    View.OnClickListener, IGalleryVaultHandler,
     IAttachmentsPresenter.IView, OnNavBckListener {
-    private var gridLayoutManager = GridLayoutManager(activity,1)
+    private var gridLayoutManager = GridLayoutManager(activity, 1)
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
     }
+    private val moveModeUIUpdater by lazy { MoveModeUIUpdater(binding) }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
@@ -117,7 +117,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             }
             R.id.action_share -> {
                 baseActivity.maybeChangeTemporaryTimeout {
-                    shareVaultFiles(attachmentsAdapter.selectedMediaFiles,baseActivity)
+                    shareVaultFiles(attachmentsAdapter.selectedMediaFiles, baseActivity)
                 }
                 return true
             }
@@ -135,7 +135,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
         activity.setSupportActionBar(binding.toolbar)
     }
 
-     fun initView() {
+    private fun initView() {
 
         if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.appbar.outlineProvider = null
@@ -143,7 +143,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             binding.appbar.bringToFront()
         }
         gridLayoutManager = GridLayoutManager(activity, 1)
-         binding.attachmentsRecyclerView.apply {
+        binding.attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
             layoutManager = gridLayoutManager
         }
@@ -170,7 +170,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             filterType = FilterType.valueOf(it)
         }
         initSorting()
-        setToolbarLabel(filterType,binding.toolbar,baseActivity)
+        setToolbarLabel(filterType, binding.toolbar, baseActivity)
         attachmentsPresenter.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
@@ -193,21 +193,24 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
     private fun setUpBreadCrumb() {
         binding.breadcrumbsView.setCallback(object : DefaultBreadcrumbsCallback<BreadcrumbItem?>() {
             override fun onNavigateBack(item: BreadcrumbItem?, position: Int) {
-                if (position == 0) {
-                    binding.breadcrumbsView.visibility = View.GONE
-                }
-                currentRootID = item?.items?.get(item.selectedIndex)?.id
-                attachmentsPresenter.addNewVaultFiles()
-                if (isMoveModeEnabled) highlightMoveBackground()
+                handleBreadcrumbNavigation(item, position)
             }
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 showToast(changedPosition.toString())
-                currentRootID = newItem?.items?.get(newItem.selectedIndex)?.id
-                attachmentsPresenter.addNewVaultFiles()
-                if (isMoveModeEnabled) highlightMoveBackground()
+                handleBreadcrumbNavigation(newItem, changedPosition)
             }
         })
+    }
+
+    private fun handleBreadcrumbNavigation(item: BreadcrumbItem?, position: Int) {
+        if (position == 0) {
+            binding.breadcrumbsView.visibility = View.GONE
+        }
+
+        currentRootID = item?.items?.get(item.selectedIndex)?.id
+        attachmentsPresenter.addNewVaultFiles()
+        if (isMoveModeEnabled) highlightMoveBackground()
     }
 
     private fun setGridView() {
@@ -396,7 +399,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
     }
 
     private fun updateAttachmentsToolbar(isItemsChecked: Boolean) {
-     baseActivity.invalidateOptionsMenu()
+        baseActivity.invalidateOptionsMenu()
 
         if (isItemsChecked) {
             val itemsSize = attachmentsAdapter.selectedMediaFiles.size
@@ -412,7 +415,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             }
         } else {
             binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-            setToolbarLabel(filterType,binding.toolbar,baseActivity)
+            setToolbarLabel(filterType, binding.toolbar, baseActivity)
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
         }
@@ -448,13 +451,15 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             }
         }
     }
-    private inline fun <reified T: Activity> openActivity(fileId: String) {
+
+    private inline fun <reified T : Activity> openActivity(fileId: String) {
         val intent = Intent(baseActivity, T::class.java).apply {
             putExtra(PLAY_MEDIA_FILE_ID_KEY, fileId)
         }
         startActivity(intent)
     }
-    private inline fun <reified T: Activity> openActivity(vaultFile: VaultFile) {
+
+    private inline fun <reified T : Activity> openActivity(vaultFile: VaultFile) {
         val intent = Intent(baseActivity, T::class.java).apply {
             putExtra(VIEW_PHOTO, vaultFile)
         }
@@ -476,8 +481,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
     }
 
 
-
-        private fun openDirectory(vaultFile: VaultFile) {
+    private fun openDirectory(vaultFile: VaultFile) {
         if (currentRootID != vaultFile.id) {
             currentRootID = vaultFile.id
             highlightMoveBackground()
@@ -537,9 +541,9 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
                 override fun share() {
                     baseActivity.maybeChangeTemporaryTimeout {
                         if (attachmentsAdapter.selectedMediaFiles.size > 0) {
-                            shareVaultFiles(attachmentsAdapter.selectedMediaFiles,baseActivity)
+                            shareVaultFiles(attachmentsAdapter.selectedMediaFiles, baseActivity)
                         } else {
-                            shareVaultFile(vaultFile,baseActivity)
+                            shareVaultFile(vaultFile, baseActivity)
                         }
                     }
                 }
@@ -901,6 +905,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
             sort = createVaultSortActions()
         )
     }
+
     private fun performSort(sortType: Sort.Type, sortDirection: Sort.Direction) {
         binding.filterNameTv.text = when (sortType) {
             Sort.Type.DATE -> {
@@ -1070,34 +1075,7 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
 
     private fun enableMoveTheme(enable: Boolean) {
         isMoveModeEnabled = enable
-        val theme = if (enable) R.style.AppTheme_DarkNoActionBar_Blue else R.style.AppTheme_DarkNoActionBar
-        val color = if (enable) R.color.prussian_blue else R.color.space_cadet
-        val colorDrawable = ColorDrawable(getColor(baseActivity, color))
-
-        (baseActivity as MainActivity).setTheme(theme)
-
-        binding.apply {
-            toolbar.background = colorDrawable
-            rootView.background = colorDrawable
-            appbar.background = colorDrawable
-            moveContainer.visibility = if (enable) View.VISIBLE else View.GONE
-            checkBoxList.visibility = if (enable) View.GONE else View.VISIBLE
-            fabButton.visibility = if (enable) View.GONE else View.VISIBLE
-            fabMoveButton.visibility = if (enable) View.VISIBLE else View.GONE
-            attachmentsRecyclerView.apply {
-                val margin = if (enable) 17 else 0
-                val padding = if (enable) 2 else 0
-                val bg = if (enable) R.color.wa_white_12 else R.color.space_cadet
-                setMargins(margin, 0, margin, if (enable) 37 else 17)
-                updatePadding(right = padding, left = padding)
-                background = ColorDrawable(getColor(activity, bg))
-            }
-        }
-
-        baseActivity.supportActionBar?.setBackgroundDrawable(colorDrawable)
-        baseActivity.window.changeStatusColor(baseActivity, color)
-        baseActivity.invalidateOptionsMenu()
-
+        moveModeUIUpdater.updateUI(enable,baseActivity)
         attachmentsAdapter.enableMoveMode(enable)
     }
 
@@ -1151,7 +1129,8 @@ class AttachmentsFragment : BaseBindingFragment<FragmentVaultAttachmentsBinding>
     private fun exportVaultFilesWithMetadataCheck(vaultFile: VaultFile?) {
         val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
         val isMultipleFiles = selected.isNotEmpty()
-        val withMetadata = selected.any { file -> file.metadata != null } || vaultFile?.metadata != null
+        val withMetadata =
+            selected.any { file -> file.metadata != null } || vaultFile?.metadata != null
 
         if (withMetadata) {
             showExportWithMetadataDialog(isMultipleFiles, vaultFile)
