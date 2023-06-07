@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -15,8 +14,8 @@ import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.view.updatePadding
 import androidx.documentfile.provider.DocumentFile
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
@@ -65,7 +64,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
-import timber.log.Timber
 
 
 class AttachmentsFragment :
@@ -76,6 +74,7 @@ class AttachmentsFragment :
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
     }
+    private val viewModel: AttachmentsViewModel by viewModels()
     private val moveModeUIUpdater by lazy { MoveModeUIUpdater(binding) }
     private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private var progressDialog: ProgressDialog? = null
@@ -152,6 +151,7 @@ class AttachmentsFragment :
         setUpToolbar()
         initData()
         setUpBreadCrumb()
+        initObservers()
     }
 
     private fun initListeners() {
@@ -275,7 +275,7 @@ class AttachmentsFragment :
 
     private fun handleMoveHereClick() {
         if (attachmentsAdapter.selectedMediaFiles.size > 0) {
-            attachmentsPresenter.moveFiles(
+            viewModel.moveFiles(
                 currentRootID, attachmentsAdapter.selectedMediaFiles
             )
         }
@@ -624,13 +624,16 @@ class AttachmentsFragment :
 
     }
 
-    override fun onGetFilesStart() {
+    private fun initObservers(){
+        viewModel.filesData.observe(viewLifecycleOwner,::onGetFilesSuccess)
+        viewModel.filesSize.observe(viewLifecycleOwner,::onMoveFilesSuccess)
+        viewModel.moveFilesError.observe(viewLifecycleOwner,::onMoveFilesError)
+        viewModel.deletedFiles.observe(viewLifecycleOwner,::onMediaFilesDeleted)
+        viewModel.deletedFile.observe(viewLifecycleOwner,::onMediaFileDeleted)
+        viewModel.deletedFileError.observe(viewLifecycleOwner,::onMediaFileDeletionError)
     }
 
-    override fun onGetFilesEnd() {
-    }
-
-    override fun onGetFilesSuccess(files: List<VaultFile?>) {
+    private fun onGetFilesSuccess(files: List<VaultFile?>) {
         val recyclerView = binding.attachmentsRecyclerView
         val emptyViewContainer = binding.emptyViewMsgContainer
 
@@ -644,10 +647,6 @@ class AttachmentsFragment :
 
         attachmentsAdapter.setFiles(files)
         attachmentsAdapter.enableSelectMode(isListCheckOn)
-    }
-
-    override fun onGetFilesError(error: Throwable?) {
-        Timber.d(error, javaClass.name)
     }
 
     override fun onMediaImported(vaultFile: VaultFile) {
@@ -690,9 +689,9 @@ class AttachmentsFragment :
         if (vaultFiles.isEmpty()) return
 
         if (vaultFiles.size > 1) {
-            attachmentsPresenter.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
+            viewModel.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
         } else {
-            attachmentsPresenter.deleteVaultFile(vaultFiles[0])
+            vaultFiles[0]?.let { viewModel.deleteVaultFile(it) }
         }
     }
 
@@ -705,7 +704,7 @@ class AttachmentsFragment :
     }
 
     override fun onMediaFilesAdded() {
-        attachmentsPresenter.getFiles(currentRootID, filterType, sort)
+        viewModel.getFiles(currentRootID, filterType, sort)
     }
 
     override fun onMediaFilesAddingError(error: Throwable?) {
@@ -717,16 +716,13 @@ class AttachmentsFragment :
         handleSelectMode()
     }
 
-    override fun onMediaFilesDeletionError(throwable: Throwable?) {
-    }
-
-    override fun onMediaFileDeleted() {
+    private fun onMediaFileDeleted(file: VaultFile) {
         attachmentsPresenter.addNewVaultFiles()
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
     }
 
-    override fun onMediaFileDeletionError(throwable: Throwable?) {
+    private fun onMediaFileDeletionError(throwable: Throwable?) {
         DialogUtils.showBottomMessage(
             baseActivity, getString(R.string.gallery_toast_fail_deleting_files), true
         )
@@ -798,7 +794,7 @@ class AttachmentsFragment :
 
     }
 
-    override fun onMoveFilesSuccess(filesSize: Int) {
+    private fun onMoveFilesSuccess(filesSize: Int) {
         attachmentsPresenter.addNewVaultFiles()
         enableMoveTheme(false)
         currentMove = null
@@ -811,7 +807,7 @@ class AttachmentsFragment :
         )
     }
 
-    override fun onMoveFilesError(error: Throwable?) {
+    private fun onMoveFilesError(error: Throwable?) {
         enableMoveTheme(false)
         currentMove = null
         selectMode = SelectMode.SELECT_ALL

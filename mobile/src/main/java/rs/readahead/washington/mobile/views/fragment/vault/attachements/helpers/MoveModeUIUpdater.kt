@@ -11,8 +11,19 @@ import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
+/**
+ * Helper class for updating UI elements in move mode.
+ *
+ * @param binding The binding object for the fragment containing the UI elements.
+ */
 class MoveModeUIUpdater(private var binding: FragmentVaultAttachmentsBinding) {
 
+    /**
+     * Updates the UI elements based on the move mode state.
+     *
+     * @param enable Indicates whether move mode is enabled or disabled.
+     * @param baseActivity The base activity to access resources and apply theme changes.
+     */
     fun updateUI(enable: Boolean, baseActivity : BaseActivity) {
         val theme = if (enable) R.style.AppTheme_DarkNoActionBar_Blue else R.style.AppTheme_DarkNoActionBar
         val color = if (enable) R.color.prussian_blue else R.color.space_cadet

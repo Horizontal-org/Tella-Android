@@ -26,24 +26,28 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     val counterData = MutableLiveData<Int>()
 
-    override fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
+     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         MyApplication.rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->
                     disposables.add(MyApplication.rxVault.list(vaultFile, filterType, sort, null)
                         .subscribeOn(Schedulers.io())
-                        .doOnSubscribe { view?.onGetFilesStart() }
+                        .doOnSubscribe {
+                           // view?.onGetFilesStart()
+                        }
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally { view?.onGetFilesEnd() }
+                        .doFinally {
+                           // view?.onGetFilesEnd()
+                        }
                         .subscribe(
                             { vaultFiles: List<VaultFile?> ->
-                                view?.onGetFilesSuccess(
-                                    vaultFiles
-                                )
+                              //  view?.onGetFilesSuccess(
+                               //     vaultFiles
+                                //)
                             }
                         ) { throwable: Throwable? ->
                             FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                            view?.onGetFilesError(throwable)
+                            //view?.onGetFilesError(throwable)
                         })
                 }
             ) { throwable: Throwable? ->
@@ -123,7 +127,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ num: Int? -> view?.onMediaFilesDeleted(num!!) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onMediaFilesDeletionError(throwable)
+                //view?.onMediaFilesDeletionError(throwable)
             })
     }
 
@@ -139,9 +143,11 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         disposables.add(Single.zip(
             completable
         ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onMoveFilesSuccess(vaultFiles.size) }) { throwable: Throwable? ->
+            .subscribe({
+                //view?.onMoveFilesSuccess(vaultFiles.size)
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onMoveFilesError(throwable)
+                //view?.onMoveFilesError(throwable)
             })
     }
 
@@ -158,9 +164,11 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     override fun deleteVaultFile(vaultFile: VaultFile?) {
         disposables.add(MyApplication.rxVault.delete(vaultFile).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ view?.onMediaFileDeleted() }) { throwable: Throwable? ->
+            .subscribe({
+                //view?.onMediaFileDeleted()
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onMediaFileDeletionError(throwable)
+               // view?.onMediaFileDeletionError(throwable)
             })
     }
 
@@ -209,7 +217,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onMediaFileDeletionError(throwable)
+                //view?.onMediaFileDeletionError(throwable)
             }
         )
     }

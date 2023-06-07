@@ -9,10 +9,6 @@ import rs.readahead.washington.mobile.mvp.contract.IBasePresenter
 
 class IAttachmentsPresenter {
     interface IView {
-        fun onGetFilesStart()
-        fun onGetFilesEnd()
-        fun onGetFilesSuccess(files: List<VaultFile?>)
-        fun onGetFilesError(error: Throwable?)
         fun onMediaImported(vaultFile: VaultFile)
         fun onMediaImportedWithDelete(uri: Uri)
         fun onConfirmDeleteFiles(vaultFiles: List<VaultFile?>, showConfirmDelete: Boolean)
@@ -22,9 +18,6 @@ class IAttachmentsPresenter {
         fun onMediaFilesAdded()
         fun onMediaFilesAddingError(error: Throwable?)
         fun onMediaFilesDeleted(num: Int)
-        fun onMediaFilesDeletionError(throwable: Throwable?)
-        fun onMediaFileDeleted()
-        fun onMediaFileDeletionError(throwable: Throwable?)
         fun onMediaExported(num: Int)
         fun onExportError(error: Throwable?)
         fun onExportStarted()
@@ -39,14 +32,12 @@ class IAttachmentsPresenter {
         fun onCreateFolderError(error: Throwable?)
         fun onGetRootIdSuccess(vaultFile: VaultFile?)
         fun onGetRootIdError(error: Throwable?)
-        fun onMoveFilesSuccess(filesSize: Int)
-        fun onMoveFilesError(error: Throwable?)
         fun getContext(): Context?
         fun onGetProgressPercent(numberFilesImported: Double, totalFilesToImport: Int)
     }
 
     interface IPresenter : IBasePresenter {
-        fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?)
+       // fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?)
         fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean)
         fun addNewVaultFiles()
         fun renameVaultFile(id: String, name: String)
