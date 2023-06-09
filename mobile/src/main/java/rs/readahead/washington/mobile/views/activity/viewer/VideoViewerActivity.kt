@@ -312,19 +312,20 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata)
     }
 
-    private fun initializePlayer() {
-        if (player == null) {
-            player = ExoPlayer.Builder(this).build().apply {
-                playWhenReady = shouldAutoPlay
-            }
-            simpleExoPlayerView.player = player
-        }
-        if ( needRetrySource) {
-            initializeMedia()
-        }
-    }
-    private fun initializeMedia(){
+//    private fun initializePlayer() {
+//        if ( needRetrySource) {
+//            initializeMedia()
+//        }
+//        if (player == null) {
+//            player = ExoPlayer.Builder(this).build().apply {
+//                playWhenReady = shouldAutoPlay
+//            }
+//            simpleExoPlayerView.player = player
+//        }
+//
+//    }
 
+    private fun initializePlayer() {
         val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
 
             this.vaultFile = vaultFile
@@ -337,18 +338,51 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                 .createMediaSource(mediaItem)
 
             val haveResumePosition = resumeWindow != C.INDEX_UNSET
+            if (player == null) {
+                player = SimpleExoPlayer.Builder(this).build().apply {
+                    playWhenReady = shouldAutoPlay
+                    simpleExoPlayerView.player = this
+                }
+            } else {
+                player?.stop()
+            }
+
             player?.apply {
                 if (haveResumePosition) {
                     seekTo(resumeWindow, resumePosition)
                 }
-                setMediaSource(mediaSource)
+                setMediaSource(mediaSource, !haveResumePosition)
                 prepare()
-               // prepare(mediaSource, !haveResumePosition, false)
             }
+
             needRetrySource = false
 
     }
-
+//    private fun initializeMedia(){
+//
+//        val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
+//
+//        this.vaultFile = vaultFile
+//        toolbar.title = vaultFile.name
+//        setupMetadataMenuItem(vaultFile.metadata != null)
+//
+//        val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
+//        val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
+//        val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
+//            .createMediaSource(mediaItem)
+//
+//        val haveResumePosition = resumeWindow != C.INDEX_UNSET
+//        player?.apply {
+//            if (haveResumePosition) {
+//                seekTo(resumeWindow, resumePosition)
+//            }
+//            setMediaSource(mediaSource)
+//            prepare()
+//            // prepare(mediaSource, !haveResumePosition, false)
+//        }
+//        needRetrySource = false
+//
+//    }
 
 
     private fun releasePlayer() {
