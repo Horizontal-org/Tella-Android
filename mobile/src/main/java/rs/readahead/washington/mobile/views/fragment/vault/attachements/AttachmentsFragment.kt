@@ -16,9 +16,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
+import com.hzontal.tella_vault.Vault
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -68,15 +70,13 @@ import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragmen
 
 class AttachmentsFragment :
     BaseBindingFragment<FragmentVaultAttachmentsBinding>(FragmentVaultAttachmentsBinding::inflate),
-    View.OnClickListener, IGalleryVaultHandler,
-    IAttachmentsPresenter.IView, OnNavBckListener {
+    View.OnClickListener, IGalleryVaultHandler,OnNavBckListener {
     private var gridLayoutManager = GridLayoutManager(activity, 1)
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
     }
     private val viewModel: AttachmentsViewModel by viewModels()
     private val moveModeUIUpdater by lazy { MoveModeUIUpdater(binding) }
-    private val attachmentsPresenter by lazy { AttachmentsPresenter(this) }
     private var progressDialog: ProgressDialog? = null
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var filterType = FilterType.ALL
@@ -171,7 +171,7 @@ class AttachmentsFragment :
         }
         initSorting()
         setToolbarLabel(filterType, binding.toolbar, baseActivity)
-        attachmentsPresenter.getRootId()
+        viewModel.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
@@ -209,8 +209,10 @@ class AttachmentsFragment :
         }
 
         currentRootID = item?.items?.get(item.selectedIndex)?.id
-        attachmentsPresenter.addNewVaultFiles()
-        if (isMoveModeEnabled) highlightMoveBackground()
+        onMediaFilesAdded()
+        if (isMoveModeEnabled) {
+            highlightMoveBackground()
+        }
     }
 
     private fun setGridView() {
@@ -264,11 +266,11 @@ class AttachmentsFragment :
             getString(R.string.Vault_CreateFolder_SheetAction),
             getString(R.string.action_cancel),
             getString(R.string.action_ok),
-            requireActivity(),
+            baseActivity,
             null
         ) {
             currentRootID?.let { root ->
-                attachmentsPresenter.createFolder(it, root)
+                viewModel.createFolder(it, root)
             }
         }
     }
@@ -323,7 +325,7 @@ class AttachmentsFragment :
                     null
                 ) {
                     currentRootID?.let { root ->
-                        attachmentsPresenter.createFolder(it, root)
+                        viewModel.createFolder(it, root)
                     }
                 }
             }
@@ -485,7 +487,7 @@ class AttachmentsFragment :
         if (currentRootID != vaultFile.id) {
             currentRootID = vaultFile.id
             highlightMoveBackground()
-            attachmentsPresenter.addNewVaultFiles()
+            onMediaFilesAdded()
             binding.breadcrumbsView.visibility = View.VISIBLE
             binding.breadcrumbsView.addItem(createItem(vaultFile))
         }
@@ -569,7 +571,7 @@ class AttachmentsFragment :
                         requireActivity(),
                         vaultFile?.name
                     ) {
-                        vaultFile?.let { it1 -> attachmentsPresenter.renameVaultFile(it1.id, it) }
+                        vaultFile?.let { it1 -> viewModel.renameVaultFile(it1.id, it) }
                     }
                 }
 
@@ -606,13 +608,13 @@ class AttachmentsFragment :
                             override fun accept(isConfirmed: Boolean) {
                                 if (isConfirmed) {
                                     if (isMultipleFiles) {
-                                        attachmentsPresenter.deleteFilesAfterConfirmation(
+                                        viewModel.deleteFilesAfterConfirmation(
                                             attachmentsAdapter.selectedMediaFiles
                                         )
                                     } else {
                                         val files = mutableListOf<VaultFile?>()
                                         files.add(vaultFile)
-                                        attachmentsPresenter.deleteFilesAfterConfirmation(files)
+                                        viewModel.deleteFilesAfterConfirmation(files)
                                     }
                                 }
 
@@ -624,13 +626,24 @@ class AttachmentsFragment :
 
     }
 
-    private fun initObservers(){
-        viewModel.filesData.observe(viewLifecycleOwner,::onGetFilesSuccess)
-        viewModel.filesSize.observe(viewLifecycleOwner,::onMoveFilesSuccess)
-        viewModel.moveFilesError.observe(viewLifecycleOwner,::onMoveFilesError)
-        viewModel.deletedFiles.observe(viewLifecycleOwner,::onMediaFilesDeleted)
-        viewModel.deletedFile.observe(viewLifecycleOwner,::onMediaFileDeleted)
-        viewModel.deletedFileError.observe(viewLifecycleOwner,::onMediaFileDeletionError)
+    private fun initObservers() {
+        with(viewLifecycleOwner) {
+            viewModel.filesData.observe(this, ::onGetFilesSuccess)
+            viewModel.filesSize.observe(this, ::onMoveFilesSuccess)
+            viewModel.moveFilesError.observe(this, ::onMoveFilesError)
+            viewModel.deletedFiles.observe(this, ::onMediaFilesDeleted)
+            viewModel.deletedFile.observe(this, ::onMediaFileDeleted)
+            viewModel.deletedFileError.observe(this, ::onMediaFileDeletionError)
+            viewModel.folderCreated.observe(this, ::onCreateFolderSuccess)
+            viewModel.rootId.observe(this, ::onGetRootIdSuccess)
+            viewModel.progressPercent.observe(this, ::onGetProgressPercent)
+            viewModel.mediaImportedWithDelete.observe(this, ::onMediaImportedWithDelete)
+            viewModel.mediaImported.observe(this, ::onMediaImported)
+            viewModel.renameFileSuccess.observe(this, ::onRenameFileSuccess)
+            viewModel.exportState.observe(this, ::onExportStarted)
+            viewModel.mediaExported.observe(this, ::onMediaExported)
+            viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
+        }
     }
 
     private fun onGetFilesSuccess(files: List<VaultFile?>) {
@@ -649,12 +662,11 @@ class AttachmentsFragment :
         attachmentsAdapter.enableSelectMode(isListCheckOn)
     }
 
-    override fun onMediaImported(vaultFile: VaultFile) {
-        attachmentsPresenter.addNewVaultFiles()
+    private fun onMediaImported(vaultFile: VaultFile) {
+        onMediaFilesAdded()
     }
 
-
-    override fun onMediaImportedWithDelete(uri: Uri) {
+    private fun onMediaImportedWithDelete(uri: Uri) {
         lifecycleScope.launch {
             uri.let {
                 deleteFileFromExternalStorage(it)
@@ -662,10 +674,12 @@ class AttachmentsFragment :
             }
         }
 
-        attachmentsPresenter.addNewVaultFiles()
+        onMediaFilesAdded()
     }
 
-    override fun onConfirmDeleteFiles(vaultFiles: List<VaultFile?>, showConfirmDelete: Boolean) {
+    private fun onConfirmDeleteFiles(deleteState: Pair<List<VaultFile?>, Boolean>) {
+        val vaultFiles = deleteState.first
+        val showConfirmDelete = deleteState.second
         if (showConfirmDelete) {
             showConfirmSheet(baseActivity.supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
@@ -695,29 +709,18 @@ class AttachmentsFragment :
         }
     }
 
-    override fun onImportError(error: Throwable?) {}
-
-    override fun onImportStarted() {
-    }
-
-    override fun onImportEnded() {
-    }
-
-    override fun onMediaFilesAdded() {
+    private fun onMediaFilesAdded() {
         viewModel.getFiles(currentRootID, filterType, sort)
     }
 
-    override fun onMediaFilesAddingError(error: Throwable?) {
-    }
-
-    override fun onMediaFilesDeleted(num: Int) {
-        attachmentsPresenter.addNewVaultFiles()
+    private fun onMediaFilesDeleted(num: Int) {
+        onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
     }
 
     private fun onMediaFileDeleted(file: VaultFile) {
-        attachmentsPresenter.addNewVaultFiles()
+        onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
     }
@@ -728,7 +731,7 @@ class AttachmentsFragment :
         )
     }
 
-    override fun onMediaExported(num: Int) {
+    private fun onMediaExported(num: Int) {
         DialogUtils.showBottomMessage(
             baseActivity,
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, num, num),
@@ -737,65 +740,35 @@ class AttachmentsFragment :
 
     }
 
-    override fun onExportError(error: Throwable?) {
+    private fun onExportStarted(state: Boolean) {
+        if (state) {
+            progressDialog = DialogsUtil.showProgressDialog(
+                baseActivity, getString(R.string.gallery_save_to_device_dialog_progress_expl)
+            )
+            binding.fabButton.hide()
+        } else {
+            hideProgressDialog()
+            binding.fabButton.show()
+        }
     }
 
-    override fun onExportStarted() {
-        progressDialog = DialogsUtil.showProgressDialog(
-            baseActivity, getString(R.string.gallery_save_to_device_dialog_progress_expl)
-        )
-        binding.fabButton.hide()
-    }
-
-    override fun onExportEnded() {
-        hideProgressDialog()
-        binding.fabButton.show()
-    }
-
-    override fun onCountTUServersEnded(num: Long?) {
-    }
-
-    override fun onCountTUServersFailed(throwable: Throwable?) {
-
-    }
-
-    override fun onRenameFileStart() {
-        baseActivity.toggleLoading(true)
-    }
-
-    override fun onRenameFileEnd() {
-        baseActivity.toggleLoading(false)
-    }
-
-    override fun onRenameFileSuccess() {
-        attachmentsPresenter.addNewVaultFiles()
+    private fun onRenameFileSuccess(vaultFile: VaultFile) {
+        onMediaFilesAdded()
         enableMoveTheme(false)
     }
 
-    override fun onRenameFileError(error: Throwable?) {
-        DialogUtils.showBottomMessage(baseActivity, error?.localizedMessage, true)
+    private fun onCreateFolderSuccess(vaultFile: VaultFile) {
+        onMediaFilesAdded()
     }
 
-    override fun onCreateFolderSuccess() {
-        attachmentsPresenter.addNewVaultFiles()
-    }
-
-    override fun onCreateFolderError(error: Throwable?) {
-
-    }
-
-    override fun onGetRootIdSuccess(vaultFile: VaultFile?) {
+    private fun onGetRootIdSuccess(vaultFile: VaultFile?) {
         currentRootID = vaultFile?.id
         binding.breadcrumbsView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile?.id)))
-        attachmentsPresenter.addNewVaultFiles()
-    }
-
-    override fun onGetRootIdError(error: Throwable?) {
-
+        onMediaFilesAdded()
     }
 
     private fun onMoveFilesSuccess(filesSize: Int) {
-        attachmentsPresenter.addNewVaultFiles()
+        onMediaFilesAdded()
         enableMoveTheme(false)
         currentMove = null
         selectMode = SelectMode.SELECT_ALL
@@ -815,7 +788,9 @@ class AttachmentsFragment :
     }
 
 
-    override fun onGetProgressPercent(numberFilesImported: Double, totalFilesToImport: Int) {
+    private fun onGetProgressPercent(progressPercent: Pair<Double, Int>) {
+        val numberFilesImported = progressPercent.first
+        val totalFilesToImport = progressPercent.second
         showProgressImportSheet(
             baseActivity.supportFragmentManager,
             getString(R.string.Vault_Importing_SheetTitle),
@@ -823,21 +798,21 @@ class AttachmentsFragment :
             resources.getQuantityString(
                 R.plurals.Vault_Importing_SheetProgress, totalFilesToImport
             ),
-            attachmentsPresenter.counterData,
+            viewModel.counterData,
             getString(R.string.action_cancel).uppercase(),
             viewLifecycleOwner
         ) {
-            attachmentsPresenter.cancelImportVaultFiles()
+            viewModel.cancelImportVaultFiles()
         }
     }
 
     private fun exportVaultFiles(isMultipleFiles: Boolean, vaultFile: VaultFile?, path: Uri?) {
         if (isMultipleFiles) {
             val selected: List<VaultFile> = attachmentsAdapter.selectedMediaFiles
-            attachmentsPresenter.exportMediaFiles(withMetadata, selected, path)
+            viewModel.exportMediaFiles(withMetadata, selected, path)
         } else {
             vaultFile?.let {
-                attachmentsPresenter.exportMediaFiles(withMetadata, arrayListOf(vaultFile), path)
+                viewModel.exportMediaFiles(withMetadata, arrayListOf(vaultFile), path)
             }
         }
     }
@@ -877,7 +852,8 @@ class AttachmentsFragment :
             VaultFileRenameEvent::class.java,
             object : EventObserver<VaultFileRenameEvent?>() {
                 override fun onNext(event: VaultFileRenameEvent) {
-                    onRenameFileSuccess()
+                    onMediaFilesAdded()
+                    enableMoveTheme(false)
                 }
             })
     }
@@ -885,7 +861,7 @@ class AttachmentsFragment :
     private fun onCaptureEventListener() {
         disposables.wire(CaptureEvent::class.java, object : EventObserver<CaptureEvent?>() {
             override fun onNext(event: CaptureEvent) {
-                attachmentsPresenter.addNewVaultFiles()
+                onMediaFilesAdded()
             }
         })
     }
@@ -920,7 +896,7 @@ class AttachmentsFragment :
 
         sort.type = sortType
         sort.direction = sortDirection
-        attachmentsPresenter.addNewVaultFiles()
+        onMediaFilesAdded()
     }
 
     private fun createVaultSortActions(): VaultSheetUtils.IVaultSortActions {
@@ -944,7 +920,7 @@ class AttachmentsFragment :
         }
         when (requestCode) {
             C.IMPORT_MULTIPLE_FILES -> handleImportMultipleFiles(data)
-            C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> attachmentsPresenter.addNewVaultFiles()
+            C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> onMediaFilesAdded()
             WRITE_REQUEST_CODE -> performFileSearch(false, vaultFile)
             PICKER_FILE_REQUEST_CODE -> handlePickerFileRequest(data)
         }
@@ -963,7 +939,7 @@ class AttachmentsFragment :
                     listVaultFilesUris.add(returnedUri)
                 }
             }
-            attachmentsPresenter.importVaultFiles(
+            viewModel.importVaultFiles(
                 listVaultFilesUris, currentRootID, importAndDelete
             )
         }
@@ -1061,7 +1037,7 @@ class AttachmentsFragment :
         }
         binding.breadcrumbsView.removeLastItem()
         currentRootID = binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
-        attachmentsPresenter.addNewVaultFiles()
+        onMediaFilesAdded()
     }
 
     private fun navigateToCameraAndFinish() {
@@ -1071,7 +1047,7 @@ class AttachmentsFragment :
 
     private fun enableMoveTheme(enable: Boolean) {
         isMoveModeEnabled = enable
-        moveModeUIUpdater.updateUI(enable,baseActivity)
+        moveModeUIUpdater.updateUI(enable, baseActivity)
         attachmentsAdapter.enableMoveMode(enable)
     }
 

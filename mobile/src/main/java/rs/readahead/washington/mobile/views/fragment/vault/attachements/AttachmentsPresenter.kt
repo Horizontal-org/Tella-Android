@@ -52,7 +52,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onGetRootIdError(throwable)
+              //  view?.onGetRootIdError(throwable)
             }.dispose()
     }
 
@@ -67,29 +67,32 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
             MediaFileHandler.importVaultFileUri(view?.getContext(), uri, parentId).toFlowable()
         }
             .doOnComplete {
-                view?.onImportEnded()
+             //   view?.onImportEnded()
             }.doOnSubscribe {
-                view?.onImportStarted()
+               // view?.onImportStarted()
             }
-            .observeOn(AndroidSchedulers.mainThread()).doFinally { view?.onImportEnded() }
+            .observeOn(AndroidSchedulers.mainThread()).doFinally {
+              //  view?.onImportEnded()
+            }
             .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
                 if (counter == 1) {
-                    view?.onGetProgressPercent(counter.toDouble(), uris.size)
+                   // view?.onGetProgressPercent(counter.toDouble(), uris.size)
                     counterData.postValue(counter++)
                 } else counterData.postValue(counter++)
             }.subscribe({ vaultFile ->
                 if (deleteOriginal) {
-                    currentUri?.let { uri -> view?.onMediaImportedWithDelete(uri) }
+                    currentUri?.let { uri ->
+                        //view?.onMediaImportedWithDelete(uri)
+                    }
                 } else {
-                    view?.onMediaImported(vaultFile)
+                    //view?.onMediaImported(vaultFile)
                 }
 
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onImportError(throwable)
+              //  view?.onImportError(throwable)
             })
-
 
     }
 
@@ -98,16 +101,25 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
     }
 
     override fun addNewVaultFiles() {
-        view?.onMediaFilesAdded()
+    //    view?.onMediaFilesAdded()
     }
 
     override fun renameVaultFile(id: String, name: String) {
         disposables.add(MyApplication.rxVault.rename(id, name).subscribeOn(Schedulers.io())
-            .doOnSubscribe { view?.onRenameFileStart() }.observeOn(AndroidSchedulers.mainThread())
-            .doFinally { view?.onRenameFileEnd() }
-            .subscribe({ view?.onRenameFileSuccess() }) { throwable: Throwable? ->
+            .doOnSubscribe {
+               // view?.onRenameFileStart()
+            }.observeOn(AndroidSchedulers.mainThread())
+            .doFinally {
+
+               // view?.onRenameFileEnd()
+            }
+            .subscribe({
+
+
+               // view?.onRenameFileSuccess()
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onRenameFileError(throwable)
+               // view?.onRenameFileError(throwable)
             })
     }
 
@@ -188,15 +200,19 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 }
             }
             resultList.size
-        }.subscribeOn(Schedulers.computation()).doOnSubscribe { view?.onExportStarted() }
-            .observeOn(AndroidSchedulers.mainThread()).doFinally { view?.onExportEnded() }
+        }.subscribeOn(Schedulers.computation()).doOnSubscribe {
+            //view?.onExportStarted()
+        }
+            .observeOn(AndroidSchedulers.mainThread()).doFinally {
+                //view?.onExportEnded()
+            }
             .subscribe({ num: Int? ->
                 if (num != null) {
-                    view?.onMediaExported(num)
+                    //view?.onMediaExported(num)
                 }
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onExportError(throwable)
+               // view?.onExportError(throwable)
             })
     }
 
@@ -213,7 +229,7 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
                 { files: List<FormMediaFile> ->
                     val doesFileExist =
                         files.any { file -> vaultFiles.any { vaultFile -> vaultFile?.id == file.id } }
-                    view?.onConfirmDeleteFiles(vaultFiles, doesFileExist)
+                   // view?.onConfirmDeleteFiles(vaultFiles, doesFileExist)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
@@ -222,22 +238,24 @@ class AttachmentsPresenter(var view: IAttachmentsPresenter.IView?) :
         )
     }
 
-    override fun createFolder(folderName: String, parent: String) {
+     fun createFolder(folderName: String, parent: String) {
         MyApplication.rxVault.builder().setName(folderName).setType(VaultFile.Type.DIRECTORY)
-            .build(parent).subscribe({ view?.onCreateFolderSuccess() }) { throwable: Throwable? ->
+            .build(parent).subscribe({
+                //view?.onCreateFolderSuccess()
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onCountTUServersFailed(throwable)
+             //   view?.onCountTUServersFailed(throwable)
             }.dispose()
     }
 
     override fun getRootId() {
         MyApplication.rxVault?.root?.subscribe({ vaultFile: VaultFile? ->
-            view?.onGetRootIdSuccess(
+           /* view?.onGetRootIdSuccess(
                 vaultFile
-            )
+            )*/
         }) { throwable: Throwable? ->
             FirebaseCrashlytics.getInstance().recordException(throwable!!)
-            view?.onGetRootIdError(throwable)
+          //  view?.onGetRootIdError(throwable)
         }?.dispose()
     }
 
