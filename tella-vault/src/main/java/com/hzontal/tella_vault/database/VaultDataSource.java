@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
@@ -26,6 +25,9 @@ import java.util.List;
 import timber.log.Timber;
 
 
+/**
+ * Provides database operations for managing vault files.
+ */
 public class VaultDataSource implements IVaultDatabase {
     public static final String ROOT_UID = "11223344-5566-4777-8899-aabbccddeeff";
 
@@ -33,6 +35,12 @@ public class VaultDataSource implements IVaultDatabase {
     private static Gson gson;
     private final SQLiteDatabase database;
 
+    /**
+     * Constructs a new VaultDataSource instance.
+     *
+     * @param context The application context.
+     * @param key     The encryption key for the database.
+     */
     public VaultDataSource(Context context, byte[] key) {
         VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
         SQLiteDatabase.loadLibs(context);
@@ -40,6 +48,13 @@ public class VaultDataSource implements IVaultDatabase {
         database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 
+    /**
+     * Returns a singleton instance of VaultDataSource.
+     *
+     * @param context The application context.
+     * @param key     The encryption key for the database.
+     * @return The VaultDataSource instance.
+     */
     public static synchronized VaultDataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
             dataSource = new VaultDataSource(context.getApplicationContext(), key);
@@ -49,11 +64,23 @@ public class VaultDataSource implements IVaultDatabase {
         return dataSource;
     }
 
+    /**
+     * Retrieves the root vault file.
+     *
+     * @return The root VaultFile object.
+     */
     @Override
     public VaultFile getRootVaultFile() {
         return get(ROOT_UID);
     }
 
+    /**
+     * Creates a new vault file.
+     *
+     * @param parentId   The ID of the parent vault file.
+     * @param vaultFile  The VaultFile object to create.
+     * @return The created VaultFile object.
+     */
     @SuppressLint("TimberArgCount")
     @Override
     public VaultFile create(String parentId, VaultFile vaultFile) {
@@ -89,6 +116,15 @@ public class VaultDataSource implements IVaultDatabase {
         return vaultFile;
     }
 
+    /**
+     * Retrieves a list of vault files based on optional parameters.
+     *
+     * @param parent     The parent VaultFile object.
+     * @param filterType The filter type to apply.
+     * @param sort       The sort order to apply.
+     * @param limits     The limits for pagination.
+     * @return A list of VaultFile objects.
+     */
     @Override
     public List<VaultFile> list(@Nullable VaultFile parent, @Nullable FilterType filterType, @Nullable Sort sort, @Nullable Limits limits) {
         List<VaultFile> vaultFiles = new ArrayList<>();
@@ -143,6 +179,12 @@ public class VaultDataSource implements IVaultDatabase {
         return vaultFiles;
     }
 
+    /**
+     * Converts a Sort object to the corresponding sort query.
+     *
+     * @param sort The Sort object.
+     * @return The sort query string.
+     */
     private String getSortQuery(Sort sort) {
         if (sort == null)
             return D.C_NAME + " " + Sort.Direction.DESC.name();
@@ -152,6 +194,13 @@ public class VaultDataSource implements IVaultDatabase {
         else return D.C_NAME + " " + sort.direction.name();
     }
 
+    /**
+     * Updates the metadata of a vault file.
+     *
+     * @param vaultFile The VaultFile object to update.
+     * @param metadata  The new Metadata object.
+     * @return The updated VaultFile object.
+     */
     public VaultFile updateMetadata(VaultFile vaultFile, Metadata metadata) {
         ContentValues values = new ContentValues();
 
@@ -163,6 +212,12 @@ public class VaultDataSource implements IVaultDatabase {
         return get(vaultFile.id);
     }
 
+    /**
+     * Completes the vault output stream by updating the hash, size, and duration of a vault file.
+     *
+     * @param vaultFile The VaultFile object to update.
+     * @return The updated VaultFile object.
+     */
     public VaultFile completeVaultOutputStream(VaultFile vaultFile) {
         ContentValues values = new ContentValues();
 
@@ -176,6 +231,12 @@ public class VaultDataSource implements IVaultDatabase {
         return get(vaultFile.id);
     }
 
+    /**
+     * Retrieves a vault file by its ID.
+     *
+     * @param id The ID of the vault file.
+     * @return The corresponding VaultFile object, or null if not found.
+     */
     @Override
     public VaultFile get(String id) {
         try (Cursor cursor = database.query(
@@ -207,6 +268,13 @@ public class VaultDataSource implements IVaultDatabase {
         return null;
     }
 
+    /**
+     * Renames a vault file.
+     *
+     * @param id   The ID of the vault file to rename.
+     * @param name The new name for the vault file.
+     * @return The updated VaultFile object.
+     */
     @Override
     public VaultFile rename(String id, String name) {
         ContentValues values = new ContentValues();
@@ -219,6 +287,13 @@ public class VaultDataSource implements IVaultDatabase {
         return get(id);
     }
 
+    /**
+     * Moves a vault file to a new parent.
+     *
+     * @param vaultFile  The VaultFile object to move.
+     * @param newParent  The ID of the new parent.
+     * @return True if the move operation is successful, false otherwise.
+     */
     @Override
     public boolean move(VaultFile vaultFile, String newParent) {
         ContentValues values = new ContentValues();
@@ -230,6 +305,12 @@ public class VaultDataSource implements IVaultDatabase {
         return count == 1;
     }
 
+    /**
+     * Retrieves a list of vault files by their IDs.
+     *
+     * @param ids The array of vault file IDs.
+     * @return A list of VaultFile objects.
+     */
     @Override
     public List<VaultFile> get(String[] ids) {
         List<VaultFile> files = new ArrayList<>();
@@ -245,6 +326,13 @@ public class VaultDataSource implements IVaultDatabase {
         return null;
     }
 
+    /**
+     * Deletes a vault file.
+     *
+     * @param vaultFile The VaultFile object to delete.
+     * @param deleter   The IVaultFileDeleter implementation for performing the deletion.
+     * @return True if the delete operation is successful, false otherwise.
+     */
     @Override
     public boolean delete(VaultFile vaultFile, IVaultFileDeleter deleter) {
         try {
@@ -266,11 +354,20 @@ public class VaultDataSource implements IVaultDatabase {
         }
     }
 
+    /**
+     * Destroys the VaultDataSource instance by deleting all records from the vault file table.
+     */
     @Override
     public void destroy() {
         deleteTable(D.T_VAULT_FILE);
     }
 
+    /**
+     * Converts a database cursor to a VaultFile object.
+     *
+     * @param cursor The database cursor.
+     * @return The corresponding VaultFile object.
+     */
     @SuppressLint("TimberArgCount")
     private VaultFile cursorToVaultFile(Cursor cursor) {
         VaultFile vaultFile = new VaultFile();
@@ -291,10 +388,23 @@ public class VaultDataSource implements IVaultDatabase {
         return vaultFile;
     }
 
+    /**
+     * Constructs a column name with a table alias.
+     *
+     * @param column The column name.
+     * @return The column name with the table alias.
+     */
     private String cn(String column) {
         return D.T_VAULT_FILE + "." + column;
     }
 
+    /**
+     * Constructs a filter query based on the filter type and parent ID.
+     *
+     * @param filter   The filter type.
+     * @param parentId The parent ID.
+     * @return The filter query string.
+     */
     private String getFilterQuery(FilterType filter, String parentId) {
         if (filter == null)
             return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
@@ -335,10 +445,11 @@ public class VaultDataSource implements IVaultDatabase {
         }
     }
 
-    private String cn(String table, String column, String as) {
-        return table + "." + column + " AS " + as;
-    }
-
+    /**
+     * Deletes all records from a table except the root directory.
+     *
+     * @param table The table name.
+     */
     private void deleteTable(String table) {
         database.delete(table,D.C_ID + " != '" + ROOT_UID + "'",null);
     }
