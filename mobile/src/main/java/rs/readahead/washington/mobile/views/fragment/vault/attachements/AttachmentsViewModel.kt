@@ -9,6 +9,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
+import com.hzontal.tella_vault.rx.RxVault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -25,9 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AttachmentsViewModel @Inject constructor(
     application: Application,
-    private val keyDataSource: KeyDataSource
-
-) : AndroidViewModel(
+    private val keyDataSource: KeyDataSource,
+    private val rxVault: RxVault
+    ) : AndroidViewModel(
     application
 ) {
     private val disposables = CompositeDisposable()
@@ -68,10 +69,10 @@ class AttachmentsViewModel @Inject constructor(
     val onConfirmDeleteFiles: LiveData<Pair<List<VaultFile?>, Boolean>> = _onConfirmDeleteFiles
 
     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
-        MyApplication.rxVault.get(parent)
+       rxVault.get(parent)
             .subscribe(
                 { vaultFile: VaultFile? ->
-                    disposables.add(MyApplication.rxVault.list(vaultFile, filterType, sort, null)
+                    disposables.add(rxVault.list(vaultFile, filterType, sort, null)
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe { }
                         .observeOn(AndroidSchedulers.mainThread())
