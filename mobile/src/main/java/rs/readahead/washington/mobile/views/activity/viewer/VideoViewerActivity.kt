@@ -1,24 +1,21 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
-import android.provider.Settings
 import android.view.KeyEvent
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -46,9 +43,9 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
 
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
+    private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private lateinit var binding: ActivityVideoViewerBinding
     private lateinit var toolbar: Toolbar
@@ -90,6 +87,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         simpleExoPlayerView.requestFocus()
 
         initObservers()
+
+        filePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == PICKER_FILE_REQUEST_CODE) {
+                    assert(result.data != null)
+                    vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, result.data?.data) }
+                }
+            }
     }
 
     private fun initObservers() {
@@ -186,14 +191,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 //        }
 //    }
 
-    private val filePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == PICKER_FILE_REQUEST_CODE) {
-            assert(result.data != null)
-            vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, result.data?.data) }
-        }
-    }
 
-   // File search logic here
+    // File search logic here
     private fun performFileSearch() {
         if (hasStoragePermissions(this)) {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -250,6 +249,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     fun onExportEnded() {
         hideProgressDialog()
     }
+
     /* to be used in other activities */
     fun onMediaFileDeleteConfirmation(mediaFileDeleteConfirmation: MediaFileDeleteConfirmation) {
         if (mediaFileDeleteConfirmation.showConfirmDelete) {
@@ -328,34 +328,34 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private fun initializePlayer() {
         val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
 
-            this.vaultFile = vaultFile
-            toolbar.title = vaultFile.name
-            setupMetadataMenuItem(vaultFile.metadata != null)
+        this.vaultFile = vaultFile
+        toolbar.title = vaultFile.name
+        setupMetadataMenuItem(vaultFile.metadata != null)
 
-            val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
-            val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
-            val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
-                .createMediaSource(mediaItem)
+        val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
+        val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
+        val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
+            .createMediaSource(mediaItem)
 
-            val haveResumePosition = resumeWindow != C.INDEX_UNSET
-            if (player == null) {
-                player = SimpleExoPlayer.Builder(this).build().apply {
-                    playWhenReady = shouldAutoPlay
-                    simpleExoPlayerView.player = this
-                }
-            } else {
-                player?.stop()
+        val haveResumePosition = resumeWindow != C.INDEX_UNSET
+        if (player == null) {
+            player = SimpleExoPlayer.Builder(this).build().apply {
+                playWhenReady = shouldAutoPlay
+                simpleExoPlayerView.player = this
             }
+        } else {
+            player?.stop()
+        }
 
-            player?.apply {
-                if (haveResumePosition) {
-                    seekTo(resumeWindow, resumePosition)
-                }
-                setMediaSource(mediaSource, !haveResumePosition)
-                prepare()
+        player?.apply {
+            if (haveResumePosition) {
+                seekTo(resumeWindow, resumePosition)
             }
+            setMediaSource(mediaSource, !haveResumePosition)
+            prepare()
+        }
 
-            needRetrySource = false
+        needRetrySource = false
 
     }
 //    private fun initializeMedia(){
@@ -405,6 +405,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     override fun onVisibilityChanged(visibility: Int) {
         toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
     }
+
     private fun setupToolbar() {
         toolbar = binding.playerToolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -418,7 +419,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             toolbar.menu.findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener {
-                    VaultActionsHelper.showVaultActionsDialog(this,vaultFile,viewModel,{
+                    VaultActionsHelper.showVaultActionsDialog(this, vaultFile, viewModel, {
                         isInfoShown = true
                         onVisibilityChanged(View.VISIBLE)
                     }, toolbar = toolbar)
@@ -531,17 +532,18 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
-                LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
                 // Permission granted, perform the necessary actions
+                LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
+                // performFileSearch()
             } else {
                 // Permission denied, handle accordingly
             }
         }
+
     private fun requestStoragePermissions() {
         maybeChangeTemporaryTimeout()
         requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
-
 
 
 }

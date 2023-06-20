@@ -605,7 +605,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/PhotoViewerTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.AudioPlayActivity"
+            android:name=".views.activity.viewer.AudioPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/play.audio_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />

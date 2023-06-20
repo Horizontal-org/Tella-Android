@@ -37,6 +37,7 @@ import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterC
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DialogsUtil;
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity;
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity;
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter;
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView;

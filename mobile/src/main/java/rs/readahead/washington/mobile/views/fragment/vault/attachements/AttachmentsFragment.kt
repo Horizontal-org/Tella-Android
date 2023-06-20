@@ -66,6 +66,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler.walkAllFilesWithDir
 import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
