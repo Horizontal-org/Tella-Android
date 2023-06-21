@@ -100,6 +100,7 @@ class ReportsEntryFragment :
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
+        highLightButtonsInit()
         checkIsNewDraftEntry()
         highLightSubmitButton()
         highLightButtonOutBoxButton()
@@ -150,14 +151,26 @@ class ReportsEntryFragment :
         )
     }
 
+    private fun highLightButtonsInit() {
+        binding?.reportTitleEt?.let { title ->
+            isTitleEnabled = title.length() > 0
+        }
+
+        binding?.reportDescriptionEt?.let { description ->
+            isDescriptionEnabled = description.length() > 0
+        }
+    }
+
     private fun highLightSubmitButton() {
         binding?.reportTitleEt?.onChange { title ->
-            isTitleEnabled = title.length > 1
+            isTitleEnabled = title.length > 0
             highLightDraftButton(isTitleEnabled)
+            highLightButtonOutBoxButton()
         }
 
         binding?.reportDescriptionEt?.onChange { description ->
-            isDescriptionEnabled = description.length > 1
+            isDescriptionEnabled = description.length > 0
+            highLightDraftButton(isTitleEnabled)
             highLightButtonOutBoxButton()
         }
 
