@@ -76,18 +76,6 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
         )
     }
 
-    fun deleteMediaFiles(vaultFile: VaultFile?) {
-        disposables.add(MyApplication.rxVault.delete(vaultFile)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { isDeleted: Boolean? -> _onMediaFileDeleted.postValue(isDeleted) }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(R.string.gallery_toast_fail_deleting_files)
-
-            })
-    }
 
     fun renameVaultFile(id: String?, name: String?) {
         disposables.add(MyApplication.rxVault.rename(id, name)
@@ -102,6 +90,20 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                 _error.postValue(R.string.gallery_toast_fail_deleting_files)
             })
     }
+
+    fun deleteMediaFiles(vaultFile: VaultFile?) {
+        disposables.add(MyApplication.rxVault.delete(vaultFile)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { isDeleted: Boolean? -> _onMediaFileDeleted.postValue(isDeleted) }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                _error.postValue(R.string.gallery_toast_fail_deleting_files)
+
+            })
+    }
+
 
     /* to be used in audioActivity */
     fun confirmDeleteMediaFile(vaultFile: VaultFile) {

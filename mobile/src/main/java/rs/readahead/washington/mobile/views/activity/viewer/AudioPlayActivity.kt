@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.ThreadUtil
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showExportWithMetadataDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 import timber.log.Timber
@@ -93,40 +94,10 @@ class AudioPlayActivity : BaseLockActivity() {
         if (intent.hasExtra(Companion.NO_ACTIONS)) {
             actionsDisabled = true
         }
+        initVaultMediaFile()
         initAudioListener()
-        if (intent.hasExtra(Companion.PLAY_MEDIA_FILE)) {
-            val vaultFile =
-                intent.getSerializableExtra(Companion.PLAY_MEDIA_FILE) as VaultFile?
-            if (vaultFile != null) {
-                ThreadUtil.runOnMain {
-                    onMediaFileSuccess(
-                        vaultFile
-                    )
-                }
-            }
-        } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
-            val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
-            if (id != null) {
-                viewModel!!.getMediaFile(id)
-            }
-        }
         initObservers()
-
-        filePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val intent = result.data
-                if (intent != null) {
-                    val uri = intent.data
-                    // Handle the returned URI here
-                    if (uri != null) {
-                        viewModel.exportNewMediaFile(withMetadata, handlingVaultFile!!, uri)
-                    } else {
-                        // Handle the case where no URI is selected
-                    }
-                }
-            }
-        }
-
+        initFilePickerLauncher()
     }
 
     private fun initObservers() {
@@ -156,9 +127,43 @@ class AudioPlayActivity : BaseLockActivity() {
                 onMediaFileSuccess(renamed)
             }
         }
-
     }
 
+    private fun initFilePickerLauncher() {
+        filePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    if (intent != null) {
+                        val uri = intent.data
+                        // Handle the returned URI here
+                        if (uri != null) {
+                            viewModel.exportNewMediaFile(withMetadata, handlingVaultFile!!, uri)
+                        } else {
+                            // Handle the case where no URI is selected
+                        }
+                    }
+                }
+            }
+    }
+    private fun initVaultMediaFile(){
+        if (intent.hasExtra(Companion.PLAY_MEDIA_FILE)) {
+        val vaultFile =
+            intent.getSerializableExtra(Companion.PLAY_MEDIA_FILE) as VaultFile?
+        if (vaultFile != null) {
+            ThreadUtil.runOnMain {
+                onMediaFileSuccess(
+                    vaultFile
+                )
+            }
+        }
+    } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
+        val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
+        if (id != null) {
+            viewModel!!.getMediaFile(id)
+        }
+    }
+    }
     private fun initAudioListener() {
         audioPlayerListener = object : AudioPlayer.Listener {
             override fun onStart(duration: Int) {
@@ -287,6 +292,7 @@ class AudioPlayActivity : BaseLockActivity() {
         }
     }
 
+
     private fun performFileSearch() {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -331,7 +337,7 @@ class AudioPlayActivity : BaseLockActivity() {
         hideProgressDialog()
     }
 
-    fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
+    private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
         if (showConfirmDelete) {
             showConfirmSheet(
                 supportFragmentManager,
@@ -510,7 +516,6 @@ class AudioPlayActivity : BaseLockActivity() {
                         Unit
                     }
                 }
-
                 override fun move() {}
                 override fun rename() {
                     showVaultRenameSheet(
@@ -549,7 +554,6 @@ class AudioPlayActivity : BaseLockActivity() {
                     addFragment(VaultInfoFragment().newInstance(vaultFile, false), R.id.root)
                     isInfoShown = true
                 }
-
                 override fun delete() {
                     showConfirmSheet(
                         supportFragmentManager,
