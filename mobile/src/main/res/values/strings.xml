@@ -788,5 +788,5 @@ button to add a new template.</string>
 
     <string name="settings.sec_keep.exif_switch" translatable="false">Preserve metadata when importing</string>
     <string name="settings.sec_keep.exif_expl" translatable="false">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
-
+    <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
 </resources>

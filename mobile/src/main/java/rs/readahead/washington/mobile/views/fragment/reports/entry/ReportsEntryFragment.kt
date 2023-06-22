@@ -57,7 +57,7 @@ class ReportsEntryFragment :
         ReportsFilesRecyclerViewAdapter(this)
     }
     private lateinit var selectedServer: TellaReportServer
-    private var servers: ArrayList<TellaReportServer>? = null
+    private lateinit var servers: ArrayList<TellaReportServer>
     private var reportInstance: ReportInstance? = null
     private var isNewDraft = true
     private var isTitleEnabled = false
@@ -213,9 +213,12 @@ class ReportsEntryFragment :
     }
 
     private fun showSubmitReportErrorSnackBar() {
+        val errorRes =
+            if (servers.size > 1) R.string.Snackbar_Submit_Report_WithProject_Error else R.string.Snackbar_Submit_Report_Error
+
         DialogUtils.showBottomMessage(
             baseActivity,
-            getString(R.string.Snackbar_Submit_Report_Error),
+            getString(errorRes),
             false
         )
     }
@@ -263,9 +266,9 @@ class ReportsEntryFragment :
         with(viewModel) {
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
+                servers = arrayListOf()
+                servers.addAll(serversList)
                 if (serversList.size > 1) {
-                    servers = arrayListOf()
-                    servers?.addAll(serversList)
                     val listDropDown = mutableListOf<DropDownItem>()
                     serversList.map { server ->
                         listDropDown.add(DropDownItem(server.projectId, server.projectName))
@@ -277,7 +280,7 @@ class ReportsEntryFragment :
                         baseActivity
                     )
                     this@ReportsEntryFragment.reportInstance?.let {
-                        servers?.first { server -> server.id == it.serverId }?.let {
+                        servers.first { server -> server.id == it.serverId }.let {
                             selectedServer = it
                             binding?.serversDropdown?.setDefaultName(it.name)
                         }
@@ -434,7 +437,7 @@ class ReportsEntryFragment :
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-        servers?.get(position)?.let {
+        servers.get(position).let {
             selectedServer = it
         }
     }
