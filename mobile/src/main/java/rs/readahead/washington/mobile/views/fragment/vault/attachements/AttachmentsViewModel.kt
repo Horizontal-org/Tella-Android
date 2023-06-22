@@ -111,7 +111,7 @@ class AttachmentsViewModel @Inject constructor(
                 })
     }
 
-    private fun moveFile(parentId: String, vaultFile: VaultFile): Single<Boolean> {
+     private fun moveFile(parentId: String, vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.rxVault.move(vaultFile, parentId).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
