@@ -707,11 +707,9 @@ button to add a new template.</string>
     <string name="Setting_Reports_Edit_Connection" >Edit connection</string>
     <string name="Setting_Reports_Connection_Name" >Connection name</string>
     <string name="Setting_Reports_Auto_Report" >Auto-report</string>
-
-
-    <string name="Setting_Reports_Auto_Report_Description" >Whenever you take a photo/video/audio\nrecording in Tella, a report will automatically be\ncreated with the file and uploaded to this project.</string>
+    <string name="Setting_Reports_Auto_Report_Description" >Whenever you take a photo/video/audio recording in Tella, a report will automatically be created with the file and uploaded to this project.</string>
     <string name="Setting_Reports_Auto_Delete" >Auto-delete</string>
-    <string name="Setting_Reports_Auto_Delete_Description" >Automatically delete files from your device once\nthey are uploaded to this project as a report.</string>
+    <string name="Setting_Reports_Auto_Delete_Description" >Automatically delete files from your device once they are uploaded to this project as a report.</string>
     <string name="Setting_Reports_Settings_Completed" >Advanced settings complete</string>
     <string name="Setting_Reports_Settings_Completed_Description" >You can always change your Reports preferences in the Tella Settings.</string>
     <string name="Drafts_Reports_Empty_Message" >Your Drafts is currently empty. Reports that you have not submitted will appear here.</string>
