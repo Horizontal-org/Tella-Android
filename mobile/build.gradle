@@ -112,7 +112,6 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
-    implementation "com.evernote:android-job:$versions.evernoteJob"
 
     // digest auth
     implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
