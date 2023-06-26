@@ -80,7 +80,7 @@ class WorkerUploadReport
 
     private fun getServer(dataSource: DataSource): TellaReportServer? {
         return dataSource.listTellaUploadServers().blockingGet()
-            .firstOrNull { server -> server.isAutoUpload }
+            .firstOrNull { server -> server.isActivatedBackgroundUpload || server.isAutoUpload }
     }
 
     private fun getAutoBackgroundServers(dataSource: DataSource): Single<List<TellaReportServer>> {
