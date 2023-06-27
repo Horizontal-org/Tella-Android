@@ -7,7 +7,7 @@
   <string name="LockSelect_Action_Continue">Siguiente</string>
   <string name="LockPatternSet_Draw_Pattern">Dibujar un patrón de desbloqueo</string>
   <string name="UnlockPattern_DrawToUnlock">Dibuja el patrón para desbloquear a Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed"></string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Tu nuevo patrón de desbloqueo</string>
   <string name="LockPatternSet_Pattern_Recorded">Patrón registrado</string>
   <string name="UnlockPattern_PatternTooShort">Dibuja tu patrón conectando
 al menos seis puntos</string>
