@@ -84,18 +84,6 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     private fun getCamoImage(): Drawable? {
-        var drawable = ContextCompat.getDrawable(baseActivity, R.drawable.ic_server)
-        val currentAlias = Preferences.getAppAlias()
-
-        if (currentAlias == cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias) {
-            return ContextCompat.getDrawable(baseActivity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId)
-        }
-
-        for (option in cm.options) {
-            if (option.alias == currentAlias) {
-                drawable = ContextCompat.getDrawable(baseActivity, option.drawableResId)
-            }
-        }
-        return drawable
+        return ContextCompat.getDrawable(baseActivity,R.mipmap.tella_icon)
     }
 }
