@@ -287,6 +287,10 @@ class ReportsEntryFragment :
                         this@ReportsEntryFragment.submitReport(instance)
                     }
                     EntityStatus.FINALIZED -> {
+                        DialogUtils.showBottomMessage(
+                            baseActivity, getString(R.string.Report_Save_Outbox_Confirmation),
+                            false
+                        )
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
