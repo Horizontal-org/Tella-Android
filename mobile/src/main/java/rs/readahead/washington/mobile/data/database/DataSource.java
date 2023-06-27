@@ -2668,7 +2668,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 EntityStatus.SUBMISSION_PENDING,
                 EntityStatus.SUBMISSION_PARTIAL_PARTS,
                 EntityStatus.SUBMISSION_IN_PROGRESS,
-                EntityStatus.SCHEDULED
+                EntityStatus.SCHEDULED,
+                EntityStatus.PAUSED
         });
     }
 
