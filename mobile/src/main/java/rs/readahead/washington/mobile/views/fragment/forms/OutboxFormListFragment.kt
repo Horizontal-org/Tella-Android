@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -22,10 +22,8 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     FragmentOutboxFormListBinding::inflate
 ),
     FormListInterfce, ISavedFormsInterface {
-    private val model: SharedFormsViewModel by lazy {
-        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
-    }
 
+    private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectOutboxFormInstanceRecycleViewAdapter? = null
 
     override fun getFormListType(): FormListInterfce.Type {

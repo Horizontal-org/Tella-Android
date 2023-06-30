@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,11 +24,9 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
 ),
     FormListInterfce, ISavedFormsInterface {
 
-    private val model: SharedFormsViewModel by lazy {
-        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
-    }
-
+    private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectDraftFormInstanceRecycleViewAdapter? = null
+
     override fun getFormListType(): FormListInterfce.Type {
         return FormListInterfce.Type.DRAFT
     }

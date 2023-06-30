@@ -15,7 +15,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -52,7 +52,7 @@ class CollectMainFragment :
     private var mViewPager: ViewPager? = null
     private val adapter by lazy { ViewPagerAdapter(baseActivity.supportFragmentManager) }
     private var numOfCollectServers: Long = 0
-    private val model: SharedFormsViewModel by activityViewModels()
+    private val model: SharedFormsViewModel by viewModels()
 
     companion object {
         // Use this function to create instance of current fragment

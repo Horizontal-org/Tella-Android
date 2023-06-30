@@ -5,11 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.AsyncSubject
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.instance.InstanceInitializationFactory
 import org.javarosa.core.reference.ReferenceManager
@@ -25,9 +25,10 @@ import rs.readahead.washington.mobile.domain.entity.collect.*
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.IOpenRosaRepository
 import rs.readahead.washington.mobile.odk.FormController
+import javax.inject.Inject
 
-class SharedFormsViewModel(private val mApplication: Application) : AndroidViewModel(mApplication) {
-
+@HiltViewModel
+class SharedFormsViewModel @Inject constructor(val mApplication: Application) : AndroidViewModel(mApplication) {
     var onCreateFormController = SingleLiveEvent<FormController?>()
     var onGetBlankFormDefSuccess = MutableLiveData<FormPair>()
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
@@ -55,7 +56,6 @@ class SharedFormsViewModel(private val mApplication: Application) : AndroidViewM
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
     private var odkRepository: IOpenRosaRepository = OpenRosaRepository()
-    private val asyncDataSource = AsyncSubject.create<DataSource>()
 
 
     fun createFormController(collectForm: CollectForm, formDef: FormDef) {

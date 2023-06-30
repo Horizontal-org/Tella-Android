@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
@@ -36,9 +36,7 @@ class BlankFormsListFragment :
     BaseBindingFragment<FragmentBlankFormsListBinding>(FragmentBlankFormsListBinding::inflate),
     FormListInterfce {
 
-    private val model: SharedFormsViewModel by lazy {
-        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
-    }
+    private val model: SharedFormsViewModel by viewModels()
 
     private var availableForms: MutableList<CollectForm>? = null
     private var downloadedForms: MutableList<CollectForm>? = null
