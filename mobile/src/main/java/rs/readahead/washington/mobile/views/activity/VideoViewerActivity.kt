@@ -50,8 +50,8 @@ import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.PICKER_FILE_REQUEST_CODE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 

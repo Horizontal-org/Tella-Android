@@ -1,7 +1,8 @@
 package rs.readahead.washington.mobile.views.activity;
 
 import static com.hzontal.tella_vault.Metadata.VIEW_METADATA;
-import static rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragmentKt.PICKER_FILE_REQUEST_CODE;
+
+import static rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsConstantsKt.PICKER_FILE_REQUEST_CODE;
 
 import android.Manifest;
 import android.content.Context;
