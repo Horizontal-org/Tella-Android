@@ -1,55 +1,41 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
-import android.Manifest
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
 import android.view.KeyEvent
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.C
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.ui.*
-import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.*
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
-import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
 import rs.readahead.washington.mobile.util.DialogsUtil
-import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showExportWithMetadataDialog
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.PICKER_FILE_REQUEST_CODE
 
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
-    private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
-    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var simpleExoPlayerView: StyledPlayerView
     private lateinit var binding: ActivityVideoViewerBinding
     private lateinit var toolbar: Toolbar
@@ -80,36 +66,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         setContentView(binding.root)
 
         actionsDisabled = intent.hasExtra(NO_ACTIONS)
-
+        initContracts()
         setupToolbar()
         shouldAutoPlay = true
         clearResumePosition()
-
         simpleExoPlayerView = findViewById(R.id.player_view)
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
-
         initObservers()
-
-        filePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == PICKER_FILE_REQUEST_CODE) {
-                    assert(result.data != null)
-                    vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, result.data?.data) }
-                }
-            }
-
-         requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-                if (isGranted) {
-                    // Permission granted, perform the necessary actions
-                    LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
-                    // performFileSearch()
-                } else {
-                    // Permission denied, handle accordingly
-                }
-            }
-
     }
 
     private fun initObservers() {
@@ -179,54 +143,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         hideProgressDialog()
         super.onDestroy()
     }
-
-//    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//     fun exportMediaFile(vaultFile: VaultFile?, withMetadata: Boolean) {
-//        if (vaultFile?.metadata != null && withMetadata) {
-//            showExportWithMetadataDialog()
-//        } else {
-//            performFileSearch()
-//        }
-//    }
-//    private fun performFileSearch() {
-//        if (hasStoragePermissions(this)) {
-//            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-//                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-//                intent.addFlags(
-//                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                )
-//                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
-//            } else {
-//                vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, null) }
-//
-//            }
-//        } else {
-//            requestStoragePermissionss()
-//        }
-//    }
-
-
-//    // File search logic here
-//    private fun performFileSearch() {
-//        if (hasStoragePermissions(this)) {
-//            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-//                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-//                    addFlags(
-//                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-//                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-//                                Intent.FLAG_GRANT_READ_URI_PERMISSION
-//                    )
-//                }
-//                filePickerLauncher.launch(intent)
-//            } else {
-//                vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, null) }
-//            }
-//        } else {
-//            requestStoragePermissions()
-//        }
-//    }
-
-
 
     fun onMediaExported() {
         DialogUtils.showBottomMessage(
@@ -409,10 +325,17 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             toolbar.menu.findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener {
-                    showVaultActionsDialog( vaultFile, viewModel, {
-                        isInfoShown = true
-                        onVisibilityChanged(View.VISIBLE)
-                    }, toolbar = toolbar, filePickerLauncher = filePickerLauncher, requestPermissionLauncher = requestPermissionLauncher)
+                    vaultFile?.let { it1 ->
+                        showVaultActionsDialog(
+                            it1,
+                            viewModel,
+                            {
+                                isInfoShown = true
+                                onVisibilityChanged(View.VISIBLE)
+                            },
+                            toolbar = toolbar
+                        )
+                    }
                     false
                 }
         }
@@ -519,7 +442,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 //            LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
 //        }
 //    }
-
 
 
 }
