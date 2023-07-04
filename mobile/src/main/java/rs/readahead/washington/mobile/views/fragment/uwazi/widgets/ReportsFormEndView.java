@@ -212,7 +212,7 @@ public class ReportsFormEndView extends FrameLayout {
         for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
             SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
 
-            if (instance.getStatus() == EntityStatus.SUBMITTED) {
+            if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
                 item.setPartUploaded();
             } else {
                 item.setPartCleared();

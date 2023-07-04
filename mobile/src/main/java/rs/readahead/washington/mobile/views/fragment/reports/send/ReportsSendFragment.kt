@@ -63,7 +63,6 @@ class ReportsSendFragment :
                         EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
                             instanceProgress.postValue(null)
-
                         }
                         EntityStatus.PAUSED -> {
                             pauseResumeLabel(entity)
@@ -163,7 +162,7 @@ class ReportsSendFragment :
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.clearDisposable()
+
                 }
             })
     }
@@ -191,7 +190,7 @@ class ReportsSendFragment :
         }
     }
 
-    fun submitEntity() {
+    private fun submitEntity() {
         reportInstance?.let { entity ->
             viewModel.submitReport(entity)
         }
