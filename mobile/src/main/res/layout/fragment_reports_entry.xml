@@ -175,6 +175,7 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
             app:layout_constraintCircleRadius="16dp">
 
             <ImageView
+                android:id="@+id/later_clock"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
@@ -212,7 +213,7 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
             android:layout_marginHorizontal="@dimen/tella_main_vertical"
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
             android:layout_toEndOf="@+id/send_later_btn"
-            android:background="@drawable/bg_round_orange16_btn"
+            android:background="@drawable/bg_round_orange_btn"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:text="@string/collect.end_action_submit"

@@ -180,6 +180,9 @@ class ReportsEntryFragment :
                 .isNotEmpty())
 
         binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) 1F else 0.6F)
+        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) 1F else 0.6F)
+
         binding?.sendLaterBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
