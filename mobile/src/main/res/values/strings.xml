@@ -734,8 +734,9 @@ button to add a new template.</string>
     <string name="Auto_Upload_Media_Report">The photo(s)/video you took has been automatically uploaded as a report.</string>
     <string name="Auto_Upload_Recording_Report">The recording you made has been automatically uploaded as a report.</string>
     <string name="Auto_Upload_Imported_Report_And_Deleted">The file(s) you imported have been uploaded as a report and automatically deleted.</string>
-    <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"The photo/video you took has been uploaded as a report and automatically deleted."</string>
-    <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"The recording you made has been uploaded as a report and automatically deleted."</string>
+    <string name="Auto_Upload_Media_Imported_Report_And_Deleted">The photo/video you took has been uploaded as a report and automatically deleted.</string>
+    <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">The recording you made has been uploaded as a report and automatically deleted.</string>
+   <string name="Report_Available_in_Outbox">Your report is available in the Outbox</string>
     <string name="Delete_Report_Confirmation" >Are you sure you want to delete this report? </string>
     <string name="Delete_Submitted_Report_Confirmation">Are you sure you want to delete this sent report from your records? The files that have been uploaded will remain on the server.</string>
     <string name="View_Report" >View </string>

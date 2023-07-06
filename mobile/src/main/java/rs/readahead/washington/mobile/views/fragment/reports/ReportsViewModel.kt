@@ -326,12 +326,13 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun submitReport(instance: ReportInstance) {
+    fun submitReport(instance: ReportInstance,backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
             reportsRepository.submitReport(
                 server,
-                instance
+                instance,
+                backButtonPressed
             )
         },
             onError = { throwable ->

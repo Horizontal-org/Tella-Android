@@ -72,7 +72,16 @@ class ReportsRepositoryImp @Inject internal constructor(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun submitReport(server: TellaReportServer, instance: ReportInstance) {
+    override fun submitReport(
+        server: TellaReportServer,
+        instance: ReportInstance,
+        backButtonPressed: Boolean
+    ) {
+
+        if (backButtonPressed){
+            instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+            dataSource.saveInstance(instance).subscribe()
+        }
 
         if (!statusProvider.isOnline()) {
             instance.status = EntityStatus.SUBMISSION_PENDING
@@ -545,7 +554,6 @@ class ReportsRepositoryImp @Inject internal constructor(
             this.code = -1
         }
     }
-
 
 
 }

@@ -5,13 +5,16 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_IS_FROM_DRAFT
@@ -37,7 +40,7 @@ class ReportsSendFragment :
     }
 
     private fun initData() {
-       checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
+        checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
 
         with(viewModel) {
             reportProcess.observe(viewLifecycleOwner) { progress ->
@@ -60,20 +63,24 @@ class ReportsSendFragment :
                             viewModel.saveSubmitted(entity)
                             instanceProgress.postValue(null)
                         }
+
                         EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
                             instanceProgress.postValue(null)
                         }
+
                         EntityStatus.PAUSED -> {
                             pauseResumeLabel(entity)
                             viewModel.saveOutbox(entity)
                         }
+
                         EntityStatus.DELETED -> {
                             instanceProgress.postValue(null)
                             handleBackButton()
                         }
-                        else -> {
 
+                        else -> {
+                            this@ReportsSendFragment.reportInstance = entity
                         }
                     }
                 }
@@ -85,6 +92,7 @@ class ReportsSendFragment :
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
+
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
@@ -103,6 +111,9 @@ class ReportsSendFragment :
         } else {
             nav().popBackStack(R.id.newReportScreen, true)
         }
+
+        reportInstance?.let { viewModel.submitReport(instance = it, true) }
+        DialogUtils.showBottomMessage(baseActivity,getString(R.string.Report_Available_in_Outbox),false)
     }
 
     private fun initView() {
@@ -158,13 +169,13 @@ class ReportsSendFragment :
     }
 
     private fun handleOnBackPressed() {
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-
-                }
-            })
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Back button pressed
+                reportInstance?.let { viewModel.submitReport(instance = it, true) }
+                DialogUtils.showBottomMessage(baseActivity,getString(R.string.Report_Available_in_Outbox),false)
+            }
+        })
     }
 
     private fun showFormEndView() {
@@ -192,7 +203,7 @@ class ReportsSendFragment :
 
     private fun submitEntity() {
         reportInstance?.let { entity ->
-            viewModel.submitReport(entity)
+            viewModel.submitReport(entity, false)
         }
     }
 }
