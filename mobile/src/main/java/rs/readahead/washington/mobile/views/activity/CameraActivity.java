@@ -40,6 +40,7 @@ import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 import com.otaliastudios.cameraview.size.SizeSelector;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -344,9 +345,19 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     @Override
     public void onMediaFilesUploadScheduled() {
-        if (intentMode != IntentMode.STAND) {
-            finish();
+        boolean isAutoUploadEnabled = Preferences.isAutoUploadEnabled();
+        boolean isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled();
+        String message;
+
+        if (isAutoUploadEnabled && isAutoDeleteEnabled) {
+            message = getString(R.string.Auto_Upload_Media_Imported_Report_And_Deleted);
+        } else if (isAutoUploadEnabled) {
+            message = getString(R.string.Auto_Upload_Media_Report);
+        } else {
+            return;
         }
+
+        DialogUtils.showBottomMessage(this, message, false);
     }
 
     @Override
