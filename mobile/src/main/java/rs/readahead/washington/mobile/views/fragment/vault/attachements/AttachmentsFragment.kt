@@ -4,6 +4,7 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -129,8 +130,7 @@ class AttachmentsFragment :
     }
 
     private fun setUpToolbar() {
-        val activity = context as MainActivity
-        activity.setSupportActionBar(binding.toolbar)
+       baseActivity.setSupportActionBar(binding.toolbar)
     }
 
     private fun initView() {
