@@ -68,7 +68,7 @@ class CollectMainFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        baseActivity.setSupportActionBar(binding?.toolbar)
+        baseActivity.setSupportActionBar(binding.toolbar)
 
         val actionBar: ActionBar? = baseActivity.supportActionBar
         if (actionBar != null) {
@@ -83,13 +83,13 @@ class CollectMainFragment :
         initObservers()
         initViewPageAdapter()
 
-        mViewPager = binding?.formsViewPager
+        mViewPager = binding.formsViewPager
         mViewPager?.adapter = adapter
         mViewPager?.currentItem = blankFragmentPosition
 
-        binding?.tabs?.setupWithViewPager(mViewPager)
+        binding.tabs.setupWithViewPager(mViewPager)
 
-        binding?.fab?.setOnClickListener {
+        binding.fab.setOnClickListener {
             if (MyApplication.isConnectedToInternet(context)) {
                 if (mViewPager?.currentItem == blankFragmentPosition) {
                     getBlankFormsListFragment().refreshBlankForms()
@@ -108,17 +108,17 @@ class CollectMainFragment :
             }
 
             override fun onPageSelected(position: Int) {
-                binding?.fab?.visibility =
+                binding.fab.visibility =
                     if (position == blankFragmentPosition && numOfCollectServers > 0) View.VISIBLE else View.GONE
             }
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
 
-        binding?.blankFormsText?.text =
+        binding.blankFormsText.text =
             Html.fromHtml(getString(R.string.collect_expl_not_connected_to_server))
-        binding?.blankFormsText?.movementMethod = LinkMovementMethod.getInstance()
-        StringUtils.stripUnderlines(binding?.blankFormsText)
+        binding.blankFormsText.movementMethod = LinkMovementMethod.getInstance()
+        StringUtils.stripUnderlines(binding.blankFormsText)
 
         disposables.wire(
             ShowBlankFormEntryEvent::class.java,
@@ -199,7 +199,7 @@ class CollectMainFragment :
                 }
             })
 
-        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+        binding.toolbar.backClickListener = { nav().popBackStack() }
     }
 
     override fun onStart() {
@@ -314,22 +314,22 @@ class CollectMainFragment :
         model.onCountCollectServersEnded.observe(viewLifecycleOwner, { num ->
             numOfCollectServers = num
             if (numOfCollectServers < 1) {
-                binding?.tabs?.visibility = View.GONE
-                binding?.formsViewPager?.visibility = View.GONE
-                binding?.fab?.visibility = View.GONE
-                binding?.noServersView?.visibility = View.VISIBLE
+                binding.tabs.visibility = View.GONE
+                binding.formsViewPager.visibility = View.GONE
+                binding.fab.visibility = View.GONE
+                binding.noServersView.visibility = View.VISIBLE
             } else {
-                binding?.tabs?.visibility = View.VISIBLE
-                binding?.formsViewPager?.visibility = View.VISIBLE
-                binding?.noServersView?.visibility = View.GONE
+                binding.tabs.visibility = View.VISIBLE
+                binding.formsViewPager.visibility = View.VISIBLE
+                binding.noServersView.visibility = View.GONE
                 if (mViewPager?.currentItem == blankFragmentPosition) {
-                    binding?.fab?.visibility = View.VISIBLE
+                    binding.fab.visibility = View.VISIBLE
                 }
             }
         })
 
         model.showFab.observe(viewLifecycleOwner, { show ->
-            binding?.fab?.isVisible = show
+            binding.fab.isVisible = show
         })
     }
 
@@ -464,12 +464,12 @@ class CollectMainFragment :
 
     private fun setPagerToSubmittedFragment() {
         mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.SUBMITTED)
-        binding?.fab?.visibility = View.GONE
+        binding.fab.visibility = View.GONE
     }
 
     private fun setPagerToOutboxFragment() {
         mViewPager?.currentItem = getFragmentPosition(FormListInterfce.Type.OUTBOX)
-        binding?.fab?.visibility = View.GONE
+        binding.fab.visibility = View.GONE
     }
 
     private fun startCollectHelp() {

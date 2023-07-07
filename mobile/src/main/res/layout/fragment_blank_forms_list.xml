@@ -34,6 +34,7 @@
             android:scrollbars="vertical">
 
             <RelativeLayout
+                android:id="@+id/forms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/space_cadet"
