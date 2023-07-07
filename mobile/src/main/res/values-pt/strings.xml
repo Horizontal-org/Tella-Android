@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">Atualizar</string>
   <string name="settings.about_app.bar">Sobre e Ajuda</string>
@@ -85,10 +85,6 @@ ativação do modo</string>
   <string name="gallery_toast_fail.exporting.to.device">Ocorreu um erro ao exportar o arquivo. Por favor, tente novamente</string>
   <string name="permission_dialog.expl_device.storage">Para exportar arquivos, Tella precisa de permissão para gravar no armazenamento do aparelho.</string>
   <string name="gallery_toast_fail.deleting.files">Erro ao excluir arquivos. Por favor, tente novamente.</string>
-  <plurals name="gallery_toast_files.exported">
-    <item quantity="one">%1$d file saved to the device</item>
-    <item quantity="other">%1$d files saved to the device</item>
-  </plurals>
   <string name="gallery_delete.files_dialog.title">Excluir o arquivo?</string>
   <string name="gallery_delete.files_dialog.expl">O arquivo selecionado será excluído permanentemente da sua galeria.</string>
   <string name="gallery_save.to.device_dialog.title">Salvar na galeria do seu aparelho celular?</string>
@@ -124,7 +120,7 @@ ativação do modo</string>
   <string name="settings.docu_verification_action">Modo de verificação</string>
   <string name="settings.docu_verification_action.expl">Torna seus arquivos de mídia verificáveis, coletando informações sobre seu aparelho celular e localização.</string>
   <string name="collect_no.form_heading">Coleta de dados fácil</string>
-  <string name="collect_expl_not.connected.to.server"><![CDATA[Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor compatível. Peça à organização patrocinadora as informações do servidor e <a href=\"tella_scheme://open.collect.manage.servers.activity\"> configure o servidor aqui </a> .]]></string>
+  <string name="collect_expl_not.connected.to.server">Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor compatível. Peça à organização patrocinadora as informações do servidor e <a href="tella_scheme://open.collect.manage.servers.activity"> configure o servidor aqui </a> .</string>
   <string name="collect.draft_expl_no.forms">Não há rascunhos de formulários a serem exibidos.</string>
   <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
   <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
@@ -191,10 +187,6 @@ ativação do modo</string>
   <string name="collect.form_signature_action_clear.signature">Apagar a assinatura</string>
   <string name="collect.form_signature_toast_fail.saving">Houve um erro ao salvar a assinatura.Por favor, tente novamente</string>
   <string name="collect.form_acknowledge_select.expl">ESTÁ BEM. Por favor continue.</string>
-  <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d file</item>
-    <item quantity="other">%d files</item>
-  </plurals>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
   <string name="settings.prot_select_delete.forms">Excluir formulários de esbooço e enviados</string>
@@ -210,8 +202,8 @@ ativação do modo</string>
   <string name="collect_toast_fail.connection.too.weak">A sua conexão com a Internet é muito fraca para enviar o formulário. Por favor, tente novamente</string>
   <string name="gallery_toast_file.encrypted">Arquivo criptografado</string>
   <string name="settings.docu_toast_disconnect.servers.delete">Todos os formulários e servidores foram excluídos</string>
-  <string name="collect.help_expl_not.connected.to.server"><![CDATA[Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor. Solicite as informações do servidor à sua organização e configure-o.]]></string>
-  <string name="collect.help_expl_odk"><![CDATA[Se você deseja criar seus próprios formulários, <a href=\"https://hzontal.org/contact/\"> entre em contato conosco </a> ou use <a href=\"https://opendatakit.org/help/help-for-hire/\"> qualquer serviço baseado no Kit de Dados Abertos (ODK) </a>]]></string>
+  <string name="collect.help_expl_not.connected.to.server">Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor. Solicite as informações do servidor à sua organização e configure-o.</string>
+  <string name="collect.help_expl_odk">Se você deseja criar seus próprios formulários, <a href="https://hzontal.org/contact/"> entre em contato conosco </a> ou use <a href="https://opendatakit.org/help/help-for-hire/"> qualquer serviço baseado no Kit de Dados Abertos (ODK) </a></string>
   <string name="collect.help_expl_no.internet">Se você não estiver conectado à Internet, ainda poderá preencher formulários e salvá-los para enviar quando estiver online.</string>
   <string name="collect_toast_fail.data.too.large">O seu formulário não pôde ser enviado porque os anexos são muito grandes. Por favor, anexe arquivos menores</string>
   <string name="collect.end_heading_submitting">Enviando</string>
@@ -282,16 +274,10 @@ ativação do modo</string>
   <string name="action_upload">Carregar</string>
   <string name="collect.blank_action.desc_more.options">Mais opções</string>
   <string name="action_next">Continuar</string>
-  <string name="Verification_Label_meter">%f m</string>
-  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="meter">%f m</string>
+  <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
-  <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
-  <string name="onboard_setup_text">How would you like to set up Tella?</string>
-  <string name="onboard_full_setup">FULL SETUP</string>
-  <string name="onboard_quick_setup">QUICK SETUP</string>
-  <string name="onboard_setup_explore_custom">Explore and fully customize the app</string>
-  <string name="onboard_setup_start">Set the lock and get started immediately</string>
-  <string name="onboard_setup_customization">Have a customization code/file?</string>
+  <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
   <string name="onboard_password">Password</string>
   <string name="onboard_password_description">The most secure option</string>
@@ -333,7 +319,6 @@ ativação do modo</string>
   <string name="settings.sec_lock_timeout_30min">30 minutos</string>
   <string name="settings.sec_lock_timeout_1hour">1 hora</string>
   <string name="settings.sec_lock_timeout_desc">Decidir quanto tempo leva para Tella se bloquear</string>
-  <string name="settings.prot_select_delete.vault">Excluir Cofre</string>
   <string name="settings.sec_delete.vault_tooltip">Excluir todos os arquivos armazenados no Tella</string>
   <string name="settings.sec_delete.forms_tooltip">Excluir todos os rascunhos e formulários enviados.</string>
   <string name="settings.sec_delete.servers_tooltip">Excluir suas conexões com servidores e todos os formulários associados a eles.</string>
@@ -352,16 +337,16 @@ ativação do modo</string>
   <string name="settings.servers_setup_hide_behind_camouflage_title">hide behind a real app</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">The most secure option: Camouflage Tella behind an actual functioning app</string>
   <string name="settings.servers_setup_change_name_icon_title">CHANGE NAME AND ICON</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><![CDATA[<b>Menos seguro:</b> Tella aparecerá na tela inicial com um nome e ícone de aplicativo diferente. Tocar no novo ícone abre o Tella real.]]></string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Menos seguro:</b> Tella aparecerá na tela inicial com um nome e ícone de aplicativo diferente. Tocar no novo ícone abre o Tella real.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">esconder atrás de um aplicativo calculadora</string>
-  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>Mais seguro:</b> Camuflar Tella atrás de uma aplicação de calculadora que realmente funciona. Digite o seu PIN na calculadora para desbloquear a Tella.]]></string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you
- use a PIN lock.<font color=\"#D6933B\"><b> Change lock here</b></font>]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Mais seguro:</b> Camuflar Tella atrás de uma aplicação de calculadora que realmente funciona. Digite o seu PIN na calculadora para desbloquear a Tella.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Continue</string>
   <string name="settings.camo_icamera">iCamera</string>
   <string name="settings.camo_selfie_cam">Selfie Cam</string>
-  <string name="settings.camo_snap_camera">Snap Câmera</string>
+  <string name="settings.camo_snap_camera">Snap Camera</string>
   <string name="settings.camo_calculate">Calculate</string>
   <string name="settings.camo_calculator_plus">Calculator Plus</string>
   <string name="settings.camo_icalculator">iCalculator</string>
@@ -371,28 +356,14 @@ ativação do modo</string>
   <string name="settings.camo_gamestation">GameStation</string>
   <string name="settings.camo_playnow">PlayNow</string>
   <string name="settings.camo_jeweldash">Jewel Dash</string>
-  <string name="settings.camo_clock">Clock</string>
-  <string name="settings.camo_micamera">MiCamera</string>
-  <string name="settings.camo_forecast">Forecast</string>
-  <string name="settings.camo_game_launcher">Game Launcher</string>
   <string name="settings.camo_time">Hora</string>
   <string name="settings.camo_stopwatch">Cronômetro</string>
-  <string name="settings.camo_music">Music</string>
-  <string name="settings.camo_fitness_life">Fitness Life</string>
-  <string name="settings.camo_health">Health</string>
-  <string name="settings.camo_watch">Watch</string>
-  <string name="settings.camo_astrology">Astrology</string>
-  <string name="settings.camo_dictionary">Dictionary</string>
-  <string name="settings.camo_plant_care">Plant Care</string>
-  <string name="settings.camo_workout">Workout</string>
-  <string name="settings.camo_period_tracker">Period Tracker</string>
   <string name="fragment_mic">Microfone</string>
   <string name="mic_recording">Gravação</string>
   <string name="mic_rename_recording">Renomear gravação</string>
   <string name="recorder_toast_recording.saved">A gravação de áudio foi salva em seus arquivos Tella</string>
-  <string name="onboard.intro_title">Bem-vindo a Tella</string>
+  <string name="onboard.intro_title">Bem vindo a Tella</string>
   <string name="onboard.intro_get_started">Começar</string>
-  <string name="onboard.intro_organization_code">I have a code from my organization</string>
   <string name="onboard.title_camera">Câmera</string>
   <string name="onboard.expl_camera">Tire fotos e grave vídeos diretamente no Tella. Esses arquivos são criptografados e salvos automaticamente no Tella e não serão visíveis na galeria normal do seu telefone.</string>
   <string name="onboard.title_recorder">Gravador</string>
@@ -421,9 +392,6 @@ ativação do modo</string>
   <string name="onboard.hide_behind_calculator_not_possible">A camuflagem da Calculadora só é possível se  usar um bloqueio de PIN (senha de números).</string>
   <string name="onboard.calculator_button">Selecionar calculadora</string>
   <string name="onboard.calculator_expl">Tella ficará escondido atrás de um aplicativo de calculadora que funciona. Desbloqueie o Tella digitando seu PIN na calculadora seguido por =</string>
-  <string name="onboard.customization_title">Customization</string>
-  <string name="onboard.customization_subtitle">Enter your customization code</string>
-  <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
   <string name="settings.general_recent_files_switch_title">Arquivos recentes</string>
   <string name="settings.general_recent_files_switch_expl">Mostre visualizações e um atalho para seus arquivos recentes na tela inicial do Tella.</string>
   <string name="settings.general_favorite_forms_switch_title">Formulários favoritos</string>
@@ -436,19 +404,14 @@ ativação do modo</string>
   <string name="Home_BottomNav_Rec">Áudio</string>
   <string name="Home_BottomNav_Camera">Câmera</string>
   <string name="Home_BottomNav_Forms">Formulários</string>
-  <string name="Home_BottomNav_Reports">Reports</string>
   <string name="Vault_Move_AppBar">Relocalizar</string>
   <string name="Vault_CreateFolder_SheetAction">Criar</string>
   <string name="ServerSettings_ServerName_ToolTip">Dê ao seu servidor um nome para reconhecê-lo se você adicionar mais servidores mais tarde. Pode ser o nome da organização, o nome do projeto, etc.</string>
-  <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
   <string name="Vault_Importing_SheetTitle">Importando e criptografando</string>
   <string name="Rec_Exit_SheetTitle">Salvar a gravação?</string>
   <string name="Rec_Exit_SheetText">A sua gravação não está salva. Gostaria de a salvar antes de sair?</string>
   <string name="Vault_AudioRecordings_AppBar">Gravações de áudio</string>
-  <string name="Vault_Encryting_SheetText" formatted="false">%d % concluído</string>
+  <string name="Vault_Encryting_SheetText">%d % concluído</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Cancelar a encriptação e apagar o arquivo?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">Se cancelar, o seu arquivo será apagado.</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">RETOMAR A ENCRIPTAÇÃO</string>
@@ -458,170 +421,8 @@ ativação do modo</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVER A CAMUFLAGEM</string>
   <string name="SettingsCamo_EnterLock_Password">Digite sua senha para alterar seu método de camuflagem</string>
   <string name="settings.gen_select_about">Sobre e Ajuda</string>
-  <string name="upload_toast_fail.finding.metadata.to.upload">There was an error locating the file\'s verification information. Please try again</string>
-  <string name="upload_toast.fail.finding.file.to.upload">There was an error locating the file to upload. Please try again</string>
-  <string name="gallery_app.bar">Gallery</string>
-  <string name="home_gallery.button">Gallery</string>
-  <string name="onboarding_action_create.pattern">Create pattern</string>
-  <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
-  <string name="home_action.expl_camera">Tap anywhere to open the câmera</string>
   <string name="settings.gen_select_language">Idioma</string>
-  <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
-  <string name="permission_dialog.expl_camera.mic">In order to capture photo, vídeo, and audio files, Tella needs access to your camera and microphone.</string>
-  <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
-  <string name="gallery_subheading_show">Show</string>
-  <string name="gallery_list.item_show.all.files">All</string>
-  <string name="gallery_list.items_show.only.photos">Photos</string>
-  <string name="gallery_list.items_show.only.videos">Videos</string>
-  <string name="gallery_list.items_show.only.audio">Audio recordings</string>
   <string name="home_action.desc_quick.exit">Sair</string>
-  <string name="onboard.camo_heading">Camuflagem</string>
-  <string name="settings.camo_camera4">Câmera</string>
-  <string name="settings.camo_camera3">CameraPro</string>
-  <string name="settings.camo_camera2">SuperCam</string>
-  <string name="settings.camo_camera1">EasyCam</string>
-  <string name="settings.camo_weather3">Weather now</string>
-  <string name="settings.camo_weather2">Local weather</string>
-  <string name="settings.camo_calculator1">Easy Math</string>
-  <string name="settings.camo_weather1">Weather</string>
-  <string name="settings.docu_dialog.action_hide">Hide</string>
-  <string name="settings.docu_auto.upload.server.selection_select">Server</string>
-  <string name="upload_dialog.title_select.server">Server selection</string>
-  <string name="settings.docu_add.server_dialog.select_tella_web">Tella WEB</string>
-  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
-  <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
-  <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
-  <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
-  <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, your files will no longer be auto-uploaded.</string>
-  <string name="settings.docu_auto.upload_action">Auto-upload</string>
-  <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
-  <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
-  <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
-  <string name="settings.select_customization">Customization</string>
-  <string name="collect.outbox_tab.title">Outbox</string>
-  <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
-  <string name="fragment_uwazi">Uwazi</string>
-  <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
-  <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
-  <string name="Uwazi_Action_FillEntity">Create an entity</string>
-  <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
-  <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
-  <string name="UWAZI_Language_Header_Title">Uwazi language</string>
-  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select in which language you would like to download templates. </string>
-  <string name="Uwazi_Send_Header_Title">End of entity</string>
-  <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
-  <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
-  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
-button to add a new template.</string>
-  <string name="Uwazi_Submitted_Entities_Empty_Description">You have no submitted entities.</string>
-  <string name="Uwazi_Outbox_Entities_Empty_Description">Your Outbox is currently empty. Entities
- that are ready to send will appear here.</string>
-  <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
-  <string name="Uwazi_Action_Save_Draft">Save draft</string>
-  <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
-  <string name="Uwazi_Form_MediaHeader">Attached file</string>
-  <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
-  <string name="Uwazi_Action_EditDraft">Edit draft</string>
-  <string name="Uwazi_Action_RemoveDraft">Remove draft</string>
-  <string name="Uwazi_Submitted_Entity_Header_Title">Summary</string>
-  <string name="Uwazi_Action_ViewEntity">View entity</string>
-  <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
-  <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
-  <string name="Uwazi_WidgetSubtitle_DateTo">To</string>
-  <string name="Uwazi_WidgetSubtitle_Label">Label</string>
-  <string name="Uwazi_WidgetSubtitle_URL">URL</string>
-  <string name="Uwazi_Info_NotValidURL">This is not a valid Url</string>
-  <string name="Uwazi_Subtitle_MarkdownSupported">markdown supported</string>
-  <string name="Uwazi_Entry_Validation_MandatoryFields">You must fill in the mandatory fields</string>
-  <string name="Uwazi_Entry_Validation_MandatoryTitle">You must fill in the title</string>
-  <string name="Uwazi_Submit_Later">Submit later</string>
-  <string name="Uwazi_Send_Entity_Title">End of entity</string>
-  <string name="Uwazi_WidgetMultiDate_AddDate">Add another date</string>
-  <string name="Uwazi_WidgetMultiDate_AddDateRange">Add another date range</string>
-  <string name="Uwazi_WidgetDateRange_Constraint">The second date in the range must be after the first</string>
-  <string name="Uwazi_MiltiFileWidget_AddMoreFiles">Add more files</string>
-  <string name="Uwazi_MiltiFileWidget_Show">Show Files</string>
-  <string name="Uwazi_MiltiFileWidget_Hide">Hide Files</string>
-  <string name="Uwazi_MiltiFileWidget_Help">Select as many files as you wish</string>
-  <string name="Uwazi_WidgetMedia_Select_Text">Select audio or video file</string>
-  <string name="Uwazi_WidgetMedia_Select_Photos_Text">Select photos</string>
-  <string name="Uwazi_WidgetMedia_Description_Text">Attach a video or audio file</string>
-  <string name="Uwazi_WidgetImage_Select_Text">Select image file</string>
-  <string name="Uwazi_WidgetImage_Select_Description_Text">Attach an image file</string>
-  <string name="Uwazi_WidgetMedia_Take_Video">Take video with camera</string>
-  <string name="Uwazi_WidgetMedia_Take_Photo">Take photo with camera</string>
-  <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
-  <string name="Uwazi_WidgetMedia_Select_From_Device">Select from your device</string>
-  <string name="Uwazi_Widget_Sheet_Description">Choose how you want to add files</string>
-  <string name="Uwazi_Entity_Error_Response_Mandatory">This field is mandatory.</string>
-  <string name="Uwazi_Server_Title">Server : </string>
-  <string name="Uwazi_Template_Title">Template : </string>
-  <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="one">%1$d file attached</item>
-    <item quantity="other">%1$d files attached</item>
-  </plurals>
-  <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
-  <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
-  <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Primary documents</string>
-  <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Attach as many PDF files as you wish</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Choose how you want to add PDF files</string>
-  <string name="Uwazi_MiltiFileWidget_SupportingFiles">Supporting files</string>
-  <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.
-
- Tap on an entity to continue working on it.</string>
-  <string name="Uwazi_Outbox_Header_Text">These are entities currently being submitted.</string>
-  <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted successfully.</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
-  <string-array name="Uwazi_Language_Array">
-    <item>English</item>
-    <item>عربي</item>
-    <item>Français</item>
-  </string-array>
-  <string-array name="Uwazi_Language_Array_Translated">
-    <item>English</item>
-    <item>Arabic</item>
-    <item>French</item>
-  </string-array>
-  <string name="Collect_Action_FillForm">Fill form</string>
-  <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove \"%1$s\"? </string>
-  <string name="Util_ellapsedTime_Year">More than a year ago</string>
-  <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one" tools:ignore="ImpliedQuantity">A month ago</item>
-    <item quantity="other">%d months ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one" tools:ignore="ImpliedQuantity">A week ago</item>
-    <item quantity="other">%d weeks ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one" tools:ignore="ImpliedQuantity">One day ago</item>
-    <item quantity="other">%d days ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one" tools:ignore="ImpliedQuantity">An hour ago</item>
-    <item quantity="other">%d hours ago</item>
-  </plurals>
-  <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one" tools:ignore="ImpliedQuantity">A minute ago</item>
-    <item quantity="other">%d minutes ago</item>
-  </plurals>
-  <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
   <string name="Donwload_Templates_Title_Description">Estes são os modelos disponíveis nas instâncias Uwazi às quais está conectado.</string>
   <string name="Uwazi_Templates_HeaderMessage">Estes são modelos Uwazi que pode preencher.</string>
   <string name="Vault_Filter_Name">Nome</string>
@@ -636,25 +437,6 @@ button to add a new template.</string>
   <string name="Connected_Successfuly_Text">Conectou-se com sucesso ao servidor e poderá compartilhar os seus dados.</string>
   <string name="Login_To_Access_Text">Faça login para acessar o servidor</string>
   <string name="action_yes">sim</string>
-  <string name="action_yes_in">SIM, ESTOU DENTRO!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Gostaria de contribuir?</string>
-  <string name="clean_insights.contribute_description">Pode optar por não participar em qualquer momento através das Configurações.</string>
-  <string name="clean_insights.how_works_title">Como funciona</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.\n• Your data is aggregated weekly on your device before it is sent to us.\n• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Perguntas específicas</string>
-  <string name="clean_insights.questions_description">Cada estudo coleta dados sobre questões específicas. Uma amostra:</string>
-  <string name="clean_insights.questions_examples">🔓 Abriu Tella 4 vezes por semana \n 💾 32 arquivos armazenados em Tella \n 📖 Idioma espanhol selecionado \n ⚡ 1 servidor conectado \n 😎 Camuflagem por calculadora habilitada</string>
-  <string name="clean_insights.share_data_title">Compartilhar dados para melhorar o Tella</string>
-  <string name="clean_insights.share_data_description">Ao participar deste estudo, você nos ajudaria a entender quais funcionalidades são importantes para você e como você usa o aplicativo.</string>
-  <string name="clean_insights.will_not_title">Nós não vamos</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Ajude-nos a melhorar o Tella</string>
-  <string name="clean_insights.improve_description">Estamos realizando um estudo para entender como se utiliza o Tella. Você pode desativar a qualquer momento acessando Configurações. \n \n Gostaria de participar?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
   <string name="Collect_WidgetVideo_Select_Text">Selecionar arquivo de video</string>
   <string name="Collect_WidgetAudio_Select_Text">Selecionar arquivo de áudio</string>
   <string name="Collect_MediaWidget_Attach_Photo">Anexar foto</string>
@@ -662,102 +444,7 @@ button to add a new template.</string>
   <string name="Collect_MediaWidget_AttachAudioRecording">Anexar gravação de áudio</string>
   <string name="Uwazi_Templates_TabTitle">Modelos</string>
   <string name="action_no">não</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
-  <string name="settings.gen_share_data_action">Compartilhar dados para melhorar o Tella</string>
   <string name="Vault_Items">Itens</string>
-  <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>
   <string name="Vault_DeleteFile_SheetTitle">Excluir o arquivo?</string>
   <string name="Vault_deleteFile_SheetDesc">O arquivo selecionado será excluído permanentemente do Tella</string>
-  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
-  <string name="Timeout_Warning_Title">Warnings</string>
-  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="settings_sec_security_screen">Screen security</string>
-  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
-  <!-- Reports -->
-  <string name="Settings_Reports_Choose_Credentials" >Do you have a username and password?</string>
-  <string name="Server_Connect_Icon" >server connect image</string>
-  <string name="Login_To_Access_Project_Text" >Log in to access the project</string>
-  <string name="Settings_Reports_Connected_To_Project" >Connected to project</string>
-  <string name="Settings_Reports_Advanced_Success_Title" >Advanced settings complete</string>
-  <string name="Settings_Reports_Advanced_Success_Description" >Advanced settings complete</string>
-  <string name="Settings_Reports_Go_To_Reports" >GO TO REPORTS</string>
-  <string name="Settings_reports_Go_To_Advanced_Settings" >Advanced settings</string>
-  <string name="Setting_Reports_Share_Information_Title" >Share verification information</string>
-  <string name="Setting_Reports_Share_Information_Description" >Include information about your device and location when sending reports, to make your files verifiable. </string>
-  <string name="Setting_Reports_Background_Upload" >Background upload</string>
-  <string name="Setting_Reports_Background_Upload_Disabled_Description" >Auto-report cannot be enabled on more than one connection. Disable auto-report elsewhere to enable it here.</string>
-  <string name="Setting_Reports_Background_Upload_Description" >Continue uploading reports while doing other tasks or if you exit Tella.\n\nWARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
-  <string name="Setting_Reports_Edit_Connection" >Edit connection</string>
-  <string name="Setting_Reports_Connection_Name" >Connection name</string>
-  <string name="Setting_Reports_Auto_Report" >Auto-report</string>
-
-
-  <string name="Setting_Reports_Auto_Report_Description" >Whenever you take a photo/video/audio\nrecording in Tella, a report will automatically be\ncreated with the file and uploaded to this project.</string>
-  <string name="Setting_Reports_Auto_Delete" >Auto-delete</string>
-  <string name="Setting_Reports_Auto_Delete_Description" >Automatically delete files from your device once\nthey are uploaded to this project as a report.</string>
-  <string name="Setting_Reports_Settings_Completed" >Advanced settings complete</string>
-  <string name="Setting_Reports_Settings_Completed_Description" >You can always change your Reports preferences in the Tella Settings.</string>
-  <string name="Drafts_Reports_Empty_Message" >Your Drafts is currently empty. Reports that you have not submitted will appear here.</string>
-  <string name="Outbox_Reports_Empty_Message" >Your Outbox is currently empty. Reports that are ready to be sent will appear here.</string>
-  <string name="Submitted_Reports_Empty_Message" >You have no submitted reports.</string>
-  <string name="New_Reports_Text" >NEW REPORT</string>
-  <string name="Reports_Title_Screen" >REPORT</string>
-  <string name="Reports_Send_To_Text" >Send report to:</string>
-  <string name="Reports_Select_Your_Project" >Select your project</string>
-  <string name="Reports_Select_Title" >Title</string>
-  <string name="Reports_Select_Description" >Description</string>
-  <string name="Reports_Attach_files_Here" >Attach files here</string>
-  <string name="Connection_Title" >Connections</string>
-  <string name="Reports_Saved_Draft" >The report was saved as a draft</string>
-  <string name="Reports_Pause" >Pause</string>
-  <string name="Reports_Resume" >Resume</string>
-  <string name="File_Uploaded_on" >Uploaded on</string>
-  <string name="File_Uploaded" >uploaded</string>
-  <string name="Delete_Report_Confirmation" >Are you sure you want to delete this report? </string>
-  <string name="Delete_Submitted_Report_Confirmation">Are you sure you want to delete this sent report from your records? The files that have been uploaded will remain on the server.</string>
-  <string name="View_Report" >View </string>
-  <string name="Delete_Report" >Delete </string>
-  <string name="Paused_Report" >Paused </string>
-  <string name="Report_Waiting_For_Connection" >Waiting for connection </string>
-  <string name="Project_Url_Screen_Title" >Enter project URL</string>
-  <string name="Report_Dialog_Draft_Title" >Exit report?</string>
-  <string name="Report_Server_Already_Exist_Error" >You are already connected to this project. Please enter another URL.</string>
-  <string name="Report_Deleted_Confirmation" >  \"%s\ " has been deleted.</string>
-  <string name="Report_Save_Outbox_Confirmation" >The report was saved to your Outbox. You can submit it when you are ready.</string>
-  <string name="Send_Action_Label" >SEND</string>
-  <!-- content description -->
-  <string name="action_open_settings">open settings</string>
-  <string name="action_refresh">refresh</string>
-  <string name="action_check">check</string>
-  <string name="action_show_location">show location</string>
-  <string name="action_fast_rewind">fast rewind</string>
-  <string name="action_fast_forward">fast forward</string>
-  <string name="action_open_bottom_sheet">open bottom sheet</string>
-  <string name="action_add">add</string>
-  <string name="action_go_next">go next</string>
-  <string name="action_move">move </string>
-  <string name="action_favorite">favorite</string>
-  <string name="action_unfavorite">unfavorite</string>
-  <string name="action_select">select</string>
-  <string name="action_unselect">unselect</string>
-  <string name="action_show_photo">show photo</string>
-  <string name="action_help">help</string>
-  <string name="action_download">download</string>
-  <string name="action_choose_resolution">choose resolution</string>
-  <string name="action_hide_gridview">hide grid view</string>
-  <string name="action_show_gridview">show grid view</string>
-  <string name="action_switch_to_front_camera">switch to front camera</string>
-  <string name="action_switch_to_back_camera">switch to back camera</string>
-  <string name="action_disable_flash">disable flash</string>
-  <string name="action_enable_flash">enable flash</string>
-  <string name="action_open_gallery">open gallery</string>
-  <string name="action_pause">pause</string>
-  <string name="action_go_to_audio_library">Go to Audio library</string>
-  <string name="action_display_gridView">display in gridView</string>
-  <string name="action_display_list">display in list</string>
-  <string name="quick_exit_action">quick exit</string>
-  <string name="action_zoom">zoom</string>
-  <string name="action_edit_recording_name">edit recording name</string>
-  <string name="action_create_new_folder">create new folder</string>
-  <string name="action_quick_delete">quick delete</string>
 </resources>

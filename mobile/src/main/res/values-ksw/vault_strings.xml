@@ -65,7 +65,4 @@
     <item quantity="many">အအါ</item>
     <item quantity="other">အဂုအၤဂၤ</item>
   </plurals>
-  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
-  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
-  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
 </resources>

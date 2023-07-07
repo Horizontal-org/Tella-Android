@@ -62,6 +62,7 @@ class ReportsEntryFragment :
     private var isNewDraft = true
     private var isTitleEnabled = false
     private var isDescriptionEnabled = false
+    private var isServerSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +103,6 @@ class ReportsEntryFragment :
         }
         highLightButtonsInit()
         checkIsNewDraftEntry()
-        highLightSubmitButton()
-        highLightButtonOutBoxButton()
     }
 
     private fun exitOrSave() {
@@ -159,19 +158,15 @@ class ReportsEntryFragment :
         binding?.reportDescriptionEt?.let { description ->
             isDescriptionEnabled = description.length() > 0
         }
-    }
 
-    private fun highLightSubmitButton() {
         binding?.reportTitleEt?.onChange { title ->
             isTitleEnabled = title.length > 0
-            highLightDraftButton(isTitleEnabled)
-            highLightButtonOutBoxButton()
+            highLightButtons()
         }
 
         binding?.reportDescriptionEt?.onChange { description ->
             isDescriptionEnabled = description.length > 0
-            highLightDraftButton(isTitleEnabled)
-            highLightButtonOutBoxButton()
+            highLightButtons()
         }
 
         binding?.deleteBtn?.setOnClickListener {
@@ -179,23 +174,18 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun highLightDraftButton(isTitleEnabled: Boolean) {
-        if (isTitleEnabled) {
-            binding?.toolbar?.onRightClickListener = {
-                saveReportAsDraft(false)
-            }
-
-        } else {
-            binding?.toolbar?.onRightClickListener = {}
-        }
-    }
-
-    private fun highLightButtonOutBoxButton() {
+    private fun highLightButtons() {
         val isSubmitEnabled =
-            isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+            isTitleEnabled && isServerSelected && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty())
 
+        val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
         binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+
         binding?.sendLaterBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
@@ -203,12 +193,21 @@ class ReportsEntryFragment :
                 showSubmitReportErrorSnackBar()
             }
         }
+
         binding?.sendReportBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsPending()
             } else {
                 showSubmitReportErrorSnackBar()
             }
+        }
+
+        if (isTitleEnabled && isServerSelected) {
+            binding?.toolbar?.onRightClickListener = {
+                saveReportAsDraft(false)
+            }
+        } else {
+            binding?.toolbar?.onRightClickListener = {}
         }
     }
 
@@ -282,12 +281,16 @@ class ReportsEntryFragment :
                     this@ReportsEntryFragment.reportInstance?.let {
                         servers.first { server -> server.id == it.serverId }.let {
                             selectedServer = it
+                            isServerSelected = true
                             binding?.serversDropdown?.setDefaultName(it.name)
+                            highLightButtons()
                         }
                     }
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
+                    isServerSelected = true
+                    highLightButtons()
                 }
             }
             reportInstance.observe(viewLifecycleOwner) { instance ->
@@ -299,9 +302,11 @@ class ReportsEntryFragment :
                             false
                         )
                     }
+
                     EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
                         this@ReportsEntryFragment.submitReport(instance)
                     }
+
                     EntityStatus.FINALIZED -> {
                         DialogUtils.showBottomMessage(
                             baseActivity, getString(R.string.Report_Save_Outbox_Confirmation),
@@ -310,6 +315,7 @@ class ReportsEntryFragment :
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
+
                     else -> {}
                 }
             }
@@ -322,7 +328,6 @@ class ReportsEntryFragment :
                 nav().popBackStack()
             }
         }
-
     }
 
     private fun showSelectFilesSheet() {
@@ -424,7 +429,7 @@ class ReportsEntryFragment :
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
@@ -436,14 +441,16 @@ class ReportsEntryFragment :
     }
 
     override fun removeFiles() {
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
         servers.get(position).let {
             selectedServer = it
+            isServerSelected = true
         }
+        highLightButtons()
     }
 
     private fun submitReport(reportInstance: ReportInstance) {
