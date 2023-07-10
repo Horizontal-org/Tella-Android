@@ -1,55 +1,40 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
-import android.Manifest
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultActions
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultRenameSheet
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.*
+import permissions.dispatcher.RuntimePermissions
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityAudioPlayBinding
 import rs.readahead.washington.mobile.media.AudioPlayer
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.ThreadUtil
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showExportWithMetadataDialog
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 @RuntimePermissions
-class AudioPlayActivity : BaseLockActivity() {
+class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
     var mPlay: ImageButton? = null
     var mRwd: ImageButton? = null
     var mFwd: ImageButton? = null
@@ -67,11 +52,10 @@ class AudioPlayActivity : BaseLockActivity() {
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var paused = true
-    private var toolbar: Toolbar? = null
+    private lateinit var toolbar: Toolbar
     private var isInfoShown = false
     private lateinit var binding: ActivityAudioPlayBinding
     private val viewModel: SharedMediaFileViewModel by viewModels()
-    private lateinit var filePickerLauncher: ActivityResultLauncher<Intent>
 
     companion object {
         const val PLAY_MEDIA_FILE = "pmf"
@@ -86,18 +70,17 @@ class AudioPlayActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayBinding.inflate(layoutInflater)
         setContentView(binding.getRoot())
+        actionsDisabled = intent.hasExtra(VideoViewerActivity.NO_ACTIONS)
+
         initView()
         initListeners()
+        initContracts()
+        setupToolbar()
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
-        setSupportActionBar(toolbar)
         enablePlay()
-        if (intent.hasExtra(Companion.NO_ACTIONS)) {
-            actionsDisabled = true
-        }
         initVaultMediaFile()
         initAudioListener()
         initObservers()
-        initFilePickerLauncher()
     }
 
     private fun initObservers() {
@@ -115,10 +98,13 @@ class AudioPlayActivity : BaseLockActivity() {
             onMediaFileDeleted.observe(this@AudioPlayActivity) { deleted ->
                 if (deleted) onMediaFileDeleted()
             }
-            onMediaFileDeleteConfirmed.observe(this@AudioPlayActivity) { mediaFileDeletedConfirmation->
-                mediaFileDeletedConfirmation.vaultFile?.let {
-                        deletedVaultFile ->
-                    onMediaFileDeleteConfirmation(deletedVaultFile,mediaFileDeletedConfirmation.showConfirmDelete) }
+            onMediaFileDeleteConfirmed.observe(this@AudioPlayActivity) { mediaFileDeletedConfirmation ->
+                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                    onMediaFileDeleteConfirmation(
+                        deletedVaultFile,
+                        mediaFileDeletedConfirmation.showConfirmDelete
+                    )
+                }
             }
             onMediaFileRenamed.observe(this@AudioPlayActivity) { renamed ->
                 onMediaFileRename(renamed)
@@ -129,41 +115,25 @@ class AudioPlayActivity : BaseLockActivity() {
         }
     }
 
-    private fun initFilePickerLauncher() {
-        filePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val intent = result.data
-                    if (intent != null) {
-                        val uri = intent.data
-                        // Handle the returned URI here
-                        if (uri != null) {
-                            viewModel.exportNewMediaFile(withMetadata, handlingVaultFile!!, uri)
-                        } else {
-                            // Handle the case where no URI is selected
-                        }
-                    }
+    private fun initVaultMediaFile() {
+        if (intent.hasExtra(Companion.PLAY_MEDIA_FILE)) {
+            val vaultFile =
+                intent.getSerializableExtra(Companion.PLAY_MEDIA_FILE) as VaultFile?
+            if (vaultFile != null) {
+                ThreadUtil.runOnMain {
+                    onMediaFileSuccess(
+                        vaultFile
+                    )
                 }
             }
-    }
-    private fun initVaultMediaFile(){
-        if (intent.hasExtra(Companion.PLAY_MEDIA_FILE)) {
-        val vaultFile =
-            intent.getSerializableExtra(Companion.PLAY_MEDIA_FILE) as VaultFile?
-        if (vaultFile != null) {
-            ThreadUtil.runOnMain {
-                onMediaFileSuccess(
-                    vaultFile
-                )
+        } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
+            val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
+            if (id != null) {
+                viewModel!!.getMediaFile(id)
             }
         }
-    } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
-        val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
-        if (id != null) {
-            viewModel!!.getMediaFile(id)
-        }
     }
-    }
+
     private fun initAudioListener() {
         audioPlayerListener = object : AudioPlayer.Listener {
             override fun onStart(duration: Int) {
@@ -192,16 +162,6 @@ class AudioPlayActivity : BaseLockActivity() {
         overridePendingTransition(R.anim.slide_in_end, R.anim.slide_out_start)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (!actionsDisabled && showActions) {
-            toolbar!!.inflateMenu(R.menu.video_view_menu)
-            if (handlingVaultFile != null && handlingVaultFile!!.metadata != null) {
-                val item = toolbar!!.menu.findItem(R.id.menu_item_metadata)
-                item.isVisible = true
-            }
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
 
     private fun onShowError(errorResId: Int) {
         DialogUtils.showBottomMessage(
@@ -209,22 +169,6 @@ class AudioPlayActivity : BaseLockActivity() {
         )
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == android.R.id.home) {
-            onBackPressed()
-            return true
-        }
-        if (id == R.id.menu_item_more) {
-            showVaultActionsDialog(handlingVaultFile)
-            return true
-        }
-        if (id == R.id.menu_item_metadata) {
-            showMetadata()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun initListeners() {
         mPlay!!.setOnClickListener {
@@ -249,9 +193,9 @@ class AudioPlayActivity : BaseLockActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if (isInfoShown) {
-            toolbar!!.menu.findItem(R.id.menu_item_more).isVisible = true
-            toolbar!!.menu.findItem(R.id.menu_item_metadata).isVisible = true
-            toolbar!!.title = handlingVaultFile!!.name
+            toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
+            toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
+            toolbar.title = handlingVaultFile!!.name
         } else {
             stopPlayer()
             finish()
@@ -277,45 +221,14 @@ class AudioPlayActivity : BaseLockActivity() {
     }
 
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun exportMediaFile() {
-        if (handlingVaultFile != null && viewModel != null) {
-            if (handlingVaultFile!!.metadata != null) {
-                showExportWithMetadataDialog()
-            } else {
-                withMetadata = false
-                maybeChangeTemporaryTimeout {
-                    performFileSearch()
-                    Unit
-                }
-            }
-        }
-    }
-
-
-    private fun performFileSearch() {
-
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            filePickerLauncher.launch(intent)
-        } else {
-            viewModel.exportNewMediaFile(withMetadata, handlingVaultFile!!, null)
-        }
-        }
-
-
     private fun onMediaFileSuccess(vaultFile: VaultFile) {
         handlingVaultFile = vaultFile
-        toolbar!!.title = vaultFile.name
+        toolbar.title = vaultFile.name
         //handlePlay();
         if (!actionsDisabled) {
             showActions = true
             invalidateOptionsMenu()
         }
-    }
-
-    fun onMediaFileError(error: Throwable) {
-        Timber.d(error, javaClass.name)
     }
 
     fun onMediaExported() {
@@ -337,6 +250,59 @@ class AudioPlayActivity : BaseLockActivity() {
         hideProgressDialog()
     }
 
+    private fun setupToolbar() {
+        toolbar = binding.toolbar
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        if (!actionsDisabled) {
+            toolbar.inflateMenu(R.menu.video_view_menu)
+            handlingVaultFile?.let { file ->
+                setupMetadataMenuItem(file.metadata != null)
+            }
+            if (handlingVaultFile != null && handlingVaultFile!!.metadata != null) {
+                val item = toolbar.menu.findItem(R.id.menu_item_metadata)
+                item.isVisible = true
+            }
+            toolbar.menu.findItem(R.id.menu_item_more)
+                .setOnMenuItemClickListener {
+                    handlingVaultFile?.let { it1 ->
+                        showVaultActionsDialog(
+                            it1,
+                            viewModel,
+                            {
+                                isInfoShown = true
+                                onVisibilityChanged(View.VISIBLE)
+                            },
+                            toolbar = toolbar
+                        )
+                    }
+                    false
+                }
+        }
+    }
+
+    private fun setupMetadataMenuItem(visible: Boolean) {
+        if (actionsDisabled) {
+            return
+        }
+        val mdMenuItem = toolbar.menu.findItem(R.id.menu_item_metadata)
+        mdMenuItem.isVisible = visible
+        if (visible) {
+            mdMenuItem.setOnMenuItemClickListener {
+                showMetadata()
+                false
+            }
+        }
+    }
+
+    override fun onVisibilityChanged(visibility: Int) {
+        toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
+    }
+
+
     private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
         if (showConfirmDelete) {
             showConfirmSheet(
@@ -348,7 +314,7 @@ class AudioPlayActivity : BaseLockActivity() {
                 object : ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
-                             viewModel.deleteMediaFiles(vaultFile)
+                            viewModel.deleteMediaFiles(vaultFile)
                         }
                     }
                 }
@@ -368,7 +334,7 @@ class AudioPlayActivity : BaseLockActivity() {
     }
 
     private fun onMediaFileRename(vaultFile: VaultFile) {
-        toolbar!!.title = vaultFile.name
+        toolbar.title = vaultFile.name
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
@@ -378,23 +344,6 @@ class AudioPlayActivity : BaseLockActivity() {
         return this
     }
 
-    private fun shareMediaFile() {
-        if (handlingVaultFile == null) {
-            return
-        }
-        if (handlingVaultFile!!.metadata != null) {
-            showShareWithMetadataDialog()
-        } else {
-            startShareActivity(false)
-        }
-    }
-
-    private fun startShareActivity(includeMetadata: Boolean) {
-        if (handlingVaultFile == null) {
-            return
-        }
-        MediaFileHandler.startShareActivity(this, handlingVaultFile, includeMetadata)
-    }
 
     private fun handlePlay() {
         if (handlingVaultFile == null) {
@@ -491,141 +440,6 @@ class AudioPlayActivity : BaseLockActivity() {
 
     private fun enableScreenTimeout() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-
-    private fun showVaultActionsDialog(vaultFile: VaultFile?) {
-        showVaultActionsSheet(
-            supportFragmentManager,
-            vaultFile!!.name,
-            getString(R.string.Vault_Upload_SheetAction),
-            getString(R.string.Vault_Share_SheetAction),
-            getString(R.string.Vault_Move_SheetDesc),
-            getString(R.string.Vault_Rename_SheetAction),
-            getString(R.string.gallery_action_desc_save_to_device),
-            getString(R.string.Vault_File_SheetAction),
-            getString(R.string.Vault_Delete_SheetAction),
-            isDirectory = false,
-            isMultipleFiles = false,
-            isUploadVisible = false,
-            isMoveVisible = false,
-            action = object : IVaultActions {
-                override fun upload() {}
-                override fun share() {
-                    maybeChangeTemporaryTimeout {
-                        shareMediaFile()
-                        Unit
-                    }
-                }
-                override fun move() {}
-                override fun rename() {
-                    showVaultRenameSheet(
-                        supportFragmentManager,
-                        getString(R.string.Vault_RenameFile_SheetTitle),
-                        getString(R.string.action_cancel),
-                        getString(R.string.action_ok),
-                        this@AudioPlayActivity,
-                        vaultFile.name
-                    ) { name: String? ->
-                        viewModel.renameVaultFile(vaultFile.id,name)
-                        Unit
-                    }
-                }
-
-                override fun save() {
-                    showConfirmSheet(
-                        supportFragmentManager,
-                        getString(R.string.gallery_save_to_device_dialog_title),
-                        getString(R.string.gallery_save_to_device_dialog_expl),
-                        getString(R.string.action_save),
-                        getString(R.string.action_cancel),
-                        object : BottomSheetUtils.ActionConfirmed {
-                            override fun accept(isConfirmed: Boolean) {
-                                this@AudioPlayActivity.exportMediaFile()
-                            }
-                        }
-                    )
-                }
-
-                override fun info() {
-                    toolbar!!.title = getString(R.string.Vault_FileInfo)
-                    toolbar!!.menu.findItem(R.id.menu_item_more).isVisible = false
-                    toolbar!!.menu.findItem(R.id.menu_item_metadata).isVisible = false
-                    invalidateOptionsMenu()
-                    addFragment(VaultInfoFragment().newInstance(vaultFile, false), R.id.root)
-                    isInfoShown = true
-                }
-                override fun delete() {
-                    showConfirmSheet(
-                        supportFragmentManager,
-                        getString(R.string.Vault_DeleteFile_SheetTitle),
-                        getString(R.string.Vault_deleteFile_SheetDesc),
-                        getString(R.string.action_delete),
-                        getString(R.string.action_cancel),
-                        object : ActionConfirmed {
-                            override fun accept(isConfirmed: Boolean) {
-                                if (isConfirmed) {
-                                    viewModel.confirmDeleteMediaFile(vaultFile)
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-        )
-    }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == PICKER_FILE_REQUEST_CODE) {
-//            assert(data != null)
-//            viewModel!!.exportNewMediaFile(withMetadata, handlingVaultFile!!, data!!.data)
-//        }
-//    }
-
-    private fun showShareWithMetadataDialog() {
-        val options = LinkedHashMap<Int, Int>()
-        options[1] = R.string.verification_share_select_media_and_verification
-        options[0] = R.string.verification_share_select_only_media
-        showRadioListOptionsSheet(
-            supportFragmentManager,
-            this,
-            options,
-            getString(R.string.verification_share_dialog_title),
-            getString(R.string.verification_share_dialog_expl),
-            getString(R.string.action_ok),
-            getString(R.string.action_cancel),
-            object : RadioOptionConsumer {
-                override fun accept(option: Int) {
-                    startShareActivity(option > 0)
-                }
-            }
-        )
-    }
-
-    private fun showExportWithMetadataDialog() {
-        val options = LinkedHashMap<Int, Int>()
-        options[1] = R.string.verification_share_select_media_and_verification
-        options[0] = R.string.verification_share_select_only_media
-        Handler().post {
-            showRadioListOptionsSheet(
-                supportFragmentManager,
-                this,
-                options,
-                getString(R.string.verification_share_dialog_title),
-                getString(R.string.verification_share_dialog_expl),
-                getString(R.string.action_ok),
-                getString(R.string.action_cancel),
-                object : RadioOptionConsumer {
-                    override fun accept(option: Int) {
-                        withMetadata = option > 0
-                        maybeChangeTemporaryTimeout {
-                            performFileSearch()
-                            Unit
-                        }
-                    }
-                }
-            )
-        }
     }
 
     private fun initView() {

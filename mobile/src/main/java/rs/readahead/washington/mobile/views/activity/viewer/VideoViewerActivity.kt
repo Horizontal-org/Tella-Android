@@ -218,19 +218,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata)
     }
 
-//    private fun initializePlayer() {
-//        if ( needRetrySource) {
-//            initializeMedia()
-//        }
-//        if (player == null) {
-//            player = ExoPlayer.Builder(this).build().apply {
-//                playWhenReady = shouldAutoPlay
-//            }
-//            simpleExoPlayerView.player = player
-//        }
-//
-//    }
-
     private fun initializePlayer() {
         val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
 
@@ -264,31 +251,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         needRetrySource = false
 
     }
-//    private fun initializeMedia(){
-//
-//        val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
-//
-//        this.vaultFile = vaultFile
-//        toolbar.title = vaultFile.name
-//        setupMetadataMenuItem(vaultFile.metadata != null)
-//
-//        val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
-//        val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
-//        val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
-//            .createMediaSource(mediaItem)
-//
-//        val haveResumePosition = resumeWindow != C.INDEX_UNSET
-//        player?.apply {
-//            if (haveResumePosition) {
-//                seekTo(resumeWindow, resumePosition)
-//            }
-//            setMediaSource(mediaSource)
-//            prepare()
-//            // prepare(mediaSource, !haveResumePosition, false)
-//        }
-//        needRetrySource = false
-//
-//    }
 
 
     private fun releasePlayer() {
@@ -322,7 +284,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             vaultFile?.let { file ->
                 setupMetadataMenuItem(file.metadata != null)
             }
-
             toolbar.menu.findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener {
                     vaultFile?.let { it1 ->
@@ -366,82 +327,5 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
         }
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == PICKER_FILE_REQUEST_CODE) {
-//            assert(data != null)
-//            vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, data?.data) }
-//        }
-//    }
-
-//    private fun showShareWithMetadataDialog() {
-//        val options = mapOf(
-//            R.string.verification_share_select_media_and_verification to R.string.verification_share_select_media_and_verification,
-//            R.string.verification_share_select_only_media to R.string.verification_share_select_only_media
-//        )
-//        showRadioListOptionsSheet(supportFragmentManager,
-//            this,
-//            options as LinkedHashMap<Int, Int>,
-//            getString(R.string.verification_share_dialog_title),
-//            getString(R.string.verification_share_dialog_expl),
-//            getString(R.string.action_ok),
-//            getString(R.string.action_cancel),
-//            object : RadioOptionConsumer {
-//                override fun accept(option: Int) {
-//                    startShareActivity(option > 0)
-//                }
-//            })
-//    }
-
-//    private fun showExportWithMetadataDialog() {
-//        val options = mapOf(
-//            R.string.verification_share_select_media_and_verification to R.string.verification_share_select_media_and_verification,
-//            R.string.verification_share_select_only_media to R.string.verification_share_select_only_media
-//        )
-//        Handler().post {
-//            showRadioListOptionsSheet(supportFragmentManager,
-//                this,
-//                options as LinkedHashMap<Int, Int>,
-//                getString(R.string.verification_share_dialog_title),
-//                getString(R.string.verification_share_dialog_expl),
-//                getString(R.string.action_ok),
-//                getString(R.string.action_cancel),
-//                object : RadioOptionConsumer {
-//                    override fun accept(option: Int) {
-//                        withMetadata = option > 0
-//                        maybeChangeTemporaryTimeout {
-//                            //performFileSearch()
-//                        }
-//                    }
-//                })
-//        }
-//    }
-
-//    private fun requestStoragePermissions() {
-//        maybeChangeTemporaryTimeout()
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-//                .addCategory(Intent.CATEGORY_DEFAULT)
-//                .setData(Uri.parse("package:${application.packageName}"))
-//            startActivityForResult(intent, WRITE_REQUEST_CODE)
-//        } else {
-//            ActivityCompat.requestPermissions(
-//                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
-//            )
-//        }
-//    }
-
-    //    @SuppressLint("NeedOnRequestPermissionsResult")
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == WRITE_REQUEST_CODE) {
-//            // performFileSearch()
-//            LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
-//        }
-//    }
-
 
 }
