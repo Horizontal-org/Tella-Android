@@ -39,7 +39,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -386,7 +385,9 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onOrientationChanged(int orientation) {
                 //if (!isInCameraMode) return;
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) return;
+                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
+                    return;
+                }
                 // handle rotation for tablets;
             }
         };

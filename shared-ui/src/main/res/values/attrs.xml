@@ -34,6 +34,7 @@
         <attr name="titleText" format="reference|string" />
         <attr name="explainText" format="reference|string" />
         <attr name="is_checked" format="boolean"/>
+        <attr name="is_disabled" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="CollapsableAppBar">

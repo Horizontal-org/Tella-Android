@@ -69,6 +69,7 @@ class EditTellaServerFragment :
                     R.string.Setting_Reports_Background_Upload_Description
                 }
                 setExplainText(text)
+                isDisabledTheme(!(isAutoUploadActivated && !reportServer.isAutoUpload))
             }
 
             if (isAutoUploadActivated && !reportServer.isAutoUpload) {
@@ -81,7 +82,6 @@ class EditTellaServerFragment :
             }
         }
     }
-
 
     private fun initView() {
         reportServer.apply {
