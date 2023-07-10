@@ -191,7 +191,7 @@ class ReportsSendFragment :
         }
     }
 
-    fun submitEntity() {
+    private fun submitEntity() {
         reportInstance?.let { entity ->
             viewModel.submitReport(entity)
         }
