@@ -11,10 +11,8 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_IS_FROM_DRAFT
@@ -23,10 +21,12 @@ import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 @AndroidEntryPoint
 class ReportsSendFragment :
-    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
+    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate),
+    OnNavBckListener {
 
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
@@ -113,7 +113,9 @@ class ReportsSendFragment :
         }
 
         reportInstance?.let { viewModel.submitReport(instance = it, true) }
-        DialogUtils.showBottomMessage(baseActivity,getString(R.string.Report_Available_in_Outbox),false)
+        DialogUtils.showBottomMessage(
+            baseActivity, getString(R.string.Report_Available_in_Outbox), false
+        )
     }
 
     private fun initView() {
@@ -133,7 +135,6 @@ class ReportsSendFragment :
             binding?.nextBtn?.hide()
         }
         highlightSubmitButton()
-        handleOnBackPressed()
     }
 
     private fun checkAndSubmitEntity(isOnline: Boolean) {
@@ -146,7 +147,6 @@ class ReportsSendFragment :
                 pauseResumeLabel(reportInstance)
             }
         }
-
     }
 
     private fun highlightSubmitButton() {
@@ -168,16 +168,6 @@ class ReportsSendFragment :
         }
     }
 
-    private fun handleOnBackPressed() {
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                // Back button pressed
-                reportInstance?.let { viewModel.submitReport(instance = it, true) }
-                DialogUtils.showBottomMessage(baseActivity,getString(R.string.Report_Available_in_Outbox),false)
-            }
-        })
-    }
-
     private fun showFormEndView() {
         if (reportInstance == null) {
             return
@@ -191,9 +181,7 @@ class ReportsSendFragment :
                 reportFormInstance.description,
             )
             endView.setInstance(
-                reportFormInstance,
-                MyApplication.isConnectedToInternet(baseActivity),
-                false
+                reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), false
             )
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
@@ -206,4 +194,10 @@ class ReportsSendFragment :
             viewModel.submitReport(entity, false)
         }
     }
+
+    override fun onBackPressed(): Boolean {
+        handleBackButton()
+        return true
+    }
+
 }

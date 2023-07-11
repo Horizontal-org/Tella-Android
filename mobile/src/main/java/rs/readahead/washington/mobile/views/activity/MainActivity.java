@@ -46,6 +46,7 @@ import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
+import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
@@ -208,12 +209,16 @@ public class MainActivity extends MetadataActivity implements
             if (fragment instanceof DownloadedTemplatesFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
-                navController.popBackStack();
+                 navController.popBackStack();
                 return true;
             }
 
             if (fragment instanceof UwaziEntryFragment) {
                 ((UwaziEntryFragment) fragment).onBackPressed();
+                return true;
+            }
+            if (fragment instanceof ReportsSendFragment) {
+                ((ReportsSendFragment) fragment).onBackPressed();
                 return true;
             }
         }
