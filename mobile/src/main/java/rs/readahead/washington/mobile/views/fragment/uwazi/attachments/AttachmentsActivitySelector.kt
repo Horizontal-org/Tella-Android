@@ -19,8 +19,8 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentAttachmentsSelectorBinding
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.CameraActivity
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
