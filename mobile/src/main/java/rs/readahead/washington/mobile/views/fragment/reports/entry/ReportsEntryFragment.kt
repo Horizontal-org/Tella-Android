@@ -179,7 +179,13 @@ class ReportsEntryFragment :
             isTitleEnabled && isServerSelected && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty())
 
+        val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
         binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+
         binding?.sendLaterBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
