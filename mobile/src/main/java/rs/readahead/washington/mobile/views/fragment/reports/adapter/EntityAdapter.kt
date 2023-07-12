@@ -81,11 +81,7 @@ class EntityAdapter(private val isOutbox: Boolean = false) :
 
         private fun setDates(timestamp: Long, context: Context) {
             val elapsedTime = Util.getElapsedTimeFromTimestamp(timestamp, context)
-            val updatedText = if (isOutbox) {
-                context.getString(R.string.Modified_Label) + " " + elapsedTime.lowercase()
-            } else {
-                elapsedTime
-            }
+            val updatedText = context.getString(R.string.Modified_Label) + " " + elapsedTime.lowercase()
             submittedItem.setUpdated(updatedText)
         }
 

@@ -147,6 +147,7 @@
                         android:id="@+id/auto_report_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:is_disabled="true"
                         app:explainText="@string/Setting_Reports_Auto_Report_Description"
                         app:titleText="@string/Setting_Reports_Auto_Report" />
 

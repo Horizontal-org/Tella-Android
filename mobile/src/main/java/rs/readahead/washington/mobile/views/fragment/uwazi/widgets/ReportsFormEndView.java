@@ -146,7 +146,14 @@ public class ReportsFormEndView extends FrameLayout {
             percentComplete = (int) (pct * 100);
         }
 
-        Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
+        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
+            if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
+                SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
+                item.setPartUploaded();
+            }
+        }
+
+        //Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
         totalProgress.setProgressCompat(percentComplete, true);
         setFormSizeLabel(instance, percentComplete);
     }

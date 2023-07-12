@@ -6,9 +6,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.tella.keys.key.LifecycleMainKey
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEditServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
@@ -34,7 +37,10 @@ class EditTellaServerFragment :
         const val TAG = "EditTellaServerFragment"
 
         @JvmStatic
-        fun newInstance(server: TellaReportServer, isEditMode: Boolean = false): EditTellaServerFragment {
+        fun newInstance(
+            server: TellaReportServer,
+            isEditMode: Boolean = false
+        ): EditTellaServerFragment {
             val editTellaServerFragment = EditTellaServerFragment()
             val args = Bundle().apply {
                 putString(OBJECT_KEY, Gson().toJson(server))
@@ -54,7 +60,7 @@ class EditTellaServerFragment :
 
     private fun initData() {
         viewModel.listAutoReports()
-        viewModel.doesAutoUploadActivated.observe(viewLifecycleOwner, { isAutoUploadActivated ->
+        viewModel.doesAutoUploadActivated.observe(viewLifecycleOwner) { isAutoUploadActivated ->
             binding?.autoReportSwitch?.apply {
                 mSwitch.isClickable = !(isAutoUploadActivated && !reportServer.isAutoUpload)
                 val text = if (isAutoUploadActivated && !reportServer.isAutoUpload) {
@@ -63,6 +69,7 @@ class EditTellaServerFragment :
                     R.string.Setting_Reports_Auto_Report_Description
                 }
                 setExplainText(text)
+                isDisabledTheme(!(isAutoUploadActivated && !reportServer.isAutoUpload))
             }
 
             if (isAutoUploadActivated && !reportServer.isAutoUpload) {
@@ -73,9 +80,8 @@ class EditTellaServerFragment :
                 binding?.autoDeleteSeparator?.isVisible = isVisible
                 binding?.autoDeleteSwitch?.isVisible = isVisible
             }
-        })
+        }
     }
-
 
     private fun initView() {
         reportServer.apply {
@@ -117,6 +123,7 @@ class EditTellaServerFragment :
             autoReportSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
                 reportServer.isAutoUpload = isChecked
                 autoDeleteSeparator.isVisible = isChecked
+                setNoTimeOut(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
                 autoDeleteSwitch.apply {
                     isVisible = isChecked
                     if (!isChecked) mSwitch.isChecked = false
@@ -125,6 +132,7 @@ class EditTellaServerFragment :
 
             backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
                 reportServer.isActivatedBackgroundUpload = isChecked
+                setNoTimeOut(isChecked || autoReportSwitch.mSwitch.isChecked)
             }
 
             shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -143,6 +151,16 @@ class EditTellaServerFragment :
         server.isAutoUpload = reportServer.isAutoUpload
         server.isAutoDelete = reportServer.isAutoDelete
         return server
+    }
+
+    private fun setNoTimeOut(enableNoTimeout: Boolean) {
+        if (enableNoTimeout) {
+            MyApplication.getMainKeyHolder().timeout =
+                LifecycleMainKey.NO_TIMEOUT
+        } else {
+            MyApplication.getMainKeyHolder().timeout =
+                LockTimeoutManager.IMMEDIATE_SHUTDOWN
+        }
     }
 
 }

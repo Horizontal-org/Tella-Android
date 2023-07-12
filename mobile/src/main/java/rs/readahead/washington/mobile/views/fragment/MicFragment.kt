@@ -42,6 +42,7 @@ import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+
 const val TIME_FORMAT: String = "%02d:%02d"
 const val COLLECT_ENTRY = "collect_entry"
 const val REPORT_ENTRY = "report_entry"
@@ -317,6 +318,18 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     override fun onMediaFilesUploadScheduled() {
+        val isAutoUploadEnabled = Preferences.isAutoUploadEnabled()
+        val isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled()
+
+        val message: String = if (isAutoUploadEnabled && isAutoDeleteEnabled) {
+            getString(R.string.Auto_Upload_Recording_Imported_Report_And_Deleted)
+        } else if (isAutoUploadEnabled) {
+            getString(R.string.Auto_Upload_Recording_Report)
+        } else {
+            return
+        }
+
+        DialogUtils.showBottomMessage(activity, message, false)
     }
 
     override fun onMediaFilesUploadScheduleError(throwable: Throwable?) {

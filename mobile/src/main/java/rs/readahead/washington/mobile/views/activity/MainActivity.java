@@ -39,7 +39,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -47,6 +46,7 @@ import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
+import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
@@ -209,12 +209,16 @@ public class MainActivity extends MetadataActivity implements
             if (fragment instanceof DownloadedTemplatesFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
-                navController.popBackStack();
+                 navController.popBackStack();
                 return true;
             }
 
             if (fragment instanceof UwaziEntryFragment) {
                 ((UwaziEntryFragment) fragment).onBackPressed();
+                return true;
+            }
+            if (fragment instanceof ReportsSendFragment) {
+                ((ReportsSendFragment) fragment).onBackPressed();
                 return true;
             }
         }
@@ -386,7 +390,9 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onOrientationChanged(int orientation) {
                 //if (!isInCameraMode) return;
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) return;
+                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
+                    return;
+                }
                 // handle rotation for tablets;
             }
         };
