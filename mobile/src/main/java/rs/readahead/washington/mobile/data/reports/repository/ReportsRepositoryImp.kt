@@ -78,9 +78,11 @@ class ReportsRepositoryImp @Inject internal constructor(
         backButtonPressed: Boolean
     ) {
 
-        if (backButtonPressed){
-            instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-            dataSource.saveInstance(instance).subscribe()
+        if (backButtonPressed) {
+            if (instance.status != EntityStatus.SUBMITTED) {
+                instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                dataSource.saveInstance(instance).subscribe()
+            }
         }
 
         if (!statusProvider.isOnline()) {
@@ -109,7 +111,9 @@ class ReportsRepositoryImp @Inject internal constructor(
                         submitFiles(instance, server, reportPostResult.id)
                     })
         } else {
-            submitFiles(instance, server, instance.reportApiId)
+            if (instance.status != EntityStatus.SUBMITTED) {
+                submitFiles(instance, server, instance.reportApiId)
+            }
         }
     }
 
@@ -139,7 +143,9 @@ class ReportsRepositoryImp @Inject internal constructor(
                     upload(file, server.url, reportApiId, server.accessToken)
                 }
                 .doOnEach {
-                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    if (instance.status != EntityStatus.SUBMITTED) {
+                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    }
                 }
                 .doOnTerminate { handleInstanceOnTerminate(instance) }
                 .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
