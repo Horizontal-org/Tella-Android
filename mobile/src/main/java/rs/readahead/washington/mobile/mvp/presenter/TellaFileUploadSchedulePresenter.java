@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract;
-import rs.readahead.washington.mobile.util.jobs.TellaUploadJob;
 import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport;
 
 
@@ -40,7 +39,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
         disposables.dispose();
         view = null;
     }
-
+/*
     @Override
     public void scheduleUploadMediaFiles(final List<VaultFile> mediaFiles) {
         disposables.add(keyDataSource.getDataSource()
@@ -75,7 +74,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                 })
         );
     }
-
+*/
     @Override
     public void scheduleUploadReportFiles(VaultFile vaultFile, long uploadServerId) {
         disposables.add(keyDataSource.getDataSource()

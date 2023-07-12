@@ -66,7 +66,7 @@ class EditTellaServerFragment :
                 val text = if (isAutoUploadActivated && !reportServer.isAutoUpload) {
                     R.string.Setting_Reports_Background_Upload_Disabled_Description
                 } else {
-                    R.string.Setting_Reports_Background_Upload_Description
+                    R.string.Setting_Reports_Auto_Report_Description
                 }
                 setExplainText(text)
                 isDisabledTheme(!(isAutoUploadActivated && !reportServer.isAutoUpload))

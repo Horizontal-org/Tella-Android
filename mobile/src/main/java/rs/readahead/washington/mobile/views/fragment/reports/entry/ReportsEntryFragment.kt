@@ -57,11 +57,12 @@ class ReportsEntryFragment :
         ReportsFilesRecyclerViewAdapter(this)
     }
     private lateinit var selectedServer: TellaReportServer
-    private var servers: ArrayList<TellaReportServer>? = null
+    private lateinit var servers: ArrayList<TellaReportServer>
     private var reportInstance: ReportInstance? = null
     private var isNewDraft = true
     private var isTitleEnabled = false
     private var isDescriptionEnabled = false
+    private var isServerSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,9 +101,8 @@ class ReportsEntryFragment :
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
+        highLightButtonsInit()
         checkIsNewDraftEntry()
-        highLightSubmitButton()
-        highLightButtonOutBoxButton()
     }
 
     private fun exitOrSave() {
@@ -150,15 +150,23 @@ class ReportsEntryFragment :
         )
     }
 
-    private fun highLightSubmitButton() {
+    private fun highLightButtonsInit() {
+        binding?.reportTitleEt?.let { title ->
+            isTitleEnabled = title.length() > 0
+        }
+
+        binding?.reportDescriptionEt?.let { description ->
+            isDescriptionEnabled = description.length() > 0
+        }
+
         binding?.reportTitleEt?.onChange { title ->
-            isTitleEnabled = title.length > 1
-            highLightDraftButton(isTitleEnabled)
+            isTitleEnabled = title.length > 0
+            highLightButtons()
         }
 
         binding?.reportDescriptionEt?.onChange { description ->
-            isDescriptionEnabled = description.length > 1
-            highLightButtonOutBoxButton()
+            isDescriptionEnabled = description.length > 0
+            highLightButtons()
         }
 
         binding?.deleteBtn?.setOnClickListener {
@@ -166,23 +174,18 @@ class ReportsEntryFragment :
         }
     }
 
-    private fun highLightDraftButton(isTitleEnabled: Boolean) {
-        if (isTitleEnabled) {
-            binding?.toolbar?.onRightClickListener = {
-                saveReportAsDraft(false)
-            }
-
-        } else {
-            binding?.toolbar?.onRightClickListener = {}
-        }
-    }
-
-    private fun highLightButtonOutBoxButton() {
+    private fun highLightButtons() {
         val isSubmitEnabled =
-            isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+            isTitleEnabled && isServerSelected && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty())
 
+        val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
         binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+
         binding?.sendLaterBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
@@ -190,6 +193,7 @@ class ReportsEntryFragment :
                 showSubmitReportErrorSnackBar()
             }
         }
+
         binding?.sendReportBtn?.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsPending()
@@ -197,12 +201,23 @@ class ReportsEntryFragment :
                 showSubmitReportErrorSnackBar()
             }
         }
+
+        if (isTitleEnabled && isServerSelected) {
+            binding?.toolbar?.onRightClickListener = {
+                saveReportAsDraft(false)
+            }
+        } else {
+            binding?.toolbar?.onRightClickListener = {}
+        }
     }
 
     private fun showSubmitReportErrorSnackBar() {
+        val errorRes =
+            if (servers.size > 1) R.string.Snackbar_Submit_Report_WithProject_Error else R.string.Snackbar_Submit_Report_Error
+
         DialogUtils.showBottomMessage(
             baseActivity,
-            getString(R.string.Snackbar_Submit_Report_Error),
+            getString(errorRes),
             false
         )
     }
@@ -250,9 +265,9 @@ class ReportsEntryFragment :
         with(viewModel) {
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
+                servers = arrayListOf()
+                servers.addAll(serversList)
                 if (serversList.size > 1) {
-                    servers = arrayListOf()
-                    servers?.addAll(serversList)
                     val listDropDown = mutableListOf<DropDownItem>()
                     serversList.map { server ->
                         listDropDown.add(DropDownItem(server.projectId, server.projectName))
@@ -264,14 +279,18 @@ class ReportsEntryFragment :
                         baseActivity
                     )
                     this@ReportsEntryFragment.reportInstance?.let {
-                        servers?.first { server -> server.id == it.serverId }?.let {
+                        servers.first { server -> server.id == it.serverId }.let {
                             selectedServer = it
+                            isServerSelected = true
                             binding?.serversDropdown?.setDefaultName(it.name)
+                            highLightButtons()
                         }
                     }
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
+                    isServerSelected = true
+                    highLightButtons()
                 }
             }
             reportInstance.observe(viewLifecycleOwner) { instance ->
@@ -283,13 +302,20 @@ class ReportsEntryFragment :
                             false
                         )
                     }
+
                     EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
                         this@ReportsEntryFragment.submitReport(instance)
                     }
+
                     EntityStatus.FINALIZED -> {
+                        DialogUtils.showBottomMessage(
+                            baseActivity, getString(R.string.Report_Save_Outbox_Confirmation),
+                            false
+                        )
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
+
                     else -> {}
                 }
             }
@@ -302,7 +328,6 @@ class ReportsEntryFragment :
                 nav().popBackStack()
             }
         }
-
     }
 
     private fun showSelectFilesSheet() {
@@ -404,7 +429,7 @@ class ReportsEntryFragment :
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
@@ -416,14 +441,16 @@ class ReportsEntryFragment :
     }
 
     override fun removeFiles() {
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-        servers?.get(position)?.let {
+        servers.get(position).let {
             selectedServer = it
+            isServerSelected = true
         }
+        highLightButtons()
     }
 
     private fun submitReport(reportInstance: ReportInstance) {

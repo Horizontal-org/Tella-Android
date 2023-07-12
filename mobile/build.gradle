@@ -14,7 +14,7 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 154
+        versionCode 155
         versionName "2.2"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
@@ -112,7 +112,6 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
-    implementation "com.evernote:android-job:$versions.evernoteJob"
 
     // digest auth
     implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
