@@ -33,4 +33,7 @@
     <string name="signature" translatable="false">Signature</string>
     <string name="inches" translatable="false">″</string>
     <string name="Uwazi_Answer_LinkInitialText" translatable="false">https://</string>
+
+    <string name="alpha_disabled" translatable="false">0.6f</string>
+    <string name="alpha_enabled" translatable="false">1.0f</string>
 </resources>
