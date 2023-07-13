@@ -80,7 +80,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding?.blankSubmittedFormsInfo?.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -129,7 +129,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
 
     fun initView(){
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        binding?.submittFormInstances?.layoutManager = mLayoutManager
-        binding?.submittFormInstances?.adapter = adapter
+        binding.submittFormInstances.layoutManager = mLayoutManager
+        binding.submittFormInstances.adapter = adapter
     }
 }

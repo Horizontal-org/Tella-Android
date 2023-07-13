@@ -80,7 +80,8 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
 
 
     private fun onDraftFormInstanceListSuccess(instances: List<CollectFormInstance>) {
-        binding?.blankDraftFormsInfo!!.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankDraftFormsInfo.visibility =
+            if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -126,9 +127,9 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
         }
     }
 
-    fun initView(){
+    fun initView() {
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        binding?.draftFormInstances?.layoutManager = mLayoutManager
-        binding?.draftFormInstances?.adapter = adapter
+        binding.draftFormInstances.layoutManager = mLayoutManager
+        binding.draftFormInstances.adapter = adapter
     }
 }

@@ -81,7 +81,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding!!.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -105,11 +105,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
                     if (action === BottomSheetUtils.Action.VIEW) {
                         reSubmitForm(instance)
                     }
+                    /* This is for a sharing form over SMS
                     if (action === BottomSheetUtils.Action.SHARE) {
-                        /*if (formSubmitter != null) {
+                        if (formSubmitter != null) {
                             formSubmitter.getCompactFormTextToShare();
-                        }*/
-                    }
+                        }
+                    }*/
                     if (action === BottomSheetUtils.Action.DELETE) {
                         deleteFormInstance(instance.id)
                     }
@@ -138,7 +139,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
 
     fun initView(){
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        binding?.submittFormInstances?.layoutManager = mLayoutManager
-        binding?.submittFormInstances?.adapter = adapter
+        binding.submittFormInstances.layoutManager = mLayoutManager
+        binding.submittFormInstances.adapter = adapter
     }
 }
