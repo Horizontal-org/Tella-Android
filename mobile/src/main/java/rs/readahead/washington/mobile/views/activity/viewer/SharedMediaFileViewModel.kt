@@ -63,11 +63,11 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
         })
             .subscribeOn(Schedulers.computation())
             .doOnSubscribe {
-                _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START) } //onExportStarted
+                _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START) }
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_END) } //view.onExportEnded()
+            .doFinally { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_END) }
             .subscribe(
-                { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_PROGRESS) } //view.onMediaExported()
+                { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_PROGRESS) }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(R.string.gallery_toast_fail_exporting_to_device)

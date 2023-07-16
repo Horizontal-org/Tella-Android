@@ -4,9 +4,6 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -21,8 +18,6 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.RuntimePermissions
 import rs.readahead.washington.mobile.MyApplication
@@ -46,46 +41,44 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
     private val viewModel: SharedMediaFileViewModel by viewModels()
     private lateinit var toolbar: Toolbar
-
-    // private var presenter: MediaFileViewerPresenter? = null
     private var vaultFile: VaultFile? = null
     private var showActions = false
     private var actionsDisabled = false
-    private var withMetadata = false
     private var alertDialog: AlertDialog? = null
-    private var menu: Menu? = null
     private var isInfoShown = false
-    private var binding: ActivityPhotoViewerBinding? = null
+    private lateinit var binding: ActivityPhotoViewerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoViewerBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-       // setSupportActionBar(binding!!.toolbar)
+        setContentView(binding.root)
         initContracts()
         setupToolbar()
         initObservers()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.appbar.outlineProvider = null
+            binding.toolbar.outlineProvider = null
         } else {
-            binding!!.appbar.bringToFront()
+            binding.toolbar.bringToFront()
         }
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
-        //presenter = MediaFileViewerPresenter(this)
-        if (intent.hasExtra(PhotoViewerActivity.VIEW_PHOTO)) {
-            val vaultFile = intent.extras!![PhotoViewerActivity.VIEW_PHOTO] as VaultFile?
+        initVaultMediaFile()
+        openMedia()
+    }
+
+    private fun initVaultMediaFile() {
+        if (intent.hasExtra(VIEW_PHOTO)) {
+            val vaultFile = intent.getSerializableExtra(VIEW_PHOTO) as VaultFile?
             if (vaultFile != null) {
                 this.vaultFile = vaultFile
             }
         }
-        title = vaultFile!!.name
-        if (intent.hasExtra(PhotoViewerActivity.NO_ACTIONS)) {
+        toolbar.title = vaultFile!!.name
+        if (intent.hasExtra(NO_ACTIONS)) {
             actionsDisabled = true
         }
-        openMedia()
     }
 
     override fun onVisibilityChanged(visibility: Int) {
-        binding!!.toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
+        binding.toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
     }
 
 
@@ -146,12 +139,11 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         )
     }
     private fun setupToolbar() {
-        toolbar = binding!!.toolbar
+        toolbar = binding.toolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.photo_view_menu)
             vaultFile?.let { file ->
@@ -239,45 +231,12 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
     override fun onDestroy() {
-        //stopPresenter()
         if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.dismiss()
         }
         super.onDestroy()
     }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        //PhotoViewerActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-//    }
-//
-//    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//    fun onWriteExternalStoragePermissionDenied() {
-//    }
-//
-//    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//    fun onWriteExternalStorageNeverAskAgain() {
-//    }
-//
-//    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//    fun exportMediaFile() {
-//       // if (vaultFile != null && presenter != null) {
-//            if (vaultFile!!.metadata != null) {
-//                showExportWithMetadataDialog()
-//            } else {
-//                withMetadata = false
-//                maybeChangeTemporaryTimeout {
-//                    performFileSearch()
-//                    Unit
-//                }
-//            }
-//       // }
-//    }
-//
+
 //    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 //    fun showWriteExternalStorageRationale(request: PermissionRequest?) {
 //        maybeChangeTemporaryTimeout()
@@ -288,6 +247,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 //        )
 //    }
 
+
     private fun openMedia() {
         showGalleryImage(vaultFile)
         if (!actionsDisabled) {
@@ -296,111 +256,38 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
-    //
-//    private fun performFileSearch() {
-//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-//            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-//            startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
-//        } else {
-//            //presenter!!.exportNewMediaFile(withMetadata, vaultFile, null)
-//        }
-//    }
-//
     fun onMediaExported() {
         showToast(resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1))
     }
 
-    //
-//    override fun onExportError(error: Throwable) {
-//        showToast(R.string.gallery_toast_fail_exporting_to_device)
-//    }
-//
     fun onExportStarted() {
-        binding!!.content.progressBar.visibility = View.VISIBLE
+        binding.content.progressBar.visibility = View.VISIBLE
     }
 
     fun onExportEnded() {
-        binding!!.content.progressBar.visibility = View.GONE
+        binding.content.progressBar.visibility = View.GONE
     }
-
-//    override fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
-//        if (showConfirmDelete) {
-//            showConfirmSheet(
-//                supportFragmentManager,
-//                getString(R.string.Vault_Warning_Title),
-//                getString(R.string.Vault_Confirm_delete_Description),
-//                getString(R.string.Vault_Delete_anyway),
-//                getString(R.string.action_cancel),
-//                object : ActionConfirmed {
-//                    override fun accept(isConfirmed: Boolean) {
-//                        if (isConfirmed) {
-//                            //presenter!!.deleteMediaFiles(vaultFile)
-//                        }
-//                    }
-//                }
-//            )
-//        } else {
-//            //presenter!!.deleteMediaFiles(vaultFile)
-//        }
-//    }
 
     fun onMediaFileDeleted() {
         MyApplication.bus().post(MediaFileDeletedEvent())
         finish()
     }
 
-    //
-//    override fun onMediaFileDeletionError(throwable: Throwable) {
-//        DialogUtils.showBottomMessage(
-//            this,
-//            getString(R.string.gallery_toast_fail_deleting_files),
-//            true
-//        )
-//    }
-//
     private fun onMediaFileRename(vaultFile: VaultFile) {
-        binding!!.toolbar.title = vaultFile.name
+        toolbar.title = vaultFile.name
         MyApplication.bus().post(VaultFileRenameEvent())
-    }
-
-    fun onMediaFileRenameError(throwable: Throwable) {
-        //TODO CHECK ERROR MSG WHEN RENAME
-        DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.gallery_toast_fail_deleting_files),
-            true
-        )
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if (menu!!.findItem(R.id.menu_item_more) != null) {
-            menu!!.findItem(R.id.menu_item_more).isVisible = true
+        if (toolbar.menu.findItem(R.id.menu_item_more) != null) {
+            toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
         }
-        if (vaultFile!!.metadata != null && menu!!.findItem(R.id.menu_item_metadata) != null) {
-            menu!!.findItem(R.id.menu_item_metadata).isVisible = true
+        if (vaultFile!!.metadata != null && toolbar.menu.findItem(R.id.menu_item_metadata) != null) {
+            toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
         }
-        binding!!.toolbar.title = vaultFile!!.name
+        binding.toolbar.title = vaultFile!!.name
         finish()
-    }
-
-
-    private fun shareMediaFile() {
-        if (vaultFile == null) {
-            return
-        }
-        if (vaultFile!!.metadata != null) {
-            showShareWithMetadataDialog()
-        } else {
-            startShareActivity(false)
-        }
-    }
-
-    private fun startShareActivity(includeMetadata: Boolean) {
-        if (vaultFile == null) {
-            return
-        }
-        MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata)
     }
 
     private fun showGalleryImage(vaultFile: VaultFile?) {
@@ -440,12 +327,6 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         startActivity(viewMetadata)
     }
 
-//    private fun stopPresenter() {
-//        if (presenter != null) {
-//            presenter!!.destroy()
-//            presenter = null
-//        }
-//    }
 
 //    private fun showVaultActionsDialog(vaultFile: VaultFile?) {
 //        showVaultActionsSheet(
@@ -540,52 +421,5 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 //        }
 //    }
 
-    private fun showShareWithMetadataDialog() {
-        val options = LinkedHashMap<Int, Int>()
-        options[1] = R.string.verification_share_select_media_and_verification
-        options[0] = R.string.verification_share_select_only_media
-        Handler().post {
-            showRadioListOptionsSheet(
-                supportFragmentManager,
-                this,
-                options,
-                getString(R.string.verification_share_dialog_title),
-                getString(R.string.verification_share_dialog_expl),
-                getString(R.string.action_ok),
-                getString(R.string.action_cancel),
-                object : RadioOptionConsumer {
-                    override fun accept(option: Int) {
-                        startShareActivity(option > 0)
-                    }
-                }
-            )
-        }
-    }
-
-//    private fun showExportWithMetadataDialog() {
-//        val options = LinkedHashMap<Int, Int>()
-//        options[1] = R.string.verification_share_select_media_and_verification
-//        options[0] = R.string.verification_share_select_only_media
-//        Handler().post {
-//            showRadioListOptionsSheet(
-//                supportFragmentManager,
-//                context,
-//                options,
-//                getString(R.string.verification_share_dialog_title),
-//                getString(R.string.verification_share_dialog_expl),
-//                getString(R.string.action_ok),
-//                getString(R.string.action_cancel),
-//                object : RadioOptionConsumer {
-//                    override fun accept(option: Int) {
-//                        withMetadata = option > 0
-//                        maybeChangeTemporaryTimeout {
-//                            performFileSearch()
-//                            Unit
-//                        }
-//                    }
-//                }
-//            )
-//        }
-//    }
 
 }

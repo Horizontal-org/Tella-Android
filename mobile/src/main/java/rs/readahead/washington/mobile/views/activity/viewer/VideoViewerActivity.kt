@@ -64,7 +64,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         setContentView(binding.root)
-
         actionsDisabled = intent.hasExtra(NO_ACTIONS)
         initContracts()
         setupToolbar()
@@ -199,10 +198,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
 
-    fun getContext(): Context {
-        return this
-    }
-
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         // Show the controls on any key event.
         simpleExoPlayerView.showController()
@@ -211,12 +206,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
 
-    private fun startShareActivity(includeMetadata: Boolean) {
-        if (vaultFile == null) {
-            return
-        }
-        MediaFileHandler.startShareActivity(this, vaultFile, includeMetadata)
-    }
 
     private fun initializePlayer() {
         val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
@@ -286,9 +275,9 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
             toolbar.menu.findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener {
-                    vaultFile?.let { it1 ->
+                    vaultFile?.let { file ->
                         showVaultActionsDialog(
-                            it1,
+                            file,
                             viewModel,
                             {
                                 isInfoShown = true

@@ -222,7 +222,9 @@ object VaultActionsHelper {
                     override fun accept(option: Int) {
                         withMetadata = option > 0
                         this@showExportWithMetadataDialog.maybeChangeTemporaryTimeout {
-                            //performFileSearch()
+                            performFileSearch(
+                                chosenVaultFile, withMetadata,
+                                sharedViewModel, filePicker, requestPermission)
                         }
                     }
                 })
@@ -234,10 +236,13 @@ object VaultActionsHelper {
         if (chosenVaultFile?.metadata != null && withMetadata) {
             showExportWithMetadataDialog()
         } else {
-            performFileSearch(
-                chosenVaultFile, withMetadata,
-                sharedViewModel, filePicker, requestPermission
-            )
+            withMetadata = false
+            maybeChangeTemporaryTimeout {
+                performFileSearch(
+                    chosenVaultFile, withMetadata,
+                    sharedViewModel, filePicker, requestPermission
+                )
+            }
         }
     }
 
