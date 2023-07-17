@@ -32,7 +32,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.s
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
 
-@RuntimePermissions
 class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
     companion object {
         const val VIEW_PHOTO = "vp"

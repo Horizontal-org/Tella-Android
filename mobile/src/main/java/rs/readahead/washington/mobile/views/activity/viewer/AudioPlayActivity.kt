@@ -33,7 +33,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-@RuntimePermissions
 class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
     var mPlay: ImageButton? = null
     var mRwd: ImageButton? = null

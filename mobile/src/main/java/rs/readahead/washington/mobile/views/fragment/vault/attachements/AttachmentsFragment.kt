@@ -52,14 +52,14 @@ import rs.readahead.washington.mobile.databinding.FragmentVaultAttachmentsBindin
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
-import rs.readahead.washington.mobile.views.activity.AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity.VIEW_PHOTO
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity.Companion.PLAY_MEDIA_FILE_ID_KEY
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.Companion.VIEW_PHOTO
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
@@ -449,9 +449,9 @@ class AttachmentsFragment :
     private fun handleFile(vaultFile: VaultFile) {
         vaultFile.mimeType?.let {
             when {
-                isImageFileType(it) -> openActivity<PhotoViewerActivity>(vaultFile)
+                isImageFileType(it) -> openActivity<PhotoViewerActivity>(VIEW_PHOTO,vaultFile)
                 isAudioFileType(it) -> openActivity<AudioPlayActivity>(vaultFile.id)
-                isVideoFileType(it) -> openActivity<VideoViewerActivity>(vaultFile)
+                isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO,vaultFile)
                 else -> showBottomSheet(vaultFile)
             }
         }
@@ -464,9 +464,9 @@ class AttachmentsFragment :
         startActivity(intent)
     }
 
-    private inline fun <reified T : Activity> openActivity(vaultFile: VaultFile) {
+    private inline fun <reified T : Activity> openActivity(VIEW_TYPE: String,vaultFile: VaultFile) {
         val intent = Intent(baseActivity, T::class.java).apply {
-            putExtra(VIEW_PHOTO, vaultFile)
+            putExtra(VIEW_TYPE, vaultFile)
         }
         startActivity(intent)
     }
