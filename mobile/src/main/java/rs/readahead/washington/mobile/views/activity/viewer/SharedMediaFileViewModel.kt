@@ -9,16 +9,13 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
-import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import java.util.concurrent.Callable
 
@@ -63,7 +60,8 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
         })
             .subscribeOn(Schedulers.computation())
             .doOnSubscribe {
-                _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START) }
+                _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START)
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_END) }
             .subscribe(
@@ -114,7 +112,7 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ formMediaFileList: List<FormMediaFile> ->
                     if (formMediaFileList.isEmpty()) {
-                        mediaFileDeleteConfirmation = MediaFileDeleteConfirmation(vaultFile,false)
+                        mediaFileDeleteConfirmation = MediaFileDeleteConfirmation(vaultFile, false)
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
                     } else {
                         var isShowConfirmation = false
@@ -125,7 +123,8 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                                 break
                             }
                         }
-                        mediaFileDeleteConfirmation = MediaFileDeleteConfirmation(vaultFile,isShowConfirmation)
+                        mediaFileDeleteConfirmation =
+                            MediaFileDeleteConfirmation(vaultFile, isShowConfirmation)
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
                     }
                 }, { throwable: Throwable? ->
@@ -155,7 +154,7 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                     }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                  //  view.onMediaFileError(throwable)
+                    //  view.onMediaFileError(throwable)
                     _error.postValue(R.string.default_error_msg)
                 })
     }

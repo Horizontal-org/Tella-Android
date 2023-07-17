@@ -19,7 +19,6 @@ import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.RuntimePermissions
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
@@ -84,7 +83,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private fun initObservers() {
         with(viewModel) {
             error.observe(this@PhotoViewerActivity) {
-                 onShowError(it)
+                onShowError(it)
             }
             onMediaFileExportStatus.observe(this@PhotoViewerActivity) { status ->
                 when (status) {
@@ -137,6 +136,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             this, getString(errorResId), true
         )
     }
+
     private fun setupToolbar() {
         toolbar = binding.toolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)

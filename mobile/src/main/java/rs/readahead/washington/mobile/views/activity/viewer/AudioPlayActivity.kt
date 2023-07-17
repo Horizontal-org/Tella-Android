@@ -17,7 +17,6 @@ import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.utils.DialogUtils
-import permissions.dispatcher.RuntimePermissions
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent

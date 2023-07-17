@@ -126,7 +126,10 @@ object VaultActionsHelper {
                 toolBar.menu.findItem(R.id.menu_item_more).isVisible = false
                 toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                 invalidateOptionsMenu()
-                addFragment(vaultFile?.let { VaultInfoFragment.newInstance(it, false) }, R.id.container)
+                addFragment(
+                    vaultFile?.let { VaultInfoFragment.newInstance(it, false) },
+                    R.id.container
+                )
             }
 
             override fun delete() {
@@ -223,7 +226,8 @@ object VaultActionsHelper {
                         this@showExportWithMetadataDialog.maybeChangeTemporaryTimeout {
                             performFileSearch(
                                 chosenVaultFile, withMetadata,
-                                sharedViewModel, filePicker, requestPermission)
+                                sharedViewModel, filePicker, requestPermission
+                            )
                         }
                     }
                 })

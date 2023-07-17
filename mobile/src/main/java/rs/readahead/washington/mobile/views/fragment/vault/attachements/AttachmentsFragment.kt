@@ -4,7 +4,6 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -53,13 +52,13 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.*
 import rs.readahead.washington.mobile.views.activity.*
 import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity.Companion.PLAY_MEDIA_FILE_ID_KEY
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.Companion.VIEW_PHOTO
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
@@ -74,7 +73,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragmen
 @AndroidEntryPoint
 class AttachmentsFragment :
     BaseBindingFragment<FragmentVaultAttachmentsBinding>(FragmentVaultAttachmentsBinding::inflate),
-    View.OnClickListener, IGalleryVaultHandler,OnNavBckListener {
+    View.OnClickListener, IGalleryVaultHandler, OnNavBckListener {
     private var gridLayoutManager = GridLayoutManager(activity, 1)
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
@@ -134,7 +133,7 @@ class AttachmentsFragment :
     }
 
     private fun setUpToolbar() {
-       baseActivity.setSupportActionBar(binding.toolbar)
+        baseActivity.setSupportActionBar(binding.toolbar)
     }
 
     private fun initView() {
@@ -449,9 +448,9 @@ class AttachmentsFragment :
     private fun handleFile(vaultFile: VaultFile) {
         vaultFile.mimeType?.let {
             when {
-                isImageFileType(it) -> openActivity<PhotoViewerActivity>(VIEW_PHOTO,vaultFile)
+                isImageFileType(it) -> openActivity<PhotoViewerActivity>(VIEW_PHOTO, vaultFile)
                 isAudioFileType(it) -> openActivity<AudioPlayActivity>(vaultFile.id)
-                isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO,vaultFile)
+                isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO, vaultFile)
                 else -> showBottomSheet(vaultFile)
             }
         }
@@ -464,7 +463,10 @@ class AttachmentsFragment :
         startActivity(intent)
     }
 
-    private inline fun <reified T : Activity> openActivity(VIEW_TYPE: String,vaultFile: VaultFile) {
+    private inline fun <reified T : Activity> openActivity(
+        VIEW_TYPE: String,
+        vaultFile: VaultFile
+    ) {
         val intent = Intent(baseActivity, T::class.java).apply {
             putExtra(VIEW_TYPE, vaultFile)
         }
