@@ -10,6 +10,12 @@
     android:textDirection="locale"
     tools:context="rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -18,11 +24,14 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="@color/wa_white"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
             app:titleMarginStart="0dp"
             />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <include
         android:id="@+id/content"
