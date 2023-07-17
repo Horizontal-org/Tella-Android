@@ -113,7 +113,7 @@
   <string name="settings.docu_verification_action">പരിശോധന രീതി</string>
   <string name="settings.docu_verification_action.expl">നിങ്ങളുടെ ഉപകരണത്തെയും സ്ഥലത്തെയും കുറിച്ചുള്ള വിവരങ്ങൾ ശേഖരിക്കുന്നതിലൂടെ നിങ്ങളുടെ മീഡിയ ഫയലുകൾ പരിശോധിച്ചുറപ്പിക്കാൻ കഴിയും.</string>
   <string name="collect_no.form_heading">ലളിതമായ ഡാറ്റ ശേഖരണം</string>
-  <string name="collect_expl_not.connected.to.server"><![CDATA[ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം അനുയോജ്യമായ ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിക്കുക, എന്നിട്ടു <a href=\"tella_scheme://open.collect.manage.servers.activity\">ഇവിടെ സെർവർ സജ്ജമാക്കുക</a>.]]></string>
+  <string name="collect_expl_not.connected.to.server">ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം അനുയോജ്യമായ ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിക്കുക, എന്നിട്ടു <a href="tella_scheme://open.collect.manage.servers.activity">ഇവിടെ സെർവർ സജ്ജമാക്കുക</a>.</string>
   <string name="collect.draft_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് കരട് ഫോമുകളൊന്നുമില്ല.</string>
   <string name="collect.sent_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് സമർപ്പിച്ച ഫോമുകളൊന്നുമില്ല.</string>
   <string name="collect.blank_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് ഫോമുകളൊന്നുമില്ല. നിങ്ങൾ ബന്ധിപ്പിച്ചിരിക്കുന്ന സെർവറുകളിൽ ഫോമുകൾ ലഭ്യമാണോയെന്ന് പരിശോധിക്കാൻ പുതുക്കുക ബട്ടൺ ടാപ്പുചെയ്യുക.</string>
@@ -192,8 +192,8 @@
   <string name="collect_toast_fail.connection.too.weak">ഫോം അയയ്‌ക്കാൻ നിങ്ങളുടെ ഇന്റർനെറ്റ് കണക്ഷൻ വളരെ ദുർബലമാണ്. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
   <string name="gallery_toast_file.encrypted">ഫയൽ എൻ‌ക്രിപ്റ്റ് ചെയ്തു</string>
   <string name="settings.docu_toast_disconnect.servers.delete">എല്ലാ ഫോമുകളും സെർവറുകളും നീക്കം ചെയ്തു</string>
-  <string name="collect.help_expl_not.connected.to.server"><![CDATA[ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിച്ച് സെർവർ സജ്ജമാക്കുക.]]></string>
-  <string name="collect.help_expl_odk"><![CDATA[നിങ്ങളുടെ സ്വന്തം ഫോമുകൾ സൃഷ്ടിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുവെങ്കിൽ, <a href=\"https://hzontal.org/contact/\">ഞങ്ങളെ ബന്ധപ്പെടുക</a> അല്ലെങ്കിൽ <a href=\"https://opendatakit.org/help/help-for-hire/\">ഓപ്പൺ ഡാറ്റ കിറ്റിനെ (ODK) അടിസ്ഥാനമാക്കി ഏതെങ്കിലും സേവനം ഉപയോഗിക്കുക</a>]]></string>
+  <string name="collect.help_expl_not.connected.to.server">ഫോമുകൾ സ്വീകരിക്കുന്നതിനും ഡാറ്റ സമർപ്പിക്കുന്നതിനും, നിങ്ങൾ ആദ്യം ഒരു സെർവറിലേക്ക് കണക്റ്റുചെയ്യണം. സെർവർ വിവരങ്ങൾക്കായി നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിച്ച് സെർവർ സജ്ജമാക്കുക.</string>
+  <string name="collect.help_expl_odk">നിങ്ങളുടെ സ്വന്തം ഫോമുകൾ സൃഷ്ടിക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുവെങ്കിൽ, <a href="https://hzontal.org/contact/">ഞങ്ങളെ ബന്ധപ്പെടുക</a> അല്ലെങ്കിൽ <a href="https://opendatakit.org/help/help-for-hire/">ഓപ്പൺ ഡാറ്റ കിറ്റിനെ (ODK) അടിസ്ഥാനമാക്കി ഏതെങ്കിലും സേവനം ഉപയോഗിക്കുക</a></string>
   <string name="collect.help_expl_no.internet">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ലെങ്കിൽ, നിങ്ങൾക്ക് ഇപ്പോഴും ഫോമുകൾ പൂരിപ്പിക്കാൻ കഴിയും. നിങ്ങൾ ഓൺലൈനിൽ എത്തുമ്പോൾ തന്നെ ഡാറ്റ സമർപ്പിക്കും.</string>
   <string name="collect_toast_fail.data.too.large">അറ്റാച്ചുമെന്റുകൾ വളരെ വലുതായതിനാൽ നിങ്ങളുടെ ഫോം സമർപ്പിക്കാൻ കഴിയില്ല. ചെറിയ ഫയലുകൾ അറ്റാച്ചുചെയ്യുക</string>
   <string name="collect.end_heading_submitting">സമർപ്പിക്കുന്നു</string>
@@ -260,10 +260,10 @@
   <string name="action_upload">അപ്‌ലോഡ്</string>
   <string name="collect.blank_action.desc_more.options">കൂടുതൽ ഓപ്ഷനുകൾ / ഐച്ഛികങ്ങള്‍</string>
   <string name="action_next">തുടരുക</string>
-  <string name="Verification_Label_meter">%f മീറ്റര്‍‌</string>
-  <string name="Verification_Label_MeterPerSecond">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
+  <string name="meter">%f മീറ്റര്‍‌</string>
+  <string name="meter_per_second">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
   <string name="tella">Tella</string>
-  <string name="intro_document_protect"><![CDATA[Document & Protect]]></string>
+  <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
   <string name="onboard_password">Password</string>
   <string name="onboard_password_description">The most secure option</string>
@@ -301,7 +301,6 @@
   <string name="settings.sec_lock_timeout_5min">5 minutes</string>
   <string name="settings.sec_lock_timeout_30min">30 minutes</string>
   <string name="settings.sec_lock_timeout_1hour">1 hour</string>
-  <string name="settings.prot_select_delete.vault">Delete Vault</string>
   <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
   <string name="settings.sec_delete.servers_tooltip">Delete your connections to servers and all forms associated with them.</string>
@@ -318,8 +317,8 @@
   <string name="settings.servers_setup_hide_behind_camouflage_title">hide behind a real app</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">The most secure option: Camouflage Tella behind an actual functioning app</string>
   <string name="settings.servers_setup_change_name_icon_title">CHANGE NAME AND ICON</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[The Calculator camouflage is only possible if you 
- use a PIN lock.<font color=\"#D6933B\"><b> Change lock here</b></font>]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Continue</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -334,28 +333,14 @@
   <string name="settings.camo_gamestation">GameStation</string>
   <string name="settings.camo_playnow">PlayNow</string>
   <string name="settings.camo_jeweldash">Jewel Dash</string>
-  <string name="settings.camo_clock">Clock</string>
-  <string name="settings.camo_micamera">MiCamera</string>
-  <string name="settings.camo_forecast">Forecast</string>
-  <string name="settings.camo_game_launcher">Game Launcher</string>
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
-  <string name="settings.camo_music">Music</string>
-  <string name="settings.camo_fitness_life">Fitness Life</string>
-  <string name="settings.camo_health">Health</string>
-  <string name="settings.camo_watch">Watch</string>
-  <string name="settings.camo_astrology">Astrology</string>
-  <string name="settings.camo_dictionary">Dictionary</string>
-  <string name="settings.camo_plant_care">Plant Care</string>
-  <string name="settings.camo_workout">Workout</string>
-  <string name="settings.camo_period_tracker">Period Tracker</string>
   <string name="fragment_mic">Recorder</string>
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
-  <string name="onboard.intro_organization_code">I have a code from my organization</string>
   <string name="onboard.title_camera">Camera</string>
   <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">Recorder</string>
@@ -384,73 +369,13 @@ connecting to a server</string>
   <string name="Vault_AudioRecordings_AppBar">ശബ്ദ രേഖകള്‍</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVE CAMOUFLAGE</string>
   <string name="settings.gen_select_about">ആമുഖം &amp; സഹായം</string>
-  <string name="upload_toast_fail.finding.metadata.to.upload">ഫയലിന്റെ സ്ഥിരീകരണ വിവരങ്ങൾ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
-  <string name="upload_toast.fail.finding.file.to.upload">അപ്‌ലോഡുചെയ്യുന്നതിന് ഫയൽ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
-  <string name="gallery_app.bar">ഗാലറി</string>
-  <string name="home_gallery.button">ഗാലറി</string>
-  <string name="onboarding_action_create.pattern">​​മാതൃക സൃഷ്ടിക്കുക</string>
-  <string name="home_action.expl_camera">ക്യാമറ തുറക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
   <string name="settings.gen_select_language">ഭാഷ</string>
-  <string name="gallery_toast_file.imported.from.device">നിങ്ങളുടെ ഗാലറിയിലേക്ക് ഫയൽ ചേർത്തു</string>
-  <string name="gallery_subheading_show">കാണിക്കുക</string>
-  <string name="gallery_list.item_show.all.files">എല്ലാം</string>
-  <string name="gallery_list.items_show.only.photos">ചിത്രങ്ങള്‍</string>
-  <string name="gallery_list.items_show.only.videos">വീഡിയോകള്‍</string>
-  <string name="gallery_list.items_show.only.audio">ശബ്ദ രേഖകള്‍</string>
   <string name="home_action.desc_quick.exit">പുറത്തുപോകുക </string>
-  <string name="onboard.camo_heading">പ്രച്ഛന്നവേഷം</string>
   <string name="settings.camo_camera4">Camera</string>
   <string name="settings.camo_camera3">ക്യാമറപ്രോ</string>
   <string name="settings.camo_camera2">സൂപ്പർക്യാം</string>
   <string name="settings.camo_camera1">ഈസിക്യാം</string>
   <string name="settings.camo_weather3">Weather Now (ഇപ്പോഴുത്തെ കാലാവസ്ഥ)</string>
   <string name="settings.camo_weather2">Local Weather (പ്രാദേശിക കാലാവസ്ഥ)</string>
-  <string name="settings.camo_calculator1">Easy Math (എളുപ്പമുള്ള കണക്ക്)</string>
   <string name="settings.camo_weather1">Weather</string>
-  <string name="settings.docu_dialog.action_hide">മറയ്ക്കുക</string>
-  <string name="settings.docu_auto.upload.server.selection_select">സെര്‍വര്‍</string>
-  <string name="upload_dialog.title_select.server">സെര്‍വര്‍ തിരഞ്ഞെടുക്കൽ</string>
-  <string name="settings.docu_connect.to.servers_enable_action">സെർവറുകളിലേക്ക് കണക്റ്റുചെയ്യുക</string>
-  <string name="settings.docu_connect.to.servers_enable_action.expl">ഡാറ്റ അയയ്‌ക്കുന്നതിന് സെർവറുകളിലേക്കുള്ള നിങ്ങളുടെ കണക്ഷൻ മാനേജ് ചെയ്യുക.</string>
-  <string name="settings.docu_disable.servers_dialog.title">സെർവറുകൾ വിച്ഛേദിക്കുക</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">നിങ്ങളുടെ സെർവർ കണക്ഷനുകൾ മൊത്തത്തിൽ ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ, അല്ലെങ്കിൽ അവ മറയ്ക്കുകയാണോ? മറയ്‌ക്കുന്നത് സെർവർ വിവരങ്ങൾ മെമ്മറിയിൽ സൂക്ഷിക്കുന്നതിനാൽ നിങ്ങൾക്ക് എളുപ്പത്തിൽ വീണ്ടും കണക്റ്റുചെയ്യാനും ഡാറ്റ സെർവറുകളിൽ സമർപ്പിക്കാനും കഴിയും.</string>
-  <string name="settings.docu_delete.auto.server_dialog.expl">നിങ്ങൾ ഈ സെർവർ ഇല്ലാതാക്കുകയാണെങ്കിൽ, നിങ്ങളുടെ ഫയലുകൾ മേലിൽ സ്വപ്രേരിത അപ്‌ലോഡ് ചെയ്യില്ല.</string>
-  <string name="settings.docu_auto.upload_action">സ്വപ്രേരിത അപ്‌ലോഡ്</string>
-  <string name="settings.docu_delete.upload.server_dialog.expl">നിങ്ങൾക്ക് ഇനി ഈ സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാൻ കഴിയില്ല.</string>
-  <string name="settings.select_customization">Customization</string>
-
-  <string name="action_yes">yes</string>
-  <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.\n• Your data is aggregated weekly on your device before it is sent to us.\n• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week\n💾  32 files stored in Tella\n📖  Spanish language selected\n⚡  1 server connected\n😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
-  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
-  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
-  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
-  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
-  <string name="Uwazi_Templates_TabTitle">Templates</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
-  <string name="action_no">no</string>
-  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
-  <string name="Timeout_Warning_Title">Warnings</string>
-  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="settings_sec_security_screen">Screen security</string>
-  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
 </resources>

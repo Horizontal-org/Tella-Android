@@ -32,6 +32,7 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
         app:rightIcon="@drawable/ic_save_white_24dp"
+        app:rightIconContentDescription="@string/action_save"
         app:startTitle="@string/Uwazi_Action_FillEntity"
         />
 

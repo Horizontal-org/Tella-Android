@@ -6,7 +6,10 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
@@ -17,9 +20,9 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
 
     private lateinit var passwordClickView: View
     lateinit var passwordEditText: EditText
-    private lateinit var passwordEyeImageView: AppCompatImageView
+    private lateinit var passwordEyeImageView: ImageView
     lateinit var enterPasswordTextView: TextView
-    lateinit var topImageView: AppCompatImageView
+    lateinit var topImageView: ImageView
     lateinit var passwordLeftButton: TextView
     lateinit var passwordMsgTextView: TextView
     lateinit var passwordRightButton: TextView
@@ -93,6 +96,7 @@ abstract class BasePasswordActivity : BaseActivity(), View.OnClickListener, OnVa
         isPasswordMode = !isPasswordMode
         passwordEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         passwordEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePasswordActivity, R.drawable.eye_off)
+        passwordClickView.contentDescription = if (isPasswordMode) getString(R.string.action_show_password) else getString(R.string.action_hide_password)
         passwordEditText.setSelection(passwordEditText.text.length)
     }
 

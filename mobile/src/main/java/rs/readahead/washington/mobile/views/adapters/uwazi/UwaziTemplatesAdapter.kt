@@ -59,7 +59,9 @@ class UwaziTemplatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             ResourcesCompat.getDrawable(resources,R.drawable.star_border_24dp,null)
                         }
                     )
-
+                    contentDescription = context.getString(
+                        if (entityRow.isFavorite) R.string.action_unfavorite else R.string.action_favorite
+                    )
                     setOnClickListener { entityRow.onFavoriteClicked() }
                 }
                 setOnClickListener { entityRow.onOpenEntityClicked() }

@@ -88,6 +88,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableReportFormInstance());
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
+
+        //DBV11
+        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
     }
 
     @Override
@@ -134,6 +139,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
+
+            case 10:
+                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+                db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+
         }
     }
 
@@ -316,6 +327,16 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
 
+    private String alterTableTellaUploadServerAddAutoDelete() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_DELETE, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAutoUpload() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
     private String alterTableMediaFileUploadsAddMetadata() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_INCLUDE_METADATA, D.INTEGER, true) + " DEFAULT 0";
@@ -344,6 +365,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String alterTableMediaFileAddHash() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE) + " ADD COLUMN " +
                 cddl(D.C_HASH, D.INTEGER, false);
+    }
+
+    private String alterTableReportFormInstanceAddCurrentUpload() {
+        return "ALTER TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " ADD COLUMN " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true)+ " DEFAULT 0";
     }
 
     private String createTableTellaUploadServer() {

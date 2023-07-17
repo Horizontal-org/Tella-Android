@@ -11,7 +11,11 @@
   <string name="Vault_SortDateAsc_SheetAction">От новейшего к старейшему</string>
   <string name="Vault_SortDateDesc_SheetAction">От старейшего к новейшему</string>
   <string name="Vault_Export_SheetAction">Сохранить на устройстве</string>
-  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
-  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
-  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
+  <string name="Vault_Keep_Original">СОХРАНИТЬ ОРИГИНАЛ
+</string>
+  <string name="Vault_Delete_Original">УДАЛИТЬ ОРИГИНАЛ
+</string>
+  <string name="Vault_deleteFileImported_SheetDesc"> После импорта файла в Tella, хотите ли вы сохранить исходный файл на вашем устройстве или удалить его?
+ Если вы удалите его, файл, импортированный в Tella, будет единственной оставшейся копией. 
+</string>
 </resources>

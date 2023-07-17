@@ -6,9 +6,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -50,7 +51,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                 }
             }
 
-            onMoreClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showSubmittedMenu(instance)
             }
 
@@ -58,17 +59,23 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                 openEntityInstance(instance)
             }
 
-            onOpenClickedFormInstance.observe(viewLifecycleOwner) { instance ->
+            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
                 loadEntityInstance(instance)
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ),baseActivity
+                )
                 viewModel.listOutbox()
             }
         }
     }
 
-    private fun showSubmittedMenu(instance: ReportFormInstance) {
+
+    private fun showSubmittedMenu(instance: ReportInstance) {
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
@@ -86,19 +93,19 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Delete_Submitted_Report_Confirmation),
-            requireContext().getString(R.string.action_yes),
-            requireContext().getString(R.string.action_no),
+            requireContext().getString(R.string.action_delete),
+            requireContext().getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )
     }
 
-    private fun loadEntityInstance(reportFormInstance: ReportFormInstance) {
-        viewModel.getReportBundle(reportFormInstance)
+    private fun loadEntityInstance(reportInstance: ReportInstance) {
+        viewModel.getReportBundle(reportInstance)
     }
 
-    private fun openEntityInstance(reportFormInstance: ReportFormInstance) {
+    private fun openEntityInstance(reportInstance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         nav().navigate(R.id.action_reportsScreen_to_reportSubmittedScreen, bundle)
     }
 

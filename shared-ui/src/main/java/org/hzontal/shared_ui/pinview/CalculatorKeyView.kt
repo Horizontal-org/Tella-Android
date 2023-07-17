@@ -144,6 +144,8 @@ class CalculatorKeyView @JvmOverloads constructor(context: Context, attrs: Attri
             button.setOnClickListener(mOnKeyBoardClickListener)
         }
 
+        binding.plusMinusBottomBtn.setOnClickListener(mOnKeyBoardClickListener)
+
         binding.deleteBtn.setOnClickListener {
             mResultListener.onClearResult()
             mOnKeyBoardClickListener.onClearClicked()

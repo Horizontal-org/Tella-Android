@@ -1,9 +1,11 @@
 package rs.readahead.washington.mobile.views.fragment.reports.di
 
+import android.content.Context
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -14,6 +16,9 @@ import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService.Companion.BASE_URL
 import rs.readahead.washington.mobile.data.uwazi.UvCookieJar
+import rs.readahead.washington.mobile.util.StatusProvider
+import rs.readahead.washington.mobile.util.StatusProviderImpl
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -29,7 +34,10 @@ object NetworkModule {
     fun providesOkHttpClient(): OkHttpClient {
         val client = OkHttpClient()
             .newBuilder()
-            .cookieJar(UvCookieJar());
+            .cookieJar(UvCookieJar())
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
         if (BuildConfig.DEBUG) {
             client.addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
         }
@@ -53,9 +61,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesGson(): Gson {
-        return Gson()
-    }
+    fun providesGson() = Gson()
 
     @Provides
     @Singleton
@@ -68,4 +74,11 @@ object NetworkModule {
     fun providesRxJavaCallAdapterFactory(): RxJava2CallAdapterFactory {
         return RxJava2CallAdapterFactory.create()
     }
+
+    @Provides
+    @Singleton
+    fun providesStatusProvider(@ApplicationContext context: Context) : StatusProvider {
+      return StatusProviderImpl(context)
+    }
+
 }

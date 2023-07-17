@@ -8,7 +8,6 @@ import androidx.core.os.bundleOf
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import kotlin.properties.Delegates
 
 class HideBehindCalculator : BaseFragment() {
 
@@ -22,9 +21,9 @@ class HideBehindCalculator : BaseFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View{
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = OnboardCalculatorFragmentBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -36,10 +35,15 @@ class HideBehindCalculator : BaseFragment() {
 
     override fun initView(view: View) {
         val position = requireArguments().getInt(VIEWPAGER_POSITION)
-        var drawables = resources.obtainTypedArray(R.array.calculator_skin_array)
-        with(binding) {
-            this.calculatorImg.setImageDrawable(drawables.getDrawable(position))
+        val skinArray = resources.obtainTypedArray(R.array.calculator_skin_array)
+        val skinStrings = resources.getStringArray(R.array.calculator_skin_strings)
+
+        with(binding.calculatorImg) {
+            setImageDrawable(skinArray.getDrawable(position))
+            contentDescription = skinStrings[position]
         }
+
+        skinArray.recycle()
     }
 
 

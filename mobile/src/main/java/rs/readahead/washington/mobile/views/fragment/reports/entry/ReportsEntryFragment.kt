@@ -21,7 +21,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.domain.entity.reports.ReportFormInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.C
@@ -29,6 +29,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.invisible
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.CameraActivity
+import rs.readahead.washington.mobile.views.activity.CameraActivity.CAPTURE_WITH_AUTO_UPLOAD
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
@@ -56,11 +57,12 @@ class ReportsEntryFragment :
         ReportsFilesRecyclerViewAdapter(this)
     }
     private lateinit var selectedServer: TellaReportServer
-    private var servers: ArrayList<TellaReportServer>? = null
-    private var reportFormInstance: ReportFormInstance? = null
+    private lateinit var servers: ArrayList<TellaReportServer>
+    private var reportInstance: ReportInstance? = null
     private var isNewDraft = true
     private var isTitleEnabled = false
     private var isDescriptionEnabled = false
+    private var isServerSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,42 +87,43 @@ class ReportsEntryFragment :
         binding?.toolbar?.backClickListener = {
             exitOrSave()
         }
-        highLightSubmitButton()
+
         arguments?.let { bundle ->
             if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
-                reportFormInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportFormInstance
+                reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
                 bundle.remove(BUNDLE_REPORT_FORM_INSTANCE)
             }
         }
 
-        reportFormInstance?.let { instance ->
+        reportInstance?.let { instance ->
             binding?.reportTitleEt?.setText(instance.title)
             binding?.reportDescriptionEt?.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
+        highLightButtonsInit()
         checkIsNewDraftEntry()
     }
 
     private fun exitOrSave() {
         val title = binding?.reportTitleEt!!.text.toString()
         val description = binding?.reportDescriptionEt!!.text.toString()
-        if (reportFormInstance == null && title.isEmpty()) {
+        if (reportInstance == null && title.isEmpty()) {
             nav().popBackStack()
-        } else if (reportFormInstance == null && title.isNotEmpty()) {
-            showConfirmSaveOrExit(reportFormInstance)
-        } else if (reportFormInstance != null && (reportFormInstance?.title != title || reportFormInstance?.description != description
+        } else if (reportInstance == null && title.isNotEmpty()) {
+            showConfirmSaveOrExit(reportInstance)
+        } else if (reportInstance != null && (reportInstance?.title != title || reportInstance?.description != description
                     || filesRecyclerViewAdapter.getFiles() != viewModel.mediaFilesToVaultFiles(
-                reportFormInstance?.widgetMediaFiles
+                reportInstance?.widgetMediaFiles
             ))
         ) {
-            showConfirmSaveOrExit(reportFormInstance)
+            showConfirmSaveOrExit(reportInstance)
         } else {
             nav().popBackStack()
         }
     }
 
-    private fun showConfirmSaveOrExit(reportFormInstance: ReportFormInstance?) {
+    private fun showConfirmSaveOrExit(reportInstance: ReportInstance?) {
         BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
             getString(R.string.Report_Dialog_Draft_Title),
@@ -130,10 +133,10 @@ class ReportsEntryFragment :
             object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     if (isConfirmed) {
-                        if (reportFormInstance == null) {
+                        if (reportInstance == null) {
                             saveReportAsDraft(true)
                         } else {
-                            if (reportFormInstance.status == EntityStatus.DRAFT) {
+                            if (reportInstance.status == EntityStatus.DRAFT) {
                                 saveReportAsDraft(true)
                             } else {
                                 saveReportAsOutbox()
@@ -147,56 +150,82 @@ class ReportsEntryFragment :
         )
     }
 
-    private fun highLightSubmitButton() {
+    private fun highLightButtonsInit() {
+        binding?.reportTitleEt?.let { title ->
+            isTitleEnabled = title.length() > 0
+        }
+
+        binding?.reportDescriptionEt?.let { description ->
+            isDescriptionEnabled = description.length() > 0
+        }
+
         binding?.reportTitleEt?.onChange { title ->
-            isTitleEnabled = title.length > 1
-            highLightDraftButton(isTitleEnabled)
+            isTitleEnabled = title.length > 0
+            highLightButtons()
         }
 
         binding?.reportDescriptionEt?.onChange { description ->
-            isDescriptionEnabled = description.length > 1
-            highLightButtonOutBoxButton()
+            isDescriptionEnabled = description.length > 0
+            highLightButtons()
         }
 
         binding?.deleteBtn?.setOnClickListener {
-            reportFormInstance?.let { instance -> showDeleteBottomSheet(instance) }
+            reportInstance?.let { instance -> showDeleteBottomSheet(instance) }
         }
     }
 
-    private fun highLightDraftButton(isTitleEnabled: Boolean) {
-        if (isTitleEnabled) {
+    private fun highLightButtons() {
+        val isSubmitEnabled =
+            isTitleEnabled && isServerSelected && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
+                .isNotEmpty())
+
+        val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
+        binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+
+        binding?.sendLaterBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
+                saveReportAsOutbox()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
+        }
+
+        binding?.sendReportBtn?.setOnClickListener {
+            if (isSubmitEnabled) {
+                saveReportAsPending()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
+        }
+
+        if (isTitleEnabled && isServerSelected) {
             binding?.toolbar?.onRightClickListener = {
                 saveReportAsDraft(false)
             }
-
         } else {
             binding?.toolbar?.onRightClickListener = {}
         }
     }
 
-    private fun highLightButtonOutBoxButton() {
-        if (isTitleEnabled && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
-                .isNotEmpty())
-        ) {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange_btn)
+    private fun showSubmitReportErrorSnackBar() {
+        val errorRes =
+            if (servers.size > 1) R.string.Snackbar_Submit_Report_WithProject_Error else R.string.Snackbar_Submit_Report_Error
 
-            binding?.sendLaterBtn?.setOnClickListener {
-                saveReportAsOutbox()
-            }
-            binding?.sendReportBtn?.setOnClickListener {
-                saveReportAsPending()
-            }
-        } else {
-            binding?.sendReportBtn?.setBackgroundResource(R.drawable.bg_round_orange16_btn)
-            binding?.sendReportBtn?.setOnClickListener(null)
-            binding?.sendLaterBtn?.setOnClickListener {}
-        }
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(errorRes),
+            false
+        )
     }
 
     private fun saveReportAsDraft(exitAfterSave: Boolean) {
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
-                id = reportFormInstance?.id,
+                id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
@@ -209,7 +238,7 @@ class ReportsEntryFragment :
     private fun saveReportAsOutbox() {
         viewModel.saveOutbox(
             viewModel.getFormInstance(
-                id = reportFormInstance?.id,
+                id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
@@ -222,7 +251,7 @@ class ReportsEntryFragment :
     private fun saveReportAsPending() {
         viewModel.saveOutbox(
             viewModel.getFormInstance(
-                id = reportFormInstance?.id,
+                id = reportInstance?.id,
                 title = binding?.reportTitleEt?.text.toString(),
                 description = binding?.reportDescriptionEt?.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
@@ -236,9 +265,9 @@ class ReportsEntryFragment :
         with(viewModel) {
             listServers()
             serversList.observe(viewLifecycleOwner) { serversList ->
+                servers = arrayListOf()
+                servers.addAll(serversList)
                 if (serversList.size > 1) {
-                    servers = arrayListOf()
-                    servers?.addAll(serversList)
                     val listDropDown = mutableListOf<DropDownItem>()
                     serversList.map { server ->
                         listDropDown.add(DropDownItem(server.projectId, server.projectName))
@@ -249,33 +278,44 @@ class ReportsEntryFragment :
                         this@ReportsEntryFragment,
                         baseActivity
                     )
-                    reportFormInstance?.let {
-                        servers?.first { server -> server.id == it.serverId }?.let {
+                    this@ReportsEntryFragment.reportInstance?.let {
+                        servers.first { server -> server.id == it.serverId }.let {
                             selectedServer = it
+                            isServerSelected = true
                             binding?.serversDropdown?.setDefaultName(it.name)
+                            highLightButtons()
                         }
                     }
                 } else {
                     binding?.dropdownGroup?.hide()
                     selectedServer = serversList[0]
+                    isServerSelected = true
+                    highLightButtons()
                 }
             }
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.DRAFT -> {
-                        reportFormInstance = instance
+                        this@ReportsEntryFragment.reportInstance = instance
                         DialogUtils.showBottomMessage(
                             baseActivity, getString(R.string.Reports_Saved_Draft),
                             false
                         )
                     }
+
                     EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
                         this@ReportsEntryFragment.submitReport(instance)
                     }
+
                     EntityStatus.FINALIZED -> {
+                        DialogUtils.showBottomMessage(
+                            baseActivity, getString(R.string.Report_Save_Outbox_Confirmation),
+                            false
+                        )
                         nav().popBackStack()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
+
                     else -> {}
                 }
             }
@@ -288,7 +328,6 @@ class ReportsEntryFragment :
                 nav().popBackStack()
             }
         }
-
     }
 
     private fun showSelectFilesSheet() {
@@ -346,13 +385,14 @@ class ReportsEntryFragment :
 
     private fun showCameraActivity() {
         try {
-            //TODO Djordje WE SHOULD BE ABLE TO USE `baseActivity instance` instead
-            baseActivity.startActivityForResult(
-                Intent(context, CameraActivity::class.java).putExtra(
-                    CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name
-                ), C.MEDIA_FILE_ID
-            )
-        } catch (e: Exception) {
+            val intent = Intent(context, CameraActivity::class.java)
+            intent.apply {
+                putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name)
+                putExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+            }
+
+            baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
+        } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
@@ -360,7 +400,8 @@ class ReportsEntryFragment :
     private fun importMedia() {
         baseActivity.maybeChangeTemporaryTimeout {
             MediaFileHandler.startSelectMediaActivity(
-                activity, "*/*", null, C.IMPORT_FILE
+                activity, "image/* video/* audio/*",
+                arrayOf("image/*", "video/*", "audio/*"), C.IMPORT_FILE
             )
         }
     }
@@ -388,7 +429,7 @@ class ReportsEntryFragment :
             filesRecyclerViewAdapter.insertAttachment(file)
         }
         binding?.filesRecyclerView?.visibility = View.VISIBLE
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
@@ -400,35 +441,37 @@ class ReportsEntryFragment :
     }
 
     override fun removeFiles() {
-        highLightButtonOutBoxButton()
+        highLightButtons()
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
         binding?.serversDropdown?.setDefaultName(chosenItem.name)
-        servers?.get(position)?.let {
+        servers.get(position).let {
             selectedServer = it
+            isServerSelected = true
         }
+        highLightButtons()
     }
 
-    private fun submitReport(reportFormInstance: ReportFormInstance) {
+    private fun submitReport(reportInstance: ReportInstance) {
         val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportFormInstance)
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
         // nav().navigateUp()
         nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
         nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
 
-    private fun showDeleteBottomSheet(entityInstance: ReportFormInstance) {
+    private fun showDeleteBottomSheet(reportInstance: ReportInstance) {
         BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
-            entityInstance.title,
+            reportInstance.title,
             getString(R.string.Collect_DeleteDraftForm_SheetExpl),
             getString(R.string.action_yes),
             getString(R.string.action_no), consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     if (isConfirmed) {
-                        viewModel.deleteReport(entityInstance)
+                        viewModel.deleteReport(reportInstance)
                     }
                 }
             })

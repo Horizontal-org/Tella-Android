@@ -92,7 +92,7 @@ class OutboxUwaziFragment : UwaziListFragment() {
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel),
             iconView = R.drawable.ic_eye_white
         )

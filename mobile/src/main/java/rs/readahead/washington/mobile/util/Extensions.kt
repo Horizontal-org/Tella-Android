@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
@@ -108,4 +109,9 @@ fun View.show() {
 
 fun View.invisible() {
     visibility = View.INVISIBLE
+}
+
+fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)
+    setImageDrawable(drawable)
 }

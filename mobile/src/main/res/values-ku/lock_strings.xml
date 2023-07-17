@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">ڕەتکردنەوە</string>
+  <string name="LockSelect_Action_Back">گەڕانەوە</string>
+  <string name="LockSelect_Action_Confirm">داهاتوو</string>
+  <string name="LockPatternConfirm_Action_Confirm">شێوازەکەت پشتڕاست بکەرەوە</string>
+  <string name="LockSelect_Action_Continue">داهاتوو</string>
+  <string name="LockPatternSet_Draw_Pattern">شێوازێکی کردنەوە قفڵ بکێشەوە</string>
+  <string name="UnlockPattern_DrawToUnlock">شێوازێک بکێشەوە بۆ کردنەوەی قفڵی تێلا</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">شێوازی نوێی کردنەوەی قفڵەکەت</string>
+  <string name="LockPatternSet_Pattern_Recorded">شێوازی تۆمارکراوە</string>
+  <string name="UnlockPattern_PatternTooShort">بە بەستنەوەی لانیکەم شەش خاڵ شێوازەکەت بکێشەوە</string>
+  <string name="LockPatternSet_RecordingPattern">کاتێک تەواو بوو پەنجەت ئازاد بکە</string>
+  <string name="LockPatternSet_Action_Redraw">پاککردنەوە</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">شێوازەکەت هەڵەیە،
+تکایە دووبارە هەوڵ بدەرەوە</string>
+  <string name="LockPatternSet_Message_PatternStarted">شێواز دەستی پێکرد</string>
+  <string name="LockPatternSet_Message_PatternCleared">شێوازەکە پاککرایەوە</string>
+  <string name="LockPatternSet_Message_CellAdded">خانە زیاد کرا</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">خانە <xliff:g id="cell_index" example="3">%1$d</xliff:g> زیاد کرا</string>
+  <string name="LockPatternSet_Message_PatternDetected">شێوازەکە تەواوبوو</string>
+  <string name="UnLockPattern_PatternArea">ناوچەی شێوازەکە.</string>
+  <string name="UnLockPattern_Message_DrawPattern">شێوازەکەت بکێشەوە بۆ کردنەوەی قفڵی تێلا</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">تکایە دووبارە هەوڵ بدەوە. شێوازەکانت یەکتر ناگرنەوە.</string>
+  <string name="LockPinSet_Message_EnterPin">PINـەکەت داخڵ بکە</string>
+  <string name="UnlockPin_Message_EnterPin">بۆ کردنەوەی قفڵی تێلا PINـەکەت بنووسە</string>
+  <string name="LockPinSet_Message_Hint">بە لایەنی کەمەوە 6 ژمارە بەکاربهێنە. دوور ببەوە لە بەکارهێنانی ئەو ژمارانەی بە ئاسانی پێشبینی دەکرێن، وەک ڕۆژی لەدایکبوونت.</string>
+  <string name="LockPinSet_Message_Confirm">PINـەکەت پشتڕاست بکەرەوە</string>
+  <string name="LockPinConfirm_Message_Confirm">تکایە جارێکی تر PINـەکەت بنووسەوە، تەنیا بۆ ئەوەی دڵنیا بیت.</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">تکایە دووبارە هەوڵ بدەوە. PINـەکانت یەکتر ناگرنەوە.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PINی هەڵە،
+تکایە دووبارە هەوڵ بدەوە</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">وشەی نهێنییەکەت داخڵ بکە</string>
+  <string name="LockPasswordSet_Message_Hint">بە لایەنی کەمەوە 6 پیت بەکاربهێنە و دوور ببەوە لە بەکارهێنانی وشەی نهێنی کە بە ئاسانی پێشبینی بکرێت، وەک وشەی \"password\". تا وشەی نهێنی درێژتر بێت، پارێزراوتر دەبێت.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">تکایە دووبارە هەوڵ بدەوە. وشە نهێنییەکانت وەک یەک نین.</string>
+  <string name="LockSuccess_Message_AllDone">کارەکەت کۆتایی هات!</string>
+  <string name="LockSuccess_Message_Hint">هەمیشە دەتوانیت بژاردەی قفڵەکەت بگۆڕیت
+وە زیاتر تێلا لە ڕێکخستنەکاندا تایبەتمەند بکەیت.</string>
+  <string name="LockSuccess_Action_GoToTella">بڕۆ بۆ تێلا</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">وشەی نهێنی هەڵە،
+تکایە دووبارە هەوڵ بدەوە</string>
+  <string name="UnlockPassword_Message_EnterPassword">بۆ کردنەوەی قفڵی تێلا وشەی نهێنی خۆت داخڵ بکە</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">وشە نهێنییەکەت پشتڕاست بکەرەوە</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">تکایە جارێکی تر وشە نهێنییەکەت بنووسەوە، تەنیا بۆ ئەوەی دڵنیا بیت.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">بۆ گۆڕینی قفڵەکەت وشەی نهێنی ئێستات داخڵ بکە</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">بۆ گۆڕینی قفڵەکەت شێوازی ئێستات بکێشەوە</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">بۆ گۆڕینی قفلەکەت PINـی ئێستات داخڵ بکە</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">بۆ گۆڕینی کامۆفلاجەکەت وشەی نهێنی ئێستات داخڵ بکە</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">بۆ گۆڕینی کامۆفلاجەکەت شێوازی ئێستات بکێشەوە</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">بۆ گۆڕینی کامۆفلاجەکەت PINی ئێستات داخڵ بکە</string>
+  <string name="Settings_Action_SetLock">قفڵ</string>
+  <string name="Settings_Message_LockChanged">قفڵەکەت گۆڕاوە!</string>
+</resources>

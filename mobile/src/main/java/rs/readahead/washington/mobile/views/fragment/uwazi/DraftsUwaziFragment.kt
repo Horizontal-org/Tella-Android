@@ -68,7 +68,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
             requireActivity().supportFragmentManager,
             instance.title,
             getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.action_delete),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -81,7 +81,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }

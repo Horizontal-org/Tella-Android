@@ -11,9 +11,10 @@ class TellaReportServer @JvmOverloads constructor(
     var projectName: String = "",
     var projectSlug: String = "",
     var isActivatedMetadata: Boolean = false,
-    var isActivatedBackgroundUpload: Boolean = false
-) :
-    Server(), Serializable {
+    var isActivatedBackgroundUpload: Boolean = false,
+    var isAutoUpload: Boolean = false,
+    var isAutoDelete: Boolean = false
+) : Server(), Serializable {
     override fun equals(other: Any?): Boolean {
         if (other == null) {
             return false

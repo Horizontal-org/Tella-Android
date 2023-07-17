@@ -47,9 +47,9 @@ class ChangeRemoveCamouflage : BaseFragment() {
             camoImage.setImageDrawable(getCamoImage())
             camoImage.requestLayout()
             val dimension = resources.displayMetrics.density * 160
-            camoImage.getLayoutParams().height = dimension.toInt()
-            camoImage.getLayoutParams().width = dimension.toInt()
-            camoImage.setScaleType(ImageView.ScaleType.FIT_XY);
+            camoImage.layoutParams.height = dimension.toInt()
+            camoImage.layoutParams.width = dimension.toInt()
+            camoImage.scaleType = ImageView.ScaleType.FIT_XY
         } else {
             camoImage.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_server))
         }
@@ -84,18 +84,6 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     private fun getCamoImage(): Drawable? {
-        var drawable = ContextCompat.getDrawable(baseActivity, R.drawable.ic_server)
-        val currentAlias = Preferences.getAppAlias()
-
-        if (currentAlias == cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias) {
-            return ContextCompat.getDrawable(baseActivity, cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId)
-        }
-
-        for (option in cm.options) {
-            if (option.alias == currentAlias) {
-                drawable = ContextCompat.getDrawable(baseActivity, option.drawableResId)
-            }
-        }
-        return drawable
+        return ContextCompat.getDrawable(baseActivity,R.mipmap.tella_icon)
     }
 }

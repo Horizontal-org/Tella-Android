@@ -2,7 +2,7 @@ package rs.readahead.washington.mobile.domain.entity.reports
 
 
 data class ReportInstanceBundle (
-    var instance: ReportFormInstance = ReportFormInstance(),
+    var instance: ReportInstance = ReportInstance(),
     var fileIds: Array<String> = emptyArray()
 ) {
     override fun equals(other: Any?): Boolean {

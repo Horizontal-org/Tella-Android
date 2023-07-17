@@ -50,7 +50,6 @@ buildscript {
     versions.commonsIo = '2.6'
     versions.rxandroid = '2.1.1'
     versions.rxrelay = '2.1.1'
-    versions.evernoteJob = '1.3.0-rc1'
     versions.exoplayer = '2.18.2'
     versions.cameraview = '2.7.2'
     versions.exifinterface = '1.3.3'

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="Vault_AllFiles_Title">Todos os arquivos</string>
   <string name="Vault_Images_Title">Imagens</string>
   <string name="Vault_Files_Title">Arquivos Tella</string>
@@ -27,14 +27,6 @@
   <string name="Vault_FileLength">Comprimento</string>
   <string name="Vault_FilePath">caminho do arquivo</string>
   <string name="Vault_RenameFile_SheetTitle">Renomear arquivo</string>
-  <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
-  <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Nome A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Nome Z &gt; A</string>
   <string name="Vault_SortDateAsc_SheetAction">Mais novo para mais antigo</string>
@@ -49,12 +41,6 @@
   <string name="Vault_MoveHere">Relocalizar aqui</string>
   <string name="Vault_ViewerOther_SheetDesc">Não pode abrir este formato de arquivo dentro do Tella. Deseja exportar o arquivo para o seu aparelho para abri-lo por meio de um aplicativo diferente? Isso pode expor o conteúdo do arquivo.</string>
   <string name="Vault_Export_SheetAction">Salvar no aparelho celular</string>
-  <plurals name="Vault_Items">
-    <item quantity="one" tools:ignore="ImpliedQuantity"></item>
-    <item quantity="other"></item>
-  </plurals>
   <string name="Vault_No_Files_Title">Ainda não tem nenhum arquivo no Tella.</string>
-  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
-  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
-  <string name="Vault_deleteFileImported_SheetDesc" > After importing the file into Tella, do you want to keep the original file on your device or delete it?\n \n If you delete it, the file imported into Tella will be the only copy left. </string>
+  <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>
 </resources>

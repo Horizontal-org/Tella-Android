@@ -22,16 +22,17 @@
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text=""
+        android:contentDescription="@string/action_edit_recording_name"
+        android:drawablePadding="8dp"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:text=""
         android:textColor="@color/wa_orange"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:drawablePadding="8dp"
         app:drawableEndCompat="@drawable/ic_edit_orange_24" />
 
     <TextView
@@ -87,7 +88,7 @@
             android:layout_height="40dp"
             android:layout_margin="12dp"
             android:background="@drawable/light_purple_circle_background"
-            android:contentDescription="@string/action_stop"
+            android:contentDescription="@string/action_pause"
             android:padding="5dp"
             android:src="@drawable/ic_pause_white_24" />
     </LinearLayout>
@@ -130,7 +131,7 @@
             android:layout_height="40dp"
             android:layout_margin="12dp"
             android:background="@drawable/light_purple_circle_background"
-            android:contentDescription="@string/action_play"
+            android:contentDescription="@string/action_go_to_audio_library"
             android:padding="5dp"
             app:backgroundTint="@color/wa_white_20"
             android:src="@drawable/ic_headset_white_24dp" />

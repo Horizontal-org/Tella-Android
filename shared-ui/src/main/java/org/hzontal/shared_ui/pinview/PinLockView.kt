@@ -109,6 +109,7 @@ class PinLockView @JvmOverloads constructor(
         }
        val deleteButton = findViewById<ImageView>(R.id.deleteBtn)
         deleteButton.setOnClickListener(mOnKeyBoardClickListener)
+        deleteButton.contentDescription = context.getString(R.string.action_delete)
     }
 
 
