@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.WRITE_REQUEST_CODE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 var withMetadata = false
@@ -126,8 +126,7 @@ object VaultActionsHelper {
                 toolBar.menu.findItem(R.id.menu_item_more).isVisible = false
                 toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                 invalidateOptionsMenu()
-                vaultFile?.let { VaultInfoFragment().newInstance(it, false) }
-                    ?.let { addFragment(it, R.id.container) }
+                addFragment(vaultFile?.let { VaultInfoFragment.newInstance(it, false) }, R.id.container)
             }
 
             override fun delete() {
