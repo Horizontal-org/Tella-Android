@@ -102,7 +102,8 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
                         //MyApplication.bus().post(new ReSubmitFormInstanceEvent(instance));
-                        MyApplication.bus().post(ShowFormInstanceEntryEvent(instance.id))
+                        model.getInstanceFormDef(instance.id)
+                       // MyApplication.bus().post(ShowFormInstanceEntryEvent(instance.id))
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         deleteFormInstance(instance.id)
@@ -114,6 +115,12 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
             requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
+    }
+
+    override fun showFormInstance(instance: CollectFormInstance?) {
+        if (instance != null) {
+            model.getInstanceFormDef(instance.id)
+        }
     }
 
     override fun reSubmitForm(instance: CollectFormInstance?) {}

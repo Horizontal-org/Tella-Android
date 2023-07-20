@@ -123,6 +123,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
         )
     }
 
+    override fun showFormInstance(instance: CollectFormInstance?) {
+        if (instance != null) {
+            model.getInstanceFormDef(instance.id)
+        }
+    }
+
     override fun reSubmitForm(instance: CollectFormInstance?) {
         MyApplication.bus().post(ReSubmitFormInstanceEvent(instance))
     }

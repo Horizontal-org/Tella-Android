@@ -1,6 +1,10 @@
 package rs.readahead.washington.mobile.views.fragment.forms
 
+import android.Manifest
 import android.app.Application
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -17,7 +21,6 @@ import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
-import rs.readahead.washington.mobile.bus.event.ShowBlankFormEntryEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.repository.OpenRosaRepository
@@ -30,7 +33,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedFormsViewModel @Inject constructor(val mApplication: Application) : AndroidViewModel(mApplication) {
     var onCreateFormController = SingleLiveEvent<FormController?>()
-    var onGetBlankFormDefSuccess = MutableLiveData<FormPair>()
+    var onGetBlankFormDefSuccess = SingleLiveEvent<FormPair>()
+    var onInstanceFormDefSuccess = SingleLiveEvent<CollectFormInstance>()
+
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
     var onError = SingleLiveEvent<Throwable>()
     var onFormDefError = SingleLiveEvent<Throwable>()
@@ -41,7 +46,6 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
     var onUpdateBlankFormDefStart = SingleLiveEvent<Boolean>()
     var onUpdateBlankFormDefSuccess = MutableLiveData<Pair<CollectForm, FormDef?>>()
     var onDownloadBlankFormDefSuccess = MutableLiveData<CollectForm?>()
-    var onInstanceFormDefSuccess = MutableLiveData<CollectFormInstance>()
     var onToggleFavoriteSuccess = MutableLiveData<CollectForm?>()
     var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean?>()
     var onCountCollectServersEnded = MutableLiveData<Long>()
@@ -115,11 +119,8 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
             }
             ?.subscribe(
                 { formDef: FormDef? ->
-                    //onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
                     if (form != null && formDef != null) {
                         onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
-                        //OMG
-                        MyApplication.bus().post(ShowBlankFormEntryEvent(FormPair(form, formDef)))
                     }
                 },
                 { throwable: Throwable? ->

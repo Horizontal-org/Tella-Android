@@ -1,11 +1,16 @@
 package rs.readahead.washington.mobile.views.fragment.forms
 
+import android.Manifest
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -13,6 +18,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
+import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -23,6 +29,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
@@ -77,6 +84,27 @@ class BlankFormsListFragment :
     }
 
     private fun initObservers() {
+        model.onError.observe(viewLifecycleOwner, { error ->
+            Timber.d(error, javaClass.name)
+        })
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
+            result.let {
+                startCreateFormControllerPresenter(it.form, it.formDef)
+            }
+        })
+        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
+            form?.let {
+                if (Preferences.isAnonymousMode()) {
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+                } else {
+                    if (!hasLocationPermissions(baseActivity)) {
+                        requestLocationPermissions()
+                    } else {
+                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+                    }
+                }
+            }
+        })
         model.showBlankFormRefreshLoading.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
@@ -367,6 +395,44 @@ class BlankFormsListFragment :
             }
         }
         return itemBinding.root
+    }
+
+    private fun hasLocationPermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+    }
+
+    private fun requestLocationPermissions() {
+        baseActivity.maybeChangeTemporaryTimeout()
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            baseActivity,
+            //2
+            permissions,
+            //3
+            LOCATION_REQUEST_CODE
+        )
+    }
+
+    private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
+        model.createFormController(form, formDef)
+    }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    fun startCollectFormEntryActivity() {
+        startActivity(Intent(activity, CollectFormEntryActivity::class.java))
     }
 
     private fun showDownloadedMenu(collectForm: CollectForm) {
