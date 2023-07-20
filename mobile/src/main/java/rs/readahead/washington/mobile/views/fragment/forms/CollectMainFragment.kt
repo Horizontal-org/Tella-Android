@@ -120,21 +120,13 @@ class CollectMainFragment :
         binding.blankFormsText.movementMethod = LinkMovementMethod.getInstance()
         StringUtils.stripUnderlines(binding.blankFormsText)
 
-        disposables.wire(
-            ShowBlankFormEntryEvent::class.java,
-            object : EventObserver<ShowBlankFormEntryEvent?>() {
-                override fun onNext(event: ShowBlankFormEntryEvent) {
-                    // this should be called on observed onGetBlankFormDefSuccess ?
-                    startCreateFormControllerPresenter(event.form.form, event.form.formDef)
-                }
-            })
-        disposables.wire(
+        /*disposables.wire(
             ShowFormInstanceEntryEvent::class.java,
             object : EventObserver<ShowFormInstanceEntryEvent?>() {
                 override fun onNext(event: ShowFormInstanceEntryEvent) {
                     showFormInstanceEntry(event.instanceId)
                 }
-            })
+            })*/
         disposables.wire(
             CollectFormSubmittedEvent::class.java,
             object : EventObserver<CollectFormSubmittedEvent?>() {
@@ -170,14 +162,14 @@ class CollectMainFragment :
                     getDraftFormsListFragment().listDraftForms()
                 }
             })
-        disposables.wire(
+        /*disposables.wire(
             CollectFormInstanceDeletedEvent::class.java,
             object : EventObserver<CollectFormInstanceDeletedEvent?>() {
                 override fun onNext(event: CollectFormInstanceDeletedEvent) {
                     //onFormInstanceDeleteSuccess()
                 }
             })
-        /*disposables.wire(
+        disposables.wire(
              DeleteFormInstanceEvent::class.java,
              object : EventObserver<DeleteFormInstanceEvent?>() {
                  override fun onNext(event: DeleteFormInstanceEvent) {
@@ -240,7 +232,7 @@ class CollectMainFragment :
         }
         return super.onOptionsItemSelected(item)
     }
-
+/*
     private fun hasLocationPermissions(context: Context): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -268,21 +260,20 @@ class CollectMainFragment :
             //3
             LOCATION_REQUEST_CODE
         )
-
-    }
+    }*/
 
     private fun initObservers() {
         model.onError.observe(viewLifecycleOwner, { error ->
             Timber.d(error, javaClass.name)
         })
-        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
+        /*model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
             result.let {
                 startCreateFormControllerPresenter(it.form, it.formDef)
             }
-        })
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
+        })*/
+        /*model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
             startCreateInstanceFormControllerPresenter(instance)
-        })
+        })*/
 
         model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
@@ -294,19 +285,6 @@ class CollectMainFragment :
             baseActivity.showToast(errorMessage)
         })
 
-        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
-            form?.let {
-                if (Preferences.isAnonymousMode()) {
-                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-                } else {
-                    if (!hasLocationPermissions(baseActivity)) {
-                        requestLocationPermissions()
-                    } else {
-                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-                    }
-                }
-            }
-        })
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, {
             getBlankFormsListFragment().listBlankForms()
         })
@@ -333,11 +311,6 @@ class CollectMainFragment :
         })
     }
 
-    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun startCollectFormEntryActivity() {
-        startActivity(Intent(activity, CollectFormEntryActivity::class.java))
-    }
-
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
     fun showFineLocationRationale(request: PermissionRequest) {
         baseActivity.maybeChangeTemporaryTimeout()
@@ -347,28 +320,6 @@ class CollectMainFragment :
             getString(R.string.permission_dialog_expl_GPS)
         )
     }
-
-    private fun showFormInstanceEntry(instanceId: Long) {
-        startGetInstanceFormDefPresenter(instanceId)
-    }
-
-    /*private fun showDeleteInstanceDialog(instanceId: Long, status: CollectFormInstanceStatus) {
-        if (status == CollectFormInstanceStatus.DRAFT) {
-            this.model.deleteFormInstance(instanceId)
-        } else {
-
-            val msgResId = R.string.collect_dialog_text_delete_sent_form
-
-            showStandardSheet(
-                activity.getSupportFragmentManager(),
-                getString(R.string.Collect_RemoveForm_SheetTitle),
-                getString(msgResId),
-                getString(R.string.action_remove),
-                getString(R.string.action_cancel),
-                { this.model.deleteFormInstance(instanceId) },
-                { })
-        }
-    }*/
 
     private fun showCancelPendingFormDialog(instanceId: Long) {
         alertDialog = AlertDialog.Builder(baseActivity)
@@ -393,18 +344,14 @@ class CollectMainFragment :
     private fun countServers() {
         model.countCollectServers()
     }
-
+/*
     private fun startGetInstanceFormDefPresenter(instanceId: Long) {
         model.getInstanceFormDef(instanceId)
-    }
+    }*/
 
-    private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
-        model.createFormController(form, formDef)
-    }
-
-    private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
+   /* private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
         model.createFormController(instance)
-    }
+    }*/
 
     private fun initViewPageAdapter() {
         adapter.addFragment(
@@ -424,6 +371,10 @@ class CollectMainFragment :
             getString(R.string.collect_sent_tab_title)
         )
         blankFragmentPosition = getFragmentPosition(FormListInterfce.Type.BLANK)
+    }
+
+    private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
+        model.createFormController(form, formDef)
     }
 
     private fun getDraftFormsListFragment(): DraftFormsListFragment {
