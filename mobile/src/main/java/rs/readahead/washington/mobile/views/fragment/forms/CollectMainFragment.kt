@@ -155,14 +155,14 @@ class CollectMainFragment :
                     setPagerToOutboxFragment()
                 }
             })
-        disposables.wire(
+        /*disposables.wire(
             CollectFormSavedEvent::class.java,
             object : EventObserver<CollectFormSavedEvent?>() {
                 override fun onNext(event: CollectFormSavedEvent) {
                     getDraftFormsListFragment().listDraftForms()
                 }
             })
-        /*disposables.wire(
+        disposables.wire(
             CollectFormInstanceDeletedEvent::class.java,
             object : EventObserver<CollectFormInstanceDeletedEvent?>() {
                 override fun onNext(event: CollectFormInstanceDeletedEvent) {
@@ -232,34 +232,34 @@ class CollectMainFragment :
         }
         return super.onOptionsItemSelected(item)
     }
-/*
+    /*
     private fun hasLocationPermissions(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
-        return false
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    )
+        return true
+    return false
     }
 
     private fun requestLocationPermissions() {
-        baseActivity.maybeChangeTemporaryTimeout()
-        val permissions = arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        ActivityCompat.requestPermissions(
-            //1
-            baseActivity,
-            //2
-            permissions,
-            //3
-            LOCATION_REQUEST_CODE
-        )
+    baseActivity.maybeChangeTemporaryTimeout()
+    val permissions = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    ActivityCompat.requestPermissions(
+        //1
+        baseActivity,
+        //2
+        permissions,
+        //3
+        LOCATION_REQUEST_CODE
+    )
     }*/
 
     private fun initObservers() {
@@ -344,13 +344,13 @@ class CollectMainFragment :
     private fun countServers() {
         model.countCollectServers()
     }
-/*
+    /*
     private fun startGetInstanceFormDefPresenter(instanceId: Long) {
-        model.getInstanceFormDef(instanceId)
+    model.getInstanceFormDef(instanceId)
     }*/
 
-   /* private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
-        model.createFormController(instance)
+    /* private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
+    model.createFormController(instance)
     }*/
 
     private fun initViewPageAdapter() {
