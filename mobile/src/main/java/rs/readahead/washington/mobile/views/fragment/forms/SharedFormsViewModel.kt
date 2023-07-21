@@ -1,11 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.forms
 
-import android.Manifest
 import android.app.Application
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
@@ -35,6 +32,9 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
     var onCreateFormController = SingleLiveEvent<FormController?>()
     var onGetBlankFormDefSuccess = SingleLiveEvent<FormPair>()
     var onInstanceFormDefSuccess = SingleLiveEvent<CollectFormInstance>()
+
+    private var _collectFormInstance = SingleLiveEvent<CollectFormInstance?>()
+    val collectFormInstance: LiveData<CollectFormInstance?> get() = _collectFormInstance
 
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
     var onError = SingleLiveEvent<Throwable>()
@@ -503,7 +503,31 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
                 )
                 onError.postValue(throwable)
             }
+        )
+    }
 
+    fun getFormInstance(instanceId: Long) {
+        var collectFormInstance : CollectFormInstance? = null
+        disposables.add(keyDataSource.dataSource
+            .flatMapSingle({ dataSource: DataSource ->
+                dataSource.getInstance(
+                    instanceId
+                )
+            })
+            .flatMapSingle({ instance: CollectFormInstance ->
+                collectFormInstance = instance
+                MyApplication.rxVault[instance.widgetMediaFilesIds]
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ vaultFiles: List<VaultFile>? ->
+                collectFormInstance.let {
+                    collectFormInstance?.setCollectInstanceAttachments(vaultFiles)
+                _collectFormInstance.postValue(collectFormInstance)}
+            }) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                onError.postValue(throwable)
+            }
         )
     }
 }

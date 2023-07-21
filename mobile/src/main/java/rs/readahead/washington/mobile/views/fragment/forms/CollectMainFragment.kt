@@ -266,9 +266,10 @@ class CollectMainFragment :
                 startCreateFormControllerPresenter(it.form, it.formDef)
             }
         })*/
-        /*model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
-            startCreateInstanceFormControllerPresenter(instance)
-        })*/
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
+            Timber.d("+++++ model.onGetBlankFormDefSuccess. CollectMainFragment")
+            //startCreateInstanceFormControllerPresenter(instance)
+        })
 
         model.onFormDefError.observe(viewLifecycleOwner, { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
