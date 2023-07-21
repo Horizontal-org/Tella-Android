@@ -27,13 +27,13 @@ import timber.log.Timber
 class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding>(
     FragmentDraftFormsListBinding::inflate
 ),
-    FormListInterfce, ISavedFormsInterface {
+    FormListInterface, ISavedFormsInterface {
 
     private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectDraftFormInstanceRecycleViewAdapter? = null
 
-    override fun getFormListType(): FormListInterfce.Type {
-        return FormListInterfce.Type.DRAFT
+    override fun getFormListType(): FormListInterface.Type {
+        return FormListInterface.Type.DRAFT
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

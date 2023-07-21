@@ -36,7 +36,7 @@ import timber.log.Timber
 
 class BlankFormsListFragment :
     BaseBindingFragment<FragmentBlankFormsListBinding>(FragmentBlankFormsListBinding::inflate),
-    FormListInterfce {
+    FormListInterface {
 
     private val model: SharedFormsViewModel by viewModels()
 
@@ -45,8 +45,8 @@ class BlankFormsListFragment :
     private var alertDialog: AlertDialog? = null
     private var noUpdatedForms = 0
     private var silentFormUpdates = false
-    override fun getFormListType(): FormListInterfce.Type {
-        return FormListInterfce.Type.BLANK
+    override fun getFormListType(): FormListInterface.Type {
+        return FormListInterface.Type.BLANK
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent
 import rs.readahead.washington.mobile.databinding.FragmentSubmittedFormsListBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.views.adapters.CollectSubmittedFormInstanceRecycleViewAdapter
@@ -21,13 +19,13 @@ import timber.log.Timber
 class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsListBinding>(
     FragmentSubmittedFormsListBinding::inflate
 ),
-    FormListInterfce, ISavedFormsInterface {
+    FormListInterface, ISavedFormsInterface {
 
     private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectSubmittedFormInstanceRecycleViewAdapter? = null
 
-    override fun getFormListType(): FormListInterfce.Type {
-        return FormListInterfce.Type.SUBMITTED
+    override fun getFormListType(): FormListInterface.Type {
+        return FormListInterface.Type.SUBMITTED
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

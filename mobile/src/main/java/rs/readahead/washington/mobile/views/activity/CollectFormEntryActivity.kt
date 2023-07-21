@@ -74,12 +74,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     IFormSubmitterContract.IView {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
+
     //private int sectionIndex;
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
     private var formSubmitter: FormSubmitter? = null
-    private var disposables: EventCompositeDisposable = MyApplication.bus().createCompositeDisposable()
+    private var disposables: EventCompositeDisposable =
+        MyApplication.bus().createCompositeDisposable()
     private var presenter // todo: use separate presenter just for importing, extract from this one
             : QuestionAttachmentPresenter? = null
     private var endView: CollectFormEndView? = null
@@ -88,29 +90,29 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var deleteEnabled = false
     private var draftAutoSaved = false
     private var micFragment: MicFragment? = null
-    private var binding: ActivityCollectFormEntryBinding? = null
+    private lateinit var binding: ActivityCollectFormEntryBinding
     private val viewModel: SharedFormsViewModel by viewModels()
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCollectFormEntryBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
         currentScreenView = null
         //sectionIndex = 0;
-        setSupportActionBar(binding!!.toolbar)
+        setSupportActionBar(binding.toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        upNavigationIcon = binding!!.toolbar.navigationIcon
+        upNavigationIcon = binding.toolbar.navigationIcon
         setToolbarIcon()
         initForm()
         startPresenter()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding!!.appbar.outlineProvider = null
+            binding.appbar.outlineProvider = null
         } else {
-            binding!!.appbar.bringToFront()
+            binding.appbar.bringToFront()
         }
-        binding!!.prevSection.setOnClickListener { v -> showPrevScreen() }
-        binding!!.nextSection.setOnClickListener { v -> showNextScreen() }
-        binding!!.submitButton.setOnClickListener { v ->
+        binding.prevSection.setOnClickListener { v -> showPrevScreen() }
+        binding.nextSection.setOnClickListener { v -> showNextScreen() }
+        binding.submitButton.setOnClickListener { v ->
             if (formSubmitter != null) {
                 formSubmitter!!.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString())
                 hideToolbarIcon()
@@ -118,34 +120,34 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 showFormCancelButton()
             }
         }
-        binding!!.cancelButton.setOnClickListener { v ->
+        binding.cancelButton.setOnClickListener { v ->
             if (userStopPresenterSubmission()) {
                 hideFormCancelButton()
             }
         }
         endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
 
-        disposables.wire(
+        /*disposables.wire(
             FormAttachmentsUpdatedEvent::class.java,
             object : EventObserver<FormAttachmentsUpdatedEvent?>() {
                 override fun onNext(event: FormAttachmentsUpdatedEvent) {
                     formAttachmentsChanged()
                 }
             })
-       /* disposables.wire(
-            LocationPermissionRequiredEvent::class.java,
-            object : EventObserver<LocationPermissionRequiredEvent?>() {
-                override fun onNext(event: LocationPermissionRequiredEvent) {
-                    //CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
-                }
-            })
-        disposables.wire(
-            GPSProviderRequiredEvent::class.java,
-            object : EventObserver<GPSProviderRequiredEvent?>() {
-                override fun onNext(event: GPSProviderRequiredEvent) {
-                    // CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
-                }
-            })*/
+         disposables.wire(
+             LocationPermissionRequiredEvent::class.java,
+             object : EventObserver<LocationPermissionRequiredEvent?>() {
+                 override fun onNext(event: LocationPermissionRequiredEvent) {
+                     //CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
+                 }
+             })
+         disposables.wire(
+             GPSProviderRequiredEvent::class.java,
+             object : EventObserver<GPSProviderRequiredEvent?>() {
+                 override fun onNext(event: GPSProviderRequiredEvent) {
+                     // CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
+                 }
+             })*/
         disposables.wire(
             MediaFileBinaryWidgetCleared::class.java,
             object : EventObserver<MediaFileBinaryWidgetCleared?>() {
@@ -314,16 +316,16 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun setToolbarIcon() {
-        binding!!.toolbar.isEnabled = true
+        binding.toolbar.isEnabled = true
         if (formParser != null && formParser!!.isFormEnd && !formParser!!.isFormFinal) {
-            binding!!.toolbar.navigationIcon = upNavigationIcon
+            binding.toolbar.navigationIcon = upNavigationIcon
         } else {
-            binding!!.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+            binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
         }
     }
 
     private fun hideToolbarIcon() {
-        binding!!.toolbar.isEnabled = false
+        binding.toolbar.isEnabled = false
     }
 
     private fun clearedFormIndex(formIndex: FormIndex) {
@@ -388,7 +390,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         destroyFormSaver()
         destroyPresenter()
         super.onDestroy()
-        binding = null
     }
 
     /*
@@ -566,7 +567,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     override fun formPartSubmitStart(instance: CollectFormInstance, partName: String) {
         endView!!.showUploadProgress(partName)
         invalidateOptionsMenu()
-        binding!!.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
     override fun formPartUploadProgress(partName: String, pct: Float) {
@@ -735,10 +736,10 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun showScreenView(view: View?) {
         if (currentScreenView != null) {
-            binding!!.screenFormView.removeView(currentScreenView)
+            binding.screenFormView.removeView(currentScreenView)
         }
         currentScreenView = view
-        binding!!.screenFormView.addView(currentScreenView!!)
+        binding.screenFormView.addView(currentScreenView!!)
     }
 
     private fun showFormView(view: CollectFormView) {
@@ -811,7 +812,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    // this bottom buttons on/off thing looks stupid :)
     private fun setFirstSectionButtons() {
         hideFormCancelButton()
         hideSubmitButtons()
@@ -819,14 +819,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun setSectionButtons() {
-        binding!!.buttonBottomLayout.visibility = View.VISIBLE
+        binding.buttonBottomLayout.visibility = View.VISIBLE
         showNextSectionButton()
         if (formParser!!.isFirstScreen) {
             setFirstSectionButtons()
             return
         }
-        binding!!.prevSection.isEnabled = true
-        binding!!.prevSection.visibility = View.VISIBLE
+        binding.prevSection.isEnabled = true
+        binding.prevSection.visibility = View.VISIBLE
     }
 
     private fun setSubmitButtonText(offline: Boolean) {
@@ -835,39 +835,39 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun showFormEndButtons() {
         setSubmitButtonText(Preferences.isOfflineMode())
-        binding!!.submitButton.isEnabled = true
-        binding!!.submitButton.visibility = View.VISIBLE
+        binding.submitButton.isEnabled = true
+        binding.submitButton.visibility = View.VISIBLE
     }
 
     private fun hidePrevSectionButton() {
-        binding!!.prevSection.isEnabled = false
-        binding!!.prevSection.visibility = View.GONE
+        binding.prevSection.isEnabled = false
+        binding.prevSection.visibility = View.GONE
     }
 
     private fun hideSectionButtons() {
         hidePrevSectionButton()
-        binding!!.nextSection.isEnabled = false
-        binding!!.nextSection.visibility = View.GONE
+        binding.nextSection.isEnabled = false
+        binding.nextSection.visibility = View.GONE
     }
 
     private fun hideSubmitButtons() {
-        binding!!.submitButton.isEnabled = false
-        binding!!.submitButton.visibility = View.GONE
+        binding.submitButton.isEnabled = false
+        binding.submitButton.visibility = View.GONE
     }
 
     private fun showNextSectionButton() {
-        binding!!.nextSection.isEnabled = true
-        binding!!.nextSection.visibility = View.VISIBLE
+        binding.nextSection.isEnabled = true
+        binding.nextSection.visibility = View.VISIBLE
     }
 
     private fun showFormCancelButton() {
-        binding!!.cancelButton.isEnabled = true
-        binding!!.cancelButton.visibility = View.VISIBLE
+        binding.cancelButton.isEnabled = true
+        binding.cancelButton.visibility = View.VISIBLE
     }
 
     private fun hideFormCancelButton() {
-        binding!!.cancelButton.isEnabled = false
-        binding!!.cancelButton.visibility = View.GONE
+        binding.cancelButton.isEnabled = false
+        binding.cancelButton.visibility = View.GONE
     }
 
     private fun showFormChangedDialog() {
@@ -900,7 +900,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun onExitPressed() {
         onBackPressedWithoutCheck()
-        return Unit
+        return
     }
 
     private fun onSavePressed() {
@@ -910,11 +910,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         } else {
             onBackPressedWithoutCheck()
         }
-        return Unit
+        return
     }
 
     private val isPresenterSubmitting: Boolean
-        private get() = formSubmitter != null && formSubmitter!!.isSubmitting
+        get() = formSubmitter != null && formSubmitter!!.isSubmitting
 
     private fun stopPresenterSubmission() {
         if (formSubmitter != null) {
@@ -958,13 +958,13 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun openAudioRecorder() {
-        binding!!.entryLayout.visibility = View.GONE
+        binding.entryLayout.visibility = View.GONE
         micFragment = newInstance(true)
         addFragment(micFragment!!, R.id.rootCollectEntry)
     }
 
     override fun returnFileToForm(file: VaultFile) {
-        binding!!.entryLayout.visibility = View.VISIBLE
+        binding.entryLayout.visibility = View.VISIBLE
         putVaultFileInForm(file)
         if (micFragment != null) {
             supportFragmentManager.beginTransaction().remove((micFragment as Fragment?)!!).commit()
@@ -972,7 +972,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun stopWaitingForData() {
-        binding!!.entryLayout.visibility = View.VISIBLE
+        binding.entryLayout.visibility = View.VISIBLE
         formParser!!.stopWaitingBinaryData()
         saveCurrentScreen(false)
     }

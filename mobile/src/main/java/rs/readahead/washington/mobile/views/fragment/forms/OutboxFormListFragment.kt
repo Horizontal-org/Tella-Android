@@ -21,13 +21,13 @@ import timber.log.Timber
 class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding>(
     FragmentOutboxFormListBinding::inflate
 ),
-    FormListInterfce, ISavedFormsInterface {
+    FormListInterface, ISavedFormsInterface {
 
     private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectOutboxFormInstanceRecycleViewAdapter? = null
 
-    override fun getFormListType(): FormListInterfce.Type {
-        return FormListInterfce.Type.OUTBOX
+    override fun getFormListType(): FormListInterface.Type {
+        return FormListInterface.Type.OUTBOX
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
