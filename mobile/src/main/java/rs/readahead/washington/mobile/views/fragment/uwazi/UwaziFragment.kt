@@ -17,7 +17,7 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
 
     private fun initView() {
         val viewPagerAdapter  = ViewPagerAdapter(this)
-        with(binding!!){
+        with(binding){
             viewPager.apply {
                 offscreenPageLimit = 4
                 isSaveEnabled = false
@@ -48,13 +48,13 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         })
 
-        binding?.toolbar?.backClickListener = { nav().popBackStack() }
+        binding.toolbar.backClickListener = { nav().popBackStack() }
 
     }
 
     private fun setCurrentTab(position: Int){
-        binding?.viewPager?.post {
-            binding?.viewPager?.setCurrentItem(position, true)
+        binding.viewPager.post {
+            binding.viewPager.setCurrentItem(position, true)
         }
     }
 

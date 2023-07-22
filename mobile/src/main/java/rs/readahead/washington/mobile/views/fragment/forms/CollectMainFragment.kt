@@ -3,18 +3,16 @@ package rs.readahead.washington.mobile.views.fragment.forms
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
@@ -32,20 +30,20 @@ import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
-import rs.readahead.washington.mobile.views.adapters.ViewPagerAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.forms.viewpager.BLANK_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
 @AndroidEntryPoint
 class CollectMainFragment :
     BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
-    private var blankFragmentPosition = 0
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
-    private var mViewPager: ViewPager? = null
-    private val adapter by lazy { ViewPagerAdapter(baseActivity.supportFragmentManager) }
-    private var numOfCollectServers: Long = 0
     private val model: SharedFormsViewModel by viewModels()
 
     companion object {
@@ -58,9 +56,10 @@ class CollectMainFragment :
             return fragment
         }
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initView()
 
         baseActivity.setSupportActionBar(binding.toolbar)
 
@@ -75,39 +74,6 @@ class CollectMainFragment :
         }
 
         initObservers()
-        initViewPageAdapter()
-
-        mViewPager = binding.formsViewPager
-        mViewPager?.adapter = adapter
-        mViewPager?.currentItem = blankFragmentPosition
-
-        binding.tabs.setupWithViewPager(mViewPager)
-
-        binding.fab.setOnClickListener {
-            if (MyApplication.isConnectedToInternet(context)) {
-                if (mViewPager?.currentItem == blankFragmentPosition) {
-                    getBlankFormsListFragment().refreshBlankForms()
-                }
-            } else {
-                baseActivity.showToast(getString(R.string.collect_blank_toast_not_connected))
-            }
-        }
-
-        mViewPager?.addOnPageChangeListener(object : OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
-            override fun onPageSelected(position: Int) {
-                binding.fab.visibility =
-                    if (position == blankFragmentPosition && numOfCollectServers > 0) View.VISIBLE else View.GONE
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {}
-        })
 
         binding.blankFormsText.text =
             Html.fromHtml(getString(R.string.collect_expl_not_connected_to_server))
@@ -125,28 +91,31 @@ class CollectMainFragment :
             CollectFormSubmittedEvent::class.java,
             object : EventObserver<CollectFormSubmittedEvent?>() {
                 override fun onNext(event: CollectFormSubmittedEvent) {
-                    getDraftFormsListFragment().listDraftForms()
-                    getSubmittedFormsListFragment().listSubmittedForms()
-                    setPagerToSubmittedFragment()
+                    //getDraftFormsListFragment().listDraftForms()
+                    //getSubmittedFormsListFragment().listSubmittedForms()
+                    setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+                    //setPagerToSubmittedFragment()
                 }
             })
         disposables.wire(
             CollectFormSubmitStoppedEvent::class.java,
             object : EventObserver<CollectFormSubmitStoppedEvent?>() {
                 override fun onNext(event: CollectFormSubmitStoppedEvent) {
-                    getDraftFormsListFragment().listDraftForms()
-                    getOutboxFormListFragment().listOutboxForms()
+                   // getDraftFormsListFragment().listDraftForms()
+                   // getOutboxFormListFragment().listOutboxForms()
                     showStoppedMessage()
-                    setPagerToOutboxFragment()
+                    //setPagerToOutboxFragment()
+                    setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 }
             })
         disposables.wire(
             CollectFormSubmissionErrorEvent::class.java,
             object : EventObserver<CollectFormSubmissionErrorEvent?>() {
                 override fun onNext(event: CollectFormSubmissionErrorEvent) {
-                    getDraftFormsListFragment().listDraftForms()
-                    getOutboxFormListFragment().listOutboxForms()
-                    setPagerToOutboxFragment()
+                    //getDraftFormsListFragment().listDraftForms()
+                    //getOutboxFormListFragment().listOutboxForms()
+                    //setPagerToOutboxFragment()
+                    setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 }
             })
         /*disposables.wire(
@@ -188,11 +157,59 @@ class CollectMainFragment :
         binding.toolbar.backClickListener = { nav().popBackStack() }
     }
 
+    private fun initView() {
+        val viewPagerAdapter  =
+            rs.readahead.washington.mobile.views.fragment.forms.viewpager.ViewPagerAdapter(this)
+        with(binding){
+            viewPager.apply {
+                offscreenPageLimit = 4
+                isSaveEnabled = false
+                adapter = viewPagerAdapter
+            }
+            // Set the text for each tab
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
+                tab.text = getTabTitle(position)
+
+            }.attach()
+
+            tabs.setTabTextColors(
+                ContextCompat.getColor(baseActivity, R.color.wa_white_44),
+                ContextCompat.getColor(baseActivity, R.color.wa_white)
+            )
+
+        }
+
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity,{ position ->
+            when (position) {
+                BLANK_LIST_PAGE_INDEX -> setCurrentTab(BLANK_LIST_PAGE_INDEX)
+                DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+            }
+        })
+    }
+
+    private fun setCurrentTab(position: Int){
+        binding.viewPager.post {
+            binding.viewPager.setCurrentItem(position, true)
+        }
+    }
+
+    private fun getTabTitle(position: Int): String? {
+        return when (position) {
+            BLANK_LIST_PAGE_INDEX -> getString(R.string.collect_tab_title_blank)
+            DRAFT_LIST_PAGE_INDEX -> getString(R.string.collect_draft_tab_title)
+            OUTBOX_LIST_PAGE_INDEX -> getString(R.string.collect_outbox_tab_title)
+            SUBMITTED_LIST_PAGE_INDEX -> getString(R.string.collect_sent_tab_title)
+            else -> null
+        }
+    }
+
     override fun onStart() {
         super.onStart()
-        Handler(Looper.getMainLooper()).post {
+        /*Handler(Looper.getMainLooper()).post {
             adapter.notifyDataSetChanged()
-        }
+        }*/
     }
 
     override fun onResume() {
@@ -277,24 +294,7 @@ class CollectMainFragment :
         })
 
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, {
-            getBlankFormsListFragment().listBlankForms()
-        })
-
-        model.onCountCollectServersEnded.observe(viewLifecycleOwner, { num ->
-            numOfCollectServers = num
-            if (numOfCollectServers < 1) {
-                binding.tabs.visibility = View.GONE
-                binding.formsViewPager.visibility = View.GONE
-                binding.fab.visibility = View.GONE
-                binding.noServersView.visibility = View.VISIBLE
-            } else {
-                binding.tabs.visibility = View.VISIBLE
-                binding.formsViewPager.visibility = View.VISIBLE
-                binding.noServersView.visibility = View.GONE
-                if (mViewPager?.currentItem == blankFragmentPosition) {
-                    binding.fab.visibility = View.VISIBLE
-                }
-            }
+            setCurrentTab(BLANK_LIST_PAGE_INDEX)
         })
 
         model.showFab.observe(viewLifecycleOwner, { show ->
@@ -344,74 +344,8 @@ class CollectMainFragment :
     model.createFormController(instance)
     }*/
 
-    private fun initViewPageAdapter() {
-        adapter.addFragment(
-            BlankFormsListFragment.newInstance(),
-            getString(R.string.collect_tab_title_blank)
-        )
-        adapter.addFragment(
-            DraftFormsListFragment.newInstance(),
-            getString(R.string.collect_draft_tab_title)
-        )
-        adapter.addFragment(
-            OutboxFormListFragment.newInstance(),
-            getString(R.string.collect_outbox_tab_title)
-        )
-        adapter.addFragment(
-            SubmittedFormsListFragment.newInstance(),
-            getString(R.string.collect_sent_tab_title)
-        )
-        blankFragmentPosition = getFragmentPosition(FormListInterface.Type.BLANK)
-    }
-
     private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
         model.createFormController(form, formDef)
-    }
-
-    private fun getDraftFormsListFragment(): DraftFormsListFragment {
-        return getFormListFragment(FormListInterface.Type.DRAFT)
-    }
-
-    private fun getBlankFormsListFragment(): BlankFormsListFragment {
-        return getFormListFragment(FormListInterface.Type.BLANK)
-    }
-
-    private fun getSubmittedFormsListFragment(): SubmittedFormsListFragment {
-        return getFormListFragment(FormListInterface.Type.SUBMITTED)
-    }
-
-    private fun getOutboxFormListFragment(): OutboxFormListFragment {
-        return getFormListFragment(FormListInterface.Type.OUTBOX)
-    }
-
-    private fun <T> getFormListFragment(type: FormListInterface.Type): T {
-        for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListInterface
-            if (fragment.formListType == type) {
-                return fragment as T
-            }
-        }
-        throw IllegalArgumentException()
-    }
-
-    private fun getFragmentPosition(type: FormListInterface.Type): Int {
-        for (i in 0 until adapter.count) {
-            val fragment = adapter.getItem(i) as FormListInterface
-            if (fragment.formListType == type) {
-                return i
-            }
-        }
-        throw IllegalArgumentException()
-    }
-
-    private fun setPagerToSubmittedFragment() {
-        mViewPager?.currentItem = getFragmentPosition(FormListInterface.Type.SUBMITTED)
-        binding.fab.visibility = View.GONE
-    }
-
-    private fun setPagerToOutboxFragment() {
-        mViewPager?.currentItem = getFragmentPosition(FormListInterface.Type.OUTBOX)
-        binding.fab.visibility = View.GONE
     }
 
     private fun startCollectHelp() {
