@@ -39,9 +39,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObservers()
-        listOutboxForms()
     }
 
+    override fun onResume() {
+        super.onResume()
+        listOutboxForms()
+    }
 
     private fun initObservers() {
         model.onFormInstanceDeleteSuccess.observe(
@@ -81,7 +84,8 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankSubmittedFormsInfo.visibility =
+            if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -143,7 +147,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
         }
     }
 
-    fun initView(){
+    fun initView() {
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         binding.submittFormInstances.layoutManager = mLayoutManager
         binding.submittFormInstances.adapter = adapter

@@ -45,6 +45,10 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
         listDraftForms()
     }
 

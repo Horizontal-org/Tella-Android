@@ -45,6 +45,10 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObservers()
+    }
+
+    override fun onResume() {
+        super.onResume()
         listSubmittedForms()
     }
 
@@ -142,7 +146,8 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankSubmittedFormsInfo.visibility =
+            if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -164,7 +169,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
                         model.getInstanceFormDef(instance.id)
-                       // MyApplication.bus().post(ShowFormInstanceEntryEvent(instance.id))
+                        // MyApplication.bus().post(ShowFormInstanceEntryEvent(instance.id))
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
                         deleteFormInstance(instance.id)
@@ -195,7 +200,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
         }
     }
 
-    fun initView(){
+    fun initView() {
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         binding.submittFormInstances.layoutManager = mLayoutManager
         binding.submittFormInstances.adapter = adapter
