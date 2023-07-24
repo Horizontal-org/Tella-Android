@@ -65,7 +65,7 @@ public class FormReSubmitter implements IFormReSubmitterContract.IFormReSubmitte
                 .flatMap(Observable::fromIterable)
                 .concatMap((Function<GranularResubmissionBundle, ObservableSource<OpenRosaPartResponse>>) bundle -> {
                     view.formPartResubmitStart(instance, bundle.getPartName());
-                    return openRosaRepository.submitFormGranular(context, bundle.server, instance, bundle.attachment,
+                    return openRosaRepository.submitFormGranular(bundle.server, instance, bundle.attachment,
                             new ProgressListener(bundle.getPartName(), this.view)).toObservable();
                 })
                 .flatMap((Function<OpenRosaPartResponse, ObservableSource<OpenRosaPartResponse>>) response -> {

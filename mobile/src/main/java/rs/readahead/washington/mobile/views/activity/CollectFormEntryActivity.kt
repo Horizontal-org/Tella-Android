@@ -20,6 +20,7 @@ import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.FormIndex
 import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
@@ -43,6 +44,7 @@ import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding
+import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse
@@ -64,6 +66,7 @@ import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.MicFragment
 import rs.readahead.washington.mobile.views.fragment.MicFragment.Companion.newInstance
 import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
+import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import timber.log.Timber
 
@@ -79,7 +82,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-    private var formSubmitter: FormSubmitter? = null
+
+    //private var formSubmitter: FormSubmitter? = null
     private var disposables: EventCompositeDisposable =
         MyApplication.bus().createCompositeDisposable()
     private var presenter // todo: use separate presenter just for importing, extract from this one
@@ -91,7 +95,10 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var draftAutoSaved = false
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
-    private val viewModel: SharedFormsViewModel by viewModels()
+
+    //private val viewModel: SharedFormsViewModel by viewModels()
+    private val viewModel: SubmitFormsViewModel by viewModels()
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCollectFormEntryBinding.inflate(layoutInflater)
@@ -105,6 +112,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         setToolbarIcon()
         initForm()
         startPresenter()
+        initObservers()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.appbar.outlineProvider = null
         } else {
@@ -113,12 +122,10 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         binding.prevSection.setOnClickListener { v -> showPrevScreen() }
         binding.nextSection.setOnClickListener { v -> showNextScreen() }
         binding.submitButton.setOnClickListener { v ->
-            if (formSubmitter != null) {
-                formSubmitter!!.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString())
-                hideToolbarIcon()
-                hideSubmitButtons()
-                showFormCancelButton()
-            }
+            viewModel.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString())
+            hideToolbarIcon()
+            hideSubmitButtons()
+            showFormCancelButton()
         }
         binding.cancelButton.setOnClickListener { v ->
             if (userStopPresenterSubmission()) {
@@ -193,9 +200,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             return true
         }
         if (id == R.id.saveForLaterMenuItem) {
-            if (formSubmitter != null) {
-                formSubmitter!!.saveForLaterFormInstance(formTitle + " " + Util.getDateTimeString())
-            }
+            viewModel.saveForLaterFormInstance(formTitle + " " + Util.getDateTimeString())
             return true
         }
         if (id == R.id.deleteFormMenuItem) {
@@ -211,9 +216,56 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun initForm() {
         formSaver = FormSaver(this)
-        formSubmitter = FormSubmitter(this)
         formParser = FormParser(this)
         formParser!!.parseForm()
+    }
+
+    private fun initObservers() {
+        with(viewModel) {
+            showFormSubmitLoading.observe(this@CollectFormEntryActivity) { instance: CollectFormInstance ->
+                showFormSubmitLoading(instance)
+            }
+
+            formPartSubmitStart.observe(this@CollectFormEntryActivity) { (first, second): Pair<CollectFormInstance, String> ->
+                formPartSubmitStart(first, second)
+            }
+
+            progressCallBack.observe(this@CollectFormEntryActivity) { (first, second): Pair<String, Float> ->
+                formPartUploadProgress(first, second)
+            }
+
+            formPartSubmitSuccess.observe(this@CollectFormEntryActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                second?.let { formPartSubmitSuccess(first, second) }
+            }
+
+            formSubmitNoConnectivity.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                formSubmitNoConnectivity()
+            }
+
+            formPartSubmitError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
+                throwable?.let { formPartSubmitError(throwable) }
+            }
+
+            hideFormSubmitLoading.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                hideFormSubmitLoading()
+            }
+
+            formPartsSubmitEnded.observe(this@CollectFormEntryActivity) { instance: CollectFormInstance ->
+                formPartsSubmitEnded(instance)
+            }
+
+            saveForLaterFormInstanceSuccess.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                saveForLaterFormInstanceSuccess()
+            }
+
+            saveForLaterFormInstanceError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
+                throwable?.let { saveForLaterFormInstanceError(throwable) }
+            }
+
+            submissionStoppedByUser.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                submissionStoppedByUser()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -363,9 +415,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         super.onPause()
         closeAlertDialog()
         if (isPresenterSubmitting) {
-            if (formSubmitter != null) {
-                formSubmitter!!.stopSubmission()
-            }
+            viewModel.stopSubmission()
             refreshFormEndView(false)
             hideFormCancelButton()
             showFormEndButtons()
@@ -381,12 +431,12 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     override fun onDestroy() {
         if (draftAutoSaved) {
-            viewModel.listDraftFormInstances()
+            //viewModel.listDraftFormInstances()
             //MyApplication.bus().post(CollectFormSavedEvent())
         }
         disposables.dispose()
         destroyFormParser()
-        destroyFormSubmitter()
+        //destroyFormSubmitter()
         destroyFormSaver()
         destroyPresenter()
         super.onDestroy()
@@ -451,7 +501,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun onBackPressedWithoutCheck() {
         if (draftAutoSaved) {
-            viewModel.listDraftFormInstances()
+           // viewModel.listDraftFormInstances()
             //MyApplication.bus().post(CollectFormSavedEvent())
         }
         super.onBackPressed()
@@ -509,7 +559,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     override fun formInstanceSaveSuccess(instance: CollectFormInstance) {
         Toast.makeText(this, getFormSaveMsg(instance), Toast.LENGTH_SHORT).show()
         formParser!!.startFormChangeTracking()
-        viewModel.listDraftFormInstances()
+        //viewModel.listDraftFormInstances()
         //MyApplication.bus().post(CollectFormSavedEvent())
     }
 
@@ -676,7 +726,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     override fun formSavedOnExit() {
         //MyApplication.bus().post(CollectFormSavedEvent())
-        viewModel.listDraftFormInstances()
+        //viewModel.listDraftFormInstances()
         closeAlertDialog()
         onBackPressedWithoutCheck()
     }
@@ -798,12 +848,12 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    private fun destroyFormSubmitter() {
-        if (formSubmitter != null) {
-            formSubmitter!!.destroy()
-            formSubmitter = null
-        }
-    }
+    /* private fun destroyFormSubmitter() {
+         if (formSubmitter != null) {
+             formSubmitter!!.destroy()
+             formSubmitter = null
+         }
+     }*/
 
     private fun destroyFormParser() {
         if (formParser != null) {
@@ -914,21 +964,16 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private val isPresenterSubmitting: Boolean
-        get() = formSubmitter != null && formSubmitter!!.isSubmitting
+        get() = viewModel.isSubmitting()
 
     private fun stopPresenterSubmission() {
-        if (formSubmitter != null) {
-            formSubmitter!!.stopSubmission()
-            MyApplication.bus().post(CollectFormSubmitStoppedEvent())
-        }
+        viewModel.stopSubmission()
+        MyApplication.bus().post(CollectFormSubmitStoppedEvent())
     }
 
     private fun userStopPresenterSubmission(): Boolean {
-        if (formSubmitter != null) {
-            formSubmitter!!.userStopSubmission()
-            return true
-        }
-        return false
+        viewModel.userStopSubmission()
+        return true
     }
 
     private fun startPresenter() {

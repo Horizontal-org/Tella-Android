@@ -39,6 +39,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_L
 import timber.log.Timber
 
 const val LOCATION_REQUEST_CODE = 1003
+
 @AndroidEntryPoint
 class CollectMainFragment :
     BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
@@ -56,6 +57,7 @@ class CollectMainFragment :
             return fragment
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -101,8 +103,8 @@ class CollectMainFragment :
             CollectFormSubmitStoppedEvent::class.java,
             object : EventObserver<CollectFormSubmitStoppedEvent?>() {
                 override fun onNext(event: CollectFormSubmitStoppedEvent) {
-                   // getDraftFormsListFragment().listDraftForms()
-                   // getOutboxFormListFragment().listOutboxForms()
+                    // getDraftFormsListFragment().listDraftForms()
+                    // getOutboxFormListFragment().listOutboxForms()
                     showStoppedMessage()
                     //setPagerToOutboxFragment()
                     setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
@@ -158,9 +160,9 @@ class CollectMainFragment :
     }
 
     private fun initView() {
-        val viewPagerAdapter  =
+        val viewPagerAdapter =
             rs.readahead.washington.mobile.views.fragment.forms.viewpager.ViewPagerAdapter(this)
-        with(binding){
+        with(binding) {
             viewPager.apply {
                 offscreenPageLimit = 4
                 isSaveEnabled = false
@@ -179,7 +181,7 @@ class CollectMainFragment :
 
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity,{ position ->
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity, { position ->
             when (position) {
                 BLANK_LIST_PAGE_INDEX -> setCurrentTab(BLANK_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
@@ -189,7 +191,7 @@ class CollectMainFragment :
         })
     }
 
-    private fun setCurrentTab(position: Int){
+    private fun setCurrentTab(position: Int) {
         binding.viewPager.post {
             binding.viewPager.setCurrentItem(position, true)
         }
@@ -297,9 +299,9 @@ class CollectMainFragment :
             setCurrentTab(BLANK_LIST_PAGE_INDEX)
         })
 
-        model.showFab.observe(viewLifecycleOwner, { show ->
+       /* model.showFab.observe(viewLifecycleOwner, { show ->
             binding.fab.isVisible = show
-        })
+        })*/
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)

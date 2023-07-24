@@ -12,6 +12,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
@@ -58,12 +59,12 @@ class BlankFormsListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-
         /* if (!Preferences.isJavarosa3Upgraded()) {
              model.showFab.postValue(false)
              showJavarosa2UpgradeSheet()
          } else {*/
         listBlankForms()
+
         //}
     }
 
@@ -75,7 +76,8 @@ class BlankFormsListFragment :
     private fun showBlankFormDownloadingDialog(progressText: Int) {
         if (alertDialog != null) return
         if (activity != null) {
-            model.showFab.postValue(false)
+            //model.showFab.postValue(false)
+            showFab(false)
         }
         alertDialog = DialogsUtil.showFormUpdatingDialog(
             context,
@@ -84,6 +86,9 @@ class BlankFormsListFragment :
     }
 
     private fun initObservers() {
+        binding.fab.setOnClickListener {
+            refreshBlankForms()
+        }
         model.onError.observe(viewLifecycleOwner, { error ->
             Timber.d(error, javaClass.name)
         })
@@ -119,7 +124,8 @@ class BlankFormsListFragment :
             } else {
                 if (alertDialog != null) return@observe
                 if (activity != null) {
-                    model.showFab.postValue(false)
+                    //model.showFab.postValue(false)
+                    showFab(false)
                 }
                 if (!silentFormUpdates) {
                     alertDialog = DialogsUtil.showCollectRefreshProgressDialog(
@@ -187,7 +193,8 @@ class BlankFormsListFragment :
         }
         model.onFormCacheCleared.observe(viewLifecycleOwner) { cleared: Boolean? ->
             refreshBlankForms()
-            model.showFab.postValue(true)
+            //model.showFab.postValue(true)
+            showFab(true)
         }
         model.onBlankFormsListResult.observe(
             viewLifecycleOwner
@@ -207,6 +214,9 @@ class BlankFormsListFragment :
                 )
             }
         }
+        /*model.showFab.observe(viewLifecycleOwner, { show ->
+            binding.fab.isVisible = show
+        })*/
     }
 
     private fun onUpdateBlankFormDefSuccess(collectForm: CollectForm?, formDef: FormDef?) {
@@ -311,7 +321,8 @@ class BlankFormsListFragment :
             alertDialog = null
         }
         if (activity != null) {
-            model.showFab.postValue(true)
+            //model.showFab.postValue(true)
+            showFab(true)
         }
     }
 
@@ -323,7 +334,8 @@ class BlankFormsListFragment :
     }
 
     private fun getCollectFormItem(collectForm: CollectForm?): View {
-        val itemBinding = BlankCollectFormRowBinding.inflate(LayoutInflater.from(context), binding.forms, false)
+        val itemBinding =
+            BlankCollectFormRowBinding.inflate(LayoutInflater.from(context), binding.forms, false)
         val row = itemBinding.formRow
         val name = itemBinding.name
         val organization = itemBinding.organization
@@ -335,7 +347,13 @@ class BlankFormsListFragment :
             name.text = collectForm.form.name
             organization.text = collectForm.serverName
             if (collectForm.isDownloaded) {
-                dlOpenButton.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_more,null))
+                dlOpenButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_more,
+                        null
+                    )
+                )
                 dlOpenButton.contentDescription =
                     getString(R.string.collect_blank_action_desc_more_options)
                 dlOpenButton.setOnClickListener { view: View? ->
@@ -371,7 +389,13 @@ class BlankFormsListFragment :
                 }
             } else {
                 pinnedIcon.visibility = View.GONE
-                dlOpenButton.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_download,null))
+                dlOpenButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_download,
+                        null
+                    )
+                )
                 dlOpenButton.contentDescription =
                     getString(R.string.collect_blank_action_download_form)
                 dlOpenButton.setOnClickListener { view: View? ->
@@ -387,10 +411,22 @@ class BlankFormsListFragment :
                 }
             }
             if (collectForm.isPinned) {
-                pinnedIcon.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.star_filled_24dp,null))
+                pinnedIcon.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.star_filled_24dp,
+                        null
+                    )
+                )
                 pinnedIcon.contentDescription = getString(R.string.action_unfavorite)
             } else {
-                pinnedIcon.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.star_border_24dp,null))
+                pinnedIcon.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.star_border_24dp,
+                        null
+                    )
+                )
                 pinnedIcon.contentDescription = getString(R.string.action_favorite)
             }
         }
@@ -473,6 +509,14 @@ class BlankFormsListFragment :
             binding.banner.visibility = View.VISIBLE
         } else {
             binding.banner.visibility = View.GONE
+        }
+    }
+
+    private fun showFab(show: Boolean) {
+        if (show) {
+            binding.fab.visibility = View.VISIBLE
+        } else {
+            binding.fab.visibility = View.GONE
         }
     }
 

@@ -42,13 +42,11 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
     private IFormSubmitterContract.IView view;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private final IOpenRosaRepository openRosaRepository;
-    private final Context context;
     private final KeyDataSource keyDataSource;
 
 
     public FormSubmitter(IFormSubmitterContract.IView view) {
         this.view = view;
-        this.context = view.getContext().getApplicationContext();
         this.openRosaRepository = new OpenRosaRepository();
         this.keyDataSource = MyApplication.getKeyDataSource();
     }
@@ -64,52 +62,6 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
         // submitFormInstance(instance);
         submitFormInstanceGranular(instance);
     }
-/*
-    @Override
-    public void submitFormInstance(final CollectFormInstance instance) {
-        final boolean offlineMode = Preferences.isOfflineMode();
-        final CollectFormInstanceStatus prevStatus = instance.getStatus();
-
-        disposables.add(keyDataSource.getDataSource()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> view.showFormSubmitLoading(instance))
-                .flatMapSingle((Function<DataSource, SingleSource<CollectServer>>) dataSource ->
-                        finalizeFormInstance(dataSource, instance))
-                .flatMapSingle((Function<CollectServer, SingleSource<NegotiatedCollectServer>>) server ->
-                        negotiateServer(server, offlineMode))
-                .flatMapSingle((Function<NegotiatedCollectServer, SingleSource<OpenRosaResponse>>) server ->
-                        openRosaRepository.submitForm(context, server, instance))
-                .flatMap((Function<OpenRosaResponse, ObservableSource<OpenRosaResponse>>) response -> {
-                    // set form and attachments statuses
-                    setSuccessSubmissionStatuses(instance);
-                    return rxSaveFormInstance(instance, response, null);
-                })
-                .onErrorResumeNext(throwable -> {
-                    setErrorSubmissionStatuses(instance, prevStatus, throwable);
-                    return rxSaveFormInstance(instance, null, throwable);
-                })
-                .doFinally(() -> view.hideFormSubmitLoading())
-                .subscribe(openRosaResponse -> {
-                    // start attachment upload process
-                    // if (hasAttachments(instance)) {
-                     //   updateMediaFilesQueue(instance.getMediaFiles());
-                   // }
-
-                    view.formSubmitSuccess(instance, openRosaResponse);
-                }, throwable -> {
-                    if (throwable instanceof OfflineModeException) {
-                        view.formSubmitOfflineMode();
-                    } else if (throwable instanceof NoConnectivityException) {
-                        // PendingFormSendJob.scheduleJob();
-                        view.formSubmitNoConnectivity();
-                    } else {
-                        FirebaseCrashlytics.getInstance().recordException(throwable);
-                        view.formSubmitError(throwable);
-                    }
-                })
-        );
-    }*/
 
     @Override
     public void submitFormInstanceGranular(final CollectFormInstance instance) {
@@ -130,7 +82,7 @@ public class FormSubmitter implements IFormSubmitterContract.IFormSubmitter {
                 .flatMap(Observable::fromIterable)
                 .concatMap((Function<GranularSubmissionBundle, ObservableSource<OpenRosaPartResponse>>) bundle -> {
                     view.formPartSubmitStart(instance, bundle.getPartName());
-                    return openRosaRepository.submitFormGranular(context, bundle.server, instance, bundle.attachment,
+                    return openRosaRepository.submitFormGranular(bundle.server, instance, bundle.attachment,
                             new ProgressListener(bundle.getPartName(), this.view)).toObservable();
                 })
                 .flatMap((Function<OpenRosaPartResponse, ObservableSource<OpenRosaPartResponse>>) response -> {
