@@ -96,7 +96,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
 
-    //private val viewModel: SharedFormsViewModel by viewModels()
+    //private val model: SharedFormsViewModel by viewModels()
     private val viewModel: SubmitFormsViewModel by viewModels()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -501,7 +501,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun onBackPressedWithoutCheck() {
         if (draftAutoSaved) {
-           // viewModel.listDraftFormInstances()
+            // viewModel.listDraftFormInstances()
             //MyApplication.bus().post(CollectFormSavedEvent())
         }
         super.onBackPressed()

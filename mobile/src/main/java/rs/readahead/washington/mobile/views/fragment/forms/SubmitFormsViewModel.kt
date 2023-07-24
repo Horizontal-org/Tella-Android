@@ -7,10 +7,13 @@ import androidx.lifecycle.LiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.Single
+import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
@@ -41,14 +44,25 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
     private var _showFormSubmitLoading = SingleLiveEvent<CollectFormInstance>()
     val showFormSubmitLoading: LiveData<CollectFormInstance> get() = _showFormSubmitLoading
 
+    private var _showReFormSubmitLoading = SingleLiveEvent<CollectFormInstance>()
+    val showReFormSubmitLoading: LiveData<CollectFormInstance> get() = _showReFormSubmitLoading
+
     private var _formPartSubmitStart = SingleLiveEvent<Pair<CollectFormInstance, String>>()
     val formPartSubmitStart: LiveData<Pair<CollectFormInstance, String>> get() = _formPartSubmitStart
+
+    private var _formPartResubmitStart = SingleLiveEvent<Pair<CollectFormInstance, String>>()
+    val formPartResubmitStart: LiveData<Pair<CollectFormInstance, String>> get() = _formPartResubmitStart
 
     private val _progressCallBack = SingleLiveEvent<Pair<String, Float>>()
     val progressCallBack: LiveData<Pair<String, Float>> get() = _progressCallBack
 
-    private val _formPartSubmitSuccess = SingleLiveEvent<Pair<CollectFormInstance, OpenRosaPartResponse?>>()
+    private val _formPartSubmitSuccess =
+        SingleLiveEvent<Pair<CollectFormInstance, OpenRosaPartResponse?>>()
     val formPartSubmitSuccess: LiveData<Pair<CollectFormInstance, OpenRosaPartResponse?>> get() = _formPartSubmitSuccess
+
+    private val _formPartResubmitSuccess =
+        SingleLiveEvent<Pair<CollectFormInstance, OpenRosaPartResponse?>>()
+    val formPartResubmitSuccess: LiveData<Pair<CollectFormInstance, OpenRosaPartResponse?>> get() = _formPartResubmitSuccess
 
     private val _formSubmitNoConnectivity = SingleLiveEvent<Boolean>()
     val formSubmitNoConnectivity: LiveData<Boolean> get() = _formSubmitNoConnectivity
@@ -58,6 +72,9 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
 
     private val _hideFormSubmitLoading = SingleLiveEvent<Boolean>()
     val hideFormSubmitLoading: LiveData<Boolean> get() = _hideFormSubmitLoading
+
+    private val _hideReFormSubmitLoading = SingleLiveEvent<Boolean>()
+    val hideReFormSubmitLoading: LiveData<Boolean> get() = _hideReFormSubmitLoading
 
     private var _formPartsSubmitEnded = SingleLiveEvent<CollectFormInstance>()
     val formPartsSubmitEnded: LiveData<CollectFormInstance> get() = _formPartsSubmitEnded
@@ -71,13 +88,20 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
     private val _submissionStoppedByUser = SingleLiveEvent<Boolean>()
     val submissionStoppedByUser: LiveData<Boolean> get() = _submissionStoppedByUser
 
+    private val _formReSubmitNoConnectivity = SingleLiveEvent<Boolean>()
+    val formReSubmitNoConnectivity: LiveData<Boolean> get() = _formReSubmitNoConnectivity
+
+    private val _formPartReSubmitError = SingleLiveEvent<Throwable?>()
+    val formPartReSubmitError: LiveData<Throwable?> get() = _formPartReSubmitError
+
+    private var _formPartsResubmitEnded = SingleLiveEvent<CollectFormInstance>()
+    val formPartsResubmitEnded: LiveData<CollectFormInstance> get() = _formPartsResubmitEnded
 
     fun submitActiveFormInstance(name: String?) {
         val instance = FormController.getActive().collectFormInstance
         if (!TextUtils.isEmpty(name)) {
             instance.instanceName = name
         }
-
         // submitFormInstance(instance);
         submitFormInstanceGranular(instance)
     }
@@ -114,7 +138,7 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
                     source
                 )
             }
-            .concatMap<OpenRosaPartResponse> { bundle: GranularSubmissionBundle ->
+            .concatMap { bundle: GranularSubmissionBundle ->
                 _formPartSubmitStart.postValue(Pair(instance, bundle.partName))
 
                 bundle.server?.let {
@@ -136,7 +160,7 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
             .doFinally({ _hideFormSubmitLoading.postValue(true) })
             .subscribe(
                 { response: OpenRosaPartResponse? ->
-                    _formPartSubmitSuccess.postValue(Pair(instance,response))
+                    _formPartSubmitSuccess.postValue(Pair(instance, response))
                 },
                 { throwable: Throwable? ->
                     if (throwable is NoConnectivityException) {
@@ -165,14 +189,18 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle<CollectFormInstance?>({ dataSource: DataSource ->
+            .flatMapSingle<CollectFormInstance?> { dataSource: DataSource ->
                 finalizeAndSaveFormInstance(
                     dataSource,
                     instance
                 )
-            })
+            }
             .subscribe(
-                { collectServer: CollectFormInstance? -> _saveForLaterFormInstanceSuccess.postValue(true) }
+                { collectServer: CollectFormInstance? ->
+                    _saveForLaterFormInstanceSuccess.postValue(
+                        true
+                    )
+                }
             ) { throwable: Throwable? ->
                 _saveForLaterFormInstanceError.postValue(throwable)
             }
@@ -265,9 +293,13 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
             dataSource.saveInstance(instance)
                 .toObservable()
                 .flatMap { instance1: CollectFormInstance? ->
-                    if (throwable == null) Observable.just(
-                        value
-                    ) else Observable.error(throwable)
+                    if (throwable == null) {
+                        Observable.just(
+                            value
+                        )
+                    } else {
+                        Observable.error(throwable)
+                    }
                 }
         }
     }
@@ -300,7 +332,6 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
                     break
                 }
             }
-
             // check instance status
             for (mediaFile in instance.widgetMediaFiles) {
                 if (mediaFile.status != FormMediaFileStatus.SUBMITTED) {
@@ -380,27 +411,245 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
             get() = if (attachment != null) attachment!!.partName else C.OPEN_ROSA_XML_PART_NAME
     }
 
-    // Ugly, think about elegant Rx/Flowable solution
-  /*  internal class ProgressListener(
-        private val partName: String,
-        private val view: IFormSubmitterContract.IView?
-    ) :
-        IProgressListener {
-        private var time: Long = 0
-        override fun onProgressUpdate(current: Long, total: Long) {
-            val now = Util.currentTimestamp()
-            if (view != null && now - time > REFRESH_TIME_MS) {
-                time = now
-                ThreadUtil.runOnMain {
-                    view.formPartUploadProgress(
-                        partName, current.toFloat() / total.toFloat()
+
+    fun reSubmitFormInstanceGranular(instance: CollectFormInstance) {
+        val startStatus = instance.status
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { disposable: Disposable? ->
+                _showReFormSubmitLoading.postValue(instance)
+            }
+            .flatMapSingle<CollectServer?> { dataSource: DataSource ->
+                setFormDef(dataSource, instance)
+            }
+            .flatMapSingle<NegotiatedCollectServer?> { server: CollectServer? ->
+                this.negotiateServer(server)
+            }
+            .flatMap { negotiatedCollectServer: NegotiatedCollectServer? ->
+                createResubmissionPartBundles(instance, negotiatedCollectServer)
+            }
+            .flatMap { source: List<GranularResubmissionBundle?>? ->
+                Observable.fromIterable(source)
+            }
+            .concatMap { bundle: GranularResubmissionBundle ->
+                _formPartResubmitStart.postValue(
+                    Pair(instance, bundle.partName)
+                )//view.formPartResubmitStart(instance, bundle.partName)
+                openRosaRepository.submitFormGranular(
+                    bundle.server!!, instance, bundle.attachment,
+                    ProgressListener(bundle.partName, _progressCallBack)
+                ).toObservable()
+            }
+            .flatMap { response: OpenRosaPartResponse ->
+                // set form and attachments statuses
+                setPartSuccessSubmissionStatuses(instance, response.partName)
+                rxSaveSuccessInstance(instance, response)
+            }
+            .onErrorResumeNext { throwable: Throwable ->
+                setErrorSubmissionStatuses(instance, startStatus, throwable)
+                rxSaveErrorInstance<OpenRosaPartResponse>(instance, throwable)
+            }
+            .doFinally({ _hideReFormSubmitLoading.postValue(true) })
+            .subscribe(
+                { response: OpenRosaPartResponse? ->
+                    _formPartResubmitSuccess.postValue(Pair(instance, response))
+                },
+                { throwable: Throwable? ->
+                    if (throwable is NoConnectivityException) {
+                        // PendingFormSendJob.scheduleJob();
+                        _formReSubmitNoConnectivity.postValue(true)
+                    } else {
+                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                        _formPartReSubmitError.postValue(throwable)
+                    }
+                },
+                { _formPartsResubmitEnded.postValue(instance) }
+            )
+        )
+    }
+
+    fun isReSubmitting(): Boolean {
+        return disposables.size() > 0
+    }
+
+    fun userStopReSubmission() {
+        stopReSubmission()
+        _submissionStoppedByUser.postValue(true)
+    }
+
+    fun stopReSubmission() {
+        disposables.clear()
+    }
+
+    private fun setFormDef(
+        dataSource: DataSource,
+        instance: CollectFormInstance
+    ): Single<CollectServer?> {
+        return dataSource.getInstance(instance.id)
+            .flatMap(Function<CollectFormInstance, SingleSource<CollectServer?>> { fullInstance: CollectFormInstance ->
+                instance.formDef = fullInstance.formDef // todo: think about this..
+                dataSource.getCollectServer(instance.serverId)
+            })
+    }
+
+    @Throws(NoConnectivityException::class)
+    private fun negotiateServer(server: CollectServer?): Single<NegotiatedCollectServer?>? {
+        if (!MyApplication.isConnectedToInternet(mApplication.baseContext)) {
+            throw NoConnectivityException()
+        }
+        return openRosaRepository.submitFormNegotiate(server)
+    }
+
+    private fun <T> rxSaveSuccessInstance(
+        instance: CollectFormInstance,
+        value: T
+    ): ObservableSource<T>? {
+        return keyDataSource.dataSource.flatMap { dataSource: DataSource ->
+            dataSource.saveInstance(instance)
+                .toObservable()
+                .flatMap { instance1: CollectFormInstance? ->
+                    Observable.just(
+                        value
                     )
                 }
+        }
+    }
+
+    private fun <T> rxSaveErrorInstance(
+        instance: CollectFormInstance,
+        throwable: Throwable
+    ): ObservableSource<T?>? {
+        return keyDataSource.dataSource.flatMap { dataSource: DataSource ->
+            dataSource.saveInstance(instance)
+                .toObservable()
+                .flatMap { instance1: CollectFormInstance? ->
+                    Observable.error(
+                        throwable
+                    )
+                }
+        }
+    }
+
+    /*  private fun setErrorSubmissionStatuses(
+          instance: CollectFormInstance,
+          startStatus: CollectFormInstanceStatus,
+          throwable: Throwable
+      ) {
+          val status: CollectFormInstanceStatus
+          status = if (startStatus == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
+              startStatus
+          } else if (throwable is NoConnectivityException) {
+              CollectFormInstanceStatus.SUBMISSION_PENDING
+          } else {
+              CollectFormInstanceStatus.SUBMISSION_ERROR
+          }
+          instance.status = status
+      }*/
+    /*
+        private fun setPartSuccessSubmissionStatuses(instance: CollectFormInstance, partName: String) {
+            var status = CollectFormInstanceStatus.SUBMITTED
+            if (C.OPEN_ROSA_XML_PART_NAME == partName) { // from xml data part is submitted
+                instance.formPartStatus = FormMediaFileStatus.SUBMITTED
+                if (!instance.widgetMediaFiles.isEmpty()) {
+                    status = CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+                }
+            } else {
+                // update part status
+                for (mediaFile in instance.widgetMediaFiles) {
+                    if (mediaFile.partName == partName) {
+                        mediaFile.status = FormMediaFileStatus.SUBMITTED
+                        break
+                    }
+                }
+
+                // check instance status
+                for (mediaFile in instance.widgetMediaFiles) {
+                    if (mediaFile.status != FormMediaFileStatus.SUBMITTED) {
+                        status = CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+                        break
+                    }
+                }
+            }
+            instance.status = status
+        }
+    */
+    private fun createResubmissionPartBundles(
+        instance: CollectFormInstance,
+        server: NegotiatedCollectServer?
+    ): Observable<List<GranularResubmissionBundle?>?>? {
+        val bundles: MutableList<GranularResubmissionBundle> = java.util.ArrayList()
+        if (instance.status != CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS &&
+            instance.status != CollectFormInstanceStatus.SUBMITTED
+        ) {
+            bundles.add(GranularResubmissionBundle(server))
+        }
+        for (attachment in instance.widgetMediaFiles) {
+            if (attachment.uploading && attachment.status != FormMediaFileStatus.SUBMITTED) {
+                bundles.add(GranularResubmissionBundle(server, attachment))
             }
         }
+        return Observable.just(bundles)
+    }
 
-        companion object {
-            private const val REFRESH_TIME_MS: Long = 500
+    private class GranularResubmissionBundle {
+        var server: NegotiatedCollectServer?
+        var attachment: FormMediaFile? = null
+
+        internal constructor(server: NegotiatedCollectServer?) {
+            this.server = server
         }
-    }*/
+
+        internal constructor(server: NegotiatedCollectServer?, attachment: FormMediaFile?) {
+            this.server = server
+            this.attachment = attachment
+        }
+
+        val partName: String
+            get() = if (attachment != null) attachment!!.partName else C.OPEN_ROSA_XML_PART_NAME
+    }
+    /*
+      // todo: merge IForm{Re}Submitter presenter interfaces
+      internal class ProgressListener(
+          private val partName: String,
+          private val view: IFormReSubmitterContract.IView?
+      ) :
+          IProgressListener {
+          private var time: Long = 0
+          override fun onProgressUpdate(current: Long, total: Long) {
+              val now = Util.currentTimestamp()
+              if (view != null && now - time > REFRESH_TIME_MS) {
+                  time = now
+                  view.formPartUploadProgress(partName, current.toFloat() / total.toFloat())
+              }
+          }
+
+          companion object {
+              private const val REFRESH_TIME_MS: Long = 500
+          }
+      }
+
+      // Ugly, think about elegant Rx/Flowable solution
+   internal class ProgressListener(
+          private val partName: String,
+          private val view: IFormSubmitterContract.IView?
+      ) :
+          IProgressListener {
+          private var time: Long = 0
+          override fun onProgressUpdate(current: Long, total: Long) {
+              val now = Util.currentTimestamp()
+              if (view != null && now - time > REFRESH_TIME_MS) {
+                  time = now
+                  ThreadUtil.runOnMain {
+                      view.formPartUploadProgress(
+                          partName, current.toFloat() / total.toFloat()
+                      )
+                  }
+              }
+          }
+
+          companion object {
+              private const val REFRESH_TIME_MS: Long = 500
+          }
+      }*/
 }

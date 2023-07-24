@@ -20,20 +20,22 @@ import rs.readahead.washington.mobile.databinding.ContentFormSubmitBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse
-import rs.readahead.washington.mobile.javarosa.FormReSubmitter
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.javarosa.IFormReSubmitterContract
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
+import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 
 class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
     var endView: CollectFormEndView? = null
-    private var formReSubmitter: FormReSubmitter? = null
-    private var instance: CollectFormInstance? = null
+
+    //private var formReSubmitter: FormReSubmitter? = null
+    private lateinit var instance: CollectFormInstance
     private lateinit var binding: ActivityFormSubmitBinding
     private lateinit var content: ContentFormSubmitBinding
     private val viewModel: SharedFormsViewModel by viewModels()
+    private val submitModel: SubmitFormsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -41,7 +43,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         setContentView(binding.root)
         content = binding.content
         init()
-        formReSubmitter = FormReSubmitter(this)
+        //formReSubmitter = FormReSubmitter(this)
         setSupportActionBar(binding.toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -65,7 +67,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            if (formReSubmitter != null && formReSubmitter!!.isReSubmitting) {
+            if (submitModel.isReSubmitting()) {
                 showStandardSheet(
                     this.supportFragmentManager,
                     getString(R.string.Collect_DialogTitle_StopExit),
@@ -88,7 +90,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
     }
 
     override fun onBackPressed() {
-        if (formReSubmitter != null && formReSubmitter!!.isReSubmitting) {
+        if (submitModel.isReSubmitting()) {
             showStandardSheet(
                 this.supportFragmentManager,
                 getString(R.string.Collect_DialogTitle_StopExit),
@@ -112,63 +114,85 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
 
     override fun onPause() {
         super.onPause()
-        if (formReSubmitter != null && formReSubmitter!!.isReSubmitting) {
-            formReSubmitter!!.stopReSubmission()
+        if (submitModel.isReSubmitting()) {
+            submitModel.stopReSubmission()
             submissionStoppedByUser()
         }
     }
 
-    override fun onDestroy() {
-        stopFormReSubmitter()
-        super.onDestroy()
-    }
-
     private fun init() {
         content.submitButton.setOnClickListener { view: View? ->
-            onSubmitClick(
-                view
-            )
+            onSubmitClick()
         }
         content.cancelButton.setOnClickListener { view: View? ->
-            onCancelClick(
-                view
-            )
+            onCancelClick()
         }
-        content.stopButton.setOnClickListener { view: View? -> onStopClick(view) }
+        content.stopButton.setOnClickListener { view: View? -> onStopClick() }
 
-        viewModel.collectFormInstance.observe(this, { instance ->
+        viewModel.collectFormInstance.observe(this) { instance ->
             if (instance != null) {
                 onGetFormInstanceSuccess(instance)
             }
-        })
+        }
 
-        viewModel.onError.observe(this, { throwable ->
+        viewModel.onError.observe(this) { throwable ->
             onGetFormInstanceError(throwable)
-        })
+        }
 
-    }
+        with(submitModel) {
+            showReFormSubmitLoading.observe(this@FormSubmitActivity) { instance: CollectFormInstance ->
+                showReFormSubmitLoading(instance)
+            }
 
-    fun onSubmitClick(view: View?) {
-        if (formReSubmitter != null) {
-            formReSubmitter!!.reSubmitFormInstanceGranular(instance)
-            hideFormSubmitButton()
-            hideFormCancelButton()
-            showFormStopButton()
+            formPartResubmitStart.observe(this@FormSubmitActivity) { (first, second): Pair<CollectFormInstance, String> ->
+                formPartResubmitStart(first, second)
+            }
+
+            progressCallBack.observe(this@FormSubmitActivity) { (first, second): Pair<String, Float> ->
+                formPartUploadProgress(first, second)
+            }
+
+            formPartResubmitSuccess.observe(this@FormSubmitActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                second?.let { formPartResubmitSuccess(first, second) }
+            }
+
+            formReSubmitNoConnectivity.observe(this@FormSubmitActivity) { value: Boolean ->
+                formReSubmitNoConnectivity()
+            }
+
+            formPartReSubmitError.observe(this@FormSubmitActivity) { throwable: Throwable? ->
+                throwable?.let { formPartReSubmitError(throwable) }
+            }
+
+            hideReFormSubmitLoading.observe(this@FormSubmitActivity) { value: Boolean ->
+                hideReFormSubmitLoading()
+            }
+
+            formPartsResubmitEnded.observe(this@FormSubmitActivity) { instance: CollectFormInstance ->
+                formPartsResubmitEnded(instance)
+            }
+
+            submissionStoppedByUser.observe(this@FormSubmitActivity) { value: Boolean ->
+                submissionStoppedByUser()
+            }
         }
     }
 
-    fun onCancelClick(view: View?) {
+    fun onSubmitClick() {
+        submitModel.reSubmitFormInstanceGranular(instance)
+        hideFormSubmitButton()
+        hideFormCancelButton()
+        showFormStopButton()
+    }
+
+    fun onCancelClick() {
         onBackPressed()
-        /*if (formReSubmitter != null) {
-            formReSubmitter.userStopReSubmission();
-        }*/
+        submitModel.userStopReSubmission()
     }
 
-    fun onStopClick(view: View?) {
+    fun onStopClick() {
         //onBackPressed();
-        if (formReSubmitter != null) {
-            formReSubmitter!!.userStopReSubmission()
-        }
+        submitModel.userStopReSubmission()
         MyApplication.bus().post(CollectFormSubmitStoppedEvent())
     }
 
@@ -243,12 +267,12 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         //hideFormCancelButton();
     }
 
-    fun onGetFormInstanceSuccess(instance: CollectFormInstance) {
+    private fun onGetFormInstanceSuccess(instance: CollectFormInstance) {
         this.instance = instance
         showFormEndView(false)
     }
 
-    fun onGetFormInstanceError(throwable: Throwable) {
+    private fun onGetFormInstanceError(throwable: Throwable) {
         Toast.makeText(this, R.string.collect_toast_fail_loading_form_instance, Toast.LENGTH_LONG)
             .show()
         finish()
@@ -261,23 +285,23 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
     private fun showFormEndView(offline: Boolean) {
         endView = CollectFormEndView(
             this,
-            if (instance!!.status == CollectFormInstanceStatus.SUBMITTED) R.string.collect_end_heading_confirmation_form_submitted else R.string.collect_end_action_submit
+            if (instance.status == CollectFormInstanceStatus.SUBMITTED) R.string.collect_end_heading_confirmation_form_submitted else R.string.collect_end_action_submit
         )
-        endView!!.setInstance(instance!!, offline)
+        endView!!.setInstance(instance, offline)
         content.formDetailsContainer.removeAllViews()
         content.formDetailsContainer.addView(endView!!)
         updateFormSubmitButton(false)
     }
 
     private fun enableMenuItems(menu: Menu) {
-        val disabled = formReSubmitter != null && formReSubmitter!!.isReSubmitting
+        val disabled = submitModel.isReSubmitting()
         for (i in 0 until menu.size()) {
             menu.getItem(i).isEnabled = !disabled
         }
     }
 
     private fun updateFormSubmitButton(offline: Boolean) {
-        if (instance!!.status != CollectFormInstanceStatus.SUBMITTED) {
+        if (instance.status != CollectFormInstanceStatus.SUBMITTED) {
             content.submitButton.visibility = View.VISIBLE
             //submitButton.setOffline(offline);
         }
@@ -305,12 +329,12 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         content.submitButton.isClickable = true
     }
 
-    private fun stopFormReSubmitter() {
-        if (formReSubmitter != null) {
-            formReSubmitter!!.destroy()
-            formReSubmitter = null
-        }
-    }
+    /*  private fun stopFormReSubmitter() {
+           if (formReSubmitter != null) {
+               formReSubmitter!!.destroy()
+               formReSubmitter = null
+           }
+       }*/
 
     private fun disableScreenTimeout() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
