@@ -32,10 +32,6 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
-import rs.readahead.washington.mobile.bus.event.CollectFormInstanceDeletedEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared
 import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
@@ -57,6 +53,10 @@ import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.MicFragment
 import rs.readahead.washington.mobile.views.fragment.MicFragment.Companion.newInstance
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
+import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import timber.log.Timber
 
@@ -419,10 +419,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun onDestroy() {
-        /* if (draftAutoSaved) {
-             viewModel.listDraftFormInstances()
-             MyApplication.bus().post(CollectFormSavedEvent())
-         }*/
         disposables.dispose()
         destroyFormParser()
         destroyFormSaver()
@@ -490,7 +486,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private fun onBackPressedWithoutCheck() {
         /*if (draftAutoSaved) {
             viewModel.listDraftFormInstances()
-            MyApplication.bus().post(CollectFormSavedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
         }*/
         super.onBackPressed()
     }
@@ -547,8 +543,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     override fun formInstanceSaveSuccess(instance: CollectFormInstance) {
         Toast.makeText(this, getFormSaveMsg(instance), Toast.LENGTH_SHORT).show()
         formParser!!.startFormChangeTracking()
-        //viewModel.listDraftFormInstances()
-        //MyApplication.bus().post(CollectFormSavedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
     }
 
     override fun formInstanceAutoSaveSuccess(instance: CollectFormInstance) {
@@ -565,7 +560,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun formInstanceDeleteSuccess(cloned: Boolean) {
-        MyApplication.bus().post(CollectFormInstanceDeletedEvent(cloned))
         finish()
     }
 
@@ -588,7 +582,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private fun formSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
         Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_LONG).show()
-        MyApplication.bus().post(CollectFormSubmissionErrorEvent()) // refresh form lists..
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -598,7 +592,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             R.string.collect_end_toast_notification_form_not_sent_no_connection,
             Toast.LENGTH_LONG
         ).show()
-        MyApplication.bus().post(CollectFormSubmittedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -630,15 +624,15 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_toast_form_submitted),
             Toast.LENGTH_LONG
         ).show()
-        MyApplication.bus().post(CollectFormSubmittedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
 
     private fun submissionStoppedByUser() {
-        MyApplication.bus().post(CollectFormSubmitStoppedEvent())
         refreshFormEndView(false)
         hideFormCancelButton()
         showFormEndButtons()
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
     override fun formConstraintViolation(formIndex: FormIndex, errorString: String) {
@@ -657,7 +651,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             R.string.collect_toast_form_saved_for_later_submission,
             Toast.LENGTH_LONG
         ).show()
-        MyApplication.bus().post(CollectFormSubmittedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -713,8 +707,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun formSavedOnExit() {
-        //MyApplication.bus().post(CollectFormSavedEvent())
-        //viewModel.listDraftFormInstances()
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         closeAlertDialog()
         onBackPressedWithoutCheck()
     }
@@ -957,7 +950,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun stopPresenterSubmission() {
         viewModel.stopSubmission()
-        MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
     private fun userStopPresenterSubmission(): Boolean {

@@ -45,6 +45,7 @@ class CollectMainFragment :
     BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
+    private var initializedView: Boolean = false
     private val model: SharedFormsViewModel by viewModels()
 
     companion object {
@@ -71,8 +72,8 @@ class CollectMainFragment :
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
         }
 
-        if (!hasInitializedRootView) {
-            hasInitializedRootView = true
+        if (!initializedView) {
+            initializedView = true
         }
 
         initObservers()
@@ -88,7 +89,7 @@ class CollectMainFragment :
                 override fun onNext(event: ShowFormInstanceEntryEvent) {
                     showFormInstanceEntry(event.instanceId)
                 }
-            })*/
+            })
         disposables.wire(
             CollectFormSubmittedEvent::class.java,
             object : EventObserver<CollectFormSubmittedEvent?>() {
@@ -119,7 +120,7 @@ class CollectMainFragment :
                     //setPagerToOutboxFragment()
                     setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 }
-            })
+            })*/
         /*disposables.wire(
             CollectFormSavedEvent::class.java,
             object : EventObserver<CollectFormSavedEvent?>() {
@@ -192,8 +193,10 @@ class CollectMainFragment :
     }
 
     private fun setCurrentTab(position: Int) {
-        binding.viewPager.post {
-            binding.viewPager.setCurrentItem(position, true)
+        if (initializedView) {
+            binding.viewPager.post {
+                binding.viewPager.setCurrentItem(position, true)
+            }
         }
     }
 
@@ -224,6 +227,11 @@ class CollectMainFragment :
             disposables.dispose()
         }
         super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        initializedView = false
     }
 
 

@@ -12,9 +12,6 @@ import androidx.activity.viewModels
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent
 import rs.readahead.washington.mobile.databinding.ActivityFormSubmitBinding
 import rs.readahead.washington.mobile.databinding.ContentFormSubmitBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
@@ -25,6 +22,9 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
+import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 
 class FormSubmitActivity : BaseLockActivity() {
     var endView: CollectFormEndView? = null
@@ -106,7 +106,8 @@ class FormSubmitActivity : BaseLockActivity() {
     }
 
     private fun onDialogBackPressed() {
-        MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         super.onBackPressed()
         return
     }
@@ -192,13 +193,14 @@ class FormSubmitActivity : BaseLockActivity() {
     fun onStopClick() {
         //onBackPressed();
         submitModel.userStopReSubmission()
-        MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
     private fun formReSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        MyApplication.bus().post(CollectFormSubmissionErrorEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -208,7 +210,7 @@ class FormSubmitActivity : BaseLockActivity() {
             R.string.collect_end_toast_notification_form_not_sent_no_connection,
             Toast.LENGTH_LONG
         ).show()
-        MyApplication.bus().post(CollectFormSubmissionErrorEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -255,7 +257,8 @@ class FormSubmitActivity : BaseLockActivity() {
     private fun formPartsResubmitEnded(instance: CollectFormInstance) {
         Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG)
             .show()
-        MyApplication.bus().post(CollectFormSubmittedEvent())
+        //MyApplication.bus().post(CollectFormSubmittedEvent())
+        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
 

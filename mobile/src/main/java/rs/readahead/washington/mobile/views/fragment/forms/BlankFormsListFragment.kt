@@ -322,7 +322,7 @@ class BlankFormsListFragment :
         }
         if (activity != null) {
             //model.showFab.postValue(true)
-            showFab(true)
+            //showFab(true)
         }
     }
 
