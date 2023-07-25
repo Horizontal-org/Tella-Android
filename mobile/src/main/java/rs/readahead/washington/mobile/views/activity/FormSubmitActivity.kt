@@ -21,16 +21,14 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse
 import rs.readahead.washington.mobile.javarosa.FormUtils
-import rs.readahead.washington.mobile.javarosa.IFormReSubmitterContract
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 
-class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
+class FormSubmitActivity : BaseLockActivity() {
     var endView: CollectFormEndView? = null
 
-    //private var formReSubmitter: FormReSubmitter? = null
     private lateinit var instance: CollectFormInstance
     private lateinit var binding: ActivityFormSubmitBinding
     private lateinit var content: ContentFormSubmitBinding
@@ -89,6 +87,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         return super.onOptionsItemSelected(item)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (submitModel.isReSubmitting()) {
             showStandardSheet(
@@ -196,14 +195,14 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         MyApplication.bus().post(CollectFormSubmitStoppedEvent())
     }
 
-    override fun formReSubmitError(error: Throwable) {
+    private fun formReSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
         Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
         MyApplication.bus().post(CollectFormSubmissionErrorEvent())
         finish()
     }
 
-    override fun formReSubmitNoConnectivity() {
+    private fun formReSubmitNoConnectivity() {
         Toast.makeText(
             this,
             R.string.collect_end_toast_notification_form_not_sent_no_connection,
@@ -213,7 +212,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         finish()
     }
 
-    override fun showReFormSubmitLoading(instance: CollectFormInstance) {
+    private fun showReFormSubmitLoading(instance: CollectFormInstance) {
         invalidateOptionsMenu()
         hideFormSubmitButton()
         showFormCancelButton()
@@ -223,24 +222,24 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         }
     }
 
-    override fun hideReFormSubmitLoading() {
+    private fun hideReFormSubmitLoading() {
         enableScreenTimeout()
         invalidateOptionsMenu()
     }
 
-    override fun formPartResubmitStart(instance: CollectFormInstance, partName: String) {
+    private fun formPartResubmitStart(instance: CollectFormInstance, partName: String) {
         if (endView != null) {
             runOnUiThread { endView!!.showUploadProgress(partName) }
         }
     }
 
-    override fun formPartUploadProgress(partName: String, pct: Float) {
+    private fun formPartUploadProgress(partName: String, pct: Float) {
         if (endView != null) {
             runOnUiThread { endView!!.setUploadProgress(partName, pct) }
         }
     }
 
-    override fun formPartResubmitSuccess(
+    private fun formPartResubmitSuccess(
         instance: CollectFormInstance,
         response: OpenRosaPartResponse
     ) {
@@ -249,18 +248,18 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         }
     }
 
-    override fun formPartReSubmitError(error: Throwable) {
+    private fun formPartReSubmitError(error: Throwable) {
         formReSubmitError(error)
     }
 
-    override fun formPartsResubmitEnded(instance: CollectFormInstance) {
+    private fun formPartsResubmitEnded(instance: CollectFormInstance) {
         Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG)
             .show()
         MyApplication.bus().post(CollectFormSubmittedEvent())
         finish()
     }
 
-    override fun submissionStoppedByUser() {
+    private fun submissionStoppedByUser() {
         showFormEndView(false)
         showFormSubmitButton()
         onBackPressed()
@@ -278,7 +277,7 @@ class FormSubmitActivity : BaseLockActivity(), IFormReSubmitterContract.IView {
         finish()
     }
 
-    override fun getContext(): Context {
+    private fun getContext(): Context {
         return this
     }
 

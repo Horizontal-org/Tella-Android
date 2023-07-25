@@ -54,12 +54,12 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
 
     private fun initObservers() {
         model.onFormInstanceDeleteSuccess.observe(
-            viewLifecycleOwner,
-            { success: Boolean? ->
-                onFormInstanceDeleted(
-                    success!!
-                )
-            })
+            viewLifecycleOwner
+        ) { success: Boolean? ->
+            onFormInstanceDeleted(
+                success!!
+            )
+        }
 
         model.onSubmittedFormInstanceListSuccess.observe(
             viewLifecycleOwner
@@ -77,11 +77,11 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
             )
         }
 
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner) { instance ->
             startCreateInstanceFormController(instance)
-        })
+        }
 
-        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
+        model.onCreateFormController.observe(viewLifecycleOwner) { form ->
             form?.let {
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -93,7 +93,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
                     }
                 }
             }
-        })
+        }
     }
 
     private fun startCreateInstanceFormController(instance: CollectFormInstance) {
@@ -155,7 +155,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
         Timber.d(error, javaClass.name)
     }
 
-    fun listSubmittedForms() {
+    private fun listSubmittedForms() {
         model.listSubmitFormInstances()
     }
 

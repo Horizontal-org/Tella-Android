@@ -181,14 +181,14 @@ class CollectMainFragment :
 
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity, { position ->
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
             when (position) {
                 BLANK_LIST_PAGE_INDEX -> setCurrentTab(BLANK_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
                 OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
             }
-        })
+        }
     }
 
     private fun setCurrentTab(position: Int) {
@@ -205,13 +205,6 @@ class CollectMainFragment :
             SUBMITTED_LIST_PAGE_INDEX -> getString(R.string.collect_sent_tab_title)
             else -> null
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        /*Handler(Looper.getMainLooper()).post {
-            adapter.notifyDataSetChanged()
-        }*/
     }
 
     override fun onResume() {
@@ -277,31 +270,22 @@ class CollectMainFragment :
     }*/
 
     private fun initObservers() {
-        model.onError.observe(viewLifecycleOwner, { error ->
+        model.onError.observe(viewLifecycleOwner) { error ->
             Timber.d(error, javaClass.name)
-        })
-        /*model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
-            result.let {
-                startCreateFormControllerPresenter(it.form, it.formDef)
-            }
-        })*/
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
-            Timber.d("+++++ model.onGetBlankFormDefSuccess. CollectMainFragment")
-            //startCreateInstanceFormControllerPresenter(instance)
-        })
+        }
 
-        model.onFormDefError.observe(viewLifecycleOwner, { error ->
+        model.onFormDefError.observe(viewLifecycleOwner) { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
             baseActivity.showToast(errorMessage)
-        })
+        }
 
-        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner, {
+        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner) {
             setCurrentTab(BLANK_LIST_PAGE_INDEX)
-        })
+        }
 
-       /* model.showFab.observe(viewLifecycleOwner, { show ->
-            binding.fab.isVisible = show
-        })*/
+        /* model.showFab.observe(viewLifecycleOwner, { show ->
+             binding.fab.isVisible = show
+         })*/
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -337,14 +321,6 @@ class CollectMainFragment :
     private fun countServers() {
         model.countCollectServers()
     }
-    /*
-    private fun startGetInstanceFormDefPresenter(instanceId: Long) {
-    model.getInstanceFormDef(instanceId)
-    }*/
-
-    /* private fun startCreateInstanceFormControllerPresenter(instance: CollectFormInstance) {
-    model.createFormController(instance)
-    }*/
 
     private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
         model.createFormController(form, formDef)

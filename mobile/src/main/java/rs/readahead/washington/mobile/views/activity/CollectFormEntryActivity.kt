@@ -20,7 +20,6 @@ import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.FormIndex
 import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
@@ -34,27 +33,19 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CollectFormInstanceDeletedEvent
-import rs.readahead.washington.mobile.bus.event.CollectFormSavedEvent
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmissionErrorEvent
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmitStoppedEvent
 import rs.readahead.washington.mobile.bus.event.CollectFormSubmittedEvent
-import rs.readahead.washington.mobile.bus.event.FormAttachmentsUpdatedEvent
-import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent
-import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared
-import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding
-import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse
 import rs.readahead.washington.mobile.javarosa.FormParser
 import rs.readahead.washington.mobile.javarosa.FormSaver
-import rs.readahead.washington.mobile.javarosa.FormSubmitter
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.javarosa.IFormParserContract
 import rs.readahead.washington.mobile.javarosa.IFormSaverContract
-import rs.readahead.washington.mobile.javarosa.IFormSubmitterContract
 import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter
 import rs.readahead.washington.mobile.util.C
@@ -65,7 +56,6 @@ import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.MicFragment
 import rs.readahead.washington.mobile.views.fragment.MicFragment.Companion.newInstance
-import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import timber.log.Timber
@@ -73,8 +63,8 @@ import timber.log.Timber
 //@RuntimePermission
 @AndroidEntryPoint
 class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
-    IQuestionAttachmentPresenterContract.IView, IFormParserContract.IView, IFormSaverContract.IView,
-    IFormSubmitterContract.IView {
+    IQuestionAttachmentPresenterContract.IView, IFormParserContract.IView,
+    IFormSaverContract.IView {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
 
@@ -82,8 +72,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-
-    //private var formSubmitter: FormSubmitter? = null
     private var disposables: EventCompositeDisposable =
         MyApplication.bus().createCompositeDisposable()
     private var presenter // todo: use separate presenter just for importing, extract from this one
@@ -268,6 +256,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
@@ -430,13 +419,12 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun onDestroy() {
-        if (draftAutoSaved) {
-            //viewModel.listDraftFormInstances()
-            //MyApplication.bus().post(CollectFormSavedEvent())
-        }
+        /* if (draftAutoSaved) {
+             viewModel.listDraftFormInstances()
+             MyApplication.bus().post(CollectFormSavedEvent())
+         }*/
         disposables.dispose()
         destroyFormParser()
-        //destroyFormSubmitter()
         destroyFormSaver()
         destroyPresenter()
         super.onDestroy()
@@ -496,14 +484,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun onDialogBackPressed() {
         onBackPressedWithoutCheck()
-        return Unit
+        return
     }
 
     private fun onBackPressedWithoutCheck() {
-        if (draftAutoSaved) {
-            // viewModel.listDraftFormInstances()
-            //MyApplication.bus().post(CollectFormSavedEvent())
-        }
+        /*if (draftAutoSaved) {
+            viewModel.listDraftFormInstances()
+            MyApplication.bus().post(CollectFormSavedEvent())
+        }*/
         super.onBackPressed()
     }
 
@@ -585,26 +573,26 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         Timber.d(throwable, javaClass.name)
     }
 
-    override fun showFormSubmitLoading(instance: CollectFormInstance) {
+    fun showFormSubmitLoading(instance: CollectFormInstance) {
         invalidateOptionsMenu()
         endView!!.clearPartsProgress(instance)
         disableScreenTimeout()
     }
 
-    override fun hideFormSubmitLoading() {
+    private fun hideFormSubmitLoading() {
         setToolbarIcon()
         invalidateOptionsMenu()
         enableScreenTimeout()
     }
 
-    override fun formSubmitError(error: Throwable) {
+    private fun formSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
         Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_LONG).show()
         MyApplication.bus().post(CollectFormSubmissionErrorEvent()) // refresh form lists..
         finish()
     }
 
-    override fun formSubmitNoConnectivity() {
+    private fun formSubmitNoConnectivity() {
         Toast.makeText(
             applicationContext,
             R.string.collect_end_toast_notification_form_not_sent_no_connection,
@@ -614,29 +602,29 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         finish()
     }
 
-    override fun formPartSubmitStart(instance: CollectFormInstance, partName: String) {
+    private fun formPartSubmitStart(instance: CollectFormInstance, partName: String) {
         endView!!.showUploadProgress(partName)
         invalidateOptionsMenu()
         binding.toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp)
     }
 
-    override fun formPartUploadProgress(partName: String, pct: Float) {
+    private fun formPartUploadProgress(partName: String, pct: Float) {
         endView!!.setUploadProgress(partName, pct)
     }
 
-    override fun formPartSubmitSuccess(
+    private fun formPartSubmitSuccess(
         instance: CollectFormInstance,
         response: OpenRosaPartResponse
     ) {
         endView!!.hideUploadProgress(response.partName)
     }
 
-    override fun formPartSubmitError(error: Throwable) {
+    private fun formPartSubmitError(error: Throwable) {
         // error on part stops entire submission
         formSubmitError(error)
     }
 
-    override fun formPartsSubmitEnded(instance: CollectFormInstance) {
+    private fun formPartsSubmitEnded(instance: CollectFormInstance) {
         Toast.makeText(
             applicationContext,
             getString(R.string.collect_toast_form_submitted),
@@ -646,7 +634,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         finish()
     }
 
-    override fun submissionStoppedByUser() {
+    private fun submissionStoppedByUser() {
         MyApplication.bus().post(CollectFormSubmitStoppedEvent())
         refreshFormEndView(false)
         hideFormCancelButton()
@@ -663,7 +651,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    override fun saveForLaterFormInstanceSuccess() {
+    fun saveForLaterFormInstanceSuccess() {
         Toast.makeText(
             applicationContext,
             R.string.collect_toast_form_saved_for_later_submission,
@@ -673,7 +661,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         finish()
     }
 
-    override fun saveForLaterFormInstanceError(throwable: Throwable) {
+    private fun saveForLaterFormInstanceError(throwable: Throwable) {
         Timber.d(throwable, javaClass.name)
     }
 
@@ -805,7 +793,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         showScreenView(endView)
     }
 
-    private fun refreshFormEndView(offline: Boolean) {
+    private fun refreshFormEndView(@Suppress("SameParameterValue") offline: Boolean) {
         endView!!.refreshInstance(offline)
     }
 
@@ -879,12 +867,13 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         binding.prevSection.visibility = View.VISIBLE
     }
 
-    private fun setSubmitButtonText(offline: Boolean) {
-        //submitButton.setOffline(offline);
-    }
-
+    /*
+        private fun setSubmitButtonText(offline: Boolean) {
+            //submitButton.setOffline(offline);
+        }
+    */
     private fun showFormEndButtons() {
-        setSubmitButtonText(Preferences.isOfflineMode())
+        //setSubmitButtonText(Preferences.isOfflineMode())
         binding.submitButton.isEnabled = true
         binding.submitButton.visibility = View.VISIBLE
     }

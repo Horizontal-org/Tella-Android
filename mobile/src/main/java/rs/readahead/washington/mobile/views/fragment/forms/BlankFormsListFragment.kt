@@ -89,15 +89,15 @@ class BlankFormsListFragment :
         binding.fab.setOnClickListener {
             refreshBlankForms()
         }
-        model.onError.observe(viewLifecycleOwner, { error ->
+        model.onError.observe(viewLifecycleOwner) { error ->
             Timber.d(error, javaClass.name)
-        })
-        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner, { result ->
+        }
+        model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner) { result ->
             result.let {
                 startCreateFormControllerPresenter(it.form, it.formDef)
             }
-        })
-        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
+        }
+        model.onCreateFormController.observe(viewLifecycleOwner) { form ->
             form?.let {
                 if (Preferences.isAnonymousMode()) {
                     startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
@@ -109,7 +109,7 @@ class BlankFormsListFragment :
                     }
                 }
             }
-        })
+        }
         model.showBlankFormRefreshLoading.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
@@ -138,19 +138,19 @@ class BlankFormsListFragment :
             viewLifecycleOwner,
             { form: CollectForm? -> updateForm(form!!) })
         model.onDownloadBlankFormDefStart.observe(
-            viewLifecycleOwner,
-            { show: Boolean? ->
-                if (show == true) {
-                    showBlankFormDownloadingDialog(R.string.collect_dialog_text_download_progress)
-                } else {
-                    hideAlertDialog()
-                    DialogUtils.showBottomMessage(
-                        activity,
-                        getString(R.string.collect_toast_download_completed),
-                        false
-                    )
-                }
-            })
+            viewLifecycleOwner
+        ) { show: Boolean? ->
+            if (show == true) {
+                showBlankFormDownloadingDialog(R.string.collect_dialog_text_download_progress)
+            } else {
+                hideAlertDialog()
+                DialogUtils.showBottomMessage(
+                    activity,
+                    getString(R.string.collect_toast_download_completed),
+                    false
+                )
+            }
+        }
         model.onUpdateBlankFormDefStart.observe(
             viewLifecycleOwner
         ) { show: Boolean ->
@@ -282,11 +282,11 @@ class BlankFormsListFragment :
         updateFormViews()
     }
 
-    fun listBlankForms() {
+    private fun listBlankForms() {
         model.listBlankForms()
     }
 
-    fun refreshBlankForms() {
+    private fun refreshBlankForms() {
         model.refreshBlankForms()
     }
 

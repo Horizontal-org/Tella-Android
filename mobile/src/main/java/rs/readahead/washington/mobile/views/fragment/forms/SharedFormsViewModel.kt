@@ -509,15 +509,15 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
     fun getFormInstance(instanceId: Long) {
         var collectFormInstance : CollectFormInstance? = null
         disposables.add(keyDataSource.dataSource
-            .flatMapSingle({ dataSource: DataSource ->
+            .flatMapSingle { dataSource: DataSource ->
                 dataSource.getInstance(
                     instanceId
                 )
-            })
-            .flatMapSingle({ instance: CollectFormInstance ->
+            }
+            .flatMapSingle { instance: CollectFormInstance ->
                 collectFormInstance = instance
                 MyApplication.rxVault[instance.widgetMediaFilesIds]
-            })
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ vaultFiles: List<VaultFile>? ->

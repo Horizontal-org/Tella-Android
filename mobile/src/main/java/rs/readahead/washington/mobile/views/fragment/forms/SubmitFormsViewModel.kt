@@ -487,10 +487,10 @@ class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
         instance: CollectFormInstance
     ): Single<CollectServer?> {
         return dataSource.getInstance(instance.id)
-            .flatMap(Function<CollectFormInstance, SingleSource<CollectServer?>> { fullInstance: CollectFormInstance ->
+            .flatMap { fullInstance: CollectFormInstance ->
                 instance.formDef = fullInstance.formDef // todo: think about this..
                 dataSource.getCollectServer(instance.serverId)
-            })
+            }
     }
 
     @Throws(NoConnectivityException::class)
