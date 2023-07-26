@@ -197,17 +197,6 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         super.onDestroy()
     }
 
-//    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//    fun showWriteExternalStorageRationale(request: PermissionRequest?) {
-//        maybeChangeTemporaryTimeout()
-//        alertDialog = showRationale(
-//            this,
-//            request!!,
-//            getString(R.string.permission_dialog_expl_device_storage)
-//        )
-//    }
-
-
     private fun openMedia() {
         showGalleryImage(vaultFile)
         if (!actionsDisabled) {
@@ -263,7 +252,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     target: Target<Drawable?>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding!!.content.progressBar.visibility = View.GONE
+                    binding.content.progressBar.visibility = View.GONE
                     return false
                 }
 
@@ -274,11 +263,11 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding!!.content.progressBar.visibility = View.GONE
+                    binding.content.progressBar.visibility = View.GONE
                     return false
                 }
             })
-            .into(binding!!.content.photoImageView)
+            .into(binding.content.photoImageView)
     }
 
     private fun showMetadata() {

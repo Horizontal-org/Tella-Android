@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
@@ -33,20 +32,11 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
-    var mPlay: ImageButton? = null
-    var mRwd: ImageButton? = null
-    var mFwd: ImageButton? = null
-    var mTimer: TextView? = null
-    var mDuration: TextView? = null
-    var forward: View? = null
-    var rewind: View? = null
     private var handlingVaultFile: VaultFile? = null
     private var audioPlayer: AudioPlayer? = null
     private var audioPlayerListener: AudioPlayer.Listener? = null
-
     private var showActions = false
     private var actionsDisabled = false
-    private var withMetadata = false
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var paused = true
@@ -70,7 +60,6 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         setContentView(binding.getRoot())
         actionsDisabled = intent.hasExtra(VideoViewerActivity.NO_ACTIONS)
 
-        initView()
         initListeners()
         initContracts()
         setupToolbar()
@@ -97,12 +86,10 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
                 if (deleted) onMediaFileDeleted()
             }
             onMediaFileDeleteConfirmed.observe(this@AudioPlayActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
-                    onMediaFileDeleteConfirmation(
-                        deletedVaultFile,
-                        mediaFileDeletedConfirmation.showConfirmDelete
-                    )
-                }
+                onMediaFileDeleteConfirmation(
+                    mediaFileDeletedConfirmation.vaultFile,
+                    mediaFileDeletedConfirmation.showConfirmDelete
+                )
             }
             onMediaFileRenamed.observe(this@AudioPlayActivity) { renamed ->
                 onMediaFileRename(renamed)
@@ -127,7 +114,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
             val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
             if (id != null) {
-                viewModel!!.getMediaFile(id)
+                this.viewModel!!.getMediaFile(id)
             }
         }
     }
@@ -135,7 +122,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     private fun initAudioListener() {
         audioPlayerListener = object : AudioPlayer.Listener {
             override fun onStart(duration: Int) {
-                mDuration!!.text = timeToString(duration.toLong())
+                binding.content.duration.text = timeToString(duration.toLong())
             }
 
             override fun onStop() {
@@ -150,7 +137,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
             }
 
             private fun showTimeRemaining(left: Int) {
-                mTimer!!.text = timeToString(left.toLong())
+                binding.content.audioTime.text = timeToString(left.toLong())
             }
         }
     }
@@ -169,20 +156,20 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
 
 
     private fun initListeners() {
-        mPlay!!.setOnClickListener {
+        binding.content.playAudio.setOnClickListener {
             if (paused) {
                 handlePlay()
             } else {
                 handlePause()
             }
         }
-        forward!!.setOnClickListener {
-            audioPlayer!!.ffwd(
+        binding.content.fwdButton.setOnClickListener {
+            audioPlayer?.ffwd(
                 SEEK_DELAY
             )
         }
-        rewind!!.setOnClickListener {
-            audioPlayer!!.rwd(
+        binding.content.rwdButton.setOnClickListener {
+            audioPlayer?.rwd(
                 SEEK_DELAY
             )
         }
@@ -193,7 +180,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         if (isInfoShown) {
             toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
             toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
-            toolbar.title = handlingVaultFile!!.name
+            toolbar.title = handlingVaultFile?.name
         } else {
             stopPlayer()
             finish()
@@ -336,7 +323,6 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
-    fun onMediaFileRenameError(throwable: Throwable) {}
 
     fun getContext(): Context {
         return this
@@ -354,7 +340,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
                 this,
                 audioPlayerListener!!
             )
-            audioPlayer!!.play(handlingVaultFile)
+            audioPlayer?.play(handlingVaultFile)
         }
         paused = false
         disablePlay()
@@ -378,15 +364,15 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     private fun disablePlay() {
-        mPlay!!.setImageDrawable(this.resources.getDrawable(R.drawable.big_white_pause_24p))
-        enableButton(forward, mFwd)
-        enableButton(rewind, mRwd)
+        binding.content.playAudio?.setImageDrawable(this.resources.getDrawable(R.drawable.big_white_pause_24p,theme))
+        enableButton(binding.content.fwdButton, binding.content.rwdButton)
+        enableButton(binding.content.rwdButton, binding.content.rwdButton)
     }
 
     private fun enablePlay() {
-        mPlay!!.setImageDrawable(this.resources.getDrawable(R.drawable.ic_play_arrow_white_24dp))
-        disableButton(forward, mFwd)
-        disableButton(rewind, mRwd)
+        binding.content.playAudio?.setImageDrawable(this.resources.getDrawable(R.drawable.ic_play_arrow_white_24dp,theme))
+        disableButton(binding.content.fwdButton, binding.content.rwdButton)
+        disableButton(binding.content.rwdButton, binding.content.rwdButton)
     }
 
     private fun enableButton(view: View?, button: ImageButton?) {
@@ -402,7 +388,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     private fun stopPlayer() {
         if (audioPlayer != null) {
             audioPlayer!!.stop()
-            audioPlayer = null
+            // audioPlayer = null
             onPlayerStop()
             enableScreenTimeout()
         }
@@ -439,17 +425,5 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     private fun enableScreenTimeout() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
-
-    private fun initView() {
-        mPlay = binding!!.content.playAudio
-        mRwd = binding!!.content.rwdButton
-        mFwd = binding!!.content.rwdButton
-        mTimer = binding!!.content.audioTime
-        mDuration = binding!!.content.duration
-        forward = binding!!.content.fwdButton
-        rewind = binding!!.content.rwdButton
-        toolbar = binding!!.toolbar
-    }
-
 
 }

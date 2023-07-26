@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -92,6 +93,15 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             onMediaFileRenamed.observe(this@VideoViewerActivity) { renamed ->
                 onMediaFileRename(renamed)
             }
+            onMediaFileDeleteConfirmed.observe(this@VideoViewerActivity) { mediaFileDeletedConfirmation ->
+                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                    onMediaFileDeleteConfirmation(
+                        deletedVaultFile,
+                        mediaFileDeletedConfirmation.showConfirmDelete
+                    )
+                }
+            }
+
         }
     }
 
@@ -164,10 +174,10 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         hideProgressDialog()
     }
 
-    /* to be used in other activities */
-    fun onMediaFileDeleteConfirmation(mediaFileDeleteConfirmation: MediaFileDeleteConfirmation) {
-        if (mediaFileDeleteConfirmation.showConfirmDelete) {
-            showConfirmSheet(supportFragmentManager,
+    private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
+        if (showConfirmDelete) {
+            showConfirmSheet(
+                supportFragmentManager,
                 getString(R.string.Vault_Warning_Title),
                 getString(R.string.Vault_Confirm_delete_Description),
                 getString(R.string.Vault_Delete_anyway),
@@ -178,7 +188,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                             viewModel.deleteMediaFiles(vaultFile)
                         }
                     }
-                })
+                }
+            )
         } else {
             viewModel.deleteMediaFiles(vaultFile)
         }
