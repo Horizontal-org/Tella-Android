@@ -35,8 +35,14 @@ lateinit var chosenVaultFile: VaultFile
 lateinit var sharedViewModel: SharedMediaFileViewModel
 lateinit var toolBar: Toolbar
 
+/**
+ * Helper object for handling Vault actions
+ * The VaultActionsHelper is a utility class designed to handle actions related to a VaultFile,
+ * which represents a file stored securely in a vault.
+ */
 object VaultActionsHelper {
 
+    // Initialize contracts for handling activity results
     fun BaseActivity.initContracts() {
         requestPermission =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,10 +57,12 @@ object VaultActionsHelper {
                     // Permission denied, handle accordingly
                 }
             }
+        // Contract for picking files
         filePicker =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == AppCompatActivity.RESULT_OK) {
                     assert(result.data != null)
+                    // Export the chosen VaultFile to the selected file destination
                     chosenVaultFile?.let {
                         sharedViewModel.exportNewMediaFile(
                             withMetadata,
@@ -68,6 +76,14 @@ object VaultActionsHelper {
 
     }
 
+    /**
+     * Show the Vault actions dialog, which displays available actions for the given VaultFile.
+     *
+     * @param vaultFile The VaultFile for which actions will be displayed.
+     * @param viewModel The SharedMediaFileViewModel for performing actions on the VaultFile.
+     * @param unitFunction A lambda function representing an action to be executed.
+     * @param toolbar The Toolbar associated with the current activity.
+     */
     fun BaseActivity.showVaultActionsDialog(
         vaultFile: VaultFile,
         viewModel: SharedMediaFileViewModel,
@@ -78,20 +94,35 @@ object VaultActionsHelper {
         sharedViewModel = viewModel
         toolBar = toolbar
 
+        // Create an instance of the VaultSheetUtils.IVaultActions interface to handle Vault actions
         val vaultActions = object : VaultSheetUtils.IVaultActions {
+            // The following methods are placeholders for Vault actions and can be implemented as needed
             // Implement the methods for upload, share, move, rename, save, info, delete
+
+            /**
+             * Placeholder for the upload action.
+             */
             override fun upload() {
             }
 
+            /**
+             * Trigger the share action, possibly with temporary timeout changes.
+             */
             override fun share() {
                 this@showVaultActionsDialog.maybeChangeTemporaryTimeout {
                     shareMediaFile()
                 }
             }
 
+            /**
+             * Placeholder for the move action.
+             */
             override fun move() {
             }
 
+            /**
+             * Rename the VaultFile using a VaultSheetUtils.showVaultRenameSheet dialog.
+             */
             override fun rename() {
                 VaultSheetUtils.showVaultRenameSheet(
                     supportFragmentManager,
@@ -105,6 +136,9 @@ object VaultActionsHelper {
 
             }
 
+            /**
+             * Show a confirmation dialog to save the VaultFile to the device.
+             */
             override fun save() {
                 BottomSheetUtils.showConfirmSheet(
                     supportFragmentManager,
@@ -120,6 +154,9 @@ object VaultActionsHelper {
                 )
             }
 
+            /**
+             * Show the information of the VaultFile using a VaultInfoFragment.
+             */
             override fun info() {
                 unitFunction()
                 toolBar.title = getString(R.string.Vault_FileInfo)
@@ -132,6 +169,9 @@ object VaultActionsHelper {
                 )
             }
 
+            /**
+             * Show a confirmation dialog to delete the VaultFile.
+             */
             override fun delete() {
                 BottomSheetUtils.showConfirmSheet(
                     supportFragmentManager,
@@ -148,7 +188,7 @@ object VaultActionsHelper {
             }
 
         }
-
+        // Show the Vault actions dialog with available actions for the given VaultFile
         showVaultActionsSheet(
             supportFragmentManager,
             chosenVaultFile?.name,

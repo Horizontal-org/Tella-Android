@@ -18,7 +18,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -75,11 +74,16 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         initObservers()
     }
 
+    /**
+     * Initialize observers for observing changes in the ViewModel.
+     */
     private fun initObservers() {
+        // Observer for error messages.
         with(viewModel) {
             error.observe(this@VideoViewerActivity) {
                 onShowError(it)
             }
+            // Observer for media file export status.
             onMediaFileExportStatus.observe(this@VideoViewerActivity) { status ->
                 when (status) {
                     MediaFileExportStatus.EXPORT_START -> onExportStarted()
@@ -87,12 +91,15 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     MediaFileExportStatus.EXPORT_END -> onExportEnded()
                 }
             }
+            // Observer for media file deletion status.
             onMediaFileDeleted.observe(this@VideoViewerActivity) { deleted ->
                 if (deleted) onMediaFileDeleted()
             }
+            // Observer for media file renaming status.
             onMediaFileRenamed.observe(this@VideoViewerActivity) { renamed ->
                 onMediaFileRename(renamed)
             }
+            // Observer for media file deletion confirmation.
             onMediaFileDeleteConfirmed.observe(this@VideoViewerActivity) { mediaFileDeletedConfirmation ->
                 mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
@@ -112,9 +119,17 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
     public override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+
+        // Release the player to avoid overlapping playback.
         releasePlayer()
+
+        // Set the flag to indicate that autoplay should be enabled.
         shouldAutoPlay = true
+
+        // Clear the resume position to start playback from the beginning.
         clearResumePosition()
+
+        // Set the new intent.
         setIntent(intent)
     }
 
@@ -195,7 +210,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
-    fun onMediaFileDeleted() {
+    private fun onMediaFileDeleted() {
         MyApplication.bus().post(MediaFileDeletedEvent())
         finish()
     }
@@ -216,19 +231,33 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
 
+    /**
+     * Initializes the video player with the provided VaultFile.
+     */
     private fun initializePlayer() {
         val vaultFile = intent.getSerializableExtra(VIEW_VIDEO) as? VaultFile ?: return
 
+        // Set the current vault file and update the toolbar title.
         this.vaultFile = vaultFile
         toolbar.title = vaultFile.name
+
+        // Setup the metadata menu item based on the availability of metadata.
         setupMetadataMenuItem(vaultFile.metadata != null)
 
+        // Create a data source factory for the media file.
         val mediaFileDataSourceFactory = MediaFileDataSourceFactory(this, vaultFile, null)
+
+        // Create a media item from the media file's URI.
         val mediaItem = MediaItem.fromUri(MediaFileHandler.getEncryptedUri(this, vaultFile))
+
+        // Create a media source from the media item.
         val mediaSource = ProgressiveMediaSource.Factory(mediaFileDataSourceFactory)
             .createMediaSource(mediaItem)
 
+        // Check if we have a resume position for the player.
         val haveResumePosition = resumeWindow != C.INDEX_UNSET
+
+        // Initialize the player if it doesn't exist, otherwise stop the existing player.
         if (player == null) {
             player = SimpleExoPlayer.Builder(this).build().apply {
                 playWhenReady = shouldAutoPlay
@@ -238,6 +267,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             player?.stop()
         }
 
+        // Apply the resume position if available, set the media source, and prepare the player.
         player?.apply {
             if (haveResumePosition) {
                 seekTo(resumeWindow, resumePosition)
@@ -246,11 +276,13 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             prepare()
         }
 
+        // Reset the retry source flag.
         needRetrySource = false
-
     }
 
-
+    /**
+     * Releases the video player, clearing its resources and state.
+     */
     private fun releasePlayer() {
         if (player != null) {
             shouldAutoPlay = player?.playWhenReady == true
@@ -272,31 +304,40 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
     }
 
+    /**
+     * Sets up the toolbar for the video player activity.
+     */
     private fun setupToolbar() {
         toolbar = binding.playerToolbar
+
+        // Set up the navigation icon and its onClickListener to handle back navigation.
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
+        // If actions are not disabled, inflate the menu and set up the menu item click listener.
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.video_view_menu)
             vaultFile?.let { file ->
+                // Set up the metadata menu item based on the availability of metadata.
                 setupMetadataMenuItem(file.metadata != null)
             }
-            toolbar.menu.findItem(R.id.menu_item_more)
-                .setOnMenuItemClickListener {
-                    vaultFile?.let { file ->
-                        showVaultActionsDialog(
-                            file,
-                            viewModel,
-                            {
-                                isInfoShown = true
-                                onVisibilityChanged(View.VISIBLE)
-                            },
-                            toolbar = toolbar
-                        )
-                    }
-                    false
+
+            // Set up the menu item click listener for the "more" menu item.
+            toolbar.menu.findItem(R.id.menu_item_more).setOnMenuItemClickListener {
+                vaultFile?.let { file ->
+                    // Show the vault actions dialog with the appropriate parameters.
+                    showVaultActionsDialog(
+                        file,
+                        viewModel,
+                        {
+                            isInfoShown = true
+                            onVisibilityChanged(View.VISIBLE)
+                        },
+                        toolbar = toolbar
+                    )
                 }
+                false
+            }
         }
     }
 

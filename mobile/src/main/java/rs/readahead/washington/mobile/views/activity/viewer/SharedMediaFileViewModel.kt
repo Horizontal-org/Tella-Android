@@ -42,38 +42,60 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
     private var _onMediaFileGot = MutableLiveData<VaultFile>()
     val onMediaFileGot: LiveData<VaultFile> get() = _onMediaFileGot
 
+    /**
+     * Exports the given [vaultFile] to the specified [path] on the device, optionally including its metadata.
+     *
+     * @param withMetadata If true, the metadata of the [vaultFile] will also be exported.
+     * @param vaultFile The VaultFile to be exported.
+     * @param path The Uri of the destination path where the file will be exported.
+     */
     fun exportNewMediaFile(withMetadata: Boolean, vaultFile: VaultFile, path: Uri?) {
-        disposables.add(Completable.fromCallable(Callable<Void?> {
-            MediaFileHandler.exportMediaFile(
-                getApplication(),
-                vaultFile,
-                path
-            )
-            if (withMetadata && vaultFile.metadata != null) {
+        disposables.add(
+            // Export the main vaultFile
+            Completable.fromCallable(Callable<Void?> {
                 MediaFileHandler.exportMediaFile(
                     getApplication(),
-                    MediaFileHandler.maybeCreateMetadataMediaFile(vaultFile),
+                    vaultFile,
                     path
                 )
-            }
-            null
-        })
-            .subscribeOn(Schedulers.computation())
-            .doOnSubscribe {
-                _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START)
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_END) }
-            .subscribe(
-                { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_PROGRESS) }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(R.string.gallery_toast_fail_exporting_to_device)
+                // Check if metadata should also be exported
+                if (withMetadata && vaultFile.metadata != null) {
+                    // Export the media file
+                    MediaFileHandler.exportMediaFile(
+                        getApplication(),
+                        MediaFileHandler.maybeCreateMetadataMediaFile(vaultFile),
+                        path
+                    )
+                }
+                null // Completable doesn't return a value
+            })
+                .subscribeOn(Schedulers.computation())
+                .doOnSubscribe {
+                    // Notify observers that the export process has started
+                    _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_START)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally {
+                    // Notify observers that the export process has ended
+                    _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_END)
+                }
+                .subscribe(
+                    { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_PROGRESS) }
+                ) { throwable: Throwable? ->
+                    // Handle any errors that occurred during the export process
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    _error.postValue(R.string.gallery_toast_fail_exporting_to_device)
 
-            }
+                }
         )
     }
 
+    /**
+     * Renames a VaultFile with the specified [id] to the given [name].
+     *
+     * @param id The unique identifier of the VaultFile to be renamed.
+     * @param name The new name for the VaultFile.
+     */
 
     fun renameVaultFile(id: String?, name: String?) {
         disposables.add(MyApplication.rxVault.rename(id, name)
@@ -81,21 +103,30 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { vaultFile: VaultFile? ->
+                    // Notify observers that the renaming was successful and provide the updated VaultFile
                     _onMediaFileRenamed.postValue(vaultFile)
                 }
             ) { throwable: Throwable? ->
+                // Handle any errors that occurred during the renaming process
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(R.string.gallery_toast_fail_deleting_files)
             })
     }
 
+    /**
+     * Deletes the specified [vaultFile] from the application's media storage.
+     *
+     * @param vaultFile The VaultFile to be deleted.
+     */
     fun deleteMediaFiles(vaultFile: VaultFile?) {
         disposables.add(MyApplication.rxVault.delete(vaultFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
+                // Notify observers that the deletion was successful, providing a boolean flag indicating success
                 { isDeleted: Boolean? -> _onMediaFileDeleted.postValue(isDeleted) }
             ) { throwable: Throwable? ->
+                // Handle any errors that occurred during the deletion process
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(R.string.gallery_toast_fail_deleting_files)
 
@@ -103,7 +134,11 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
     }
 
 
-    /* to be used in audioActivity */
+    /**
+     * Confirms whether to delete the specified [vaultFile] based on its association with other FormMediaFiles.
+     *
+     * @param vaultFile The VaultFile to be confirmed for deletion.
+     */
     fun confirmDeleteMediaFile(vaultFile: VaultFile) {
         disposables.add(
             keyDataSource.dataSource
@@ -112,6 +147,7 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ formMediaFileList: List<FormMediaFile> ->
                     if (formMediaFileList.isEmpty()) {
+                        // Set confirmation based on the association with FormMediaFiles
                         mediaFileDeleteConfirmation = MediaFileDeleteConfirmation(vaultFile, false)
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
                     } else {
@@ -128,13 +164,18 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
                     }
                 }, { throwable: Throwable? ->
+                    // Handle any errors that occurred during data retrieval
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                     _error.postValue(R.string.gallery_toast_fail_deleting_files)
                 })
         )
     }
 
-
+    /**
+     * Retrieves a VaultFile based on its [id].
+     *
+     * @param id The ID of the VaultFile to retrieve.
+     */
     fun getMediaFile(id: String?) {
         disposables.add(
             Single
@@ -146,7 +187,6 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                 .subscribe(
                     { vaultFile: Single<VaultFile>? ->
                         if (vaultFile == null) {
-                            //view.onMediaFileError(NotFountException())
                             _error.postValue(R.string.default_error_msg)
                         } else {
                             _onMediaFileGot.postValue(vaultFile.blockingGet())
@@ -154,7 +194,6 @@ class SharedMediaFileViewModel(application: Application) : AndroidViewModel(appl
                     }
                 ) { throwable: Throwable? ->
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                    //  view.onMediaFileError(throwable)
                     _error.postValue(R.string.default_error_msg)
                 })
     }

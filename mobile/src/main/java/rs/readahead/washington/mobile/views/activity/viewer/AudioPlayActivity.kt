@@ -70,6 +70,9 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         initObservers()
     }
 
+    /**
+     * Initializes observers for the AudioPlayActivity.
+     */
     private fun initObservers() {
         with(viewModel) {
             error.observe(this@AudioPlayActivity) {
@@ -100,6 +103,12 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         }
     }
 
+    /**
+     * Initializes the media file for the AudioPlayActivity.
+     * Checks if the intent contains the media file directly or its ID.
+     * If the media file is available directly, it triggers the onMediaFileSuccess() callback.
+     * If only the media file ID is available, it calls the view model to fetch the media file.
+     */
     private fun initVaultMediaFile() {
         if (intent.hasExtra(Companion.PLAY_MEDIA_FILE)) {
             val vaultFile =
@@ -119,12 +128,18 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         }
     }
 
+    /**
+     * Initializes the audio player listener for the AudioPlayActivity.
+     * This listener provides callbacks for different audio player events such as onStart, onStop, and onProgress.
+     */
     private fun initAudioListener() {
         audioPlayerListener = object : AudioPlayer.Listener {
+            // Update the duration text when the audio playback starts
             override fun onStart(duration: Int) {
                 binding.content.duration.text = timeToString(duration.toLong())
             }
 
+            // Stop the player, update UI, and set the paused flag to true
             override fun onStop() {
                 stopPlayer()
                 paused = true
@@ -132,10 +147,12 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
                 showTimeRemaining(0)
             }
 
+            // Update the time remaining text during audio playback progress
             override fun onProgress(currentPosition: Int) {
                 showTimeRemaining(currentPosition)
             }
 
+            // Update the time remaining text with the current playback progress
             private fun showTimeRemaining(left: Int) {
                 binding.content.audioTime.text = timeToString(left.toLong())
             }
@@ -235,6 +252,9 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         hideProgressDialog()
     }
 
+    /**
+     * Sets up the toolbar for the video player activity.
+     */
     private fun setupToolbar() {
         toolbar = binding.toolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -362,9 +382,14 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     private fun onPlayerStop() {
         enablePlay()
     }
-
+    /**
+     * Disables the play functionality in the video player.
+     */
     private fun disablePlay() {
+        // Set the play button to display the pause icon.
         binding.content.playAudio?.setImageDrawable(this.resources.getDrawable(R.drawable.big_white_pause_24p,theme))
+
+        // Enable the forward and rewind buttons.
         enableButton(binding.content.fwdButton, binding.content.rwdButton)
         enableButton(binding.content.rwdButton, binding.content.rwdButton)
     }

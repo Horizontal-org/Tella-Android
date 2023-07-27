@@ -62,6 +62,10 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         openMedia()
     }
 
+    /**
+     * Initializes the VaultMediaFile activity by retrieving the VaultFile from the intent extras.
+     * Sets the title of the toolbar to the name of the VaultFile and checks if actions are disabled.
+     */
     private fun initVaultMediaFile() {
         if (intent.hasExtra(VIEW_PHOTO)) {
             val vaultFile = intent.getSerializableExtra(VIEW_PHOTO) as VaultFile?
@@ -79,12 +83,16 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         binding.toolbar.visibility = if (!isInfoShown) visibility else View.VISIBLE
     }
 
-
+    /**
+     * Initializes observers for LiveData in the ViewModel and sets up corresponding actions when the LiveData values change.
+     */
     private fun initObservers() {
         with(viewModel) {
+            // Observer for the error LiveData, displays the error message when it is triggered
             error.observe(this@PhotoViewerActivity) {
                 onShowError(it)
             }
+            // Observer for the onMediaFileExportStatus LiveData, handles different export status cases
             onMediaFileExportStatus.observe(this@PhotoViewerActivity) { status ->
                 when (status) {
                     MediaFileExportStatus.EXPORT_START -> onExportStarted()
@@ -92,13 +100,18 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     MediaFileExportStatus.EXPORT_END -> onExportEnded()
                 }
             }
+
+            // Observer for the onMediaFileDeleted LiveData, handles the action when a media file is deleted
             onMediaFileDeleted.observe(this@PhotoViewerActivity) { deleted ->
                 if (deleted) onMediaFileDeleted()
             }
+
+            // Observer for the onMediaFileRenamed LiveData, handles the action when a media file is renamed
             onMediaFileRenamed.observe(this@PhotoViewerActivity) { renamed ->
                 onMediaFileRename(renamed)
             }
 
+            // Observer for the onMediaFileDeleteConfirmed LiveData, handles the action when media file deletion is confirmed
             onMediaFileDeleteConfirmed.observe(this@PhotoViewerActivity) { mediaFileDeletedConfirmation ->
                 mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
@@ -110,6 +123,14 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
+    /**
+     * Handles the action when media file deletion is confirmed.
+     * If showConfirmDelete is true, shows a confirmation bottom sheet to confirm the deletion,
+     * otherwise, directly initiates the deletion of the media file.
+     *
+     * @param vaultFile The VaultFile to be deleted.
+     * @param showConfirmDelete Flag indicating whether to show a confirmation bottom sheet or not.
+     */
     private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
         if (showConfirmDelete) {
             BottomSheetUtils.showConfirmSheet(
@@ -131,12 +152,21 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
+    /**
+     * Displays a bottom message dialog to show the specified error message.
+     *
+     * @param errorResId The resource ID of the error message to be shown.
+     */
     private fun onShowError(errorResId: Int) {
         DialogUtils.showBottomMessage(
             this, getString(errorResId), true
         )
     }
 
+    /**
+     * Sets up the toolbar for the activity, including navigation icon, menu items, and click listeners.
+     * If actions are not disabled, it inflates the menu with actions like metadata and more options.
+     */
     private fun setupToolbar() {
         toolbar = binding.toolbar
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
@@ -170,6 +200,12 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
+    /**
+     * Sets up the metadata menu item in the toolbar based on the visibility status.
+     * If actions are disabled, the method returns without doing anything.
+     * If the metadata is visible, it shows the menu item and sets a click listener to show the metadata.
+     * @param visible Boolean indicating whether the metadata menu item should be visible or not.
+     */
     private fun setupMetadataMenuItem(visible: Boolean) {
         if (actionsDisabled) {
             return
@@ -217,7 +253,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         binding.content.progressBar.visibility = View.GONE
     }
 
-    fun onMediaFileDeleted() {
+    private fun onMediaFileDeleted() {
         MyApplication.bus().post(MediaFileDeletedEvent())
         finish()
     }
@@ -239,6 +275,10 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         finish()
     }
 
+    /**
+     * Displays the image from the gallery using Glide library.
+     * @param vaultFile The VaultFile containing the image to be displayed.
+     */
     private fun showGalleryImage(vaultFile: VaultFile?) {
         val uri = MediaFileHandler.getEncryptedUri(this, vaultFile)
         Glide.with(this)
