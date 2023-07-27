@@ -12,8 +12,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
@@ -35,6 +35,7 @@ import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
 
+@AndroidEntryPoint
 class BlankFormsListFragment :
     BaseBindingFragment<FragmentBlankFormsListBinding>(FragmentBlankFormsListBinding::inflate),
     FormListInterface {
@@ -97,16 +98,14 @@ class BlankFormsListFragment :
                 startCreateFormControllerPresenter(it.form, it.formDef)
             }
         }
-        model.onCreateFormController.observe(viewLifecycleOwner) { form ->
-            form?.let {
-                if (Preferences.isAnonymousMode()) {
-                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+        model.onCreateFormController.observe(viewLifecycleOwner) {
+            if (Preferences.isAnonymousMode()) {
+                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+            } else {
+                if (!hasLocationPermissions(baseActivity)) {
+                    requestLocationPermissions()
                 } else {
-                    if (!hasLocationPermissions(baseActivity)) {
-                        requestLocationPermissions()
-                    } else {
-                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-                    }
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 }
             }
         }
@@ -135,8 +134,8 @@ class BlankFormsListFragment :
             }
         }
         model.onDownloadBlankFormDefSuccess.observe(
-            viewLifecycleOwner,
-            { form: CollectForm? -> updateForm(form!!) })
+            viewLifecycleOwner
+        ) { form: CollectForm? -> updateForm(form!!) }
         model.onDownloadBlankFormDefStart.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
@@ -166,8 +165,8 @@ class BlankFormsListFragment :
             }
         }
         model.onBlankFormDefRemoved.observe(
-            viewLifecycleOwner,
-            { updateFormViews() })
+            viewLifecycleOwner
+        ) { updateFormViews() }
         model.onUpdateBlankFormDefSuccess.observe(
             viewLifecycleOwner
         ) { (first, second): Pair<CollectForm?, FormDef?> ->
@@ -205,7 +204,7 @@ class BlankFormsListFragment :
         }
         model.onNoConnectionAvailable.observe(
             viewLifecycleOwner
-        ) { available: Boolean? ->
+        ) {
             if (!silentFormUpdates) {
                 DialogUtils.showBottomMessage(
                     activity,
@@ -320,10 +319,10 @@ class BlankFormsListFragment :
             alertDialog!!.dismiss()
             alertDialog = null
         }
-        if (activity != null) {
-            //model.showFab.postValue(true)
-            //showFab(true)
-        }
+        /*if (activity != null) {
+            model.showFab.postValue(true)
+            showFab(true)
+        }*/
     }
 
     private fun createCollectFormViews(forms: List<CollectForm>, listView: LinearLayout) {

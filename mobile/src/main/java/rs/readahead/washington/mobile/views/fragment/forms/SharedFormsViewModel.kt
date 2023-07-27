@@ -28,17 +28,16 @@ import rs.readahead.washington.mobile.odk.FormController
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedFormsViewModel @Inject constructor(val mApplication: Application) : AndroidViewModel(mApplication) {
-    var onCreateFormController = SingleLiveEvent<FormController?>()
+class SharedFormsViewModel @Inject constructor(private val mApplication: Application) : AndroidViewModel(mApplication) {
+    var onCreateFormController = SingleLiveEvent<FormController>()
     var onGetBlankFormDefSuccess = SingleLiveEvent<FormPair>()
     var onInstanceFormDefSuccess = SingleLiveEvent<CollectFormInstance>()
 
     private var _collectFormInstance = SingleLiveEvent<CollectFormInstance?>()
     val collectFormInstance: LiveData<CollectFormInstance?> get() = _collectFormInstance
-
     var onBlankFormsListResult = MutableLiveData<ListFormResult>()
-    var onError = SingleLiveEvent<Throwable>()
-    var onFormDefError = SingleLiveEvent<Throwable>()
+    var onError = SingleLiveEvent<Throwable?>()
+    var onFormDefError = SingleLiveEvent<Throwable?>()
     var showBlankFormRefreshLoading = SingleLiveEvent<Boolean>()
     var onNoConnectionAvailable = SingleLiveEvent<Boolean>()
     var onBlankFormDefRemoved = SingleLiveEvent<Boolean?>()
@@ -47,7 +46,7 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
     var onUpdateBlankFormDefSuccess = MutableLiveData<Pair<CollectForm, FormDef?>>()
     var onDownloadBlankFormDefSuccess = MutableLiveData<CollectForm?>()
     var onToggleFavoriteSuccess = MutableLiveData<CollectForm?>()
-    var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean?>()
+    var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean>()
     var onCountCollectServersEnded = MutableLiveData<Long>()
     var onUserCancel = SingleLiveEvent<Boolean>()
     var onFormCacheCleared = SingleLiveEvent<Boolean>()
@@ -55,7 +54,7 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
     var onSubmittedFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onOutboxFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
     var onDraftFormInstanceListSuccess = MutableLiveData<List<CollectFormInstance>>()
-    var onFormInstanceListError = SingleLiveEvent<Throwable>()
+    var onFormInstanceListError = SingleLiveEvent<Throwable?>()
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
@@ -194,8 +193,8 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
                         form
                     )
                 }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            ) { throwable: Throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
             }
         )
@@ -212,8 +211,8 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
             }
             .subscribe(
                 { onFormInstanceDeleteSuccess.postValue(true) }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            ) { throwable: Throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
             }
         )
@@ -230,8 +229,8 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
                         num
                     )
                 }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            ) { throwable: Throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
             }
         )
@@ -435,7 +434,7 @@ class SharedFormsViewModel @Inject constructor(val mApplication: Application) : 
                 },
                 { throwable: Throwable? ->
                     onFormInstanceListError.postValue(
-                        throwable
+                        throwable!!
                     )
                 }
             )

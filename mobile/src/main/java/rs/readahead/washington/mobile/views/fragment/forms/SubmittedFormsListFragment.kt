@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -24,12 +25,13 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface
 import timber.log.Timber
 
+@AndroidEntryPoint
 class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsListBinding>(
     FragmentSubmittedFormsListBinding::inflate
 ),
     FormListInterface, ISavedFormsInterface {
 
-    private val model: SharedFormsViewModel by viewModels()
+    private val viewModel: SharedFormsViewModel by viewModels()
     private var adapter: CollectSubmittedFormInstanceRecycleViewAdapter? = null
 
     override fun getFormListType(): FormListInterface.Type {
@@ -53,15 +55,15 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     }
 
     private fun initObservers() {
-        model.onFormInstanceDeleteSuccess.observe(
+        viewModel.onFormInstanceDeleteSuccess.observe(
             viewLifecycleOwner
-        ) { success: Boolean? ->
+        ) { success: Boolean ->
             onFormInstanceDeleted(
-                success!!
+                success
             )
         }
 
-        model.onSubmittedFormInstanceListSuccess.observe(
+        viewModel.onSubmittedFormInstanceListSuccess.observe(
             viewLifecycleOwner
         ) { instances: List<CollectFormInstance> ->
             onFormInstanceListSuccess(
@@ -69,7 +71,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
             )
         }
 
-        model.onFormInstanceListError.observe(
+        viewModel.onFormInstanceListError.observe(
             viewLifecycleOwner
         ) { error: Throwable? ->
             onFormInstanceListError(
@@ -77,27 +79,25 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
             )
         }
 
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner) { instance ->
+        viewModel.onInstanceFormDefSuccess.observe(viewLifecycleOwner) { instance ->
             startCreateInstanceFormController(instance)
         }
 
-        model.onCreateFormController.observe(viewLifecycleOwner) { form ->
-            form?.let {
-                if (Preferences.isAnonymousMode()) {
-                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+        viewModel.onCreateFormController.observe(viewLifecycleOwner) {
+            if (Preferences.isAnonymousMode()) {
+                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+            } else {
+                if (!hasLocationPermissions(baseActivity)) {
+                    requestLocationPermissions()
                 } else {
-                    if (!hasLocationPermissions(baseActivity)) {
-                        requestLocationPermissions()
-                    } else {
-                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-                    }
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 }
             }
         }
     }
 
     private fun startCreateInstanceFormController(instance: CollectFormInstance) {
-        model.createFormController(instance)
+        viewModel.createFormController(instance)
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -156,7 +156,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
     }
 
     private fun listSubmittedForms() {
-        model.listSubmitFormInstances()
+        viewModel.listSubmitFormInstances()
     }
 
     override fun showFormsMenu(instance: CollectFormInstance) {
@@ -168,7 +168,7 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
             object : ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
-                        model.getInstanceFormDef(instance.id)
+                        viewModel.getInstanceFormDef(instance.id)
                         // MyApplication.bus().post(ShowFormInstanceEntryEvent(instance.id))
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
@@ -185,13 +185,13 @@ class SubmittedFormsListFragment : BaseBindingFragment<FragmentSubmittedFormsLis
 
     override fun showFormInstance(instance: CollectFormInstance?) {
         if (instance != null) {
-            model.getInstanceFormDef(instance.id)
+            viewModel.getInstanceFormDef(instance.id)
         }
     }
 
     override fun reSubmitForm(instance: CollectFormInstance?) {}
     fun deleteFormInstance(instanceId: Long) {
-        model.deleteFormInstance(instanceId)
+        viewModel.deleteFormInstance(instanceId)
     }
 
     companion object {

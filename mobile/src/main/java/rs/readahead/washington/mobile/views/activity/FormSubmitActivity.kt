@@ -9,8 +9,8 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.ActivityFormSubmitBinding
 import rs.readahead.washington.mobile.databinding.ContentFormSubmitBinding
@@ -26,8 +26,9 @@ import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 
+@AndroidEntryPoint
 class FormSubmitActivity : BaseLockActivity() {
-    var endView: CollectFormEndView? = null
+    private var endView: CollectFormEndView? = null
 
     private lateinit var instance: CollectFormInstance
     private lateinit var binding: ActivityFormSubmitBinding
@@ -42,16 +43,13 @@ class FormSubmitActivity : BaseLockActivity() {
         content = binding.content
 
         init()
-        initObservers()
 
-        setSupportActionBar(binding.toolbar)
-        val actionBar = supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById<View>(R.id.appbar).outlineProvider = null
-        } else {
-            findViewById<View>(R.id.appbar).bringToFront()
-        }
+        binding.appbar.configureAppBar()
+        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+             findViewById<View>(R.id.appbar).outlineProvider = null
+         } else {
+             findViewById<View>(R.id.appbar).bringToFront()
+         }*/
         if (intent.hasExtra(FORM_INSTANCE_ID_KEY)) {
             val instanceId = intent.getLongExtra(FORM_INSTANCE_ID_KEY, 0)
             viewModel.getFormInstance(instanceId)
@@ -124,6 +122,11 @@ class FormSubmitActivity : BaseLockActivity() {
             onCancelClick()
         }
         content.stopButton.setOnClickListener { view: View? -> onStopClick() }
+
+        initObservers()
+        setSupportActionBar(binding.toolbar)
+        val actionBar = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun initObservers() {
@@ -134,7 +137,7 @@ class FormSubmitActivity : BaseLockActivity() {
                 }
             }
             onError.observe(this@FormSubmitActivity) { throwable ->
-                onGetFormInstanceError(throwable)
+                onGetFormInstanceError()
             }
         }
 
@@ -177,19 +180,19 @@ class FormSubmitActivity : BaseLockActivity() {
         }
     }
 
-    fun onSubmitClick() {
+    private fun onSubmitClick() {
         submitModel.reSubmitFormInstanceGranular(instance)
         hideFormSubmitButton()
         hideFormCancelButton()
         showFormStopButton()
     }
 
-    fun onCancelClick() {
+    private fun onCancelClick() {
         onBackPressed()
         submitModel.userStopReSubmission()
     }
 
-    fun onStopClick() {
+    private fun onStopClick() {
         //onBackPressed();
         submitModel.userStopReSubmission()
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
@@ -271,7 +274,7 @@ class FormSubmitActivity : BaseLockActivity() {
         showFormEndView(false)
     }
 
-    private fun onGetFormInstanceError(throwable: Throwable) {
+    private fun onGetFormInstanceError() {
         Toast.makeText(this, R.string.collect_toast_fail_loading_form_instance, Toast.LENGTH_LONG)
             .show()
         finish()
@@ -334,6 +337,14 @@ class FormSubmitActivity : BaseLockActivity() {
 
     private fun enableScreenTimeout() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    private fun View.configureAppBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            outlineProvider = null
+        } else {
+            bringToFront()
+        }
     }
 
     companion object {

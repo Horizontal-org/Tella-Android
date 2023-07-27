@@ -83,72 +83,6 @@ class CollectMainFragment :
         binding.blankFormsText.movementMethod = LinkMovementMethod.getInstance()
         StringUtils.stripUnderlines(binding.blankFormsText)
 
-        /*disposables.wire(
-            ShowFormInstanceEntryEvent::class.java,
-            object : EventObserver<ShowFormInstanceEntryEvent?>() {
-                override fun onNext(event: ShowFormInstanceEntryEvent) {
-                    showFormInstanceEntry(event.instanceId)
-                }
-            })
-        disposables.wire(
-            CollectFormSubmittedEvent::class.java,
-            object : EventObserver<CollectFormSubmittedEvent?>() {
-                override fun onNext(event: CollectFormSubmittedEvent) {
-                    //getDraftFormsListFragment().listDraftForms()
-                    //getSubmittedFormsListFragment().listSubmittedForms()
-                    setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
-                    //setPagerToSubmittedFragment()
-                }
-            })
-        disposables.wire(
-            CollectFormSubmitStoppedEvent::class.java,
-            object : EventObserver<CollectFormSubmitStoppedEvent?>() {
-                override fun onNext(event: CollectFormSubmitStoppedEvent) {
-                    // getDraftFormsListFragment().listDraftForms()
-                    // getOutboxFormListFragment().listOutboxForms()
-                    showStoppedMessage()
-                    //setPagerToOutboxFragment()
-                    setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                }
-            })
-        disposables.wire(
-            CollectFormSubmissionErrorEvent::class.java,
-            object : EventObserver<CollectFormSubmissionErrorEvent?>() {
-                override fun onNext(event: CollectFormSubmissionErrorEvent) {
-                    //getDraftFormsListFragment().listDraftForms()
-                    //getOutboxFormListFragment().listOutboxForms()
-                    //setPagerToOutboxFragment()
-                    setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                }
-            })*/
-        /*disposables.wire(
-            CollectFormSavedEvent::class.java,
-            object : EventObserver<CollectFormSavedEvent?>() {
-                override fun onNext(event: CollectFormSavedEvent) {
-                    getDraftFormsListFragment().listDraftForms()
-                }
-            })
-        disposables.wire(
-            CollectFormInstanceDeletedEvent::class.java,
-            object : EventObserver<CollectFormInstanceDeletedEvent?>() {
-                override fun onNext(event: CollectFormInstanceDeletedEvent) {
-                    //onFormInstanceDeleteSuccess()
-                }
-            })
-        disposables.wire(
-             DeleteFormInstanceEvent::class.java,
-             object : EventObserver<DeleteFormInstanceEvent?>() {
-                 override fun onNext(event: DeleteFormInstanceEvent) {
-                     showDeleteInstanceDialog(event.instanceId, event.status)
-                 }
-             })
-        disposables.wire(
-            CancelPendingFormInstanceEvent::class.java,
-            object : EventObserver<CancelPendingFormInstanceEvent?>() {
-                override fun onNext(event: CancelPendingFormInstanceEvent) {
-                    showCancelPendingFormDialog(event.instanceId)
-                }
-            })*/
         disposables.wire(
             ReSubmitFormInstanceEvent::class.java,
             object : EventObserver<ReSubmitFormInstanceEvent?>() {
@@ -235,6 +169,7 @@ class CollectMainFragment :
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {

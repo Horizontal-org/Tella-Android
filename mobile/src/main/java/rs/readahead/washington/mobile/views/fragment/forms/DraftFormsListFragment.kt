@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -24,6 +25,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface
 import timber.log.Timber
 
+@AndroidEntryPoint
 class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding>(
     FragmentDraftFormsListBinding::inflate
 ),
@@ -68,28 +70,26 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
             )
         }
         model.onFormInstanceDeleteSuccess.observe(
-            viewLifecycleOwner,
-            { success: Boolean? ->
-                onFormInstanceDeleted(
-                    success!!
-                )
-            })
-        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner, { instance ->
+            viewLifecycleOwner
+        ) { success: Boolean? ->
+            onFormInstanceDeleted(
+                success!!
+            )
+        }
+        model.onInstanceFormDefSuccess.observe(viewLifecycleOwner) { instance ->
             startCreateInstanceFormController(instance)
-        })
-        model.onCreateFormController.observe(viewLifecycleOwner, { form ->
-            form?.let {
-                if (Preferences.isAnonymousMode()) {
-                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+        }
+        model.onCreateFormController.observe(viewLifecycleOwner) {
+            if (Preferences.isAnonymousMode()) {
+                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+            } else {
+                if (!hasLocationPermissions(baseActivity)) {
+                    requestLocationPermissions()
                 } else {
-                    if (!hasLocationPermissions(baseActivity)) {
-                        requestLocationPermissions()
-                    } else {
-                        startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
-                    }
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
                 }
             }
-        })
+        }
     }
 
     private fun startCreateInstanceFormController(instance: CollectFormInstance) {

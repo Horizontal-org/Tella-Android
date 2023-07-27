@@ -9,11 +9,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.Single
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
@@ -35,7 +33,7 @@ import rs.readahead.washington.mobile.util.C
 import javax.inject.Inject
 
 @HiltViewModel
-class SubmitFormsViewModel @Inject constructor(val mApplication: Application) :
+class SubmitFormsViewModel @Inject constructor(private val mApplication: Application) :
     AndroidViewModel(mApplication) {
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()

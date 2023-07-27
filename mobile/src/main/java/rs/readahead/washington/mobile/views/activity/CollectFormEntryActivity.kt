@@ -61,7 +61,8 @@ import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface, IFormParserContract.IView,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+    IFormParserContract.IView,
     IFormSaverContract.IView {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
