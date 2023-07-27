@@ -382,12 +382,18 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     private fun onPlayerStop() {
         enablePlay()
     }
+
     /**
      * Disables the play functionality in the video player.
      */
     private fun disablePlay() {
         // Set the play button to display the pause icon.
-        binding.content.playAudio?.setImageDrawable(this.resources.getDrawable(R.drawable.big_white_pause_24p,theme))
+        binding.content.playAudio?.setImageDrawable(
+            this.resources.getDrawable(
+                R.drawable.big_white_pause_24p,
+                theme
+            )
+        )
 
         // Enable the forward and rewind buttons.
         enableButton(binding.content.fwdButton, binding.content.rwdButton)
@@ -395,7 +401,12 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     private fun enablePlay() {
-        binding.content.playAudio?.setImageDrawable(this.resources.getDrawable(R.drawable.ic_play_arrow_white_24dp,theme))
+        binding.content.playAudio?.setImageDrawable(
+            this.resources.getDrawable(
+                R.drawable.ic_play_arrow_white_24dp,
+                theme
+            )
+        )
         disableButton(binding.content.fwdButton, binding.content.rwdButton)
         disableButton(binding.content.rwdButton, binding.content.rwdButton)
     }
