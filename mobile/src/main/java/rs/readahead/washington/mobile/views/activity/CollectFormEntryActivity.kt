@@ -74,7 +74,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formSaver: FormSaver? = null
     private var disposables: EventCompositeDisposable =
         MyApplication.bus().createCompositeDisposable()
-    private var presenter // todo: use separate presenter just for importing, extract from this one
+    private var presenter
             : QuestionAttachmentPresenter? = null
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
@@ -101,59 +101,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         initForm()
         startPresenter()
         initObservers()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.appbar.outlineProvider = null
-        } else {
-            binding.appbar.bringToFront()
-        }
-        binding.prevSection.setOnClickListener { v -> showPrevScreen() }
-        binding.nextSection.setOnClickListener { v -> showNextScreen() }
-        binding.submitButton.setOnClickListener { v ->
-            viewModel.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString())
-            hideToolbarIcon()
-            hideSubmitButtons()
-            showFormCancelButton()
-        }
-        binding.cancelButton.setOnClickListener { v ->
-            if (userStopPresenterSubmission()) {
-                hideFormCancelButton()
-            }
-        }
-        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
-
-        /*disposables.wire(
-            FormAttachmentsUpdatedEvent::class.java,
-            object : EventObserver<FormAttachmentsUpdatedEvent?>() {
-                override fun onNext(event: FormAttachmentsUpdatedEvent) {
-                    formAttachmentsChanged()
-                }
-            })
-         disposables.wire(
-             LocationPermissionRequiredEvent::class.java,
-             object : EventObserver<LocationPermissionRequiredEvent?>() {
-                 override fun onNext(event: LocationPermissionRequiredEvent) {
-                     //CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
-                 }
-             })
-         disposables.wire(
-             GPSProviderRequiredEvent::class.java,
-             object : EventObserver<GPSProviderRequiredEvent?>() {
-                 override fun onNext(event: GPSProviderRequiredEvent) {
-                     // CollectFormEntryActivityPermissionsDispatcher.startPermissionProcessWithPermissionCheck(CollectFormEntryActivity.this);
-                 }
-             })*/
-        disposables.wire(
-            MediaFileBinaryWidgetCleared::class.java,
-            object : EventObserver<MediaFileBinaryWidgetCleared?>() {
-                override fun onNext(event: MediaFileBinaryWidgetCleared) {
-                    if (formParser != null) {
-                        formParser!!.removeWidgetMediaFile(event.filename)
-                    }
-                    clearedFormIndex(event.formIndex)
-                }
-            })
+        initView()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.collect_form_entry_menu, menu)
@@ -206,6 +156,39 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         formSaver = FormSaver(this)
         formParser = FormParser(this)
         formParser!!.parseForm()
+    }
+
+    private fun initView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.appbar.outlineProvider = null
+        } else {
+            binding.appbar.bringToFront()
+        }
+        binding.prevSection.setOnClickListener { v -> showPrevScreen() }
+        binding.nextSection.setOnClickListener { v -> showNextScreen() }
+        binding.submitButton.setOnClickListener { v ->
+            viewModel.submitActiveFormInstance(formTitle + " " + Util.getDateTimeString())
+            hideToolbarIcon()
+            hideSubmitButtons()
+            showFormCancelButton()
+        }
+        binding.cancelButton.setOnClickListener { v ->
+            if (userStopPresenterSubmission()) {
+                hideFormCancelButton()
+            }
+        }
+        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
+
+        disposables.wire(
+            MediaFileBinaryWidgetCleared::class.java,
+            object : EventObserver<MediaFileBinaryWidgetCleared?>() {
+                override fun onNext(event: MediaFileBinaryWidgetCleared) {
+                    if (formParser != null) {
+                        formParser!!.removeWidgetMediaFile(event.filename)
+                    }
+                    clearedFormIndex(event.formIndex)
+                }
+            })
     }
 
     private fun initObservers() {
@@ -426,15 +409,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         super.onDestroy()
     }
 
-    /*
-    @Override
-    public void onCacheWordOpened() {
-        super.onCacheWordOpened();
-        formSaver = new FormSaver(this);
-        formSubmitter = new FormSubmitter(this);
-        formParser = new FormParser(this);
-        formParser.parseForm();
-    }*/
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (isPresenterSubmitting) {
             alertDialog = DialogsUtil.showExitWithSubmitDialog(this,
@@ -469,10 +444,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 getString(R.string.Collect_DialogAction_StopAndExit),
                 null
             ) { onDialogBackPressed() }
-            /*alertDialog = DialogsUtil.showExitOnFinalDialog(this,
-            (dialog, which) -> onBackPressedWithoutCheck(),
-            (dialog, which) -> {
-            });*/
         } else {
             onBackPressedWithoutCheck()
         }
@@ -484,10 +455,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onBackPressedWithoutCheck() {
-        /*if (draftAutoSaved) {
-            viewModel.listDraftFormInstances()
-        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
-        }*/
         super.onBackPressed()
     }
 
@@ -860,11 +827,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         binding.prevSection.visibility = View.VISIBLE
     }
 
-    /*
-        private fun setSubmitButtonText(offline: Boolean) {
-            //submitButton.setOffline(offline);
-        }
-    */
     private fun showFormEndButtons() {
         //setSubmitButtonText(Preferences.isOfflineMode())
         binding.submitButton.isEnabled = true
@@ -910,24 +872,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_form_exit_dialog_action_save_exit),
             getString(R.string.collect_form_exit_dialog_action_exit_anyway),
             { onSavePressed() }) { onExitPressed() }
-        /*
-            alertDialog = DialogsUtil.showMessageOKCancelWithTitle(this,
-                    message,
-                    getString(R.string.collect_form_exit_unsaved_dialog_title),
-                    getString(R.string.collect_form_exit_dialog_action_save_exit),
-                    getString(R.string.collect_form_exit_dialog_action_exit_anyway),
-                    (dialog, which) -> {
-                        if (formSaver != null) {
-                            formSaver.saveActiveFormInstanceOnExit();
-                            return;
-                        }
-                        dialog.dismiss();
-                        onBackPressedWithoutCheck();
-                    },
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                        onBackPressedWithoutCheck();
-                    });*/
     }
 
     private fun onExitPressed() {
@@ -950,7 +894,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun stopPresenterSubmission() {
         viewModel.stopSubmission()
-        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 

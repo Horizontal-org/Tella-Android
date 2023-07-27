@@ -40,8 +40,10 @@ class FormSubmitActivity : BaseLockActivity() {
         binding = ActivityFormSubmitBinding.inflate(layoutInflater)
         setContentView(binding.root)
         content = binding.content
+
         init()
-        //formReSubmitter = FormReSubmitter(this)
+        initObservers()
+
         setSupportActionBar(binding.toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -74,11 +76,6 @@ class FormSubmitActivity : BaseLockActivity() {
                     getString(R.string.Collect_DialogAction_StopAndExit),
                     null
                 ) { onDialogBackPressed() }
-
-                /*DialogsUtil.showExitWithSubmitDialog(this,
-                        (dialog, which) -> finish(),
-                        (dialog, which) -> {
-                        });*/
             } else {
                 finish()
             }
@@ -106,7 +103,6 @@ class FormSubmitActivity : BaseLockActivity() {
     }
 
     private fun onDialogBackPressed() {
-        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         super.onBackPressed()
         return
@@ -128,15 +124,18 @@ class FormSubmitActivity : BaseLockActivity() {
             onCancelClick()
         }
         content.stopButton.setOnClickListener { view: View? -> onStopClick() }
+    }
 
-        viewModel.collectFormInstance.observe(this) { instance ->
-            if (instance != null) {
-                onGetFormInstanceSuccess(instance)
+    private fun initObservers() {
+        with(viewModel) {
+            collectFormInstance.observe(this@FormSubmitActivity) { instance ->
+                if (instance != null) {
+                    onGetFormInstanceSuccess(instance)
+                }
             }
-        }
-
-        viewModel.onError.observe(this) { throwable ->
-            onGetFormInstanceError(throwable)
+            onError.observe(this@FormSubmitActivity) { throwable ->
+                onGetFormInstanceError(throwable)
+            }
         }
 
         with(submitModel) {
@@ -193,7 +192,6 @@ class FormSubmitActivity : BaseLockActivity() {
     fun onStopClick() {
         //onBackPressed();
         submitModel.userStopReSubmission()
-        //MyApplication.bus().post(CollectFormSubmitStoppedEvent())
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
@@ -257,7 +255,6 @@ class FormSubmitActivity : BaseLockActivity() {
     private fun formPartsResubmitEnded(instance: CollectFormInstance) {
         Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG)
             .show()
-        //MyApplication.bus().post(CollectFormSubmittedEvent())
         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
@@ -330,13 +327,6 @@ class FormSubmitActivity : BaseLockActivity() {
         content.submitButton.visibility = View.VISIBLE
         content.submitButton.isClickable = true
     }
-
-    /*  private fun stopFormReSubmitter() {
-           if (formReSubmitter != null) {
-               formReSubmitter!!.destroy()
-               formReSubmitter = null
-           }
-       }*/
 
     private fun disableScreenTimeout() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
