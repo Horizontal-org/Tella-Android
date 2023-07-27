@@ -42,8 +42,6 @@ import rs.readahead.washington.mobile.javarosa.FormSaver
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.javarosa.IFormParserContract
 import rs.readahead.washington.mobile.javarosa.IFormSaverContract
-import rs.readahead.washington.mobile.mvp.contract.IQuestionAttachmentPresenterContract
-import rs.readahead.washington.mobile.mvp.presenter.QuestionAttachmentPresenter
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil.showRationale
@@ -52,6 +50,7 @@ import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.MicFragment
 import rs.readahead.washington.mobile.views.fragment.MicFragment.Companion.newInstance
+import rs.readahead.washington.mobile.views.fragment.forms.QuestionAttachmentModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
@@ -62,8 +61,7 @@ import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
-    IQuestionAttachmentPresenterContract.IView, IFormParserContract.IView,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface, IFormParserContract.IView,
     IFormSaverContract.IView {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
@@ -74,8 +72,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formSaver: FormSaver? = null
     private var disposables: EventCompositeDisposable =
         MyApplication.bus().createCompositeDisposable()
-    private var presenter
-            : QuestionAttachmentPresenter? = null
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
@@ -84,8 +80,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
 
-    //private val model: SharedFormsViewModel by viewModels()
     private val viewModel: SubmitFormsViewModel by viewModels()
+    private val attachmentModel: QuestionAttachmentModel by viewModels()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +95,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         upNavigationIcon = binding.toolbar.navigationIcon
         setToolbarIcon()
         initForm()
-        startPresenter()
         initObservers()
         initView()
     }
@@ -173,7 +168,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             showFormCancelButton()
         }
         binding.cancelButton.setOnClickListener { v ->
-            if (userStopPresenterSubmission()) {
+            if (userStoppedSubmission()) {
                 hideFormCancelButton()
             }
         }
@@ -237,6 +232,54 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 submissionStoppedByUser()
             }
         }
+
+        with(attachmentModel) {
+            onGetFilesStart.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                onGetFilesStart()
+            }
+
+            onGetFilesEnd.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                onGetFilesEnd()
+            }
+
+            onGetFilesSuccess.observe(this@CollectFormEntryActivity) { vaultFiles: List<VaultFile?>? ->
+                vaultFiles?.let {
+                    onGetFilesSuccess(vaultFiles)
+                }
+            }
+
+            onGetFilesError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
+                throwable?.let {
+                    onGetFilesError(throwable)
+                }
+            }
+
+            onMediaFileAdded.observe(this@CollectFormEntryActivity) { vaultFile: VaultFile? ->
+                vaultFile?.let {
+                    onMediaFileAdded(vaultFile)
+                }
+            }
+
+            onImportStarted.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                onImportStarted()
+            }
+
+            onImportEnded.observe(this@CollectFormEntryActivity) { value: Boolean ->
+                onImportEnded()
+            }
+
+            onMediaFileImported.observe(this@CollectFormEntryActivity) { vaultFile: VaultFile? ->
+                vaultFile?.let {
+                    onMediaFileImported(vaultFile)
+                }
+            }
+
+            onImportError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
+                throwable?.let {
+                    onImportError(throwable)
+                }
+            }
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -271,14 +314,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             C.IMPORT_IMAGE -> {
                 val image = data!!.data
                 if (image != null) {
-                    presenter!!.importImage(image)
+                    attachmentModel.importImage(image)
                 }
             }
 
             C.IMPORT_VIDEO -> {
                 val video = data!!.data
                 if (video != null) {
-                    presenter!!.importVideo(video)
+                    attachmentModel.importVideo(video)
                 }
             }
         }
@@ -331,7 +374,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun hideMenuItems(menu: Menu): Boolean {
-        val submitting = isPresenterSubmitting
+        val submitting = isSubmitting
         for (i in 0 until menu.size()) {
             menu.getItem(i).isEnabled = !submitting
             menu.getItem(i).isVisible = !submitting
@@ -386,7 +429,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     override fun onPause() {
         super.onPause()
         closeAlertDialog()
-        if (isPresenterSubmitting) {
+        if (isSubmitting) {
             viewModel.stopSubmission()
             refreshFormEndView(false)
             hideFormCancelButton()
@@ -405,16 +448,15 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         disposables.dispose()
         destroyFormParser()
         destroyFormSaver()
-        destroyPresenter()
         super.onDestroy()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (isPresenterSubmitting) {
+        if (isSubmitting) {
             alertDialog = DialogsUtil.showExitWithSubmitDialog(this,
                 { dialog: DialogInterface?, which: Int ->
-                    stopPresenterSubmission()
+                    stopSubmission()
                     onBackPressedNotSubmitting(true)
                 }
             ) { dialog: DialogInterface?, which: Int -> }
@@ -637,11 +679,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    override fun onGetFilesStart() {}
-    override fun onGetFilesEnd() {}
-    override fun onGetFilesSuccess(files: List<VaultFile>) {}
-    override fun onGetFilesError(error: Throwable) {}
-    override fun onMediaFileAdded(vaultFile: VaultFile) {
+    private fun onGetFilesStart() {}
+    private fun onGetFilesEnd() {}
+    private fun onGetFilesSuccess(files: List<VaultFile?>) {}
+    private fun onGetFilesError(error: Throwable) {}
+    private fun onMediaFileAdded(vaultFile: VaultFile) {
         onActivityResult(
             C.MEDIA_FILE_ID,
             RESULT_OK,
@@ -649,26 +691,26 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         )
     }
 
-    override fun onMediaFileAddError(error: Throwable) {
+    private fun onMediaFileAddError(error: Throwable) {
         showToast(R.string.collect_toast_fail_attaching_file_to_form)
         Timber.d(error, javaClass.name)
     }
 
-    override fun onMediaFileImported(vaultFile: VaultFile) {
+    private fun onMediaFileImported(vaultFile: VaultFile) {
         onMediaFileAdded(vaultFile)
     }
 
-    override fun onImportError(error: Throwable) {
+    private fun onImportError(error: Throwable) {
         showToast(R.string.gallery_toast_fail_importing_file)
         Timber.d(error, javaClass.name)
     }
 
-    override fun onImportStarted() {
+    private fun onImportStarted() {
         progressDialog =
             DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting))
     }
 
-    override fun onImportEnded() {
+    private fun onImportEnded() {
         hideProgressDialog()
         showToast(R.string.gallery_toast_file_encrypted)
     }
@@ -796,13 +838,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    /* private fun destroyFormSubmitter() {
-         if (formSubmitter != null) {
-             formSubmitter!!.destroy()
-             formSubmitter = null
-         }
-     }*/
-
     private fun destroyFormParser() {
         if (formParser != null) {
             formParser!!.destroy()
@@ -889,28 +924,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         return
     }
 
-    private val isPresenterSubmitting: Boolean
+    private val isSubmitting: Boolean
         get() = viewModel.isSubmitting()
 
-    private fun stopPresenterSubmission() {
+    private fun stopSubmission() {
         viewModel.stopSubmission()
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
-    private fun userStopPresenterSubmission(): Boolean {
+    private fun userStoppedSubmission(): Boolean {
         viewModel.userStopSubmission()
         return true
-    }
-
-    private fun startPresenter() {
-        presenter = QuestionAttachmentPresenter(this)
-    }
-
-    private fun destroyPresenter() {
-        if (presenter != null) {
-            presenter!!.destroy()
-            presenter = null
-        }
     }
 
     private fun hideProgressDialog() {
