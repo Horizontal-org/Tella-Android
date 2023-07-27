@@ -32,24 +32,18 @@ class FormSubmitActivity : BaseLockActivity() {
 
     private lateinit var instance: CollectFormInstance
     private lateinit var binding: ActivityFormSubmitBinding
-    private lateinit var content: ContentFormSubmitBinding
+    private val content: ContentFormSubmitBinding by lazy { binding.content }
     private val viewModel: SharedFormsViewModel by viewModels()
     private val submitModel: SubmitFormsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityFormSubmitBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        content = binding.content
 
         init()
 
         binding.appbar.configureAppBar()
-        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-             findViewById<View>(R.id.appbar).outlineProvider = null
-         } else {
-             findViewById<View>(R.id.appbar).bringToFront()
-         }*/
+
         if (intent.hasExtra(FORM_INSTANCE_ID_KEY)) {
             val instanceId = intent.getLongExtra(FORM_INSTANCE_ID_KEY, 0)
             viewModel.getFormInstance(instanceId)
