@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -31,6 +32,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
     private var handlingVaultFile: VaultFile? = null
     private var audioPlayer: AudioPlayer? = null

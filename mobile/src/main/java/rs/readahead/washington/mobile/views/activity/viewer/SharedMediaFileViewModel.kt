@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,12 +16,18 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.database.DataSource
+import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import java.util.concurrent.Callable
+import javax.inject.Inject
 
-class SharedMediaFileViewModel(application: Application) : AndroidViewModel(application) {
-    private val keyDataSource = MyApplication.getKeyDataSource()
+
+@HiltViewModel
+class SharedMediaFileViewModel @Inject constructor(
+    application: Application,
+    private val keyDataSource: KeyDataSource
+) : AndroidViewModel(application) {
 
     private val disposables = CompositeDisposable()
     private var _error = MutableLiveData<Int>()

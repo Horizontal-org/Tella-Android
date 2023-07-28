@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.Target
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
@@ -30,7 +31,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.i
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
-
+@AndroidEntryPoint
 class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
     companion object {
         const val VIEW_PHOTO = "vp"
