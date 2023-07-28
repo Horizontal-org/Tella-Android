@@ -23,7 +23,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.mappers.toViewEntityT
 
 class SharedUwaziViewModel : ViewModel() {
 
-    var error = MutableLiveData<Throwable>()
+    var error = MutableLiveData<Throwable?>()
     private val _templates = MutableLiveData<List<Any>>()
     val templates: LiveData<List<Any>> get() = _templates
     private val _progress = MutableLiveData<Boolean>()
@@ -46,7 +46,9 @@ class SharedUwaziViewModel : ViewModel() {
     val outboxInstances: LiveData<List<Any>> get() = _outboxInstances
     private var _instanceDeleteD = SingleLiveEvent<Boolean>()
     val instanceDeleteD: LiveData<Boolean> get() = _instanceDeleteD
+
     var onInstanceSuccess = SingleLiveEvent<UwaziEntityInstance>()
+
     var onGetInstanceError = SingleLiveEvent<Throwable>()
 
     init {
@@ -190,8 +192,8 @@ class SharedUwaziViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
             .subscribe({ listTemplates() }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            ) { throwable: Throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
                 error.postValue(throwable)
             }
         )
@@ -270,8 +272,8 @@ class SharedUwaziViewModel : ViewModel() {
                 onInstanceSuccess.postValue(
                     uwaziEntityInstance?.let { maybeCloneInstance(it) }
                 )
-            }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+            }) { throwable: Throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
                 onGetInstanceError.postValue(throwable)
             }
         )

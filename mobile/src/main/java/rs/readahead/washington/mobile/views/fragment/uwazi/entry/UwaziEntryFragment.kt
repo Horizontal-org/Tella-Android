@@ -77,7 +77,7 @@ class UwaziEntryFragment :
     }
 
     private fun initView() {
-        binding?.apply {
+        binding.apply {
             toolbar.backClickListener = { onBackPressed() }
             toolbar.onRightClickListener = {
                 uwaziParser.setInstanceStatus(EntityStatus.DRAFT)
@@ -104,7 +104,7 @@ class UwaziEntryFragment :
                 parseUwaziTemplate(it)
             }
         }
-        binding!!.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
+        binding.toolbar.setStartTextTitle(uwaziParser.getTemplate()?.entityRow?.translatedName.toString())
     }
 
     private fun initObservers() {

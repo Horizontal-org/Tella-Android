@@ -1,24 +1,24 @@
-package rs.readahead.washington.mobile.views.fragment.uwazi.viewpager
+package rs.readahead.washington.mobile.views.fragment.forms.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import rs.readahead.washington.mobile.views.fragment.uwazi.*
+import rs.readahead.washington.mobile.views.fragment.forms.*
 
-const val TEMPLATES_LIST_PAGE_INDEX = 0
+const val BLANK_LIST_PAGE_INDEX = 0
 const val DRAFT_LIST_PAGE_INDEX = 1
 const val OUTBOX_LIST_PAGE_INDEX = 2
 const val SUBMITTED_LIST_PAGE_INDEX = 3
 
-class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class ViewPagerAdapter (fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     /**
      * Mapping of the ViewPager page indexes to their respective Fragments
      */
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
-        TEMPLATES_LIST_PAGE_INDEX to { TemplatesUwaziFragment() },
-        DRAFT_LIST_PAGE_INDEX to { DraftsUwaziFragment() },
-        OUTBOX_LIST_PAGE_INDEX to { OutboxUwaziFragment() },
-        SUBMITTED_LIST_PAGE_INDEX to { SubmittedUwaziFragment() }
+        BLANK_LIST_PAGE_INDEX to { BlankFormsListFragment() },
+        DRAFT_LIST_PAGE_INDEX to { DraftFormsListFragment() },
+        OUTBOX_LIST_PAGE_INDEX to { OutboxFormListFragment() },
+        SUBMITTED_LIST_PAGE_INDEX to { SubmittedFormsListFragment() }
     )
 
     override fun getItemCount() = tabFragmentsCreators.size
