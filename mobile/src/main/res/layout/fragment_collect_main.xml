@@ -8,12 +8,11 @@
     android:background="@color/space_cadet"
     android:fitsSystemWindows="true">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/forms_view_pager"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/space_cadet"
-        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.appbar.AppBarLayout
@@ -101,18 +100,6 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginHorizontal="@dimen/tella_main_vertical"
-        android:layout_marginBottom="@dimen/tella_main_vertical"
-        android:background="@color/dark_orange"
-        android:contentDescription="@string/action_refresh"
-        android:src="@drawable/ic_autorenew_white_24dp"
-        android:visibility="gone"
-        app:backgroundTint="@color/dark_orange" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
