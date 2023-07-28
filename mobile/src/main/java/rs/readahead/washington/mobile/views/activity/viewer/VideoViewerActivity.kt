@@ -31,7 +31,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
@@ -70,7 +70,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         setupToolbar()
         shouldAutoPlay = true
         clearResumePosition()
-        simpleExoPlayerView = findViewById(R.id.player_view)
+        simpleExoPlayerView = binding.playerView
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
         initObservers()

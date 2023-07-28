@@ -1,31 +1,21 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
-import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.hzontal.tella_vault.VaultFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
 import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.hasStoragePermissions
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.requestStoragePermissions
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 var withMetadata = false
@@ -42,39 +32,6 @@ lateinit var toolBar: Toolbar
  */
 object VaultActionsHelper {
 
-    // Initialize contracts for handling activity results
-    fun BaseActivity.initContracts() {
-        requestPermission =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                    // Permission granted, perform the necessary actions
-                    LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
-                    performFileSearch(
-                        chosenVaultFile, withMetadata, sharedViewModel, filePicker,
-                        requestPermission
-                    )
-                } else {
-                    // Permission denied, handle accordingly
-                }
-            }
-        // Contract for picking files
-        filePicker =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                    assert(result.data != null)
-                    // Export the chosen VaultFile to the selected file destination
-                    chosenVaultFile?.let {
-                        sharedViewModel.exportNewMediaFile(
-                            withMetadata,
-                            it,
-                            result.data?.data
-                        )
-                    }
-                }
-            }
-
-
-    }
 
     /**
      * Show the Vault actions dialog, which displays available actions for the given VaultFile.
@@ -131,7 +88,7 @@ object VaultActionsHelper {
                     getString(R.string.action_ok), this@showVaultActionsDialog,
                     chosenVaultFile?.name
                 ) { name: String? ->
-                    viewModel.renameVaultFile(chosenVaultFile?.id, name)
+                    name?.let { viewModel.run { renameVaultFile(chosenVaultFile.id, it) } }
                 }
 
             }
@@ -290,7 +247,7 @@ object VaultActionsHelper {
     }
 
     // File search logic here
-    private fun BaseActivity.performFileSearch(
+     fun BaseActivity.performFileSearch(
         vaultFile: VaultFile?,
         withMetadata: Boolean,
         viewModel: SharedMediaFileViewModel,
@@ -309,7 +266,13 @@ object VaultActionsHelper {
                 }
                 filePickerLauncher.launch(intent)
             } else {
-                vaultFile?.let { viewModel.exportNewMediaFile(withMetadata, it, null) }
+                vaultFile?.let {
+                    viewModel.exportNewMediaFile(
+                        withMetadata = withMetadata,
+                        vaultFile = it,
+                        path = null
+                    )
+                }
             }
         } else {
             requestStoragePermissions(requestPermissionLauncher)
@@ -317,34 +280,6 @@ object VaultActionsHelper {
     }
 
 
-    // Check if the app has storage permissions
-    private fun hasStoragePermissions(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
-        } else {
-            val result: Int = ContextCompat.checkSelfPermission(
-                context, Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-            val result1: Int = ContextCompat.checkSelfPermission(
-                context, Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
-        }
-    }
 
-
-    private fun BaseActivity.requestStoragePermissions(requestPermissionLauncher: ActivityResultLauncher<Intent>) {
-        this.maybeChangeTemporaryTimeout()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                .addCategory(Intent.CATEGORY_DEFAULT)
-                .setData(Uri.parse("package:${application.packageName}"))
-            requestPermissionLauncher.launch(intent)
-        } else {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
-            )
-        }
-    }
 
 }

@@ -18,6 +18,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus
 import rs.readahead.washington.mobile.domain.entity.collect.OpenRosaPartResponse
 import rs.readahead.washington.mobile.javarosa.FormUtils
+import rs.readahead.washington.mobile.util.configureAppBar
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.fragment.forms.SharedFormsViewModel
@@ -333,13 +334,6 @@ class FormSubmitActivity : BaseLockActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun View.configureAppBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            outlineProvider = null
-        } else {
-            bringToFront()
-        }
-    }
 
     companion object {
         const val FORM_INSTANCE_ID_KEY = "fid"

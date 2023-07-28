@@ -26,7 +26,7 @@ import rs.readahead.washington.mobile.media.AudioPlayer
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.ThreadUtil
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import java.util.*
@@ -59,7 +59,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
 
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayBinding.inflate(layoutInflater)
-        setContentView(binding.getRoot())
+        setContentView(binding.root)
         actionsDisabled = intent.hasExtra(VideoViewerActivity.NO_ACTIONS)
 
         initListeners()
@@ -125,7 +125,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         } else if (intent.hasExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)) {
             val id = intent.getStringExtra(Companion.PLAY_MEDIA_FILE_ID_KEY)
             if (id != null) {
-                this.viewModel!!.getMediaFile(id)
+                this.viewModel.getMediaFile(id)
             }
         }
     }
@@ -331,7 +331,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         }
     }
 
-    fun onMediaFileDeleted() {
+    private fun onMediaFileDeleted() {
         MyApplication.bus().post(MediaFileDeletedEvent())
         finish()
     }

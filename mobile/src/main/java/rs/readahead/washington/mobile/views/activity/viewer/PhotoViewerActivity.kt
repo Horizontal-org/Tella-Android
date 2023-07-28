@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.activity.viewer
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -26,8 +25,9 @@ import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPhotoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.util.configureAppBar
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
@@ -53,11 +53,8 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         initContracts()
         setupToolbar()
         initObservers()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.toolbar.outlineProvider = null
-        } else {
-            binding.toolbar.bringToFront()
-        }
+
+        binding.toolbar.configureAppBar()
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         initVaultMediaFile()
         openMedia()

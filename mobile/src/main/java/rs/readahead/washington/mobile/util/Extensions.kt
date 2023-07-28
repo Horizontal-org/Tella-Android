@@ -111,6 +111,14 @@ fun View.invisible() {
     visibility = View.INVISIBLE
 }
 
+fun View.configureAppBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        outlineProvider = null
+    } else {
+        bringToFront()
+    }
+}
+
 fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
     val drawable = ContextCompat.getDrawable(context, drawableRes)
     setImageDrawable(drawable)

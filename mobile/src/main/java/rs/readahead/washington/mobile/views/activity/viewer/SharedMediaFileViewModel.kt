@@ -104,7 +104,7 @@ class SharedMediaFileViewModel @Inject constructor(
      * @param name The new name for the VaultFile.
      */
 
-    fun renameVaultFile(id: String?, name: String?) {
+    fun renameVaultFile(id: String, name: String) {
         disposables.add(MyApplication.rxVault.rename(id, name)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -125,7 +125,7 @@ class SharedMediaFileViewModel @Inject constructor(
      *
      * @param vaultFile The VaultFile to be deleted.
      */
-    fun deleteMediaFiles(vaultFile: VaultFile?) {
+    fun deleteMediaFiles(vaultFile: VaultFile) {
         disposables.add(MyApplication.rxVault.delete(vaultFile)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -183,7 +183,7 @@ class SharedMediaFileViewModel @Inject constructor(
      *
      * @param id The ID of the VaultFile to retrieve.
      */
-    fun getMediaFile(id: String?) {
+    fun getMediaFile(id: String) {
         disposables.add(
             Single
                 .fromCallable {

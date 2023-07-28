@@ -30,6 +30,9 @@ import rs.readahead.washington.mobile.databinding.ActivityQuestionAttachmentBind
 import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter
 import rs.readahead.washington.mobile.views.custom.GalleryRecyclerView
 import rs.readahead.washington.mobile.views.fragment.forms.QuestionAttachmentModel
