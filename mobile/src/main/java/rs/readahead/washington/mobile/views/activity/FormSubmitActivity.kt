@@ -334,7 +334,6 @@ class FormSubmitActivity : BaseLockActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-
     companion object {
         const val FORM_INSTANCE_ID_KEY = "fid"
     }
