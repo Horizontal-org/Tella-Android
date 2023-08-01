@@ -38,7 +38,7 @@ import java.util.Locale
 class OpenRosaRepository : IOpenRosaRepository {
 
     /**
-     * Fetch list of forms from given server.
+     * Fetch list of forms from given [server].
      *
      * @param server CollectServer from which we fetch the forms.
      */
@@ -69,7 +69,7 @@ class OpenRosaRepository : IOpenRosaRepository {
     }
 
     /**
-     * Download specific FormDef from a given CollectServer.
+     * Download specific FormDef of a [form] from given [server].
      *
      * @param server CollectServer from which we download the FormDef.
      * @param form CollectForm for which we retrieve the FormDef.
@@ -90,6 +90,11 @@ class OpenRosaRepository : IOpenRosaRepository {
             }
     }
 
+    /**
+     * Retrieves the NegotiatedCollectServer specified [server]
+     *
+     * @param server Specified CollectServer
+     */
     override fun submitFormNegotiate(server: CollectServer): Single<NegotiatedCollectServer> {
         // todo: InstanceColumns.SUBMISSION_URI? url in form
         return OpenRosaService.newInstance(server.username, server.password)
@@ -112,6 +117,13 @@ class OpenRosaRepository : IOpenRosaRepository {
             }
     }
 
+    /**
+     * Submits [instance] to the ODK [server]
+     *
+     * @param context Context
+     * @param server NegotiatedCollectServer to which the CollectFormInstance is submitted.
+     * @param instance CollectFormInstance being submitted.
+     */
     override fun submitForm(
         context: Context,
         server: NegotiatedCollectServer,
@@ -164,6 +176,14 @@ class OpenRosaRepository : IOpenRosaRepository {
             }
     }
 
+    /**
+     * Submits part of the [instance] to the ODK [server]
+     *
+     * @param server NegotiatedCollectServer to which the CollectFormInstance is submitted.
+     * @param instance CollectFormInstance being submitted.
+     * @param attachment Optional FormMediaFile as a part of submission.
+     * @param progressListener Optional IProgressListener.
+     */
     override fun submitFormGranular(
         server: NegotiatedCollectServer,
         instance: CollectFormInstance,
