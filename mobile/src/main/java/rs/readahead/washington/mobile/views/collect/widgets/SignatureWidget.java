@@ -29,9 +29,9 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePr
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.FileUtil;
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
 import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
 import rs.readahead.washington.mobile.views.activity.SignatureActivity;
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity;
 
 
 /**
