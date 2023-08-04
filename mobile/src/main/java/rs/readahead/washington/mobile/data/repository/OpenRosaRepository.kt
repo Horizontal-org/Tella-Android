@@ -48,22 +48,20 @@ class OpenRosaRepository : IOpenRosaRepository {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { formsEntity: XFormsEntity ->
-                val forms: MutableList<CollectForm> =
-                    ArrayList()
                 val mapper = OpenRosaDataMapper()
-                for (form in formsEntity.xforms) {
-                    forms.add(CollectForm(server.id, mapper.transform(form)))
+                val forms = formsEntity.xforms.map { form ->
+                    CollectForm(server.id, mapper.transform(form))
                 }
-                val listFormResult = ListFormResult()
-                listFormResult.forms = forms
-                listFormResult
+                ListFormResult().apply { this.forms = forms }
             }
             .onErrorResumeNext { throwable: Throwable? ->
                 val listFormResult = ListFormResult()
-                val errorBundle = ErrorBundle(throwable)
-                errorBundle.serverId = server.id
-                errorBundle.serverName = server.name
-                listFormResult.errors = listOf<IErrorBundle>(errorBundle)
+                listFormResult.apply {
+                    val errorBundle = ErrorBundle(throwable)
+                    errorBundle.serverId = server.id
+                    errorBundle.serverName = server.name
+                    this.errors = listOf<IErrorBundle>(errorBundle)
+                }
                 Single.just(listFormResult)
             }
     }
@@ -129,29 +127,10 @@ class OpenRosaRepository : IOpenRosaRepository {
         server: NegotiatedCollectServer,
         instance: CollectFormInstance
     ): Single<OpenRosaResponse> {
-        val parts: MutableMap<String, RequestBody> = LinkedHashMap()
+        val parts: MutableMap<String, RequestBody>
         try {
-            val formDef = instance.formDef
-            val formInstance = formDef.instance
-            val serializer = XFormSerializingVisitor()
-            val payload = serializer.createSerializedPayload(
-                formInstance,
-                getSubmissionDataReference(formDef)
-            ) as ByteArrayPayload
-            parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, C.OPEN_ROSA_XML_PART_NAME + ".xml")] =
-                RequestBody.create(
-                    MediaType.parse("text/xml"),
-                    IOUtils.toByteArray(payload.payloadStream)
-                )
-            // add attachment parts
-            for (attachment in instance.widgetMediaFiles) {
-                if (!attachment.uploading || attachment.status == FormMediaFileStatus.SUBMITTED) {
-                    continue
-                }
-                val filename = attachment.name
-                parts[String.format(Locale.ROOT, "%s\"; filename=\"%s", filename, filename)] =
-                    MediaFileRequestBody(attachment)
-            }
+            parts = getSerializedFormData(instance.formDef)
+            parts += getMediaAttachmentsForSubmission(instance)
         } catch (e: IOException) {
             return Single.error(e)
         }
@@ -176,6 +155,39 @@ class OpenRosaRepository : IOpenRosaRepository {
             }
     }
 
+    private fun getSerializedFormData(formDef: FormDef): MutableMap<String, RequestBody> {
+        val parts: MutableMap<String, RequestBody> = LinkedHashMap()
+
+        val serializer = XFormSerializingVisitor()
+        val formInstance = formDef.instance
+        val payload = serializer.createSerializedPayload(
+            formInstance,
+            getSubmissionDataReference(formDef)
+        ) as ByteArrayPayload
+
+        parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, "${C.OPEN_ROSA_XML_PART_NAME}.xml")] =
+            RequestBody.create(
+                MediaType.parse("text/xml"),
+                IOUtils.toByteArray(payload.payloadStream)
+            )
+
+        return parts
+    }
+
+    private fun getMediaAttachmentsForSubmission(instance: CollectFormInstance): List<Pair<String, RequestBody>> {
+        return instance.widgetMediaFiles
+            .filter { attachment -> attachment.uploading && attachment.status != FormMediaFileStatus.SUBMITTED }
+            .map { attachment ->
+                val filename = attachment.name
+                String.format(
+                    Locale.ROOT,
+                    "%s\"; filename=\"%s",
+                    filename,
+                    filename
+                ) to MediaFileRequestBody(attachment)
+            }
+    }
+
     /**
      * Submits part of the [instance] to the ODK [server]
      *
@@ -183,6 +195,7 @@ class OpenRosaRepository : IOpenRosaRepository {
      * @param instance CollectFormInstance being submitted.
      * @param attachment Optional FormMediaFile as a part of submission.
      * @param progressListener Optional IProgressListener.
+     * @return Single<OpenRosaPartResponse> representing the server response for the specific part.
      */
     override fun submitFormGranular(
         server: NegotiatedCollectServer,
@@ -190,24 +203,10 @@ class OpenRosaRepository : IOpenRosaRepository {
         attachment: FormMediaFile?,
         progressListener: IProgressListener?
     ): Single<OpenRosaPartResponse> {
-        val parts: MutableMap<String, RequestBody> = LinkedHashMap()
+        val parts: MutableMap<String, RequestBody>
         try {
-            val formDef = instance.formDef
-            val formInstance = formDef.instance
-            val serializer = XFormSerializingVisitor()
-            val payload = serializer.createSerializedPayload(
-                formInstance,
-                getSubmissionDataReference(formDef)
-            ) as ByteArrayPayload
-            parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, C.OPEN_ROSA_XML_PART_NAME + ".xml")] =
-                RequestBody.create(
-                    MediaType.parse("text/xml"),
-                    IOUtils.toByteArray(payload.payloadStream)
-                )
-            if (attachment != null) {
-                parts[getPartKey(attachment.partName, attachment.id)] =
-                    MediaFileRequestBody(attachment, progressListener)
-            }
+            parts = getSerializedFormData(instance.formDef)
+            parts += getSerializedFormData(instance.formDef, attachment, progressListener)
         } catch (e: IOException) {
             return Single.error(e)
         }
@@ -232,6 +231,33 @@ class OpenRosaRepository : IOpenRosaRepository {
                     exception
                 )
             }
+    }
+
+    private fun getSerializedFormData(
+        formDef: FormDef,
+        attachment: FormMediaFile?,
+        progressListener: IProgressListener?
+    ): Map<String, RequestBody> {
+        val parts: MutableMap<String, RequestBody> = LinkedHashMap()
+
+        val serializer = XFormSerializingVisitor()
+        val formInstance = formDef.instance
+        val payload = serializer.createSerializedPayload(
+            formInstance,
+            getSubmissionDataReference(formDef)
+        ) as ByteArrayPayload
+
+        parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, "${C.OPEN_ROSA_XML_PART_NAME}.xml")] =
+            RequestBody.create(
+                MediaType.parse("text/xml"),
+                IOUtils.toByteArray(payload.payloadStream)
+            )
+
+        attachment?.let {
+            parts[getPartKey(it.partName, it.id)] = MediaFileRequestBody(it, progressListener)
+        }
+
+        return parts
     }
 
     private fun getPartKey(partName: String, filename: String): String {
