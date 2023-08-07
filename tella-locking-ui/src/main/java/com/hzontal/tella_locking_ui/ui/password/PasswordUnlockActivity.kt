@@ -9,6 +9,7 @@ import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
@@ -21,10 +22,19 @@ class PasswordUnlockActivity : BasePasswordActivity() {
 
 
     private lateinit var backBtn: ImageView
+    private var mNumFailedAttempts = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+
+        mNumFailedAttempts =
+            savedInstanceState?.getInt(ConfirmPatternActivity.KEY_NUM_FAILED_ATTEMPTS) ?: 0
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ConfirmPatternActivity.KEY_NUM_FAILED_ATTEMPTS, mNumFailedAttempts)
     }
 
     private fun initView() {
@@ -46,45 +56,86 @@ class PasswordUnlockActivity : BasePasswordActivity() {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
-                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
+                passwordMsgTextView.text =
+                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
+                passwordEditText.hint =
+                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPassword)
             }
+
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                passwordMsgTextView.text = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
-                passwordEditText.hint = getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
+                passwordMsgTextView.text =
+                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
+                passwordEditText.hint =
+                    getString(R.string.LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage)
             }
+
             else -> {
                 passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
                 passwordEditText.hint = getString(R.string.UnlockPassword_Message_EnterPassword)
                 passwordEditText.onChange {
-                    passwordMsgTextView.text = getText(R.string.UnlockPassword_Message_EnterPassword)
+                    passwordMsgTextView.text =
+                        getText(R.string.UnlockPassword_Message_EnterPassword)
                 }
             }
         }
     }
 
     override fun onSuccessSetPassword(password: String) {
-        TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(password.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
-            override fun onReady(mainKey: MainKey) {
-                Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
-                TellaKeysUI.getMainKeyHolder().set(mainKey)
-                onSuccessfulUnlock()
-                finish()
-            }
+        TellaKeysUI.getMainKeyStore().load(
+            config.wrapper,
+            PBEKeySpec(password.toCharArray()),
+            object : MainKeyStore.IMainKeyLoadCallback {
+                override fun onReady(mainKey: MainKey) {
+                    Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
+                    TellaKeysUI.getMainKeyHolder().set(mainKey)
+                    onSuccessfulUnlock()
+                    finish()
+                }
 
-            override fun onError(throwable: Throwable) {
-                Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")
-                onFailureSetPassword(getString(R.string.LockPasswordSet_Message_Error_IncorrectPassword))
-                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
-            }
-        })
+                override fun onError(throwable: Throwable) {
+                    Timber.d(throwable, "*** MainKeyStore.UnlockRegistry.IUnlocker.onError")
+                    onFailureSetPassword(getString(R.string.LockPasswordSet_Message_Error_IncorrectPassword))
+                    TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
+                }
+            })
     }
 
     override fun onFailureSetPassword(error: String) {
-        passwordMsgTextView.text = error
-        passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
+        if (TellaKeysUI.getNumFailedAttempts() == 0L) {
+            passwordMsgTextView.text = error
+            passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
+        } else {
+            onWrongPattern()
+        }
     }
+
+    private fun onWrongPattern() {
+        ++mNumFailedAttempts
+
+        showErrorMessage()
+    }
+
+    private fun showErrorMessage() {
+        if (TellaKeysUI.getNumFailedAttempts() == 0L) return
+
+        val remainingAttempts: Long = TellaKeysUI.getNumFailedAttempts() - mNumFailedAttempts
+        val message: String = if (remainingAttempts > 1) {
+            getString(R.string.incorrect_password) + getString(
+                R.string.attempts_remaining_plural,
+                remainingAttempts
+            )
+        } else if (remainingAttempts == 1L) {
+            getString(R.string.incorrect_password) + getString(R.string.attempts_remaining_singular)
+        } else {
+            // Add code here to handle the deletion process
+            TellaKeysUI.getCredentialsCallback().onFailedAttempts(mNumFailedAttempts.toLong())
+            getString(R.string.incorrect_password) + getString(R.string.exceeded_max_attempts)
+        }
+        passwordMsgTextView.text = message
+    }
+
+
 }

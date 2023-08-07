@@ -15,6 +15,7 @@ import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 import javax.crypto.spec.PBEKeySpec
 
+
 private const val TAG = "PatternUnlockActivity"
 
 class PatternUnlockActivity : ConfirmPatternActivity() {
@@ -48,6 +49,30 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
         return isPatternCorrect
     }
 
+    override fun onWrongPattern() {
+        super.onWrongPattern()
+        showErrorMessage()
+    }
+
+    private fun showErrorMessage() {
+        if (TellaKeysUI.getNumFailedAttempts() == 0L) return
+
+        val remainingAttempts: Long = TellaKeysUI.getNumFailedAttempts() - mNumFailedAttempts
+        val message: String = if (remainingAttempts > 1) {
+            getString(R.string.incorrect_pattern) + getString(
+                R.string.attempts_remaining_plural,
+                remainingAttempts
+            )
+        } else if (remainingAttempts == 1L) {
+            getString(R.string.incorrect_pattern) + getString(R.string.attempts_remaining_singular)
+        } else {
+            // Add code here to handle the deletion process
+            TellaKeysUI.getCredentialsCallback().onFailedAttempts(mNumFailedAttempts.toLong())
+            getString(R.string.incorrect_pattern) + getString(R.string.exceeded_max_attempts)
+        }
+        mMessageText.text = message
+    }
+
     override fun onConfirmed() {
         super.onConfirmed()
         finish()
@@ -64,12 +89,15 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
                 backBtn.setOnClickListener { finish() }
                 mMessageText.text = getString(R.string.LockPatternSet_Settings_DrawCurrentPattern)
             }
+
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.isVisible = true
                 backBtn.setOnClickListener { finish() }
-                mMessageText.text = getString(R.string.LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage)
+                mMessageText.text =
+                    getString(R.string.LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage)
             }
+
             else -> {
             }
         }

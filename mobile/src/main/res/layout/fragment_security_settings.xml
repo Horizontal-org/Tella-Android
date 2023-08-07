@@ -109,6 +109,34 @@
                         android:textColor="@color/wa_white"
                         tools:ignore="RelativeOverlap" />
                 </RelativeLayout>
+
+                <View style="@style/SettingsMainShadowLine" />
+
+                <RelativeLayout
+                    android:id="@+id/delete_unlock_settings_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:visibility="visible"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/Settings_Delete_After_Failed_Unlock"
+                        android:textColor="@color/wa_white" />
+
+                    <TextView
+                        android:id="@+id/delete_unlock_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/Settings_Off"
+                        android:textColor="@color/wa_white"
+                        />
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout

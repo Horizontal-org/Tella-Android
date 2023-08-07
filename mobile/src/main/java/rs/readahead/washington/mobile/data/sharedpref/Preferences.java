@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
 
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -83,14 +85,18 @@ public class Preferences {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
     }
 
-    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+    public static boolean isShutterMute() {
+        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false);
+    }
 
     public static void setShutterMute(boolean value) {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
 
-    public static boolean isKeepExif() { return getBoolean(SharedPrefs.KEEP_EXIF, false); }
+    public static boolean isKeepExif() {
+        return getBoolean(SharedPrefs.KEEP_EXIF, false);
+    }
 
     public static void setKeepExif(boolean value) {
         setBoolean(SharedPrefs.KEEP_EXIF, value);
@@ -137,6 +143,7 @@ public class Preferences {
     public static void setCalculatorTheme(@NonNull String value) {
         setString(SharedPrefs.CALCULATOR_THEME, value);
     }
+
     @Nullable
     public static String getVideoResolution() {
         return getString(SharedPrefs.VIDEO_RESOLUTION, null);
@@ -275,6 +282,14 @@ public class Preferences {
         setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
+    public static void setFailedUnlockOption(Long option) {
+        setLong(FAILED_UNLOCK_OPTION, option);
+    }
+
+    public static Long getFailedUnlockOption() {
+        return getLong(FAILED_UNLOCK_OPTION, 0);
+    }
+
     public static boolean isTempTimeout() {
         return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
     }
@@ -382,15 +397,19 @@ public class Preferences {
         setTimeAcceptedImprovements(new Date().getTime());
     }
 
-    private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }
+    private static void setTimeAcceptedImprovements(Long value) {
+        setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
+    }
+
     public static Long getTimeAcceptedImprovements() {
         return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
     }
+
     public static boolean isTimeToShowReminderImprovements() {
-        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false ;
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false;
         Date currentDate = new Date();
         Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
-        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime() ;
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
     }
 
     private Preferences() {
