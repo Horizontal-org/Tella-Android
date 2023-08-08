@@ -117,17 +117,20 @@ class AttachmentsFragment :
                 }
                 true
             }
+
             R.id.action_share -> {
                 baseActivity.maybeChangeTemporaryTimeout {
                     shareVaultFiles(attachmentsAdapter.selectedMediaFiles, baseActivity)
                 }
                 return true
             }
+
             R.id.action_upload -> {
                 vaultFile = null
                 performFileSearch(true, vaultFile)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -199,7 +202,11 @@ class AttachmentsFragment :
             }
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
-                showToast(changedPosition.toString())
+                DialogUtils.showBottomMessage(
+                    activity,
+                    changedPosition.toString(),
+                    false
+                )
                 handleBreadcrumbNavigation(newItem, changedPosition)
             }
         })
@@ -373,9 +380,11 @@ class AttachmentsFragment :
                 enableMoveTheme(false)
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check, baseActivity)
             }
+
             SelectMode.ONE_SELECTION -> {
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, baseActivity)
             }
+
             SelectMode.SELECT_ALL -> {
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_on, baseActivity)
                 attachmentsAdapter.selectAll()
@@ -390,11 +399,13 @@ class AttachmentsFragment :
                 selectMode = SelectMode.ONE_SELECTION
 
             }
+
             SelectMode.ONE_SELECTION -> {
                 isListCheckOn = true
                 selectMode = SelectMode.SELECT_ALL
 
             }
+
             SelectMode.SELECT_ALL -> {
                 isListCheckOn = false
                 selectMode = SelectMode.DESELECT_ALL
@@ -891,6 +902,7 @@ class AttachmentsFragment :
                     Sort.Direction.DESC -> getString(R.string.Vault_SortDateDesc_SheetAction)
                 }
             }
+
             Sort.Type.NAME -> {
                 when (sortDirection) {
                     Sort.Direction.ASC -> getString(R.string.Vault_SortNameAsc_SheetAction)
@@ -1024,12 +1036,15 @@ class AttachmentsFragment :
                 selectMode = SelectMode.SELECT_ALL
                 handleSelectMode()
             }
+
             breadcrumbsSize > 1 -> {
                 handleBreadcrumbs(breadcrumbsSize)
             }
+
             filterType == FilterType.PHOTO_VIDEO -> {
                 navigateToCameraAndFinish()
             }
+
             else -> {
                 nav().navigateUp()
             }

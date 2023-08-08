@@ -236,11 +236,19 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     fun onMediaExported() {
-        showToast(resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1))
+        DialogUtils.showBottomMessage(
+            this,
+            resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
+            false
+        )
     }
 
     fun onExportError(error: Throwable) {
-        showToast(R.string.gallery_toast_fail_exporting_to_device)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_exporting_to_device),
+            true
+        )
     }
 
     fun onExportStarted() {
@@ -337,7 +345,11 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     fun onMediaFileDeletionError(throwable: Throwable) {
-        showToast(R.string.gallery_toast_fail_deleting_files)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_deleting_files),
+            true
+        )
     }
 
     private fun onMediaFileRename(vaultFile: VaultFile) {

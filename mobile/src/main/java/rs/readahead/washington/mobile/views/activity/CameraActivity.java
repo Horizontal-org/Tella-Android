@@ -233,7 +233,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.gallery_toast_file_encrypted);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_file_encrypted),
+                false
+        );
     }
 
     @Override
@@ -257,7 +261,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.gallery_toast_fail_saving_file);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_fail_saving_file),
+                true
+        );
     }
 
     @Override

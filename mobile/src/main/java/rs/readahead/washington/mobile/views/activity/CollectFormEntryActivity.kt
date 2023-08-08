@@ -20,6 +20,7 @@ import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormIndex
 import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
@@ -538,7 +539,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun formParseError(error: Throwable) {
-        showToast(R.string.collect_toast_fail_parsing_form)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.collect_toast_fail_parsing_form),
+            true
+        )
     }
 
     override fun formSaveError(error: Throwable) {
@@ -651,7 +656,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 formIndex,
                 errorString
             )
-            showToast(getString(R.string.collect_form_toast_validation_generic_error))
+            DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.collect_form_toast_validation_generic_error),
+                true
+            )
         }
     }
 
@@ -693,7 +702,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onMediaFileAddError(error: Throwable) {
-        showToast(R.string.collect_toast_fail_attaching_file_to_form)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.collect_toast_fail_attaching_file_to_form),
+            true
+        )
         Timber.d(error, javaClass.name)
     }
 
@@ -702,7 +715,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onImportError(error: Throwable) {
-        showToast(R.string.gallery_toast_fail_importing_file)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_importing_file),
+            true
+        )
         Timber.d(error, javaClass.name)
     }
 
@@ -713,7 +730,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun onImportEnded() {
         hideProgressDialog()
-        showToast(R.string.gallery_toast_file_encrypted)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_file_encrypted),
+            false
+        )
     }
 
     override fun formSavedOnExit() {

@@ -21,6 +21,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
+import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
@@ -285,7 +286,11 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
     }
 
     private fun onMediaFileAddError(error: Throwable) {
-        showToast(R.string.collect_toast_fail_attaching_file_to_form)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.collect_toast_fail_attaching_file_to_form),
+            true
+        )
         Timber.d(error, javaClass.name)
     }
 
@@ -294,7 +299,11 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
     }
 
     private fun onImportError(error: Throwable) {
-        showToast(R.string.gallery_toast_fail_importing_file)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_importing_file),
+            true
+        )
         Timber.d(error, javaClass.name)
     }
 
@@ -305,7 +314,11 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
 
     private fun onImportEnded() {
         hideProgressDialog()
-        showToast(R.string.gallery_toast_file_encrypted)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_file_encrypted),
+            false
+        )
     }
 
     private fun getContext(): Context {

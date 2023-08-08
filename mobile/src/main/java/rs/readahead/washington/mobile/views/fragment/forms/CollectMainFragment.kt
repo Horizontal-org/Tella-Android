@@ -219,7 +219,11 @@ class CollectMainFragment :
 
         model.onFormDefError.observe(viewLifecycleOwner) { error ->
             val errorMessage = FormUtils.getFormDefErrorMessage(baseActivity, error)
-            baseActivity.showToast(errorMessage)
+            DialogUtils.showBottomMessage(
+                baseActivity,
+                errorMessage,
+                true
+            )
         }
 
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner) {
