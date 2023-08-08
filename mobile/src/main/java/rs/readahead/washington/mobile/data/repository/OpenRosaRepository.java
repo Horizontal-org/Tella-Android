@@ -142,7 +142,6 @@ public class OpenRosaRepository implements IOpenRosaRepository {
 
     @Override
     public Single<OpenRosaPartResponse> submitFormGranular(
-            @NonNull Context context,
             @NonNull NegotiatedCollectServer server,
             @NonNull CollectFormInstance instance,
             @Nullable FormMediaFile attachment,

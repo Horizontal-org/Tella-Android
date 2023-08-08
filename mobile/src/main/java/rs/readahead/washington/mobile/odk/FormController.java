@@ -101,9 +101,9 @@ public class FormController {
         }
     }
 
-    private FormEntryController formEntryController;
+    private final FormEntryController formEntryController;
     private FormIndex indexWaitingForData = null;
-    private CollectFormInstance collectFormInstance;
+    private final CollectFormInstance collectFormInstance;
 
     public FormController(FormEntryController fec, CollectFormInstance instance) {
         formEntryController = fec;

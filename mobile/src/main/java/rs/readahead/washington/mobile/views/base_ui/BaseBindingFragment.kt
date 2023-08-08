@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.viewbinding.ViewBinding
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
-import timber.log.Timber
-
+import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -22,41 +20,30 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
 
     protected lateinit var baseActivity: BaseActivity
     private var _binding: VB? = null
-    val binding get() = _binding
+    protected val binding: VB
+        get() = _binding ?: throw IllegalStateException("ViewBinding is not initialized.")
     private var rootView: View? = null
     var hasInitializedRootView = false
-
-    private fun getPersistentView(inflater: LayoutInflater, container: ViewGroup?): View? {
-        if (binding == null) {
-            // Inflate the layout for this fragment
-            _binding = inflate.invoke(inflater, container, false)
-            rootView = binding?.root
-        } else {
-            // Do not inflate the layout again.
-            // The returned View of onCreateView will be added into the fragment.
-            // However it is not allowed to be added twice even if the parent is same.
-            // So we must remove rootView from the existing parent view group
-            // (it will be added back).
-            (rootView?.parent as? ViewGroup)?.removeView(rootView)
-        }
-
-        return rootView
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return getPersistentView(inflater, container)
+        return _binding?.root ?: inflate.invoke(inflater, container, false).also {
+            _binding = it
+            rootView = it.root
+        }.root
     }
 
     override fun onAttach(context: Context) {
-        Timber.d("***** ${this.javaClass.name} onAttach")
-
         super.onAttach(context)
 
-        baseActivity = context as BaseActivity
+        if (context is BaseActivity) {
+            baseActivity = context
+        } else {
+            throw ClassCastException("$context must inherit from BaseActivity")
+        }
     }
 
     protected fun showToast(message: String) {
@@ -66,7 +53,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
     }
 
     protected open fun nav(): NavController {
-        return NavHostFragment.findNavController(this)
+        return NavControllerProvider(this).navController
     }
 
     protected fun showTooltip(v: View, text: String, gravity: Int) {
@@ -84,6 +71,11 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
 
     open fun back() {
         nav().navigateUp()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

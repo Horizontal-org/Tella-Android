@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
+import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.repository.ReportsRepositoryImp
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository
@@ -20,7 +21,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductsRepository(
+    fun provideReportsRepository(
         service: ReportsApiService,
         dataSource: DataSource,
         statusProvider: StatusProvider
@@ -36,7 +37,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideReportsRepository(): ITellaReportsRepository {
+    fun provideReportsDataSource(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
 
