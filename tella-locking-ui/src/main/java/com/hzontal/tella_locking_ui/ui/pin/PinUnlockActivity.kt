@@ -73,6 +73,8 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     override fun onFailureSetPin(error: String) {
+        pinTopText.requestFocus()
+        pinTopText.announceForAccessibility(error)
         pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
         pinTopText.text = error
     }

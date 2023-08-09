@@ -36,6 +36,8 @@
         android:id="@+id/pin_enterTV"
         style="@style/Unlock_White_Text_Bold"
         android:text="@string/LockPinSet_Message_EnterPin"
+        android:importantForAccessibility="yes"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/pin_msgTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
