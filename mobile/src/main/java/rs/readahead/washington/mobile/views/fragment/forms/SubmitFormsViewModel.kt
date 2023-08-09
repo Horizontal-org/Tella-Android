@@ -529,53 +529,10 @@ class SubmitFormsViewModel @Inject constructor(private val mApplication: Applica
         }
     }
 
-    /*  private fun setErrorSubmissionStatuses(
-          instance: CollectFormInstance,
-          startStatus: CollectFormInstanceStatus,
-          throwable: Throwable
-      ) {
-          val status: CollectFormInstanceStatus
-          status = if (startStatus == CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS) {
-              startStatus
-          } else if (throwable is NoConnectivityException) {
-              CollectFormInstanceStatus.SUBMISSION_PENDING
-          } else {
-              CollectFormInstanceStatus.SUBMISSION_ERROR
-          }
-          instance.status = status
-      }*/
-    /*
-        private fun setPartSuccessSubmissionStatuses(instance: CollectFormInstance, partName: String) {
-            var status = CollectFormInstanceStatus.SUBMITTED
-            if (C.OPEN_ROSA_XML_PART_NAME == partName) { // from xml data part is submitted
-                instance.formPartStatus = FormMediaFileStatus.SUBMITTED
-                if (!instance.widgetMediaFiles.isEmpty()) {
-                    status = CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
-                }
-            } else {
-                // update part status
-                for (mediaFile in instance.widgetMediaFiles) {
-                    if (mediaFile.partName == partName) {
-                        mediaFile.status = FormMediaFileStatus.SUBMITTED
-                        break
-                    }
-                }
-
-                // check instance status
-                for (mediaFile in instance.widgetMediaFiles) {
-                    if (mediaFile.status != FormMediaFileStatus.SUBMITTED) {
-                        status = CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
-                        break
-                    }
-                }
-            }
-            instance.status = status
-        }
-    */
     private fun createResubmissionPartBundles(
         instance: CollectFormInstance,
         server: NegotiatedCollectServer?
-    ): Observable<List<GranularResubmissionBundle?>?>? {
+    ): Observable<List<GranularResubmissionBundle?>?> {
         val bundles: MutableList<GranularResubmissionBundle> = java.util.ArrayList()
         if (instance.status != CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS &&
             instance.status != CollectFormInstanceStatus.SUBMITTED
