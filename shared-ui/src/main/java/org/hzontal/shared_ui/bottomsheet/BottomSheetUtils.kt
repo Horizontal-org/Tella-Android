@@ -90,13 +90,13 @@ object BottomSheetUtils {
     fun showRadioListSheet(
         fragmentManager: FragmentManager,
         context: Context,
-        currentTimeout: Long,
+        currentValue: Long,
         radioList: LinkedHashMap<Long, Int>,
         titleText: String?,
         descriptionText: String?,
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
-        consumer: LockOptionConsumer
+        consumer: Any
     ) {
 
         val customSheetFragment =
@@ -119,7 +119,7 @@ object BottomSheetUtils {
                             val radioButton: AppCompatRadioButton =
                                 radioGroup.findViewById(radioGroup.checkedRadioButtonId)
                             val option = radioButton.tag as Long
-                            consumer.accept(option)
+                            (consumer as LockOptionConsumer).accept(option)
                             customSheetFragment.dismiss()
                         }
 
@@ -135,7 +135,7 @@ object BottomSheetUtils {
                             button.tag = option.key
                             button.setText(option.value)
                             radioGroup.addView(button)
-                            if (option.key == currentTimeout) {
+                            if (option.key == currentValue) {
                                 button.isChecked = true
                             }
                         }

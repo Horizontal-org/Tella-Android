@@ -1357,27 +1357,27 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
-                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,null));
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));
                 updateTellaReportsFormInstance(currentInstance);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
                 reportInstance = updateTellaReportsFormInstance(newReportInstance);
             } else {
-                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance,mediaFile));
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, mediaFile));
                 currentInstance.setStatus(EntityStatus.SCHEDULED);
                 reportInstance = updateTellaReportsFormInstance(currentInstance);
             }
         } else {
             ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
-            newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance,mediaFile));
+            newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance, mediaFile));
             reportInstance = updateTellaReportsFormInstance(newReportInstance);
         }
         return reportInstance;
     }
 
-    private List<FormMediaFile> getReportFiles(ReportInstance instance,@Nullable FormMediaFile mediaFile){
+    private List<FormMediaFile> getReportFiles(ReportInstance instance, @Nullable FormMediaFile mediaFile) {
         List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
-        if (mediaFile != null){
+        if (mediaFile != null) {
             mediaFiles.add(mediaFile);
         }
 
@@ -2262,6 +2262,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
         deleteTable(D.T_UWAZI_SERVER);
+        deleteTable(D.T_REPORT_FORM_INSTANCE);
+        deleteTable(D.T_REPORT_FILES_UPLOAD);
+        deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
     }
 
     public void deleteForms() {

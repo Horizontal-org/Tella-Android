@@ -55,21 +55,22 @@ class DownloadedTemplatesFragment : BaseFragment() {
 
     private fun initObservers(){
         with(viewModel){
-            templates.observe(viewLifecycleOwner, { list ->
-                val result =    list.groupBy { it.serverId }.toMap()
+            templates.observe(viewLifecycleOwner) { list ->
+                val result = list.groupBy { it.serverId }.toMap()
                 templateContainerAdapter.setContainers(result)
-            })
+            }
 
-            progress.observe(viewLifecycleOwner, {
+            progress.observe(viewLifecycleOwner) {
                 binding.progressCircular.isVisible = it
-            })
+            }
 
-            showDeleteSheet.observe(viewLifecycleOwner, {
-                BottomSheetUtils.showConfirmDelete(baseActivity.supportFragmentManager,
-                it.second.entityRow.name,
-                getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
+            showDeleteSheet.observe(viewLifecycleOwner) {
+                BottomSheetUtils.showConfirmDelete(
+                    baseActivity.supportFragmentManager,
+                    it.second.entityRow.name,
+                    getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
                 ) { viewModel.confirmDelete(it.second) }
-            })
+            }
 
         }
     }

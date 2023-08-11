@@ -25,6 +25,7 @@ public class SharedPrefs {
     static final String PANIC_GEOLOCATION = "panic_geolocation";
     static final String DELETE_SERVER_SETTINGS = "erase_everything";
     static final String ERASE_GALLERY = "erase_gallery";
+    static final String FAILED_UNLOCK_OPTION = "failed_unlock_option";
     static final String ERASE_FORMS = "erase_forms";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";

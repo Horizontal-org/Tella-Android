@@ -17,8 +17,10 @@ public class TellaKeysUI {
     private static UnlockRegistry mUnlockRegistry;
     private static CredentialsCallback mCredentialsCallback;
 
+    private static long mNumFailedAttempts;
 
-    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder, UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback) {
+
+    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder, UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback, long numFailedAttempts) {
         if (initialized) {
             return;
         }
@@ -26,6 +28,7 @@ public class TellaKeysUI {
         mMainKeyHolder = mainKeyHolder;
         mUnlockRegistry = unlockRegistry;
         mCredentialsCallback = credentialsCallback;
+        mNumFailedAttempts = numFailedAttempts;
         initialized = true;
     }
 
@@ -43,5 +46,13 @@ public class TellaKeysUI {
 
     public static CredentialsCallback getCredentialsCallback() {
         return mCredentialsCallback;
+    }
+
+    public static long getNumFailedAttempts() {
+        return mNumFailedAttempts;
+    }
+
+    public static long setNumFailedAttempts(long numFailedAttempts) {
+        return mNumFailedAttempts = numFailedAttempts;
     }
 }
