@@ -167,9 +167,11 @@ class SecuritySettings : BaseFragment() {
     private fun setupCheckedChangeListener(
         switch: CheckBox, isChecked: Boolean, onCheckedChange: (Boolean) -> Unit
     ) {
-        switch.isChecked = isChecked
-        switch.setOnCheckedChangeListener { _, isChecked ->
-            onCheckedChange(isChecked)
+        switch.apply {
+            this.isChecked = isChecked
+            setOnCheckedChangeListener { _, isChecked ->
+                onCheckedChange(isChecked)
+            }
         }
     }
 
@@ -209,7 +211,7 @@ class SecuritySettings : BaseFragment() {
             BottomSheetUtils.showRadioListSheet(
                 requireActivity().supportFragmentManager,
                 baseActivity,
-                failedUnlockManager.getLockTimeout(),
+                failedUnlockManager.getOption(),
                 failedUnlockManager.getOptionsList(),
                 getString(R.string.Settings_Delete_After_Failed_Unlock),
                 getString(R.string.Settings_Delete_After_Failed_Unlock_Descreption),
