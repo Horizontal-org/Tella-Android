@@ -115,17 +115,17 @@
             app:exitAnim="@anim/fade_out" />
     </fragment>
 
-    <fragment
-        android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
-        android:label="@string/Home_BottomNav_Rec"
-        tools:layout="@layout/fragment_mic">
-        <action
-            android:id="@+id/action_micScreen_to_attachments_screen"
-            app:destination="@id/attachments_screen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out"/>
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/micScreen"-->
+<!--        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"-->
+<!--        android:label="@string/Home_BottomNav_Rec"-->
+<!--        tools:layout="@layout/fragment_mic">-->
+<!--        <action-->
+<!--            android:id="@+id/action_micScreen_to_attachments_screen"-->
+<!--            app:destination="@id/attachments_screen"-->
+<!--            app:enterAnim="@anim/slide_in_start"-->
+<!--            app:exitAnim="@anim/fade_out"/>-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/reportSendScreen"
