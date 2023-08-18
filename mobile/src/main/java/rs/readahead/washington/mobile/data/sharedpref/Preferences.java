@@ -2,6 +2,8 @@ package rs.readahead.washington.mobile.data.sharedpref;
 
 
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -288,6 +290,23 @@ public class Preferences {
 
     public static Long getFailedUnlockOption() {
         return getLong(FAILED_UNLOCK_OPTION, 0);
+    }
+
+
+    public static void setShowUnlockRemainingAttempts(boolean option) {
+        setBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
+    public static boolean isShowUnlockRemainingAttempts() {
+        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, false);
+    }
+
+    public static void setUnlockRemainingAttempts(long option) {
+        setLong(REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
+    public static long isUnlockRemainingAttempts() {
+        return getLong(REMAINING_UNLOCK_ATTEMPTS, 0);
     }
 
     public static boolean isTempTimeout() {

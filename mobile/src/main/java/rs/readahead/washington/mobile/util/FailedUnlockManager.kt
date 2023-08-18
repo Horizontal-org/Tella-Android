@@ -11,13 +11,18 @@ enum class FailedUnlockOption(val value: Long, val stringResId: Int) {
 }
 
 class FailedUnlockManager {
-    private val options: LinkedHashMap<Long, Int> = FailedUnlockOption.values().associate { it.value to it.stringResId } as LinkedHashMap
+    private val options: LinkedHashMap<Long, Int> =
+        FailedUnlockOption.values().associate { it.value to it.stringResId } as LinkedHashMap
 
     fun getOptionsList(): LinkedHashMap<Long, Int> = options
 
     fun getFailedUnlockOption(): Int {
         val selectedOption = Preferences.getFailedUnlockOption()
-        return FailedUnlockOption.values().find { it.value == selectedOption }?.stringResId ?: R.string.Settings_Off
+        return if (selectedOption == 0L) {
+            R.string.Settings_Off
+        } else {
+            R.string.Settings_On
+        }
     }
 
     fun setFailedUnlockOption(option: Long) {
@@ -27,4 +32,13 @@ class FailedUnlockManager {
     fun getOption(): Long {
         return Preferences.getFailedUnlockOption()
     }
+
+    fun isShowRemainingAttempts(): Boolean {
+        return Preferences.isShowUnlockRemainingAttempts()
+    }
+
+    fun setShowUnlockRemainingAttempts(option: Boolean) {
+        Preferences.setShowUnlockRemainingAttempts(option)
+    }
+
 }

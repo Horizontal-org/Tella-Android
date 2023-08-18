@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
 import com.hzontal.tella_locking_ui.ReturnActivity
@@ -19,6 +20,7 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.R
@@ -54,19 +56,11 @@ class SecuritySettings : BaseFragment() {
         val fragmentSelected = baseActivity as OnFragmentSelected?
         fragmentSelected?.showAppbar()
         fragmentSelected?.setToolbarLabel(R.string.settings_sec_app_bar)
-        setUpDeleteAfterUnlockText()
+        setUpSettingsVisibility()
         setUpLockTimeoutText()
-        binding.camouflageSettingsButton.setOnClickListener { goToUnlockingActivity(ReturnActivity.CAMOUFLAGE) }
-        if (cm.getLauncherName(baseActivity) != null) {
-            binding.camouflageSetting.text = cm.getLauncherName(baseActivity)
-        }
-
         binding.lockSettingsButton.setOnClickListener { checkCamouflageAndLockSetting() }
 
         binding.lockTimeoutSettingsButton.setOnClickListener { showLockTimeoutSettingDialog() }
-
-        binding.deleteUnlockSettingsButton.setOnClickListener { showDeleteAfterFailedUnlockDialog() }
-
 
         setupCheckedChangeListener(
             binding.deleteVault, Preferences.isDeleteGalleryEnabled()
@@ -112,6 +106,14 @@ class SecuritySettings : BaseFragment() {
         enableSecurityScreen.mSwitch.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 Preferences.setSecurityScreenEnabled(isChecked)
+            }
+        }
+
+        binding.unlockRemainingSwitch.mSwitch.isChecked =
+            failedUnlockManager.isShowRemainingAttempts()
+        binding.unlockRemainingSwitch.mSwitch.apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                failedUnlockManager.setShowUnlockRemainingAttempts(isChecked)
             }
         }
 
@@ -205,6 +207,13 @@ class SecuritySettings : BaseFragment() {
         val optionConsumer = object : BottomSheetUtils.LockOptionConsumer {
             override fun accept(option: Long) {
                 onFailedAttemptChoosen(option)
+                if (option > 0L) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(R.string.Settings_failed_unlock_message_template, option),
+                        false
+                    )
+                }
             }
         }
         baseActivity.let {
@@ -232,14 +241,17 @@ class SecuritySettings : BaseFragment() {
         when ((baseActivity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
             baseActivity
         )) {
-            UnlockRegistry.Method.TELLA_PIN -> binding.lockSetting.text =
-                getString(R.string.onboard_pin)
+            UnlockRegistry.Method.TELLA_PIN -> binding.lockSettingsButton.setLabelText(getString(R.string.onboard_pin))
 
-            UnlockRegistry.Method.TELLA_PASSWORD -> binding.lockSetting.text =
+            UnlockRegistry.Method.TELLA_PASSWORD -> binding.lockSettingsButton.setLabelText(
                 getString(R.string.onboard_password)
+            )
 
-            UnlockRegistry.Method.TELLA_PATTERN -> binding.lockSetting.text =
-                getString(R.string.onboard_pattern)
+            UnlockRegistry.Method.TELLA_PATTERN -> binding.lockSettingsButton.setLabelText(
+                getString(
+                    R.string.onboard_pattern
+                )
+            )
 
             else -> {
                 Timber.e("Unlock method not recognized")
@@ -248,17 +260,62 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTimeoutText() {
-        binding.lockTimeoutSetting.setText(lockTimeoutManager.selectedStringRes)
+        binding.lockSettingsButton.setLabelText(getString(lockTimeoutManager.selectedStringRes))
     }
 
     private fun onFailedAttemptChoosen(option: Long) {
         failedUnlockManager.setFailedUnlockOption(option)
         TellaKeysUI.setNumFailedAttempts(option)
-        setUpDeleteAfterUnlockText()
+        setUpSettingsVisibility()
     }
 
-    private fun setUpDeleteAfterUnlockText() {
-        binding.deleteUnlockSetting.setText(failedUnlockManager.getFailedUnlockOption())
+    private fun setUpSettingsVisibility() {
+        if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) {
+            with(binding) {
+                binding.unlockRemainingSwitch.isVisible = false
+                camouflageSettingsButton.setOnClickListener {
+                    goToUnlockingActivity(
+                        ReturnActivity.CAMOUFLAGE
+                    )
+                }
+                if (cm.getLauncherName(baseActivity) != null) {
+                    camouflageSettingsButton.setLabelText(cm.getLauncherName(baseActivity))
+                }
+                deleteUnlockSettingsButton.apply {
+                    isBottomLineVisible(failedUnlockManager.getOption() != 0L)
+                    setInfoText(getString(R.string.Settings_feature_not_available_camouflage))
+                    setLabelText(getString(R.string.Settings_Disabled))
+                    setLabelColor(R.color.wa_white_64)
+                    setOnClickListener(null)
+                }
+
+            }
+
+        } else {
+            with(binding) {
+                if (failedUnlockManager.getOption() == 0L) {
+                    camouflageSettingsButton.setOnClickListener {
+                        goToUnlockingActivity(
+                            ReturnActivity.CAMOUFLAGE
+                        )
+                    }
+                    camouflageSettingsButton.setLabelText(cm.getLauncherName(baseActivity))
+                    failedUnlockManager.setShowUnlockRemainingAttempts(false)
+                    unlockRemainingSwitch.mSwitch.isChecked = false
+                } else {
+                    camouflageSettingsButton.setOnClickListener(null)
+                    camouflageSettingsButton.setLabelText(getString(R.string.Settings_Off))
+                }
+                unlockRemainingSwitch.isVisible = failedUnlockManager.getOption() != 0L
+                deleteUnlockSettingsButton.apply {
+                    isBottomLineVisible(failedUnlockManager.getOption() != 0L)
+                    setLabelText(getString(failedUnlockManager.getFailedUnlockOption()))
+                    setOnClickListener { showDeleteAfterFailedUnlockDialog() }
+                    setLabelColor(R.color.wa_white)
+                }
+
+            }
+        }
     }
 
     private fun checkCamouflageAndLockSetting() {

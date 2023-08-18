@@ -6,7 +6,7 @@
         <attr name="bottomTextCenter" format="reference|string" />
         <attr name="bottomText" format="reference|string" />
         <attr name="startImg" format="reference" />
-        <attr name="state_checked" format="boolean"/>
+        <attr name="state_checked" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="HomeButton">
@@ -16,8 +16,8 @@
 
     <declare-styleable name="RoundButton">
         <attr name="text" format="reference|string" />
-        <attr name="check_state" format="boolean"/>
-        <attr name="tint_color" format="color|reference"/>
+        <attr name="check_state" format="boolean" />
+        <attr name="tint_color" format="color|reference" />
     </declare-styleable>
 
 
@@ -27,21 +27,23 @@
 
     <declare-styleable name="CenterMessageTextView">
         <attr name="textMessage" format="reference|string" />
-        <attr name="topImg" format="reference"/>
+        <attr name="topImg" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
         <attr name="explainText" format="reference|string" />
-        <attr name="is_checked" format="boolean"/>
-        <attr name="is_disabled" format="boolean"/>
+        <attr name="is_checked" format="boolean" />
+        <attr name="is_disabled" format="boolean" />
+        <attr name="isSwitchVisible" format="boolean" />
+        <attr name="labelText" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="CollapsableAppBar">
         <attr name="titleRes" format="reference|string" />
         <attr name="barHeightRes" format="reference" />
-        <attr name="contentScrimRes" format="reference"/>
-        <attr name="backgroundRes" format="reference"/>
+        <attr name="contentScrimRes" format="reference" />
+        <attr name="backgroundRes" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ToolbarComponent">
@@ -75,12 +77,12 @@
     </declare-styleable>
 
     <declare-styleable name="BreadcrumbsView">
-        <attr name="popupTheme"/>
-        <attr name="crumbsTextColor" format="color"/>
-        <attr name="crumbsSelectedTextColor" format="color"/>
-        <attr name="crumbsTextSize" format="dimension"/>
-        <attr name="crumbsPadding" format="dimension"/>
-        <attr name="homeIcon" format="reference"/>
+        <attr name="popupTheme" />
+        <attr name="crumbsTextColor" format="color" />
+        <attr name="crumbsSelectedTextColor" format="color" />
+        <attr name="crumbsTextSize" format="dimension" />
+        <attr name="crumbsPadding" format="dimension" />
+        <attr name="homeIcon" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="PinLockView">
@@ -107,5 +109,12 @@
             <enum name="fillWithAnimation" value="2" />
         </attr>
 
+    </declare-styleable>
+
+    <declare-styleable name="InfoSettingsView">
+        <attr name="settingsTitleText" format="reference|string" />
+        <attr name="settingsLabelText" format="reference|string" />
+        <attr name="settingsInfoText" format="reference|string" />
+        <attr name="isBottomLineVisible" format="boolean" />
     </declare-styleable>
 </resources>
