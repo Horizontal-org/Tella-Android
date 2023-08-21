@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import org.hzontal.tella.keys.MainKeyStore
@@ -114,28 +115,11 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     private fun onWrongPattern() {
-        ++mNumFailedAttempts
-
         showErrorMessage()
     }
 
     private fun showErrorMessage() {
-        if (TellaKeysUI.getNumFailedAttempts() == 0L) return
-
-        val remainingAttempts: Long = TellaKeysUI.getNumFailedAttempts() - mNumFailedAttempts
-        val message: String = if (remainingAttempts > 1) {
-            getString(R.string.incorrect_pin) + getString(
-                R.string.attempts_remaining_plural,
-                remainingAttempts
-            )
-        } else if (remainingAttempts == 1L) {
-            getString(R.string.incorrect_pin) + getString(R.string.attempts_remaining_singular)
-        } else {
-            // Add code here to handle the deletion process
-            TellaKeysUI.getCredentialsCallback().onFailedAttempts(mNumFailedAttempts.toLong())
-            getString(R.string.incorrect_pin) + getString(R.string.exceeded_max_attempts)
-        }
-        pinTopText.text = message
+        pinTopText.text = ErrorMessageUtil.generateErrorMessage(this,R.string.incorrect_pin,R.string.LockPinConfirm_Message_Error_IncorrectPin,TellaKeysUI.isShowRemainingAttempts())
     }
 
 

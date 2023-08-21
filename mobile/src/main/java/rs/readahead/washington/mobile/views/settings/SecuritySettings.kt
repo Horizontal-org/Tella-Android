@@ -113,6 +113,7 @@ class SecuritySettings : BaseFragment() {
             failedUnlockManager.isShowRemainingAttempts()
         binding.unlockRemainingSwitch.mSwitch.apply {
             setOnCheckedChangeListener { _, isChecked ->
+                TellaKeysUI.setIsShowRemainingAttempts(isChecked)
                 failedUnlockManager.setShowUnlockRemainingAttempts(isChecked)
             }
         }
@@ -266,6 +267,7 @@ class SecuritySettings : BaseFragment() {
     private fun onFailedAttemptChoosen(option: Long) {
         failedUnlockManager.setFailedUnlockOption(option)
         TellaKeysUI.setNumFailedAttempts(option)
+        TellaKeysUI.setRemainingAttempts(failedUnlockManager.getUnlockRemainingAttempts())
         setUpSettingsVisibility()
     }
 

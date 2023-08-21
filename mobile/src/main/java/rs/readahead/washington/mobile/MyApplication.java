@@ -215,7 +215,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
-        TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption());
+        TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         //initCleanInsights();
     }
 
@@ -315,9 +315,12 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onFailedAttempts(long num) {
-        if (Preferences.getFailedUnlockOption() == num) {
-            ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
-        }
+        ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+    }
+
+    @Override
+    public void saveRemainingAttempts(long num) {
+        Preferences.setUnlockRemainingAttempts(num);
     }
 
     @Override

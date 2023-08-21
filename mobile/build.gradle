@@ -151,7 +151,7 @@ dependencies {
     //optional - RxJava2 support
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+   // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
 
     testImplementation "junit:junit:$versions.junit"
 }

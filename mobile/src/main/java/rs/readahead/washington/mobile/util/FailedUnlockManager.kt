@@ -41,4 +41,12 @@ class FailedUnlockManager {
         Preferences.setShowUnlockRemainingAttempts(option)
     }
 
+    fun getUnlockRemainingAttempts(): Long {
+        return Preferences.getUnlockRemainingAttempts()
+    }
+    
+    fun setUnlockRemainingAttempts(option: Long) {
+        Preferences.setUnlockRemainingAttempts(option)
+    }
+
 }

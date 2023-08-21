@@ -2,17 +2,20 @@ package com.hzontal.tella_locking_ui.ui.pattern
 
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.TellaKeysUI.getMainKeyHolder
+import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.patternlock.PatternUtils
 import com.hzontal.tella_locking_ui.patternlock.PatternView
 import org.hzontal.tella.keys.MainKeyStore.IMainKeyLoadCallback
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
+import java.lang.Error
 import javax.crypto.spec.PBEKeySpec
 
 
@@ -55,23 +58,17 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
     }
 
     private fun showErrorMessage() {
-        if (TellaKeysUI.getNumFailedAttempts() == 0L) return
+        val numFailedAttempts = TellaKeysUI.getNumFailedAttempts()
+        val isShowRemainingAttempts = TellaKeysUI.isShowRemainingAttempts()
 
-        val remainingAttempts: Long = TellaKeysUI.getNumFailedAttempts() - mNumFailedAttempts
-        val message: String = if (remainingAttempts > 1) {
-            getString(R.string.incorrect_pattern) + getString(
-                R.string.attempts_remaining_plural,
-                remainingAttempts
-            )
-        } else if (remainingAttempts == 1L) {
-            getString(R.string.incorrect_pattern) + getString(R.string.attempts_remaining_singular)
+        if (numFailedAttempts == 0L ) {
+            mMessageText.text = getString(R.string.LockPatternConfirm_Message_WrongPattern)
         } else {
-            // Add code here to handle the deletion process
-            TellaKeysUI.getCredentialsCallback().onFailedAttempts(mNumFailedAttempts.toLong())
-            getString(R.string.incorrect_pattern) + getString(R.string.exceeded_max_attempts)
+
+           mMessageText.text = ErrorMessageUtil.generateErrorMessage(this,R.string.incorrect_pattern,R.string.LockPatternConfirm_Message_WrongPattern,isShowRemainingAttempts)
         }
-        mMessageText.text = message
     }
+
 
     override fun onConfirmed() {
         super.onConfirmed()

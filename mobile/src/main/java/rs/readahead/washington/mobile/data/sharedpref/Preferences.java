@@ -305,7 +305,7 @@ public class Preferences {
         setLong(REMAINING_UNLOCK_ATTEMPTS, option);
     }
 
-    public static long isUnlockRemainingAttempts() {
+    public static long getUnlockRemainingAttempts() {
         return getLong(REMAINING_UNLOCK_ATTEMPTS, 0);
     }
 
