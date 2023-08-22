@@ -273,52 +273,61 @@ class SecuritySettings : BaseFragment() {
 
     private fun setUpSettingsVisibility() {
         if (!CamouflageManager.getInstance().isDefaultLauncherActivityAlias) {
-            with(binding) {
-                binding.unlockRemainingSwitch.isVisible = false
-                camouflageSettingsButton.setOnClickListener {
-                    goToUnlockingActivity(
-                        ReturnActivity.CAMOUFLAGE
-                    )
-                }
-                if (cm.getLauncherName(baseActivity) != null) {
-                    camouflageSettingsButton.setLabelText(cm.getLauncherName(baseActivity))
-                }
-                deleteUnlockSettingsButton.apply {
-                    isBottomLineVisible(failedUnlockManager.getOption() != 0L)
-                    setInfoText(getString(R.string.Settings_feature_not_available_camouflage))
-                    setLabelText(getString(R.string.Settings_Disabled))
-                    setLabelColor(R.color.wa_white_64)
-                    setOnClickListener(null)
-                }
-
-            }
-
+            setUpNonDefaultLauncherVisibility()
         } else {
-            with(binding) {
-                if (failedUnlockManager.getOption() == 0L) {
-                    camouflageSettingsButton.setOnClickListener {
-                        goToUnlockingActivity(
-                            ReturnActivity.CAMOUFLAGE
-                        )
-                    }
-                    camouflageSettingsButton.setLabelText(cm.getLauncherName(baseActivity))
-                    failedUnlockManager.setShowUnlockRemainingAttempts(false)
-                    unlockRemainingSwitch.mSwitch.isChecked = false
-                } else {
-                    camouflageSettingsButton.setOnClickListener(null)
-                    camouflageSettingsButton.setLabelText(getString(R.string.Settings_Off))
-                }
-                unlockRemainingSwitch.isVisible = failedUnlockManager.getOption() != 0L
-                deleteUnlockSettingsButton.apply {
-                    isBottomLineVisible(failedUnlockManager.getOption() != 0L)
-                    setLabelText(getString(failedUnlockManager.getFailedUnlockOption()))
-                    setOnClickListener { showDeleteAfterFailedUnlockDialog() }
-                    setLabelColor(R.color.wa_white)
-                }
+            setUpDefaultLauncherVisibility()
+        }
+    }
 
+    private fun setUpNonDefaultLauncherVisibility() {
+        val launcherName = cm.getLauncherName(baseActivity)
+        with(binding) {
+            unlockRemainingSwitch.isVisible = false
+            camouflageSettingsButton.setOnClickListener {
+                goToUnlockingActivity(ReturnActivity.CAMOUFLAGE)
+            }
+            camouflageSettingsButton.setLabelText(launcherName)
+            deleteUnlockSettingsButton.apply {
+                isBottomLineVisible(failedUnlockManager.getOption() != 0L)
+                setInfoText(getString(R.string.Settings_feature_not_available_camouflage))
+                setLabelText(getString(R.string.Settings_Disabled))
+                setLabelColor(R.color.wa_white_64)
+                setOnClickListener(null)
             }
         }
     }
+
+    private fun setUpDefaultLauncherVisibility() {
+        with(binding) {
+            val failedUnlockOption = failedUnlockManager.getFailedUnlockOption()
+            if (failedUnlockManager.getOption() == 0L) {
+                setUpCamouflageButtonForDefaultLauncher()
+            } else {
+                camouflageSettingsButton.setOnClickListener(null)
+                camouflageSettingsButton.setLabelText(getString(R.string.Settings_Off))
+            }
+            unlockRemainingSwitch.isVisible = failedUnlockManager.getOption() != 0L
+            deleteUnlockSettingsButton.apply {
+                isBottomLineVisible(failedUnlockManager.getOption() != 0L)
+                setLabelText(getString(failedUnlockOption))
+                setOnClickListener { showDeleteAfterFailedUnlockDialog() }
+                setLabelColor(R.color.wa_white)
+            }
+        }
+    }
+
+    private fun setUpCamouflageButtonForDefaultLauncher() {
+        val launcherName = cm.getLauncherName(baseActivity)
+        with(binding) {
+            camouflageSettingsButton.setOnClickListener {
+                goToUnlockingActivity(ReturnActivity.CAMOUFLAGE)
+            }
+            camouflageSettingsButton.setLabelText(launcherName)
+            failedUnlockManager.setShowUnlockRemainingAttempts(false)
+            unlockRemainingSwitch.mSwitch.isChecked = false
+        }
+    }
+
 
     private fun checkCamouflageAndLockSetting() {
         if ((baseActivity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
