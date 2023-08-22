@@ -70,6 +70,7 @@ class PinUnlockActivity : BasePinActivity() {
                 override fun onReady(mainKey: MainKey) {
                     TellaKeysUI.getMainKeyHolder().set(mainKey)
                     onSuccessfulUnlock()
+                    ErrorMessageUtil.resetUnlockAttempts()
                     finish()
                 }
 

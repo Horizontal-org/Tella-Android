@@ -39,6 +39,7 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
                     Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                     getMainKeyHolder().set(mainKey);
                     onSuccessfulUnlock()
+                    ErrorMessageUtil.resetUnlockAttempts()
                     isPatternCorrect = true
                 }
 
