@@ -12,4 +12,6 @@ public interface CredentialsCallback {
     void onUpdateUnlocking();
 
     void onFailedAttempts(long num);
+
+    void saveRemainingAttempts(long num);
 }

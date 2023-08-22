@@ -18,9 +18,17 @@ public class TellaKeysUI {
     private static CredentialsCallback mCredentialsCallback;
 
     private static long mNumFailedAttempts;
+    private static long mRemainingAttempts;
 
+    private static boolean misShowRemainingAttempts;
 
-    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder, UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback, long numFailedAttempts) {
+    private TellaKeysUI() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder,
+                                  UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback,
+                                  long numFailedAttempts,long remainingAttempts, boolean isShowRemainingAttempts) {
         if (initialized) {
             return;
         }
@@ -29,6 +37,8 @@ public class TellaKeysUI {
         mUnlockRegistry = unlockRegistry;
         mCredentialsCallback = credentialsCallback;
         mNumFailedAttempts = numFailedAttempts;
+        mRemainingAttempts = remainingAttempts;
+        misShowRemainingAttempts = isShowRemainingAttempts;
         initialized = true;
     }
 
@@ -54,5 +64,21 @@ public class TellaKeysUI {
 
     public static long setNumFailedAttempts(long numFailedAttempts) {
         return mNumFailedAttempts = numFailedAttempts;
+    }
+
+    public static void setRemainingAttempts(long remainingAttempts) {
+        mRemainingAttempts = remainingAttempts;
+    }
+
+    public static long getRemainingAttempts() {
+        return mRemainingAttempts;
+    }
+
+    public static boolean isShowRemainingAttempts() {
+        return misShowRemainingAttempts;
+    }
+
+    public static void setIsShowRemainingAttempts(boolean isShowRemainingAttempts) {
+        TellaKeysUI.misShowRemainingAttempts = isShowRemainingAttempts;
     }
 }

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.password.base.BasePasswordActivity
@@ -45,8 +46,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
         passwordRightButton.isVisible = false
         passwordEditText.setOnKeyListener { _, keyCode, keyEvent ->
             if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                if (isHiLighted)
-                    onSuccessSetPassword(mPassword)
+                if (isHiLighted) onSuccessSetPassword(mPassword)
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
@@ -84,14 +84,14 @@ class PasswordUnlockActivity : BasePasswordActivity() {
     }
 
     override fun onSuccessSetPassword(password: String) {
-        TellaKeysUI.getMainKeyStore().load(
-            config.wrapper,
+        TellaKeysUI.getMainKeyStore().load(config.wrapper,
             PBEKeySpec(password.toCharArray()),
             object : MainKeyStore.IMainKeyLoadCallback {
                 override fun onReady(mainKey: MainKey) {
                     Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
                     TellaKeysUI.getMainKeyHolder().set(mainKey)
                     onSuccessfulUnlock()
+                    ErrorMessageUtil.resetUnlockAttempts()
                     finish()
                 }
 
@@ -104,7 +104,9 @@ class PasswordUnlockActivity : BasePasswordActivity() {
     }
 
     override fun onFailureSetPassword(error: String) {
-        if (TellaKeysUI.getNumFailedAttempts() == 0L) {
+        val numFailedAttempts = TellaKeysUI.getNumFailedAttempts()
+
+        if (numFailedAttempts == 0L ) {
             passwordMsgTextView.text = error
             passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
         } else {
@@ -113,29 +115,14 @@ class PasswordUnlockActivity : BasePasswordActivity() {
     }
 
     private fun onWrongPattern() {
-        ++mNumFailedAttempts
+        val error = ErrorMessageUtil.generateErrorMessage(
+            this,
+            R.string.incorrect_password,
+            R.string.LockPasswordSet_Message_Error_IncorrectPassword,
+            TellaKeysUI.isShowRemainingAttempts()
+        )
 
-        showErrorMessage()
+        passwordMsgTextView.text = error
     }
-
-    private fun showErrorMessage() {
-        if (TellaKeysUI.getNumFailedAttempts() == 0L) return
-
-        val remainingAttempts: Long = TellaKeysUI.getNumFailedAttempts() - mNumFailedAttempts
-        val message: String = if (remainingAttempts > 1) {
-            getString(R.string.incorrect_password) + getString(
-                R.string.attempts_remaining_plural,
-                remainingAttempts
-            )
-        } else if (remainingAttempts == 1L) {
-            getString(R.string.incorrect_password) + getString(R.string.attempts_remaining_singular)
-        } else {
-            // Add code here to handle the deletion process
-            TellaKeysUI.getCredentialsCallback().onFailedAttempts(mNumFailedAttempts.toLong())
-            getString(R.string.incorrect_password) + getString(R.string.exceeded_max_attempts)
-        }
-        passwordMsgTextView.text = message
-    }
-
 
 }

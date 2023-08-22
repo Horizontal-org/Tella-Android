@@ -688,6 +688,8 @@ button to add a new template.</string>
   <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
 
 Would you like to contribute?</string>
+  <string name="Settings_show_unlock_attempts_remaining" translatable="false">Show unlock attempts remaining</string>
+  <string name="Settings_unlock_screen_instructions" translatable="false">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decide how many failed unlock attempts are allowed before everything inside Tella is deleted.</string>
   <string name="Settings_Off_Do_Not_Delete">Off (do not delete data)</string>
@@ -695,6 +697,11 @@ Would you like to contribute?</string>
   <string name="Settings_Ten_Attempts">10 attempts</string>
   <string name="Settings_Twenty_Attempts">20 attempts</string>
   <string name="Settings_Off">Off</string>
+  <string name="Settings_On">On</string>
+  <string name="Settings_Disabled">Disabled</string>
+  <string name="Settings_remaining_attempts_before_deletion">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_failed_unlock_message_template" translatable="false">Your Tella data will be deleted after %1$d failed unlock attempts</string>
+  <string name="Settings_feature_not_available_camouflage">This feature is not available with the calculator camouflage. Change your camouflage to enable this feature.</string>
 
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
   <string name="settings.gen_share_data_action">Share data to improve Tella</string>
