@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
 
 
@@ -30,6 +31,7 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
     lateinit var mSwitch: SwitchCompat
 
     private var mChecked = false
+    private var isDisabledTheme = false
 
     init {
         LayoutInflater.from(context).inflate(R.layout.switch_with_text, this, true)
@@ -66,6 +68,8 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
                     typedArray.getBoolean(R.styleable.TellaSwitchWithMessage_is_checked, false)
                 mSwitch.isChecked = mChecked
 
+                isDisabledTheme =
+                    typedArray.getBoolean(R.styleable.TellaSwitchWithMessage_is_disabled, false)
             } finally {
                 typedArray.recycle()
             }
@@ -76,6 +80,7 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
     private fun bindView() {
         setTextAndVisibility(titleText, titleTextView)
         setTextAndVisibility(explainText, messageTextView)
+        isDisabledTheme(isDisabledTheme)
     }
 
     private fun setTextAndVisibility(text: Int, textView: TextView) {
@@ -90,6 +95,16 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
             visibility = View.VISIBLE
             text = context.getString(textResource)
             setOnClickListener { action() }
+        }
+    }
+
+    fun isDisabledTheme(isDisabled: Boolean) {
+        if (isDisabled) {
+            mSwitch.trackTintList =
+                ContextCompat.getColorStateList(context, R.color.switch_track_color_disabled)
+        } else {
+            mSwitch.trackTintList =
+                ContextCompat.getColorStateList(context, R.color.switch_track_color)
         }
     }
 

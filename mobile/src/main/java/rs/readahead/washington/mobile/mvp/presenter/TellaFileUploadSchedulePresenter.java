@@ -9,6 +9,8 @@ import androidx.work.WorkManager;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 
+import org.hzontal.tella.keys.key.LifecycleMainKey;
+
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -89,6 +91,7 @@ public class TellaFileUploadSchedulePresenter implements ITellaFileUploadSchedul
                             .setConstraints(constraints).build();
                     WorkManager.getInstance(view.getContext())
                             .enqueueUniqueWork("WorkerUploadReport2 ", ExistingWorkPolicy.KEEP, onetimeJob);
+                    MyApplication.getMainKeyHolder().setTimeout(LifecycleMainKey.NO_TIMEOUT);
                     view.onMediaFilesUploadScheduled();
                 }, throwable -> {
                     FirebaseCrashlytics.getInstance().recordException(throwable);

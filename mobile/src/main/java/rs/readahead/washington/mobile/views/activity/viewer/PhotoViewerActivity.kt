@@ -240,7 +240,11 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
     fun onMediaExported() {
-        showToast(resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1))
+        DialogUtils.showBottomMessage(
+            this,
+            resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
+            false
+        )
     }
 
     fun onExportStarted() {

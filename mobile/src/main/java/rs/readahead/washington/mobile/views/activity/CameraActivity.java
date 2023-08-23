@@ -40,6 +40,7 @@ import com.otaliastudios.cameraview.gesture.Gesture;
 import com.otaliastudios.cameraview.gesture.GestureAction;
 import com.otaliastudios.cameraview.size.SizeSelector;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -232,7 +233,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.gallery_toast_file_encrypted);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_file_encrypted),
+                false
+        );
     }
 
     @Override
@@ -256,7 +261,11 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.gallery_toast_fail_saving_file);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_fail_saving_file),
+                true
+        );
     }
 
     @Override
@@ -344,9 +353,19 @@ public class CameraActivity extends MetadataActivity implements ICameraPresenter
 
     @Override
     public void onMediaFilesUploadScheduled() {
-        if (intentMode != IntentMode.STAND) {
-            finish();
+        boolean isAutoUploadEnabled = Preferences.isAutoUploadEnabled();
+        boolean isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled();
+        String message;
+
+        if (isAutoUploadEnabled && isAutoDeleteEnabled) {
+            message = getString(R.string.Auto_Upload_Media_Imported_Report_And_Deleted);
+        } else if (isAutoUploadEnabled) {
+            message = getString(R.string.Auto_Upload_Media_Report);
+        } else {
+            return;
         }
+
+        DialogUtils.showBottomMessage(this, message, false);
     }
 
     @Override

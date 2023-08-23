@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
@@ -20,10 +21,12 @@ import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 @AndroidEntryPoint
 class ReportsSendFragment :
-    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
+    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate),
+    OnNavBckListener {
 
     private val viewModel by viewModels<ReportsViewModel>()
     private lateinit var endView: ReportsFormEndView
@@ -37,7 +40,7 @@ class ReportsSendFragment :
     }
 
     private fun initData() {
-       checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
+        checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
 
         with(viewModel) {
             reportProcess.observe(viewLifecycleOwner) { progress ->
@@ -60,21 +63,24 @@ class ReportsSendFragment :
                             viewModel.saveSubmitted(entity)
                             instanceProgress.postValue(null)
                         }
+
                         EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
                             instanceProgress.postValue(null)
-
                         }
+
                         EntityStatus.PAUSED -> {
                             pauseResumeLabel(entity)
                             viewModel.saveOutbox(entity)
                         }
+
                         EntityStatus.DELETED -> {
                             instanceProgress.postValue(null)
                             handleBackButton()
                         }
-                        else -> {
 
+                        else -> {
+                            this@ReportsSendFragment.reportInstance = entity
                         }
                     }
                 }
@@ -86,6 +92,7 @@ class ReportsSendFragment :
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
+
                     EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
@@ -104,6 +111,11 @@ class ReportsSendFragment :
         } else {
             nav().popBackStack(R.id.newReportScreen, true)
         }
+
+        reportInstance?.let { viewModel.submitReport(instance = it, true) }
+        DialogUtils.showBottomMessage(
+            baseActivity, getString(R.string.Report_Available_in_Outbox), false
+        )
     }
 
     private fun initView() {
@@ -123,7 +135,6 @@ class ReportsSendFragment :
             binding?.nextBtn?.hide()
         }
         highlightSubmitButton()
-        handleOnBackPressed()
     }
 
     private fun checkAndSubmitEntity(isOnline: Boolean) {
@@ -136,7 +147,6 @@ class ReportsSendFragment :
                 pauseResumeLabel(reportInstance)
             }
         }
-
     }
 
     private fun highlightSubmitButton() {
@@ -158,16 +168,6 @@ class ReportsSendFragment :
         }
     }
 
-    private fun handleOnBackPressed() {
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    viewModel.clearDisposable()
-                }
-            })
-    }
-
     private fun showFormEndView() {
         if (reportInstance == null) {
             return
@@ -181,9 +181,7 @@ class ReportsSendFragment :
                 reportFormInstance.description,
             )
             endView.setInstance(
-                reportFormInstance,
-                MyApplication.isConnectedToInternet(baseActivity),
-                false
+                reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), false
             )
             binding?.endViewContainer?.removeAllViews()
             binding?.endViewContainer?.addView(endView)
@@ -193,7 +191,13 @@ class ReportsSendFragment :
 
     private fun submitEntity() {
         reportInstance?.let { entity ->
-            viewModel.submitReport(entity)
+            viewModel.submitReport(entity, false)
         }
     }
+
+    override fun onBackPressed(): Boolean {
+        handleBackButton()
+        return true
+    }
+
 }

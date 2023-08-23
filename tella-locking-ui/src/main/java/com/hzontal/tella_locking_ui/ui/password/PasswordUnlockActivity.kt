@@ -84,6 +84,8 @@ class PasswordUnlockActivity : BasePasswordActivity() {
     }
 
     override fun onFailureSetPassword(error: String) {
+        passwordMsgTextView.requestFocus()
+        passwordMsgTextView.announceForAccessibility(error)
         passwordMsgTextView.text = error
         passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
     }

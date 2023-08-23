@@ -334,7 +334,7 @@ mode activation</string>
   <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
   <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
   <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
-  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged 
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
  with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
   <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
@@ -350,7 +350,7 @@ mode activation</string>
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
  use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Continue</string>
@@ -463,7 +463,7 @@ connecting to a server</string>
   <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates. </string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Show shortcuts to your favorite templates on Tella’s homescreen.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Favorite templates</string>
-  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+” 
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
 button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">You have no submitted entities.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">Your Outbox is currently empty. Entities
@@ -754,6 +754,14 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Setting_Reports_Auto_Report_Description">Whenever you take a photo/video/audio
 recording in Tella, a report will automatically be
 created with the file and uploaded to this project.</string>
+  <string name="Auto_Upload_Report">The file(s) you imported have been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Media_Report">The photo(s)/video you took has been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Recording_Report">The recording you made has been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Imported_Report_And_Deleted">The file(s) you imported have been uploaded as a report and automatically deleted.</string>
+  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"The photo/video you took has been uploaded as a report and automatically deleted."</string>
+  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"The recording you made has been uploaded as a report and automatically deleted."</string>
+  <string name="Report_Available_in_Outbox">Your report is available in the Outbox</string>
+
   <string name="Setting_Reports_Auto_Delete">Auto-delete</string>
   <string name="Setting_Reports_Auto_Delete_Description">Automatically delete files from your device once
 they are uploaded to this project as a report.</string>

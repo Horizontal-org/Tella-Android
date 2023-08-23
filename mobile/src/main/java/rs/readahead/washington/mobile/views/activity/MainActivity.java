@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +48,7 @@ import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
+import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
@@ -216,6 +219,10 @@ public class MainActivity extends MetadataActivity implements
                 ((UwaziEntryFragment) fragment).onBackPressed();
                 return true;
             }
+            if (fragment instanceof ReportsSendFragment) {
+                ((ReportsSendFragment) fragment).onBackPressed();
+                return true;
+            }
         }
         return false;
     }
@@ -228,7 +235,11 @@ public class MainActivity extends MetadataActivity implements
     private boolean checkIfShouldExit() {
         if (!mExit) {
             mExit = true;
-            showToast(R.string.home_toast_back_exit);
+            DialogUtils.showBottomMessage(
+                    this,
+                    getString(R.string.home_toast_back_exit),
+                    false
+            );
             handler.postDelayed(() -> mExit = false, 3 * 1000);
             return false;
         }
@@ -385,7 +396,9 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onOrientationChanged(int orientation) {
                 //if (!isInCameraMode) return;
-                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) return;
+                if (orientation == OrientationEventListener.ORIENTATION_UNKNOWN) {
+                    return;
+                }
                 // handle rotation for tablets;
             }
         };

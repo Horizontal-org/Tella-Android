@@ -263,15 +263,15 @@ class BlankFormsListFragment :
         // todo: make this multiply errors friendly
         if (!silentFormUpdates) {
             for (error in listFormResult.errors) {
-                Toast.makeText(
+                DialogUtils.showBottomMessage(
                     activity,
                     String.format(
                         "%s %s",
                         getString(R.string.collect_blank_toast_fail_updating_form_list),
                         error.serverName
                     ),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    true
+                )
                 Timber.d(error.exception, javaClass.name)
             }
         }
