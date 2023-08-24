@@ -34,26 +34,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:settingsLabelText="@string/settings.lang_select_default"
-                    app:settingsTitleText="@string/Settings_Action_SetLock"/>
+                    app:settingsTitleText="@string/Settings_Action_SetLock" />
 
                 <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/lock_timeout_settings_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:settingsLabelText="@string/settings.lang_select_default"
-                    app:settingsTitleText="@string/settings.select_lock_timeout"/>
+                    app:settingsTitleText="@string/settings.select_lock_timeout" />
 
                 <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/delete_unlock_settings_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:isBottomLineVisible="false"
                     app:settingsLabelText="@string/Settings_Off"
-                    app:settingsTitleText="@string/Settings_Delete_After_Failed_Unlock"/>
+                    app:settingsTitleText="@string/Settings_Delete_After_Failed_Unlock" />
 
                 <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                     android:id="@+id/unlock_remaining_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:explainText="@string/Settings_unlock_screen_instructions"
                     app:titleText="@string/Settings_show_unlock_attempts_remaining" />
             </LinearLayout>
@@ -75,7 +77,7 @@
                     android:layout_height="wrap_content"
                     app:isBottomLineVisible="false"
                     app:settingsLabelText="@string/settings.prot_select_camouflage"
-                    app:settingsTitleText="@string/settings.lang_select_default"/>
+                    app:settingsTitleText="@string/settings.lang_select_default" />
             </LinearLayout>
 
             <LinearLayout

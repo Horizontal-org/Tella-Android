@@ -298,7 +298,7 @@ public class Preferences {
     }
 
     public static boolean isShowUnlockRemainingAttempts() {
-        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, false);
+        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, true);
     }
 
     public static void setUnlockRemainingAttempts(long option) {

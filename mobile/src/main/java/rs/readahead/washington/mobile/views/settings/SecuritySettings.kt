@@ -261,7 +261,7 @@ class SecuritySettings : BaseFragment() {
     }
 
     private fun setUpLockTimeoutText() {
-        binding.lockSettingsButton.setLabelText(getString(lockTimeoutManager.selectedStringRes))
+        binding.lockTimeoutSettingsButton.setLabelText(getString(lockTimeoutManager.selectedStringRes))
     }
 
     private fun onFailedAttemptChoosen(option: Long) {
@@ -323,8 +323,6 @@ class SecuritySettings : BaseFragment() {
                 goToUnlockingActivity(ReturnActivity.CAMOUFLAGE)
             }
             camouflageSettingsButton.setLabelText(launcherName)
-            failedUnlockManager.setShowUnlockRemainingAttempts(false)
-            unlockRemainingSwitch.mSwitch.isChecked = false
         }
     }
 
