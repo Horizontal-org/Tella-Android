@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
@@ -114,4 +115,17 @@ fun View.invisible() {
 fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
     val drawable = ContextCompat.getDrawable(context, drawableRes)
     setImageDrawable(drawable)
+}
+
+fun FragmentManager.setupForAccessibility() {
+    addOnBackStackChangedListener {
+        val lastFragmentWithView = fragments.last { it.view != null }
+        for (fragment in fragments) {
+            if (fragment == lastFragmentWithView) {
+                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            } else {
+                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            }
+        }
+    }
 }

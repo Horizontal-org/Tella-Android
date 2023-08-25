@@ -12,10 +12,16 @@ import androidx.navigation.fragment.NavHostFragment
 import timber.log.Timber
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.setupForAccessibility
 
 abstract class BaseFragment : Fragment() {
 
     protected lateinit var baseActivity: BaseActivity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        childFragmentManager.setupForAccessibility()
+    }
 
     override fun onAttach(context: Context) {
         Timber.d("***** ${this.javaClass.name} onAttach")
