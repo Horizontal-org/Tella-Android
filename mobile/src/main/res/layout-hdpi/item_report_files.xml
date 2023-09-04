@@ -14,6 +14,7 @@
         android:layout_height="85dp"
         android:scaleType="centerCrop"
         android:background="@color/light_purple"
+        android:contentDescription="@string/Vault_Select_Title"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
