@@ -615,7 +615,7 @@
             android:launchMode="singleTop"
             android:theme="@style/PlayerTheme" />
         <activity
-            android:name=".views.activity.CameraActivity"
+            android:name=".views.activity.camera.CameraActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CameraTheme" />
