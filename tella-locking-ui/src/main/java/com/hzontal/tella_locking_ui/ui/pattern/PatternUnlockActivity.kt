@@ -35,8 +35,9 @@ class PatternUnlockActivity : ConfirmPatternActivity() {
 
         TellaKeysUI.getMainKeyStore()
             .load(config.wrapper, PBEKeySpec(passphrase), object : IMainKeyLoadCallback {
+
                 override fun onReady(mainKey: MainKey) {
-                    Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady")
+                    Timber.d("*** MainKeyStore.IMainKeyLoadCallback.onReady"+mainKey.key)
                     getMainKeyHolder().set(mainKey);
                     onSuccessfulUnlock()
                     ErrorMessageUtil.resetUnlockAttempts()

@@ -601,21 +601,21 @@
             android:label="@string/verification.help.info_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.PhotoViewerActivity"
+            android:name=".views.activity.viewer.PhotoViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/PhotoViewerTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.AudioPlayActivity"
+            android:name=".views.activity.viewer.AudioPlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/play.audio_app.bar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.VideoViewerActivity"
+            android:name=".views.activity.viewer.VideoViewerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:theme="@style/PlayerTheme" />
         <activity
-            android:name=".views.activity.CameraActivity"
+            android:name=".views.activity.camera.CameraActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CameraTheme" />

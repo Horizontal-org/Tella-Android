@@ -8,7 +8,7 @@ import rs.readahead.washington.mobile.databinding.FragmentVaultInfoBinding
 import rs.readahead.washington.mobile.util.DateUtil
 import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.VAULT_FILE_ARG
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 
 class VaultInfoFragment : BaseBindingFragment<FragmentVaultInfoBinding>(FragmentVaultInfoBinding::inflate) {
 

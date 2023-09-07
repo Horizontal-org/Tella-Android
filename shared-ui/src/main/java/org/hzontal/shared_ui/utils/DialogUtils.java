@@ -21,10 +21,13 @@ public class DialogUtils {
     private static void showBottomMessage(Activity context, String msg, @ColorRes int colorRes) {
         ViewGroup container = context.findViewById(android.R.id.content);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_bottom_message, container, false);
-
         TextView txv_msg = view.findViewById(R.id.txv_msg);
         txv_msg.setText(msg);
         container.addView(view);
+
+        view.requestFocus();
+        view.announceForAccessibility(msg);
+
         view.setAlpha(0f);
         view.animate().alphaBy(1f).setDuration(500).withEndAction(() -> {
             if (view.isAttachedToWindow()) {

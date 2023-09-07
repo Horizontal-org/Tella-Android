@@ -18,6 +18,8 @@ import java.io.ByteArrayOutputStream;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.ActivitySignatureBinding;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
@@ -120,7 +122,11 @@ public class SignatureActivity extends BaseLockActivity implements
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.gallery_toast_file_encrypted);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_file_encrypted),
+                false
+        );
     }
 
     @Override
@@ -131,7 +137,11 @@ public class SignatureActivity extends BaseLockActivity implements
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.collect_form_signature_toast_fail_saving);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.collect_form_signature_toast_fail_saving),
+                true
+        );
     }
 
     @Override
