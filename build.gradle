@@ -7,7 +7,7 @@ buildscript {
     ext.versions = [:]
     versions.compileSdk = 33
     versions.minSdk = 19
-    versions.targetSdk = 31
+    versions.targetSdk = 33
     versions.kotlin = '1.6.0'
     versions.sqlcipher = '3.5.9'
     versions.biometric = '1.0.1'

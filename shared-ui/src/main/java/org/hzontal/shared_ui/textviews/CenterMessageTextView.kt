@@ -69,5 +69,4 @@ class CenterMessageTextView @JvmOverloads constructor(
         binding.textviewDescription.text = text
     }
 
-
 }

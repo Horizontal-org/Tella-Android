@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -62,14 +63,13 @@ import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.CleanInsightUtils;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.TellaUpgrader;
-//import rs.readahead.washington.mobile.util.jobs.TellaJobCreator;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback , Configuration.Provider {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider {
     public static Vault vault;
     public static RxVault rxVault;
     private static TellaBus bus;
@@ -80,7 +80,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static KeyDataSource keyDataSource;
     private static CleanInsights cleanInsights;
     private final Long start = System.currentTimeMillis();
-   @Inject
+    @Inject
     public HiltWorkerFactory workerFactory;
     Vault.Config vaultConfig;
 
@@ -103,8 +103,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     public static boolean isConnectedToInternet(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) return false;
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
@@ -113,18 +112,14 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public static void exit(Context context) {
         Intent intent = new Intent(context, ExitActivity.class);
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                Intent.FLAG_ACTIVITY_NO_ANIMATION |
-                Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
         context.startActivity(intent);
     }
 
     private static void maybeExcludeIntentFromRecents(Intent intent) {
         if (Preferences.isSecretModeActive()) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS/* |
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS/* |
                     Intent.FLAG_ACTIVITY_MULTIPLE_TASK*/);
         }
     }
@@ -205,8 +200,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         MediaFileHandler.emptyTmp(this);
 
         /* evernote jobs */
-     //    JobManager.create(this).addJobCreator(new TellaJobCreator());
-       //  JobManager.instance().cancelAll(); // for testing, kill them all for now..
+        //    JobManager.create(this).addJobCreator(new TellaJobCreator());
+        //  JobManager.instance().cancelAll(); // for testing, kill them all for now..
 
         // Collect
         PropertyManager mgr = new PropertyManager();
@@ -220,7 +215,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
         mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
-        TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this);
+        TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         //initCleanInsights();
     }
 
@@ -241,23 +236,17 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         PBEKeyWrapper pbeKeyWrapper = new PBEKeyWrapper();
         AndroidKeyStoreWrapper androidKeyStoreWrapper = new AndroidKeyStoreWrapper();
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.DISABLED,
-                new UnlockConfig(new UnencryptedUnlocker(), new UnencryptedKeyWrapper()));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.DISABLED, new UnlockConfig(new UnencryptedUnlocker(), new UnencryptedKeyWrapper()));
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PIN,
-                new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PinUnlockActivity.class), pbeKeyWrapper));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PIN, new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PinUnlockActivity.class), pbeKeyWrapper));
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PATTERN,
-                new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PatternUnlockActivity.class), pbeKeyWrapper));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PATTERN, new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PatternUnlockActivity.class), pbeKeyWrapper));
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PASSWORD,
-                new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PasswordUnlockActivity.class), pbeKeyWrapper));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.TELLA_PASSWORD, new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, PasswordUnlockActivity.class), pbeKeyWrapper));
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.DEVICE_CREDENTIALS,
-                new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, DeviceCredentialsUnlockActivity.class), androidKeyStoreWrapper));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.DEVICE_CREDENTIALS, new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, DeviceCredentialsUnlockActivity.class), androidKeyStoreWrapper));
 
-        unlockRegistry.registerConfig(UnlockRegistry.Method.DEVICE_CREDENTIALS_BIOMETRICS,
-                new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, DeviceCredentialsUnlockActivity.class), androidKeyStoreWrapper));
+        unlockRegistry.registerConfig(UnlockRegistry.Method.DEVICE_CREDENTIALS_BIOMETRICS, new UnlockConfig(new AppCompatActivityUnlocker(unlockRegistry, DeviceCredentialsUnlockActivity.class), androidKeyStoreWrapper));
 
         // we need this to set one active unlocking method
         // in Tella1 this can be here and fixed, but in Tella2 we need to read saved active method
@@ -325,6 +314,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     @Override
+    public void onFailedAttempts(long num) {
+        ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
+    }
+
+    @Override
+    public void saveRemainingAttempts(long num) {
+        Preferences.setUnlockRemainingAttempts(num);
+    }
+
+    @Override
     public UnlockRegistry getUnlockRegistry() {
         return unlockRegistry;
     }
@@ -359,9 +358,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @NonNull
     @Override
     public Configuration getWorkManagerConfiguration() {
-        return new Configuration.Builder()
-                .setMinimumLoggingLevel(android.util.Log.DEBUG)
-                .setWorkerFactory(workerFactory)
-                .build();
+        return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
     }
 }

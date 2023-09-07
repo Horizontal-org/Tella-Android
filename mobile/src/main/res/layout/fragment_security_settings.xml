@@ -15,8 +15,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <LinearLayout
                 android:id="@+id/options_layout"
@@ -25,90 +25,59 @@
                 android:layout_margin="@dimen/activity_vertical_margin"
                 android:background="@drawable/rounded_light_purple_background"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <RelativeLayout
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/lock_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsLabelText="@string/settings.lang_select_default"
+                    app:settingsTitleText="@string/Settings_Action_SetLock" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/Settings_Action_SetLock"
-                        android:textColor="@color/wa_white" />
-
-                    <TextView
-                        android:id="@+id/lock_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
-
-                <View style="@style/SettingsMainShadowLine" />
-
-                <RelativeLayout
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/lock_timeout_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsLabelText="@string/settings.lang_select_default"
+                    app:settingsTitleText="@string/settings.select_lock_timeout" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.select_lock_timeout"
-                        android:textColor="@color/wa_white" />
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
+                    android:id="@+id/delete_unlock_settings_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="false"
+                    app:settingsLabelText="@string/Settings_Off"
+                    app:settingsTitleText="@string/Settings_Delete_After_Failed_Unlock" />
 
-                    <TextView
-                        android:id="@+id/lock_timeout_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/unlock_remaining_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:explainText="@string/Settings_unlock_screen_instructions"
+                    app:titleText="@string/Settings_show_unlock_attempts_remaining" />
+            </LinearLayout>
 
-                <View style="@style/SettingsMainShadowLine" />
+            <LinearLayout
+                android:id="@+id/camouflage_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/options_layout">
 
-                <RelativeLayout
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/camouflage_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.prot_select_camouflage"
-                        android:textColor="@color/wa_white" />
-
-                    <TextView
-                        android:id="@+id/camouflage_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="false"
+                    app:settingsLabelText="@string/settings.prot_select_camouflage"
+                    app:settingsTitleText="@string/settings.lang_select_default" />
             </LinearLayout>
 
             <LinearLayout
@@ -121,7 +90,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/options_layout">
+                app:layout_constraintTop_toBottomOf="@+id/camouflage_layout">
 
                 <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                     android:id="@+id/quick_delete_switch"
@@ -144,10 +113,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_vault_title"
@@ -162,8 +131,8 @@
                         <ImageView
                             android:id="@+id/delete_vault_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_vault_title"
@@ -186,10 +155,10 @@
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_forms_title"
@@ -224,10 +193,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_server_settings_title"
@@ -243,8 +212,8 @@
                         <ImageView
                             android:id="@+id/delete_server_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_server_settings_title"
@@ -264,10 +233,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
-                        android:paddingStart="@dimen/activity_vertical_margin">
+                        android:paddingBottom="8dp">
 
                         <TextView
                             android:id="@+id/delete_tella_title"
@@ -282,8 +251,8 @@
                         <ImageView
                             android:id="@+id/delete_app_tooltip"
                             android:layout_width="wrap_content"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/tooltip_icon_size"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginStart="@dimen/tooltip_icon_margin_start"
                             android:layout_marginTop="@dimen/tooltip_icon_margin_top"
                             android:layout_toEndOf="@id/delete_tella_title"
@@ -339,17 +308,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
                 app:titleText="@string/settings_sec_security_screen" />
 
-           <!-- <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
-                android:id="@+id/bypass_censorship_switch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_vertical_margin"
-                android:background="@drawable/rounded_light_purple_background"
-                app:explainText="@string/settings.sec_bypass_switch_expl"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
-                app:titleText="@string/settings.sec_bypass_switch_title" /> -->
+            <!-- <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                 android:id="@+id/bypass_censorship_switch"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="@dimen/activity_vertical_margin"
+                 android:background="@drawable/rounded_light_purple_background"
+                 app:explainText="@string/settings.sec_bypass_switch_expl"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@+id/camera_silent_switch"
+                 app:titleText="@string/settings.sec_bypass_switch_title" /> -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -123,7 +123,7 @@ class EditTellaServerFragment :
             autoReportSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
                 reportServer.isAutoUpload = isChecked
                 autoDeleteSeparator.isVisible = isChecked
-                updateTimeoutSetting(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
+                setNoTimeOut(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
                 autoDeleteSwitch.apply {
                     isVisible = isChecked
                     if (!isChecked) mSwitch.isChecked = false
@@ -132,7 +132,6 @@ class EditTellaServerFragment :
 
             backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
                 reportServer.isActivatedBackgroundUpload = isChecked
-                updateTimeoutSetting(isChecked || autoReportSwitch.mSwitch.isChecked)
             }
 
             shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -153,7 +152,7 @@ class EditTellaServerFragment :
         return server
     }
 
-    private fun updateTimeoutSetting(enableNoTimeout: Boolean) {
+    private fun setNoTimeOut(enableNoTimeout: Boolean) {
         if (enableNoTimeout) {
             MyApplication.getMainKeyHolder().timeout =
                 LifecycleMainKey.NO_TIMEOUT

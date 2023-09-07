@@ -192,4 +192,10 @@
         <item name="android:background">@drawable/rounded_light_green_button_background</item>
         <item name="android:textColor">@color/wa_black</item>
     </style>
+
+    <style name="SettingsMainShadowLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">#47426F</item>
+    </style>
 </resources>

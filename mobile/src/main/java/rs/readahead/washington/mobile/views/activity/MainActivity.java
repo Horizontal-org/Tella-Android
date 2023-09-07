@@ -211,7 +211,7 @@ public class MainActivity extends MetadataActivity implements
             if (fragment instanceof DownloadedTemplatesFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
-                navController.popBackStack();
+                 navController.popBackStack();
                 return true;
             }
 
