@@ -47,6 +47,7 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil.showRationale
 import rs.readahead.washington.mobile.util.Util
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.MicFragment
