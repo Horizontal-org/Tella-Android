@@ -43,9 +43,8 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityCameraBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
-import rs.readahead.washington.mobile.mvp.contract.ITellaFileUploadSchedulePresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
+import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulerViewModel
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.VideoResolutionManager
@@ -61,8 +60,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FIL
 import java.io.File
 
 @AndroidEntryPoint
-class CameraActivity : MetadataActivity(),
-    ITellaFileUploadSchedulePresenterContract.IView, IMetadataAttachPresenterContract.IView {
+class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView {
     private lateinit var cameraView: CameraView
     private lateinit var gridButton: CameraGridButton
     private lateinit var switchButton: CameraSwitchButton
@@ -76,7 +74,6 @@ class CameraActivity : MetadataActivity(),
     private lateinit var photoModeText: TextView
     private lateinit var videoModeText: TextView
     private lateinit var resolutionButton: CameraResolutionButton
-    private var uploadPresenter: TellaFileUploadSchedulePresenter? = null
     private var metadataAttacher: MetadataAttacher? = null
     private var mode: CameraMode? = null
     private var modeLocked = false
@@ -93,6 +90,7 @@ class CameraActivity : MetadataActivity(),
     private lateinit var binding: ActivityCameraBinding
     private var captureWithAutoUpload = true
     private val viewModel by viewModels<CameraViewModel>()
+    private val uploadViewModel by viewModels<TellaFileUploadSchedulerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +101,6 @@ class CameraActivity : MetadataActivity(),
         initView()
         initListeners()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
-        uploadPresenter = TellaFileUploadSchedulePresenter(this)
         metadataAttacher = MetadataAttacher(this)
         mode = CameraMode.PHOTO
         if (intent.hasExtra(CAMERA_MODE)) {
@@ -156,6 +153,14 @@ class CameraActivity : MetadataActivity(),
         viewModel.rotationUpdate.observe(this) { rotation ->
             rotateViews(rotation)
         }
+
+        uploadViewModel.mediaFilesUploadScheduled.observe(this) {
+            onMediaFilesUploadScheduled()
+        }
+
+        uploadViewModel.mediaFilesUploadScheduleError.observe(this){
+            onMediaFilesUploadScheduleError(it)
+        }
     }
 
     override fun onResume() {
@@ -196,6 +201,7 @@ class CameraActivity : MetadataActivity(),
         cameraView.destroy()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (maybeStopVideoRecording()) return
         super.onBackPressed()
@@ -234,7 +240,8 @@ class CameraActivity : MetadataActivity(),
             returnIntent(bundle)
         }
         if (captureWithAutoUpload) {
-            scheduleFileUpload(capturedMediaFile)
+            capturedMediaFile?.let { vaultFile -> scheduleFileUpload(vaultFile) }
+
         }
         MyApplication.bus().post(CaptureEvent())
     }
@@ -331,16 +338,17 @@ class CameraActivity : MetadataActivity(),
         return this
     }
 
-    override fun onMediaFilesUploadScheduled() {
+    fun onMediaFilesUploadScheduled() {
         if (intentMode != IntentMode.STAND) {
             finish()
         }
     }
 
-    override fun onMediaFilesUploadScheduleError(throwable: Throwable) {}
-    override fun onGetMediaFilesSuccess(mediaFiles: List<VaultFile>) {}
-    override fun onGetMediaFilesError(error: Throwable) {}
-    fun onCaptureClicked() {
+    fun onMediaFilesUploadScheduleError(throwable: Throwable) {
+
+    }
+
+    private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
             val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
             mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
@@ -685,9 +693,9 @@ class CameraActivity : MetadataActivity(),
         }
     }
 
-    private fun scheduleFileUpload(vaultFile: VaultFile?) {
+    private fun scheduleFileUpload(vaultFile: VaultFile) {
         if (Preferences.isAutoUploadEnabled()) {
-            uploadPresenter!!.scheduleUploadReportFiles(
+            uploadViewModel.scheduleUploadReportFiles(
                 vaultFile, Preferences.getAutoUploadServerId()
             )
         }
