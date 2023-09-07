@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.mvp.presenter
+package rs.readahead.washington.mobile.mvvm.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.LiveData

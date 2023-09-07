@@ -44,7 +44,7 @@ import rs.readahead.washington.mobile.databinding.ActivityCameraBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
-import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulerViewModel
+import rs.readahead.washington.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.VideoResolutionManager
