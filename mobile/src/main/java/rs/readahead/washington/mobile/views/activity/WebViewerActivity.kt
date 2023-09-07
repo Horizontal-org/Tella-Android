@@ -9,6 +9,7 @@ import android.webkit.WebView
 import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.mvp.contract.IMediaFileViewerPresenterContract
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
 class WebViewerActivity : BaseLockActivity(),

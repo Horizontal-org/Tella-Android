@@ -20,9 +20,9 @@ import rs.readahead.washington.mobile.databinding.CollectAttachemntPreviewViewBi
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
 import rs.readahead.washington.mobile.util.FileUtil;
-import rs.readahead.washington.mobile.views.activity.AudioPlayActivity;
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity;
-import rs.readahead.washington.mobile.views.activity.VideoViewerActivity;
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity;
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity;
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 
 

@@ -31,8 +31,8 @@ import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvp.presenter.TellaFileUploadSchedulePresenter
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.StringUtils
-import rs.readahead.washington.mobile.views.activity.CameraActivity.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_AUDIO
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_VAULT_FILE

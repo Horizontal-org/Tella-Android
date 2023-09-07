@@ -299,7 +299,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             Preferences.setAutoUpload(isAutoUploadEnabled(servers));
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
-            showToast(R.string.settings_docu_toast_server_updated);
+            DialogUtils.showBottomMessage(
+                    this,
+                    getString(R.string.settings_docu_toast_server_updated),
+                    false
+            );
         }
     }
 

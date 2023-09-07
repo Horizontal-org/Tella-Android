@@ -41,7 +41,7 @@ public class CollectDraftFormInstanceRecycleViewAdapter extends RecyclerView.Ada
         final CollectFormInstance instance = instances.get(position);
         final Context context = holder.binding.name.getContext();
 
-        holder.binding.instanceRow.setOnClickListener(v -> MyApplication.bus().post(new ShowFormInstanceEntryEvent(instance.getId())));
+        holder.binding.instanceRow.setOnClickListener(v -> draftFormsInterface.showFormInstance(instance));
         holder.binding.name.setText(instance.getInstanceName());
         holder.binding.organization.setText(instance.getServerName());
         holder.binding.updated.setText(String.format(context.getString(R.string.collect_draft_meta_date_updated),

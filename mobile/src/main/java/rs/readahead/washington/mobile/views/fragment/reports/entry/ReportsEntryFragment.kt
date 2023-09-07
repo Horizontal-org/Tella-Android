@@ -28,8 +28,8 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.invisible
 import rs.readahead.washington.mobile.util.show
-import rs.readahead.washington.mobile.views.activity.CameraActivity
-import rs.readahead.washington.mobile.views.activity.CameraActivity.CAPTURE_WITH_AUTO_UPLOAD
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.CAPTURE_WITH_AUTO_UPLOAD
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
@@ -80,11 +80,11 @@ class ReportsEntryFragment :
 
     private fun initView() {
         gridLayoutManager = GridLayoutManager(context, 3)
-        binding?.filesRecyclerView?.apply {
+        binding.filesRecyclerView.apply {
             layoutManager = gridLayoutManager
             adapter = filesRecyclerViewAdapter
         }
-        binding?.toolbar?.backClickListener = {
+        binding.toolbar.backClickListener = {
             exitOrSave()
         }
 
@@ -96,8 +96,8 @@ class ReportsEntryFragment :
         }
 
         reportInstance?.let { instance ->
-            binding?.reportTitleEt?.setText(instance.title)
-            binding?.reportDescriptionEt?.setText(instance.description)
+            binding.reportTitleEt.setText(instance.title)
+            binding.reportDescriptionEt.setText(instance.description)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
@@ -106,8 +106,8 @@ class ReportsEntryFragment :
     }
 
     private fun exitOrSave() {
-        val title = binding?.reportTitleEt!!.text.toString()
-        val description = binding?.reportDescriptionEt!!.text.toString()
+        val title = binding.reportTitleEt.text.toString()
+        val description = binding.reportDescriptionEt.text.toString()
         if (reportInstance == null && title.isEmpty()) {
             nav().popBackStack()
         } else if (reportInstance == null && title.isNotEmpty()) {
@@ -151,25 +151,25 @@ class ReportsEntryFragment :
     }
 
     private fun highLightButtonsInit() {
-        binding?.reportTitleEt?.let { title ->
+        binding.reportTitleEt.let { title ->
             isTitleEnabled = title.length() > 0
         }
 
-        binding?.reportDescriptionEt?.let { description ->
+        binding.reportDescriptionEt.let { description ->
             isDescriptionEnabled = description.length() > 0
         }
 
-        binding?.reportTitleEt?.onChange { title ->
-            isTitleEnabled = title.length > 0
+        binding.reportTitleEt.onChange { title ->
+            isTitleEnabled = title.isNotEmpty()
             highLightButtons()
         }
 
-        binding?.reportDescriptionEt?.onChange { description ->
-            isDescriptionEnabled = description.length > 0
+        binding.reportDescriptionEt.onChange { description ->
+            isDescriptionEnabled = description.isNotEmpty()
             highLightButtons()
         }
 
-        binding?.deleteBtn?.setOnClickListener {
+        binding.deleteBtn.setOnClickListener {
             reportInstance?.let { instance -> showDeleteBottomSheet(instance) }
         }
     }
@@ -182,11 +182,11 @@ class ReportsEntryFragment :
         val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
         val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
 
-        binding?.sendReportBtn?.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
-        binding?.sendLaterBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
-        binding?.sendReportBtn?.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding.sendReportBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding.sendLaterBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
+        binding.sendReportBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
 
-        binding?.sendLaterBtn?.setOnClickListener {
+        binding.sendLaterBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
             } else {
@@ -194,7 +194,7 @@ class ReportsEntryFragment :
             }
         }
 
-        binding?.sendReportBtn?.setOnClickListener {
+        binding.sendReportBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsPending()
             } else {
@@ -203,11 +203,11 @@ class ReportsEntryFragment :
         }
 
         if (isTitleEnabled && isServerSelected) {
-            binding?.toolbar?.onRightClickListener = {
+            binding.toolbar.onRightClickListener = {
                 saveReportAsDraft(false)
             }
         } else {
-            binding?.toolbar?.onRightClickListener = {}
+            binding.toolbar.onRightClickListener = {}
         }
     }
 
@@ -226,8 +226,8 @@ class ReportsEntryFragment :
         viewModel.saveDraft(
             viewModel.getDraftFormInstance(
                 id = reportInstance?.id,
-                title = binding?.reportTitleEt?.text.toString(),
-                description = binding?.reportDescriptionEt?.text.toString(),
+                title = binding.reportTitleEt.text.toString(),
+                description = binding.reportDescriptionEt.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer
             ),
@@ -239,8 +239,8 @@ class ReportsEntryFragment :
         viewModel.saveOutbox(
             viewModel.getFormInstance(
                 id = reportInstance?.id,
-                title = binding?.reportTitleEt?.text.toString(),
-                description = binding?.reportDescriptionEt?.text.toString(),
+                title = binding.reportTitleEt.text.toString(),
+                description = binding.reportDescriptionEt.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer,
                 status = EntityStatus.FINALIZED
@@ -252,8 +252,8 @@ class ReportsEntryFragment :
         viewModel.saveOutbox(
             viewModel.getFormInstance(
                 id = reportInstance?.id,
-                title = binding?.reportTitleEt?.text.toString(),
-                description = binding?.reportDescriptionEt?.text.toString(),
+                title = binding.reportTitleEt.text.toString(),
+                description = binding.reportDescriptionEt.text.toString(),
                 files = viewModel.vaultFilesToMediaFiles(filesRecyclerViewAdapter.getFiles()),
                 server = selectedServer,
                 status = EntityStatus.SUBMISSION_PARTIAL_PARTS
@@ -272,8 +272,8 @@ class ReportsEntryFragment :
                     serversList.map { server ->
                         listDropDown.add(DropDownItem(server.projectId, server.projectName))
                     }
-                    binding?.dropdownGroup?.show()
-                    binding?.serversDropdown?.setListAdapter(
+                    binding.dropdownGroup.show()
+                    binding.serversDropdown.setListAdapter(
                         listDropDown,
                         this@ReportsEntryFragment,
                         baseActivity
@@ -282,12 +282,12 @@ class ReportsEntryFragment :
                         servers.first { server -> server.id == it.serverId }.let {
                             selectedServer = it
                             isServerSelected = true
-                            binding?.serversDropdown?.setDefaultName(it.name)
+                            binding.serversDropdown.setDefaultName(it.name)
                             highLightButtons()
                         }
                     }
                 } else {
-                    binding?.dropdownGroup?.hide()
+                    binding.dropdownGroup.hide()
                     selectedServer = serversList[0]
                     isServerSelected = true
                     highLightButtons()
@@ -359,13 +359,13 @@ class ReportsEntryFragment :
 
     private fun checkIsNewDraftEntry() {
         if (isNewDraft) {
-            binding?.deleteBtn?.invisible()
-            binding?.sendLaterBtn?.show()
-            binding?.sendReportBtn?.text = getString(R.string.collect_end_action_submit)
+            binding.deleteBtn.invisible()
+            binding.sendLaterBtn.show()
+            binding.sendReportBtn.text = getString(R.string.collect_end_action_submit)
         } else {
-            binding?.deleteBtn?.show()
-            binding?.sendLaterBtn?.invisible()
-            binding?.sendReportBtn?.text = getString(R.string.Send_Action_Label)
+            binding.deleteBtn.show()
+            binding.sendLaterBtn.invisible()
+            binding.sendReportBtn.text = getString(R.string.Send_Action_Label)
         }
     }
 
@@ -428,7 +428,7 @@ class ReportsEntryFragment :
         for (file in vaultFileList) {
             filesRecyclerViewAdapter.insertAttachment(file)
         }
-        binding?.filesRecyclerView?.visibility = View.VISIBLE
+        binding.filesRecyclerView.visibility = View.VISIBLE
         highLightButtons()
     }
 
@@ -445,7 +445,7 @@ class ReportsEntryFragment :
     }
 
     override fun onDropDownItemClicked(position: Int, chosenItem: DropDownItem) {
-        binding?.serversDropdown?.setDefaultName(chosenItem.name)
+        binding.serversDropdown.setDefaultName(chosenItem.name)
         servers.get(position).let {
             selectedServer = it
             isServerSelected = true
