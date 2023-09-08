@@ -42,30 +42,23 @@ public class Evaluator {
 
     public static String handlePercentage(final String input) {
         String inputS = input.replace(" ", "");
+        //regular expression to find decimal
 
-        while (inputS.contains("%")) {
-            int end = inputS.indexOf("%");
-            String lastNum = "x";
-            if (end == -1) break;;
-
-            //take substring before char %
-            String beforePct = substring(inputS, 0, end);
-
-            //regular expression to find decimal
-            Pattern regex = Pattern.compile("(\\d+(?:\\.\\d+)?)");
-            Matcher matcher = regex.matcher(beforePct);
+        Pattern regex = Pattern.compile("(\\d+(?:\\.\\d+)?%)");
+        Matcher matcher = regex.matcher(inputS);
 
             while (matcher.find()) {
                 //last decimal in string up to char %
-                lastNum = matcher.group(1);
+                String occurrence = matcher.group(1);
+                // replacement for x% = x/100
+                if (occurrence != null) {
+                    String pctNum = occurrence.replace("%", "");
+                    String pctReplace = evaluateResult(pctNum + "/100");
+                    inputS = inputS.replace(occurrence, pctReplace);
+                } else {
+                    break;
+                }
             }
-            if (lastNum.equals("x")) break;
-
-            // replacement for x% = x/100
-            String pctReplace = evaluateResult(lastNum + "/100");
-            String percentage = lastNum + "%";
-            inputS = inputS.replace(percentage, pctReplace);
-        }
 
         return inputS;
     }
