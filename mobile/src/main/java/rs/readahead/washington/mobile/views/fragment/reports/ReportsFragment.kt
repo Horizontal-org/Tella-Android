@@ -20,15 +20,11 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 @AndroidEntryPoint
 class ReportsFragment :
     BaseBindingFragment<FragmentReportsBinding>(FragmentReportsBinding::inflate) {
-    private var initializedView: Boolean = false
     private val viewModel by viewModels<ReportsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()
-        if (!initializedView) {
-            initializedView = true
-        }
     }
 
     private fun initView() {
@@ -96,16 +92,11 @@ class ReportsFragment :
     }
 
     private fun setCurrentTab(position: Int) {
-        if (initializedView) {
+        if (isViewInitialized) {
             binding.viewPager.post {
                 binding.viewPager.setCurrentItem(position, true)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        initializedView = false
     }
 
     private fun scheduleWorker() {

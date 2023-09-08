@@ -44,7 +44,6 @@ class CollectMainFragment :
     BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
-    private var initializedView: Boolean = false
     private val model: SharedFormsViewModel by viewModels()
 
     companion object {
@@ -69,10 +68,6 @@ class CollectMainFragment :
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false)
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
-        }
-
-        if (!initializedView) {
-            initializedView = true
         }
 
         initObservers()
@@ -126,7 +121,7 @@ class CollectMainFragment :
     }
 
     private fun setCurrentTab(position: Int) {
-        if (initializedView) {
+        if (isViewInitialized) {
             binding.viewPager.post {
                 binding.viewPager.setCurrentItem(position, true)
             }
@@ -160,11 +155,6 @@ class CollectMainFragment :
             disposables.dispose()
         }
         super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        initializedView = false
     }
 
     @Deprecated("Deprecated in Java")
