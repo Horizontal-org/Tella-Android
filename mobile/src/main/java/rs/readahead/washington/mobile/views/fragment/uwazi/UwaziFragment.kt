@@ -10,9 +10,13 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.*
 
 class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBinding::inflate) {
+    private var initializedView: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
+        if (!initializedView) {
+            initializedView = true
+        }
     }
 
     private fun initView() {
@@ -49,12 +53,18 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
         })
 
         binding.toolbar.backClickListener = { nav().popBackStack() }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        initializedView = false
     }
 
     private fun setCurrentTab(position: Int) {
-        binding.viewPager.post {
-            binding.viewPager.setCurrentItem(position, true)
+        if (initializedView) {
+            binding.viewPager.post {
+                binding.viewPager.setCurrentItem(position, true)
+            }
         }
     }
 
