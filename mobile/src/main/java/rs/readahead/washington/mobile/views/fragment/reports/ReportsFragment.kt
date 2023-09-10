@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 @AndroidEntryPoint
 class ReportsFragment :
     BaseBindingFragment<FragmentReportsBinding>(FragmentReportsBinding::inflate) {
-
     private val viewModel by viewModels<ReportsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,9 +79,11 @@ class ReportsFragment :
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(
                     DRAFT_LIST_PAGE_INDEX
                 )
+
                 OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(
                     OUTBOX_LIST_PAGE_INDEX
                 )
+
                 SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(
                     SUBMITTED_LIST_PAGE_INDEX
                 )
@@ -91,8 +92,10 @@ class ReportsFragment :
     }
 
     private fun setCurrentTab(position: Int) {
-        binding.viewPager.post {
-            binding.viewPager.setCurrentItem(position, true)
+        if (isViewInitialized) {
+            binding.viewPager.post {
+                binding.viewPager.setCurrentItem(position, true)
+            }
         }
     }
 

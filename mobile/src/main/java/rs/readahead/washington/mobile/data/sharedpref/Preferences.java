@@ -88,7 +88,7 @@ public class Preferences {
     }
 
     public static boolean isShutterMute() {
-        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false);
+        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, true);
     }
 
     public static void setShutterMute(boolean value) {

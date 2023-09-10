@@ -10,7 +10,6 @@ import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +44,6 @@ class CollectMainFragment :
     BaseBindingFragment<FragmentCollectMainBinding>(FragmentCollectMainBinding::inflate) {
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
     private var alertDialog: AlertDialog? = null
-    private var initializedView: Boolean = false
     private val model: SharedFormsViewModel by viewModels()
 
     companion object {
@@ -70,10 +68,6 @@ class CollectMainFragment :
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false)
             actionBar.setTitle(R.string.settings_servers_add_server_forms)
-        }
-
-        if (!initializedView) {
-            initializedView = true
         }
 
         initObservers()
@@ -127,7 +121,7 @@ class CollectMainFragment :
     }
 
     private fun setCurrentTab(position: Int) {
-        if (initializedView) {
+        if (isViewInitialized) {
             binding.viewPager.post {
                 binding.viewPager.setCurrentItem(position, true)
             }
@@ -162,12 +156,6 @@ class CollectMainFragment :
         }
         super.onDestroy()
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        initializedView = false
-    }
-
 
     @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

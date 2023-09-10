@@ -24,6 +24,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
         get() = _binding ?: throw IllegalStateException("ViewBinding is not initialized.")
     private var rootView: View? = null
     var hasInitializedRootView = false
+    var isViewInitialized: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +35,14 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
             _binding = it
             rootView = it.root
         }.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (!isViewInitialized) {
+            isViewInitialized = true
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -76,6 +85,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        isViewInitialized = false
     }
 
 }
