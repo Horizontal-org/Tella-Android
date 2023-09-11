@@ -156,4 +156,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
+
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 }
