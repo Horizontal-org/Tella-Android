@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/space_cadet">
+    android:background="@color/wa_black">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:background="@color/wa_black"
         android:theme="@style/AppTheme.DarkNoActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +44,7 @@
         android:paddingHorizontal="@dimen/tella_main_vertical"
         tools:text="Traffic Light"
         android:id="@+id/fileInfoTv"
-        android:textSize="11sp"
+        android:textSize="17sp"
         android:layout_marginTop="20dp"
         />
 
@@ -117,7 +118,7 @@
         tools:text="08-03-2021 09:33:35 +0500"
         android:id="@+id/fileCreatedTv"
         android:layout_marginTop="12dp"
-        android:textSize="11sp"
+        android:textSize="17sp"
         />
 
     <TextView
