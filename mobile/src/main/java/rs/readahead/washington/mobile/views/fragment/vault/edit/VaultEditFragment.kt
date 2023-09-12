@@ -10,11 +10,9 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentVaultEditBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 
 class VaultEditFragment :
     BaseBindingFragment<FragmentVaultEditBinding>(FragmentVaultEditBinding::inflate),
@@ -50,10 +48,7 @@ class VaultEditFragment :
                 val uri = MediaFileHandler.getEncryptedUri(context, it)
                 binding.run {
                     fileInfoTv.text = "crop Image"
-                    fileFormatTv.text = mimeType
                     fileCreatedTv.text = "Rotate"
-                    fileSizeTv.text = FileUtil.getFileSizeString(size)
-                    filePathTv.text = path
                     cropImageView.setImageUriAsync(uri)
                 }
 
@@ -72,46 +67,21 @@ class VaultEditFragment :
         binding.cropImageView.rotateImage(270)
     }
     private fun cropImage() {
-        Timber.d("++++ cropImage()")
         binding.cropImageView.getCroppedImageAsync(500, 500)
-        /*val bitmap: Bitmap = binding.cropImageView.getCroppedImage(500,500)
-        val imageJpegStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)
-        try {
-            Timber.d("++++ MediaFileHandler.saveJpegPhoto")
-            MediaFileHandler.saveJpegPhoto(imageJpegStream.toByteArray(), null)
-        } catch (throwable: Throwable) {
-            Timber.d("++++ error %s", throwable.localizedMessage)
-        }*/
     }
 
     override fun onCropImageComplete(view: CropImageView?, result: CropImageView.CropResult?) {
-        Timber.d("++++ onCropImageComplete")
         if (result != null) {
             if (result.isSuccessful) {
-                val bitmap: Bitmap = result.bitmap
-                binding.cropImageView.setImageBitmap(bitmap);
 
-                val imageJpegStream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)
-                try {
-                    Timber.d("++++ MediaFileHandler.saveJpegPhoto")
-                    MediaFileHandler.saveJpegPhoto(imageJpegStream.toByteArray(), null)
-                } catch (throwable: Throwable) {
-                    Timber.d("++++ error %s", throwable.localizedMessage)
-                }
+                val bitmap: Bitmap = result.bitmap
+                binding.cropImageView.setImageBitmap(bitmap)
+
+                val vaultFile: VaultFile = MediaFileHandler.savePhotoBitmap(context, bitmap, null).blockingGet()
             }
         }
     }
 
     override fun onSetImageUriComplete(view: CropImageView?, uri: Uri?, error: Exception?) {
-        Timber.d("++++ onSetImageUriComplete")
-        if (uri != null) {
-            Timber.d("++++ uri %s", uri.path)
-        }
-
-        if (error != null) {
-            Timber.d("++++ error %s", error.localizedMessage)
-        }
     }
 }

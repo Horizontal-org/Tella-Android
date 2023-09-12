@@ -197,6 +197,25 @@ public class MediaFileHandler {
         }
     }
 
+    public static Single<VaultFile> savePhotoBitmap(Context context, Bitmap bitmap, @Nullable String parentId) throws Exception {
+        ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
+
+        Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10); // bitmap of thumb
+        thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbJpegStream);
+
+        if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
+            throw new Exception("JPEG compression failed");
+        }
+
+        return MyApplication.rxVault
+                .builder(new ByteArrayInputStream(imageJpegStream.toByteArray()))
+                .setMimeType("image/jpeg")
+                .setType(VaultFile.Type.FILE)
+                .setThumb(thumbJpegStream.toByteArray())
+                .build(parentId)
+                .subscribeOn(Schedulers.io());
+    }
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
