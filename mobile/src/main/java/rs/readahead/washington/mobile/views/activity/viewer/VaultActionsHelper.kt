@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.Toolbar
 import com.hzontal.tella_vault.VaultFile
@@ -131,15 +132,19 @@ object VaultActionsHelper {
              * Edit the file of the VaultFile using a VaultEditFragment.
              */
             override fun edit() {
-                unitFunction()
-                toolBar.title = getString(R.string.Vault_FileEdit_SheetAction)
-                toolBar.menu.findItem(R.id.menu_item_more).isVisible = false
-                toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
-                invalidateOptionsMenu()
+                /*unitFunction()
+                toolBar.visibility = View.GONE
                 addFragment(
                     vaultFile.let { VaultEditFragment.newInstance(it) },
                     R.id.container
                 )
+                vaultFile.let {
+                    unitFunction()
+                    toolBar.visibility = View.GONE
+                    val bundle = Bundle()
+                    bundle.putSerializable(VAULT_FILE_ARG, it)
+                    nav().navigate(R.id.action_attachments_screen_to_edit_screen, bundle)
+                }*/
             }
 
             /**

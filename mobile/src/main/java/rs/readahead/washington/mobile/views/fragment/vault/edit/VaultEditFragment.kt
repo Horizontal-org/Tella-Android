@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.vault.edit
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import com.hzontal.tella_vault.VaultFile
 import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,20 +40,14 @@ class VaultEditFragment :
     }
 
     private fun initView() {
-        binding.toolbar.backClickListener = { back() }
-        binding.toolbar.setRightIcon(R.drawable.ic_check_select)
         arguments?.getSerializable(VAULT_FILE_ARG)?.let {
             (it as VaultFile).run {
                 val uri = MediaFileHandler.getEncryptedUri(context, it)
                 binding.run {
-                    fileInfoTv.text = "crop Image"
-                    fileCreatedTv.text = "Rotate"
                     cropImageView.setImageUriAsync(uri)
                 }
-
             }
         }
-        binding.toolbar.isVisible = true
     }
 
     private fun initObservers() {
@@ -74,10 +67,10 @@ class VaultEditFragment :
     }
 
     private fun initListeners() {
-        binding.toolbar.onRightClickListener?.let { cropImage() }
+        binding.close.setOnClickListener { back() }
+        binding.accept.setOnClickListener { cropImage() }
         binding.cropImageView.setOnCropImageCompleteListener(this)
-        binding.fileInfoTv.setOnClickListener { cropImage() }
-        binding.fileCreatedTv.setOnClickListener { rotateImage() }
+        binding.rotate.setOnClickListener { rotateImage() }
     }
 
     private fun rotateImage() {

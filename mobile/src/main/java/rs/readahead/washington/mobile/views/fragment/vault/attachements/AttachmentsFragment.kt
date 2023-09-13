@@ -646,7 +646,6 @@ class AttachmentsFragment :
                                         viewModel.deleteFilesAfterConfirmation(files)
                                     }
                                 }
-
                             }
                         })
 
