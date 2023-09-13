@@ -241,7 +241,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         if (captureWithAutoUpload) {
             capturedMediaFile?.let { vaultFile -> scheduleFileUpload(vaultFile) }
-
         }
         MyApplication.bus().post(CaptureEvent())
     }
@@ -278,7 +277,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata)
                     setResult(RESULT_OK, this)
                 }
-
             }
         }
     }

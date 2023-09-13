@@ -69,7 +69,6 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
-import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment.Companion.VAULT_FILE_EDIT_TOOLBAR
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 
 
@@ -566,7 +565,6 @@ class AttachmentsFragment :
                     vaultFile.let {
                         val bundle = Bundle()
                         bundle.putSerializable(VAULT_FILE_ARG, it)
-                        bundle.putBoolean(VAULT_FILE_EDIT_TOOLBAR, true)
                         nav().navigate(R.id.action_attachments_screen_to_edit_screen, bundle)
                     }
                 }

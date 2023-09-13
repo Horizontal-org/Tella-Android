@@ -137,7 +137,7 @@ object VaultActionsHelper {
                 toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                 invalidateOptionsMenu()
                 addFragment(
-                    vaultFile.let { VaultEditFragment.newInstance(it, false) },
+                    vaultFile.let { VaultEditFragment.newInstance(it) },
                     R.id.container
                 )
             }

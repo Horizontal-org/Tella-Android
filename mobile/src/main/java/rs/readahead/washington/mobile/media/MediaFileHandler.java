@@ -197,7 +197,7 @@ public class MediaFileHandler {
         }
     }
 
-    public static Single<VaultFile> savePhotoBitmap(Context context, Bitmap bitmap, @Nullable String parentId) throws Exception {
+    public static Single<VaultFile> saveBitmapAsJpeg(Bitmap bitmap, @Nullable String parent) throws Exception {
         ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
         ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
 
@@ -208,13 +208,23 @@ public class MediaFileHandler {
             throw new Exception("JPEG compression failed");
         }
 
-        return MyApplication.rxVault
+        String uid = UUID.randomUUID().toString();
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(new ByteArrayInputStream(imageJpegStream.toByteArray()))
                 .setMimeType("image/jpeg")
+                .setName(uid + ".jpg")
                 .setType(VaultFile.Type.FILE)
-                .setThumb(thumbJpegStream.toByteArray())
-                .build(parentId)
-                .subscribeOn(Schedulers.io());
+                .setThumb(thumbJpegStream.toByteArray());
+
+        if (parent == null) {
+            return rxVaultFileBuilder
+                    .build()
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return rxVaultFileBuilder
+                    .build(parent)
+                    .subscribeOn(Schedulers.io());
+        }
     }
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
