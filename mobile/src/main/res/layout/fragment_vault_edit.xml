@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_black"
-    android:padding="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -36,7 +37,7 @@
             android:src="@drawable/circle_check"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="visible"
+            android:visibility="gone"
             android:contentDescription="@string/action_continue"
             />
     </RelativeLayout>

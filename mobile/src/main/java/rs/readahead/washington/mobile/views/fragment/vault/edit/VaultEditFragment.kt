@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.fragment.vault.edit
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import com.hzontal.tella_vault.VaultFile
 import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,17 +69,25 @@ class VaultEditFragment :
 
     private fun initListeners() {
         binding.close.setOnClickListener { back() }
-        binding.accept.setOnClickListener { cropImage() }
         binding.cropImageView.setOnCropImageCompleteListener(this)
         binding.rotate.setOnClickListener { rotateImage() }
+        binding.cropImageView.setOnSetCropOverlayReleasedListener { showAcceptButton() }
+    }
+
+    private fun showAcceptButton() {
+        if (!binding.accept.isVisible) {
+            binding.accept.visibility = View.VISIBLE
+            binding.accept.setOnClickListener { cropImage() }
+        }
     }
 
     private fun rotateImage() {
         binding.cropImageView.rotateImage(270)
+        showAcceptButton()
     }
 
     private fun cropImage() {
-        binding.cropImageView.getCroppedImageAsync(500, 500)
+        binding.cropImageView.getCroppedImageAsync(1000, 1000)
     }
 
     override fun onCropImageComplete(view: CropImageView?, result: CropImageView.CropResult?) {
@@ -108,9 +117,11 @@ class VaultEditFragment :
             true
         )
     }
+
     private fun onSaveStart() {
         //showProgressDialog()
     }
+
     private fun onSaveEnd() {
         //hideProgressDialog()
         back()
