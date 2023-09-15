@@ -4,10 +4,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import com.hzontal.tella_vault.VaultFile
 import com.theartofdev.edmodo.cropper.CropImageView
+import com.theartofdev.edmodo.cropper.CropImageView.RequestSizeOptions
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.fragment.app.viewModels
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentVaultEditBinding
@@ -71,7 +72,9 @@ class VaultEditFragment :
         binding.close.setOnClickListener { back() }
         binding.cropImageView.setOnCropImageCompleteListener(this)
         binding.rotate.setOnClickListener { rotateImage() }
-        binding.cropImageView.setOnSetCropOverlayReleasedListener { showAcceptButton() }
+        binding.cropImageView.setOnSetCropOverlayReleasedListener {
+            showAcceptButton()
+        }
     }
 
     private fun showAcceptButton() {
@@ -87,7 +90,16 @@ class VaultEditFragment :
     }
 
     private fun cropImage() {
-        binding.cropImageView.getCroppedImageAsync(1000, 1000)
+        binding.cropImageView.getCroppedImageAsync(
+            binding.cropImageView.cropRect.width(),
+            binding.cropImageView.cropRect.height()
+        )
+        /* This needs a little more tunning
+        binding.cropImageView.getCroppedImageAsync(
+            binding.cropImageView.cropRect.width(),
+            binding.cropImageView.cropRect.height(), RequestSizeOptions.RESIZE_EXACT
+        )*/
+
     }
 
     override fun onCropImageComplete(view: CropImageView?, result: CropImageView.CropResult?) {
