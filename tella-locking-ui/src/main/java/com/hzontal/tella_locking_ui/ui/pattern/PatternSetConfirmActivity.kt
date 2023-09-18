@@ -24,7 +24,6 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         pattern = intent.extras?.getString(PATTERN_CELL_BYTES)
         mRightButton.isVisible = false
         mTopImageView.background = ContextCompat.getDrawable(this, R.drawable.pattern_draw_bg)
-
     }
 
     override fun onPatternDetected(newPattern: MutableList<PatternView.Cell>?) {
@@ -61,7 +60,7 @@ class PatternSetConfirmActivity : SetPatternActivity() {
 
         TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
             override fun onSuccess(mainKey: MainKey) {
-                Timber.d("** MainKey stored: %s **", mainKey)
+                Timber.d("** MainKey stored: %s **", mainKey.key)
                 // here, we store MainKey in memory -> unlock the app
                 TellaKeysUI.getMainKeyHolder().set(mainKey)
                 onSuccessConfirmUnlock()

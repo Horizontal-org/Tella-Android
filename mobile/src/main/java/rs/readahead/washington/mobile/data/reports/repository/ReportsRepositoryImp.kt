@@ -48,7 +48,6 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     private val reportProgress = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = MutableLiveData<ReportInstance>()
-
     private val disposables = CompositeDisposable()
 
     override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {

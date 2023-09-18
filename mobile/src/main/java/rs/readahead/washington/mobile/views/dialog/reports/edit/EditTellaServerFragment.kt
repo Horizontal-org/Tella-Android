@@ -61,7 +61,7 @@ class EditTellaServerFragment :
     private fun initData() {
         viewModel.listAutoReports()
         viewModel.doesAutoUploadActivated.observe(viewLifecycleOwner) { isAutoUploadActivated ->
-            binding?.autoReportSwitch?.apply {
+            binding.autoReportSwitch.apply {
                 mSwitch.isClickable = !(isAutoUploadActivated && !reportServer.isAutoUpload)
                 val text = if (isAutoUploadActivated && !reportServer.isAutoUpload) {
                     R.string.Setting_Reports_Background_Upload_Disabled_Description
@@ -73,19 +73,19 @@ class EditTellaServerFragment :
             }
 
             if (isAutoUploadActivated && !reportServer.isAutoUpload) {
-                binding?.autoDeleteSeparator?.isVisible = false
-                binding?.autoDeleteSwitch?.isVisible = false
+                binding.autoDeleteSeparator.isVisible = false
+                binding.autoDeleteSwitch.isVisible = false
             } else {
                 val isVisible = isAutoUploadActivated || reportServer.isAutoUpload
-                binding?.autoDeleteSeparator?.isVisible = isVisible
-                binding?.autoDeleteSwitch?.isVisible = isVisible
+                binding.autoDeleteSeparator.isVisible = isVisible
+                binding.autoDeleteSwitch.isVisible = isVisible
             }
         }
     }
 
     private fun initView() {
         reportServer.apply {
-            binding?.apply {
+            binding.apply {
                 serverNameTv.text = name.orEmpty()
                 serverUrlTv.text = url.orEmpty()
                 userNameTv.text = username.orEmpty()
@@ -96,12 +96,12 @@ class EditTellaServerFragment :
             }
         }
         if (isEditMode) {
-            binding?.credentialsContainer?.show()
+            binding.credentialsContainer.show()
         }
     }
 
     private fun initListeners() {
-        binding?.apply {
+        binding.apply {
             cancel.setOnClickListener { baseActivity.finish() }
             next.setOnClickListener {
                 if (isEditMode) {
@@ -132,7 +132,6 @@ class EditTellaServerFragment :
 
             backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
                 reportServer.isActivatedBackgroundUpload = isChecked
-                setNoTimeOut(isChecked || autoReportSwitch.mSwitch.isChecked)
             }
 
             shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->

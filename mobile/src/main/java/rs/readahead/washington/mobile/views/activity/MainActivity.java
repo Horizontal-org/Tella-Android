@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -233,7 +235,11 @@ public class MainActivity extends MetadataActivity implements
     private boolean checkIfShouldExit() {
         if (!mExit) {
             mExit = true;
-            showToast(R.string.home_toast_back_exit);
+            DialogUtils.showBottomMessage(
+                    this,
+                    getString(R.string.home_toast_back_exit),
+                    false
+            );
             handler.postDelayed(() -> mExit = false, 3 * 1000);
             return false;
         }

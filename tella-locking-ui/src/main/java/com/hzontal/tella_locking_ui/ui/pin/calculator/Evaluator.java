@@ -1,13 +1,21 @@
-/* Thanks to Boann answer https://stackoverflow.com/a/26227947 */
+/* Inspired by Boann answer https://stackoverflow.com/a/26227947 */
 
 package com.hzontal.tella_locking_ui.ui.pin.calculator;
 
 import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.text.TextUtils.substring;
 import static java.lang.String.format;
 
+
 public class Evaluator {
+
+    public static String calculateResult(final String input) {
+        String entry = handlePercentage(input);
+        return evaluateResult(entry);
+    }
 
     public static String evaluateResult(final String input) {
         String entry = input;
@@ -30,6 +38,29 @@ public class Evaluator {
             evaluationString = sf.format(evaluation);
         }
         return evaluationString;
+    }
+
+    public static String handlePercentage(final String input) {
+        String inputS = input.replace(" ", "");
+        //regular expression to find decimal
+
+        Pattern regex = Pattern.compile("(\\d+(?:\\.\\d+)?%)");
+        Matcher matcher = regex.matcher(inputS);
+
+            while (matcher.find()) {
+                //last decimal in string up to char %
+                String occurrence = matcher.group(1);
+                // replacement for x% = x/100
+                if (occurrence != null) {
+                    String pctNum = occurrence.replace("%", "");
+                    String pctReplace = evaluateResult(pctNum + "/100");
+                    inputS = inputS.replace(occurrence, pctReplace);
+                } else {
+                    break;
+                }
+            }
+
+        return inputS;
     }
 
     public static double eval(final String str) {

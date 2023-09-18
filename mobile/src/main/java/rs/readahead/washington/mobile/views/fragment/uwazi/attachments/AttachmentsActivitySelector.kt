@@ -18,10 +18,10 @@ import org.hzontal.shared_ui.breadcrumb.model.Item
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentAttachmentsSelectorBinding
 import rs.readahead.washington.mobile.util.setMargins
-import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
-import rs.readahead.washington.mobile.views.activity.CameraActivity
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
 const val RETURN_ODK = "rodk"
@@ -79,7 +79,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
     private fun initObservers() {
         with(viewModel) {
-            rootVaultFile.observe(this@AttachmentsActivitySelector, { vaultFile ->
+            rootVaultFile.observe(this@AttachmentsActivitySelector) { vaultFile ->
                 vaultFile?.let { root ->
                     currentRootID = root.id
                     getFiles(root.id, filterType, null)
@@ -92,9 +92,9 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                         )
                     )
                 }
-            })
+            }
 
-            vaultFiles.observe(this@AttachmentsActivitySelector, { files ->
+            vaultFiles.observe(this@AttachmentsActivitySelector) { files ->
                 if (files.isEmpty()) {
                     binding.attachmentsRecyclerView.visibility = View.GONE
                     binding.emptyViewMsgContainer.visibility = View.VISIBLE
@@ -103,14 +103,14 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.emptyViewMsgContainer.visibility = View.GONE
                 }
                 attachmentsAdapter.setFiles(files)
-            })
+            }
 
-            selectVaultFiles.observe(this@AttachmentsActivitySelector, { listFiles ->
+            selectVaultFiles.observe(this@AttachmentsActivitySelector) { listFiles ->
                 if (!listFiles.isNullOrEmpty()) {
                     attachmentsAdapter.selectedMediaFiles = listFiles
                     updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
                 }
-            })
+            }
         }
     }
 

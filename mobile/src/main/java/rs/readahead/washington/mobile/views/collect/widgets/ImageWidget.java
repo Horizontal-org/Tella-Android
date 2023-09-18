@@ -32,7 +32,7 @@ import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.CameraActivity;
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;

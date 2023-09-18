@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 158
-        versionName "2.3"
+        versionCode 159
+        versionName "2.4"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -102,7 +102,7 @@ dependencies {
     implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragment"
     implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher"
+    kapt("org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
@@ -152,6 +152,8 @@ dependencies {
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
 }

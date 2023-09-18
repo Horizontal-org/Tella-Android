@@ -71,7 +71,6 @@ class DownloadedTemplatesFragment : BaseFragment() {
                     getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
                 ) { viewModel.confirmDelete(it.second) }
             }
-
         }
     }
 }

@@ -98,7 +98,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
     override fun onFailureSetPin(error: String) {
         var evaluationString = ""
         try {
-            evaluationString = Evaluator.evaluateResult(pinEditText.text.toString())
+            evaluationString = Evaluator.calculateResult(pinEditText.text.toString())
         } catch (e: Exception) {
             evaluationString = "ERROR"
         } finally {
