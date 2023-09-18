@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
-import rs.readahead.washington.mobile.util.isScreenReaderOn
 import rs.readahead.washington.mobile.util.setupForAccessibility
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -27,8 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var loading: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (this.isScreenReaderOn())
-            supportFragmentManager.setupForAccessibility()
+        supportFragmentManager.setupForAccessibility(this)
 
         // start with preventing showing screen in tasks?
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,

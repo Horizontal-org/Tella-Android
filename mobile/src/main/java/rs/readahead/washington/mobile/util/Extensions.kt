@@ -120,7 +120,8 @@ fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
     setImageDrawable(drawable)
 }
 
-fun FragmentManager.setupForAccessibility() {
+fun FragmentManager.setupForAccessibility(context: Context) {
+    if (context.isScreenReaderOn())
     addOnBackStackChangedListener {
         val lastFragmentWithView = fragments.last { it.view != null }
         for (fragment in fragments) {

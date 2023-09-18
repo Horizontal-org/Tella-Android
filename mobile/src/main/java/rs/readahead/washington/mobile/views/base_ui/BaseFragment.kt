@@ -11,7 +11,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.util.isScreenReaderOn
 import rs.readahead.washington.mobile.util.setupForAccessibility
 import timber.log.Timber
 
@@ -21,8 +20,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (requireContext().isScreenReaderOn())
-            childFragmentManager.setupForAccessibility()
+        childFragmentManager.setupForAccessibility(requireContext())
     }
 
     override fun onAttach(context: Context) {
