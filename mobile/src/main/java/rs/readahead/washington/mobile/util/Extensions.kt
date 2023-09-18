@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.util
 
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
 import android.os.Build
 import android.util.TypedValue
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -19,6 +21,7 @@ import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
 import timber.log.Timber
 import java.net.URL
+
 
 /**
  * function that converts data from json to object
@@ -46,10 +49,10 @@ fun <T> String.fromJsonToObjectList(clazz: Class<T>?): List<T>? {
 }
 
 fun View.setMargins(
-    leftMarginDp: Int? = null,
-    topMarginDp: Int? = null,
-    rightMarginDp: Int? = null,
-    bottomMarginDp: Int? = null
+        leftMarginDp: Int? = null,
+        topMarginDp: Int? = null,
+        rightMarginDp: Int? = null,
+        bottomMarginDp: Int? = null
 ) {
     if (layoutParams is ViewGroup.MarginLayoutParams) {
         val params = layoutParams as ViewGroup.MarginLayoutParams
@@ -78,9 +81,9 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
     return try {
         val endDate = startDate + (7 * 86400)
         val cleanInsightsConfiguration = CleanInsightsConfiguration(
-            URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
-            3,
-            mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
+                URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
+                3,
+                mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
         )
         CleanInsights(cleanInsightsConfiguration, context.filesDir)
     } catch (e: Exception) {
@@ -94,7 +97,7 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
 fun View.setTint(@ColorRes colorRes: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         background.setTintList(
-            ContextCompat.getColorStateList(context, colorRes)
+                ContextCompat.getColorStateList(context, colorRes)
         );
     }
 }
@@ -129,3 +132,15 @@ fun FragmentManager.setupForAccessibility() {
         }
     }
 }
+
+fun Context.isScreenReaderOn(): Boolean {
+    val accessibilityManager = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    if (accessibilityManager != null && accessibilityManager.isEnabled) {
+        val serviceInfoList =
+                accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN)
+        if (serviceInfoList.isNotEmpty())
+            return true
+    }
+    return false
+}
+
