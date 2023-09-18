@@ -157,5 +157,5 @@ dependencies {
 
     testImplementation "junit:junit:$versions.junit"
 
-    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
 }

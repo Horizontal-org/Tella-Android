@@ -42,7 +42,7 @@
             />
     </RelativeLayout>
 
-    <com.theartofdev.edmodo.cropper.CropImageView
+    <com.canhub.cropper.CropImageView
         android:id="@+id/cropImageView"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@+id/topbar"
@@ -69,7 +69,7 @@
             android:clickable="true"
             android:focusable="true"
             android:visibility="visible"
-            android:contentDescription="@string/crop_image_menu_rotate_left"
+            android:contentDescription="@string/action_rotate"
             />
     </LinearLayout>
 

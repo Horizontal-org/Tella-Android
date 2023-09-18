@@ -1,13 +1,13 @@
 package rs.readahead.washington.mobile.views.fragment.vault.edit
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.hzontal.tella_vault.VaultFile
-import com.theartofdev.edmodo.cropper.CropImageView
-import com.theartofdev.edmodo.cropper.CropImageView.RequestSizeOptions
+import com.canhub.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -90,28 +90,18 @@ class VaultEditFragment :
     }
 
     private fun cropImage() {
-        binding.cropImageView.getCroppedImageAsync(
-            binding.cropImageView.cropRect.width(),
-            binding.cropImageView.cropRect.height()
-        )
-        /* This needs a little more tunning
-        binding.cropImageView.getCroppedImageAsync(
-            binding.cropImageView.cropRect.width(),
-            binding.cropImageView.cropRect.height(), RequestSizeOptions.RESIZE_EXACT
-        )*/
-
-    }
-
-    override fun onCropImageComplete(view: CropImageView?, result: CropImageView.CropResult?) {
-        result?.let {
-            if (result.isSuccessful) {
-                binding.cropImageView.setImageBitmap(result.bitmap)
-                viewModel.saveBitmapAsJpeg(result.bitmap, null)
-            }
+        var bitmap: Bitmap? = null
+        binding.cropImageView.cropRect?.let {
+            bitmap = binding.cropImageView.getCroppedImage(
+                it.width(),
+                it.height()
+            )
         }
-    }
 
-    override fun onSetImageUriComplete(view: CropImageView?, uri: Uri?, error: Exception?) {
+        bitmap?.let{
+            binding.cropImageView.setImageBitmap(it)
+            viewModel.saveBitmapAsJpeg(it, null)
+        }
     }
 
     private fun onSaveError() {
@@ -137,5 +127,16 @@ class VaultEditFragment :
     private fun onSaveEnd() {
         //hideProgressDialog()
         back()
+    }
+
+    override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
+        /*if (result.isSuccessful) {
+            binding.cropImageView.setImageBitmap(result.bitmap)
+            result.bitmap?.let { it1 -> viewModel.saveBitmapAsJpeg(it1, null) }
+        }*/
+    }
+
+    override fun onSetImageUriComplete(view: CropImageView, uri: Uri, error: Exception?) {
+
     }
 }
