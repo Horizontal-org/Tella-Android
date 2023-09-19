@@ -8,6 +8,11 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menu_item_edit"
+        android:icon="@drawable/crop_rotate"
+        android:title="@string/action_edit"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menu_item_more"
         android:icon="@drawable/ic_more"
         android:title="@string/gallery_action.desc_save.to.device"

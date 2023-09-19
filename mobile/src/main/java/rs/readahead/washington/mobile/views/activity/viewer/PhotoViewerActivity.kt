@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
 
 @AndroidEntryPoint
 class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
@@ -191,6 +192,17 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                                 onVisibilityChanged(View.VISIBLE)
                             },
                             toolbar = toolbar
+                        )
+                    }
+                    false
+                }
+            toolbar.menu.findItem(R.id.menu_item_edit)
+                .setOnMenuItemClickListener {
+                    vaultFile?.let { file ->
+                        toolbar.visibility = View.GONE
+                        addFragment(
+                            vaultFile.let { VaultEditFragment.newInstance(file, false) },
+                            R.id.container
                         )
                     }
                     false
