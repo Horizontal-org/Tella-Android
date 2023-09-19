@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.hzontal.tella_vault.VaultFile
 import com.canhub.cropper.CropImageView
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -22,12 +22,16 @@ class VaultEditFragment :
     CropImageView.OnCropImageCompleteListener,
     CropImageView.OnSetImageUriCompleteListener {
     private val viewModel by viewModels<EditMediaViewModel>()
+    private var isNavigationCall = true
 
     companion object {
+        const val CALLER_PARAM = "cp"
+
         @JvmStatic
-        fun newInstance(vaultFile: VaultFile): VaultEditFragment {
+        fun newInstance(vaultFile: VaultFile, isFromViewer: Boolean): VaultEditFragment {
             val args = Bundle()
             args.putSerializable(VAULT_FILE_ARG, vaultFile)
+            args.putBoolean(CALLER_PARAM, isFromViewer)
             val fragment = VaultEditFragment()
             fragment.arguments = args
             return fragment
@@ -50,6 +54,9 @@ class VaultEditFragment :
                 }
             }
         }
+        arguments?.getBoolean(CALLER_PARAM)?.let {
+            isNavigationCall = it
+        }
     }
 
     private fun initObservers() {
@@ -69,7 +76,7 @@ class VaultEditFragment :
     }
 
     private fun initListeners() {
-        binding.close.setOnClickListener { back() }
+        binding.close.setOnClickListener { goBack() }
         binding.cropImageView.setOnCropImageCompleteListener(this)
         binding.rotate.setOnClickListener { rotateImage() }
         binding.cropImageView.setOnSetCropOverlayReleasedListener {
@@ -98,7 +105,7 @@ class VaultEditFragment :
             )
         }
 
-        bitmap?.let{
+        bitmap?.let {
             binding.cropImageView.setImageBitmap(it)
             viewModel.saveBitmapAsJpeg(it, null)
         }
@@ -126,7 +133,7 @@ class VaultEditFragment :
 
     private fun onSaveEnd() {
         //hideProgressDialog()
-        back()
+        goBack()
     }
 
     override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
@@ -137,6 +144,14 @@ class VaultEditFragment :
     }
 
     override fun onSetImageUriComplete(view: CropImageView, uri: Uri, error: Exception?) {
+    }
 
+    private fun goBack() {
+        if (isNavigationCall) {
+            back()
+        } else {
+            @Suppress("DEPRECATION")
+            activity?.onBackPressed()
+        }
     }
 }

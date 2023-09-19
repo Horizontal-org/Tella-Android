@@ -132,19 +132,12 @@ object VaultActionsHelper {
              * Edit the file of the VaultFile using a VaultEditFragment.
              */
             override fun edit() {
-                /*unitFunction()
+                unitFunction()
                 toolBar.visibility = View.GONE
                 addFragment(
-                    vaultFile.let { VaultEditFragment.newInstance(it) },
+                    vaultFile.let { VaultEditFragment.newInstance(it, false) },
                     R.id.container
                 )
-                vaultFile.let {
-                    unitFunction()
-                    toolBar.visibility = View.GONE
-                    val bundle = Bundle()
-                    bundle.putSerializable(VAULT_FILE_ARG, it)
-                    nav().navigate(R.id.action_attachments_screen_to_edit_screen, bundle)
-                }*/
             }
 
             /**

@@ -111,7 +111,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             // Observer for the onMediaFileDeleteConfirmed LiveData, handles the action when media file deletion is confirmed
             onMediaFileDeleteConfirmed.observe(this@PhotoViewerActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                mediaFileDeletedConfirmation.vaultFile.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
                         deletedVaultFile,
                         mediaFileDeletedConfirmation.showConfirmDelete
@@ -265,6 +265,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if (toolbar.menu.findItem(R.id.menu_item_more) != null) {
