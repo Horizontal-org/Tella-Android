@@ -169,6 +169,7 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
             android:layout_width="52dp"
             android:layout_height="54dp"
             android:layout_alignParentStart="true"
+            android:contentDescription="@string/Uwazi_Submit_Later"
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
             android:layout_marginStart="@dimen/activity_vertical_large_margin"
             android:background="@drawable/bg_send_later"
