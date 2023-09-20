@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
@@ -58,7 +59,7 @@ class ReportsViewModel @Inject constructor(
     val onOpenClickedInstance: LiveData<ReportInstance> get() = _onOpenClickedFormInstance
     private val _instanceDeleted = MutableLiveData<String?>()
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
-    private val _reportInstance = MutableLiveData<ReportInstance>()
+    private val _reportInstance = SingleLiveEvent<ReportInstance>()
     val reportInstance: LiveData<ReportInstance> get() = _reportInstance
     private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
     private val _entityStatus = MutableLiveData<ReportInstance>()
