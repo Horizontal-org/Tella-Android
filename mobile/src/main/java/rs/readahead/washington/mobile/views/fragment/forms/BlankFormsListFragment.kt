@@ -539,8 +539,11 @@ class BlankFormsListFragment :
 
     private fun upgradeJavarosa2() {
         try {
-            Toast.makeText(context, getString(R.string.Javarosa_Upgrade_Toast), Toast.LENGTH_LONG)
-                .show()
+            DialogUtils.showBottomMessage(
+                activity,
+                requireActivity().getString(R.string.Javarosa_Upgrade_Toast),
+                false
+            )
             model.deleteCachedForms()
         } catch (t: Throwable) {
             Timber.d(t)

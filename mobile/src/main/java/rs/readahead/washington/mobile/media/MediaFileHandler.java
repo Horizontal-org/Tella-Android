@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.media;
 
+import static android.provider.Settings.System.getString;
+import static androidx.core.content.ContentProviderCompat.requireContext;
 import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
 
 import android.app.Activity;
@@ -18,7 +20,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 import com.hzontal.utils.MediaFile;
 
 import org.apache.commons.io.IOUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -123,7 +125,11 @@ public class MediaFileHandler {
             activity.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
             Timber.d(e, activity.getClass().getName());
-            Toast.makeText(activity, R.string.gallery_toast_fail_import, Toast.LENGTH_LONG).show();
+            DialogUtils.showBottomMessage(
+                    activity,
+                    activity.getString(R.string.gallery_toast_fail_import),
+                    true
+            );
         }
     }
 
