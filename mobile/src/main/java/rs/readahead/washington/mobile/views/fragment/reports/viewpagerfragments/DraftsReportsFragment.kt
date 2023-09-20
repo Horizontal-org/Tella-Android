@@ -31,8 +31,8 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun initView() {
-        binding?.textViewEmpty?.setText(getString(R.string.Drafts_Reports_Empty_Message))
-        binding?.listReportsRecyclerView?.apply {
+        binding.textViewEmpty.setText(getString(R.string.Drafts_Reports_Empty_Message))
+        binding.listReportsRecyclerView.apply {
             adapter = entityAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -43,12 +43,12 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         with(viewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 if (drafts.isEmpty()) {
-                    binding?.listReportsRecyclerView?.hide()
-                    binding?.textViewEmpty?.show()
+                    binding.listReportsRecyclerView.hide()
+                    binding.textViewEmpty.show()
                 } else {
                     entityAdapter.setEntities(drafts)
-                    binding?.listReportsRecyclerView?.show()
-                    binding?.textViewEmpty?.hide()
+                    binding.listReportsRecyclerView.show()
+                    binding.textViewEmpty.hide()
                 }
             }
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
