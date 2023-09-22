@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     app:startDestination="@+id/homeScreen">
+    <include app:graph="@navigation/micro"/>
 
     <fragment
         android:id="@+id/homeScreen"
@@ -54,8 +55,8 @@
             android:id="@+id/action_attachments_screen_to_camera"
             app:destination="@id/cameraScreen" />
         <action
-            android:id="@+id/action_attachments_screen_to_micScreen"
-            app:destination="@id/micScreen" />
+            android:id="@+id/action_attachments_screen_to_micro"
+            app:destination="@id/mic" />
     </fragment>
 
     <fragment

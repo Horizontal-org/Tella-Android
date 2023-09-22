@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -364,7 +365,7 @@ class AttachmentsFragment : BaseFragment(), View.OnClickListener, IGalleryVaultH
 
             override fun goToRecorder() {
                 bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
+                findNavController().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 
             override fun chooseImportAndDelete() {

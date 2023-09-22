@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
@@ -546,7 +547,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
-        nav().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
+        findNavController().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
     }
 
     private fun exportVaultFiles(vaultFile: VaultFile) {
