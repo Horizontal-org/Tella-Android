@@ -54,6 +54,7 @@ public class Evaluator {
                 if (occurrence != null) {
                     String pctNum = occurrence.replace("%", "");
                     String pctReplace = evaluateResult(pctNum + "/100");
+                    pctReplace = pctReplace.concat("*");
                     inputS = inputS.replace(occurrence, pctReplace);
                 } else {
                     break;

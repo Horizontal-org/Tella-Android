@@ -90,6 +90,8 @@ class PinUnlockActivity : BasePinActivity() {
         if (TellaKeysUI.getNumFailedAttempts() == 0L) {
             pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
             pinTopText.text = error
+            pinTopText.requestFocus()
+            pinTopText.announceForAccessibility(error)
         } else {
             onWrongPattern()
         }
@@ -120,7 +122,15 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     private fun showErrorMessage() {
-        pinTopText.text = ErrorMessageUtil.generateErrorMessage(this,R.string.incorrect_pin,R.string.LockPinConfirm_Message_Error_IncorrectPin,TellaKeysUI.isShowRemainingAttempts())
+        val error = ErrorMessageUtil.generateErrorMessage(
+            this,
+            R.string.incorrect_pin,
+            R.string.LockPinConfirm_Message_Error_IncorrectPin,
+            TellaKeysUI.isShowRemainingAttempts()
+        )
+        pinTopText.text = error
+        pinTopText.requestFocus()
+        pinTopText.announceForAccessibility(error)
     }
 
 

@@ -50,19 +50,19 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoViewerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initVaultMediaFile()
         initContracts()
-        setupToolbar()
         initObservers()
 
         binding.toolbar.configureAppBar()
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
-        initVaultMediaFile()
         openMedia()
+        setupToolbar()
     }
 
     /**
      * Initializes the VaultMediaFile activity by retrieving the VaultFile from the intent extras.
-     * Sets the title of the toolbar to the name of the VaultFile and checks if actions are disabled.
+     * and checks if actions are disabled.
      */
     private fun initVaultMediaFile() {
         if (intent.hasExtra(VIEW_PHOTO)) {
@@ -71,7 +71,6 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                 this.vaultFile = vaultFile
             }
         }
-        toolbar.title = vaultFile!!.name
         if (intent.hasExtra(NO_ACTIONS)) {
             actionsDisabled = true
         }
@@ -162,7 +161,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
     /**
-     * Sets up the toolbar for the activity, including navigation icon, menu items, and click listeners.
+     * Sets up the toolbar for the activity, including navigation icon, title, menu items, and click listeners.
      * If actions are not disabled, it inflates the menu with actions like metadata and more options.
      */
     private fun setupToolbar() {
@@ -171,15 +170,13 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        toolbar.title = vaultFile!!.name
         if (!actionsDisabled) {
             toolbar.inflateMenu(R.menu.photo_view_menu)
             vaultFile?.let { file ->
                 setupMetadataMenuItem(file.metadata != null)
             }
-            if (vaultFile != null && vaultFile!!.metadata != null) {
-                val item = toolbar.menu.findItem(R.id.menu_item_metadata)
-                item.isVisible = true
-            }
+
             toolbar.menu.findItem(R.id.menu_item_more)
                 .setOnMenuItemClickListener {
                     vaultFile?.let { it1 ->

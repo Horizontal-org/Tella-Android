@@ -36,6 +36,7 @@ import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
 import com.otaliastudios.cameraview.size.SizeSelector
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CaptureEvent
@@ -158,7 +159,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             onMediaFilesUploadScheduled()
         }
 
-        uploadViewModel.mediaFilesUploadScheduleError.observe(this){
+        uploadViewModel.mediaFilesUploadScheduleError.observe(this) {
             onMediaFilesUploadScheduleError(it)
         }
     }
@@ -225,7 +226,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddingEnd() {
         hideProgressDialog()
-        showToast(R.string.gallery_toast_file_encrypted)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_file_encrypted),
+            false
+        )
     }
 
     private fun onAddSuccess(bundle: VaultFile) {
@@ -247,7 +252,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddError(error: Throwable) {
-        showToast(R.string.gallery_toast_fail_saving_file)
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.gallery_toast_fail_saving_file),
+            true
+        )
     }
 
     override fun onMetadataAttached(vaultFile: VaultFile) {
