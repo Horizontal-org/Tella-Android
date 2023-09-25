@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import org.hzontal.shared_ui.utils.DialogUtils;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
 import org.hzontal.tella.keys.config.UnlockRegistry;
 import org.hzontal.tella.keys.config.UnlockResult;
@@ -129,21 +129,33 @@ public class DeviceCredentialsUnlockActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-                Toast.makeText(getApplicationContext(), "Authentication error: " + errString, Toast.LENGTH_SHORT).show();
+                DialogUtils.showBottomMessage(
+                        DeviceCredentialsUnlockActivity.this,
+                        "Authentication error: " + errString,
+                        true
+                );
                 handleUnsuccessfulUnlock();
             }
 
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getApplicationContext(), "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+                DialogUtils.showBottomMessage(
+                        DeviceCredentialsUnlockActivity.this,
+                        "Authentication succeeded!",
+                        false
+                );
                 handleSuccessfulUnlock();
             }
 
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-                Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_SHORT).show();
+                DialogUtils.showBottomMessage(
+                        DeviceCredentialsUnlockActivity.this,
+                        "Authentication failed",
+                        true
+                );
                 handleUnsuccessfulUnlock();
             }
         };
