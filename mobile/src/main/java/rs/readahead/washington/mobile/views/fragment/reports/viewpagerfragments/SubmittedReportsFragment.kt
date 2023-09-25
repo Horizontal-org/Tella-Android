@@ -69,7 +69,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listOutbox()
+                viewModel.listSubmitted()
             }
         }
     }
