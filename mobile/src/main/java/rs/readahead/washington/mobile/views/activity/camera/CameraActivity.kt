@@ -22,6 +22,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.filter.FilterType
+import com.hzontal.utils.MediaFile
 import com.otaliastudios.cameraview.CameraException
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraOptions
@@ -51,6 +53,8 @@ import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.VideoResolutionManager
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.MetadataActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton
 import rs.readahead.washington.mobile.views.custom.CameraDurationTextView
 import rs.readahead.washington.mobile.views.custom.CameraFlashButton
@@ -84,6 +88,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private lateinit var mOrientationEventListener: OrientationEventListener
     private var zoomLevel = 0
     private var capturedMediaFile: VaultFile? = null
+    private var lastMediaFile: VaultFile? = null
     private var videoQualityDialog: AlertDialog? = null
     private var videoResolutionManager: VideoResolutionManager? = null
     private var lastClickTime = System.currentTimeMillis()
@@ -236,6 +241,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun onAddSuccess(bundle: VaultFile) {
         capturedMediaFile = bundle
         if (intentMode != IntentMode.COLLECT) {
+            lastMediaFile = bundle
             previewView.visibility = View.VISIBLE
             Glide.with(this).load(bundle.thumb).into(previewView)
         }
@@ -328,6 +334,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onLastMediaFileSuccess(vaultFile: VaultFile) {
+        lastMediaFile = vaultFile
         if (intentMode != IntentMode.COLLECT) {
             previewView.visibility = View.VISIBLE
             Glide.with(this).load(vaultFile.thumb).diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -346,7 +353,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onMediaFilesUploadScheduled() {
-       //todo do something here
+        //todo do something here
     }
 
     private fun onMediaFilesUploadScheduleError(throwable: Throwable) {
@@ -454,11 +461,30 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         switchButton.contentDescription = getString(contentDescriptionResId)
     }
 
-    fun onPreviewClicked() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(MainActivity.PHOTO_VIDEO_FILTER, "filter")
-        startActivity(intent)
-        finish()
+    private fun onPreviewClicked() {
+        var intent: Intent? = null
+        lastMediaFile?.mimeType?.let {
+            when {
+                MediaFile.isImageFileType(it) -> {
+                    intent = Intent(this, PhotoViewerActivity::class.java).apply {
+                        putExtra(PhotoViewerActivity.VIEW_PHOTO, lastMediaFile)
+                    }
+                }
+                MediaFile.isVideoFileType(it) -> {
+                    intent = Intent(this, VideoViewerActivity::class.java).apply {
+                        putExtra(VideoViewerActivity.VIEW_VIDEO, lastMediaFile)
+                    }
+                }
+                else -> {
+                    intent = Intent(this, MainActivity::class.java).apply {
+                        putExtra(MainActivity.PHOTO_VIDEO_FILTER, FilterType.PHOTO_VIDEO.name)
+                    }
+                }
+            }
+        }
+        if (intent != null) {
+            startActivity(intent)
+        }
     }
 
     private fun resetZoom() {
