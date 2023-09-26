@@ -203,6 +203,47 @@ public class MediaFileHandler {
         }
     }
 
+    public static Single<VaultFile> saveBitmapAsJpeg(Bitmap bitmap, @Nullable String parent) {
+
+        String uid = UUID.randomUUID().toString();
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
+                .builder(new ByteArrayInputStream(getJpegBytes(bitmap)))
+                .setMimeType("image/jpeg")
+                .setName(uid + ".jpg")
+                .setType(VaultFile.Type.FILE)
+                .setThumb(getThumbBytes(bitmap));
+
+        if (parent == null) {
+            return rxVaultFileBuilder
+                    .build()
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return rxVaultFileBuilder
+                    .build(parent)
+                    .subscribeOn(Schedulers.io());
+        }
+    }
+
+    private static byte[] getJpegBytes(Bitmap bitmap) {
+        if (bitmap != null) {
+            ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
+                return imageJpegStream.toByteArray();
+            }
+        }
+        return null;
+    }
+
+    private static byte[] getThumbBytes(Bitmap bitmap) {
+        if (bitmap != null) {
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if (thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                return stream.toByteArray();
+            }
+        }
+        return null;
+    }
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods

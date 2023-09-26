@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
 
 @AndroidEntryPoint
 class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
@@ -110,7 +111,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             // Observer for the onMediaFileDeleteConfirmed LiveData, handles the action when media file deletion is confirmed
             onMediaFileDeleteConfirmed.observe(this@PhotoViewerActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                mediaFileDeletedConfirmation.vaultFile.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
                         deletedVaultFile,
                         mediaFileDeletedConfirmation.showConfirmDelete
@@ -192,6 +193,17 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     }
                     false
                 }
+            toolbar.menu.findItem(R.id.menu_item_edit)
+                .setOnMenuItemClickListener {
+                    vaultFile?.let { file ->
+                        toolbar.visibility = View.GONE
+                        addFragment(
+                            vaultFile.let { VaultEditFragment.newInstance(file, false) },
+                            R.id.container
+                        )
+                    }
+                    false
+                }
         }
     }
 
@@ -262,6 +274,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         MyApplication.bus().post(VaultFileRenameEvent())
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if (toolbar.menu.findItem(R.id.menu_item_more) != null) {

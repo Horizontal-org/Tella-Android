@@ -38,7 +38,6 @@ class CameraViewModel @Inject constructor() : ViewModel() {
     private val _lastMediaFileError = SingleLiveEvent<Throwable>()
     val lastMediaFileError: LiveData<Throwable> = _lastMediaFileError
 
-
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
         disposables.add(
             Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
@@ -71,7 +70,6 @@ class CameraViewModel @Inject constructor() : ViewModel() {
                 )
         )
     }
-
 
     fun getLastMediaFile() {
         disposables.add(

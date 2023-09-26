@@ -68,8 +68,10 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.setToolbarLabel
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
-import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
+import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
+import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
+
 
 @AndroidEntryPoint
 class AttachmentsFragment :
@@ -96,6 +98,7 @@ class AttachmentsFragment :
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         if (isListCheckOn && !isMoveModeEnabled) {
@@ -110,6 +113,7 @@ class AttachmentsFragment :
         initView()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_more -> {
@@ -549,12 +553,22 @@ class AttachmentsFragment :
             getString(R.string.gallery_action_desc_save_to_device),
             getString(R.string.Vault_File_SheetAction),
             getString(R.string.Vault_Delete_SheetAction),
+            getString(R.string.Vault_FileEdit_SheetAction),
             isDirectory = vaultFile?.type == VaultFile.Type.DIRECTORY,
             isMultipleFiles = isMultipleFiles,
             isUploadVisible = false,
             isMoveVisible = filterType == FilterType.ALL,
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
+                }
+
+                override fun edit() {
+                    vaultFile.let {
+                        val bundle = Bundle()
+                        bundle.putSerializable(VAULT_FILE_ARG, it)
+                        bundle.putBoolean(VaultEditFragment.CALLER_PARAM, true)
+                        nav().navigate(R.id.action_attachments_screen_to_edit_screen, bundle)
+                    }
                 }
 
                 override fun share() {
@@ -634,7 +648,6 @@ class AttachmentsFragment :
                                         viewModel.deleteFilesAfterConfirmation(files)
                                     }
                                 }
-
                             }
                         })
 
@@ -1097,6 +1110,7 @@ class AttachmentsFragment :
 
     override fun onResume() {
         super.onResume()
+        onMediaFilesAdded()
         handleOnBackPressed()
     }
 

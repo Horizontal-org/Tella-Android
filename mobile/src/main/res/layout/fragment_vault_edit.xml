@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_black"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@color/wa_black">
+
+        <ImageView
+            android:id="@+id/close"
+            style="@style/CameraTopImageStyle"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_close_white"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/action_cancel"
+            />
+
+        <ImageView
+            android:id="@+id/accept"
+            style="@style/CameraTopImageStyle"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/circle_check"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            android:contentDescription="@string/action_continue"
+            />
+    </RelativeLayout>
+
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        app:layout_constraintBottom_toTopOf="@+id/bottombar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:gravity="center"
+        android:background="@color/wa_black">
+
+        <ImageView
+            android:id="@+id/rotate"
+            style="@style/CameraTopImageStyle"
+            android:src="@drawable/rotate_image"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="visible"
+            android:contentDescription="@string/action_rotate"
+            />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

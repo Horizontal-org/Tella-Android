@@ -239,3 +239,6 @@
 # slf4j
 -keep class org.slf4j.** { *; }
 -dontwarn org.slf4j.**
+
+# Android-Image-Cropper
+-keep class androidx.appcompat.widget.** { *; }

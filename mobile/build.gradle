@@ -156,4 +156,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
+
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
 }

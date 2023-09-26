@@ -831,4 +831,5 @@ they are uploaded to this project as a report.</string>
   <string name="action_hide_pin">hide pin</string>
   <string name="action_go_back">go back</string>
   <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
+  <string name="action_rotate">Rotate</string>
 </resources>

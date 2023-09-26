@@ -60,10 +60,18 @@
         app:drawableStartCompat="@drawable/ic_pen" />
 
     <TextView
-        android:id="@+id/saveActionTV"
+        android:id="@+id/editActionTV"
         style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/renameActionTV"
+        android:layout_marginTop="20dp"
+        app:drawableStartCompat="@drawable/crop_rotate" />
+
+    <TextView
+        android:id="@+id/saveActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editActionTV"
         android:layout_marginTop="20dp"
         app:drawableStartCompat="@drawable/ic_save_alt_24px" />
 

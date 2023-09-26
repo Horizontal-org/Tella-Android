@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.Toolbar
 import com.hzontal.tella_vault.VaultFile
@@ -16,6 +17,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.hasStoragePermissions
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.requestStoragePermissions
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
+import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment
 
 var withMetadata = false
@@ -121,7 +123,19 @@ object VaultActionsHelper {
                 toolBar.menu.findItem(R.id.menu_item_metadata).isVisible = false
                 invalidateOptionsMenu()
                 addFragment(
-                    vaultFile?.let { VaultInfoFragment.newInstance(it, false) },
+                    vaultFile.let { VaultInfoFragment.newInstance(it, false) },
+                    R.id.container
+                )
+            }
+
+            /**
+             * Edit the file of the VaultFile using a VaultEditFragment.
+             */
+            override fun edit() {
+                unitFunction()
+                toolBar.visibility = View.GONE
+                addFragment(
+                    vaultFile.let { VaultEditFragment.newInstance(it, false) },
                     R.id.container
                 )
             }
@@ -138,7 +152,7 @@ object VaultActionsHelper {
                     getString(R.string.action_cancel),
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
-                            vaultFile?.let { sharedViewModel.confirmDeleteMediaFile(it) }
+                            vaultFile.let { sharedViewModel.confirmDeleteMediaFile(it) }
                         }
                     }
                 )
@@ -148,7 +162,7 @@ object VaultActionsHelper {
         // Show the Vault actions dialog with available actions for the given VaultFile
         showVaultActionsSheet(
             supportFragmentManager,
-            chosenVaultFile?.name,
+            chosenVaultFile.name,
             getString(R.string.Vault_Upload_SheetAction),
             getString(R.string.Vault_Share_SheetAction),
             getString(R.string.Vault_Move_SheetDesc),
@@ -156,6 +170,7 @@ object VaultActionsHelper {
             getString(R.string.gallery_action_desc_save_to_device),
             getString(R.string.Vault_File_SheetAction),
             getString(R.string.Vault_Delete_SheetAction),
+            getString(R.string.Vault_FileEdit_SheetAction),
             isDirectory = false,
             isMultipleFiles = false,
             isUploadVisible = false,
