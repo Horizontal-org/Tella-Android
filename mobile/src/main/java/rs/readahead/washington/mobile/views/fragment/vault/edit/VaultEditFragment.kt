@@ -29,9 +29,10 @@ class VaultEditFragment :
 
         @JvmStatic
         fun newInstance(vaultFile: VaultFile, isFromViewer: Boolean): VaultEditFragment {
-            val args = Bundle()
-            args.putSerializable(VAULT_FILE_ARG, vaultFile)
-            args.putBoolean(CALLER_PARAM, isFromViewer)
+            val args = Bundle().apply {
+                putSerializable(VAULT_FILE_ARG, vaultFile)
+                putBoolean(CALLER_PARAM, isFromViewer)
+            }
             val fragment = VaultEditFragment()
             fragment.arguments = args
             return fragment

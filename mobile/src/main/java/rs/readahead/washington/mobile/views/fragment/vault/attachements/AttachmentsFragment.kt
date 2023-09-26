@@ -1110,6 +1110,7 @@ class AttachmentsFragment :
 
     override fun onResume() {
         super.onResume()
+        onMediaFilesAdded()
         handleOnBackPressed()
     }
 
