@@ -31,8 +31,8 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
     }
 
     private fun initView() {
-        binding?.textViewEmpty?.setText(getString(R.string.Submitted_Reports_Empty_Message))
-        binding?.listReportsRecyclerView?.apply {
+        binding.textViewEmpty.setText(getString(R.string.Submitted_Reports_Empty_Message))
+        binding.listReportsRecyclerView.apply {
             adapter = entityAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -42,12 +42,12 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
         with(viewModel) {
             submittedReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 if (outboxes.isEmpty()) {
-                    binding?.listReportsRecyclerView?.hide()
-                    binding?.textViewEmpty?.show()
+                    binding.listReportsRecyclerView.hide()
+                    binding.textViewEmpty.show()
                 } else {
                     entityAdapter.setEntities(outboxes)
-                    binding?.listReportsRecyclerView?.show()
-                    binding?.textViewEmpty?.hide()
+                    binding.listReportsRecyclerView.show()
+                    binding.textViewEmpty.hide()
                 }
             }
 
@@ -67,9 +67,9 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
                         R.string.Report_Deleted_Confirmation, it
-                    ),baseActivity
+                    ), baseActivity
                 )
-                viewModel.listOutbox()
+                viewModel.listSubmitted()
             }
         }
     }

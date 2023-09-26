@@ -345,13 +345,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         return this
     }
 
-    fun onMediaFilesUploadScheduled() {
-        if (intentMode != IntentMode.STAND) {
-            finish()
-        }
+    private fun onMediaFilesUploadScheduled() {
+       //todo do something here
     }
 
-    fun onMediaFilesUploadScheduleError(throwable: Throwable) {
+    private fun onMediaFilesUploadScheduleError(throwable: Throwable) {
 
     }
 
