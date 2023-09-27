@@ -177,10 +177,7 @@ class SubmitFormsViewModel @Inject constructor(private val mApplication: Applica
     // todo: move to FormSaver
     fun saveForLaterFormInstance(name: String?) {
         val instance = FormController.getActive().collectFormInstance
-        if (instance.id > 0) { // already saved
-            _saveForLaterFormInstanceSuccess.postValue(true)
-            return
-        }
+
         if (!TextUtils.isEmpty(name)) {
             instance.instanceName = name
         }
