@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Enviado</string>
   <string name="home_expl_cancel.quick.delete">Pulsa en cualquier lugar para cancelar</string>
   <string name="recorder_app.bar">Grabadora</string>
-  <string name="collect_app.bar">Recopilar</string>
   <string name="settings.docu_field_username">Nombre de usuaria(o)</string>
   <string name="collect.draft_meta_date.updated">Actualizado: %1$s</string>
   <string name="settings.about_app.version">Versión</string>
@@ -129,8 +128,6 @@
   <string name="collect.blank_expl_no.forms">No hay formularios para mostrar. Pulsa el botón de actualización para comprobar si hay formularios disponibles en los servidores a los que estás conectada(o).</string>
   <string name="settings.camo_heading">Selecciona un nombre y un logo diferentes</string>
   <string name="gallery_expl_empty">No hay archivos para mostrar. Toca el botón + para importar los archivos. </string>
-  <string name="collect.help_app.bar">Ayuda de Collect</string>
-  <string name="collect.help_expl_intro">Collect es una herramienta para recopilar datos al completar formularios y encuestas directamente en tu dispositivo</string>
   <string name="collect.blank_toast_not.connected">No hay conexión a Internet. Inténtalo de nuevo cuando estés conectada(o) a Internet.</string>
   <string name="settings.gen_crash.reports_action">Compartir informes de fallos</string>
   <string name="settings.gen_crash.reports_action.expl">Los informes de fallos nos ayudan a mejorar Tella. Se envían automáticamente e incluyen datos tales como el modelo del dispositivo y la versión de Android.</string>
@@ -435,10 +432,6 @@ conectarse a un servidor</string>
   <string name="SettingsCamo_EnterLock_Password">Ingresa tu contraseña para cambiar tu método de camuflaje</string>
   <string name="settings.gen_select_about">Acerca de y Ayuda</string>
   <string name="settings.gen_select_language">Idioma</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">Archivo borrado</item>
-    <item quantity="other">%1$d archivos borrados</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">Salir</string>
   <string name="settings.camo_camera4">Cámara</string>
   <string name="settings.camo_camera3">CameraPro</string>

@@ -44,7 +44,6 @@ mode activation</string>
   <string name="collect.sent_tab.title">Submitted</string>
   <string name="home_expl_cancel.quick.delete">Tap anywhere to cancel</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">Collect</string>
   <string name="settings.docu_field_username">Username</string>
   <string name="collect.draft_meta_date.updated">Updated: %1$s</string>
   <string name="settings.about_app.version">Version</string>
@@ -130,8 +129,6 @@ mode activation</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>
   <string name="gallery_expl_empty">There are no files to show. Tap the + button to import files.</string>
-  <string name="collect.help_app.bar">Collect Help</string>
-  <string name="collect.help_expl_intro">Collect is a tool to collect data by filling forms and surveys directly on your device</string>
   <string name="collect.blank_toast_not.connected">You’re not connected to the internet. Try again when connected</string>
   <string name="settings.gen_crash.reports_action">Share crash reports</string>
   <string name="settings.gen_crash.reports_action.expl">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>
@@ -437,10 +434,6 @@ connecting to a server</string>
   <string name="SettingsCamo_EnterLock_Password">Enter your password to change your camouflage method</string>
   <string name="settings.gen_select_about">About &amp; Help</string>
   <string name="settings.gen_select_language">Language</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">File deleted</item>
-    <item quantity="other">%1$d files deleted</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">Exit</string>
   <string name="settings.camo_camera4">Camera</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -832,4 +825,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_go_back">go back</string>
   <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
   <string name="action_rotate">Rotate</string>
+  <string name="Snackbar_file_was_deleted">The file was deleted.</string>
+  <string name="Snackbar_files_were_deleted">The files were deleted.</string>
+
 </resources>

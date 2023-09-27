@@ -46,7 +46,6 @@
     <string name="collect.sent_tab.title">Terkirim</string>
     <string name="home_expl_cancel.quick.delete">Ketuk mana saja untuk membatalkan</string>
     <string name="recorder_app.bar">Recorder</string>
-    <string name="collect_app.bar">Kumpulkan</string>
     <string name="home_action.expl_camera">Tap anywhere to open the camera</string>
     <string name="settings.docu_field_username">Nama pengguna</string>
     <string name="collect.draft_meta_date.updated">Diperbarui: %1$s</string>
@@ -88,10 +87,6 @@
     <string name="collect.end_action_submit">Kirim</string>
     <string name="gallery_toast_fail.exporting.to.device">There was an error exporting the files. Please try again</string>
     <string name="permission_dialog.expl_device.storage">Untuk mengekspor file, Tella butuh izin untuk memodifikasi penyimpanan gawai.</string>
-    <plurals name="gallery_toast_files.deleted">
-        <item quantity="one">File deleted</item>
-        <item quantity="other">%1$d files deleted</item>
-    </plurals>
     <string name="gallery_toast_fail.deleting.files">There was an error deleting the files. Please try again.</string>
     <plurals name="gallery_toast_files.exported">
         <item quantity="one">%1$d file saved to the device</item>
@@ -148,8 +143,6 @@
     <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
     <string name="settings.camo_heading">Select a different name and logo</string>
     <string name="gallery_expl_empty">There are no files to show. Tap the + button to import files.</string>
-    <string name="collect.help_app.bar">Collect Help</string>
-    <string name="collect.help_expl_intro">Collect is a tool to collect data by filling forms and surveys directly on your device</string>
     <string name="collect.blank_toast_not.connected">You’re not connected to the internet. Try again when connected</string>
     <string name="settings.gen_crash.reports_action">Share crash reports</string>
     <string name="settings.gen_crash.reports_action.expl">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>

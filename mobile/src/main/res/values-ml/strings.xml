@@ -40,7 +40,6 @@
   <string name="collect.sent_tab.title">സമര്‍പ്പിച്ചവ</string>
   <string name="home_expl_cancel.quick.delete">റദ്ദാക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">ശേഖരിക്കുക</string>
   <string name="settings.docu_field_username">ഉപയോക്താവിന്റെ പേർ </string>
   <string name="collect.draft_meta_date.updated">പുതുക്കപ്പെട്ടത്: %1$s</string>
   <string name="settings.about_app.version">പതിപ്പ്</string>
@@ -118,8 +117,6 @@
   <string name="collect.sent_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് സമർപ്പിച്ച ഫോമുകളൊന്നുമില്ല.</string>
   <string name="collect.blank_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് ഫോമുകളൊന്നുമില്ല. നിങ്ങൾ ബന്ധിപ്പിച്ചിരിക്കുന്ന സെർവറുകളിൽ ഫോമുകൾ ലഭ്യമാണോയെന്ന് പരിശോധിക്കാൻ പുതുക്കുക ബട്ടൺ ടാപ്പുചെയ്യുക.</string>
   <string name="settings.camo_heading">മറ്റൊരു പേരും ലോഗോയും തിരഞ്ഞെടുക്കുക</string>
-  <string name="collect.help_app.bar">കളക്ട് സഹായി</string>
-  <string name="collect.help_expl_intro">നിങ്ങളുടെ ഉപകരണത്തിൽ ഫോമുകളും സർവേകളും നേരിട്ട് പൂരിപ്പിച്ച് ഡാറ്റ ശേഖരിക്കുന്നതിനുള്ള ഒരു സംവിധാനമാണ് ശേഖരിക്കുക</string>
   <string name="settings.gen_crash.reports_action">തകരാറിനെപ്പറ്റിയുള്ള അറിയിപ്പ് പങ്കിടുക</string>
   <string name="settings.gen_crash.reports_action.expl">ക്രാഷ് (അപ്പ്ലിക്കേഷന്റെ പ്രവർത്തന പ്രശ്നങ്ങൾ) റിപ്പോർട്ടുകൾ റ്റെല്ലയെ മെച്ചപ്പെടുത്താൻ ഞങ്ങളെ സഹായിക്കുന്നു. അവ ഓട്ടോമാറ്റിക്കായി (യാന്ത്രികമായി) അയക്കുന്നു - അതിൽ ഉപകരണ മോഡൽ, ആൻഡ്രോയിഡ് പതിപ്പ് എന്നിവ പോലുള്ള ഡാറ്റ ഉൾപ്പെടുത്തുകയും ചെയ്യുന്നു.</string>
   <string name="collect.form_dialog.action_add.group">ചേര്‍ക്കുക</string>

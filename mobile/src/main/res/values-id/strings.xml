@@ -40,7 +40,6 @@
   <string name="collect.sent_tab.title">Terkirim</string>
   <string name="home_expl_cancel.quick.delete">Ketuk mana saja untuk membatalkan</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">Kumpulkan</string>
   <string name="settings.docu_field_username">Nama pengguna</string>
   <string name="collect.draft_meta_date.updated">Diperbarui: %1$s</string>
   <string name="settings.about_app.version">Versi</string>
@@ -118,8 +117,6 @@
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>
-  <string name="collect.help_app.bar">Collect Help</string>
-  <string name="collect.help_expl_intro">Collect is a tool to collect data by filling forms and surveys directly on your device</string>
   <string name="settings.gen_crash.reports_action">Share crash reports</string>
   <string name="settings.gen_crash.reports_action.expl">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>
   <string name="collect.form_dialog.action_add.group">Tambahkan</string>

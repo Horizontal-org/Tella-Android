@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Envoyés</string>
   <string name="home_expl_cancel.quick.delete">Toucher n’importe où pour annuler</string>
   <string name="recorder_app.bar">Dictaphone</string>
-  <string name="collect_app.bar">Collecte</string>
   <string name="settings.docu_field_username">Nom d’utilisateur</string>
   <string name="collect.draft_meta_date.updated">Mis à jour : %1$s</string>
   <string name="settings.about_app.version">Version</string>
@@ -127,8 +126,6 @@
   <string name="collect.sent_expl_no.forms">Il n’y a aucun formulaire envoyé à afficher.</string>
   <string name="collect.blank_expl_no.forms">Il n’y a aucun formulaire à afficher. Toucher le bouton d’actualisation pour vérifier si des formulaires sont disponibles sur les serveurs auxquels vous êtes connecté.</string>
   <string name="settings.camo_heading">Sélectionner un nom et un logo différents</string>
-  <string name="collect.help_app.bar">Aide de Collecte</string>
-  <string name="collect.help_expl_intro">Collecte est un outil pour recueillir des données en remplissant des formulaires et des enquêtes directement sur votre appareil</string>
   <string name="collect.blank_toast_not.connected">Pas de connexion Internet. Réessayez lorsque vous êtes connecté à Internet.</string>
   <string name="settings.gen_crash.reports_action">Partager les rapports de plantage</string>
   <string name="settings.gen_crash.reports_action.expl">Les rapports de plantage nous aident à améliorer Tella. Ils sont envoyés automatiquement et comprennent des données telles que le modèle de votre appareil et la version d’Android.</string>
@@ -416,10 +413,6 @@
   <string name="SettingsCamo_EnterLock_Password">Entrez votre mot de passe pour changer votre méthode de camouflage</string>
   <string name="settings.gen_select_about">À propos et Aide</string>
   <string name="settings.gen_select_language">Langue</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">Fichier supprimé</item>
-    <item quantity="other">%1$d fichiers supprimés</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">Sortir</string>
   <string name="settings.camo_camera4">Appareil photo</string>
   <string name="settings.camo_camera3">PhotoPro</string>

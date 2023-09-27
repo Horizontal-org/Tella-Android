@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
@@ -27,7 +26,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
 import rs.readahead.washington.mobile.javarosa.FormUtils
 import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.StringUtils
-import rs.readahead.washington.mobile.views.activity.CollectHelpActivity
 import rs.readahead.washington.mobile.views.activity.FormSubmitActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.BLANK_LIST_PAGE_INDEX
@@ -156,49 +154,45 @@ class CollectMainFragment :
         }
         super.onDestroy()
     }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == android.R.id.home) {
-            //onBackPressed()
-            return true
-        }
-        if (id == R.id.help_item) {
-            startCollectHelp()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
     /*
-    private fun hasLocationPermissions(context: Context): Boolean {
-    if (ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    )
-        return true
-    return false
-    }
+        @Deprecated("Deprecated in Java")
+        override fun onOptionsItemSelected(item: MenuItem): Boolean {
+            val id = item.itemId
+            if (id == android.R.id.home) {
+                //onBackPressed()
+                return true
+            }
+            return super.onOptionsItemSelected(item)
+        }
 
-    private fun requestLocationPermissions() {
-    baseActivity.maybeChangeTemporaryTimeout()
-    val permissions = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
-    ActivityCompat.requestPermissions(
-        //1
-        baseActivity,
-        //2
-        permissions,
-        //3
-        LOCATION_REQUEST_CODE
-    )
-    }*/
+        private fun hasLocationPermissions(context: Context): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+            return true
+        return false
+        }
+
+        private fun requestLocationPermissions() {
+        baseActivity.maybeChangeTemporaryTimeout()
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            baseActivity,
+            //2
+            permissions,
+            //3
+            LOCATION_REQUEST_CODE
+        )
+        }*/
 
     private fun initObservers() {
         model.onError.observe(viewLifecycleOwner) { error ->
@@ -259,10 +253,6 @@ class CollectMainFragment :
 
     private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
         model.createFormController(form, formDef)
-    }
-
-    private fun startCollectHelp() {
-        startActivity(Intent(baseActivity, CollectHelpActivity::class.java))
     }
 
     private fun showStoppedMessage() {

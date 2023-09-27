@@ -238,17 +238,17 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
-    private fun onAddSuccess(bundle: VaultFile) {
-        capturedMediaFile = bundle
+    private fun onAddSuccess(file: VaultFile) {
+        capturedMediaFile = file
         if (intentMode != IntentMode.COLLECT) {
-            lastMediaFile = bundle
+            lastMediaFile = file
             previewView.visibility = View.VISIBLE
-            Glide.with(this).load(bundle.thumb).into(previewView)
+            Glide.with(this).load(file.thumb).into(previewView)
         }
         if (!Preferences.isAnonymousMode()) {
             attachMediaFileMetadata(capturedMediaFile, metadataAttacher)
         } else {
-            returnIntent(bundle)
+            returnIntent(file)
         }
         if (captureWithAutoUpload) {
             capturedMediaFile?.let { vaultFile -> scheduleFileUpload(vaultFile) }
