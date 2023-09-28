@@ -232,9 +232,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun onAddingEnd() {
         hideProgressDialog()
         DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.gallery_toast_file_encrypted),
-            false
+            this, getString(R.string.gallery_toast_file_encrypted), false
         )
     }
 
@@ -258,9 +256,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddError(error: Throwable) {
         DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.gallery_toast_fail_saving_file),
-            true
+            this, getString(R.string.gallery_toast_fail_saving_file), true
         )
     }
 
@@ -462,6 +458,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onPreviewClicked() {
+        val intent: Intent? = createIntentForMediaFile()
+        intent?.let {
+            startActivity(intent)
+        }
+    }
+
+    private fun createIntentForMediaFile(): Intent? {
         var intent: Intent? = null
         lastMediaFile?.mimeType?.let {
             when {
@@ -470,11 +473,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                         putExtra(PhotoViewerActivity.VIEW_PHOTO, lastMediaFile)
                     }
                 }
+
                 MediaFile.isVideoFileType(it) -> {
                     intent = Intent(this, VideoViewerActivity::class.java).apply {
                         putExtra(VideoViewerActivity.VIEW_VIDEO, lastMediaFile)
                     }
                 }
+
                 else -> {
                     intent = Intent(this, MainActivity::class.java).apply {
                         putExtra(MainActivity.PHOTO_VIDEO_FILTER, FilterType.PHOTO_VIDEO.name)
@@ -482,9 +487,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 }
             }
         }
-        if (intent != null) {
-            startActivity(intent)
-        }
+        return intent
     }
 
     private fun resetZoom() {
