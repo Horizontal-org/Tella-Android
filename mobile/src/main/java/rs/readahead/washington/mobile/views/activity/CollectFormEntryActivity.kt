@@ -12,7 +12,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -557,13 +556,21 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     override fun hideDeleteFormInstanceEnd() {}
     override fun formInstanceSaveError(throwable: Throwable) {}
     override fun formInstanceSaveSuccess(instance: CollectFormInstance) {
-        Toast.makeText(this, getFormSaveMsg(instance), Toast.LENGTH_SHORT).show()
+        DialogUtils.showBottomMessage(
+            this,
+            getFormSaveMsg(instance),
+            false
+        )
         formParser!!.startFormChangeTracking()
         SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
     }
 
     override fun formInstanceAutoSaveSuccess(instance: CollectFormInstance) {
-        Toast.makeText(this, getFormSaveMsg(instance), Toast.LENGTH_SHORT).show()
+        DialogUtils.showBottomMessage(
+            this,
+            getFormSaveMsg(instance),
+            false
+        )
         formParser!!.startFormChangeTracking()
         draftAutoSaved = true
     }
@@ -597,17 +604,21 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun formSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
-        Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_LONG).show()
+        DialogUtils.showBottomMessage(
+            this,
+            errorMessage,
+            true
+        )
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
     private fun formSubmitNoConnectivity() {
-        Toast.makeText(
-            applicationContext,
-            R.string.collect_end_toast_notification_form_not_sent_no_connection,
-            Toast.LENGTH_LONG
-        ).show()
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.collect_end_toast_notification_form_not_sent_no_connection),
+            true
+        )
         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
@@ -635,11 +646,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun formPartsSubmitEnded(instance: CollectFormInstance) {
-        Toast.makeText(
-            applicationContext,
+        DialogUtils.showBottomMessage(
+            this,
             getString(R.string.collect_toast_form_submitted),
-            Toast.LENGTH_LONG
-        ).show()
+            false
+        )
         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
@@ -666,11 +677,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     fun saveForLaterFormInstanceSuccess() {
-        Toast.makeText(
-            applicationContext,
-            R.string.collect_toast_form_saved_for_later_submission,
-            Toast.LENGTH_LONG
-        ).show()
+        DialogUtils.showBottomMessage(
+            this,
+            getString(R.string.collect_toast_form_saved_for_later_submission),
+            false
+        )
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }

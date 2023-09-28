@@ -44,7 +44,6 @@ ativação do modo</string>
   <string name="collect.sent_tab.title">Enviado</string>
   <string name="home_expl_cancel.quick.delete">Toque em qualquer lugar para cancelar</string>
   <string name="recorder_app.bar">Gravador de áudio</string>
-  <string name="collect_app.bar">Coletar</string>
   <string name="settings.docu_field_username">Nome de usuário</string>
   <string name="collect.draft_meta_date.updated">Atualizado: %1$s</string>
   <string name="settings.about_app.version">Versão</string>
@@ -126,8 +125,6 @@ ativação do modo</string>
   <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
   <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
   <string name="gallery_expl_empty">Não há arquivos para mostrar. Toque no botão + para importar arquivos.</string>
-  <string name="collect.help_app.bar">Ajuda de Coletar</string>
-  <string name="collect.help_expl_intro">Coletar é uma ferramenta para coletar dados preenchendo formulários e pesquisas diretamente no seu aparelho celular</string>
   <string name="collect.blank_toast_not.connected">Não está conectado à Internet. Tente novamente quando estiver conectado</string>
   <string name="settings.gen_crash.reports_action">Compartilhar relatórios de falhas</string>
   <string name="settings.gen_crash.reports_action.expl">Os relatórios de falhas nos ajudam a melhorar o aplicativo Tella. Eles são enviados automaticamente e incluem dados como modelo do aparelho e versão do Android.</string>

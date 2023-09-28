@@ -40,7 +40,6 @@
   <string name="collect.sent_tab.title">Адпраўлена</string>
   <string name="home_expl_cancel.quick.delete">Націсніце ў любым месцы, каб адмяніць</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">Collect</string>
   <string name="settings.docu_field_username">Логін</string>
   <string name="collect.draft_meta_date.updated">Абноўлена: %1$s</string>
   <string name="settings.about_app.version">Версія</string>
@@ -118,8 +117,6 @@
   <string name="collect.sent_expl_no.forms">Няма адпраўленых формаў для паказу</string>
   <string name="collect.blank_expl_no.forms">Няма формаў для паказу. Націсніце кнопку абнаўлення, каб праверыць наяўнасць пустых формаў на серверах, да якіх вы падлучаныя.</string>
   <string name="settings.camo_heading">Абярыце іншае імя і лагатып</string>
-  <string name="collect.help_app.bar">Даведка Збору</string>
-  <string name="collect.help_expl_intro">Збор - гэта інструмент для збору дадзеных з дапамогай запаўнення анкет і апытанняў непасрэдна на вашай прыладзе</string>
   <string name="settings.gen_crash.reports_action">Падзяліцца справаздачамі аб збоях</string>
   <string name="settings.gen_crash.reports_action.expl">Справаздачы аб збоях дапамагаюць нам палепшыць Tella. Яны адпраўляюцца аўтаматычна і ўтрымліваюць такія дадзеныя, як мадэль прылады і версія Android.</string>
   <string name="collect.form_dialog.action_add.group">дадаць суполку</string>

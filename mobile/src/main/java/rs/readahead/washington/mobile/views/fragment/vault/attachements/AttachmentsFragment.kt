@@ -662,7 +662,7 @@ class AttachmentsFragment :
             viewModel.filesSize.observe(this, ::onMoveFilesSuccess)
             viewModel.moveFilesError.observe(this, ::onMoveFilesError)
             viewModel.deletedFiles.observe(this, ::onMediaFilesDeleted)
-            viewModel.deletedFile.observe(this, ::onMediaFileDeleted)
+            viewModel.deletedFile.observe(this) { onMediaFileDeleted() }
             viewModel.deletedFileError.observe(this, ::onMediaFileDeletionError)
             viewModel.folderCreated.observe(this, ::onCreateFolderSuccess)
             viewModel.rootId.observe(this, ::onGetRootIdSuccess)
@@ -744,12 +744,22 @@ class AttachmentsFragment :
     }
 
     private fun onMediaFilesDeleted(num: Int) {
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.Snackbar_files_were_deleted),
+            false
+        )
         onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
     }
 
-    private fun onMediaFileDeleted(file: VaultFile) {
+    private fun onMediaFileDeleted() {
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.Snackbar_file_was_deleted),
+            false
+        )
         onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
         handleSelectMode()
@@ -872,7 +882,7 @@ class AttachmentsFragment :
             MediaFileDeletedEvent::class.java,
             object : EventObserver<MediaFileDeletedEvent?>() {
                 override fun onNext(event: MediaFileDeletedEvent) {
-                    onMediaFilesDeleted(1)
+                    onMediaFileDeleted()
                 }
             })
     }

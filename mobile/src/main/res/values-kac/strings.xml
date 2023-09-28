@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Tang shawn ngut sai</string>
   <string name="home_expl_cancel.quick.delete">Lamang dawm na matu shara ra kaw ahtawk hkra dat u</string>
   <string name="recorder_app.bar">Nsen rim jak</string>
-  <string name="collect_app.bar">Mahkawng da u</string>
   <string name="settings.docu_field_username">Kompyuta hta lang ai mying</string>
   <string name="collect.draft_meta_date.updated">Prat madang bung hkra galaw da ngut sai: %1$s</string>
   <string name="settings.about_app.version">Kasi</string>
@@ -131,8 +130,6 @@
   <string name="collect.sent_expl_no.forms">Madun na matu tang shawn da ai hkrang laika ni n nga ai.</string>
   <string name="collect.blank_expl_no.forms">Madun na matu hkrang laika ni n nga ai. Nang matut mahkai da ai madung kompyuta ni hta hkrang laika ni lu la mai ai rai yang, jep yu na matu n-gun ban ai lam (Refresh) hkalap hpe ahtawk hkra dat u.</string>
   <string name="settings.camo_heading">Kaga mying hte masat kumla langai ngai hpe lata san u</string>
-  <string name="collect.help_app.bar">Mahkawng ai lam hte Karum ningtum</string>
-  <string name="collect.help_expl_intro">Mahkawng ai(Collect) gaw, na a jak rai hta hkrang laika ni hte yu jep maram ai lam ni (survery) ni hpe dan tawk ka jahpring ai hku nna shiga lamang ni hpe mahkawng na matu, hkingrai langai rai nga ai</string>
   <string name="collect.blank_toast_not.connected">Intanet matut mahkra ai lam n nga ai. Intanet hte matut mahkai lu shaloi nang kalang bai chyam yu u.</string>
   <string name="settings.gen_crash.reports_action">Hten za mat ai shiga lami laman ni hpe garan u</string>
   <string name="settings.gen_crash.reports_action.expl">Hten za mat ai shiga lami laman htawn ai lam ni gaw, Tella hpe grau kaja wa hkra karum ya nga ai. Dai ni hpe shi hte shi shagun sa ya nna, jak rai a kasi kamang hte Android hkrang kasi zawn re ai shiga lamang ni mung lawm nga ai.</string>

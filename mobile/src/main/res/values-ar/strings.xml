@@ -44,7 +44,6 @@
   <string name="collect.sent_tab.title">تم التقديم</string>
   <string name="home_expl_cancel.quick.delete">اضغط في أي مكان للإلغاء</string>
   <string name="recorder_app.bar">مسجل الصوت</string>
-  <string name="collect_app.bar">جمع</string>
   <string name="settings.docu_field_username">اسم المستخدم</string>
   <string name="collect.draft_meta_date.updated">تم التحديث: %1$s</string>
   <string name="settings.about_app.version">الإصدار</string>
@@ -132,8 +131,6 @@
   <string name="collect.sent_expl_no.forms">لا تتوفر نماذج مقدمة لعرضها.</string>
   <string name="collect.blank_expl_no.forms">لا تتوفر نماذج لعرضها. اضغط على زر تحديث للتأكد مما إذا كان هناك نماذج متوفرة على الخوادم التي تتصل بها.</string>
   <string name="settings.camo_heading">اختر اسمًا وشعارًا مختلفين</string>
-  <string name="collect.help_app.bar">مساعدة Collect.</string>
-  <string name="collect.help_expl_intro">Collect هي أداة لجمع البيانات من خلال ملء النماذج والاستبيانات من جهازك مباشرةً.</string>
   <string name="collect.blank_toast_not.connected">الجهاز غير متصل بالإنترنت. حاول مرة أخرى عند الاتصال بالإنترنت.</string>
   <string name="settings.gen_crash.reports_action">مشاركة تقارير الأعطال</string>
   <string name="settings.gen_crash.reports_action.expl">تساعدنا تقارير الأعطال في تحسين Tella. تُرسل تلك التقارير تلقائيًّا، وتتضمن مجموعة من البيانات؛ مثل طراز الجهاز وإصدار Android.</string>
@@ -445,14 +442,6 @@
   <string name="SettingsCamo_EnterLock_Password">ادخل كلمة السر الخاصة بك لتغيير طريقة التموية</string>
   <string name="settings.gen_select_about">عن التطبيق والمساعدة</string>
   <string name="settings.gen_select_language">اللغة</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="zero">ملف محذوف</item>
-    <item quantity="one">ملف محذوف</item>
-    <item quantity="two">%d ملفان محذوفان</item>
-    <item quantity="few">%d من الملفات محذوفة</item>
-    <item quantity="many">%d من الملفات محذوفة</item>
-    <item quantity="other">%d من الملفات محذوفة</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">الخروج</string>
   <string name="settings.camo_camera4">الكاميرا</string>
   <string name="settings.camo_camera3">CameraPro</string>
