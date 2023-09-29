@@ -266,6 +266,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun onCollectServerDialogCreate(server: CollectServer?) {
         presenter.create(server)
+        addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
     }
 
     override fun onCollectServerDialogUpdate(server: CollectServer?) {
