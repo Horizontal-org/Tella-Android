@@ -15,6 +15,7 @@
         android:paddingTop="40dp"
         android:paddingEnd="15dp"
         android:src="@drawable/icon_left"
+        android:background="@color/space_cadet"
         android:visibility="gone"
         android:contentDescription="@string/action_go_back"
         app:layout_constraintStart_toStartOf="parent"
