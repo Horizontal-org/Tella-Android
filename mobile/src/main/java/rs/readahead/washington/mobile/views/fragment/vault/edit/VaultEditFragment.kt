@@ -88,6 +88,10 @@ class VaultEditFragment :
         }
     }
 
+    /**
+     * After the change is made on the image this displays the top left item on the toolbar to save changes.
+     * It also adds a dialog on exit to check if the user wants to save changes or not.
+     */
     private fun showAcceptButton() {
         if (!binding.accept.isVisible) {
             binding.accept.visibility = View.VISIBLE
@@ -101,6 +105,9 @@ class VaultEditFragment :
         showAcceptButton()
     }
 
+    /**
+     * We take the cropped part of the image as a bitmap and save it as a jpeg
+     */
     private fun cropImage() {
         var bitmap: Bitmap? = null
         binding.progressBar.visibility = View.VISIBLE

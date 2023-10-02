@@ -42,6 +42,7 @@ public class Evaluator {
 
     public static String handlePercentage(final String input) {
         String inputS = input.replace(" ", "");
+        inputS = inputS.replace('x', '*');
         //regular expression to find decimal
 
         Pattern regex = Pattern.compile("(\\d+(?:\\.\\d+)?%)");
@@ -56,6 +57,7 @@ public class Evaluator {
                     String pctReplace = evaluateResult(pctNum + "/100");
                     pctReplace = pctReplace.concat("*");
                     inputS = inputS.replace(occurrence, pctReplace);
+                    inputS = inputS.replace("**", "*");
                 } else {
                     break;
                 }
