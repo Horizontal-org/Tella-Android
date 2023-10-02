@@ -25,21 +25,12 @@
         android:layout_marginTop="25dp"
         app:drawableStartCompat="@drawable/ic_upload_cloud" />
 
-    <TextView
-        android:id="@+id/shareActionTV"
-        style="@style/Tella2_BottomSheet_Text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/uploadActionTV"
-        android:layout_marginTop="20dp"
-        app:drawableStartCompat="@drawable/ic_share" />
-
-
     <View
         android:layout_width="match_parent"
         android:layout_height="0.33dp"
         android:id="@+id/separator"
         android:layout_marginTop="17dp"
-        app:layout_constraintTop_toBottomOf="@id/shareActionTV"
+        app:layout_constraintTop_toBottomOf="@id/uploadActionTV"
         android:background="@color/wa_white"
         />
 
@@ -67,11 +58,21 @@
         android:layout_marginTop="20dp"
         app:drawableStartCompat="@drawable/crop_rotate" />
 
+
+    <TextView
+        android:id="@+id/shareActionTV"
+        style="@style/Tella2_BottomSheet_Text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editActionTV"
+        android:layout_marginTop="20dp"
+        app:drawableStartCompat="@drawable/ic_share" />
+
+
     <TextView
         android:id="@+id/saveActionTV"
         style="@style/Tella2_BottomSheet_Text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editActionTV"
+        app:layout_constraintTop_toBottomOf="@id/shareActionTV"
         android:layout_marginTop="20dp"
         app:drawableStartCompat="@drawable/ic_save_alt_24px" />
 
