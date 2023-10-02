@@ -9,8 +9,11 @@ import androidx.fragment.app.viewModels
 import com.canhub.cropper.CropImageView
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.event.EditMediaSavedEvent
 import rs.readahead.washington.mobile.databinding.FragmentVaultEditBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -89,6 +92,7 @@ class VaultEditFragment :
         if (!binding.accept.isVisible) {
             binding.accept.visibility = View.VISIBLE
             binding.accept.setOnClickListener { cropImage() }
+            binding.close.setOnClickListener { checkSaveOrExit() }
         }
     }
 
@@ -99,6 +103,7 @@ class VaultEditFragment :
 
     private fun cropImage() {
         var bitmap: Bitmap? = null
+        binding.progressBar.visibility = View.VISIBLE
         binding.cropImageView.cropRect?.let {
             bitmap = binding.cropImageView.getCroppedImage(
                 it.width(),
@@ -107,7 +112,7 @@ class VaultEditFragment :
         }
 
         bitmap?.let {
-            binding.cropImageView.setImageBitmap(it)
+            //binding.cropImageView.setImageBitmap(it)
             viewModel.saveBitmapAsJpeg(it, null)
         }
     }
@@ -121,23 +126,20 @@ class VaultEditFragment :
     }
 
     private fun onSaveSuccess() {
-        DialogUtils.showBottomMessage(
-            baseActivity,
-            resources.getString(R.string.gallery_toast_file_encrypted),
-            true
-        )
+        MyApplication.bus().post(EditMediaSavedEvent())
     }
 
     private fun onSaveStart() {
-        //showProgressDialog()
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun onSaveEnd() {
-        //hideProgressDialog()
+        binding.progressBar.visibility = View.GONE
         goBack()
     }
 
     override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
+        binding.progressBar.visibility = View.GONE
         /*if (result.isSuccessful) {
             binding.cropImageView.setImageBitmap(result.bitmap)
             result.bitmap?.let { it1 -> viewModel.saveBitmapAsJpeg(it1, null) }
@@ -145,6 +147,22 @@ class VaultEditFragment :
     }
 
     override fun onSetImageUriComplete(view: CropImageView, uri: Uri, error: Exception?) {
+    }
+
+    private fun checkSaveOrExit(){
+        BottomSheetUtils.showStandardSheet(
+            baseActivity.supportFragmentManager,
+            baseActivity.getString(R.string.Edit_Dialog_confirm_exit_title),
+            baseActivity.getString(R.string.Edit_Dialog_confirm_exit),
+            baseActivity.getString(R.string.action_save).uppercase(),
+            baseActivity.getString(R.string.action_exit_without_saving),
+            onConfirmClick = {
+                cropImage()
+            },
+            onCancelClick = {
+                goBack()
+            }
+        )
     }
 
     private fun goBack() {

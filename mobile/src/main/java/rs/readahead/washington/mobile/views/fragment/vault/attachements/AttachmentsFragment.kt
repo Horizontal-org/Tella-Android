@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CaptureEvent
+import rs.readahead.washington.mobile.bus.event.EditMediaSavedEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -185,6 +186,7 @@ class AttachmentsFragment :
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
+        onEditMediaSavedListener()
         initViewType()
     }
 
@@ -902,6 +904,18 @@ class AttachmentsFragment :
         disposables.wire(CaptureEvent::class.java, object : EventObserver<CaptureEvent?>() {
             override fun onNext(event: CaptureEvent) {
                 onMediaFilesAdded()
+            }
+        })
+    }
+
+    private fun onEditMediaSavedListener() {
+        disposables.wire(EditMediaSavedEvent::class.java, object : EventObserver<EditMediaSavedEvent?>() {
+            override fun onNext(event: EditMediaSavedEvent) {
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    resources.getString(R.string.Snackbar_changes_were_saved),
+                    false
+                )
             }
         })
     }
