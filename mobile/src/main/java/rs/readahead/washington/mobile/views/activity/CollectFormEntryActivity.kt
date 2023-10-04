@@ -58,13 +58,14 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView {
+    IFormSaverContract.IView{
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
 
@@ -984,6 +985,15 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun enableScreenTimeout() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun hideBottomNavigation() {
+        binding.btmNavMain.visibility = View.GONE
+    }
+
+    override fun showBottomNavigation() {
+        binding.btmNavMain.visibility = View.VISIBLE
+
     }
 
     override fun openAudioRecorder() {
