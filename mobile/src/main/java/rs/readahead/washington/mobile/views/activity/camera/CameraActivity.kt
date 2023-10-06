@@ -349,7 +349,19 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onMediaFilesUploadScheduled() {
-        //todo do something here
+        val isAutoUploadEnabled = Preferences.isAutoUploadEnabled()
+        val isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled()
+
+
+        val message = if (isAutoUploadEnabled && isAutoDeleteEnabled) {
+            getString(R.string.Auto_Upload_Media_Imported_Report_And_Deleted)
+        } else if (isAutoUploadEnabled) {
+            getString(R.string.Auto_Upload_Media_Report)
+        } else {
+            return
+        }
+
+        DialogUtils.showBottomMessage(this, message, false)
     }
 
     private fun onMediaFilesUploadScheduleError(throwable: Throwable) {
