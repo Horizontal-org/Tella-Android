@@ -16,6 +16,8 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.EditMediaSavedEvent
 import rs.readahead.washington.mobile.databinding.FragmentVaultEditBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 
@@ -110,7 +112,7 @@ class VaultEditFragment :
      */
     private fun cropImage() {
         var bitmap: Bitmap? = null
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
         binding.cropImageView.cropRect?.let {
             bitmap = binding.cropImageView.getCroppedImage(
                 it.width(),
@@ -137,16 +139,16 @@ class VaultEditFragment :
     }
 
     private fun onSaveStart() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun onSaveEnd() {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         goBack()
     }
 
     override fun onCropImageComplete(view: CropImageView, result: CropImageView.CropResult) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         /*if (result.isSuccessful) {
             binding.cropImageView.setImageBitmap(result.bitmap)
             result.bitmap?.let { it1 -> viewModel.saveBitmapAsJpeg(it1, null) }
