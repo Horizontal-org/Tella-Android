@@ -51,6 +51,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.
 import timber.log.Timber
 
 const val VAULT_FILTER = "vf"
+const val SERVER_TYPE_COUNT = 3
 
 class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
     private lateinit var toolbar: ToolbarComponent
@@ -72,6 +73,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
     private var disposables: EventCompositeDisposable? = null
+    private var counted = 0
 
 
     override fun onCreateView(
@@ -182,8 +184,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    /**
+     * Counting of connections is over when all types of servers are counted.
+     * This functionT-And-1304 - Cards for Uwazi and Reports disappearing show connections when all the server types are counted.
+     **/
     private fun maybeShowConnections() {
-        if (serversList?.isEmpty() == false) {
+        if (serversList?.isEmpty() == false && counted == SERVER_TYPE_COUNT) {
             vaultAdapter.addConnectionServers(serversList!!)
         } else {
             vaultAdapter.removeConnectionServers()
@@ -382,7 +388,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeCountServers()
     }
 
+    /**
+     * This is used to start counting different connections (servers) to be shown on the home fragment.
+     * At the start, the list of servers and shown connections are cleared.
+     **/
     private fun maybeCountServers() {
+        counted = 0
+        serversList?.clear()
+        vaultAdapter.removeConnectionServers()
         homeVaultPresenter.countCollectServers()
         homeVaultPresenter.countTUServers()
         homeVaultPresenter.countUwaziServers()
@@ -446,6 +459,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
 
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
+        counted ++
         tuServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
         if (!servers.isNullOrEmpty()) {
@@ -460,6 +474,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
+        counted ++
         collectServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
         if (!servers.isNullOrEmpty()) {
@@ -475,6 +490,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
+        counted ++
         uwaziServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.UWAZI }
         if (!servers.isNullOrEmpty()) {
