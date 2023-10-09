@@ -153,7 +153,7 @@ class ReportsViewModel @Inject constructor(
                         onMoreClicked = { onMoreClicked(instance) })
                 )
             }
-            _submittedReportListFormInstance.postValue(resultList)
+            _outboxReportListFormInstance.postValue(resultList)
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
