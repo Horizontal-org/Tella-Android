@@ -46,6 +46,8 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil.showRationale
 import rs.readahead.washington.mobile.util.Util
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
@@ -988,12 +990,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     }
 
     override fun hideBottomNavigation() {
-        binding.btmNavMain.visibility = View.GONE
+        binding.btmNavMain.hide()
     }
 
     override fun showBottomNavigation() {
-        binding.btmNavMain.visibility = View.VISIBLE
-
+        binding.btmNavMain.show()
     }
 
     override fun openAudioRecorder() {
