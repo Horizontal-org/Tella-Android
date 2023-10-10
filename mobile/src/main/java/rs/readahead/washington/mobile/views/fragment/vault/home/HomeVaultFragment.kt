@@ -385,6 +385,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+    }
+
+    override fun onStart() {
+        super.onStart()
         maybeCountServers()
     }
 
