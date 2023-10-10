@@ -46,6 +46,8 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.util.PermissionUtil.showRationale
 import rs.readahead.washington.mobile.util.Util
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
@@ -58,13 +60,14 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
+import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView {
+    IFormSaverContract.IView{
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
 
@@ -984,6 +987,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun enableScreenTimeout() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+
+    override fun hideBottomNavigation() {
+        binding.btmNavMain.hide()
+    }
+
+    override fun showBottomNavigation() {
+        binding.btmNavMain.show()
     }
 
     override fun openAudioRecorder() {
