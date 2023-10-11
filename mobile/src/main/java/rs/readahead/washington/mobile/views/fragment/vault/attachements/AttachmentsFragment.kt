@@ -560,6 +560,7 @@ class AttachmentsFragment :
             isMultipleFiles = isMultipleFiles,
             isUploadVisible = false,
             isMoveVisible = filterType == FilterType.ALL,
+            isEditVisible = vaultFile?.mimeType == "image/jpeg",
             action = object : VaultSheetUtils.IVaultActions {
                 override fun upload() {
                 }
