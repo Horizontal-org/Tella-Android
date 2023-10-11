@@ -21,13 +21,16 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
-    fun showVaultActionsSheet(fragmentManager: FragmentManager, titleText: String?, uploadLabel: String, shareLabel: String, moveLabel: String, renameLabel: String, saveLabel: String, infoLabel: String, deleteLabel: String, editLabel: String, isDirectory: Boolean = false, isMultipleFiles: Boolean = false, isUploadVisible: Boolean = false, isMoveVisible: Boolean = false, action: IVaultActions) {
+    fun showVaultActionsSheet(fragmentManager: FragmentManager, titleText: String?, uploadLabel: String, shareLabel: String, moveLabel: String, renameLabel: String, saveLabel: String, infoLabel: String, deleteLabel: String, editLabel: String, isDirectory: Boolean = false, isMultipleFiles: Boolean = false, isUploadVisible: Boolean = false, isMoveVisible: Boolean = false, isEditVisible: Boolean = false, action: IVaultActions) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.vault_actions_sheet_layout).cancellable(true).screenTag("vaultActionSheet")
         vaultActionSheet.holder(VaultActionsSheetHolder(), object : CustomBottomSheetFragment.Binder<VaultActionsSheetHolder> {
             override fun onBind(holder: VaultActionsSheetHolder) {
                 with(holder) {
                     title.text = titleText
                     //Actions visibility
+                    if (!isEditVisible) {
+                        actionEdit.visibility = View.GONE
+                    }
                     if (isDirectory) {
                         seperator.visibility = View.GONE
                         actionShare.visibility = View.GONE
