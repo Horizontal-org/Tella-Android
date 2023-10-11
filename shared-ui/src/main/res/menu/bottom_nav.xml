@@ -18,4 +18,10 @@
         android:icon="@drawable/ic_mic"
         android:title="@string/Home_BottomNav_Rec" />
 
+    <item
+        android:id="@+id/settings"
+        android:contentDescription="@string/Home_BottomNav_Settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/Home_BottomNav_Settings" />
+
 </menu>
