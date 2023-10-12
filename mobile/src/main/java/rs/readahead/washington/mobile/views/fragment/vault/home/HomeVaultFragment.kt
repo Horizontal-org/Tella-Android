@@ -5,10 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,13 +17,14 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
-import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.TopSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
@@ -37,13 +35,12 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.CountdownTextView
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -52,13 +49,10 @@ import timber.log.Timber
 
 const val VAULT_FILTER = "vf"
 
-class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
-    private lateinit var toolbar: ToolbarComponent
-    private lateinit var vaultRecyclerView: RecyclerView
-    private lateinit var panicModeView: RelativeLayout
-    private lateinit var countDownTextView: CountdownTextView
-    private lateinit var seekBar: SeekBar
-    private lateinit var seekBarContainer: View
+
+//TODO REFACTOR THIS TO MVVM
+class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaultBinding::inflate),
+    VaultClickListener, IHomeVaultPresenter.IView {
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
@@ -76,28 +70,19 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var collectServersCounted = false
     private var uwaziServersCounted = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vault, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
     }
 
-    override fun initView(view: View) {
-        toolbar = view.findViewById(R.id.toolbar)
-        vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
-        panicModeView = view.findViewById(R.id.panic_mode_view)
-        countDownTextView = view.findViewById(R.id.countdown_timer)
-        seekBar = view.findViewById(R.id.panic_seek)
-        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
+    fun initView() {
         disposables = MyApplication.bus().createCompositeDisposable()
 
         setUpToolbar()
         initData()
         initListeners()
         initPermissions()
-        fixAppBarShadow(view)
+        fixAppBarShadow()
     }
 
     @Deprecated("Deprecated in Java")
@@ -125,7 +110,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun initData() {
         homeVaultPresenter = HomeVaultPresenter(this)
-        vaultRecyclerView.apply {
+        binding.vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -197,7 +182,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun initListeners() {
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.panicSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
 
             }
@@ -206,18 +191,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (seekBar.progress == 100) {
-                    seekBar.progress = 0
+                if (binding.panicSeek.progress == 100) {
+                    binding.panicSeek.progress = 0
                     showPanicScreens()
                 } else {
-                    seekBar.progress = 0
+                    binding.panicSeek.progress = 0
                     hidePanicScreens()
                 }
             }
         })
-        panicModeView.setOnClickListener { onPanicClicked() }
-        toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
-        toolbar.onRightClickListener = {
+        binding.content.panicModeView.setOnClickListener { onPanicClicked() }
+        binding.toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
+        binding.toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
             MyApplication.exit(baseActivity)
@@ -225,27 +210,27 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
         vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
 
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
 
             override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
 
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
 
             override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-                vaultRecyclerView.scrollToPosition(0)
+                binding.vaultRecyclerView.scrollToPosition(0)
             }
         })
     }
@@ -257,7 +242,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setUpToolbar() {
         val activity = context as MainActivity
-        activity.setSupportActionBar(toolbar)
+        activity.setSupportActionBar(binding.toolbar)
+
+        binding.counterNotification.setOnClickListener {
+            TopSheetUtils.showBackgroundActivitiesSheet(baseActivity.supportFragmentManager,"test", "testtesttesttest")
+        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -267,16 +256,19 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                 startActivity(intent)
             }
+
             MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, AudioPlayActivity::class.java)
                 intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                 startActivity(intent)
             }
+
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
+
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     baseActivity.supportFragmentManager,
@@ -303,12 +295,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.ODK_COLLECT -> {
                 nav().navigate(R.id.action_homeScreen_to_forms_screen)
             }
+
             ServerType.TELLA_UPLOAD -> {
                 nav().navigate(R.id.action_homeScreen_to_reports_screen)
             }
+
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+
             else -> {}
         }
     }
@@ -321,6 +316,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 removeImprovementSection()
                 showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
             }
+
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
@@ -366,8 +362,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun stopPanicking() {
-        countDownTextView.cancel()
-        countDownTextView.setCountdownNumber(timerDuration)
+        binding.content.countdownTimer.cancel()
+        binding.content.countdownTimer.setCountdownNumber(timerDuration)
         panicActivated = false
         // showMainControls()
     }
@@ -403,7 +399,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * This is used to start counting different connections (servers) to be shown on the home fragment.
      * At the start, the list of servers and shown connections are cleared.
      **/
-    private fun clearServerCount(){
+    private fun clearServerCount() {
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false
@@ -412,7 +408,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun maybeClosePanic(): Boolean {
-        if (panicModeView.visibility == View.VISIBLE) {
+        if (binding.content.panicModeView.visibility == View.VISIBLE) {
             stopPanicking()
             hidePanicScreens()
         }
@@ -422,17 +418,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun hidePanicScreens() {
         (baseActivity as MainActivity).showBottomNavigation()
         setupPanicView()
-        panicModeView.visibility = View.GONE
-        toolbar.visibility = View.VISIBLE
+        binding.content.panicModeView.visibility = View.GONE
+        binding.toolbar.visibility = View.VISIBLE
     }
 
     private fun showPanicScreens() {
         // really show panic screen
         (baseActivity as MainActivity).hideBottomNavigation()
-        toolbar.visibility = View.GONE
-        panicModeView.visibility = View.VISIBLE
-        panicModeView.alpha = 1f
-        countDownTextView.start(
+        binding.toolbar.visibility = View.GONE
+        binding.content.panicModeView.visibility = View.VISIBLE
+        binding.content.panicModeView.alpha = 1f
+        binding.content.countdownTimer.start(
             timerDuration
         ) {
             executePanicMode()
@@ -441,11 +437,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            seekBarContainer.visibility = View.VISIBLE
-            vaultRecyclerView.setMargins(null, null, null, 110)
+            binding.panicSeekContainer.visibility = View.VISIBLE
+            binding.vaultRecyclerView.setMargins(null, null, null, 110)
         } else {
-            seekBarContainer.visibility = View.GONE
-            vaultRecyclerView.setMargins(null, null, null, 55)
+            binding.panicSeekContainer.visibility = View.GONE
+            binding.vaultRecyclerView.setMargins(null, null, null, 55)
         }
     }
 
@@ -615,12 +611,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun fixAppBarShadow(view: View) {
-        val appBar = view.findViewById<View>(R.id.appbar)
+    private fun fixAppBarShadow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appBar.outlineProvider = null
+            binding.appbar.outlineProvider = null
         } else {
-            appBar.bringToFront()
+            binding.appbar.bringToFront()
         }
     }
 }

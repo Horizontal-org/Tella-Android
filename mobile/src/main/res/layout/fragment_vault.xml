@@ -1,97 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    android:background="@color/space_cadet">
 
-   <com.google.android.material.appbar.AppBarLayout
-       android:id="@+id/appbar"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       android:fitsSystemWindows="true"
-       android:theme="@style/AppTheme.DarkNoActionBar">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.DarkNoActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-      <org.hzontal.shared_ui.appbar.ToolbarComponent
-          android:id="@+id/toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          app:toolbarTitle="@string/app_name"
-          app:leftIcon="@drawable/ic_settings"
-          app:leftIconContentDescription="@string/action_open_settings"
-          app:rightIcon="@drawable/ic_close"
-          app:rightIconContentDescription="@string/quick_exit_action"
-          />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-   </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:id="@+id/counterNotification"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bg_circle_counter"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="2"
+                style="@style/Tella_Main_White_Text.Small"
+              />
 
-   <androidx.recyclerview.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/vaultRecyclerView"
-       android:background="@color/space_cadet"
-       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-       tools:listitem="@layout/item_vault_attachment_hor"
-       tools:itemCount="30"
-       />
+            <org.hzontal.shared_ui.appbar.ToolbarComponent
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rightIcon="@drawable/ic_close"
+                app:rightIconContentDescription="@string/quick_exit_action"
+                app:toolbarTitle="@string/app_name" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-   <androidx.constraintlayout.widget.ConstraintLayout
-       android:layout_width="match_parent"
-       android:layout_height="55dp"
-       android:layout_gravity="bottom"
-       android:id="@+id/panicSeekContainer"
-       android:background="@color/space_cadet"
-       android:visibility="gone"
-       android:layout_marginBottom="55dp"
-       android:contentDescription="@string/action_quick_delete">
-      <SeekBar
-          android:id="@+id/panic_seek"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          android:layout_width="0dp"
-          android:layout_height="@dimen/navigation_panic_height"
-          android:max="100"
-          android:thumbOffset="-4dp"
-          android:padding="3dp"
-          android:progressDrawable="@drawable/panic_seek_var_progress"
-          android:thumb="@drawable/ic_progress_bg"
-          android:splitTrack="false"
-          />
+    </com.google.android.material.appbar.AppBarLayout>
 
-      <TextView
-          android:id="@+id/deleteTv"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="bottom|center"
-          android:gravity="center"
-          android:text="@string/home_action.label_quick.delete"
-          android:textAllCaps="true"
-          app:layout_constraintStart_toStartOf="@id/panic_seek"
-          app:layout_constraintEnd_toEndOf="@id/panic_seek"
-          app:layout_constraintTop_toTopOf="@id/panic_seek"
-          app:layout_constraintBottom_toBottomOf="@id/panic_seek"
-          android:textSize="15sp"
-          style="@style/Tella_Main_White_Text.MeduimbBold"
-          android:textColor="@color/wa_white_80"
-          />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vaultRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/space_cadet"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="30"
+        tools:listitem="@layout/item_vault_attachment_hor" />
 
-      <androidx.constraintlayout.widget.Group
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:visibility="visible"
-          app:constraint_referenced_ids="panic_seek,deleteTv"
-          />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/panicSeekContainer"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="55dp"
+        android:background="@color/space_cadet"
+        android:contentDescription="@string/action_quick_delete"
+        android:visibility="gone">
 
-   </androidx.constraintlayout.widget.ConstraintLayout>
+        <SeekBar
+            android:id="@+id/panic_seek"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/navigation_panic_height"
+            android:max="100"
+            android:padding="3dp"
+            android:progressDrawable="@drawable/panic_seek_var_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/ic_progress_bg"
+            android:thumbOffset="-4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/deleteTv"
+            style="@style/Tella_Main_White_Text.MeduimbBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:gravity="center"
+            android:text="@string/home_action.label_quick.delete"
+            android:textAllCaps="true"
+            android:textColor="@color/wa_white_80"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/panic_seek"
+            app:layout_constraintEnd_toEndOf="@id/panic_seek"
+            app:layout_constraintStart_toStartOf="@id/panic_seek"
+            app:layout_constraintTop_toTopOf="@id/panic_seek" />
 
-   <include layout="@layout/content_panic_mode_view" />
+        <androidx.constraintlayout.widget.Group
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="panic_seek,deleteTv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_panic_mode_view" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

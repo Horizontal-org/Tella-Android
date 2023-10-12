@@ -36,7 +36,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
         customSheetFragment.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -69,7 +69,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class GenericSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class GenericSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -103,7 +103,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
                 .cancellable(true)
         customSheetFragment.holder(RadioListSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+            object : Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -151,7 +151,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class RadioListSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class RadioListSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -188,7 +188,7 @@ object BottomSheetUtils {
                 .cancellable(true).screenTag("RadioListOptionsSheet")
 
         customSheetFragment.holder(RadioListSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+            object : Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -233,7 +233,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class DualChoiceSheetHolder : PageHolder() {
         lateinit var cancelButton: ImageView
         lateinit var buttonOne: RoundButton
         lateinit var buttonTwo: RoundButton
@@ -286,7 +286,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.dual_choose_layout)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DualChoiceSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
+            object : Binder<DualChoiceSheetHolder> {
                 override fun onBind(holder: DualChoiceSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -329,10 +329,12 @@ object BottomSheetUtils {
                                     consumer.addODKServer()
                                     customSheetFragment.dismiss()
                                 }
+
                                 buttonTwo.isChecked -> {
                                     consumer.addTellaWebServer()
                                     customSheetFragment.dismiss()
                                 }
+
                                 else -> {
                                     consumer.addUwaziServer()
                                     customSheetFragment.dismiss()
@@ -349,7 +351,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class CamouflageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class CamouflageSheetHolder : PageHolder() {
         lateinit var sheetTitle: TextView
         lateinit var sheetsubTitle: TextView
         lateinit var cancelButton: ImageView
@@ -393,7 +395,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.change_camouflage_layout)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(CamouflageSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<CamouflageSheetHolder> {
+            object : Binder<CamouflageSheetHolder> {
                 override fun onBind(holder: CamouflageSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -443,7 +445,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true).screenTag("ConfirmSheet")
         customSheetFragment.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -493,7 +495,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true).screenTag("ConfirmSheet")
         customSheetFragment.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -539,7 +541,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DownloadStatustHolder(),
-            object : CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
+            object : Binder<DownloadStatustHolder> {
                 override fun onBind(holder: DownloadStatustHolder) {
                     with(holder) {
                         progressStatus.observe(lifecycleOwner) { status ->
@@ -567,7 +569,7 @@ object BottomSheetUtils {
     }
 
 
-    class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ConfirmImageSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -599,7 +601,7 @@ object BottomSheetUtils {
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
         customSheetFragment2.holder(ConfirmImageSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
                         title.text = timeoutTitleText
@@ -623,7 +625,7 @@ object BottomSheetUtils {
             .page(R.layout.confirm_image_sheet_layout).cancellable(true)
             .screenTag("ConfirmImageSheet")
         customSheetFragment.holder(ConfirmImageSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -676,7 +678,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
         customSheetFragment.holder(ConfirmImageSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
+            object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
                         title.text = timeoutTitleText
@@ -718,7 +720,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
                 .cancellable(true)
         customSheetFragment.holder(RadioListSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
+            object : Binder<RadioListSheetHolder> {
                 override fun onBind(holder: RadioListSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -770,7 +772,7 @@ object BottomSheetUtils {
         EDIT, DELETE, SHARE, VIEW
     }
 
-    class ServerMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ServerMenuSheetHolder : PageHolder() {
         lateinit var actionEdit: TextView
         lateinit var actionDelete: TextView
         lateinit var title: TextView
@@ -782,7 +784,7 @@ object BottomSheetUtils {
         }
     }
 
-    class ThreeOptionsMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ThreeOptionsMenuSheetHolder : PageHolder() {
         lateinit var actionView: TextView
         lateinit var actionShare: TextView
         lateinit var actionDelete: TextView
@@ -818,7 +820,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
         customSheetFragment2.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText2
@@ -850,7 +852,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.server_menu_sheet_layout)
                 .cancellable(true)
         customSheetFragment.holder(ServerMenuSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
+            object : Binder<ServerMenuSheetHolder> {
                 override fun onBind(holder: ServerMenuSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -884,7 +886,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class RenameFileSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class RenameFileSheetHolder : PageHolder() {
         lateinit var actionCancel: TextView
         lateinit var actionRename: TextView
         lateinit var title: TextView
@@ -912,7 +914,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_rename)
                 .screenTag("FileRenameSheet").cancellable(true)
         renameFileSheet.holder(RenameFileSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<RenameFileSheetHolder> {
+            object : Binder<RenameFileSheetHolder> {
                 override fun onBind(holder: RenameFileSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -941,7 +943,7 @@ object BottomSheetUtils {
         renameFileSheet.launch()
     }
 
-    class EnterCodeSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class EnterCodeSheetHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var description: TextView
@@ -974,7 +976,7 @@ object BottomSheetUtils {
             .page(R.layout.enter_string_bottomsheet_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(EnterCodeSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<EnterCodeSheetHolder> {
+            object : Binder<EnterCodeSheetHolder> {
                 override fun onBind(holder: EnterCodeSheetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -1015,7 +1017,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DownloadStatustHolder(),
-            object : CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
+            object : Binder<DownloadStatustHolder> {
                 override fun onBind(holder: DownloadStatustHolder) {
                     with(holder) {
                         title.text = titleText
@@ -1038,7 +1040,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class DownloadStatustHolder : CustomBottomSheetFragment.PageHolder() {
+    class DownloadStatustHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var cancelTextView: TextView
@@ -1066,7 +1068,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_confirm_delete)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(ConfirmDeletetHolder(),
-            object : CustomBottomSheetFragment.Binder<ConfirmDeletetHolder> {
+            object : Binder<ConfirmDeletetHolder> {
                 override fun onBind(holder: ConfirmDeletetHolder) {
                     with(holder) {
                         title.text = titleText
@@ -1084,7 +1086,7 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-    class ConfirmDeletetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ConfirmDeletetHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var confirmTextView: TextView
 
@@ -1113,7 +1115,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
         customSheetFragment2.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText2
@@ -1144,7 +1146,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.three_options_sheet_layout).cancellable(true)
         customSheetFragment.holder(ThreeOptionsMenuSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ThreeOptionsMenuSheetHolder> {
+            object : Binder<ThreeOptionsMenuSheetHolder> {
                 override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
                     with(holder) {
                         title.text = titleText
