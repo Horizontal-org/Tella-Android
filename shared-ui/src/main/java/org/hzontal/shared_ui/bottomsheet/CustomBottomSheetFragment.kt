@@ -24,7 +24,7 @@ import java.util.*
 open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
     @LayoutRes
-    private var layoutRes: Int = 0
+    protected var layoutRes: Int = 0
 
     protected lateinit var manager: FragmentManager
     private val clickers = ArrayList<Pair<Int, () -> Unit>>()
@@ -51,7 +51,7 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
      * @param layoutRes ID layout to setContentView on CustomBottomSheetFragment Activity
      * @return Instantiated CustomBottomSheetFragment object
      */
-    fun page(@LayoutRes layoutRes: Int): CustomBottomSheetFragment {
+    open fun page(@LayoutRes layoutRes: Int): CustomBottomSheetFragment {
         this.layoutRes = layoutRes
         return this
     }

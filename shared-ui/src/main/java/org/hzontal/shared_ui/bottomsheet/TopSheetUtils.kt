@@ -3,13 +3,14 @@ package org.hzontal.shared_ui.bottomsheet
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.R
 
-object TopSheetUtils {
+object TopSheetTestUtils {
 
     fun showBackgroundActivitiesSheet(
         fragmentManager: FragmentManager,
-        titleText: String?,
+        titleText: String,
         description: String,
     ) {
         val renameFileSheet =
@@ -33,7 +34,7 @@ object TopSheetUtils {
 
         lateinit var titleTv: TextView
         lateinit var descriptionTv: TextView
-        lateinit var activitiesRecyclerView: TextView
+        lateinit var activitiesRecyclerView: RecyclerView
 
         override fun bindView(view: View) {
 

@@ -18,7 +18,8 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.TopSheetUtils
+import org.hzontal.shared_ui.databinding.BackgroundActivitiesTopsheetBinding
+import org.hzontal.shared_ui.topsheet.TopSheetDialog
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -46,6 +47,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import timber.log.Timber
+
 
 const val VAULT_FILTER = "vf"
 
@@ -245,8 +247,11 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         activity.setSupportActionBar(binding.toolbar)
 
         binding.counterNotification.setOnClickListener {
-            TopSheetUtils.showBackgroundActivitiesSheet(baseActivity.supportFragmentManager,"test", "testtesttesttest")
-        }
+            TopSheetDialog(baseActivity, R.style.TopSheet_DialogAnimation).apply {
+            // Required to have the top-down animation when the app starts showing / dismissin it.
+            window?.attributes?.windowAnimations = R.style.TopSheet_DialogAnimation
+            //setContentView<BackgroundActivitiesTopsheetBinding>(baseActivity, R.layout.background_activities_topsheet)
+        }.show()        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {

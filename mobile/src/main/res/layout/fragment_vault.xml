@@ -20,20 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/counterNotification"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/bg_circle_counter"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="2"
-                style="@style/Tella_Main_White_Text.Small"
-              />
-
             <org.hzontal.shared_ui.appbar.ToolbarComponent
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -42,6 +28,20 @@
                 app:rightIcon="@drawable/ic_close"
                 app:rightIconContentDescription="@string/quick_exit_action"
                 app:toolbarTitle="@string/app_name" />
+
+            <TextView
+                android:id="@+id/counterNotification"
+                style="@style/Tella_Main_White_Text.Small"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="16dp"
+                android:background="@drawable/bg_circle_counter"
+                android:gravity="center"
+                android:text="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

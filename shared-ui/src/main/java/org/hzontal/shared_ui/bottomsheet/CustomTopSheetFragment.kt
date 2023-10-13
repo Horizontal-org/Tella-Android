@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -25,55 +26,19 @@ class CustomTopSheetFragment : CustomBottomSheetFragment() {
                 it.window?.let { window ->
                     if (animationStyle != null) window.attributes.windowAnimations =
                         animationStyle!!
-                    if (isTransparent) window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) else {
-                        if (isFullscreen) window.setBackgroundDrawable(
-                            ColorDrawable(
-                                resources.getColor(
-                                    R.color.dark_purple
-                                )
-                            )
-                        )
-                        // For top sheet effect, set a custom animation or remove animation.
-                        // Example: window.attributes.windowAnimations = R.style.TopSheetAnimation
-                        // Or: window.attributes.windowAnimations = 0
-                    }
-                    // Set gravity to show the sheet at the top of the screen.
-                    window.setGravity(Gravity.TOP)
+                    window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 }
             }
         }
         super.onStart()
 
-        if (isFullscreen) {
-            val sheetContainer = requireView().parent as? ViewGroup ?: return
-            sheetContainer.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        }
+        val sheetContainer = requireView().parent as? ViewGroup ?: return
+        val layoutParams = sheetContainer.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.topMargin = 0
+        sheetContainer.layoutParams = layoutParams
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
 
-        // Adjust dialog window to appear at the top of the screen.
-        val layoutParams = WindowManager.LayoutParams()
-        layoutParams.copyFrom(dialog.window?.attributes)
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-        layoutParams.gravity = Gravity.TOP
-        dialog.window?.attributes = layoutParams
-
-        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        dialog.setOnShowListener {
-            lifecycleScope.launch {
-                // Expand the top sheet.
-                val bottomSheet =
-                    (dialog as? BottomSheetDialog)?.findViewById<View>(R.id.design_bottom_sheet) as? FrameLayout
-                bottomSheet?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
-                }
-            }
-        }
-
-        return dialog
-    }
 
 
     companion object {
@@ -90,6 +55,19 @@ class CustomTopSheetFragment : CustomBottomSheetFragment() {
             return process
         }
     }
+
+    /**
+     * Called to init LayoutRes with ID layout.
+     * Mandatory
+     *
+     * @param layoutRes ID layout to setContentView on CustomBottomSheetFragment Activity
+     * @return Instantiated CustomBottomSheetFragment object
+     */
+    override fun page(@LayoutRes layoutRes: Int): CustomTopSheetFragment {
+        this.layoutRes = layoutRes
+        return this
+    }
+
 
 }
 
