@@ -433,4 +433,19 @@
         <item name="android:windowEnterAnimation">@anim/slide_out_from_top</item>
         <item name="android:windowExitAnimation">@anim/slide_back_to_top</item>
     </style>
+
+
+    <style name="TopSheetTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/TopSheetAnimation</item>
+    </style>
+
+    <style name="TopSheetAnimation" parent="android:Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_top</item>
+    </style>
+
 </resources>

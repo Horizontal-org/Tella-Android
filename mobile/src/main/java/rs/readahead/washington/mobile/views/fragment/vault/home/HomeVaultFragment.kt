@@ -5,21 +5,26 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.PopupWindow
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.databinding.BackgroundActivitiesTopsheetBinding
-import org.hzontal.shared_ui.topsheet.TopSheetDialog
+import org.hzontal.shared_ui.bottomsheet.TopSheetTestUtils.showBackgroundActivitiesSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -247,11 +252,29 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         activity.setSupportActionBar(binding.toolbar)
 
         binding.counterNotification.setOnClickListener {
-            TopSheetDialog(baseActivity, R.style.TopSheet_DialogAnimation).apply {
-            // Required to have the top-down animation when the app starts showing / dismissin it.
-            window?.attributes?.windowAnimations = R.style.TopSheet_DialogAnimation
-            //setContentView<BackgroundActivitiesTopsheetBinding>(baseActivity, R.layout.background_activities_topsheet)
-        }.show()        }
+            // showBackgroundActivitiesSheet(baseActivity.supportFragmentManager,"test","test")
+            val topSheetFragment = CustomTopSheetFragment()
+            topSheetFragment.show(baseActivity.supportFragmentManager, topSheetFragment.tag)
+
+        }
+    }
+
+    fun showCustomTopSheet() {
+        val topSheetView =
+            LayoutInflater.from(baseActivity).inflate(R.layout.background_activities_topsheet, null)
+        val topSheet = PopupWindow(
+            topSheetView,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        // Set an animation for the top sheet to slide down from the top
+        val slideInAnimation = AnimationUtils.loadAnimation(baseActivity, R.anim.slide_in_down)
+        topSheetView.startAnimation(slideInAnimation)
+
+        // Show the top sheet at the top of the screen
+        topSheet.showAtLocation(topSheetView, Gravity.TOP, 0, 0)
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -622,5 +645,21 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         } else {
             binding.appbar.bringToFront()
         }
+    }
+
+
+}
+
+class CustomTopSheetFragment : BottomSheetDialogFragment() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.TopSheetTheme)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.background_activities_topsheet, container, false)
     }
 }

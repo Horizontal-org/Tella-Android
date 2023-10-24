@@ -1,25 +1,21 @@
 package org.hzontal.shared_ui.bottomsheet
 
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 
 class CustomTopSheetFragment : CustomBottomSheetFragment() {
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+      //  setStyle(STYLE_NORMAL, R.style.TopSheetTheme)
+
+    }
     override fun onStart() {
         if (dialog != null && dialog!!.window != null) {
             dialog?.let {

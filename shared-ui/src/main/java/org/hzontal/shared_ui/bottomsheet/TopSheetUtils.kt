@@ -22,7 +22,8 @@ object TopSheetTestUtils {
             object : Binder<BackgroundActivitiesSheetHolder> {
                 override fun onBind(holder: BackgroundActivitiesSheetHolder) {
                     with(holder) {
-
+                        titleTv.text = titleText
+                        descriptionTv.text = description
                     }
                 }
             })
