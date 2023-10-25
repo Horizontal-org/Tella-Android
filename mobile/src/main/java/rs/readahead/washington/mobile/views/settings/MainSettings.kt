@@ -43,6 +43,11 @@ class MainSettings : BaseFragment() {
         binding?.aboutNHelpSettingsButton?.setOnClickListener {
             nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
+
+        binding?.feedbackButton?.setOnClickListener {
+            nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
+        }
+
     }
 
 }

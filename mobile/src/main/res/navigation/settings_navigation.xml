@@ -41,6 +41,7 @@
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start">
         </action>
+
         <action
             android:id="@+id/action_main_settings_to_hide_tella"
             app:destination="@id/hide_tella"
@@ -57,6 +58,13 @@
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_end">
         </action>
+        <action
+            android:id="@+id/action_main_settings_to_sendFeedbackFragment"
+            app:destination="@id/send_feedback_fragment"
+            app:enterAnim="@anim/slide_in_end"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_end"/>
     </fragment>
 
     <fragment
@@ -142,4 +150,9 @@
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start"/>
     </fragment>
+    <fragment
+        android:id="@+id/send_feedback_fragment"
+        android:name="rs.readahead.washington.mobile.views.settings.SendFeedbackFragment"
+        android:label="fragment_send_feedback"
+        tools:layout="@layout/fragment_send_feedback" />
 </navigation>

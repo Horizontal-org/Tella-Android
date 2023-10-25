@@ -15,5 +15,6 @@
     <dimen name="default_delete_button_size">16dp</dimen>
     <dimen name="default_horizontal_spacing">30dp</dimen>
     <dimen name="default_vertical_spacing">0dp</dimen>
+    <dimen name="dimen_25">25dp</dimen>
 
 </resources>

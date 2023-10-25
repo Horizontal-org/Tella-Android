@@ -72,5 +72,19 @@
             android:textAllCaps="false"
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
+
+        <TextView
+            android:id="@+id/feedback_button"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_marginEnd="@dimen/activity_vertical_margin"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="Feedback"
+            android:textAllCaps="false"
+            android:textColor="@color/wa_white"
+            app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

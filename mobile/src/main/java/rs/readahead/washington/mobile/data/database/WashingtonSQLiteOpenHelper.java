@@ -89,6 +89,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
 
+        db.execSQL(createTableFeedback());
+
+
         //DBV11
         db.execSQL(alterTableTellaUploadServerAddAutoUpload());
         db.execSQL(alterTableTellaUploadServerAddAutoDelete());
@@ -139,6 +142,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
+                db.execSQL(createTableFeedback());
+
 
             case 10:
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
@@ -454,6 +459,17 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
                 sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
                 "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
+                ");";
+    }
+
+
+
+    private String createTableFeedback() {
+        return "CREATE TABLE " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0  " +
                 ");";
     }
 
