@@ -114,6 +114,24 @@ class GeneralSettings : BaseFragment() {
 
             recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
         }
+
+        val textJustificationSwitch = binding?.textJustificationSwitch
+        if (textJustificationSwitch != null) {
+            textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                Preferences.setTextJustification(isChecked)
+            }
+
+            textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+        }
+
+        val textSpacingSwitch = binding?.textSpacingSwitch
+        if (textSpacingSwitch != null) {
+            textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                Preferences.setTextSpacing(isChecked)
+            }
+
+            textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
+        }
     }
 
     private fun setLanguageSetting() {

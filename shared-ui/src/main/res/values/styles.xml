@@ -39,6 +39,14 @@
         <item name="android:textSize">11sp</item>
     </style>
 
+    <style name="SettingsMessageTextLineSpacing">
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="SettingsMessageTextJustification">
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
     <style name="RadioListButtonStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

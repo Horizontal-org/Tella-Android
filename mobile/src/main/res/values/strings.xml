@@ -831,5 +831,8 @@ they are uploaded to this project as a report.</string>
   <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
   <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
-
+  <string name="Settings_General_TextJustificationTitle">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
+  <string name="Settings_General_TextSpacingExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
 </resources>
