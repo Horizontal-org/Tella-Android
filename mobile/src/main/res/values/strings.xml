@@ -834,5 +834,9 @@ they are uploaded to this project as a report.</string>
   <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
   <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+    <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="save_draft_action">Save draft</string>
 
 </resources>
