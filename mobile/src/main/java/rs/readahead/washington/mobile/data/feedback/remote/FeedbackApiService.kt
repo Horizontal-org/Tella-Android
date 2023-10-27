@@ -12,18 +12,14 @@ import rs.readahead.washington.mobile.data.feedback.utils.ParamsNetwork
 @JvmSuppressWildcards
 interface FeedbackApiService {
 
-        companion object {
-            //base URL
-            const val BASE_URL = "https://api.feedback.tella-app.org/"
-        }
 
-        @POST
-        fun submitFeedback(
-                @Url
-                url: String,
-                @Header(ParamsNetwork.FEEDBACK_HEADER) tella_platform: String,
-                @Body
-                feedbackBodyEntity: FeedbackBodyEntity,
-        ): Single<FeedbackPostResponse>
+    @POST
+    fun submitFeedback(
+            @Url
+            url: String = "https://api.feedback.tella-app.org/",
+            @Header(ParamsNetwork.FEEDBACK_HEADER) tellaPlatform: String,
+            @Body
+            feedbackBodyEntity: FeedbackBodyEntity,
+    ): Single<FeedbackPostResponse>
 
-    }
+}

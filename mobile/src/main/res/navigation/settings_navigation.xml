@@ -152,7 +152,7 @@
     </fragment>
     <fragment
         android:id="@+id/send_feedback_fragment"
-        android:name="rs.readahead.washington.mobile.views.settings.SendFeedbackFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment"
         android:label="fragment_send_feedback"
         tools:layout="@layout/fragment_send_feedback" />
 </navigation>

@@ -25,10 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object NetworkModule {
-    @Singleton
-    @Provides
-    fun providesFeedbackApiService(retrofit: Retrofit): FeedbackApiService =
-            retrofit.create(FeedbackApiService::class.java)
+
     @Singleton
     @Provides
     fun providesApiService(retrofit: Retrofit): ReportsApiService =

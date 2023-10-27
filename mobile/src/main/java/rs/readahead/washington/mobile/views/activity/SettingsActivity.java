@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
@@ -26,7 +27,7 @@ import rs.readahead.washington.mobile.views.settings.MainSettings;
 import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
 import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
-
+@AndroidEntryPoint
 public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;

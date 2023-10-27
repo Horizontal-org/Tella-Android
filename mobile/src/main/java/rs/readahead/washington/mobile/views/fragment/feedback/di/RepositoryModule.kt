@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.reports.di
+package rs.readahead.washington.mobile.views.fragment.feedback.di
 
 import dagger.Module
 import dagger.Provides
@@ -21,32 +21,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
-    @Provides
-    @Singleton
-    fun provideReportsRepository(
-        service: ReportsApiService,
-        dataSource: DataSource,
-        statusProvider: StatusProvider
-    ): ReportsRepository {
-        return ReportsRepositoryImp(service, dataSource, statusProvider)
-    }
 
     @Provides
     @Singleton
-    fun provideReportsServerRepository(): ITellaUploadServersRepository {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
+    fun provideFeedbackRepository(
+            service: FeedbackApiService,
+            dataSource: DataSource
+          //  statusProvider: StatusProvider
+    ): FeedbackRepository {
+        return FeedbackRepositoryImp(service, dataSource)
     }
 
-    @Provides
-    @Singleton
-    fun provideReportsDataSource(): ITellaReportsRepository {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
-    }
-
-    @Provides
-    @Singleton
-    fun provideDataSource(): DataSource {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
-    }
+//    @Provides
+//    @Singleton
+//    fun provideDataSource(): DataSource {
+//        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
+//    }
 
 }

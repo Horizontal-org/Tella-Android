@@ -7,7 +7,7 @@
     android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
     android:textDirection="locale"
-    tools:context=".views.settings.SendFeedbackFragment">
+    tools:context=".views.fragment.feedback.SendFeedbackFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
