@@ -89,13 +89,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
 
-        db.execSQL(createTableFeedback());
-
 
         //DBV11
         db.execSQL(alterTableTellaUploadServerAddAutoUpload());
         db.execSQL(alterTableTellaUploadServerAddAutoDelete());
         db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+
+        db.execSQL(createTableFeedback());
     }
 
     @Override
@@ -142,14 +142,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
-                db.execSQL(createTableFeedback());
-
 
             case 10:
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
                 db.execSQL(alterTableTellaUploadServerAddAutoDelete());
                 db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-
+                db.execSQL(createTableFeedback());
         }
     }
 
@@ -374,7 +372,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     private String alterTableReportFormInstanceAddCurrentUpload() {
         return "ALTER TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " ADD COLUMN " +
-                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true)+ " DEFAULT 0";
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String createTableTellaUploadServer() {
@@ -463,9 +461,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     }
 
 
-
     private String createTableFeedback() {
-        return "CREATE TABLE " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
+        return "CREATE TABLE " + sq(D.T_FEEDBACK) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +

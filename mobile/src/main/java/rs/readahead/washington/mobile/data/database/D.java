@@ -114,4 +114,8 @@ class D {
     static final String A_MEDIA_FILE_ID = "a_media_file_id";
     static final String A_SERVER_USERNAME = "a_server_username";
     static final String A_FORM_MEDIA_FILE_STATUS = "a_form_media_file_status";
+
+    //Feedback
+    static final String T_FEEDBACK = "t_feedback";
+
 }

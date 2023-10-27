@@ -11,20 +11,15 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackPostResult
 import rs.readahead.washington.mobile.domain.repository.feedback.FeedbackRepository
 import javax.inject.Inject
 
-class FeedbackRepositoryImp @Inject
-    internal constructor(
-            private val apiService: FeedbackApiService,
-            private val dataSource: DataSource) : FeedbackRepository {
+class FeedbackRepositoryImp @Inject internal constructor(
+    private val apiService: FeedbackApiService,
+    private val dataSource: DataSource
+) : FeedbackRepository {
     override fun submitFeedback(feedbackBody: FeedbackBodyEntity): Single<FeedbackPostResult> {
         return apiService.submitFeedback(
-                feedbackBodyEntity = feedbackBody,
-                tellaPlatform = "X-Tella-Platform",
-                url = "opinions"
-        ).map{ it.mapToDomainModel() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { }
+            data = feedbackBody,
+            tellaPlatform = "wearehorizontal",
+        ).map { it.mapToDomainModel() }
     }
-
 
 }
