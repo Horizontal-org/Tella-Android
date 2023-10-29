@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
+import com.airbnb.paris.extensions.style
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -28,6 +29,7 @@ import java.util.*
 class GeneralSettings : BaseFragment() {
 
     private var binding: FragmentGeneralSettingsBinding? = null
+    private var viewCreated = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +42,7 @@ class GeneralSettings : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
+        viewCreated = true
     }
 
     override fun initView(view: View) {
@@ -66,7 +69,17 @@ class GeneralSettings : BaseFragment() {
                     }
                 }
                 it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
+
+                it.messageTextView.style {
+                    if (Preferences.isTextJustification()) {
+                        add(R.style.SettingsMessageTextJustification)
+                    }
+                    if (Preferences.isTextSpacing()) {
+                        add(R.style.SettingsMessageTextLineSpacing)
+                    }
+                }
             }
+
         }
 
         val crashReportsSwitch = binding?.crashReportSwitch
@@ -75,6 +88,15 @@ class GeneralSettings : BaseFragment() {
                 Preferences.setSubmittingCrashReports(isChecked)
             }
             crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
+
+            crashReportsSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val verificationSwitch = binding?.verificationSwitch
@@ -88,6 +110,15 @@ class GeneralSettings : BaseFragment() {
                 }
             }
             verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
+
+            verificationSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val favoriteFormsSwitch = binding?.favoriteFormsSwitch
@@ -96,6 +127,15 @@ class GeneralSettings : BaseFragment() {
                 Preferences.setShowFavoriteForms(isChecked)
             }
             favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
+
+            favoriteFormsSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val favoriteTemplatesSwitch = binding?.favoriteTemplatesSwitch
@@ -104,6 +144,15 @@ class GeneralSettings : BaseFragment() {
                 Preferences.setShowFavoriteTemplates(isChecked)
             }
             favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
+
+            favoriteTemplatesSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val recentFilesSwitch = binding?.recentFilesSwitch
@@ -113,24 +162,53 @@ class GeneralSettings : BaseFragment() {
             }
 
             recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
+
+            recentFilesSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val textJustificationSwitch = binding?.textJustificationSwitch
         if (textJustificationSwitch != null) {
             textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
                 Preferences.setTextJustification(isChecked)
+                refreshFragment()
             }
 
             textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+
+            textJustificationSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
 
         val textSpacingSwitch = binding?.textSpacingSwitch
         if (textSpacingSwitch != null) {
             textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
                 Preferences.setTextSpacing(isChecked)
+                refreshFragment()
             }
 
             textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
+
+            textSpacingSwitch.messageTextView.style {
+                if (Preferences.isTextJustification()) {
+                    add(R.style.SettingsMessageTextJustification)
+                }
+                if (Preferences.isTextSpacing()) {
+                    add(R.style.SettingsMessageTextLineSpacing)
+                }
+            }
         }
     }
 
@@ -170,11 +248,13 @@ class GeneralSettings : BaseFragment() {
                     false
                 )
             }
+
             CleanInsightsActions.NO -> {
                 Preferences.setIsAcceptedImprovements(false)
                 CleanInsightUtils.grantCampaign(false)
                 binding?.shareDataSwitch?.mSwitch?.isChecked = false
             }
+
             else -> {}
         }
     }
@@ -196,5 +276,15 @@ class GeneralSettings : BaseFragment() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ), requestCode
         )
+    }
+
+    private fun refreshFragment() {
+        if (viewCreated) {
+            baseActivity.addFragment(
+                GeneralSettings(),
+                R.id.my_nav_host_fragment
+            )
+            nav().popBackStack()
+        }
     }
 }
