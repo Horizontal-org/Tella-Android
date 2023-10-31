@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -79,6 +80,17 @@ public class MainActivity extends MetadataActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Preferences.isTextSpacing()) {
+            if (Preferences.isTextJustification()) {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacingJustify, true);
+            } else {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacing, true);
+            }
+        } else {
+            if (Preferences.isTextJustification()) {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_Justify, true);
+            }
+        }
         setContentView(R.layout.activity_main2);
 
         //  setupToolbar();

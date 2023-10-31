@@ -17,6 +17,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CloseSettingsActivityEvent;
 import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
@@ -36,6 +37,19 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Preferences.isTextSpacing()) {
+            if (Preferences.isTextJustification()) {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacingJustify, true);
+            } else {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacing, true);
+            }
+        } else {
+            if (Preferences.isTextJustification()) {
+                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_Justify, true);
+            }
+        }
+
+
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
