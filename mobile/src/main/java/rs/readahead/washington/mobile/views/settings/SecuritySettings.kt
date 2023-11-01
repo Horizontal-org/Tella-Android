@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.settings
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -29,30 +30,26 @@ import rs.readahead.washington.mobile.databinding.FragmentSecuritySettingsBindin
 import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.util.FailedUnlockManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import timber.log.Timber
 
 
-class SecuritySettings : BaseFragment() {
+class SecuritySettings :
+    BaseBindingFragment<FragmentSecuritySettingsBinding>(FragmentSecuritySettingsBinding::inflate) {
 
     private val lockTimeoutManager by lazy { LockTimeoutManager() }
     private val failedUnlockManager by lazy { FailedUnlockManager() }
     private val cm = CamouflageManager.getInstance()
-    private lateinit var binding: FragmentSecuritySettingsBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSecuritySettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(view)
+        initView()
     }
 
-    override fun initView(view: View) {
+    private fun initView() {
         val fragmentSelected = baseActivity as OnFragmentSelected?
         fragmentSelected?.showAppbar()
         fragmentSelected?.setToolbarLabel(R.string.settings_sec_app_bar)
@@ -164,6 +161,16 @@ class SecuritySettings : BaseFragment() {
                 resources.getString(R.string.settings_sec_delete_app_tooltip),
                 Gravity.TOP
             )
+        }
+
+        hideDeleteTellaCheckBox()
+    }
+
+
+    private fun hideDeleteTellaCheckBox() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // Check if the SDK version is 34 or higher
+            binding.deleteContainer.hide()
         }
     }
 
