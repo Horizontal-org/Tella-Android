@@ -37,19 +37,6 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Preferences.isTextSpacing()) {
-            if (Preferences.isTextJustification()) {
-                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacingJustify, true);
-            } else {
-                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_LineSpacing, true);
-            }
-        } else {
-            if (Preferences.isTextJustification()) {
-                this.getTheme().applyStyle(R.style.AppTheme_NoActionBar_Justify, true);
-            }
-        }
-
-
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

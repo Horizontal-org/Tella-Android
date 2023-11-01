@@ -26,6 +26,17 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var loading: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Preferences.isTextSpacing()) {
+            if (Preferences.isTextJustification()) {
+                this.theme.applyStyle(R.style.AppTheme_NoActionBar_LineSpacingJustify, true)
+            } else {
+                this.theme.applyStyle(R.style.AppTheme_NoActionBar_LineSpacing, true)
+            }
+        } else {
+            if (Preferences.isTextJustification()) {
+                this.theme.applyStyle(R.style.AppTheme_NoActionBar_Justify, true)
+            }
+        }
         supportFragmentManager.setupForAccessibility(this)
 
         // start with preventing showing screen in tasks?
