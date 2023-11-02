@@ -18,25 +18,17 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+Stzimport rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.setupForAccessibility
 
 abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
+    private val themeManager = ThemeStyleManager.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Preferences.isTextSpacing()) {
-            if (Preferences.isTextJustification()) {
-                this.theme.applyStyle(R.style.AppTheme_NoActionBar_LineSpacingJustify, true)
-            } else {
-                this.theme.applyStyle(R.style.AppTheme_NoActionBar_LineSpacing, true)
-            }
-        } else {
-            if (Preferences.isTextJustification()) {
-                this.theme.applyStyle(R.style.AppTheme_NoActionBar_Justify, true)
-            }
-        }
+        themeManager?.let { this.theme.applyStyle(it.getThemeStyle(), true) }
         supportFragmentManager.setupForAccessibility(this)
 
         // start with preventing showing screen in tasks?

@@ -156,7 +156,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
-    implementation 'com.airbnb.android:paris:2.0.0'
 
     implementation("com.vanniktech:android-image-cropper:4.3.3")
 }
