@@ -168,7 +168,7 @@ class SecuritySettings :
 
 
     private fun hideDeleteTellaCheckBox() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
             // Check if the SDK version is 34 or higher
             binding.deleteContainer.hide()
         }
