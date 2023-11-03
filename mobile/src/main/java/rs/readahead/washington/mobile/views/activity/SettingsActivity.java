@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
+import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.jetbrains.annotations.NotNull;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -21,6 +22,7 @@ import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
 import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
+import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment;
 import rs.readahead.washington.mobile.views.settings.ChangeRemoveCamouflage;
 import rs.readahead.washington.mobile.views.settings.HideTella;
 import rs.readahead.washington.mobile.views.settings.MainSettings;
@@ -45,10 +47,6 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
         setSupportActionBar(binding.toolbar);
 
-        binding.toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return null;
-        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
@@ -113,6 +111,11 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         binding.toolbar.setToolbarNavigationIcon(iconRes);
     }
 
+    public ToolbarComponent getToolbar() {
+        return binding.toolbar;
+    }
+
+
     @Override
     public boolean isCamouflage() {
         return isCamouflage;
@@ -121,8 +124,11 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+
+        if ((f instanceof SendFeedbackFragment)) {
+            ((SendFeedbackFragment) f).handleBackButton();
+        }
 
         if (f instanceof MainSettings) {
             showAppbar();

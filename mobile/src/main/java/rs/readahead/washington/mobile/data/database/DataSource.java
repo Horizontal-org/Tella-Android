@@ -58,6 +58,8 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
+import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance;
+import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
@@ -68,6 +70,7 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
+import rs.readahead.washington.mobile.domain.repository.feedback.ITellaFeedBackRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DateUtil;
@@ -76,7 +79,7 @@ import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository {
+        IMediaFileRecordRepository, ITellaFeedBackRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 
@@ -2481,6 +2484,50 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
+    @NonNull
+    public Single<FeedbackInstance> saveInstance(@NonNull FeedbackInstance instance) {
+        return Single.fromCallable(() -> updateTellaFeedbackInstance(instance))
+                .compose(applySchedulers());
+    }
+
+    private FeedbackInstance updateTellaFeedbackInstance(FeedbackInstance instance) {
+        try {
+            int statusOrdinal;
+            ContentValues values = new ContentValues();
+
+            if (instance.getId() > 0) {
+                values.put(D.C_ID, instance.getId());
+            }
+
+            values.put(D.C_DESCRIPTION_TEXT, instance.getText());
+            values.put(D.C_UPDATED, Util.currentTimestamp());
+
+            if (instance.getStatus() == FeedbackStatus.UNKNOWN) {
+                statusOrdinal = FeedbackStatus.DRAFT.ordinal();
+            } else {
+                statusOrdinal = instance.getStatus().ordinal();
+            }
+            values.put(D.C_STATUS, statusOrdinal);
+            database.beginTransaction();
+
+            // insert/update feedback instance
+            long id = database.insertWithOnConflict(
+                    D.T_FEEDBACK,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
+            instance.setId(id);
+
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            database.endTransaction();
+        }
+
+        return instance;
+    }
+
     private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
         try {
             int statusOrdinal;
@@ -2664,6 +2711,53 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         });
     }
 
+    @NonNull
+    @Override
+    public Single<FeedbackInstance> getFeedbackDraft() {
+        return Single.fromCallable(() -> getFeedBackInstance(FeedbackStatus.DRAFT))
+                .compose(applySchedulers());
+    }
+
+
+    @NonNull
+    public FeedbackInstance getFeedBackInstance(FeedbackStatus status) {
+
+        Cursor cursor = null;
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_FEEDBACK,
+                    new String[]{D.C_ID, D.C_DESCRIPTION_TEXT, D.C_STATUS, D.C_UPDATED},
+                    D.C_STATUS + " = ?",
+                    null, null, null, null
+            );
+
+
+            cursor = database.rawQuery(query, new String[]{String.valueOf(status.ordinal())});
+
+            if (cursor.moveToFirst()) {
+                return cursorToFeedbackInstance(cursor);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return null;
+    }
+
+    private FeedbackInstance cursorToFeedbackInstance(Cursor cursor) {
+        FeedbackInstance feedbackInstance = new FeedbackInstance();
+        feedbackInstance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        feedbackInstance.setStatus(FeedbackStatus.values()[statusOrdinal]);
+        feedbackInstance.setText(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
+        return feedbackInstance;
+    }
+
     private List<ReportInstance> getOutboxReportInstances() {
         return getReportFormInstances(new EntityStatus[]{
                 EntityStatus.FINALIZED,
@@ -2808,6 +2902,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public Single<List<ReportInstance>> listAllReportInstances() {
         return null;
     }
+
 
     private static class Setting {
         Integer intValue;

@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.feedback.remote.FeedbackApiService
 import rs.readahead.washington.mobile.data.feedback.repository.FeedbackRepositoryImp
-import rs.readahead.washington.mobile.domain.repository.feedback.FeedbackRepository
+import rs.readahead.washington.mobile.domain.repository.feedback.FeedBackRepository
 import javax.inject.Singleton
 
 @Module
@@ -21,7 +21,7 @@ object RepositoryModule {
             service: FeedbackApiService,
             dataSource: DataSource
           //  statusProvider: StatusProvider
-    ): FeedbackRepository {
+    ): FeedBackRepository {
         return FeedbackRepositoryImp(service, dataSource)
     }
 

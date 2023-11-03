@@ -68,7 +68,7 @@
             app:layout_constraintBottom_toTopOf="@id/feedback_switch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-        §
+
 
         <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
             android:id="@+id/feedback_switch"
@@ -105,7 +105,7 @@
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/tella_main_vertical"
-            android:background="@drawable/bg_round_orange_btn"
+            android:background="@drawable/bg_round_orange16_btn"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:text="@string/collect.end_action_submit"

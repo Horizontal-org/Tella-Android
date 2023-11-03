@@ -837,6 +837,6 @@ they are uploaded to this project as a report.</string>
     <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>
   <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
-  <string name="save_draft_action">Save draft</string>
+  <string name="feedback">Feedback</string>
 
 </resources>

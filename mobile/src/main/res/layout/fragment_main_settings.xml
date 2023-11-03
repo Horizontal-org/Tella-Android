@@ -13,6 +13,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/settings_layout"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -73,18 +74,23 @@
             android:textColor="@color/wa_white"
             app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
 
-        <TextView
-            android:id="@+id/feedback_button"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="@dimen/activity_vertical_margin"
-            android:layout_marginEnd="@dimen/activity_vertical_margin"
-            android:drawablePadding="10dp"
-            android:gravity="center_vertical"
-            android:text="Feedback"
-            android:textAllCaps="false"
-            android:textColor="@color/wa_white"
-            app:drawableStartCompat="@drawable/ic_help_outline_white_24" />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/feedback_button"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"
+        android:drawablePadding="10dp"
+        android:paddingStart="@dimen/activity_vertical_margin"
+        android:gravity="center_vertical"
+        android:text="@string/feedback"
+        android:textAllCaps="false"
+        android:textColor="@color/wa_white"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/settings_layout"
+        android:background="@drawable/rounded_light_purple_background"
+        app:drawableStartCompat="@drawable/feedback_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
