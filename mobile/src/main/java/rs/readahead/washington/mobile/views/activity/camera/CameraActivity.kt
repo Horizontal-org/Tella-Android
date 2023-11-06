@@ -42,6 +42,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.CaptureEvent
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.ActivityCameraBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -160,6 +161,12 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             rotateViews(rotation)
         }
 
+        viewModel.lastBackgroundActivityModel.observe(this) { backgroundActivity ->
+            MyApplication.bus().post(
+                RecentBackgroundActivitiesEvent(mutableListOf(backgroundActivity))
+            )
+        }
+
         uploadViewModel.mediaFilesUploadScheduled.observe(this) {
             onMediaFilesUploadScheduled()
         }
@@ -220,9 +227,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddingStart() {
-        progressDialog = DialogsUtil.showLightProgressDialog(
-            this, getString(R.string.gallery_dialog_expl_encrypting)
-        )
+        /*   progressDialog = DialogsUtil.showLightProgressDialog(
+               this, getString(R.string.gallery_dialog_expl_encrypting)
+           )*/
         if (Preferences.isShutterMute()) {
             val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
             mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
@@ -230,7 +237,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddingEnd() {
-        hideProgressDialog()
+        //    hideProgressDialog()
         DialogUtils.showBottomMessage(
             this, getString(R.string.gallery_toast_file_encrypted), false
         )

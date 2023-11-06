@@ -1,10 +1,15 @@
-package org.hzontal.shared_ui.bottomsheet
+package rs.readahead.washington.mobile.util
 
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.bottomsheet.Binder
+import org.hzontal.shared_ui.bottomsheet.CustomTopSheetFragment
+import org.hzontal.shared_ui.bottomsheet.PageHolder
+import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 
 object TopSheetTestUtils {
 
@@ -12,6 +17,7 @@ object TopSheetTestUtils {
         fragmentManager: FragmentManager,
         titleText: String,
         description: String,
+        backgroundActivitiesAdapter: BackgroundActivitiesAdapter
     ) {
         val renameFileSheet =
             CustomTopSheetFragment.with(fragmentManager)
@@ -24,6 +30,11 @@ object TopSheetTestUtils {
                     with(holder) {
                         titleTv.text = titleText
                         descriptionTv.text = description
+
+                        holder.activitiesRecyclerView.apply {
+                            adapter = backgroundActivitiesAdapter
+                            layoutManager = LinearLayoutManager(context)
+                        }
                     }
                 }
             })

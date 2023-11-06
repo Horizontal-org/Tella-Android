@@ -5,30 +5,25 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.PopupWindow
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.TopSheetTestUtils.showBackgroundActivitiesSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
@@ -39,7 +34,9 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.setMargins
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
@@ -51,11 +48,11 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClick
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
+import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 import timber.log.Timber
 
 
 const val VAULT_FILTER = "vf"
-
 
 //TODO REFACTOR THIS TO MVVM
 class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaultBinding::inflate),
@@ -76,6 +73,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
+    private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(BackgroundencryptingMock.generateMockDataList()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -250,31 +248,23 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private fun setUpToolbar() {
         val activity = context as MainActivity
         activity.setSupportActionBar(binding.toolbar)
-
-        binding.counterNotification.setOnClickListener {
-            // showBackgroundActivitiesSheet(baseActivity.supportFragmentManager,"test","test")
-            val topSheetFragment = CustomTopSheetFragment()
-            topSheetFragment.show(baseActivity.supportFragmentManager, topSheetFragment.tag)
-
-        }
+        maybeShowRecentBackgroundActivities()
     }
 
-    fun showCustomTopSheet() {
-        val topSheetView =
-            LayoutInflater.from(baseActivity).inflate(R.layout.background_activities_topsheet, null)
-        val topSheet = PopupWindow(
-            topSheetView,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            true
-        )
-
-        // Set an animation for the top sheet to slide down from the top
-        val slideInAnimation = AnimationUtils.loadAnimation(baseActivity, R.anim.slide_in_down)
-        topSheetView.startAnimation(slideInAnimation)
-
-        // Show the top sheet at the top of the screen
-        topSheet.showAtLocation(topSheetView, Gravity.TOP, 0, 0)
+    private fun maybeShowRecentBackgroundActivities(){
+        disposables?.wire(
+            RecentBackgroundActivitiesEvent::class.java,
+            object : EventObserver<RecentBackgroundActivitiesEvent?>() {
+                override fun onNext(event: RecentBackgroundActivitiesEvent) {
+                    if (event.hasItems()){
+                        binding.counterNotification.show()
+                        binding.counterNotification.text = event.size().toString()
+                    }
+                }
+            })
+        binding.counterNotification.setOnClickListener {
+            showBackgroundActivitiesSheet(baseActivity.supportFragmentManager, getString(R.string.background_activities), getString(R.string.current_background_activities), backgroundActivitiesAdapter = backgroundActivitiesAdapter )
+        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -647,19 +637,4 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         }
     }
 
-
-}
-
-class CustomTopSheetFragment : BottomSheetDialogFragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.TopSheetTheme)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.background_activities_topsheet, container, false)
-    }
 }

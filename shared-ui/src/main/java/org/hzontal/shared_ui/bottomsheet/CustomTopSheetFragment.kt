@@ -13,7 +13,7 @@ class CustomTopSheetFragment : CustomBottomSheetFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      //  setStyle(STYLE_NORMAL, R.style.TopSheetTheme)
+         setStyle(STYLE_NORMAL, R.style.TopSheetTheme)
 
     }
     override fun onStart() {

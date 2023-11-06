@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/space_cadet"
+    android:paddingVertical="13dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/activityImgContainer"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="17dp"
+        android:background="@color/wa_white_20"
+        android:backgroundTint="@color/wa_white_20"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/backgroundActivityImg"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:backgroundTint="@color/wa_white_20"
+            android:scaleType="fitXY" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/icAttachmentImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/activityImgContainer"
+        app:layout_constraintEnd_toEndOf="@id/activityImgContainer"
+        app:layout_constraintStart_toStartOf="@id/activityImgContainer"
+        app:layout_constraintTop_toTopOf="@id/activityImgContainer" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/barrierNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.96" />
+
+    <TextView
+        android:id="@+id/activityNameTextView"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="30dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@id/icAttachmentImg"
+        app:layout_constraintEnd_toStartOf="@id/barrierNameTextView"
+        app:layout_constraintStart_toEndOf="@id/activityImgContainer"
+        app:layout_constraintTop_toTopOf="@id/icAttachmentImg"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="IMG1021_6aIMG1021_6a6aIMG1021_6a..6aIMG16aIMG1021_6a..jpg" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

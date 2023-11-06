@@ -38,7 +38,8 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/bg_circle_counter"
                 android:gravity="center"
-                android:text="2"
+                android:text="3"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

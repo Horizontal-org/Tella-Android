@@ -10,12 +10,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class CameraViewModel @Inject constructor() : ViewModel() {
+
     private val disposables = CompositeDisposable()
     private var currentRotation = 0
 
@@ -38,48 +41,61 @@ class CameraViewModel @Inject constructor() : ViewModel() {
     private val _lastMediaFileError = SingleLiveEvent<Throwable>()
     val lastMediaFileError: LiveData<Throwable> = _lastMediaFileError
 
+    private val _lastBackgroundActivityModel = SingleLiveEvent<BackgroundActivityModel>()
+    val lastBackgroundActivityModel: LiveData<BackgroundActivityModel> =
+        _lastBackgroundActivityModel
+
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
-        disposables.add(
-            Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
-                .doOnSubscribe { _addingInProgress.postValue(true) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally { _addingInProgress.postValue(false) }
-                .subscribe(
-                    { bundle -> _addSuccess.postValue(bundle.blockingGet()) },
-                    { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _addError.postValue(throwable)
-                    }
-                )
-        )
+        disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
+            .doOnSubscribe { _addingInProgress.postValue(true) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { _addingInProgress.postValue(false) }
+            .subscribe({ bundle -> _addSuccess.postValue(bundle.blockingGet()) }, { throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+                _addError.postValue(throwable)
+            }))
     }
 
     fun addMp4Video(file: File, parent: String?) {
-        disposables.add(
-            Observable.fromCallable { MediaFileHandler.saveMp4Video(file, parent) }
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe { _addingInProgress.postValue(true) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doFinally { _addingInProgress.postValue(false) }
-                .subscribe(
-                    { vaultFile -> _addSuccess.postValue(vaultFile) },
-                    { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _addError.postValue(throwable)
-                    }
-                )
-        )
+        disposables.add(Observable.fromCallable { MediaFileHandler.saveMp4Video(file, parent) }
+            .subscribeOn(Schedulers.io()).doOnSubscribe {
+                _addingInProgress.postValue(true)
+            }.doOnEach { notification ->
+
+                notification.value?.let { vaultFile ->
+                /*  val backgroundVideoFile = BackgroundActivityModel(
+                     id = vaultFile.id,
+                     name = vaultFile.name,
+                     type = vaultFile.mimeType,
+                     status = BackgroundActivityStatus.IN_PROGRESS
+                 )
+                 _lastBackgroundActivityModel.postValue(backgroundVideoFile)*/
+                }
+
+            }.observeOn(AndroidSchedulers.mainThread()).doFinally {
+                _addingInProgress.postValue(false)
+            }.subscribe({ vaultFile ->
+                _addSuccess.postValue(vaultFile)
+
+                /* val backgroundVideoFile = BackgroundActivityModel(
+                 id = vaultFile.id,
+                 name = vaultFile.name,
+                 type = vaultFile.mimeType,
+                 status = BackgroundActivityStatus.FINISH
+                )*/
+// _lastBackgroundActivityModel.postValue(backgroundVideoFile)
+            }, { throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+                _addError.postValue(throwable)
+            }))
     }
 
     fun getLastMediaFile() {
         disposables.add(
-            MediaFileHandler.getLastVaultFileFromDb()
-                .subscribeOn(Schedulers.io())
+            MediaFileHandler.getLastVaultFileFromDb().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { vaultFiles -> _lastMediaFileSuccess.postValue(vaultFiles[0]) },
-                    { throwable -> _lastMediaFileError.postValue(throwable) }
-                )
+                .subscribe({ vaultFiles -> _lastMediaFileSuccess.postValue(vaultFiles[0]) },
+                    { throwable -> _lastMediaFileError.postValue(throwable) })
         )
     }
 
