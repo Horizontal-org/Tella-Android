@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,11 +19,11 @@
         app:layout_constraintStart_toStartOf="parent">
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_circular"
-            app:layout_constraintTop_toTopOf="parent"
+            style="@style/Tella_Progress_Circular"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            style="@style/Tella_Progress_Circular" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/feedback_layout"
@@ -88,11 +89,11 @@
             android:layout_marginTop="48dp"
             android:background="@drawable/bg_description"
             android:hint="@string/Reports_Select_Title"
-            android:textColorHint="@color/wa_white"
             android:inputType="textMultiLine"
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
             android:scrollbars="none"
+            android:textColorHint="@color/wa_white"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

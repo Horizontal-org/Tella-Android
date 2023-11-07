@@ -25,11 +25,15 @@ class SendFeedbackViewModel @Inject constructor(
 ) : ViewModel() {
     private val disposables = CompositeDisposable()
 
-
     // LiveData to communicate with the view
     private val _feedbackSubmitted = SingleLiveEvent<Boolean>()
     val feedbackSubmitted: LiveData<Boolean>
         get() = _feedbackSubmitted
+
+    // LiveData to communicate with the view
+    private val _feedbackSaved = SingleLiveEvent<Boolean>()
+    val feedbackSaved: LiveData<Boolean>
+        get() = _feedbackSaved
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -37,10 +41,6 @@ class SendFeedbackViewModel @Inject constructor(
     private val _draftFeedBackInstance = MutableLiveData<FeedbackInstance>()
     val draftFeedBackInstance: LiveData<FeedbackInstance> get() = _draftFeedBackInstance
 
-
-//    init {
-//        getFeedBackDraft()
-//    }
 
     @SuppressLint("CheckResult")
     fun submitFeedback(instance: FeedbackInstance) {
@@ -69,7 +69,7 @@ class SendFeedbackViewModel @Inject constructor(
                 .doFinally { _progress.postValue(false) }
                 .subscribe({
                     it.apply {
-                        _feedbackSubmitted.postValue(true)
+                        _feedbackSaved.postValue(true)
                     }
 
                 }) { throwable: Throwable? ->
@@ -78,9 +78,6 @@ class SendFeedbackViewModel @Inject constructor(
                 })
 
     }
-    //to do wafa create a getFeedbackDraft method
-    // create a method that returns Feedback instance for the draft
-
 
     fun getFeedBackDraft() {
         disposables.add(dataSource.getFeedbackDraft().subscribeOn(Schedulers.io())
@@ -94,7 +91,6 @@ class SendFeedbackViewModel @Inject constructor(
                     Timber.d(throwable)
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 })
-
 
     }
 

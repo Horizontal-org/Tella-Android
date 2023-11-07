@@ -12,17 +12,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentSendFeedbackBinding
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
-import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
-import java.util.Locale
 
 @AndroidEntryPoint
 class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(FragmentSendFeedbackBinding::inflate), OnNavBckListener {
@@ -34,66 +33,76 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     }
 
     private val viewModel by viewModels<SendFeedbackViewModel>()
-    private val isSubmitEnabled by lazy { binding.feedbackSwitch.mSwitch.isEnabled  && isDescriptionEnabled }
-
+    private var isSubmitEnabled = isDescriptionEnabled && Preferences.isFeedbackSharingEnabled()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(isSubmitEnabled) viewModel.getFeedBackDraft()
+        if (Preferences.isFeedbackSharingEnabled()) viewModel.getFeedBackDraft()
+        initViews()
+        initObservers()
+    }
 
-        binding.feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
-
+    private fun initViews() {
+        setupFeedbackSwitchView()
+        KeyboardUtil(activity, view)
         val feedbackSwitch = binding.feedbackSwitch
+        feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
         feedbackSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            binding.sendFeedbackBtn.isVisible = isChecked
-            binding.newFeedbackEditDescription.isVisible = isChecked
             Preferences.setFeedbackSharingEnabled(isChecked)
+            setupFeedbackSwitchView()
         }
         binding.newFeedbackEditDescription.onChange { description ->
             isDescriptionEnabled = description.isNotEmpty()
+            isSubmitEnabled = isDescriptionEnabled &&  feedbackSwitch.mSwitch.isChecked
             highLightButton()
         }
 
         binding.sendFeedbackBtn.setOnClickListener {
+
             feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.toString())
-            feedbackInstance?.let { it1 ->
-                viewModel.submitFeedback(it1)
-            }
+            viewModel.submitFeedback(feedbackInstance!!)
+
         }
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
         (activity as SettingsActivity).toolbar.backClickListener = {
-                handleBackButton()
+            handleBackButton()
 
         }
-
-
-        initObservers()
     }
 
     fun handleBackButton() {
+        if(isSubmitEnabled)
         BottomSheetUtils.showConfirmSheet(
                 fragmentManager = parentFragmentManager,
                 getString(R.string.save_draft),
                 getString(R.string.description_submit_feedback),
-                StringUtils.capitalize(getString(R.string.Uwazi_Action_Save_Draft), Locale.ROOT),
+                getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
                 getString(R.string.action_exit_without_saving),
                 object : BottomSheetUtils.ActionConfirmed {
-                    override fun accept(isConfirmed: Boolean) = if (isConfirmed) {
-                        feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.text.toString(), platform = "ANDROID")
-                        viewModel.saveFeedbackDraft(feedbackInstance!!)
-                    } else {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            if (feedbackInstance != null) {
+                                  feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
+                             }
+                            else {
+                                feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.text.toString())
+                            }
+                            viewModel.saveFeedbackDraft(feedbackInstance!!)
+                        } else {
+                            nav().popBackStack()
+                        }
                     }
                 })
-
+        else nav().popBackStack()
     }
 
     private fun highLightButton() {
 
         binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
-  }
+    }
 
 
     override fun onBackPressed(): Boolean {
@@ -102,13 +111,20 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     }
 
     private fun initObservers() {
+        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) {
+            onFeedbackSubmittedSuccess()
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(1000)
+            }
+            nav().popBackStack()
+        }
 
         viewModel.feedbackSubmitted.observe(viewLifecycleOwner) {
             onFeedbackSubmittedSuccess()
             CoroutineScope(Dispatchers.Main).launch {
                 delay(1000)
             }
-            activity?.onBackPressed()
+            nav().popBackStack()
         }
         with(viewModel) {
             progress.observe(
@@ -118,9 +134,15 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             }
         }
 
-        viewModel.draftFeedBackInstance.observe(viewLifecycleOwner) {
-             binding.newFeedbackEditDescription.setText(it.text)
+        viewModel.draftFeedBackInstance.observe(viewLifecycleOwner) { draft ->
+            binding.newFeedbackEditDescription.setText(draft.text)
+            feedbackInstance = draft
         }
+
+        viewModel.feedbackSaved.observe(viewLifecycleOwner) {
+               nav().popBackStack()
+        }
+
 
     }
 
@@ -128,5 +150,18 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         DialogUtils.showBottomMessage(activity, getString(R.string.thanks_for_your_feedback), true)
     }
 
+    private fun setupFeedbackSwitchView() {
+
+        if (Preferences.isFeedbackSharingEnabled()) {
+            binding.sendFeedbackBtn.isVisible = true
+            binding.newFeedbackEditDescription.isVisible = true
+
+        } else {
+            binding.sendFeedbackBtn.isVisible = false
+            binding.newFeedbackEditDescription.isVisible = false
+            binding.newFeedbackEditDescription.setText("")
+
+        }
+    }
 
 }
