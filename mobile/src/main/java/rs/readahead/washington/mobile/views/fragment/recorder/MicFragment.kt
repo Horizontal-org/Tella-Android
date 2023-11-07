@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment
+package rs.readahead.washington.mobile.views.fragment.recorder
 
 import android.Manifest
 import android.animation.AnimatorInflater

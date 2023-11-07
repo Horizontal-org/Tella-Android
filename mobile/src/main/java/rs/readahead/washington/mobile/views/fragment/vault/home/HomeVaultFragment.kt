@@ -35,6 +35,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MainActivity
@@ -73,7 +74,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
-    private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(BackgroundencryptingMock.generateMockDataList()) }
+    private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -259,9 +260,13 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
                     if (event.hasItems()){
                         binding.counterNotification.show()
                         binding.counterNotification.text = event.size().toString()
+                        backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
+                    }else {
+                        binding.counterNotification.hide()
                     }
                 }
             })
+
         binding.counterNotification.setOnClickListener {
             showBackgroundActivitiesSheet(baseActivity.supportFragmentManager, getString(R.string.background_activities), getString(R.string.current_background_activities), backgroundActivitiesAdapter = backgroundActivitiesAdapter )
         }

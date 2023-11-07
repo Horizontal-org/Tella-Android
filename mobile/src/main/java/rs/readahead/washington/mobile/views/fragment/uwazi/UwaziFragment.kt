@@ -39,14 +39,14 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity, { position ->
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
             when (position) {
                 TEMPLATES_LIST_PAGE_INDEX -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
                 OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
                 SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
             }
-        })
+        }
 
         binding.toolbar.backClickListener = { nav().popBackStack() }
     }

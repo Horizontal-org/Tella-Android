@@ -48,11 +48,17 @@ class CameraViewModel @Inject constructor() : ViewModel() {
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
             .doOnSubscribe { _addingInProgress.postValue(true) }
+            .doOnEach { notification ->
+                notification.value?.let { vaultFile ->
+                    handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.IN_PROGRESS)
+                }
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { _addingInProgress.postValue(false) }
-            .subscribe({ bundle -> _addSuccess.postValue(bundle.blockingGet()) }, { throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
-                _addError.postValue(throwable)
+            .subscribe({ vaultFile ->
+                handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.COMPLETED)
+                _addSuccess.postValue(vaultFile.blockingGet()) }, { throwable ->
+                handleAddError(throwable)
             }))
     }
 
@@ -61,33 +67,34 @@ class CameraViewModel @Inject constructor() : ViewModel() {
             .subscribeOn(Schedulers.io()).doOnSubscribe {
                 _addingInProgress.postValue(true)
             }.doOnEach { notification ->
-
                 notification.value?.let { vaultFile ->
-                /*  val backgroundVideoFile = BackgroundActivityModel(
-                     id = vaultFile.id,
-                     name = vaultFile.name,
-                     type = vaultFile.mimeType,
-                     status = BackgroundActivityStatus.IN_PROGRESS
-                 )
-                 _lastBackgroundActivityModel.postValue(backgroundVideoFile)*/
+                    handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
                 }
-
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
                 _addingInProgress.postValue(false)
             }.subscribe({ vaultFile ->
+                handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
                 _addSuccess.postValue(vaultFile)
-
-                /* val backgroundVideoFile = BackgroundActivityModel(
-                 id = vaultFile.id,
-                 name = vaultFile.name,
-                 type = vaultFile.mimeType,
-                 status = BackgroundActivityStatus.FINISH
-                )*/
-// _lastBackgroundActivityModel.postValue(backgroundVideoFile)
             }, { throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
-                _addError.postValue(throwable)
+                handleAddError(throwable)
             }))
+    }
+
+    private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
+
+        val backgroundVideoFile = BackgroundActivityModel(
+            id = vaultFile.id,
+            name = vaultFile.name,
+            mimeType = vaultFile.mimeType,
+            status = status,
+            thumb = vaultFile.thumb
+        )
+        _lastBackgroundActivityModel.postValue(backgroundVideoFile)
+    }
+
+    private fun handleAddError(throwable: Throwable) {
+        FirebaseCrashlytics.getInstance().recordException(throwable)
+        _addError.postValue(throwable)
     }
 
     fun getLastMediaFile() {
