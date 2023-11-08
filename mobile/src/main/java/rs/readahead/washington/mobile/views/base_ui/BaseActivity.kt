@@ -18,17 +18,17 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
-Stzimport rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.setupForAccessibility
 
 abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
-    private val themeManager = ThemeStyleManager.instance
+    val themeManager = ThemeStyleManager.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        themeManager?.let { this.theme.applyStyle(it.getThemeStyle(), true) }
+        setThemeStyle()
         supportFragmentManager.setupForAccessibility(this)
 
         // start with preventing showing screen in tasks?
@@ -57,7 +57,7 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun initLoading() {
         container = findViewById<View>(android.R.id.content) as ViewGroup
         loading =
-                LayoutInflater.from(this).inflate(R.layout.baseactivity_activity, container, false)
+            LayoutInflater.from(this).inflate(R.layout.baseactivity_activity, container, false)
         loading.setOnTouchListener { _, _ -> false }
     }
 
@@ -81,7 +81,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun maybeChangeTemporaryTimeout() {
         if (LockTimeoutManager().lockTimeout == LockTimeoutManager.IMMEDIATE_SHUTDOWN || LockTimeoutManager().lockTimeout == LockTimeoutManager.ONE_MINUTES_SHUTDOWN) {
             MyApplication.getMainKeyHolder().timeout =
-                    LockTimeoutManager.THREE_MINUTES_SHUTDOWN
+                LockTimeoutManager.THREE_MINUTES_SHUTDOWN
             Preferences.setTempTimeout(true)
         }
     }
@@ -96,55 +96,55 @@ abstract class BaseActivity : AppCompatActivity() {
     fun replaceFragmentNoAddToBackStack(fragment: Fragment, cont: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
-                .beginTransaction()
-                .add(cont, fragment, className)
-                .commitAllowingStateLoss()
+            .beginTransaction()
+            .add(cont, fragment, className)
+            .commitAllowingStateLoss()
     }
 
     fun addFragment(fragmentToHide: Fragment, fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.`in`,
-                        R.anim.out,
-                        R.anim.left_to_right,
-                        R.anim.right_to_left
-                )
-                .hide(fragmentToHide)
-                .add(container, fragment, className)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.`in`,
+                R.anim.out,
+                R.anim.left_to_right,
+                R.anim.right_to_left
+            )
+            .hide(fragmentToHide)
+            .add(container, fragment, className)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 
     fun addFragment(fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
-                .beginTransaction()
-                .add(container, fragment, className)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            .beginTransaction()
+            .add(container, fragment, className)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 
     fun addFragmentWithAnimation(fragment: Fragment, container: Int) {
         val className = fragment.javaClass.name
         supportFragmentManager
-                .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.`in`,
-                        R.anim.out,
-                        R.anim.left_to_right,
-                        R.anim.right_to_left
-                )
-                .setCustomAnimations(
-                        R.anim.`in`,
-                        R.anim.out,
-                        R.anim.left_to_right,
-                        R.anim.right_to_left
-                )
-                .add(container, fragment, className)
-                .addToBackStack(null)
-                .commitAllowingStateLoss()
+            .beginTransaction()
+            .setCustomAnimations(
+                R.anim.`in`,
+                R.anim.out,
+                R.anim.left_to_right,
+                R.anim.right_to_left
+            )
+            .setCustomAnimations(
+                R.anim.`in`,
+                R.anim.out,
+                R.anim.left_to_right,
+                R.anim.right_to_left
+            )
+            .add(container, fragment, className)
+            .addToBackStack(null)
+            .commitAllowingStateLoss()
     }
 
     override fun onResume() {
@@ -155,30 +155,34 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun maybeEnableSecurityScreen() {
         if (Preferences.isSecurityScreenEnabled()) {
             window.setFlags(
-                    WindowManager.LayoutParams.FLAG_SECURE,
-                    WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE
             )
         } else {
             window.clearFlags(
-                    WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE
             )
         }
     }
 
     private fun showTimeOutChangeDialog(confirm: () -> Unit) {
         BottomSheetUtils.showStandardSheet(
-                fragmentManager = supportFragmentManager,
-                getString(R.string.Timeout_Warning_Title),
-                getString(R.string.Timeout_Warning_Description),
-                getString(R.string.action_continue),
-                getString(R.string.action_cancel),
-                onConfirmClick = {
-                    MyApplication.getMainKeyHolder().timeout =
-                            LockTimeoutManager.THREE_MINUTES_SHUTDOWN
-                    Preferences.setTempTimeout(true)
-                    confirm.invoke()
-                },
-                onCancelClick = null
+            fragmentManager = supportFragmentManager,
+            getString(R.string.Timeout_Warning_Title),
+            getString(R.string.Timeout_Warning_Description),
+            getString(R.string.action_continue),
+            getString(R.string.action_cancel),
+            onConfirmClick = {
+                MyApplication.getMainKeyHolder().timeout =
+                    LockTimeoutManager.THREE_MINUTES_SHUTDOWN
+                Preferences.setTempTimeout(true)
+                confirm.invoke()
+            },
+            onCancelClick = null
         )
+    }
+
+    open fun setThemeStyle() {
+        themeManager?.let { this.theme.applyStyle(it.getThemeStyle(this), true) }
     }
 }

@@ -209,11 +209,11 @@ class GeneralSettings : BaseFragment() {
 
     private fun refreshFragment() {
         if (viewCreated) {
-            themeManager?.let { activity?.theme?.applyStyle(it.getThemeStyle(), true) }
-            baseActivity.addFragment(
+            themeManager?.let { activity?.theme?.applyStyle(it.getThemeStyle(baseActivity), true) }
+            /*baseActivity.addFragment(
                 GeneralSettings(),
                 R.id.my_nav_host_fragment
-            )
+            )*/
             nav().popBackStack()
         }
     }

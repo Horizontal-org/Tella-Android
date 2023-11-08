@@ -36,7 +36,7 @@
         <item name="patternViewStyle">@style/PatternView</item>
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
-        <item name="android:justificationMode">inter_word</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
     </style>
 
     <style name="AppTheme.NoActionBar.LineSpacingJustify" parent="Theme.AppCompat.Light.NoActionBar">
@@ -47,7 +47,6 @@
         <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
-        <item name="android:justificationMode">inter_word</item>
     </style>
 
     <style name="AppTheme.DarkNoActionBar" parent="Theme.AppCompat.NoActionBar">
@@ -87,6 +86,31 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="PlayerTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="AppTheme.NoActionBarToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -100,6 +124,31 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="CameraTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="SettingsMainLine">
