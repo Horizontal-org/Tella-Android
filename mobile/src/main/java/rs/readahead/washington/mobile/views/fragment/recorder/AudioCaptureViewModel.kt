@@ -13,11 +13,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.media.AudioRecorder
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReportFilesUseCase: ScheduleUploadReportFilesUseCase) : ViewModel(),
+class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReportFilesUseCase: ScheduleUploadReportFilesUseCase) :
+    ViewModel(),
     AudioRecorder.AudioRecordInterface {
     private val _availableStorageLiveData = SingleLiveEvent<Long>()
     val availableStorageLiveData: LiveData<Long>
@@ -35,8 +38,6 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
     val recordingErrorLiveData: LiveData<Throwable>
         get() = _recordingErrorLiveData
 
-
-    // LiveData to communicate with the view
     private val _mediaFilesUploadScheduled = SingleLiveEvent<Boolean>()
     val mediaFilesUploadScheduled: LiveData<Boolean>
         get() = _mediaFilesUploadScheduled
@@ -44,6 +45,11 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
     private val _mediaFilesUploadScheduleError = MutableLiveData<Throwable>()
     val mediaFilesUploadScheduleError: LiveData<Throwable>
         get() = _mediaFilesUploadScheduleError
+
+    private val _lastBackgroundActivityModel = SingleLiveEvent<BackgroundActivityModel>()
+    val lastBackgroundActivityModel: LiveData<BackgroundActivityModel>
+        get() =
+            _lastBackgroundActivityModel
 
     private val disposables = CompositeDisposable()
     private var audioRecorder: AudioRecorder? = null
@@ -73,13 +79,23 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
         audioRecorder = AudioRecorder(this)
         disposables.add(
             audioRecorder!!.startRecording(filename, parent)
+                .doOnNext { vaultFile ->
+                    handleAddSuccess(
+                        vaultFile,
+                        BackgroundActivityStatus.IN_PROGRESS
+                    )
+                }
                 .subscribe(
-                    { vaultFile: VaultFile? ->
+                    { vaultFile: VaultFile ->
+
+                        handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
                         _recordingStoppedLiveData.postValue(
                             vaultFile
                         )
                     }
-                ) { throwable: Throwable? -> _recordingErrorLiveData.postValue(throwable) }
+                ) { throwable: Throwable? ->
+                    _recordingErrorLiveData.postValue(throwable)
+                }
         )
     }
 
@@ -120,6 +136,18 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                     _mediaFilesUploadScheduleError.postValue(throwable)
                 })
         )
+    }
+
+    private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
+
+        val backgroundVideoFile = BackgroundActivityModel(
+            id = vaultFile.id,
+            name = vaultFile.name,
+            mimeType = vaultFile.mimeType,
+            status = status,
+            thumb = vaultFile.thumb
+        )
+        _lastBackgroundActivityModel.postValue(backgroundVideoFile)
     }
 
 

@@ -23,7 +23,9 @@ import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -175,6 +177,12 @@ class MicFragment : MetadataBaseLockFragment(),
             viewLifecycleOwner,
             ::onMediaFilesUploadScheduleError
         )
+
+        viewModel.lastBackgroundActivityModel.observe(viewLifecycleOwner) { backgroundActivity ->
+            MyApplication.bus().post(
+                RecentBackgroundActivitiesEvent(mutableListOf(backgroundActivity))
+            )
+        }
     }
 
     override fun onStart() {
