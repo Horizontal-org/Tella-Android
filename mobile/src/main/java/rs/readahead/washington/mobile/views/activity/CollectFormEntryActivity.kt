@@ -51,11 +51,11 @@ import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
-import rs.readahead.washington.mobile.views.fragment.MicFragment
-import rs.readahead.washington.mobile.views.fragment.MicFragment.Companion.newInstance
 import rs.readahead.washington.mobile.views.fragment.forms.QuestionAttachmentModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
+import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment.Companion.newInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
@@ -217,7 +217,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                 throwable?.let { formPartSubmitError(throwable) }
             }
 
-            hideFormSubmitLoading.observe(this@CollectFormEntryActivity) { value: Boolean ->
+            hideFormSubmitLoading.observe(this@CollectFormEntryActivity) {
                 hideFormSubmitLoading()
             }
 
@@ -225,7 +225,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                 formPartsSubmitEnded(instance)
             }
 
-            saveForLaterFormInstanceSuccess.observe(this@CollectFormEntryActivity) { value: Boolean ->
+            saveForLaterFormInstanceSuccess.observe(this@CollectFormEntryActivity) {
                 saveForLaterFormInstanceSuccess()
             }
 
@@ -233,17 +233,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                 throwable?.let { saveForLaterFormInstanceError(throwable) }
             }
 
-            submissionStoppedByUser.observe(this@CollectFormEntryActivity) { value: Boolean ->
+            submissionStoppedByUser.observe(this@CollectFormEntryActivity) {
                 submissionStoppedByUser()
             }
         }
 
         with(attachmentModel) {
-            onGetFilesStart.observe(this@CollectFormEntryActivity) { value: Boolean ->
+            onGetFilesStart.observe(this@CollectFormEntryActivity) {
                 onGetFilesStart()
             }
 
-            onGetFilesEnd.observe(this@CollectFormEntryActivity) { value: Boolean ->
+            onGetFilesEnd.observe(this@CollectFormEntryActivity) {
                 onGetFilesEnd()
             }
 
@@ -593,7 +593,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         Timber.d(throwable, javaClass.name)
     }
 
-    fun showFormSubmitLoading(instance: CollectFormInstance) {
+    private fun showFormSubmitLoading(instance: CollectFormInstance) {
         invalidateOptionsMenu()
         endView!!.clearPartsProgress(instance)
         disableScreenTimeout()
@@ -714,15 +714,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             RESULT_OK,
             Intent().putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile)
         )
-    }
-
-    private fun onMediaFileAddError(error: Throwable) {
-        DialogUtils.showBottomMessage(
-            this,
-            getString(R.string.collect_toast_fail_attaching_file_to_form),
-            true
-        )
-        Timber.d(error, javaClass.name)
     }
 
     private fun onMediaFileImported(vaultFile: VaultFile) {

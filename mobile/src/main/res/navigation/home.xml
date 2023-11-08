@@ -128,7 +128,7 @@
 
     <fragment
         android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.recorder.MicFragment"
         android:label="@string/Home_BottomNav_Rec"
         tools:layout="@layout/fragment_mic">
         <action

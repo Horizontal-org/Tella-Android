@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.recorder.MicFragment"
         android:label="@string/fragment_mic"
         tools:layout="@layout/fragment_mic">
         <action
