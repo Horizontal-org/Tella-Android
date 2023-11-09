@@ -230,6 +230,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/delete_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
