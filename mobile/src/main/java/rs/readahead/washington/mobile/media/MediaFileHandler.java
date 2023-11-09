@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.media;
 
-import static android.provider.Settings.System.getString;
-import static androidx.core.content.ContentProviderCompat.requireContext;
 import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
 
 import android.app.Activity;
@@ -447,24 +445,6 @@ public class MediaFileHandler {
             } catch (Exception ignore) {
             }
         }
-    }
-
-    public static List<Single<VaultFile>> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
-        List<Single<VaultFile>> vaultFiles = new ArrayList<>();
-        assert uris != null;
-        for (Uri uri : uris) {
-            String mimeType = getMimeType(uri, context.getContentResolver());
-            if (mimeType != null) {
-                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
-                    vaultFiles.add(importPhotoUri(context, uri, parentId));
-                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
-                    vaultFiles.add(importVideoUri(context, uri, parentId));
-                } else {
-                    vaultFiles.add(importOthersUri(context, uri, parentId));
-                }
-            }
-        }
-        return vaultFiles;
     }
 
     @Nullable
