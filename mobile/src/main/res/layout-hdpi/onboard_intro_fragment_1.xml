@@ -82,7 +82,7 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:text="@string/onboard.intro_get_started"
-        android:textColor="@color/wa_white"
+        android:textColor="@color/btn_dark_letter"
         android:fontFamily="@font/open_sans"
         android:textSize="16sp"/>
 

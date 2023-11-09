@@ -43,7 +43,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stop_button"
-            style="@style/Unlock_White_Text_Back"
+            style="@style/Submit_Text_Button"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"

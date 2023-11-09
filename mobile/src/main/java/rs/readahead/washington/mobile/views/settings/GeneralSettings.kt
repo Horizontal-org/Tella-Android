@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
@@ -121,14 +123,20 @@ class GeneralSettings : BaseFragment() {
         }
 
         val textJustificationSwitch = binding?.textJustificationSwitch
-        if (textJustificationSwitch != null) {
-            textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setTextJustification(isChecked)
-                refreshFragment()
-            }
 
-            textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+        if (textJustificationSwitch != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                    Preferences.setTextJustification(isChecked)
+                    refreshFragment()
+                }
+
+                textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+            } else {
+                textJustificationSwitch.hide()
+            }
         }
+
 
         val textSpacingSwitch = binding?.textSpacingSwitch
         if (textSpacingSwitch != null) {
@@ -139,6 +147,11 @@ class GeneralSettings : BaseFragment() {
 
             textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewCreated = false
     }
 
     private fun setLanguageSetting() {
@@ -210,11 +223,11 @@ class GeneralSettings : BaseFragment() {
     private fun refreshFragment() {
         if (viewCreated) {
             themeManager?.let { activity?.theme?.applyStyle(it.getThemeStyle(baseActivity), true) }
-            /*baseActivity.addFragment(
+           /* nav().popBackStack()
+            baseActivity.addFragment(
                 GeneralSettings(),
                 R.id.my_nav_host_fragment
             )*/
-            nav().popBackStack()
         }
     }
 }

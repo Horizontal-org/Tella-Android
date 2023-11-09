@@ -22,6 +22,7 @@
     <color name="delimiter">#47426F</color>
     <color name="onboardingIndicatorInactive">#DCDCDC</color>
     <color name="onboardingIndicatorActive">#D6933B</color>
+    <color name="btn_dark_letter">#FF071013</color>
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorPrimaryDark">@color/space_cadet</color>
