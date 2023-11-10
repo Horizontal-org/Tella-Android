@@ -2497,16 +2497,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (instance.getId() > 0) {
                 values.put(D.C_ID, instance.getId());
-            }
+           }
 
             values.put(D.C_DESCRIPTION_TEXT, instance.getText());
             values.put(D.C_UPDATED, Util.currentTimestamp());
 
-            if (instance.getStatus() == FeedbackStatus.UNKNOWN) {
-                statusOrdinal = FeedbackStatus.DRAFT.ordinal();
-            } else {
-                statusOrdinal = instance.getStatus().ordinal();
-            }
+//            if (instance.getStatus() == FeedbackStatus.DRAFT) {
+//                values.put(D.C_ID, instance.getId());
+//            }
+            statusOrdinal = instance.getStatus().ordinal();
             values.put(D.C_STATUS, statusOrdinal);
             database.beginTransaction();
 
@@ -2517,7 +2516,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     values,
                     SQLiteDatabase.CONFLICT_REPLACE);
             instance.setId(id);
-
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -2527,7 +2525,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return instance;
     }
-
+    @NonNull
+    @Override
+    public Completable deleteReportInstance(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            deleteReportFormInstance(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
     private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
         try {
             int statusOrdinal;
@@ -2778,13 +2783,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     @NonNull
     @Override
-    public Completable deleteReportInstance(long id) {
+    public Completable deleteFeedbackInstance(long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            deleteReportFormInstance(id);
+            deleteFeedbackFormInstance(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
 
+
+    private void deleteFeedbackFormInstance(long id) throws NotFountException {
+        int count = database.delete(D.T_FEEDBACK, D.C_ID + " = ?", new String[]{Long.toString(id)});
+        if (count != 1) {
+            throw new NotFountException();
+        }
+
+    }
     @NonNull
     @Override
     public Single<List<ReportInstance>> listDraftReportInstances() {

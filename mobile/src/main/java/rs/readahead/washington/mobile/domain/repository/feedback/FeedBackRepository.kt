@@ -13,5 +13,8 @@ interface FeedBackRepository {
 
     fun submitFeedback(
             feedbackBody: FeedbackInstance
-    ): Single<FeedbackPostResult>
+    ) : Single<FeedbackPostResult>
+
+   // fun cleanup()
+
 }

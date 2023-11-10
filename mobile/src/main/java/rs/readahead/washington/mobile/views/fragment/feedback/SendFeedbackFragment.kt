@@ -5,6 +5,9 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentSendFeedbackBinding
@@ -55,14 +59,28 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         }
         binding.newFeedbackEditDescription.onChange { description ->
             isDescriptionEnabled = description.isNotEmpty()
-            isSubmitEnabled = isDescriptionEnabled &&  feedbackSwitch.mSwitch.isChecked
+            isSubmitEnabled = isDescriptionEnabled && feedbackSwitch.mSwitch.isChecked
             highLightButton()
         }
 
         binding.sendFeedbackBtn.setOnClickListener {
 
-            feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.toString())
-            viewModel.submitFeedback(feedbackInstance!!)
+            if (feedbackInstance == null)
+                feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
+
+             else
+                 feedbackInstance!!.text =  binding.newFeedbackEditDescription.text.toString()
+
+            if (MyApplication.isConnectedToInternet(baseActivity)) {
+                feedbackInstance!!.status = FeedbackStatus.SUBMISSION_IN_PROGRESS
+                viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
+                binding.sendFeedbackBtn.setOnClickListener {  }
+            } else {
+                feedbackInstance!!.status = FeedbackStatus.SUBMISSION_PENDING
+                viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
+                binding.sendFeedbackBtn.setOnClickListener {  }
+                handleNoInternetBehavior()
+            }
 
         }
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
@@ -72,29 +90,33 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         }
     }
 
+    private fun handleNoInternetBehavior() {
+        scheduleWorker()
+        DialogUtils.showBottomMessage(activity, "You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n", true)
+    }
+
     fun handleBackButton() {
-        if(isSubmitEnabled)
-        BottomSheetUtils.showConfirmSheet(
-                fragmentManager = parentFragmentManager,
-                getString(R.string.save_draft),
-                getString(R.string.description_submit_feedback),
-                getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
-                getString(R.string.action_exit_without_saving),
-                object : BottomSheetUtils.ActionConfirmed {
-                    override fun accept(isConfirmed: Boolean) {
-                        if (isConfirmed) {
-                            if (feedbackInstance != null) {
-                                  feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
-                             }
-                            else {
-                                feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.text.toString())
+        if (isSubmitEnabled)
+            BottomSheetUtils.showConfirmSheet(
+                    fragmentManager = parentFragmentManager,
+                    getString(R.string.save_draft),
+                    getString(R.string.description_submit_feedback),
+                    getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
+                    getString(R.string.action_exit_without_saving),
+                    object : BottomSheetUtils.ActionConfirmed {
+                        override fun accept(isConfirmed: Boolean) {
+                            if (isConfirmed) {
+                                if (feedbackInstance != null) {
+                                    feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
+                                } else {
+                                    feedbackInstance = FeedbackInstance(status = FeedbackStatus.DRAFT, text = binding.newFeedbackEditDescription.text.toString())
+                                }
+                                viewModel.saveFeedbackDraft(feedbackInstance!!)
+                            } else {
+                                nav().popBackStack()
                             }
-                            viewModel.saveFeedbackDraft(feedbackInstance!!)
-                        } else {
-                            nav().popBackStack()
                         }
-                    }
-                })
+                    })
         else nav().popBackStack()
     }
 
@@ -111,20 +133,17 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     }
 
     private fun initObservers() {
-        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) {
-            onFeedbackSubmittedSuccess()
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(1000)
-            }
-            nav().popBackStack()
-        }
 
-        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) {
-            onFeedbackSubmittedSuccess()
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(1000)
+        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
+            if (isFeedbackSubmitted) {
+                onFeedbackSubmittedSuccess()
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(1000)
+                }
+                nav().popBackStack()
+            } else {
+                handleNoInternetBehavior()
             }
-            nav().popBackStack()
         }
         with(viewModel) {
             progress.observe(
@@ -139,8 +158,15 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             feedbackInstance = draft
         }
 
-        viewModel.feedbackSaved.observe(viewLifecycleOwner) {
-               nav().popBackStack()
+        viewModel.feedbackSavedToBeSubmitted.observe(viewLifecycleOwner) { isSavedToBeSubmit ->
+            if (isSavedToBeSubmit) feedbackInstance?.let { viewModel.submitFeedback(instance = it) }
+            else {
+                handleNoInternetBehavior()
+            }
+
+        }
+        viewModel.feedbackSavedAsDraft.observe(viewLifecycleOwner) { isSavedAsDraft ->
+            if (isSavedAsDraft) nav().popBackStack()
         }
 
 
@@ -162,6 +188,17 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             binding.newFeedbackEditDescription.setText("")
 
         }
+    }
+
+    private fun scheduleWorker() {
+        val constraints =
+                Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build()
+        val onetimeJob = OneTimeWorkRequest.Builder(WorkerUploadReport::class.java)
+                .setConstraints(constraints).build()
+        WorkManager.getInstance(baseActivity)
+                .enqueueUniqueWork("WorkerUploadReport", ExistingWorkPolicy.KEEP, onetimeJob)
     }
 
 }
