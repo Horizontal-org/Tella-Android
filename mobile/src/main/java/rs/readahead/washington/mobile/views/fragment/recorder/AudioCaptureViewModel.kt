@@ -75,7 +75,7 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
         return audioRecorder == null
     }
 
-    fun startRecording(filename: String?, parent: String?) {
+    fun startRecording(filename: String, parent: String?) {
         audioRecorder = AudioRecorder(this)
         disposables.add(
             audioRecorder!!.startRecording(filename, parent)
@@ -84,6 +84,15 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                         vaultFile,
                         BackgroundActivityStatus.IN_PROGRESS
                     )
+                }.doOnSubscribe{
+                    val backgroundVideoFile = BackgroundActivityModel(
+                        id = filename,
+                        name = filename,
+                        mimeType = "mp3",
+                        status = BackgroundActivityStatus.IN_PROGRESS,
+                        thumb = null
+                    )
+                    _lastBackgroundActivityModel.postValue(backgroundVideoFile)
                 }
                 .subscribe(
                     { vaultFile: VaultFile ->

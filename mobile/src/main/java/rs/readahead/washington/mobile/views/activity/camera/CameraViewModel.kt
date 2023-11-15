@@ -47,17 +47,26 @@ class CameraViewModel @Inject constructor() : ViewModel() {
 
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
-            .doOnSubscribe { _addingInProgress.postValue(true) }
-            .doOnEach { notification ->
-                notification.value?.let { vaultFile ->
-                    handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.IN_PROGRESS)
-                }
+            .doOnSubscribe {
+                val backgroundVideoFile = BackgroundActivityModel(
+                    id = "",
+                    name = "",
+                    mimeType = "jpeg",
+                    status = BackgroundActivityStatus.IN_PROGRESS,
+                    thumb = null
+                )
+                _lastBackgroundActivityModel.postValue(backgroundVideoFile)
+                _addingInProgress.postValue(true)
             }
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { vaultFile ->
+                handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.IN_PROGRESS)
+            }
             .doFinally { _addingInProgress.postValue(false) }
             .subscribe({ vaultFile ->
                 handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.COMPLETED)
-                _addSuccess.postValue(vaultFile.blockingGet()) }, { throwable ->
+                _addSuccess.postValue(vaultFile.blockingGet())
+            }, { throwable ->
                 handleAddError(throwable)
             }))
     }
@@ -65,11 +74,17 @@ class CameraViewModel @Inject constructor() : ViewModel() {
     fun addMp4Video(file: File, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveMp4Video(file, parent) }
             .subscribeOn(Schedulers.io()).doOnSubscribe {
+                val backgroundVideoFile = BackgroundActivityModel(
+                    id = file.name,
+                    name = file.name,
+                    mimeType = file.extension,
+                    status = BackgroundActivityStatus.IN_PROGRESS,
+                    thumb = null
+                )
+                _lastBackgroundActivityModel.postValue(backgroundVideoFile)
                 _addingInProgress.postValue(true)
-            }.doOnEach { notification ->
-                notification.value?.let { vaultFile ->
-                    handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
-                }
+            }.doOnNext { vaultFile ->
+                //  handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
                 _addingInProgress.postValue(false)
             }.subscribe({ vaultFile ->

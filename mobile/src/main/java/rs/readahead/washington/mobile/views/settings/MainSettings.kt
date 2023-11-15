@@ -36,6 +36,8 @@ class MainSettings : BaseBindingFragment<FragmentMainSettingsBinding>(
             nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
         }
 
+        binding.toolbar.backClickListener = { back() }
+
         setUpToolbar()
     }
 

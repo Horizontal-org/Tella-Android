@@ -758,7 +758,6 @@ class AttachmentsFragment :
         }
     }
 
-
     private fun onMediaFilesAdded() {
         viewModel.getFiles(currentRootID, filterType, sort)
     }
