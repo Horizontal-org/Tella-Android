@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -223,11 +225,18 @@ class GeneralSettings : BaseFragment() {
     private fun refreshFragment() {
         if (viewCreated) {
             themeManager?.let { activity?.theme?.applyStyle(it.getThemeStyle(baseActivity), true) }
-           /* nav().popBackStack()
-            baseActivity.addFragment(
-                GeneralSettings(),
-                R.id.my_nav_host_fragment
-            )*/
+            BottomSheetUtils.showWarningSheetWithImageAndTimeout(
+                baseActivity.supportFragmentManager,
+                getString(R.string.Settings_General_BottomSheetRefreshWarningTitle),
+                getString(R.string.Settings_General_BottomSheetRefreshWarningText),
+                ContextCompat.getDrawable(baseActivity, R.drawable.refresh_phone_device),
+                consumer = object : BottomSheetUtils.ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        nav().popBackStack()
+                    }
+                },
+                BottomSheetUtils.SHORT_TIMEOUT
+            )
         }
     }
 }

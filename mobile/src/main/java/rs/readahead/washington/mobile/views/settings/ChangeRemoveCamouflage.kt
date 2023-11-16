@@ -79,7 +79,8 @@ class ChangeRemoveCamouflage : BaseFragment() {
                 override fun accept(isConfirmed: Boolean) {
                     removeCamouflage()
                 }
-            }
+            },
+            BottomSheetUtils.LONG_TIMEOUT
         )
     }
 

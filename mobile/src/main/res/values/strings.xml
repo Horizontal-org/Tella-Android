@@ -835,4 +835,6 @@ they are uploaded to this project as a report.</string>
   <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
   <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
   <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
 </resources>
