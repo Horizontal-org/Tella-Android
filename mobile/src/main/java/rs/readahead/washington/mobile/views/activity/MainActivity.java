@@ -444,12 +444,13 @@ public class MainActivity extends MetadataActivity implements
 
     private void checkEncryptionBeforeExit() {
         BottomSheetUtils.showStandardSheet(
-                this.getSupportFragmentManager(),
+                getSupportFragmentManager(),
                 getString(R.string.file_encryption_in_progress),
                 getString(R.string.files_being_encrypted_message),
                 getString(R.string.exit_and_discard_files),
                 getString(R.string.action_cancel),
-                this::closeApp);
+                this::closeApp,
+                null);
     }
 }
 
