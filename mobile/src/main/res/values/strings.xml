@@ -838,5 +838,8 @@ they are uploaded to this project as a report.</string>
   <string name="save_draft">Save draft?</string>
   <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
   <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
 
 </resources>

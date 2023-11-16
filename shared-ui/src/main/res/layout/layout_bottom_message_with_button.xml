@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    android:background="@drawable/pop_up_background"
+    android:importantForAccessibility="yes"
+    android:elevation="2dp"
+    android:layout_margin="8dp"
+    >
+
+    <TextView
+        android:id="@+id/txv_msg"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/wa_black"
+        android:textSize="15sp"
+        android:paddingTop="12dp"
+        tools:text="MESSAGEMESSAGEMESSAGEMESSAGEMESSAGE" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_ok"
+        android:text="OK"
+        android:textSize="15sp"
+        android:layout_gravity="end"
+        android:background="@color/transparent"
+        android:textColor="@color/tigers_eye">
+
+    </androidx.appcompat.widget.AppCompatButton>
+</LinearLayout>

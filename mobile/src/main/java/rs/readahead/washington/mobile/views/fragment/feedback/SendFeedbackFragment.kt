@@ -5,9 +5,13 @@ import android.view.View
 import android.widget.CompoundButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +27,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentSendFeedbackBinding
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
+import rs.readahead.washington.mobile.util.jobs.WorkerSendFeedBack
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -51,6 +56,8 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     private fun initViews() {
         setupFeedbackSwitchView()
         KeyboardUtil(activity, view)
+        (activity as SettingsActivity).toolbar.setStartTextTitle(getString(R.string.feedback_title))
+
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
         feedbackSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -64,22 +71,20 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         }
 
         binding.sendFeedbackBtn.setOnClickListener {
+            if (isSubmitEnabled) {
+                if (feedbackInstance == null)
+                    feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
+                else
+                    feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
 
-            if (feedbackInstance == null)
-                feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
-
-             else
-                 feedbackInstance!!.text =  binding.newFeedbackEditDescription.text.toString()
-
-            if (MyApplication.isConnectedToInternet(baseActivity)) {
-                feedbackInstance!!.status = FeedbackStatus.SUBMISSION_IN_PROGRESS
-                viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
-                binding.sendFeedbackBtn.setOnClickListener {  }
-            } else {
-                feedbackInstance!!.status = FeedbackStatus.SUBMISSION_PENDING
-                viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
-                binding.sendFeedbackBtn.setOnClickListener {  }
-                handleNoInternetBehavior()
+                if (MyApplication.isConnectedToInternet(baseActivity)) {
+                    feedbackInstance!!.status = FeedbackStatus.SUBMISSION_IN_PROGRESS
+                    viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
+                } else {
+                    feedbackInstance!!.status = FeedbackStatus.SUBMISSION_PENDING
+                    viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
+                    handleNoInternetBehavior()
+                }
             }
 
         }
@@ -92,7 +97,9 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
 
     private fun handleNoInternetBehavior() {
         scheduleWorker()
-        DialogUtils.showBottomMessage(activity, "You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n", true)
+        activity?.let {
+            DialogUtils.showBottomMessageWithButton(it, getString(R.string.not_internet_msg)) { nav().popBackStack() }
+        }
     }
 
     fun handleBackButton() {
@@ -133,8 +140,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     }
 
     private fun initObservers() {
-
-        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
+        viewModel.feedbackSubmittedInBackground.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
             if (isFeedbackSubmitted) {
                 onFeedbackSubmittedSuccess()
                 CoroutineScope(Dispatchers.Main).launch {
@@ -143,6 +149,17 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                 nav().popBackStack()
             } else {
                 handleNoInternetBehavior()
+            }
+        }
+
+
+        viewModel.feedbackSubmitted.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
+            if (isFeedbackSubmitted) {
+                onFeedbackSubmittedSuccess()
+                nav().popBackStack()
+            } else {
+                handleNoInternetBehavior()
+                nav().popBackStack()
             }
         }
         with(viewModel) {
@@ -158,22 +175,23 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             feedbackInstance = draft
         }
 
-        viewModel.feedbackSavedToBeSubmitted.observe(viewLifecycleOwner) { isSavedToBeSubmit ->
-            if (isSavedToBeSubmit) feedbackInstance?.let { viewModel.submitFeedback(instance = it) }
-            else {
-                handleNoInternetBehavior()
-            }
 
+        viewModel.feedbackSavedToBeSubmitted.observe(viewLifecycleOwner) { isSavedToBeSubmit ->
+            if (isSavedToBeSubmit) {
+                feedbackInstance?.let {
+                    viewModel.submitFeedback(instance = it)
+                    feedbackInstance = null
+                }
+            }
         }
         viewModel.feedbackSavedAsDraft.observe(viewLifecycleOwner) { isSavedAsDraft ->
             if (isSavedAsDraft) nav().popBackStack()
         }
 
-
     }
 
     private fun onFeedbackSubmittedSuccess() {
-        DialogUtils.showBottomMessage(activity, getString(R.string.thanks_for_your_feedback), true)
+        activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.thanks_for_your_feedback), true,4000) }
     }
 
     private fun setupFeedbackSwitchView() {
@@ -186,6 +204,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             binding.sendFeedbackBtn.isVisible = false
             binding.newFeedbackEditDescription.isVisible = false
             binding.newFeedbackEditDescription.setText("")
+            feedbackInstance = null
 
         }
     }
@@ -195,10 +214,24 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                 Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
-        val onetimeJob = OneTimeWorkRequest.Builder(WorkerUploadReport::class.java)
+        val onetimeJob = OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java)
                 .setConstraints(constraints).build()
         WorkManager.getInstance(baseActivity)
-                .enqueueUniqueWork("WorkerUploadReport", ExistingWorkPolicy.KEEP, onetimeJob)
+                .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, onetimeJob)
+        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(onetimeJob.id)
+                .observeForever(object : Observer<WorkInfo> {
+                    override fun onChanged(workInfo: WorkInfo?) {
+                        if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+                            activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true,4000) }
+                        }
+                        /* Here We remove the Observer if Not needed anymore
+                             'this' here = the Observer */
+                        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(onetimeJob.id)
+                                .removeObserver(this)
+                    }
+
+                })
     }
 
 }
+

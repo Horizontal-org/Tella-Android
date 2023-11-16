@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.jetbrains.annotations.NotNull;
@@ -123,19 +124,30 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
 
-        if ((f instanceof SendFeedbackFragment)) {
-            ((SendFeedbackFragment) f).handleBackButton();
+        if (navHostFragment != null) {
+            Fragment currentFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
+
+            // Now 'currentFragment' represents the currently displayed fragment within the NavHostFragment.
+            if (currentFragment != null) {
+                // Do something with the current fragment
+                if ((currentFragment instanceof SendFeedbackFragment)) {
+                    ((SendFeedbackFragment) currentFragment).handleBackButton();
+                }
+                else
+                {
+                    super.onBackPressed();
+                    if (currentFragment instanceof MainSettings) {
+                    showAppbar();
+                    setToolbarLabel(R.string.settings_app_bar);
+                } else if (currentFragment instanceof SecuritySettings) {
+                    showAppbar();
+                    setToolbarLabel(R.string.settings_sec_app_bar);
+                }
+             }
+            }
         }
 
-        if (f instanceof MainSettings) {
-            showAppbar();
-            setToolbarLabel(R.string.settings_app_bar);
-        } else if (f instanceof SecuritySettings) {
-            showAppbar();
-            setToolbarLabel(R.string.settings_sec_app_bar);
-        }
     }
 }

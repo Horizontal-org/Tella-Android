@@ -8,6 +8,7 @@ interface ITellaFeedBackRepository {
     fun saveInstance(instance: FeedbackInstance): Single<FeedbackInstance>
     fun getFeedbackDraft(): Single<FeedbackInstance>
     fun  deleteFeedbackInstance(id:Long): Completable
+    fun listFeedBackInstancesToBeSubmitted(): Single<List<FeedbackInstance>>?
 
 
 }

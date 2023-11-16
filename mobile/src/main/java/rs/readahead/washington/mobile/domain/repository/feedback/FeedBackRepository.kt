@@ -15,6 +15,7 @@ interface FeedBackRepository {
             feedbackBody: FeedbackInstance
     ) : Single<FeedbackPostResult>
 
-   // fun cleanup()
+    fun displayFeedbackSent(
+    ) : Single<Boolean>
 
 }

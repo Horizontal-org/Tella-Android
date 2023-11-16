@@ -2807,6 +2807,57 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     @Nullable
     @Override
+    public Single<List<FeedbackInstance>> listFeedBackInstancesToBeSubmitted() {
+        return Single.fromCallable(this::getFeedBackInstancesToBeSubmitted)
+                .compose(applySchedulers());
+    }
+
+    private List<FeedbackInstance> getFeedBackInstancesToBeSubmitted() {
+        return getFeedbackInstances(new FeedbackStatus[]{
+                FeedbackStatus.SUBMISSION_PENDING,
+                FeedbackStatus.SUBMISSION_ERROR
+        });
+    }
+
+
+    private List<FeedbackInstance> getFeedbackInstances(FeedbackStatus[] statuses) {
+        Cursor cursor = null;
+        List<FeedbackInstance> instances = new ArrayList<>();
+
+        List<String> s = new ArrayList<>(statuses.length);
+        for (FeedbackStatus status : statuses) {
+            s.add(Integer.toString(status.ordinal()));
+        }
+        String selection = "(" + TextUtils.join(", ", s) + ")";
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_FEEDBACK,
+                    new String[]{D.C_ID, D.C_DESCRIPTION_TEXT, D.C_STATUS, D.C_UPDATED},
+                    D.C_STATUS + " IN " + selection,
+                    null, null, cn(D.T_FEEDBACK, D.C_ID) + " DESC", null
+
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FeedbackInstance instance = cursorToFeedbackInstance(cursor);
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    @Nullable
+    @Override
     public Single<List<ReportInstance>> listOutboxReportInstances() {
         return Single.fromCallable(this::getOutboxReportInstances)
                 .compose(applySchedulers());

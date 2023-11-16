@@ -23,7 +23,6 @@ class FeedbackRepositoryImp @Inject internal constructor(
                 tellaPlatform = "wearehorizontal",
         ).map { it.mapToDomainModel() }
     }
-// save should be done before submit and in submit success do
 
 
     @SuppressLint("CheckResult")
@@ -34,11 +33,18 @@ class FeedbackRepositoryImp @Inject internal constructor(
                 }.doOnSuccess {
                     dataSource.deleteFeedbackInstance(feedbackInstance.id)
                             .subscribeOn(Schedulers.io()).subscribe({
-                    }, { throwable ->
-                        throwable.printStackTrace()
-                    })
+                            }, { throwable ->
+                                throwable.printStackTrace()
+                            })
                 }
     }
+
+    override fun displayFeedbackSent(): Single<Boolean> {
+        return Single.fromCallable {
+            true
+        }
+    }
+
 
     private fun handleSubmissionError(feedbackInstance: FeedbackInstance, throwable: Throwable) {
         feedbackInstance.status = if (throwable is NoConnectivityException) {
@@ -50,61 +56,6 @@ class FeedbackRepositoryImp @Inject internal constructor(
     }
 
 
-//    override fun submitReport(
-//            server: TellaReportServer,
-//            reportBody: ReportBodyEntity
-//    ): Single<ReportPostResult> {
-//        return apiService.submitReport(
-//                reportBodyEntity = reportBody,
-//                url = server.url + ParamsNetwork.URL_PROJECTS + "/${server.projectId}",
-//                access_token = server.accessToken
-//        ).map { it.mapToDomainModel() }
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .doOnError { }
-//    }
-//    override fun submitReport(
-//            server: TellaReportServer,
-//            instance: ReportInstance,
-//            backButtonPressed: Boolean
-//    ) {
-//
-//        if (backButtonPressed) {
-//            if (instance.status != EntityStatus.SUBMITTED) {
-//                instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-//                dataSource.saveInstance(instance).subscribe()
-//            }
-//        }
-//
-//        if (!statusProvider.isOnline()) {
-//            instance.status = EntityStatus.SUBMISSION_PENDING
-//            dataSource.saveInstance(instance).subscribe()
-//        }
-//
-//        if (instance.reportApiId.isEmpty()) {
-//            disposables.add(
-//                    submitReport(
-//                            server,
-//                            ReportBodyEntity(instance.title, instance.description)
-//                    )
-//                            .doOnError { throwable -> handleSubmissionError(instance, throwable) }
-//
-//                            .doOnDispose {
-//                                instance.status = EntityStatus.PAUSED
-//                                dataSource.saveInstance(instance).subscribe()
-//
-//                                instanceProgress.postValue(instance)
-//                            }
-//                            .subscribe { reportPostResult ->
-//                                instance.apply {
-//                                    reportApiId = reportPostResult.id
-//                                }
-//                                submitFiles(instance, server, reportPostResult.id)
-//                            })
-//        } else {
-//            if (instance.status != EntityStatus.SUBMITTED) {
-//                submitFiles(instance, server, instance.reportApiId)
-//            }
-//        }
-//    }
+
+
 }

@@ -27,6 +27,9 @@ class SendFeedbackViewModel @Inject constructor(
 ) : ViewModel() {
     private val disposables = CompositeDisposable()
 
+    private val _feedbackSubmittedInBackground = SingleLiveEvent<Boolean>()
+    val feedbackSubmittedInBackground: LiveData<Boolean>
+        get() = _feedbackSubmittedInBackground
     // LiveData to communicate with the view
     private val _feedbackSubmitted = SingleLiveEvent<Boolean>()
     val feedbackSubmitted: LiveData<Boolean>
@@ -127,6 +130,21 @@ class SendFeedbackViewModel @Inject constructor(
                 })
 
     }
+
+//    fun displayFeedbackSentMsg() {
+//        disposables.add(feedbackRepository.displayFeedbackSent().subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnSubscribe { _progress.postValue(true) }
+//                .doFinally { _progress.postValue(false) }
+//                .subscribe({
+//                    _feedbackSubmittedInBackground.postValue(true)
+//
+//                }) { throwable: Throwable? ->
+//                    Timber.d(throwable)
+//                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+//                })
+//
+//    }
 
     override fun onCleared() {
         super.onCleared()
