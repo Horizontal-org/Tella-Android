@@ -208,13 +208,12 @@ public class MainActivity extends MetadataActivity implements
     @Override
     public void onBackPressed() {
         if (checkCurrentFragment()) return;
-        if (!checkIfShouldExit()) return;
-
         // If files are currently being encrypted in the background, show a confirmation
         if (isEncryptingInBackground) {
             checkEncryptionBeforeExit();
             return;
         }
+        if (!checkIfShouldExit()) return;
         closeApp();
     }
 
