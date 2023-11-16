@@ -833,4 +833,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
+  <string name="file_encryption_in_progress">File encryption in progress</string>
+  <string name="exit_and_discard_files">Exit and discard files</string>
+  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
 </resources>

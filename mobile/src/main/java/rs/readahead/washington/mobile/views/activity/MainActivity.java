@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kotlin.Unit;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rs.readahead.washington.mobile.MyApplication;
@@ -41,6 +43,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
 import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent;
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract;
@@ -75,6 +78,8 @@ public class MainActivity extends MetadataActivity implements
     private OrientationEventListener mOrientationEventListener;
     private BottomNavigationView btmNavMain;
     private NavController navController;
+
+    private Boolean isEncryptingInBackground = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +116,14 @@ public class MainActivity extends MetadataActivity implements
             @Override
             public void onNext(@NonNull CamouflageAliasChangedEvent event) {
                 closeApp();
+            }
+        });
+
+
+        disposables.wire(RecentBackgroundActivitiesEvent.class, new EventObserver<RecentBackgroundActivitiesEvent>() {
+            @Override
+            public void onNext(@NonNull RecentBackgroundActivitiesEvent event) {
+                isEncryptingInBackground = event.hasItems();
             }
         });
     }
@@ -194,9 +207,14 @@ public class MainActivity extends MetadataActivity implements
 
     @Override
     public void onBackPressed() {
-        // if (maybeCloseCamera()) return;
         if (checkCurrentFragment()) return;
         if (!checkIfShouldExit()) return;
+
+        // If files are currently being encrypted in the background, show a confirmation
+        if (isEncryptingInBackground) {
+            checkEncryptionBeforeExit();
+            return;
+        }
         closeApp();
     }
 
@@ -211,7 +229,7 @@ public class MainActivity extends MetadataActivity implements
             if (fragment instanceof DownloadedTemplatesFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
-                 navController.popBackStack();
+                navController.popBackStack();
                 return true;
             }
 
@@ -227,9 +245,10 @@ public class MainActivity extends MetadataActivity implements
         return false;
     }
 
-    private void closeApp() {
+    private Unit closeApp() {
         finish();
         lockApp();
+        return Unit.INSTANCE;
     }
 
     private boolean checkIfShouldExit() {
@@ -421,6 +440,16 @@ public class MainActivity extends MetadataActivity implements
     public void selectHome() {
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         navController.navigate(R.id.home);
+    }
+
+    private void checkEncryptionBeforeExit() {
+        BottomSheetUtils.showStandardSheet(
+                this.getSupportFragmentManager(),
+                getString(R.string.file_encryption_in_progress),
+                getString(R.string.files_being_encrypted_message),
+                getString(R.string.exit_and_discard_files),
+                getString(R.string.action_cancel),
+                this::closeApp);
     }
 }
 
