@@ -355,7 +355,7 @@ class AttachmentsFragment :
                 importAndDelete = false
                 baseActivity.maybeChangeTemporaryTimeout {
                     MediaFileHandler.startImportFiles(
-                        activity, true, getCurrentType(filterType)
+                        activity, false, getCurrentType(filterType)
                     )
                 }
             }
@@ -733,14 +733,31 @@ class AttachmentsFragment :
     }
 
     private fun deleteFiles(vaultFiles: List<VaultFile?>) {
-        if (vaultFiles.isEmpty()) return
+        // Check if the input list is empty, if so, return early
+        if (vaultFiles.isEmpty()) {
+            return
+        }
 
+        // If there are multiple items in the list, delete selected media files
         if (vaultFiles.size > 1) {
-            viewModel.deleteVaultFiles(attachmentsAdapter.selectedMediaFiles)
+            val selectedFiles = attachmentsAdapter.selectedMediaFiles
+            viewModel.deleteVaultFiles(selectedFiles)
         } else {
-            vaultFiles[0]?.let { viewModel.deleteVaultFile(it) }
+            // Retrieve the single item from the list
+            val singleVaultFile = vaultFiles[0]
+
+            // Check if the item is a directory, delete all files inside the directory
+            if (singleVaultFile?.type == VaultFile.Type.DIRECTORY) {
+                viewModel.deleteVaultFiles(vaultFiles)
+            } else {
+                // If it's a single file, delete that file
+                singleVaultFile?.let {
+                    viewModel.deleteVaultFile(it)
+                }
+            }
         }
     }
+
 
     private fun onMediaFilesAdded() {
         viewModel.getFiles(currentRootID, filterType, sort)
@@ -910,15 +927,17 @@ class AttachmentsFragment :
     }
 
     private fun onEditMediaSavedListener() {
-        disposables.wire(EditMediaSavedEvent::class.java, object : EventObserver<EditMediaSavedEvent?>() {
-            override fun onNext(event: EditMediaSavedEvent) {
-                DialogUtils.showBottomMessage(
-                    baseActivity,
-                    resources.getString(R.string.Snackbar_changes_were_saved),
-                    false
-                )
-            }
-        })
+        disposables.wire(
+            EditMediaSavedEvent::class.java,
+            object : EventObserver<EditMediaSavedEvent?>() {
+                override fun onNext(event: EditMediaSavedEvent) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        resources.getString(R.string.Snackbar_changes_were_saved),
+                        false
+                    )
+                }
+            })
     }
 
     private fun handleSortSheet() {
