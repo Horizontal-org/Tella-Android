@@ -53,6 +53,9 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         initObservers()
     }
 
+    /**
+     * Initializes the views in the fragment, sets up the feedback switch, and configures the toolbar.
+     */
     private fun initViews() {
         setupFeedbackSwitchView()
         KeyboardUtil(activity, view)
@@ -60,23 +63,29 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
 
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
+
+        // Set an event listener for changes in the feedback switch state
         feedbackSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setFeedbackSharingEnabled(isChecked)
             setupFeedbackSwitchView()
         }
+        // Set up listener for changes in the feedback description
         binding.newFeedbackEditDescription.onChange { description ->
             isDescriptionEnabled = description.isNotEmpty()
             isSubmitEnabled = isDescriptionEnabled && feedbackSwitch.mSwitch.isChecked
             highLightButton()
         }
 
+        // Set up click listener for the "Send Feedback" button
         binding.sendFeedbackBtn.setOnClickListener {
             if (isSubmitEnabled) {
+                // Create or update the feedback instance with the entered text
                 if (feedbackInstance == null)
                     feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
                 else
                     feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
 
+                // Check internet connection before attempting to submit
                 if (MyApplication.isConnectedToInternet(baseActivity)) {
                     feedbackInstance!!.status = FeedbackStatus.SUBMISSION_IN_PROGRESS
                     viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
@@ -88,6 +97,8 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             }
 
         }
+
+        // Set up the toolbar icons and back button listener
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
         (activity as SettingsActivity).toolbar.backClickListener = {
             handleBackButton()
@@ -95,24 +106,43 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         }
     }
 
+    /**
+     * Handles the behavior when there is no internet connection.
+     * Schedules a worker to run in the background using scheduleWorker().
+     * Displays a bottom message with a button to navigate back when clicked.
+     */
     private fun handleNoInternetBehavior() {
+        // Schedule a worker to run in the background
         scheduleWorker()
+        // Show a bottom message with a button to navigate back
         activity?.let {
-            DialogUtils.showBottomMessageWithButton(it, getString(R.string.not_internet_msg)) { nav().popBackStack() }
+            DialogUtils.showBottomMessageWithButton(it, getString(R.string.not_internet_msg)) {
+                // Navigate back when the button is clicked
+                nav().popBackStack()
+            }
         }
     }
 
+    /**
+     * Handles the behavior when the back button is pressed.
+     * If isSubmitEnabled is true, displays a confirmation dialog. If confirmed, saves the feedback
+     * as a draft; otherwise, navigates back without saving.
+     * If isSubmitEnabled is false, navigates back without any confirmation or saving.
+     */
     fun handleBackButton() {
         if (isSubmitEnabled)
+        // Display a confirmation dialog using BottomSheetUtils
             BottomSheetUtils.showConfirmSheet(
                     fragmentManager = parentFragmentManager,
-                    getString(R.string.save_draft),
-                    getString(R.string.description_submit_feedback),
-                    getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
-                    getString(R.string.action_exit_without_saving),
+                    titleText = getString(R.string.save_draft),
+                    descriptionText = getString(R.string.description_submit_feedback),
+                    actionButtonLabel = getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
+                    cancelButtonLabel = getString(R.string.action_exit_without_saving),
+                    // Callback for the user's choice in the dialog
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
                             if (isConfirmed) {
+                                // Save feedback as a draft
                                 if (feedbackInstance != null) {
                                     feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
                                 } else {
@@ -120,16 +150,24 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                                 }
                                 viewModel.saveFeedbackDraft(feedbackInstance!!)
                             } else {
+                                // User chose not to save, navigate back
                                 nav().popBackStack()
                             }
                         }
                     })
+        // If not submitting, navigate back without any confirmation or saving
         else nav().popBackStack()
     }
 
+    /**
+     * Updates the appearance and state of the "Send Feedback" button based on the current
+     * state of isSubmitEnabled.
+     */
     private fun highLightButton() {
-
+        // Determine the background resource based on the value of isSubmitEnabled
         binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+
+        // Set the background resource of the button
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
     }
 
@@ -139,29 +177,42 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         return true
     }
 
+    /**
+     * Set up observers for LiveData in the ViewModel.
+     */
     private fun initObservers() {
+        // Observer for background feedback submission
         viewModel.feedbackSubmittedInBackground.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
             if (isFeedbackSubmitted) {
+                // Handle successful feedback submission
                 onFeedbackSubmittedSuccess()
+
+                // Delay the navigation after a successful submission
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(1000)
                 }
+
+                // Navigate back to the previous screen
                 nav().popBackStack()
             } else {
+                // Handle behavior when there is no internet connection
                 handleNoInternetBehavior()
             }
         }
 
-
         viewModel.feedbackSubmitted.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
+            // Check if feedback is successfully submitted
             if (isFeedbackSubmitted) {
                 onFeedbackSubmittedSuccess()
                 nav().popBackStack()
             } else {
+                // Handle the scenario when feedback submission fails
                 handleNoInternetBehavior()
                 nav().popBackStack()
             }
         }
+
+        // Observe progress changes to show/hide progress circular
         with(viewModel) {
             progress.observe(
                     viewLifecycleOwner,
@@ -170,66 +221,96 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             }
         }
 
+        // Observe changes in the feedback draft instance
         viewModel.draftFeedBackInstance.observe(viewLifecycleOwner) { draft ->
             binding.newFeedbackEditDescription.setText(draft.text)
             feedbackInstance = draft
         }
 
-
+        // Observe changes in the flag indicating that feedback is saved to be submitted
         viewModel.feedbackSavedToBeSubmitted.observe(viewLifecycleOwner) { isSavedToBeSubmit ->
             if (isSavedToBeSubmit) {
+                // Submit the feedback instance if it is saved to be submitted
                 feedbackInstance?.let {
                     viewModel.submitFeedback(instance = it)
                     feedbackInstance = null
                 }
             }
         }
+
+        // Observe changes in the flag indicating that feedback is saved as a draft
         viewModel.feedbackSavedAsDraft.observe(viewLifecycleOwner) { isSavedAsDraft ->
-            if (isSavedAsDraft) nav().popBackStack()
+            if (isSavedAsDraft) {
+                // Pop the back stack if feedback is saved as a draft
+                nav().popBackStack()
+            }
         }
 
+
     }
 
+    /**
+     * Displays a bottom message with a thank you message for successful feedback submission.
+     */
     private fun onFeedbackSubmittedSuccess() {
-        activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.thanks_for_your_feedback), true, 4000) }
+        activity?.let {
+            // Show a bottom message with success message
+            DialogUtils.showBottomMessage(it, getString(R.string.thanks_for_your_feedback), true, 4000)
+        }
     }
 
+    /**
+     * Sets up the visibility of feedback-related views based on the feedback sharing status.
+     */
     private fun setupFeedbackSwitchView() {
-
         if (Preferences.isFeedbackSharingEnabled()) {
+            // If feedback sharing is enabled, show the feedback button and input description
             binding.sendFeedbackBtn.isVisible = true
             binding.newFeedbackEditDescription.isVisible = true
-
         } else {
+            // If feedback sharing is disabled, hide the feedback button and input description
             binding.sendFeedbackBtn.isVisible = false
             binding.newFeedbackEditDescription.isVisible = false
+
+            // Clear the feedback input description and reset feedbackInstance
             binding.newFeedbackEditDescription.setText("")
             feedbackInstance = null
-
         }
     }
 
+    /**
+     * Schedules a one-time background work for sending feedback.
+     * The work is executed when the device is connected to the network.
+     */
     private fun scheduleWorker() {
-        val constraints =
-                Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-        val onetimeJob = OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java)
-                .setConstraints(constraints).build()
+        // Define network constraints for the work
+        val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+
+        // Create a one-time work request for the WorkerSendFeedBack class
+        val oneTimeJob = OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java)
+                .setConstraints(constraints)
+                .build()
+
+        // Enqueue the work with a unique name and keep existing work if it exists
         WorkManager.getInstance(baseActivity)
-                .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, onetimeJob)
-        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(onetimeJob.id)
+                .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, oneTimeJob)
+
+        // Observe the work's status using LiveData
+        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
                 .observeForever(object : Observer<WorkInfo> {
                     override fun onChanged(workInfo: WorkInfo?) {
+                        // Check if the work has succeeded
                         if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+                            // Show a success message with a duration of 4000 milliseconds (4 seconds)
                             activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true, 4000) }
                         }
-                        /* Here We remove the Observer if Not needed anymore
-                             'this' here = the Observer */
-                        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(onetimeJob.id)
+
+                        // Remove the observer when it's no longer needed
+                        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
                                 .removeObserver(this)
                     }
-
                 })
     }
 
