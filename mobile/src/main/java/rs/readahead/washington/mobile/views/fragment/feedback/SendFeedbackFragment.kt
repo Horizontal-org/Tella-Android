@@ -191,7 +191,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     }
 
     private fun onFeedbackSubmittedSuccess() {
-        activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.thanks_for_your_feedback), true,4000) }
+        activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.thanks_for_your_feedback), true, 4000) }
     }
 
     private fun setupFeedbackSwitchView() {
@@ -222,7 +222,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                 .observeForever(object : Observer<WorkInfo> {
                     override fun onChanged(workInfo: WorkInfo?) {
                         if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
-                            activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true,4000) }
+                            activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true, 4000) }
                         }
                         /* Here We remove the Observer if Not needed anymore
                              'this' here = the Observer */

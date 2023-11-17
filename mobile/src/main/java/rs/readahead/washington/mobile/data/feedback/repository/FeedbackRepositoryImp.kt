@@ -16,14 +16,16 @@ import javax.inject.Inject
 
 class FeedbackRepositoryImp @Inject internal constructor(
         private val apiService: FeedbackApiService, private val dataSource: DataSource) : FeedBackRepository {
+    companion object {
+        private const val TELLA_PLATFORM = "wearehorizontal"
+    }
 
     override fun submitFeedback(feedbackBody: FeedbackBodyEntity): Single<FeedbackPostResult> {
         return apiService.submitFeedback(
                 data = feedbackBody,
-                tellaPlatform = "wearehorizontal",
+                tellaPlatform = TELLA_PLATFORM,
         ).map { it.mapToDomainModel() }
     }
-
 
     @SuppressLint("CheckResult")
     override fun submitFeedback(feedbackInstance: FeedbackInstance): Single<FeedbackPostResult> {
@@ -54,8 +56,6 @@ class FeedbackRepositoryImp @Inject internal constructor(
         }
         dataSource.saveInstance(feedbackInstance).subscribe()
     }
-
-
 
 
 }

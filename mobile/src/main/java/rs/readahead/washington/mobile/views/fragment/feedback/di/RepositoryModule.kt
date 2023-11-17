@@ -14,21 +14,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
-
     @Provides
     @Singleton
     fun provideFeedbackRepository(
             service: FeedbackApiService,
             dataSource: DataSource
-          //  statusProvider: StatusProvider
     ): FeedBackRepository {
         return FeedbackRepositoryImp(service, dataSource)
     }
-
-//    @Provides
-//    @Singleton
-//    fun provideDataSource(): DataSource {
-//        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
-//    }
-
 }
