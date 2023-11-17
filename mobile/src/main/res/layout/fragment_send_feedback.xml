@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -87,24 +88,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/feedback_layout"
                 app:titleText="@string/settings.feedback_enable_sharing" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/newFeedbackEditDescription"
-                style="@style/MainEditTextStyle"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
-                android:background="@drawable/bg_description"
-                android:hint="@string/Reports_Select_Title"
-                android:inputType="textMultiLine"
-                android:paddingStart="18dp"
-                android:paddingEnd="18dp"
-                android:scrollbars="none"
-                android:textColorHint="@color/wa_white"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/feedback_switch" />
+                app:layout_constraintTop_toBottomOf="@+id/feedback_switch"
+                app:hintAnimationEnabled="true"
+                app:boxStrokeWidth="0dp"
+                android:textColorHint="@color/wa_white"
+                app:boxCollapsedPaddingTop="60dp"
+                app:boxStrokeColor="@color/wa_white">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/newFeedbackEditDescription"
+                    style="@style/MainEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_description"
+                    android:hint="@string/feedback_title"
+                    android:inputType="textMultiLine"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:scrollbars="none"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/feedback_switch" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
