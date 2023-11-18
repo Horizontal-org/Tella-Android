@@ -22,10 +22,6 @@ public class Preferences {
     // cache
     private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
 
-
-    private Preferences() {
-    }
-
     public static boolean isSecretModeActive() {
         return getBoolean(SharedPrefs.SECRET_MODE_ENABLED, false);
     }

@@ -42,13 +42,15 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.toolbar.setBackClickListener(() -> {
+            onBackPressed();
+            return null;
+        });
 
         setSupportActionBar(binding.toolbar);
-
         binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
         setSupportActionBar(binding.toolbar);
-
-
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
         } else {
@@ -134,18 +136,16 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
                 // Do something with the current fragment
                 if ((currentFragment instanceof SendFeedbackFragment)) {
                     ((SendFeedbackFragment) currentFragment).handleBackButton();
-                }
-                else
-                {
+                } else {
                     super.onBackPressed();
                     if (currentFragment instanceof MainSettings) {
-                    showAppbar();
-                    setToolbarLabel(R.string.settings_app_bar);
-                } else if (currentFragment instanceof SecuritySettings) {
-                    showAppbar();
-                    setToolbarLabel(R.string.settings_sec_app_bar);
+                        showAppbar();
+                        setToolbarLabel(R.string.settings_app_bar);
+                    } else if (currentFragment instanceof SecuritySettings) {
+                        showAppbar();
+                        setToolbarLabel(R.string.settings_sec_app_bar);
+                    }
                 }
-             }
             }
         }
 
