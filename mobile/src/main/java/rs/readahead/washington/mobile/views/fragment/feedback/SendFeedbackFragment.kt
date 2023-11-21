@@ -149,6 +149,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                             } else {
                                 // User chose not to save, navigate back
                                 nav().popBackStack()
+                                (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
                             }
                         }
                     })
@@ -156,7 +157,6 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         else {
             nav().popBackStack()
             (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
-
         }
     }
 
