@@ -215,4 +215,11 @@
         <item name="android:ellipsize">end</item>
         <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
+
+    <style name="TextInputLayoutDescriptionStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/wa_white</item>
+        <item name="boxStrokeColor">@color/edit_text_box_border</item>
+        <item name="hintTextColor">@color/wa_white</item>
+    </style>
+
 </resources>

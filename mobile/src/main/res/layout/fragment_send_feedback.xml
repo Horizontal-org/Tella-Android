@@ -8,6 +8,7 @@
     android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
     android:textDirection="locale"
+    android:theme="@style/Theme.MaterialComponents.Bridge"
     tools:context=".views.fragment.feedback.SendFeedbackFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -89,29 +90,26 @@
                 app:titleText="@string/settings.feedback_enable_sharing" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/textInputLayoutDescription"
                 android:layout_marginTop="48dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/feedback_switch"
                 app:hintAnimationEnabled="true"
-                app:boxStrokeWidth="0dp"
-                android:textColorHint="@color/wa_white"
-                app:boxCollapsedPaddingTop="60dp"
-                app:boxStrokeColor="@color/wa_white">
+                style="@style/TextInputLayoutDescriptionStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newFeedbackEditDescription"
-                    style="@style/MainEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_description"
-                    android:hint="@string/feedback_title"
                     android:inputType="textMultiLine"
                     android:paddingStart="18dp"
                     android:paddingEnd="18dp"
+                    android:hint="@string/feedback_title"
+                    android:textColor="@color/wa_white"
                     android:scrollbars="none"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"

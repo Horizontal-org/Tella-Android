@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="wa_dialog_gray">#636161</color>
     <color name="wa_red">#C9040D</color>
     <color name="wa_green">#23a923</color>
@@ -37,6 +37,7 @@
     <color name="wa_dark_green">#3C6E72</color>
     <color name="wa_calc_gray">#A4A2A2</color>
     <color name="wa_light_green">#E6F4F3</color>
+    <color name="wa_black_contrast">#FF071013</color>
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorPrimaryDark">@color/space_cadet</color>

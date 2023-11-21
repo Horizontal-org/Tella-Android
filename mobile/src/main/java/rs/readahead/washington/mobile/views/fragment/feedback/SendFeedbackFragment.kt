@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.feedback
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
@@ -98,12 +99,8 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
 
         }
 
-        // Set up the toolbar icons and back button listener
+        // Set up the toolbar icons
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
-        (activity as SettingsActivity).toolbar.backClickListener = {
-            handleBackButton()
-
-        }
     }
 
     /**
@@ -156,17 +153,22 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
                         }
                     })
         // If not submitting, navigate back without any confirmation or saving
-        else nav().popBackStack()
+        else {
+            nav().popBackStack()
+            (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
+
+        }
     }
 
     /**
      * Updates the appearance and state of the "Send Feedback" button based on the current
      * state of isSubmitEnabled.
      */
+    @SuppressLint("ResourceAsColor")
     private fun highLightButton() {
         // Determine the background resource based on the value of isSubmitEnabled
         binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
-
+        binding.sendFeedbackBtn.setTextColor(if (isSubmitEnabled) R.color.wa_black_contrast else R.color.wa_white)
         // Set the background resource of the button
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
     }
@@ -267,10 +269,12 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             // If feedback sharing is enabled, show the feedback button and input description
             binding.sendFeedbackBtn.isVisible = true
             binding.newFeedbackEditDescription.isVisible = true
+            binding.textInputLayoutDescription.isVisible = true
         } else {
             // If feedback sharing is disabled, hide the feedback button and input description
             binding.sendFeedbackBtn.isVisible = false
             binding.newFeedbackEditDescription.isVisible = false
+            binding.textInputLayoutDescription.isVisible = false
 
             // Clear the feedback input description and reset feedbackInstance
             binding.newFeedbackEditDescription.setText("")
