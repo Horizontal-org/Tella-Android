@@ -106,6 +106,7 @@ class GeneralSettings :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
                 Preferences.setTextJustification(isChecked)
+                applyActivityTheme()
                 refreshFragment()
             }
             textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
@@ -116,6 +117,7 @@ class GeneralSettings :
         val textSpacingSwitch = binding.textSpacingSwitch
         textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
             Preferences.setTextSpacing(isChecked)
+            applyActivityTheme()
             refreshFragment()
         }
         textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
@@ -193,9 +195,14 @@ class GeneralSettings :
         )
     }
 
-    private fun refreshFragment() {
+    private fun applyActivityTheme() {
         if (viewCreated) {
             activity?.theme?.applyStyle(ThemeStyleManager.getThemeStyle(baseActivity), true)
+        }
+    }
+
+    private fun refreshFragment() {
+        if (viewCreated) {
             BottomSheetUtils.showWarningSheetWithImageAndTimeout(
                 baseActivity.supportFragmentManager,
                 getString(R.string.Settings_General_BottomSheetRefreshWarningTitle),
