@@ -6,9 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,23 +24,14 @@ import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import java.util.*
 
 
-class GeneralSettings : BaseFragment() {
+class GeneralSettings :
+    BaseBindingFragment<FragmentGeneralSettingsBinding>(FragmentGeneralSettingsBinding::inflate) {
 
-    private var binding: FragmentGeneralSettingsBinding? = null
     private var viewCreated = false
-    private val themeManager = ThemeStyleManager.instance
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentGeneralSettingsBinding.inflate(inflater, container, false)
-        return binding?.root!!
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,105 +39,86 @@ class GeneralSettings : BaseFragment() {
         viewCreated = true
     }
 
-    override fun initView(view: View) {
+    fun initView(view: View) {
         (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
         (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
-        binding?.languageSettingsButton?.setOnClickListener {
+        binding.languageSettingsButton.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
         setLanguageSetting()
 
-        binding?.shareDataSwitch.let {
-            if (it != null) {
-                it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
-                it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                    try {
-                        Preferences.setIsAcceptedImprovements(isChecked)
-                        CleanInsightUtils.grantCampaign(isChecked)
-                        if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-                it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
-            }
-
-        }
-
-        val crashReportsSwitch = binding?.crashReportSwitch
-        if (crashReportsSwitch != null) {
-            crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setSubmittingCrashReports(isChecked)
-            }
-            crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
-        }
-
-        val verificationSwitch = binding?.verificationSwitch
-        if (verificationSwitch != null) {
-            verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                run {
-                    if (!context?.let { hasLocationPermission(it) }!!) {
-                        requestLocationPermission(LOCATION_PERMISSION)
-                    }
-                    Preferences.setAnonymousMode(!isChecked)
+        binding.shareDataSwitch.let {
+            it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
+            it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                try {
+                    Preferences.setIsAcceptedImprovements(isChecked)
+                    CleanInsightUtils.grantCampaign(isChecked)
+                    if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
-            verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
+            it.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
+
         }
 
-        val favoriteFormsSwitch = binding?.favoriteFormsSwitch
-        if (favoriteFormsSwitch != null) {
-            favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                Preferences.setShowFavoriteForms(isChecked)
-            }
-            favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
+        val crashReportsSwitch = binding.crashReportSwitch
+        crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            Preferences.setSubmittingCrashReports(isChecked)
         }
+        crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
 
-        val favoriteTemplatesSwitch = binding?.favoriteTemplatesSwitch
-        if (favoriteTemplatesSwitch != null) {
-            favoriteTemplatesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-                Preferences.setShowFavoriteTemplates(isChecked)
-            }
-            favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
-        }
-
-        val recentFilesSwitch = binding?.recentFilesSwitch
-        if (recentFilesSwitch != null) {
-            recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setShowRecentFiles(isChecked)
-            }
-
-            recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
-        }
-
-        val textJustificationSwitch = binding?.textJustificationSwitch
-
-        if (textJustificationSwitch != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                    Preferences.setTextJustification(isChecked)
-                    refreshFragment()
+        val verificationSwitch = binding.verificationSwitch
+        verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            run {
+                if (!context?.let { hasLocationPermission(it) }!!) {
+                    requestLocationPermission(LOCATION_PERMISSION)
                 }
-
-                textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
-            } else {
-                textJustificationSwitch.hide()
+                Preferences.setAnonymousMode(!isChecked)
             }
         }
+        verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
 
+        val favoriteFormsSwitch = binding.favoriteFormsSwitch
+        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowFavoriteForms(isChecked)
+        }
+        favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
 
-        val textSpacingSwitch = binding?.textSpacingSwitch
-        if (textSpacingSwitch != null) {
-            textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setTextSpacing(isChecked)
+        val favoriteTemplatesSwitch = binding.favoriteTemplatesSwitch
+        favoriteTemplatesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowFavoriteTemplates(isChecked)
+        }
+        favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
+
+        val recentFilesSwitch = binding.recentFilesSwitch
+        recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            Preferences.setShowRecentFiles(isChecked)
+        }
+
+        recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
+
+        val textJustificationSwitch = binding.textJustificationSwitch
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+                Preferences.setTextJustification(isChecked)
                 refreshFragment()
             }
-
-            textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
+            textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+        } else {
+            textJustificationSwitch.hide()
         }
+
+        val textSpacingSwitch = binding.textSpacingSwitch
+        textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            Preferences.setTextSpacing(isChecked)
+            refreshFragment()
+        }
+        textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
     }
 
     override fun onDestroyView() {
@@ -160,9 +130,9 @@ class GeneralSettings : BaseFragment() {
         val language = LocaleManager.getInstance().languageSetting
         if (language != null) {
             val locale = Locale(language)
-            binding?.languageSetting?.setText(StringUtils.capitalize(locale.displayName, locale))
+            binding.languageSetting.setText(StringUtils.capitalize(locale.displayName, locale))
         } else {
-            binding?.languageSetting?.setText(R.string.settings_lang_select_default)
+            binding.languageSetting.setText(R.string.settings_lang_select_default)
         }
     }
 
@@ -171,6 +141,7 @@ class GeneralSettings : BaseFragment() {
         startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
@@ -185,7 +156,7 @@ class GeneralSettings : BaseFragment() {
             CleanInsightsActions.YES -> {
                 Preferences.setIsAcceptedImprovements(true)
                 CleanInsightUtils.grantCampaign(true)
-                binding?.shareDataSwitch?.mSwitch?.isChecked = true
+                binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
                     requireActivity(),
                     getString(R.string.clean_insights_signed_for_days),
@@ -196,7 +167,7 @@ class GeneralSettings : BaseFragment() {
             CleanInsightsActions.NO -> {
                 Preferences.setIsAcceptedImprovements(false)
                 CleanInsightUtils.grantCampaign(false)
-                binding?.shareDataSwitch?.mSwitch?.isChecked = false
+                binding.shareDataSwitch.mSwitch.isChecked = false
             }
 
             else -> {}
@@ -224,7 +195,7 @@ class GeneralSettings : BaseFragment() {
 
     private fun refreshFragment() {
         if (viewCreated) {
-            themeManager?.let { activity?.theme?.applyStyle(it.getThemeStyle(baseActivity), true) }
+            activity?.theme?.applyStyle(ThemeStyleManager.getThemeStyle(baseActivity), true)
             BottomSheetUtils.showWarningSheetWithImageAndTimeout(
                 baseActivity.supportFragmentManager,
                 getString(R.string.Settings_General_BottomSheetRefreshWarningTitle),

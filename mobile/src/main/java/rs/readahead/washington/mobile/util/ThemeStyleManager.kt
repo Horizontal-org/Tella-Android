@@ -6,7 +6,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 
 
-class ThemeStyleManager private constructor() {
+object ThemeStyleManager {
     /**
      * Based on the values of the theme switches combination
      * returns the appropriate style.
@@ -17,63 +17,52 @@ class ThemeStyleManager private constructor() {
         //This should be more elegant
         when (activity.localClassName) {
             "rs.readahead.washington.mobile.views.activity.camera.CameraActivity" -> {
-                if (Preferences.isTextSpacing()) {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.CameraTheme_LineSpacingJustify
-                    } else {
-                        return R.style.CameraTheme_LineSpacing
-                    }
-                } else {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.CameraTheme_Justify
-                    } else {
-                        return R.style.CameraTheme
-                    }
-                }
+                return getThemeStyleBasedOnPreferences(
+                    R.style.CameraTheme,
+                    R.style.CameraTheme_LineSpacing,
+                    R.style.CameraTheme_Justify,
+                    R.style.CameraTheme_LineSpacingJustify
+                )
             }
 
             "rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity" -> {
-                if (Preferences.isTextSpacing()) {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.PlayerTheme_LineSpacingJustify
-                    } else {
-                        return R.style.PlayerTheme_LineSpacing
-                    }
-                } else {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.PlayerTheme_Justify
-                    } else {
-                        return R.style.PlayerTheme
-                    }
-                }
+                return getThemeStyleBasedOnPreferences(
+                    R.style.PlayerTheme,
+                    R.style.PlayerTheme_LineSpacing,
+                    R.style.PlayerTheme_Justify,
+                    R.style.PlayerTheme_LineSpacingJustify
+                )
             }
 
             else -> {
-                if (Preferences.isTextSpacing()) {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.AppTheme_NoActionBar_LineSpacingJustify
-                    } else {
-                        return R.style.AppTheme_NoActionBar_LineSpacing
-                    }
-                } else {
-                    if (Preferences.isTextJustification()) {
-                        return R.style.AppTheme_NoActionBar_Justify
-                    } else {
-                        return R.style.AppTheme_NoActionBar
-                    }
-                }
+                return getThemeStyleBasedOnPreferences(
+                    R.style.AppTheme_NoActionBar,
+                    R.style.AppTheme_NoActionBar_LineSpacing,
+                    R.style.AppTheme_NoActionBar_Justify,
+                    R.style.AppTheme_NoActionBar_LineSpacingJustify
+                )
             }
         }
     }
 
-    companion object {
-        @get:Synchronized
-        var instance: ThemeStyleManager? = null
-            get() {
-                if (field == null) {
-                    field = ThemeStyleManager()
-                }
-                return field
+    private fun getThemeStyleBasedOnPreferences(
+        defaultStyle: Int,
+        lineSpacingStyle: Int,
+        justifyStyle: Int,
+        lineSpacingJustifyStyle: Int
+    ): Int {
+        if (Preferences.isTextSpacing()) {
+            if (Preferences.isTextJustification()) {
+                return lineSpacingJustifyStyle
+            } else {
+                return lineSpacingStyle
             }
+        } else {
+            if (Preferences.isTextJustification()) {
+                return justifyStyle
+            } else {
+                return defaultStyle
+            }
+        }
     }
 }

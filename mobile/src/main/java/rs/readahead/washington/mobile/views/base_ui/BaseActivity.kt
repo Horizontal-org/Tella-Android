@@ -25,7 +25,6 @@ abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
-    val themeManager = ThemeStyleManager.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setThemeStyle()
@@ -183,6 +182,6 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun setThemeStyle() {
-        themeManager?.let { this.theme.applyStyle(it.getThemeStyle(this), true) }
+        this.theme.applyStyle(ThemeStyleManager.getThemeStyle(this), true)
     }
 }

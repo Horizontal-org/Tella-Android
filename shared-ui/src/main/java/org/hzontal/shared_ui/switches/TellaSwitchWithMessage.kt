@@ -30,7 +30,7 @@ class TellaSwitchWithMessage @JvmOverloads constructor(
     private var labelText: Int = -1
 
     private lateinit var titleTextView: TextView
-    lateinit var messageTextView: TextView
+    private lateinit var messageTextView: TextView
     private lateinit var learnMoreTextView: TextView
     private lateinit var labelTextView: TextView
     lateinit var mSwitch: SwitchCompat
