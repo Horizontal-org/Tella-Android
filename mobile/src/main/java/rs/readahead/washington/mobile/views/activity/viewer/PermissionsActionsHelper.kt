@@ -41,7 +41,7 @@ object PermissionsActionsHelper {
                 if (result.resultCode == AppCompatActivity.RESULT_OK) {
                     assert(result.data != null)
                     // Export the chosen VaultFile to the selected file destination
-                    chosenVaultFile?.let {
+                    chosenVaultFile.let {
                         sharedViewModel.exportNewMediaFile(
                             withMetadata,
                             it,
