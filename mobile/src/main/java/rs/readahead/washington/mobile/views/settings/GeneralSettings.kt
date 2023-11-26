@@ -30,7 +30,6 @@ import java.util.*
 
 class GeneralSettings :
     BaseBindingFragment<FragmentGeneralSettingsBinding>(FragmentGeneralSettingsBinding::inflate) {
-
     private var viewCreated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +51,7 @@ class GeneralSettings :
 
         binding.shareDataSwitch.let {
             it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
-            it.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+            it.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
                 try {
                     Preferences.setIsAcceptedImprovements(isChecked)
                     CleanInsightUtils.grantCampaign(isChecked)
@@ -66,13 +65,13 @@ class GeneralSettings :
         }
 
         val crashReportsSwitch = binding.crashReportSwitch
-        crashReportsSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        crashReportsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setSubmittingCrashReports(isChecked)
         }
         crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
 
         val verificationSwitch = binding.verificationSwitch
-        verificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        verificationSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             run {
                 if (!context?.let { hasLocationPermission(it) }!!) {
                     requestLocationPermission(LOCATION_PERMISSION)
@@ -95,32 +94,36 @@ class GeneralSettings :
         favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
 
         val recentFilesSwitch = binding.recentFilesSwitch
-        recentFilesSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
+        recentFilesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowRecentFiles(isChecked)
         }
 
         recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
 
-        val textJustificationSwitch = binding.textJustificationSwitch
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            textJustificationSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-                Preferences.setTextJustification(isChecked)
-                applyActivityTheme()
-                refreshFragment()
-            }
-            textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+            setupSwitch(
+                switch = binding.textJustificationSwitch.mSwitch,
+                isEnabled = Preferences.isTextJustification(),
+                setEnabled = { isOn -> Preferences.setTextJustification(isOn); applyActivityTheme(); refreshFragment() })
         } else {
-            textJustificationSwitch.hide()
+            binding.textJustificationSwitch.hide()
         }
 
-        val textSpacingSwitch = binding.textSpacingSwitch
-        textSpacingSwitch.mSwitch.setOnCheckedChangeListener { switch: CompoundButton?, isChecked: Boolean ->
-            Preferences.setTextSpacing(isChecked)
-            applyActivityTheme()
-            refreshFragment()
+        setupSwitch(
+            switch = binding.textSpacingSwitch.mSwitch,
+            isEnabled = Preferences.isTextSpacing(),
+            setEnabled = { isOn -> Preferences.setTextSpacing(isOn); applyActivityTheme(); refreshFragment() })
+    }
+
+    private fun setupSwitch(
+        switch: CompoundButton?,
+        isEnabled: Boolean,
+        setEnabled: (isOn: Boolean) -> Unit
+    ) {
+        switch?.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            setEnabled(isChecked)
         }
-        textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
+        switch?.isChecked = isEnabled
     }
 
     override fun onDestroyView() {
@@ -132,7 +135,7 @@ class GeneralSettings :
         val language = LocaleManager.getInstance().languageSetting
         if (language != null) {
             val locale = Locale(language)
-            binding.languageSetting.setText(StringUtils.capitalize(locale.displayName, locale))
+            binding.languageSetting.text = StringUtils.capitalize(locale.displayName, locale)
         } else {
             binding.languageSetting.setText(R.string.settings_lang_select_default)
         }
