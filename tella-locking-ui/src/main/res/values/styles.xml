@@ -25,6 +25,17 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Unlock_Black_Text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="DialogBottomPopUpBackground">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
