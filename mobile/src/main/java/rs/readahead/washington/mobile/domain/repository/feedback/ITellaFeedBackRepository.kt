@@ -7,8 +7,6 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 interface ITellaFeedBackRepository {
     fun saveInstance(instance: FeedbackInstance): Single<FeedbackInstance>
     fun getFeedbackDraft(): Single<FeedbackInstance>
-    fun  deleteFeedbackInstance(id:Long): Completable
-    fun listFeedBackInstancesToBeSubmitted(): Single<List<FeedbackInstance>>?
-
-
+    fun deleteFeedbackInstance(id: Long): Completable
+    fun listFeedBackInstances(): Single<List<FeedbackInstance>>?
 }

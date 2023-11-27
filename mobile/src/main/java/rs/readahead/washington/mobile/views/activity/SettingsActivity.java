@@ -50,7 +50,7 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
         setSupportActionBar(binding.toolbar);
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById(R.id.appbar).setOutlineProvider(null);
         } else {

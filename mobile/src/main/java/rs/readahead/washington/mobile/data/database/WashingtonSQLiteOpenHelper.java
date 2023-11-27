@@ -94,7 +94,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableTellaUploadServerAddAutoUpload());
         db.execSQL(alterTableTellaUploadServerAddAutoDelete());
         db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-
         db.execSQL(createTableFeedback());
     }
 

@@ -48,7 +48,6 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         if (Preferences.isFeedbackSharingEnabled()) viewModel.getFeedBackDraft()
         initViews()
         initObservers()
@@ -61,10 +60,8 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
         setupFeedbackSwitchView()
         KeyboardUtil(activity, view)
         (activity as SettingsActivity).toolbar.setStartTextTitle(getString(R.string.feedback_title))
-
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
-
         // Set an event listener for changes in the feedback switch state
         feedbackSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setFeedbackSharingEnabled(isChecked)
@@ -76,15 +73,12 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             isSubmitEnabled = isDescriptionEnabled && feedbackSwitch.mSwitch.isChecked
             highLightButton()
         }
-
         // Set up click listener for the "Send Feedback" button
         binding.sendFeedbackBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 // Create or update the feedback instance with the entered text
-                if (feedbackInstance == null)
-                    feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
-                else
-                    feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
+                if (feedbackInstance == null) feedbackInstance = FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
+                else feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
 
                 // Check internet connection before attempting to submit
                 if (MyApplication.isConnectedToInternet(baseActivity)) {
@@ -98,7 +92,6 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             }
 
         }
-
         // Set up the toolbar icons
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
     }
@@ -129,12 +122,7 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
     fun handleBackButton() {
         if (isSubmitEnabled)
         // Display a confirmation dialog using BottomSheetUtils
-            BottomSheetUtils.showConfirmSheet(
-                    fragmentManager = parentFragmentManager,
-                    titleText = getString(R.string.save_draft),
-                    descriptionText = getString(R.string.description_submit_feedback),
-                    actionButtonLabel = getString(R.string.Uwazi_Action_Save_Draft).uppercase(),
-                    cancelButtonLabel = getString(R.string.action_exit_without_saving),
+            BottomSheetUtils.showConfirmSheet(fragmentManager = parentFragmentManager, titleText = getString(R.string.save_draft), descriptionText = getString(R.string.description_submit_feedback), actionButtonLabel = getString(R.string.Uwazi_Action_Save_Draft).uppercase(), cancelButtonLabel = getString(R.string.action_exit_without_saving),
                     // Callback for the user's choice in the dialog
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
@@ -288,34 +276,26 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
      */
     private fun scheduleWorker() {
         // Define network constraints for the work
-        val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
         // Create a one-time work request for the WorkerSendFeedBack class
-        val oneTimeJob = OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java)
-                .setConstraints(constraints)
-                .build()
+        val oneTimeJob = OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java).setConstraints(constraints).build()
 
         // Enqueue the work with a unique name and keep existing work if it exists
-        WorkManager.getInstance(baseActivity)
-                .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, oneTimeJob)
+        WorkManager.getInstance(baseActivity).enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, oneTimeJob)
 
         // Observe the work's status using LiveData
-        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
-                .observeForever(object : Observer<WorkInfo> {
-                    override fun onChanged(workInfo: WorkInfo?) {
-                        // Check if the work has succeeded
-                        if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
-                            // Show a success message with a duration of 4000 milliseconds (4 seconds)
-                            activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true, 4000) }
-                        }
-
-                        // Remove the observer when it's no longer needed
-                        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
-                                .removeObserver(this)
-                    }
-                })
+        WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id).observeForever(object : Observer<WorkInfo> {
+            override fun onChanged(workInfo: WorkInfo?) {
+                // Check if the work has succeeded
+                if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
+                    // Show a success message with a duration of 4000 milliseconds (4 seconds)
+                    activity?.let { DialogUtils.showBottomMessage(it, getString(R.string.feedback_sent_msg), true, 4000) }
+                }
+                // Remove the observer when it's no longer needed
+                WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id).removeObserver(this)
+            }
+        })
     }
 
 }

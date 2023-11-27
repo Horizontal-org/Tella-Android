@@ -5,49 +5,49 @@ import android.view.*
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.*
 import rs.readahead.washington.mobile.databinding.FragmentMainSettingsBinding
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
-
-class MainSettings : BaseFragment() {
-
-    private var binding: FragmentMainSettingsBinding? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMainSettingsBinding.inflate(inflater, container, false)
-        return binding?.root!!
-    }
+class MainSettings : BaseBindingFragment<FragmentMainSettingsBinding>(FragmentMainSettingsBinding::inflate), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
     }
 
-    override fun initView(view: View) {
+    fun initView(view: View) {
         (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
-
-        binding?.generalSettingsButton?.setOnClickListener {
-            nav().navigate(R.id.action_main_to_general_settings)
-        }
-
-        binding?.securitySettingsButton?.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_security_settings)
-        }
-
-        binding?.serversSettingsButton?.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_servers_settings)
-        }
-
-        binding?.aboutNHelpSettingsButton?.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
-        }
-
-        binding?.feedbackButton?.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
-        }
-
+        initListeners()
     }
 
+    private fun initListeners() {
+        binding.generalSettingsButton.setOnClickListener(this)
+        binding.securitySettingsButton.setOnClickListener(this)
+        binding.serversSettingsButton.setOnClickListener(this)
+        binding.aboutNHelpSettingsButton.setOnClickListener(this)
+        binding.feedbackButton.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.general_settings -> {
+                nav().navigate(R.id.action_main_to_general_settings)
+            }
+
+            R.id.security_settings -> {
+                nav().navigate(R.id.action_main_settings_to_security_settings)
+            }
+
+            R.id.servers_settings -> {
+                nav().navigate(R.id.action_main_settings_to_servers_settings)
+            }
+
+            R.id.about_n_help_settings -> {
+                nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
+            }
+
+            R.id.feedback_button -> {
+                nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
+            }
+        }
+    }
 }

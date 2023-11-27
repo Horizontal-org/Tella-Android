@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -91,26 +90,26 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutDescription"
-                android:layout_marginTop="48dp"
+                style="@style/TextInputLayoutDescriptionStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_marginTop="48dp"
+                app:hintAnimationEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/feedback_switch"
-                app:hintAnimationEnabled="true"
-                style="@style/TextInputLayoutDescriptionStyle">
+                app:layout_constraintTop_toBottomOf="@+id/feedback_switch">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/newFeedbackEditDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/feedback_title"
                     android:inputType="textMultiLine"
                     android:paddingStart="18dp"
                     android:paddingEnd="18dp"
-                    android:hint="@string/feedback_title"
-                    android:textColor="@color/wa_white"
                     android:scrollbars="none"
+                    android:textColor="@color/wa_white"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
