@@ -433,7 +433,7 @@
     </style>
 
     <style name="TextEntryLayoutErrorStyle">
-        <item name="android:textColor">@color/input_error_red</item>
+        <item name="android:textColor">@color/light_red</item>
     </style>
 
     <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
