@@ -112,7 +112,9 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
-    implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
+    implementation "com.github.barteksc:android-pdf-viewer:$versions.pdf_viewer"
+
+
 
     // digest auth
     implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"

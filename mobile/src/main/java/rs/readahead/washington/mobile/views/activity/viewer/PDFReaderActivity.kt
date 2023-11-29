@@ -1,22 +1,18 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
-import android.graphics.Bitmap
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.activity.viewModels
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
+import com.github.barteksc.pdfviewer.listener.OnPageErrorListener
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
+import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
-import com.tom_roush.pdfbox.pdmodel.PDDocument
-import com.tom_roush.pdfbox.pdmodel.PDPage
-import com.tom_roush.pdfbox.pdmodel.PDPageContentStream
-import com.tom_roush.pdfbox.pdmodel.encryption.AccessPermission
-import com.tom_roush.pdfbox.pdmodel.encryption.StandardProtectionPolicy
-import com.tom_roush.pdfbox.pdmodel.font.PDFont
-import com.tom_roush.pdfbox.pdmodel.font.PDType1Font
-import com.tom_roush.pdfbox.rendering.ImageType
-import com.tom_roush.pdfbox.rendering.PDFRenderer
 import dagger.hilt.android.AndroidEntryPoint
-import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
@@ -24,24 +20,26 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPdfReaderBinding
+import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.security.Security
+import java.io.InputStream
 
 @AndroidEntryPoint
-class PDFReaderActivity : BaseLockActivity() {
-    private val assetManager by lazy { assets }
-    private var pageImage: Bitmap? = null
+class PDFReaderActivity : BaseLockActivity(), OnPageChangeListener, OnLoadCompleteListener,
+    OnPageErrorListener {
     private val viewModel: SharedMediaFileViewModel by viewModels()
     private lateinit var binding: ActivityPdfReaderBinding
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
+    private var pageNumber = 0
+    private var pdfFileName: String? = null
+    private var isInfoShown = false
 
     companion object {
         const val VIEW_PDF = "vp"
-        const val NO_ACTIONS = "na"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,25 +48,31 @@ class PDFReaderActivity : BaseLockActivity() {
         setContentView(binding.root)
         initVaultMediaFile()
         initObservers()
+        initContracts()
+        setupToolbar()
     }
 
     private fun initVaultMediaFile() {
-        if (intent.hasExtra(VIEW_PDF)) {
-            val vaultFile = intent.getSerializableExtra(VIEW_PDF) as VaultFile?
-            if (vaultFile != null) {
-                this.vaultFile = vaultFile
+        val vaultFile = intent.getSerializableExtra(VIEW_PDF) as? VaultFile
+
+        if (vaultFile != null) {
+            this.vaultFile = vaultFile
+
+            val vaultFileStream = MediaFileHandler.getStream(vaultFile)
+
+            vaultFileStream?.let {
+                displayFromUri(it)
             }
         }
-        if (intent.hasExtra(PhotoViewerActivity.NO_ACTIONS)) {
-            actionsDisabled = true
-        }
+
+        actionsDisabled = intent.hasExtra(PhotoViewerActivity.NO_ACTIONS)
     }
 
     private fun initObservers() {
         with(viewModel) {
             // Observer for the error LiveData, displays the error message when it is triggered
-            error.observe(this@PDFReaderActivity) {
-                // onShowError(it)
+            error.observe(this@PDFReaderActivity) { errorResId ->
+               onShowError(errorResId)
             }
             // Observer for the onMediaFileExportStatus LiveData, handles different export status cases
             onMediaFileExportStatus.observe(this@PDFReaderActivity) { status ->
@@ -99,100 +103,6 @@ class PDFReaderActivity : BaseLockActivity() {
         }
     }
 
-    /**
-     * Loads an existing PDF and renders it to a Bitmap
-     */
-    private fun renderFile(pdf: File) {
-        // Render the page and save it to an image file
-        try {
-            // Load in an already created PDF
-            val document: PDDocument = PDDocument.load(pdf)
-            // Create a renderer for the document
-            val renderer = PDFRenderer(document)
-            // Render the image to an RGB Bitmap
-            pageImage = renderer.renderImage(0, 1f, ImageType.RGB)
-
-
-            val fileOut = FileOutputStream(pdf)
-            pageImage?.compress(Bitmap.CompressFormat.JPEG, 100, fileOut)
-            fileOut.close()
-            //  tv.setText("Successfully rendered image to $path")
-            // Optional: display the render result on screen
-            displayRenderedImage()
-        } catch (e: IOException) {
-            //Log.e("PdfBox-Android-Sample", "Exception thrown while rendering file", e)
-        }
-    }
-
-    /**
-     * Helper method for drawing the result of renderFile() on screen
-     */
-    private fun displayRenderedImage() {
-        object : Thread() {
-            override fun run() {
-                runOnUiThread {
-                    val imageView =
-                        findViewById<View>(R.id.renderedImageView) as ImageView
-                    imageView.setImageBitmap(pageImage)
-                }
-            }
-        }.start()
-    }
-
-
-    /**
-     * Creates a simple pdf and encrypts it
-     */
-    fun createEncryptedPdf(pdf: File) {
-        // val path: String = root.getAbsolutePath() + "/crypt.pdf"
-        val keyLength = 128 // 128 bit is the highest currently supported
-
-        // Limit permissions of those without the password
-        val ap = AccessPermission()
-        ap.setCanPrint(false)
-
-        // Sets the owner password and user password
-        val spp = StandardProtectionPolicy("12345", "hi", ap)
-
-        // Setups up the encryption parameters
-        spp.encryptionKeyLength = keyLength
-        spp.permissions = ap
-        val provider = BouncyCastleProvider()
-        Security.addProvider(provider)
-        val font: PDFont = PDType1Font.HELVETICA
-        val document = PDDocument()
-        val page = PDPage()
-        document.addPage(page)
-        try {
-            val contentStream = PDPageContentStream(document, page)
-
-            // Write Hello World in blue text
-            contentStream.beginText()
-            contentStream.setNonStrokingColor(15, 38, 192)
-            contentStream.setFont(font, 12f)
-            contentStream.newLineAtOffset(100f, 700f)
-            contentStream.showText("Hello World")
-            contentStream.endText()
-            contentStream.close()
-
-            // Save the final pdf document to a file
-            document.protect(spp) // Apply the protections to the PDF
-            document.save(pdf)
-            document.close()
-            //   tv.setText("Successfully wrote PDF to $path")
-        } catch (e: IOException) {
-            //  Log.e("PdfBox-Android-Sample", "Exception thrown while creating PDF for encryption", e)
-        }
-    }
-
-    /**
-     * Handles the action when media file deletion is confirmed.
-     * If showConfirmDelete is true, shows a confirmation bottom sheet to confirm the deletion,
-     * otherwise, directly initiates the deletion of the media file.
-     *
-     * @param vaultFile The VaultFile to be deleted.
-     * @param showConfirmDelete Flag indicating whether to show a confirmation bottom sheet or not.
-     */
     private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
         if (showConfirmDelete) {
             BottomSheetUtils.showConfirmSheet(
@@ -214,6 +124,12 @@ class PDFReaderActivity : BaseLockActivity() {
         }
     }
 
+
+    private fun onShowError(errorResId: Int) {
+        DialogUtils.showBottomMessage(
+            this, getString(errorResId), true
+        )
+    }
     private fun onExportStarted() {
         binding.progressBar.visibility = View.VISIBLE
     }
@@ -238,6 +154,83 @@ class PDFReaderActivity : BaseLockActivity() {
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
             false
         )
+    }
+
+    private fun displayFromUri(vaultFileStream: InputStream) {
+        binding.pdfView.fromStream(vaultFileStream)
+            .defaultPage(pageNumber)
+            .onPageChange(this)
+            .enableAnnotationRendering(true)
+            .onLoad(this)
+            .scrollHandle(DefaultScrollHandle(this))
+            .spacing(10) // in dp
+            .onPageError(this)
+            .load()
+    }
+
+    override fun onPageChanged(page: Int, pageCount: Int) {
+        pageNumber = page
+        title = String.format("%s %s / %s", pdfFileName, page + 1, pageCount)
+    }
+
+    override fun loadComplete(nbPages: Int) {
+
+    }
+
+    @SuppressLint("LogNotTimber")
+    override fun onPageError(page: Int, t: Throwable?) {
+        Log.e("PDFViewActivity.TAG", "Cannot load page $page")
+    }
+
+
+    private fun setupToolbar() {
+
+        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        binding.toolbar.title = vaultFile!!.name
+        if (!actionsDisabled) {
+            binding.toolbar.inflateMenu(R.menu.video_view_menu)
+            vaultFile?.let { file ->
+                setupMetadataMenuItem(file.metadata != null)
+            }
+
+            binding.toolbar.menu.findItem(R.id.menu_item_more)
+                .setOnMenuItemClickListener {
+                    vaultFile?.let { it1 ->
+                        showVaultActionsDialog(
+                            it1,
+                            viewModel,
+                            {
+                                isInfoShown = true
+                            },
+                            toolbar = binding.toolbar
+                        )
+                    }
+                    false
+                }
+        }
+    }
+
+    private fun setupMetadataMenuItem(visible: Boolean) {
+        if (actionsDisabled) {
+            return
+        }
+        val mdMenuItem = binding.toolbar.menu.findItem(R.id.menu_item_metadata)
+        mdMenuItem.isVisible = visible
+        if (visible) {
+            mdMenuItem.setOnMenuItemClickListener {
+                showMetadata()
+                false
+            }
+        }
+    }
+
+    private fun showMetadata() {
+        val viewMetadata = Intent(this, MetadataViewerActivity::class.java)
+        viewMetadata.putExtra(Metadata.VIEW_METADATA, vaultFile)
+        startActivity(viewMetadata)
     }
 
 }

@@ -248,7 +248,7 @@ object VaultActionsHelper {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun BaseActivity.exportMediaFile() {
-        if (chosenVaultFile?.metadata != null && withMetadata) {
+        if (chosenVaultFile.metadata != null && withMetadata) {
             showExportWithMetadataDialog()
         } else {
             withMetadata = false

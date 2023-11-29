@@ -30,10 +30,8 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
-import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 
 import org.cleaninsights.sdk.CleanInsights;
-import org.hzontal.shared_ui.utils.DialogUtils;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -219,9 +217,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         //initCleanInsights();
-
-        PDFBoxResourceLoader.init(getApplicationContext());
-
     }
 
     private void configureCrashlytics() {

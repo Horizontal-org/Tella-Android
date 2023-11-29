@@ -29,10 +29,10 @@
         android:layout_gravity="center"
         android:indeterminate="true" />
 
-    <ImageView
-        android:id="@+id/renderedImageView"
+    <com.github.barteksc.pdfviewer.PDFView
+        android:id="@+id/pdfView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="55dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
