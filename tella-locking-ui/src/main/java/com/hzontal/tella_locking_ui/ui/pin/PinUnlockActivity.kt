@@ -88,7 +88,7 @@ class PinUnlockActivity : BasePinActivity() {
 
     override fun onFailureSetPin(error: String) {
         if (TellaKeysUI.getNumFailedAttempts() == 0L) {
-            pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
+            pinTopText.setTextColor(ContextCompat.getColor(this, R.color.light_red))
             pinTopText.text = error
             pinTopText.requestFocus()
             pinTopText.announceForAccessibility(error)

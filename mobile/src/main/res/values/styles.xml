@@ -432,6 +432,10 @@
         <item name="android:textColorHint">@color/wa_white</item>
     </style>
 
+    <style name="TextEntryLayoutErrorStyle">
+        <item name="android:textColor">@color/light_red</item>
+    </style>
+
     <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
         <item name="android:windowExitAnimation">@anim/slide_out_down</item>
