@@ -89,7 +89,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableReportInstanceVaultFile());
         db.execSQL(createTableReportFileUploads());
 
-
         //DBV11
         db.execSQL(alterTableTellaUploadServerAddAutoUpload());
         db.execSQL(alterTableTellaUploadServerAddAutoDelete());
@@ -273,7 +272,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 sq(D.T_MEDIA_FILE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +
                 ");";
     }
-
 
     private String createTableReportFileUploads() {
         return "CREATE TABLE " + sq(D.T_REPORT_FILES_UPLOAD) + " (" +
@@ -461,7 +459,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-
     private String createTableFeedback() {
         return "CREATE TABLE " + sq(D.T_FEEDBACK) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
@@ -470,5 +467,4 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0  " +
                 ");";
     }
-
 }

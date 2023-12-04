@@ -2476,7 +2476,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
@@ -2644,7 +2643,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instances;
     }
 
-
     private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
         Cursor cursor = null;
         List<ReportInstance> instances = new ArrayList<>();
@@ -2718,7 +2716,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-
     @NonNull
     public FeedbackInstance getFeedBackInstance(FeedbackStatus status) {
 
@@ -2781,13 +2778,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-
     private void deleteFeedbackFormInstance(long id) throws NotFountException {
         int count = database.delete(D.T_FEEDBACK, D.C_ID + " = ?", new String[]{Long.toString(id)});
         if (count != 1) {
             throw new NotFountException();
         }
-
     }
 
     @NonNull
@@ -2957,7 +2952,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     public Single<List<ReportInstance>> listAllReportInstances() {
         return null;
     }
-
 
     private static class Setting {
         Integer intValue;

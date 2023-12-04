@@ -18,5 +18,4 @@ interface FeedbackApiService {
             @Header(ParamsNetwork.FEEDBACK_HEADER) tellaPlatform: String,
             @Body data: FeedbackBodyEntity,
     ): Single<FeedbackPostResponse>
-
 }

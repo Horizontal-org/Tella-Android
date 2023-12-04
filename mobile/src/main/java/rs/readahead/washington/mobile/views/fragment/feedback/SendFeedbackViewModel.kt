@@ -99,5 +99,4 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
         super.onCleared()
         disposables.clear()
     }
-
 }

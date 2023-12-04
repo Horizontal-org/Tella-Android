@@ -297,6 +297,5 @@ class SendFeedbackFragment : BaseBindingFragment<FragmentSendFeedbackBinding>(Fr
             }
         })
     }
-
 }
 

@@ -118,7 +118,6 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         return binding.toolbar;
     }
 
-
     @Override
     public boolean isCamouflage() {
         return isCamouflage;
@@ -148,6 +147,5 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
                 }
             }
         }
-
     }
 }
