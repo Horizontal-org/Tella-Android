@@ -2485,9 +2485,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @NonNull
-    public Single<FeedbackInstance> saveFeedbackInstance(@NonNull FeedbackInstance instance) {
-        return Single.fromCallable(() -> updateTellaFeedbackInstance(instance))
-                .compose(applySchedulers());
+    public Single<FeedbackInstance> saveInstance(@NonNull FeedbackInstance instance) {
+        return Single.fromCallable(() -> updateTellaFeedbackInstance(instance)).compose(applySchedulers());
     }
 
     private FeedbackInstance updateTellaFeedbackInstance(FeedbackInstance instance) {
@@ -2788,6 +2787,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
+
     }
 
     @NonNull
