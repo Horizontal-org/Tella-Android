@@ -93,7 +93,6 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
             Timber.d(throwable)
             FirebaseCrashlytics.getInstance().recordException(throwable!!)
         })
-
     }
 
     override fun onCleared() {

@@ -5,24 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.databinding.LayoutBottomMessageBinding
 import org.hzontal.shared_ui.databinding.LayoutBottomMessageWithButtonBinding
 
-
 object DialogUtils {
 
     @JvmStatic
-    fun showBottomMessage(context: Activity, msg: String, isError: Boolean,duration: Long = 2000L) {
-        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye,duration) }
+    fun showBottomMessage(context: Activity, msg: String, isError: Boolean, duration: Long = 2000L) {
+        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye, duration) }
     }
 
     @JvmStatic
     fun showBottomMessage(context: Activity, msg: String, isError: Boolean) {
-        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye,2000L) }
+        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye, 2000L) }
     }
 
     @JvmStatic
@@ -63,12 +60,9 @@ object DialogUtils {
         disableView.isClickable = true
         disableView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         frameLayout.addView(disableView)
-
-
-        val binding = LayoutBottomMessageWithButtonBinding.inflate(LayoutInflater.from(context))
+        val binding = LayoutBottomMessageWithButtonBinding.inflate(LayoutInflater.from(context), container, false)
         binding.txvMsg.text = msg
         frameLayout.addView(binding.root)
-
         binding.root.requestFocus()
         binding.root.announceForAccessibility(msg)
 
@@ -80,6 +74,4 @@ object DialogUtils {
         }
         container.addView(frameLayout)
     }
-
-
 }
