@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.CompoundButton
 import androidx.core.app.ActivityCompat
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
@@ -61,13 +60,12 @@ class GeneralSettings :
         )
 
 
-        binding.verificationSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            run {
-                if (!context?.let { hasLocationPermission(it) }!!) {
-                    requestLocationPermission(LOCATION_PERMISSION)
-                }
-                Preferences.setAnonymousMode(!isChecked)
+        binding.verificationSwitch.mSwitch.setOnClickListener {
+
+            if (!context?.let { hasLocationPermission(it) }!!) {
+                requestLocationPermission(LOCATION_PERMISSION)
             }
+            Preferences.setAnonymousMode(!binding.verificationSwitch.mSwitch.isChecked)
         }
 
         initSwitch(
@@ -94,19 +92,17 @@ class GeneralSettings :
         switchView: TellaSwitchWithMessage,
         preferencesGetter: () -> Boolean,
         preferencesSetter: (Boolean) -> Unit,
-        onCheckedChangeListener: (Boolean) -> Unit = {}
+        onClickListener: (Boolean) -> Unit = {}
     ) {
-        switchView.mSwitch.isChecked = preferencesGetter()
-        switchView.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+        switchView.mSwitch.setOnClickListener {
             try {
-                preferencesSetter(isChecked)
-                onCheckedChangeListener(isChecked)
+                preferencesSetter(switchView.mSwitch.isChecked)
+                onClickListener(switchView.mSwitch.isChecked)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
-
 
     private fun updateView() {
         binding.recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
@@ -114,7 +110,6 @@ class GeneralSettings :
         binding.favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
         binding.verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
         binding.crashReportSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
-
     }
 
     override fun onResume() {
