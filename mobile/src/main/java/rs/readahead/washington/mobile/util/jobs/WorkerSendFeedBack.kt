@@ -44,7 +44,7 @@ class WorkerSendFeedBack @AssistedInject constructor(@Assisted val context: Cont
             }
             if (feedbackInstances != null) {
                 for (feedbackInstance in feedbackInstances) {
-                    feedbackRepository.submitFeedback(feedbackInstance).blockingGet()
+                    feedbackRepository.submitFeedbackInstance(feedbackInstance).blockingGet()
                 }
             }
             setNoTimeOut(false)

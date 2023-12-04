@@ -11,7 +11,7 @@ interface FeedBackRepository {
             feedbackBody: FeedbackBodyEntity
     ): Single<FeedbackPostResult>
 
-    fun submitFeedback(
+    fun submitFeedbackInstance(
             feedbackBody: FeedbackInstance
     ): Single<FeedbackPostResult>
 }

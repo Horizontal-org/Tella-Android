@@ -9,36 +9,35 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.databinding.LayoutBottomMessageBinding
+import org.hzontal.shared_ui.databinding.LayoutBottomMessageWithButtonBinding
 
 
 object DialogUtils {
 
     @JvmStatic
-    fun showBottomMessage(context: Activity?, msg: String, isError: Boolean,duration: Long = 2000L) {
+    fun showBottomMessage(context: Activity, msg: String, isError: Boolean,duration: Long = 2000L) {
         context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye,duration) }
     }
 
     @JvmStatic
-    fun showBottomMessage(context: Activity?, msg: String, isError: Boolean) {
+    fun showBottomMessage(context: Activity, msg: String, isError: Boolean) {
         context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye,2000L) }
     }
 
-
     @JvmStatic
     private fun showBottomMessage(context: Activity, msg: String, colorRes: Int, duration: Long) {
+        val binding = LayoutBottomMessageBinding.inflate(LayoutInflater.from(context))
+
         val container = context.findViewById<ViewGroup>(android.R.id.content)
-        val view = LayoutInflater.from(context).inflate(R.layout.layout_bottom_message, container, false)
-        val txvMsg: TextView = view.findViewById(R.id.txv_msg)
-        txvMsg.text = msg
-        container.addView(view)
-
-        view.requestFocus()
-        view.announceForAccessibility(msg)
-
-        view.alpha = 0f
-        view.animate().alphaBy(1f).setDuration(500).withEndAction {
-            if (view.isAttachedToWindow) {
-                view.animate().alpha(0f).setStartDelay(duration).duration = 500
+        binding.txvMsg.text = msg
+        container.addView(binding.root)
+        binding.root.requestFocus()
+        binding.root.announceForAccessibility(msg)
+        binding.root.alpha = 0f
+        binding.root.animate().alphaBy(1f).setDuration(500).withEndAction {
+            if (binding.root.isAttachedToWindow) {
+                binding.root.animate().alpha(0f).setStartDelay(duration).duration = 500
             }
         }
     }
@@ -66,17 +65,15 @@ object DialogUtils {
         frameLayout.addView(disableView)
 
 
-        val view = LayoutInflater.from(context).inflate(R.layout.layout_bottom_message_with_button, container, false)
-        val txvMsg: TextView = view.findViewById(R.id.txv_msg)
-        txvMsg.text = msg
-        val btnOk: AppCompatButton = view.findViewById(R.id.btn_ok)
-        frameLayout.addView(view)
+        val binding = LayoutBottomMessageWithButtonBinding.inflate(LayoutInflater.from(context))
+        binding.txvMsg.text = msg
+        frameLayout.addView(binding.root)
 
-        view.requestFocus()
-        view.announceForAccessibility(msg)
+        binding.root.requestFocus()
+        binding.root.announceForAccessibility(msg)
 
         // Set up the "OK" button
-        btnOk.setOnClickListener {
+        binding.btnOk.setOnClickListener {
             // Dismiss the message when the button is clicked
             container.removeView(frameLayout)
             onBtnClick.invoke()

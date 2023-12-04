@@ -49,12 +49,11 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_insights_share_data"
-                    tools:ignore="ContentDescription" />
-
+                    android:contentDescription="@string/share_feedback_action"
+                    android:src="@drawable/ic_insights_share_data" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/infoBtn"
+                    android:id="@+id/info_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -89,7 +88,7 @@
                 app:titleText="@string/settings.feedback_enable_sharing" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayoutDescription"
+                android:id="@+id/textInput_layout_description"
                 style="@style/TextInputLayoutDescriptionStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,7 +100,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/feedback_switch">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/newFeedbackEditDescription"
+                    android:id="@+id/new_feedback_edit_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/feedback_title"
