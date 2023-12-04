@@ -45,7 +45,6 @@ class GeneralSettings :
 
         initSwitch(
             binding.shareDataSwitch,
-            Preferences::hasAcceptedImprovements,
             Preferences::setIsAcceptedImprovements
         ) { isChecked ->
             CleanInsightUtils.grantCampaign(isChecked)
@@ -55,7 +54,6 @@ class GeneralSettings :
 
         initSwitch(
             binding.crashReportSwitch,
-            Preferences::isSubmittingCrashReports,
             Preferences::setSubmittingCrashReports
         )
 
@@ -70,19 +68,16 @@ class GeneralSettings :
 
         initSwitch(
             binding.favoriteFormsSwitch,
-            Preferences::isShowFavoriteForms,
             Preferences::setShowFavoriteForms
         )
 
         initSwitch(
             binding.favoriteTemplatesSwitch,
-            Preferences::isShowFavoriteTemplates,
             Preferences::setShowFavoriteTemplates
         )
 
         initSwitch(
             binding.recentFilesSwitch,
-            Preferences::isShowRecentFiles,
             Preferences::setShowRecentFiles
         )
 
@@ -90,7 +85,6 @@ class GeneralSettings :
 
     private fun initSwitch(
         switchView: TellaSwitchWithMessage,
-        preferencesGetter: () -> Boolean,
         preferencesSetter: (Boolean) -> Unit,
         onClickListener: (Boolean) -> Unit = {}
     ) {
