@@ -2485,7 +2485,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @NonNull
-    public Single<FeedbackInstance> saveInstance(@NonNull FeedbackInstance instance) {
+    public Single<FeedbackInstance> saveFeedbackInstance(@NonNull FeedbackInstance instance) {
         return Single.fromCallable(() -> updateTellaFeedbackInstance(instance)).compose(applySchedulers());
     }
 
