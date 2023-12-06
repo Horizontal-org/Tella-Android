@@ -124,7 +124,9 @@
                 android:layout_width="match_parent"
                 android:text="@string/settings.servers_setup_change_name_icon_subtitle"
                 android:fontFamily="@font/open_sans"
+                android:ellipsize="marquee"
                 android:textColor="@color/wa_white"
+                android:lineSpacingMultiplier="1"
                 android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>
@@ -168,14 +170,15 @@
 
             <TextView
                 android:id="@+id/title_btn_two"
-                android:layout_marginTop="@dimen/hide_tella_big_margin"
-                android:textAlignment="viewStart"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/hide_tella_big_margin"
                 android:fontFamily="@font/open_sans"
-                android:textColor="@color/wa_white"
-                android:textAllCaps="true"
                 android:text="@string/settings.servers_setup_hide_behind_calculator_title"
+                android:textAlignment="viewStart"
+                android:textAllCaps="true"
+                android:lineSpacingMultiplier="1"
+                android:textColor="@color/wa_white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -187,8 +190,10 @@
                 android:textAlignment="viewStart"
                 android:layout_width="match_parent"
                 android:fontFamily="@font/open_sans"
+                android:ellipsize="marquee"
                 android:text="@string/settings.servers_setup_hide_behind_calculator_subtitle"
                 android:textColor="@color/wa_white"
+                android:lineSpacingMultiplier="1"
                 android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>
