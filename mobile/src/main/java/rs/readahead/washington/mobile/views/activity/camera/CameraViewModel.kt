@@ -84,7 +84,7 @@ class CameraViewModel @Inject constructor() : ViewModel() {
                 _lastBackgroundActivityModel.postValue(backgroundVideoFile)
                 _addingInProgress.postValue(true)
             }.doOnNext { vaultFile ->
-                //  handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
+                  handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
                 _addingInProgress.postValue(false)
             }.subscribe({ vaultFile ->
@@ -148,7 +148,7 @@ class CameraViewModel @Inject constructor() : ViewModel() {
     }
 
     override fun onCleared() {
-        disposables.dispose()
+        disposables.clear()
         super.onCleared()
     }
 
