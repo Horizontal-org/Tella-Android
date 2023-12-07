@@ -31,14 +31,13 @@
    </com.google.android.material.appbar.AppBarLayout>
 
    <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/vaultRecyclerView"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:id="@+id/vaultRecyclerView"
        android:background="@color/space_cadet"
        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-       tools:listitem="@layout/item_vault_attachment_hor"
        tools:itemCount="30"
-       />
+       tools:listitem="@layout/item_vault_attachment_hor" />
 
    <androidx.constraintlayout.widget.ConstraintLayout
        android:layout_width="match_parent"

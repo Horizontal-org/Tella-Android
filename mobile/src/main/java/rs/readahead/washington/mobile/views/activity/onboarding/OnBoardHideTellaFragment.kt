@@ -58,7 +58,7 @@ class OnBoardHideTellaFragment : BaseFragment() {
             /*hideNotPossible.setOnClickListener {
                 activity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
             }*/
-            btnTwoLabel.setAlpha(0.38f)
+            btnTwoLabel.setAlpha(0.65f)
             btnTwo.setClickable(false)
         } else {
             hideNotPossible.hide()
