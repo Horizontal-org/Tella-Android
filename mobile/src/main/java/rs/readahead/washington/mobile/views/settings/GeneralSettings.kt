@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -25,8 +26,13 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import java.util.Locale
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import java.util.*
 
+
+class GeneralSettings :
+    BaseBindingFragment<FragmentGeneralSettingsBinding>(FragmentGeneralSettingsBinding::inflate) {
 
 class GeneralSettings :
     BaseBindingFragment<FragmentGeneralSettingsBinding>(FragmentGeneralSettingsBinding::inflate) {
@@ -36,12 +42,16 @@ class GeneralSettings :
         super.onViewCreated(view, savedInstanceState)
         initView(view)
         viewCreated = true
+        initView()
     }
 
+    private fun initView() {
     fun initView(view: View) {
         (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
         (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
+        binding.languageSettingsButton.setOnClickListener {
+            Navigation.findNavController(it)
         binding.languageSettingsButton.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_general_settings_to_language_settings)
@@ -49,6 +59,13 @@ class GeneralSettings :
 
         setLanguageSetting()
 
+        initSwitch(
+            binding.shareDataSwitch,
+            Preferences::setIsAcceptedImprovements
+        ) { isChecked ->
+            CleanInsightUtils.grantCampaign(isChecked)
+            if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
+            binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
         binding.shareDataSwitch.let {
             it.mSwitch.isChecked = Preferences.hasAcceptedImprovements()
             it.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
@@ -64,29 +81,51 @@ class GeneralSettings :
 
         }
 
-        val crashReportsSwitch = binding.crashReportSwitch
-        crashReportsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            Preferences.setSubmittingCrashReports(isChecked)
-        }
-        crashReportsSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
+        initSwitch(
+            binding.crashReportSwitch,
+            Preferences::setSubmittingCrashReports
+        )
 
-        val verificationSwitch = binding.verificationSwitch
-        verificationSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            run {
-                if (!context?.let { hasLocationPermission(it) }!!) {
-                    requestLocationPermission(LOCATION_PERMISSION)
-                }
-                Preferences.setAnonymousMode(!isChecked)
+
+        binding.verificationSwitch.mSwitch.setOnClickListener {
+
+            if (!context?.let { hasLocationPermission(it) }!!) {
+                requestLocationPermission(LOCATION_PERMISSION)
+            }
+            Preferences.setAnonymousMode(!binding.verificationSwitch.mSwitch.isChecked)
+        }
+
+        initSwitch(
+            binding.favoriteFormsSwitch,
+            Preferences::setShowFavoriteForms
+        )
+
+        initSwitch(
+            binding.favoriteTemplatesSwitch,
+            Preferences::setShowFavoriteTemplates
+        )
+
+        initSwitch(
+            binding.recentFilesSwitch,
+            Preferences::setShowRecentFiles
+        )
+
+    }
+
+    private fun initSwitch(
+        switchView: TellaSwitchWithMessage,
+        preferencesSetter: (Boolean) -> Unit,
+        onClickListener: (Boolean) -> Unit = {}
+    ) {
+        switchView.mSwitch.setOnClickListener {
+            try {
+                preferencesSetter(switchView.mSwitch.isChecked)
+                onClickListener(switchView.mSwitch.isChecked)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
-        verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
-
-        val favoriteFormsSwitch = binding.favoriteFormsSwitch
-        favoriteFormsSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            Preferences.setShowFavoriteForms(isChecked)
-        }
-        favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
-
+    }
         val favoriteTemplatesSwitch = binding.favoriteTemplatesSwitch
         favoriteTemplatesSwitch.mSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             Preferences.setShowFavoriteTemplates(isChecked)
@@ -98,6 +137,17 @@ class GeneralSettings :
             Preferences.setShowRecentFiles(isChecked)
         }
 
+    private fun updateView() {
+        binding.recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
+        binding.favoriteTemplatesSwitch.mSwitch.isChecked = Preferences.isShowFavoriteTemplates()
+        binding.favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
+        binding.verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
+        binding.crashReportSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateView()
         recentFilesSwitch.mSwitch.isChecked = Preferences.isShowRecentFiles()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -163,9 +213,7 @@ class GeneralSettings :
                 CleanInsightUtils.grantCampaign(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
-                    requireActivity(),
-                    getString(R.string.clean_insights_signed_for_days),
-                    false
+                    requireActivity(), getString(R.string.clean_insights_signed_for_days), false
                 )
             }
 
@@ -182,11 +230,9 @@ class GeneralSettings :
     private fun hasLocationPermission(context: Context): Boolean {
         baseActivity.maybeChangeTemporaryTimeout()
         if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                context, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
+        ) return true
         return false
     }
 
