@@ -29,11 +29,11 @@ class FeedbackRepositoryImp @Inject internal constructor(private val apiService:
     }
 
     @SuppressLint("CheckResult")
-    override fun submitFeedbackInstance(feedbackInstance: FeedbackInstance): Single<FeedbackPostResult> {
-        return submitFeedback(FeedbackBodyEntity(feedbackInstance.platform, feedbackInstance.text)).doOnError { throwable ->
-            handleSubmissionError(feedbackInstance, throwable)
+    override fun submitFeedbackInstance(feedbackBody: FeedbackInstance): Single<FeedbackPostResult> {
+        return submitFeedback(FeedbackBodyEntity(feedbackBody.platform, feedbackBody.text)).doOnError { throwable ->
+            handleSubmissionError(feedbackBody, throwable)
         }.doOnSuccess {
-            dataSource.deleteFeedbackInstance(feedbackInstance.id).subscribeOn(Schedulers.io()).subscribe({}, { throwable ->
+            dataSource.deleteFeedbackInstance(feedbackBody.id).subscribeOn(Schedulers.io()).subscribe({}, { throwable ->
                 throwable.printStackTrace()
             })
         }
