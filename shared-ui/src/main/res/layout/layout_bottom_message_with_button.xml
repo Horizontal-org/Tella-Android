@@ -28,7 +28,7 @@
         android:layout_gravity="end"
         android:background="@color/transparent"
         android:text="OK"
-        android:textColor="@color/tigers_eye"
+        android:textColor="@color/tigers_eye_dark"
         android:textSize="15sp">
 
     </androidx.appcompat.widget.AppCompatButton>
