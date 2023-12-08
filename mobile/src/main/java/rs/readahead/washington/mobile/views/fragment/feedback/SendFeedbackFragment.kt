@@ -15,10 +15,6 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -85,7 +81,6 @@ class SendFeedbackFragment :
                 } else {
                     feedbackInstance!!.status = FeedbackStatus.SUBMISSION_PENDING
                     viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
-                    handleNoInternetBehavior()
                 }
             }
 
@@ -99,7 +94,7 @@ class SendFeedbackFragment :
      * Schedules a worker to run in the background using scheduleWorker().
      * Displays a bottom message with a button to navigate back when clicked.
      */
-    private fun handleNoInternetBehavior(resMessage : Int = R.string.not_internet_msg) {
+    private fun handleNoInternetBehavior(resMessage: Int = R.string.not_internet_msg) {
         // Schedule a worker to run in the background
         scheduleWorker()
         // Show a bottom message with a button to navigate back
@@ -185,10 +180,6 @@ class SendFeedbackFragment :
                 // Navigate back to the previous screen
                 nav().popBackStack()
             }
-//            } else {
-//                // Handle behavior when there is no internet connection
-//                handleNoInternetBehavior()
-//            }
         }
 
         viewModel.feedbackSubmitted.observe(viewLifecycleOwner) { isFeedbackSubmitted ->
@@ -197,16 +188,10 @@ class SendFeedbackFragment :
                 onFeedbackSubmittedSuccess()
                 nav().popBackStack()
             }
-//            } else {
-//                // Handle the scenario when feedback submission fails
-//                handleNoInternetBehavior()
-//                nav().popBackStack()
-//            }
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner){
-            message ->
-              handleNoInternetBehavior(message)
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            handleNoInternetBehavior(message)
         }
 
         // Observe progress changes to show/hide progress circular
@@ -253,7 +238,7 @@ class SendFeedbackFragment :
             DialogUtils.showBottomMessage(
                 it,
                 getString(R.string.thanks_for_your_feedback),
-                true,
+                false,
                 4000
             )
         }
@@ -309,7 +294,7 @@ class SendFeedbackFragment :
                             DialogUtils.showBottomMessage(
                                 it,
                                 getString(R.string.feedback_sent_msg),
-                                true,
+                                false,
                                 4000
                             )
                         }

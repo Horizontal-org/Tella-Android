@@ -61,14 +61,10 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
                     val exceptionType = ExceptionHandler.handleException(throwable)
                     handleException(exceptionType)
-//                    if (throwable is NoConnectivityException) {
-//                        _feedbackSubmitted.postValue(false)
-//                    } else {
-//                    }
                 })
-
     }
 
     fun saveFeedbackToBeSubmitted(feedbackInstance: FeedbackInstance) {
@@ -82,14 +78,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    val exceptionType = ExceptionHandler.handleException(throwable)
-                    handleException(exceptionType)
-//                    if (throwable is NoConnectivityException) {
-//                        _feedbackSavedToBeSubmitted.postValue(false)
-//                    } else {
-//                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
-//                    }
-
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 })
     }
 
@@ -104,8 +93,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    val exceptionType = ExceptionHandler.handleException(throwable)
-                    handleException(exceptionType)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 })
     }
 
@@ -118,8 +106,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     _draftFeedBackInstance.postValue(draft)
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    val exceptionType = ExceptionHandler.handleException(throwable)
-                    handleException(exceptionType)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 })
     }
 
