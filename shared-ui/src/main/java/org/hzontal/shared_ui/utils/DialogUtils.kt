@@ -13,13 +13,32 @@ import org.hzontal.shared_ui.databinding.LayoutBottomMessageWithButtonBinding
 object DialogUtils {
 
     @JvmStatic
-    fun showBottomMessage(context: Activity, msg: String, isError: Boolean, duration: Long = 2000L) {
-        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye, duration) }
+    fun showBottomMessage(
+        context: Activity,
+        msg: String,
+        isError: Boolean,
+        duration: Long = 2000L
+    ) {
+        context?.let {
+            showBottomMessage(
+                it,
+                msg,
+                if (isError) R.color.wa_red_error else R.color.tigers_eye,
+                duration
+            )
+        }
     }
 
     @JvmStatic
     fun showBottomMessage(context: Activity, msg: String, isError: Boolean) {
-        context?.let { showBottomMessage(it, msg, if (isError) R.color.wa_red_error else R.color.tigers_eye, 2000L) }
+        context?.let {
+            showBottomMessage(
+                it,
+                msg,
+                if (isError) R.color.wa_red_error else R.color.tigers_eye,
+                2000L
+            )
+        }
     }
 
     @JvmStatic
@@ -45,22 +64,35 @@ object DialogUtils {
 
         // Create a FrameLayout to hold both the overlay and the dialog content
         val frameLayout = FrameLayout(context)
-        frameLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        frameLayout.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
 
         // Create a transparent background overlay
         val overlay = View(context)
         overlay.setBackgroundColor(ContextCompat.getColor(context, android.R.color.black))
         overlay.alpha = 0.5f // Adjust the alpha value as needed
-        overlay.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        overlay.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         frameLayout.addView(overlay)
 
         // Create a transparent view to disable interaction with the views behind
         val disableView = View(context)
         disableView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
         disableView.isClickable = true
-        disableView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        disableView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         frameLayout.addView(disableView)
-        val binding = LayoutBottomMessageWithButtonBinding.inflate(LayoutInflater.from(context), container, false)
+        val binding = LayoutBottomMessageWithButtonBinding.inflate(
+            LayoutInflater.from(context),
+            container,
+            false
+        )
         binding.txvMsg.text = msg
         frameLayout.addView(binding.root)
         binding.root.requestFocus()

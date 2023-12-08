@@ -16,27 +16,44 @@ import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.feedback.FeedBackRepository
 import javax.inject.Inject
 
-class FeedbackRepositoryImp @Inject internal constructor(private val apiService: FeedbackApiService, private val dataSource: DataSource) : FeedBackRepository {
+class FeedbackRepositoryImp @Inject internal constructor(
+    private val apiService: FeedbackApiService,
+    private val dataSource: DataSource
+) : FeedBackRepository {
 
     override fun submitFeedback(feedbackBody: FeedbackBodyEntity): Single<FeedbackPostResult> {
         return apiService.submitFeedback(
-                data = feedbackBody,
-                tellaPlatform = ParamsNetwork.TELLA_PLATFORM,
+            data = feedbackBody,
+            tellaPlatform = ParamsNetwork.TELLA_PLATFORM,
         ).map { response -> response.mapToDomainModel() }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { throwable -> throwable.printStackTrace() }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError { throwable -> throwable.printStackTrace() }
     }
 
     @SuppressLint("CheckResult")
     override fun submitFeedbackInstance(feedbackBody: FeedbackInstance): Single<FeedbackPostResult> {
-        return submitFeedback(FeedbackBodyEntity(feedbackBody.platform, feedbackBody.text)).doOnError { throwable ->
+        return submitFeedback(
+            FeedbackBodyEntity(
+                feedbackBody.platform,
+                feedbackBody.text
+            )
+        ).doOnError { throwable ->
             handleSubmissionError(feedbackBody, throwable)
         }.doOnSuccess {
-            dataSource.deleteFeedbackInstance(feedbackBody.id).subscribeOn(Schedulers.io()).subscribe({}, { throwable ->
-                throwable.printStackTrace()
-            })
+            dataSource.deleteFeedbackInstance(feedbackBody.id).subscribeOn(Schedulers.io())
+                .subscribe({}, { throwable ->
+                    throwable.printStackTrace()
+                })
         }
+    }
+
+    override fun saveFeedbackInstance(feedbackInstance: FeedbackInstance): Single<FeedbackInstance> {
+        return dataSource.saveFeedbackInstance(feedbackInstance)
+    }
+
+    override fun getFeedbackDraft(): Single<FeedbackInstance> {
+        return dataSource.getFeedbackDraft()
     }
 
     private fun handleSubmissionError(feedbackInstance: FeedbackInstance, throwable: Throwable) {

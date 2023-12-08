@@ -16,7 +16,6 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.StatusProvider
 import timber.log.Timber
 
-const val TAGWorker = "WorkerSendFeedBack"
 
 @HiltWorker
 class WorkerSendFeedBack @AssistedInject constructor(@Assisted val context: Context, @Assisted workerParams: WorkerParameters, private val feedbackRepository: FeedBackRepository, private val statusProvider: StatusProvider) : RxWorker(context, workerParams) {

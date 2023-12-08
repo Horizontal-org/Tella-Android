@@ -123,6 +123,7 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         return isCamouflage;
     }
 
+    //TODO needs an improvement
     @Override
     public void onBackPressed() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);

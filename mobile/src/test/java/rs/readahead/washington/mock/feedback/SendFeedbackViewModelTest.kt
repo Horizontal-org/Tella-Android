@@ -50,7 +50,7 @@ class SendFeedbackViewModelTest {
         testScheduler = TestScheduler()
 
         // Inject mock dependencies
-        viewModel = SendFeedbackViewModel(feedbackRepository, dataSource)
+        viewModel = SendFeedbackViewModel(feedbackRepository)
 
         // Override schedulers for RxJava
         RxJavaPlugins.setIoSchedulerHandler { testScheduler }

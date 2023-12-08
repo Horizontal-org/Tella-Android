@@ -8,10 +8,18 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackPostResult
 
 interface FeedBackRepository {
     fun submitFeedback(
-            feedbackBody: FeedbackBodyEntity
+        feedbackBody: FeedbackBodyEntity
     ): Single<FeedbackPostResult>
 
     fun submitFeedbackInstance(
-            feedbackBody: FeedbackInstance
+        feedbackBody: FeedbackInstance
     ): Single<FeedbackPostResult>
+
+    fun saveFeedbackInstance(
+        feedbackInstance: FeedbackInstance
+    )
+            : Single<FeedbackInstance>
+
+    fun getFeedbackDraft()
+            : Single<FeedbackInstance>
 }

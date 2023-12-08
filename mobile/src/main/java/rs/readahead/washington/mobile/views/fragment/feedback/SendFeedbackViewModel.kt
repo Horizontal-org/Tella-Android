@@ -10,16 +10,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
-import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
-import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.feedback.FeedBackRepository
+import rs.readahead.washington.mobile.util.exception.ExceptionHandler
+import rs.readahead.washington.mobile.util.exception.ExceptionType
 import timber.log.Timber
 import javax.inject.Inject
 
 
 @HiltViewModel
-class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: FeedBackRepository, private val dataSource: DataSource) : ViewModel() {
+class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: FeedBackRepository) :
+    ViewModel() {
     private val disposables = CompositeDisposable()
 
     private val _feedbackSubmittedInBackground = SingleLiveEvent<Boolean>()
@@ -41,62 +42,93 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
 
+    private val _errorMessage = SingleLiveEvent<Int>()
+    val errorMessage: LiveData<Int>
+        get() = _errorMessage
+
     private val _draftFeedBackInstance = MutableLiveData<FeedbackInstance>()
     val draftFeedBackInstance: LiveData<FeedbackInstance> get() = _draftFeedBackInstance
 
     @SuppressLint("CheckResult")
     fun submitFeedback(instance: FeedbackInstance) {
-        disposables.add(feedbackRepository.submitFeedbackInstance(instance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnSubscribe { _progress.postValue(true) }.doFinally { _progress.postValue(false) }.subscribe({
-            it.apply {
-                _feedbackSubmitted.postValue(true)
-            }
-        }) { throwable: Throwable? ->
-            Timber.d(throwable)
-            if (throwable is NoConnectivityException) {
-                _feedbackSubmitted.postValue(false)
-            } else {
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-            }
-        })
+        disposables.add(
+            feedbackRepository.submitFeedbackInstance(instance).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .doFinally { _progress.postValue(false) }.subscribe({
+                    it.apply {
+                        _feedbackSubmitted.postValue(true)
+                    }
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    val exceptionType = ExceptionHandler.handleException(throwable)
+                    handleException(exceptionType)
+//                    if (throwable is NoConnectivityException) {
+//                        _feedbackSubmitted.postValue(false)
+//                    } else {
+//                    }
+                })
+
     }
 
     fun saveFeedbackToBeSubmitted(feedbackInstance: FeedbackInstance) {
-        disposables.add(dataSource.saveFeedbackInstance(feedbackInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnSubscribe { _progress.postValue(true) }.doFinally { _progress.postValue(false) }.subscribe({
-            it.apply {
-                _feedbackSavedToBeSubmitted.postValue(true)
-            }
-        }) { throwable: Throwable? ->
-            Timber.d(throwable)
-            if (throwable is NoConnectivityException) {
-                _feedbackSavedToBeSubmitted.postValue(false)
-            } else {
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-            }
-        })
+        disposables.add(
+            feedbackRepository.saveFeedbackInstance(feedbackInstance).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .doFinally { _progress.postValue(false) }.subscribe({
+                    it.apply {
+                        _feedbackSavedToBeSubmitted.postValue(true)
+                    }
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    val exceptionType = ExceptionHandler.handleException(throwable)
+                    handleException(exceptionType)
+//                    if (throwable is NoConnectivityException) {
+//                        _feedbackSavedToBeSubmitted.postValue(false)
+//                    } else {
+//                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+//                    }
+
+                })
     }
 
     fun saveFeedbackDraft(feedbackInstance: FeedbackInstance) {
-        disposables.add(dataSource.saveFeedbackInstance(feedbackInstance).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnSubscribe { _progress.postValue(true) }.doFinally { _progress.postValue(false) }.subscribe({
-            it.apply {
-                _feedbackSavedAsDraft.postValue(true)
-            }
-        }) { throwable: Throwable? ->
-            Timber.d(throwable)
-            FirebaseCrashlytics.getInstance().recordException(throwable!!)
-        })
+        disposables.add(
+            feedbackRepository.saveFeedbackInstance(feedbackInstance).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .doFinally { _progress.postValue(false) }.subscribe({
+                    it.apply {
+                        _feedbackSavedAsDraft.postValue(true)
+                    }
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    val exceptionType = ExceptionHandler.handleException(throwable)
+                    handleException(exceptionType)
+                })
     }
 
     fun getFeedBackDraft() {
-        disposables.add(dataSource.getFeedbackDraft().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).doOnSubscribe { _progress.postValue(true) }.doFinally { _progress.postValue(false) }.subscribe({ draft ->
-            _draftFeedBackInstance.postValue(draft)
-        }) { throwable: Throwable? ->
-            Timber.d(throwable)
-            FirebaseCrashlytics.getInstance().recordException(throwable!!)
-        })
+        disposables.add(
+            feedbackRepository.getFeedbackDraft().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .doFinally { _progress.postValue(false) }.subscribe({ draft ->
+                    _draftFeedBackInstance.postValue(draft)
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    val exceptionType = ExceptionHandler.handleException(throwable)
+                    handleException(exceptionType)
+                })
     }
 
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
+    }
+
+    private fun handleException(exceptionType: ExceptionType) {
+        _errorMessage.postValue(exceptionType.id)
     }
 }
