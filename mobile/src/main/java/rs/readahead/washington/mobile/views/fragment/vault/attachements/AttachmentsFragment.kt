@@ -316,7 +316,7 @@ class AttachmentsFragment :
 
             override fun goToRecorder() {
                 bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
+                nav().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 
             override fun chooseImportAndDelete() {
