@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.entity.uwazi.answer.UwaziDateRange;

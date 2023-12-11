@@ -51,18 +51,15 @@ object ThemeStyleManager {
         justifyStyle: Int,
         lineSpacingJustifyStyle: Int
     ): Int {
-        if (Preferences.isTextSpacing()) {
-            if (Preferences.isTextJustification()) {
-                return lineSpacingJustifyStyle
-            } else {
-                return lineSpacingStyle
-            }
-        } else {
-            if (Preferences.isTextJustification()) {
-                return justifyStyle
-            } else {
-                return defaultStyle
-            }
+        val isTextSpacingEnabled = Preferences.isTextSpacing()
+        val isTextJustificationEnabled = Preferences.isTextJustification()
+
+        return when {
+            isTextSpacingEnabled && isTextJustificationEnabled -> lineSpacingJustifyStyle
+            isTextSpacingEnabled -> lineSpacingStyle
+            isTextJustificationEnabled -> justifyStyle
+            else -> defaultStyle
         }
     }
+
 }
