@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
+import dagger.hilt.android.AndroidEntryPoint
 import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -45,7 +46,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
 import java.util.*
-
+@AndroidEntryPoint
 class MainActivity : MetadataActivity(),
     IHomeScreenPresenterContract.IView,
     IMediaImportPresenterContract.IView,
