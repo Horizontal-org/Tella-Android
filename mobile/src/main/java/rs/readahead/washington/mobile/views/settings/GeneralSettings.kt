@@ -4,10 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -17,6 +20,8 @@ import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
+import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -25,11 +30,12 @@ import java.util.Locale
 
 class GeneralSettings :
     BaseBindingFragment<FragmentGeneralSettingsBinding>(FragmentGeneralSettingsBinding::inflate) {
-
+    private var viewCreated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        viewCreated = true
     }
 
     private fun initView() {
@@ -57,9 +63,7 @@ class GeneralSettings :
             Preferences::setSubmittingCrashReports
         )
 
-
         binding.verificationSwitch.mSwitch.setOnClickListener {
-
             if (!context?.let { hasLocationPermission(it) }!!) {
                 requestLocationPermission(LOCATION_PERMISSION)
             }
@@ -80,6 +84,26 @@ class GeneralSettings :
             binding.recentFilesSwitch,
             Preferences::setShowRecentFiles
         )
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            initSwitch(
+                binding.textJustificationSwitch,
+                Preferences::setTextJustification
+            ) { _ ->
+                applyActivityTheme()
+                refreshFragment()
+            }
+        } else {
+            binding.textJustificationSwitch.hide()
+        }
+
+        initSwitch(
+            binding.textSpacingSwitch,
+            Preferences::setTextSpacing
+        ) { _ ->
+            applyActivityTheme()
+            refreshFragment()
+        }
 
     }
 
@@ -104,6 +128,8 @@ class GeneralSettings :
         binding.favoriteFormsSwitch.mSwitch.isChecked = Preferences.isShowFavoriteForms()
         binding.verificationSwitch.mSwitch.isChecked = !Preferences.isAnonymousMode()
         binding.crashReportSwitch.mSwitch.isChecked = Preferences.isSubmittingCrashReports()
+        binding.textJustificationSwitch.mSwitch.isChecked = Preferences.isTextJustification()
+        binding.textSpacingSwitch.mSwitch.isChecked = Preferences.isTextSpacing()
     }
 
     override fun onResume() {
@@ -126,6 +152,7 @@ class GeneralSettings :
         startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
@@ -153,6 +180,34 @@ class GeneralSettings :
             }
 
             else -> {}
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewCreated = false
+    }
+
+    private fun applyActivityTheme() {
+        if (viewCreated) {
+            activity?.theme?.applyStyle(ThemeStyleManager.getThemeStyle(baseActivity), true)
+        }
+    }
+
+    private fun refreshFragment() {
+        if (viewCreated) {
+            BottomSheetUtils.showWarningSheetWithImageAndTimeout(
+                baseActivity.supportFragmentManager,
+                getString(R.string.Settings_General_BottomSheetRefreshWarningTitle),
+                getString(R.string.Settings_General_BottomSheetRefreshWarningText),
+                ContextCompat.getDrawable(baseActivity, R.drawable.refresh_phone_device),
+                consumer = object : BottomSheetUtils.ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        nav().popBackStack()
+                    }
+                },
+                BottomSheetUtils.SHORT_TIMEOUT
+            )
         }
     }
 

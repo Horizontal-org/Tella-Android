@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_container"
     android:background="@color/space_cadet"
     android:layout_width="match_parent"
@@ -22,20 +23,19 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:navGraph="@navigation/nav_graph" />
 
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/btm_nav_main"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_navigation_bar_height"
+            android:layout_gravity="bottom"
+            android:background="@color/light_space_cadet"
+            app:elevation="0dp"
+            app:itemIconTint="@color/bottom_nav_item_color"
+            app:itemTextColor="@color/bottom_nav_item_color"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/btm_nav_main"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/main_navigation_bar_height"
-        android:layout_gravity="bottom"
-        app:labelVisibilityMode="labeled"
-        app:elevation="0dp"
-        android:background="@color/light_space_cadet"
-        app:itemIconTint="@color/bottom_nav_item_color"
-        app:itemTextColor="@color/bottom_nav_item_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

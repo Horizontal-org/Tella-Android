@@ -69,6 +69,8 @@ public class SharedPrefs {
     static final String TEMP_TIMEOUT = "temp_timeout";
     static final String EXIT_TIMEOUT = "exit_timeout";
     static final String JAVAROSA_3_UPGRADE = "javarosa_3_upgrade";
+    static final String TEXT_JUSTIFICATION = "text_justification";
+    static final String TEXT_SPACING = "text_spacing";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

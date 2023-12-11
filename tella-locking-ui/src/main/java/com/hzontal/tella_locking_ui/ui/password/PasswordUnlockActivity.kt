@@ -108,7 +108,7 @@ class PasswordUnlockActivity : BasePasswordActivity() {
 
         if (numFailedAttempts == 0L ) {
             passwordMsgTextView.text = error
-            passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
+            passwordEditText.setTextColor(ContextCompat.getColor(this, R.color.light_red))
             passwordMsgTextView.requestFocus()
             passwordMsgTextView.announceForAccessibility(error)
         } else {

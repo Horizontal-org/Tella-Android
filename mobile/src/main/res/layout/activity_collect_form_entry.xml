@@ -85,7 +85,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/submit_button"
-                style="@style/Unlock_White_Text_Back"
+                style="@style/Submit_Text_Button"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:layout_marginStart="5dp"

@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
-import org.hzontal.shared_ui.databinding.LayoutBottomMessageBinding
 import org.hzontal.shared_ui.databinding.LayoutBottomMessageWithButtonBinding
 
 object DialogUtils {
@@ -23,7 +23,7 @@ object DialogUtils {
             showBottomMessage(
                 it,
                 msg,
-                if (isError) R.color.wa_red_error else R.color.tigers_eye,
+                if (isError) R.color.light_red else R.color.tigers_eye,
                 duration
             )
         }
@@ -35,7 +35,7 @@ object DialogUtils {
             showBottomMessage(
                 it,
                 msg,
-                if (isError) R.color.wa_red_error else R.color.tigers_eye,
+                if (isError) R.color.light_red else R.color.tigers_eye,
                 2000L
             )
         }
@@ -43,17 +43,20 @@ object DialogUtils {
 
     @JvmStatic
     private fun showBottomMessage(context: Activity, msg: String, colorRes: Int, duration: Long) {
-        val binding = LayoutBottomMessageBinding.inflate(LayoutInflater.from(context))
-
         val container = context.findViewById<ViewGroup>(android.R.id.content)
-        binding.txvMsg.text = msg
-        container.addView(binding.root)
-        binding.root.requestFocus()
-        binding.root.announceForAccessibility(msg)
-        binding.root.alpha = 0f
-        binding.root.animate().alphaBy(1f).setDuration(500).withEndAction {
-            if (binding.root.isAttachedToWindow) {
-                binding.root.animate().alpha(0f).setStartDelay(duration).duration = 500
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.layout_bottom_message, container, false)
+        val txv_msg = view.findViewById<TextView>(R.id.txv_msg)
+        txv_msg.text = msg
+        container.addView(view)
+
+        view.requestFocus()
+        view.announceForAccessibility(msg)
+
+        view.alpha = 0f
+        view.animate().alphaBy(1f).setDuration(500).withEndAction {
+            if (view.isAttachedToWindow) {
+                view.animate().alpha(0f).setStartDelay(2000).duration = 500
             }
         }
     }

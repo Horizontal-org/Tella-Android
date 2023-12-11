@@ -15,6 +15,7 @@ object ThemeManager {
                         calculatorNumbersTextColor = R.color.wa_white,
                         calculatorOperatorsTextColor = R.color.wa_white)
             }
+
             CalculatorTheme.ORANGE_SKIN -> {
                 CalculatorThemeStyle(
                         calculatorBackgroundDrawable = R.drawable.rounded_button_background,
@@ -23,8 +24,8 @@ object ThemeManager {
                         calculatorOperatorsTextColor = R.color.calc_orange_skin_orange,
                         calculatorOkBtnTextColor = R.color.wa_white,
                         calculatorOkBtnTextBackgroundDrawable = R.drawable.rounded_ok_button_background)
-
             }
+
             CalculatorTheme.YELLOW_SKIN -> {
                 CalculatorThemeStyle(calculatorOperatorsBackgroundColor = R.color.wa_white,
                         calculatorNumbersBackgroundColor = R.color.wa_white,
@@ -33,13 +34,12 @@ object ThemeManager {
                         calculatorOperatorsTextColor = R.color.calc_yellow_skin_yellow,
                         calculatorOkBtnTextBackgroundDrawable = R.drawable.yellow_button_background,
                         calculatorOkBtnTextColor = R.color.wa_black)
-
-
             }
 
             CalculatorTheme.GREEN_SKIN -> {
                 CalculatorThemeStyle()
             }
+
             else -> {
                 CalculatorThemeStyle()
             }

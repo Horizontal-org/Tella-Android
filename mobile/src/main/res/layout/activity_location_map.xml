@@ -35,7 +35,7 @@
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
-        app:srcCompat="@drawable/ic_location_searching_white"
+        app:srcCompat="@drawable/ic_location_searching_black"
         app:useCompatPadding="true"
         tools:ignore="VectorDrawableCompat" />
 

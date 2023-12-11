@@ -36,7 +36,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_reports,
+                        R.drawable.baseline_assignment_24,
                         null
                     )
                 )
@@ -46,7 +46,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_forms,
+                        R.drawable.ic_list_numbered_24,
                         null
                     )
                 )

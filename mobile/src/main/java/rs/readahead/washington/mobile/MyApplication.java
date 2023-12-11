@@ -32,7 +32,6 @@ import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 
 import org.cleaninsights.sdk.CleanInsights;
-import org.hzontal.shared_ui.utils.DialogUtils;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;

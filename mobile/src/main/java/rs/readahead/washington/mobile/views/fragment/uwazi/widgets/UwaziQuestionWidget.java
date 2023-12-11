@@ -36,7 +36,6 @@ import timber.log.Timber;
 
 
 public abstract class UwaziQuestionWidget extends RelativeLayout {
-    @SuppressWarnings("unused")
     private static final String t = "QuestionWidget";
     private static int idGenerator = 5411322;
 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.LineSpacing" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Justify" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.LineSpacingJustify" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
+    <style name="PlayerTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="PlayerTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
+    <style name="CameraTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">none</item>
+    </style>
+
+    <style name="CameraTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:justificationMode">inter_word</item>
+    </style>
+</resources>

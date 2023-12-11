@@ -82,6 +82,6 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/action_refresh"
-        android:src="@drawable/ic_autorenew_white_24dp" />
+        android:src="@drawable/baseline_autorenew_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
