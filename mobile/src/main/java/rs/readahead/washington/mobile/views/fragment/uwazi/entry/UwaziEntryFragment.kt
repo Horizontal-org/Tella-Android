@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -44,9 +44,8 @@ class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
     OnNavBckListener {
 
-    private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(baseActivity)[SharedUwaziSubmissionViewModel::class.java]
-    }
+    private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
+
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
     private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
@@ -116,17 +115,20 @@ class UwaziEntryFragment :
                         nav().popBackStack()
                         progress.postValue(EntityStatus.UNKNOWN)
                     }
+
                     EntityStatus.SUBMITTED -> {
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                         nav().popBackStack()
                         progress.postValue(EntityStatus.UNKNOWN)
                     }
+
                     EntityStatus.DRAFT -> {
                         SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
                         nav().popBackStack()
                         showSavedDialog()
                         progress.postValue(EntityStatus.UNKNOWN)
                     }
+
                     else -> {}
                 }
             })
@@ -140,7 +142,7 @@ class UwaziEntryFragment :
             showValidationErrorsFieldsDialog()
         } else {
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
-            bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY,true)
+            bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY, true)
             NavHostFragment.findNavController(this@UwaziEntryFragment)
                 .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }

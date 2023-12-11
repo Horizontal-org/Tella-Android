@@ -79,7 +79,7 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:text="@string/onboard.go_btn_all_done"
-        android:textColor="@color/wa_white"
+        android:textColor="@color/btn_dark_letter"
         android:fontFamily="@font/open_sans"
         android:textSize="16sp"/>
 

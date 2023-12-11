@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.bus.EventObserver;
 import rs.readahead.washington.mobile.bus.event.CloseSettingsActivityEvent;
 import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent;
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent;
+import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.databinding.ActivitySettingsBinding;
 import rs.readahead.washington.mobile.util.CamouflageManager;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;

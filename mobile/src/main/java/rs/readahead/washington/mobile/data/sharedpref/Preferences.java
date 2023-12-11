@@ -192,6 +192,22 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_RECENT_FILES, value);
     }
 
+    public static boolean isTextJustification() {
+        return getBoolean(SharedPrefs.TEXT_JUSTIFICATION, false);
+    }
+
+    public static void setTextJustification(boolean value) {
+        setBoolean(SharedPrefs.TEXT_JUSTIFICATION, value);
+    }
+
+    public static boolean isTextSpacing() {
+        return getBoolean(SharedPrefs.TEXT_SPACING, false);
+    }
+
+    public static void setTextSpacing(boolean value) {
+        setBoolean(SharedPrefs.TEXT_SPACING, value);
+    }
+
     public static boolean isUpgradeTella2() {
         return getBoolean(SharedPrefs.UPGRADE_TELLA_2, true);
     }

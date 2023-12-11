@@ -18,6 +18,7 @@
     <color name="wa_white_12">#1FFFFFFF</color>
     <color name="wa_white_16">#03FFFFFF</color>
     <color name="wa_white_15">#26FFFFFF</color>
+    <color name="wa_white_50">#80FFFFFF</color>
     <color name="wa_white_80">#CCFFFFFF</color>
     <color name="wa_white_88">#E0FFFFFF</color>
     <color name="wa_white_90">#E6FFFFFF</color>
@@ -39,6 +40,9 @@
     <color name="wa_calc_gray">#A4A2A2</color>
     <color name="wa_light_green">#E6F4F3</color>
     <color name="wa_black_contrast">#FF071013</color>
+
+    <color name="light_grayer">#D0D7DB</color>
+
 
     <color name="colorPrimary">@color/space_cadet</color>
     <color name="colorPrimaryDark">@color/space_cadet</color>

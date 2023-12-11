@@ -72,7 +72,7 @@ class LoginReportsFragment :
     private fun initObservers() {
 
         viewModel.error.observe(baseActivity) {
-            binding?.passwordLayout?.error =
+            binding.passwordLayout.error =
                 getString(R.string.settings_docu_error_wrong_credentials)
         }
 
@@ -84,14 +84,14 @@ class LoginReportsFragment :
         }
 
         viewModel.progress.observe(baseActivity) {
-            binding?.progressBar?.isVisible = it
+            binding.progressBar.isVisible = it
         }
     }
 
     private fun validate() {
         validated = true
-        validateRequired(binding?.username, binding?.usernameLayout)
-        validateRequired(binding?.password, binding?.passwordLayout)
+        validateRequired(binding.username, binding.usernameLayout)
+        validateRequired(binding.password, binding.passwordLayout)
     }
 
     private fun validateRequired(field: EditText?, layout: TextInputLayout?) {
@@ -104,8 +104,8 @@ class LoginReportsFragment :
 
     private fun copyFields(server: TellaReportServer): TellaReportServer {
         server.url = serverReports.url
-        server.username = binding?.username?.text.toString().trim(' ')
-        server.password = binding?.password?.text.toString()
+        server.username = binding.username.text.toString().trim(' ')
+        server.password = binding.password.text.toString()
         server.name = serverReports.name
         serverReports = server
         return server
@@ -120,11 +120,11 @@ class LoginReportsFragment :
         }
 
         if (!serverReports.username.isNullOrEmpty() && !serverReports.password.isNullOrEmpty()) {
-            binding?.username?.setText(serverReports.username)
-            binding?.password?.setText(serverReports.password)
+            binding.username.setText(serverReports.username)
+            binding.password.setText(serverReports.password)
         }
-        KeyboardLiveData(binding!!.root).observe(baseActivity) {
-            binding?.backBtn?.isVisible = !it.first
+        KeyboardLiveData(binding.root).observe(baseActivity) {
+            binding.backBtn.isVisible = !it.first
         }
     }
 }

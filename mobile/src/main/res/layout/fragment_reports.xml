@@ -81,7 +81,7 @@
         android:gravity="center_vertical"
         android:text="@string/New_Reports_Text"
         android:textAlignment="center"
-        android:textColor="@color/wa_white"
+        android:textColor="@color/btn_dark_letter"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="20dp"
