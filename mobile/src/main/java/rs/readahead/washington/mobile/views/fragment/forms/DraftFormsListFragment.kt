@@ -99,7 +99,7 @@ class DraftFormsListFragment : BaseBindingFragment<FragmentDraftFormsListBinding
     private fun onFormInstanceDeleted(success: Boolean) {
         if (success) {
             DialogUtils.showBottomMessage(
-                activity,
+                baseActivity,
                 getString(R.string.collect_toast_form_deleted),
                 false
             )

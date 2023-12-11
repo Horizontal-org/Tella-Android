@@ -210,7 +210,7 @@ class AttachmentsFragment :
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     changedPosition.toString(),
                     false
                 )

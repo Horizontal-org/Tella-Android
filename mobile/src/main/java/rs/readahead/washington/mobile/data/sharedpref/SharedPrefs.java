@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SharedPrefs {
     public static final String NONE = "";
-
+    public static final String FEEDBACK_SHARING_ENBALED = "feedback_sharing_enabled";
     private static final String SHARED_PREFS_NAME = "washington_shared_prefs";
 
     static final String SECRET_PASSWORD = "secret_password";

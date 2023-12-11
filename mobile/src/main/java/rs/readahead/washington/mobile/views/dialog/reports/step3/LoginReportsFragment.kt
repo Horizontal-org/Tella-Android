@@ -55,9 +55,9 @@ class LoginReportsFragment :
         binding.loginButton.setOnClickListener {
             if (!MyApplication.isConnectedToInternet(baseActivity)) {
                 DialogUtils.showBottomMessage(
-                    baseActivity,
-                    getString(R.string.settings_docu_error_no_internet),
-                    true
+                        baseActivity,
+                        getString(R.string.settings_docu_error_no_internet),
+                        true
                 )
             } else {
                 validate()

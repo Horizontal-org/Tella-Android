@@ -144,7 +144,7 @@ class BlankFormsListFragment :
             } else {
                 hideAlertDialog()
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     getString(R.string.collect_toast_download_completed),
                     false
                 )
@@ -158,7 +158,7 @@ class BlankFormsListFragment :
             } else {
                 hideAlertDialog()
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     getString(R.string.collect_blank_toast_form_definition_updated),
                     false
                 )
@@ -178,7 +178,7 @@ class BlankFormsListFragment :
         model.onUserCancel.observe(viewLifecycleOwner) { cancel: Boolean? ->
             hideAlertDialog()
             DialogUtils.showBottomMessage(
-                activity,
+                baseActivity,
                 getString(R.string.collect_blank_toast_refresh_canceled),
                 false
             )
@@ -207,7 +207,7 @@ class BlankFormsListFragment :
         ) {
             if (!silentFormUpdates) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     getString(R.string.collect_blank_toast_not_connected),
                     true
                 )
@@ -227,7 +227,7 @@ class BlankFormsListFragment :
     private fun onFormDefError(error: Throwable) {
         val errorMessage = FormUtils.getFormDefErrorMessage(requireContext(), error)
         DialogUtils.showBottomMessage(
-            activity,
+            baseActivity,
             errorMessage,
             true
         )
@@ -264,7 +264,7 @@ class BlankFormsListFragment :
         if (!silentFormUpdates) {
             for (error in listFormResult.errors) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     String.format(
                         "%s %s",
                         getString(R.string.collect_blank_toast_fail_updating_form_list),
@@ -377,7 +377,7 @@ class BlankFormsListFragment :
                             model.updateBlankFormDef(collectForm)
                         } else {
                             DialogUtils.showBottomMessage(
-                                activity,
+                                baseActivity,
                                 getString(R.string.collect_blank_toast_not_connected),
                                 true
                             )
@@ -402,7 +402,7 @@ class BlankFormsListFragment :
                         model.downloadBlankFormDef(collectForm)
                     } else {
                         DialogUtils.showBottomMessage(
-                            activity,
+                            baseActivity,
                             getString(R.string.collect_blank_toast_not_connected),
                             true
                         )
@@ -540,7 +540,7 @@ class BlankFormsListFragment :
     private fun upgradeJavarosa2() {
         try {
             DialogUtils.showBottomMessage(
-                activity,
+                baseActivity,
                 requireActivity().getString(R.string.Javarosa_Upgrade_Toast),
                 false
             )

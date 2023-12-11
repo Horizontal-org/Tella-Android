@@ -9,6 +9,7 @@
     <color name="wa_white">#FFFF</color>
     <color name="wa_white_40">#66FFFFFF</color>
     <color name="tigers_eye">#D6933B</color>
+    <color name="tigers_eye_dark">#8B4F00</color>
     <color name="wa_white_32">#52FFFFFF</color>
     <color name="wa_orange">#D6933B</color>
     <color name="wa_red_error">#CE1515</color>
@@ -38,6 +39,7 @@
     <color name="wa_dark_green">#3C6E72</color>
     <color name="wa_calc_gray">#A4A2A2</color>
     <color name="wa_light_green">#E6F4F3</color>
+    <color name="wa_black_contrast">#FF071013</color>
 
     <color name="light_grayer">#D0D7DB</color>
 

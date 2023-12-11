@@ -511,7 +511,6 @@
         <item name="fontFamily">@font/open_sans</item>
     </style>
 
-
     <style name="Submit_Text_Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -523,5 +522,16 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_marginBottom">18dp</item>
         <item name="android:layout_marginStart">34dp</item>
+    </style>
+
+    <style name="MainSettingsTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginEnd">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginStart">@dimen/activity_vertical_margin</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 </resources>
