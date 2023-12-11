@@ -37,12 +37,12 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
-import rs.readahead.washington.mobile.views.activity.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.activity.VideoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
+import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
@@ -73,7 +73,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
     private var disposables: EventCompositeDisposable? = null
-
+    private var reportServersCounted = false
+    private var collectServersCounted = false
+    private var uwaziServersCounted = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +101,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         fixAppBarShadow(view)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
@@ -183,8 +186,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    /**
+     * This function show connections when all the server types are counted.
+     **/
     private fun maybeShowConnections() {
-        if (serversList?.isEmpty() == false) {
+        if (serversList?.isEmpty() == false && reportServersCounted && collectServersCounted && uwaziServersCounted) {
             vaultAdapter.addConnectionServers(serversList!!)
         } else {
             vaultAdapter.removeConnectionServers()
@@ -380,13 +386,30 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+    }
+
+    override fun onStart() {
+        super.onStart()
         maybeCountServers()
     }
 
     private fun maybeCountServers() {
+        clearServerCount()
         homeVaultPresenter.countCollectServers()
         homeVaultPresenter.countTUServers()
         homeVaultPresenter.countUwaziServers()
+    }
+
+    /**
+     * This is used to start counting different connections (servers) to be shown on the home fragment.
+     * At the start, the list of servers and shown connections are cleared.
+     **/
+    private fun clearServerCount(){
+        reportServersCounted = false
+        collectServersCounted = false
+        uwaziServersCounted = false
+        serversList?.clear()
+        vaultAdapter.removeConnectionServers()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -447,6 +470,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
 
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
+        reportServersCounted = true
         tuServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
         if (!servers.isNullOrEmpty()) {
@@ -457,10 +481,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountTUServersFailed(throwable: Throwable?) {
+        reportServersCounted = true
         Timber.d("***onCountTUServersFailed**$throwable")
     }
 
     override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
+        collectServersCounted = true
         collectServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
         if (!servers.isNullOrEmpty()) {
@@ -472,10 +498,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {
+        collectServersCounted = true
         Timber.d("***onCountCollectServersFailed**$throwable")
     }
 
     override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
+        uwaziServersCounted = true
         uwaziServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.UWAZI }
         if (!servers.isNullOrEmpty()) {
@@ -486,6 +514,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onCountUwaziServersFailed(throwable: Throwable?) {
+        uwaziServersCounted = true
         Timber.d("***onCountUwaziServersFailed**$throwable")
     }
 

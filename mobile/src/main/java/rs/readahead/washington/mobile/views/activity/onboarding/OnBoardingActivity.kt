@@ -74,9 +74,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
             hideViewpager()
         } else {
-            if (isFromSettings)
-            {
-                replaceFragmentNoAddToBackStack(OnBoardLockFragment.newInstance(isFromSettings), R.id.rootOnboard)
+            if (isFromSettings) {
+                replaceFragmentNoAddToBackStack(
+                    OnBoardLockFragment.newInstance(isFromSettings),
+                    R.id.rootOnboard
+                )
                 hideViewpager()
             }
         }
@@ -130,8 +132,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         }
     }
 
-    private fun initReportsEvents(){
-        createReportsServer.observe(this){ server ->
+    private fun initReportsEvents() {
+        createReportsServer.observe(this) { server ->
             if (server != null) {
                 presenter.create(server)
                 addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
@@ -197,7 +199,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 }
 
                 override fun addTellaWebServer() {
-                 //   showTellaUploadServerDialog()
+                    //   showTellaUploadServerDialog()
                 }
 
                 override fun addODKServer() {
@@ -264,6 +266,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun onCollectServerDialogCreate(server: CollectServer?) {
         presenter.create(server)
+        addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
     }
 
     override fun onCollectServerDialogUpdate(server: CollectServer?) {
@@ -318,7 +321,11 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun handleCustomizationCode(code: String) {
-        showToast(code)
+        DialogUtils.showBottomMessage(
+            this,
+            code,
+            false
+        )
     }
 
 

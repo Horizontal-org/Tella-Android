@@ -16,15 +16,15 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
     }
 
     private fun initView() {
-        val viewPagerAdapter  = ViewPagerAdapter(this)
-        with(binding!!){
+        val viewPagerAdapter = ViewPagerAdapter(this)
+        with(binding) {
             viewPager.apply {
                 offscreenPageLimit = 4
                 isSaveEnabled = false
                 adapter = viewPagerAdapter
             }
             // Set the text for each tab
-          TabLayoutMediator(tabs, viewPager) { tab, position ->
+            TabLayoutMediator(tabs, viewPager) { tab, position ->
                 tab.text = getTabTitle(position)
 
             }.attach()
@@ -32,15 +32,15 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             tabs.setTabTextColors(
                 ContextCompat.getColor(baseActivity, R.color.wa_white_44),
                 ContextCompat.getColor(baseActivity, R.color.wa_white)
-                )
+            )
 
             fabButton.setOnClickListener {
                 nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
             }
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity,{ position ->
-             when (position) {
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity, { position ->
+            when (position) {
                 TEMPLATES_LIST_PAGE_INDEX -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
                 DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
                 OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
@@ -48,13 +48,14 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         })
 
-        binding?.toolbar?.backClickListener = { nav().popBackStack() }
-
+        binding.toolbar.backClickListener = { nav().popBackStack() }
     }
 
-    private fun setCurrentTab(position: Int){
-        binding?.viewPager?.post {
-            binding?.viewPager?.setCurrentItem(position, true)
+    private fun setCurrentTab(position: Int) {
+        if (isViewInitialized) {
+            binding.viewPager.post {
+                binding.viewPager.setCurrentItem(position, true)
+            }
         }
     }
 

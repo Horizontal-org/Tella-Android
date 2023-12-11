@@ -20,7 +20,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideProductsRepository(
+    fun provideReportsRepository(
         service: ReportsApiService,
         dataSource: DataSource,
         statusProvider: StatusProvider
@@ -36,7 +36,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideReportsRepository(): ITellaReportsRepository {
+    fun provideReportsDataSource(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
 

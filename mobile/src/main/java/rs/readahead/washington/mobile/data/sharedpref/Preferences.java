@@ -1,6 +1,10 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
 
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -17,7 +21,6 @@ public class Preferences {
 
     // cache
     private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
-
 
     public static boolean isSecretModeActive() {
         return getBoolean(SharedPrefs.SECRET_MODE_ENABLED, false);
@@ -83,19 +86,21 @@ public class Preferences {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
     }
 
-    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+    public static boolean isShutterMute() {
+        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, true);
+    }
 
     public static void setShutterMute(boolean value) {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
-
-    public static boolean isKeepExif() { return getBoolean(SharedPrefs.KEEP_EXIF, false); }
+    public static boolean isKeepExif() {
+        return getBoolean(SharedPrefs.KEEP_EXIF, false);
+    }
 
     public static void setKeepExif(boolean value) {
         setBoolean(SharedPrefs.KEEP_EXIF, value);
     }
-
 
     public static boolean isDeleteServerSettingsActive() {
         return getBoolean(SharedPrefs.DELETE_SERVER_SETTINGS, true);
@@ -137,6 +142,7 @@ public class Preferences {
     public static void setCalculatorTheme(@NonNull String value) {
         setString(SharedPrefs.CALCULATOR_THEME, value);
     }
+
     @Nullable
     public static String getVideoResolution() {
         return getString(SharedPrefs.VIDEO_RESOLUTION, null);
@@ -275,6 +281,30 @@ public class Preferences {
         setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
+    public static Long getFailedUnlockOption() {
+        return getLong(FAILED_UNLOCK_OPTION, 0);
+    }
+
+    public static void setFailedUnlockOption(Long option) {
+        setLong(FAILED_UNLOCK_OPTION, option);
+    }
+
+    public static boolean isShowUnlockRemainingAttempts() {
+        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, true);
+    }
+
+    public static void setShowUnlockRemainingAttempts(boolean option) {
+        setBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
+    public static long getUnlockRemainingAttempts() {
+        return getLong(REMAINING_UNLOCK_ATTEMPTS, 0);
+    }
+
+    public static void setUnlockRemainingAttempts(long option) {
+        setLong(REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
     public static boolean isTempTimeout() {
         return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
     }
@@ -382,17 +412,26 @@ public class Preferences {
         setTimeAcceptedImprovements(new Date().getTime());
     }
 
-    private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }
     public static Long getTimeAcceptedImprovements() {
         return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
     }
-    public static boolean isTimeToShowReminderImprovements() {
-        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false ;
-        Date currentDate = new Date();
-        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
-        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime() ;
+
+    private static void setTimeAcceptedImprovements(Long value) {
+        setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
     }
 
-    private Preferences() {
+    public static boolean isTimeToShowReminderImprovements() {
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
+    }
+
+    public static boolean isFeedbackSharingEnabled() {
+        return getBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, false);
+    }
+
+    public static void setFeedbackSharingEnabled(boolean value) {
+        setBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, value);
     }
 }

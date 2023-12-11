@@ -9,7 +9,7 @@ const val DRAFT_LIST_PAGE_INDEX = 1
 const val OUTBOX_LIST_PAGE_INDEX = 2
 const val SUBMITTED_LIST_PAGE_INDEX = 3
 
-class ViewPagerAdapter (fragment: Fragment) : FragmentStateAdapter(fragment) {
+class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     /**
      * Mapping of the ViewPager page indexes to their respective Fragments

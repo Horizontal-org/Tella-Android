@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +36,7 @@ import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 import com.hzontal.utils.MediaFile;
 
 import org.apache.commons.io.IOUtils;
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -123,7 +123,11 @@ public class MediaFileHandler {
             activity.startActivityForResult(intent, requestCode);
         } catch (ActivityNotFoundException e) {
             Timber.d(e, activity.getClass().getName());
-            Toast.makeText(activity, R.string.gallery_toast_fail_import, Toast.LENGTH_LONG).show();
+            DialogUtils.showBottomMessage(
+                    activity,
+                    activity.getString(R.string.gallery_toast_fail_import),
+                    true
+            );
         }
     }
 
@@ -197,6 +201,47 @@ public class MediaFileHandler {
         }
     }
 
+    public static Single<VaultFile> saveBitmapAsJpeg(Bitmap bitmap, @Nullable String parent) {
+
+        String uid = UUID.randomUUID().toString();
+        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
+                .builder(new ByteArrayInputStream(getJpegBytes(bitmap)))
+                .setMimeType("image/jpeg")
+                .setName(uid + ".jpg")
+                .setType(VaultFile.Type.FILE)
+                .setThumb(getThumbBytes(bitmap));
+
+        if (parent == null) {
+            return rxVaultFileBuilder
+                    .build()
+                    .subscribeOn(Schedulers.io());
+        } else {
+            return rxVaultFileBuilder
+                    .build(parent)
+                    .subscribeOn(Schedulers.io());
+        }
+    }
+
+    private static byte[] getJpegBytes(Bitmap bitmap) {
+        if (bitmap != null) {
+            ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
+            if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
+                return imageJpegStream.toByteArray();
+            }
+        }
+        return null;
+    }
+
+    private static byte[] getThumbBytes(Bitmap bitmap) {
+        if (bitmap != null) {
+            Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if (thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                return stream.toByteArray();
+            }
+        }
+        return null;
+    }
 
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
         // Vault replacement methods
@@ -400,24 +445,6 @@ public class MediaFileHandler {
             } catch (Exception ignore) {
             }
         }
-    }
-
-    public static List<Single<VaultFile>> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
-        List<Single<VaultFile>> vaultFiles = new ArrayList<>();
-        assert uris != null;
-        for (Uri uri : uris) {
-            String mimeType = getMimeType(uri, context.getContentResolver());
-            if (mimeType != null) {
-                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
-                    vaultFiles.add(importPhotoUri(context, uri, parentId));
-                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
-                    vaultFiles.add(importVideoUri(context, uri, parentId));
-                } else {
-                    vaultFiles.add(importOthersUri(context, uri, parentId));
-                }
-            }
-        }
-        return vaultFiles;
     }
 
     @Nullable

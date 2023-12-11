@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.Callable;
@@ -14,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SharedPrefs {
     public static final String NONE = "";
-
+    public static final String FEEDBACK_SHARING_ENBALED = "feedback_sharing_enabled";
     private static final String SHARED_PREFS_NAME = "washington_shared_prefs";
 
     static final String SECRET_PASSWORD = "secret_password";
@@ -25,6 +26,11 @@ public class SharedPrefs {
     static final String PANIC_GEOLOCATION = "panic_geolocation";
     static final String DELETE_SERVER_SETTINGS = "erase_everything";
     static final String ERASE_GALLERY = "erase_gallery";
+    static final String FAILED_UNLOCK_OPTION = "failed_unlock_option";
+
+    static final String SHOW_REMAINING_UNLOCK_ATTEMPTS = "show_remaining_unlock_attempts";
+
+    static final String REMAINING_UNLOCK_ATTEMPTS = "remaining_unlock_attempts";
     static final String ERASE_FORMS = "erase_forms";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";

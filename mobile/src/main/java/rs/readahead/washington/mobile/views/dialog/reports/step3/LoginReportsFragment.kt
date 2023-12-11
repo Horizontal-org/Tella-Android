@@ -16,12 +16,10 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
-import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
 import rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment
-import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
 
 internal const val OBJECT_SLUG = "os"
 
@@ -54,12 +52,12 @@ class LoginReportsFragment :
     }
 
     private fun initListeners() {
-        binding?.loginButton?.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             if (!MyApplication.isConnectedToInternet(baseActivity)) {
                 DialogUtils.showBottomMessage(
-                    baseActivity,
-                    getString(R.string.settings_docu_error_no_internet),
-                    true
+                        baseActivity,
+                        getString(R.string.settings_docu_error_no_internet),
+                        true
                 )
             } else {
                 validate()
@@ -68,7 +66,7 @@ class LoginReportsFragment :
                 }
             }
         }
-        binding?.backBtn?.setOnClickListener { baseActivity.onBackPressed() }
+        binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
     }
 
     private fun initObservers() {

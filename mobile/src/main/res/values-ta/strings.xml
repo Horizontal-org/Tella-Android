@@ -40,7 +40,6 @@
   <string name="collect.sent_tab.title">சமர்ப்பிக்கப்பட்டது</string>
   <string name="home_expl_cancel.quick.delete">ரத்துசெய்ய, திரையில் எங்காவது தட்டவும்</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">தரவை சேகரிக்கவும்</string>
   <string name="settings.docu_field_username">பயனர்பெயர்</string>
   <string name="collect.draft_meta_date.updated">புதுப்பிக்கப்பட்டது %1$s</string>
   <string name="settings.about_app.version">பதிப்பு</string>
@@ -118,8 +117,6 @@
   <string name="collect.sent_expl_no.forms">உங்களுக்கு காண்பிக்க சமர்ப்பிக்கப்பட்ட படிவங்கள் எதுவும் இல்லை.</string>
   <string name="collect.blank_expl_no.forms">உங்களுக்கு காண்பிக்க படிவங்கள் எதுவும் இல்லை. நீங்கள் இணைக்கப்பட்ட சேவையகங்களில் படிவங்கள் உள்ளனவா என்பதை அறிய \"புத்தாக்க\" பொத்தானைத் தட்டவும்.</string>
   <string name="settings.camo_heading">வேறு பெயர் மற்றும் சின்னத்தை தேர்ந்தெடுக்கவும்</string>
-  <string name="collect.help_app.bar">தரவை சேகரிக்கவும் - உதவி</string>
-  <string name="collect.help_expl_intro">படிவங்கள் மற்றும் கணக்கெடுப்புகளை உங்கள் சாதனத்தில் நேரடியாக நிரப்புவதன் மூலம் தரவை சேகரிக்க உதவுகிறது</string>
   <string name="settings.gen_crash.reports_action">செயலிழப்புப் புகாரைபப் பகிரவும்</string>
   <string name="settings.gen_crash.reports_action.expl">செயலிழப்புப் புகார்கள் டெல்லாவை மேம்படுத்த எங்களுக்கு உதவுகின்றன. அவை தானாக அனுப்பப்படுகின்றன. அவற்றில் சாதன மாதிரி மற்றும் ஆண்ட்ராய்டு பதிப்பு போன்ற தரவு அடங்கும்.</string>
   <string name="collect.form_dialog.action_add.group">சேர்</string>
@@ -377,4 +374,15 @@ connecting to a server</string>
   <string name="settings.camo_weather3">தற்போதைய வானிலை</string>
   <string name="settings.camo_weather2">உள்ளூர் வானிலை</string>
   <string name="settings.camo_weather1">Weather</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

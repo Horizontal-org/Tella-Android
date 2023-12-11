@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">ဆှၢထီၣ်</string>
   <string name="home_expl_cancel.quick.delete">စံၢ်လီၤဖဲတၢ်တတီၤတီၤအလိၤလၢတၢ်ဆိကတီၢ်အဂီၢ်</string>
   <string name="recorder_app.bar">စဲးဖီၣ်တၢ်ကလုၢ်</string>
-  <string name="collect_app.bar">တၢ်ထၢဖှိၣ်တၢ်</string>
   <string name="settings.docu_field_username">တၢ်စူးကါမံၤ</string>
   <string name="collect.draft_meta_date.updated">တၢ်မၤဂ့ၤထီၣ်တၢ်: %1$s</string>
   <string name="settings.about_app.version">အကတြူၢ်</string>
@@ -131,8 +130,6 @@
   <string name="collect.sent_expl_no.forms">တအိၣ်ဒီးတၢ်ဆှၢထီၣ်လံာ်ကွီၣ်ဒိလၢတၢ်ဒုးနဲၣ်ဖျါထီၣ်အဂီၢ်ဘၣ်.</string>
   <string name="collect.blank_expl_no.forms">တအိၣ်ဒီးလံာ်ကွီၣ်ဒိလၢတၢ်ဒုးနဲၣ်ဖျါထီၣ်အဂီၢ်ဘၣ်. စံၢ်လီၤဖဲ တၢ်မၤဆူၣ်ထီၣ်ကဒါက့ၤအဖီလ၁်  လၢတၢ်သမံသမိးကွၢ်ဝဲမ့ၢ်လံာ်ကွီၣ်ဒိဖဲ ခီၣ်ဖၠူထၢၣ်အခိၣ်ကျၢၢ်လၢနဘျးစဲအပူၤအိၣ်တအိၣ်အဂ့ၢ်န့ၣ်လီၤ.</string>
   <string name="settings.camo_heading">ဃုထၢအမံၤဒီးအတၢ်ပနီၣ်လၢလီၤဆီလိာ်သး</string>
-  <string name="collect.help_app.bar">တၢ်မၤစၢၤတၢ်ထၢဖှိၣ်တၢ်</string>
-  <string name="collect.help_expl_intro">တၢ်ထၢဖှိၣ်တၢ်မ့ၢ်ဝဲစုကဝဲၤတၢ်ပီးတၢ်လီတခါလၢတၢ်ထၢဖှိၣ်တၢ်ဂ့ၢ်တၢ်ကျိၤအဂီၢ်ခီဖျိတၢ်ထၢနုာ်မၤပှဲၤလံာ်ကွီၣ်ဒိဒီးတၢ်လီၤဃုသ့ၣ်ညါတဖၣ်ဖဲနပီးလီအပူၤ</string>
   <string name="collect.blank_toast_not.connected">တၢ်တဘျးစဲဝဲဒီးအ့ထၢၣ်နဲးဘၣ်. မၤကွၢ်ကဒီးအသီတဘျီဖဲနဘျးစဲဒီးအ့ထၢၣ်နဲးအခါန့ၣ်တက့ၢ်.</string>
   <string name="settings.gen_crash.reports_action">နီၤလီၤတၢ်ပာ်ဖျါထီၣ်ပီးလီဆိကတီၢ်သတူၢ်ကလာ်အဂ့ၢ်</string>
   <string name="settings.gen_crash.reports_action.expl">တၢ်ပာ်ဖျါထီၣ်ပီးလီဆိကတီၢ်သတူၢ်ကလာ်အဂ့ၢ်မ့ၢ်တၢ်မၤဂ့ၤထီၣ်စၢၤ Tella န့ၣ်လီၤ. တၢ်ဆှၢထီၣ်တ့ၢ်အဝဲသ့ၣ်တဘျီဃီဃုာ်ဒီးတၢ်ဂ့ၢ်တၢ်ကျိၤဒ်အမ့ၢ်ပီးလီအက့ၢ်ဂီၤဒိဒီး Android န့ၣ်လီၤ.</string>
@@ -447,4 +444,15 @@
   <string name="settings.camo_camera4">ခဲမရၣ်</string>
   <string name="settings.camo_weather1">မူခိၣ်ကလံၤသီၣ်ဂီၤ</string>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">ဃုထၢလံာ်တြံ၁်တဖၣ်</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

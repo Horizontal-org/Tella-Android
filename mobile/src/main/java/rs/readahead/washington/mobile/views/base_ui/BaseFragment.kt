@@ -9,13 +9,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import timber.log.Timber
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.setupForAccessibility
+import timber.log.Timber
 
 abstract class BaseFragment : Fragment() {
 
     protected lateinit var baseActivity: BaseActivity
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        childFragmentManager.setupForAccessibility(requireContext())
+    }
 
     override fun onAttach(context: Context) {
         Timber.d("***** ${this.javaClass.name} onAttach")
@@ -26,9 +32,9 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         Timber.d("***** ${this.javaClass.name} onCreateView")
 

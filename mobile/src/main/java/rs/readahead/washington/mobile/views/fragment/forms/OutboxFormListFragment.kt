@@ -2,9 +2,10 @@ package rs.readahead.washington.mobile.views.fragment.forms
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -18,18 +19,17 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.interfaces.ISavedFormsInterface
 import timber.log.Timber
 
+@AndroidEntryPoint
 class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding>(
     FragmentOutboxFormListBinding::inflate
 ),
-    FormListInterfce, ISavedFormsInterface {
-    private val model: SharedFormsViewModel by lazy {
-        ViewModelProvider(baseActivity).get(SharedFormsViewModel::class.java)
-    }
+    FormListInterface, ISavedFormsInterface {
 
+    private val model: SharedFormsViewModel by viewModels()
     private var adapter: CollectOutboxFormInstanceRecycleViewAdapter? = null
 
-    override fun getFormListType(): FormListInterfce.Type {
-        return FormListInterfce.Type.OUTBOX
+    override fun getFormListType(): FormListInterface.Type {
+        return FormListInterface.Type.OUTBOX
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +41,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObservers()
-        listOutboxForms()
     }
 
+    override fun onResume() {
+        super.onResume()
+        listOutboxForms()
+    }
 
     private fun initObservers() {
         model.onFormInstanceDeleteSuccess.observe(
@@ -74,7 +77,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     private fun onFormInstanceDeleted(success: Boolean) {
         if (success) {
             DialogUtils.showBottomMessage(
-                activity,
+                baseActivity,
                 getString(R.string.collect_toast_form_deleted),
                 false
             )
@@ -83,7 +86,8 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding!!.blankSubmittedFormsInfo.visibility = if (instances.isEmpty()) View.VISIBLE else View.GONE
+        binding.blankSubmittedFormsInfo.visibility =
+            if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }
 
@@ -107,11 +111,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
                     if (action === BottomSheetUtils.Action.VIEW) {
                         reSubmitForm(instance)
                     }
+                    /* This is for a sharing form over SMS
                     if (action === BottomSheetUtils.Action.SHARE) {
-                        /*if (formSubmitter != null) {
+                        if (formSubmitter != null) {
                             formSubmitter.getCompactFormTextToShare();
-                        }*/
-                    }
+                        }
+                    }*/
                     if (action === BottomSheetUtils.Action.DELETE) {
                         deleteFormInstance(instance.id)
                     }
@@ -122,6 +127,12 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
             requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
+    }
+
+    override fun showFormInstance(instance: CollectFormInstance?) {
+        if (instance != null) {
+            model.getInstanceFormDef(instance.id)
+        }
     }
 
     override fun reSubmitForm(instance: CollectFormInstance?) {
@@ -138,9 +149,9 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
         }
     }
 
-    fun initView(){
+    fun initView() {
         val mLayoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        binding?.submittFormInstances?.layoutManager = mLayoutManager
-        binding?.submittFormInstances?.adapter = adapter
+        binding.submittFormInstances.layoutManager = mLayoutManager
+        binding.submittFormInstances.adapter = adapter
     }
 }

@@ -33,10 +33,8 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 public class MetadataViewerActivity extends BaseLockActivity {
 
     LinearLayout metadataList;
-
     private VaultFile vaultFile;
     private Metadata metadata;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

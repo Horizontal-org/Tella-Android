@@ -3,8 +3,6 @@ package com.hzontal.tella_locking_ui.ui.pin.base
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
@@ -29,7 +27,6 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
     private var isPasswordMode = true
     private var mPIN: String? = ""
     private var isRightButtonHighLighted = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
@@ -88,8 +85,6 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinEditText.transformationMethod = if (isPasswordMode) PasswordTransformationMethod() else null
         pinEyeImageView.background = if (isPasswordMode) ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye) else ContextCompat.getDrawable(this@BasePinActivity, R.drawable.eye_off)
         pinClickView.contentDescription = if (isPasswordMode) getString(R.string.action_show_pin) else getString(R.string.action_hide_pin)
-
-
     }
 
     private fun hiLightLeftButton(isHiLighted: Boolean) {

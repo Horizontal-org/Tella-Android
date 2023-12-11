@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">پێشکەشکراوە</string>
   <string name="home_expl_cancel.quick.delete">بۆ ڕەتکردنەوە لە هەر شوێنێک پەنجە بنێ</string>
   <string name="recorder_app.bar">تۆمارکەر</string>
-  <string name="collect_app.bar">کۆکردنەوە</string>
   <string name="settings.docu_field_username">ناوی بەکارهێنەر</string>
   <string name="collect.draft_meta_date.updated">نوێکراوەتەوە: %1$s</string>
   <string name="settings.about_app.version">وەشان</string>
@@ -129,8 +128,6 @@
   <string name="collect.blank_expl_no.forms">هیچ فۆرمێک نییە بۆ پیشاندان. پەنجە بنێ بە دوگمەی تازەکردنەوە بۆ ئەوەی بزانیت ئایا فۆرمەکان لەو سێرڤەرانەدا بەردەستن کە تۆ پەیوەندیت پێوە کردووە.</string>
   <string name="settings.camo_heading">ناو و لۆگۆیەکی جیاواز هەڵبژێرە</string>
   <string name="gallery_expl_empty">هیچ فایلێک نییە بۆ پیشاندان. بۆ هاوردەکردنی فایلەکان پەنجە بنێ بە دوگمەی +وە.</string>
-  <string name="collect.help_app.bar">یارمەتی کۆکردنەوە</string>
-  <string name="collect.help_expl_intro">کۆکردنەوە ئامرازێکە بۆ کۆکردنەوەی داتا بە پڕکردنەوەی فۆرم و ڕاپرسی ڕاستەوخۆ لەسەر ئامێرەکەت</string>
   <string name="collect.blank_toast_not.connected">تۆ پەیوەندیت بە ئینتەرنێتەوە نییە. کاتێک پەیوەندییەکەت سازدرایەوە، دووبارە هەوڵ بدەوە</string>
   <string name="settings.gen_crash.reports_action">هاوبەشکردنی ڕاپۆرتەکانی تێکشکان</string>
   <string name="settings.gen_crash.reports_action.expl">ڕاپۆرتەکانی تێکشکان یارمەتیمان دەدەن بۆ باشترکردنی تێلا. ئەوانە بە شێوەیەکی ئۆتۆماتیکی دەنێردرێن و داتاکانی وەک مۆدێلی ئامێر و وەشانی ئەندرۆید لەخۆدەگرێت.</string>
@@ -434,10 +431,6 @@
   <string name="SettingsCamo_EnterLock_Password">بۆ گۆڕینی شێوازی CAMOUFLAGEـەکەت وشەی نهێنی بنووسە</string>
   <string name="settings.gen_select_about">دەربارەی &amp; یارمەتی</string>
   <string name="settings.gen_select_language">زمان</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">فەیلەکە سڕدرایەوە</item>
-    <item quantity="other">%1$d سڕدرانەوە</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">دەرچوون</string>
   <string name="settings.camo_camera4">کامێرا</string>
   <string name="settings.camo_camera3">کامێراپرۆ</string>
@@ -768,4 +761,15 @@
   <string name="action_show_pin">pin پیشاندان بە</string>
   <string name="action_hide_pin">pin بشارەوە</string>
   <string name="action_go_back">بگەڕێوە دواوە</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

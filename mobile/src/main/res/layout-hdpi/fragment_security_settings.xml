@@ -25,90 +25,60 @@
                 android:layout_margin="@dimen/activity_vertical_margin"
                 android:background="@drawable/rounded_light_purple_background"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <RelativeLayout
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/lock_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsLabelText="@string/settings.lang_select_default"
+                    app:settingsTitleText="@string/Settings_Action_SetLock" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/Settings_Action_SetLock"
-                        android:textColor="@color/wa_white" />
-
-                    <TextView
-                        android:id="@+id/lock_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
-
-                <View style="@style/SettingsMainShadowLine" />
-
-                <RelativeLayout
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/lock_timeout_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsLabelText="@string/settings.lang_select_default"
+                    app:settingsTitleText="@string/settings.select_lock_timeout" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.select_lock_timeout"
-                        android:textColor="@color/wa_white" />
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
+                    android:id="@+id/delete_unlock_settings_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="false"
+                    app:settingsLabelText="@string/Settings_Off"
+                    app:settingsTitleText="@string/Settings_Delete_After_Failed_Unlock" />
 
-                    <TextView
-                        android:id="@+id/lock_timeout_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/unlock_remaining_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:explainText="@string/Settings_unlock_screen_instructions"
+                    app:titleText="@string/Settings_show_unlock_attempts_remaining" />
 
-                <View style="@style/SettingsMainShadowLine" />
+            </LinearLayout>
 
-                <RelativeLayout
+            <LinearLayout
+                android:id="@+id/camouflage_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/options_layout">
+
+                <org.hzontal.shared_ui.textviews.InfoSettingsView
                     android:id="@+id/camouflage_settings_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.prot_select_camouflage"
-                        android:textColor="@color/wa_white" />
-
-                    <TextView
-                        android:id="@+id/camouflage_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="center_vertical"
-                        android:text="@string/settings.lang_select_default"
-                        android:textColor="@color/wa_white"
-                        tools:ignore="RelativeOverlap" />
-                </RelativeLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:isBottomLineVisible="false"
+                    app:settingsLabelText="@string/settings.lang_select_default"
+                    app:settingsTitleText="@string/settings.prot_select_camouflage" />
             </LinearLayout>
 
             <LinearLayout
@@ -121,7 +91,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/options_layout">
+                app:layout_constraintTop_toBottomOf="@+id/camouflage_layout">
 
                 <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
                     android:id="@+id/quick_delete_switch"
@@ -262,6 +232,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/delete_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

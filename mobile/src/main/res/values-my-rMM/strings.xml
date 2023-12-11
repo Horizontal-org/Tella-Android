@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">ပေးပို့ပြီးပြီ</string>
   <string name="home_expl_cancel.quick.delete">ပယ်ဖျက်ရန် မည်သည့်နေရာကိုမဆို နှိပ်ပါ</string>
   <string name="recorder_app.bar">အသံဖမ်းစက်</string>
-  <string name="collect_app.bar">စုဆောင်းပါ</string>
   <string name="settings.docu_field_username">အသုံးပြုသူအမည်</string>
   <string name="collect.draft_meta_date.updated">အပ်ဒိတ်လုပ်ထားသည် - %1$s</string>
   <string name="settings.about_app.version">ဗားရှင်း</string>
@@ -126,8 +125,6 @@
   <string name="collect.sent_expl_no.forms">ပြသရန် တင်သွင်းထားသော ပုံစံများ မရှိပါ။</string>
   <string name="collect.blank_expl_no.forms">ပြသရန် ပုံစံများ မရှိပါ။ သင်ချိတ်ဆက်ထားသော ဆာဗာများတွင် ပုံစံများ ရရှိနိုင်ပါက ပြန်လည်ဆန်းသစ်ခလုတ်ကို နှိပ်ပါ။</string>
   <string name="settings.camo_heading">အခြားအမည်နှင့် လိုဂိုကို ရွေးပါ</string>
-  <string name="collect.help_app.bar">အကူအညီကို စုဆောင်းပါ</string>
-  <string name="collect.help_expl_intro">Collect သည် သင့်စက်ပေါ်တွင် ဖောင်များနှင့် စစ်တမ်းများကို တိုက်ရိုက်ဖြည့်ခြင်းဖြင့် ဒေတာစုဆောင်းရန် ကိရိယာတစ်ခု ဖြစ်သည်</string>
   <string name="collect.blank_toast_not.connected">အင်တာနက် ချိတ်ဆက်မှုမရှိပါ။ အင်တာနက်သို့ ချိတ်ဆက်ထားသောအခါတွင် ထပ်စမ်းကြည့်ပါ။</string>
   <string name="settings.gen_crash.reports_action">ပျက်စီးမှု အစီရင်ခံစာများကို မျှဝေပါ</string>
   <string name="settings.gen_crash.reports_action.expl">ပျက်စီးမှုအစီရင်ခံစာများသည် Tella ပိုမိုကောင်းမွန်လာစေရန် ကူညီပေးသည်။ ၎င်းတို့ကို အလိုအလျောက် ပေးပို့ပြီး စက်ပစ္စည်း မော်ဒယ်နှင့် Android ဗားရှင်းကဲ့သို့သော ဒေတာများ ပါဝင်သည်။</string>
@@ -592,4 +589,15 @@
   <string name="action_edit_recording_name">edit recording name</string>
   <string name="action_create_new_folder">create new folder</string>
   <string name="action_quick_delete">quick delete</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

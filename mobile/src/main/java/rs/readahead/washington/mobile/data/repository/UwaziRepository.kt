@@ -33,7 +33,7 @@ class UwaziRepository : IUwaziUserRepository {
             .map {
                 val cookieList: List<String> = it.headers().values("Set-Cookie")
                 var jsessionid = ""
-                if (!cookieList.isNullOrEmpty()) {
+                if (cookieList.isNotEmpty()) {
                     jsessionid = cookieList[0].split(";")[0]
                 }
 

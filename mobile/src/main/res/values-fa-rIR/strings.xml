@@ -43,8 +43,7 @@
   <string name="settings.docu_field_server.url">URL سرور</string>
   <string name="collect.sent_tab.title">ارسال شد</string>
   <string name="home_expl_cancel.quick.delete">برای لغو کردن، روی هر نقطه ای از صفحه ضربه بزنید</string>
-  <string name="recorder_app.bar">ضبط کننده</string>
-  <string name="collect_app.bar">جمع‌آوری</string>
+  <string name="recorder_app.bar">ضبط کننده</string>[
   <string name="settings.docu_field_username">نام کاربری</string>
   <string name="collect.draft_meta_date.updated">به‌روزر رسانی شد: %1$s</string>
   <string name="settings.about_app.version">نسخه</string>
@@ -130,8 +129,6 @@
   <string name="collect.blank_expl_no.forms">فرمی برای نمایش وجود ندارد. برای این که بررسی کنید آیا فرم‌ها در سروری که به آن متصل شده‌اید در دسترس هستند یا خیر، دکمه «تازه سازی» (Refresh) را بزنید.</string>
   <string name="settings.camo_heading">نام و نماد دیگری انتخاب کنید</string>
   <string name="gallery_expl_empty">فایلی برای نمایش وجود ندارد. برای وارد کردن فایل، دکمه + را بزنید.</string>
-  <string name="collect.help_app.bar">راهنمای Collect</string>
-  <string name="collect.help_expl_intro">Collect ابزاری برای جمع‌آوری داده از طریق ارسال مستقیم فایل و پرسش‌نامه بر روی دستگاه شماست</string>
   <string name="collect.blank_toast_not.connected">شما به اینترنت متصل نیستید. پس از ایجاد برقراری اتصال، دوباره امتحان کنید</string>
   <string name="settings.gen_crash.reports_action">به اشتراک‌گذاری گزارش‌های خرابی</string>
   <string name="settings.gen_crash.reports_action.expl">گزارش‌های خرابی به بهبود عملکرد Tella کمک می‌کنند. این گزارش‌ها به‌طور خودکار ارسال می‌شوند و شامل داده‌هایی مانند مدل دستگاه و نسخه اندروید است.</string>
@@ -435,10 +432,6 @@
   <string name="SettingsCamo_EnterLock_Password">برای تغییر دادن روش استتار، گذرواژه را وارد کنید</string>
   <string name="settings.gen_select_about">درباره و راهنما</string>
   <string name="settings.gen_select_language">زبان</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">فایل حذف شد</item>
-    <item quantity="other">%1$d  فایل ها حذف شدند</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">خروج</string>
   <string name="settings.camo_camera4">دوربین</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -771,4 +764,15 @@
   <string name="action_show_pin">نمایش پین</string>
   <string name="action_hide_pin">پنهان کردن پین</string>
   <string name="action_go_back">بازگشت</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

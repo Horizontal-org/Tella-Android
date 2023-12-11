@@ -45,13 +45,13 @@ class ReportSubmittedFragment :
             showFormEndView()
         }
 
-        binding?.toolbar?.backClickListener = {
+        binding.toolbar.backClickListener = {
             nav().popBackStack()
         }
-        binding?.toolbar?.onRightClickListener =
+        binding.toolbar.onRightClickListener =
             { reportInstance?.let { showDeleteBottomSheet(it) } }
 
-        binding?.nextBtn?.hide()
+        binding.nextBtn.hide()
 
     }
 
@@ -76,7 +76,7 @@ class ReportSubmittedFragment :
         }
 
         reportInstance?.let { reportFormInstance ->
-            binding?.nextBtn?.hide()
+            binding.nextBtn.hide()
 
             endView = ReportsFormEndView(
                 activity,
@@ -84,8 +84,8 @@ class ReportSubmittedFragment :
                 reportFormInstance.description
             )
             endView.setInstance(reportFormInstance, false, true)
-            binding?.endViewContainer?.removeAllViews()
-            binding?.endViewContainer?.addView(endView)
+            binding.endViewContainer.removeAllViews()
+            binding.endViewContainer.addView(endView)
             endView.clearPartsProgress(reportFormInstance)
         }
 

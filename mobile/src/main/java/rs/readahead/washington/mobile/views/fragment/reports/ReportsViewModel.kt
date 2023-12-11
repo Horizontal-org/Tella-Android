@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
@@ -20,7 +20,11 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
-import rs.readahead.washington.mobile.domain.usecases.reports.*
+import rs.readahead.washington.mobile.domain.usecases.reports.DeleteReportUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportBundleUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsUseCase
+import rs.readahead.washington.mobile.domain.usecases.reports.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
@@ -52,13 +56,13 @@ class ReportsViewModel @Inject constructor(
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
     private val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
-    private val _onMoreClickedFormInstance = MutableLiveData<ReportInstance>()
+    private val _onMoreClickedFormInstance = SingleLiveEvent<ReportInstance>()
     val onMoreClickedInstance: LiveData<ReportInstance> get() = _onMoreClickedFormInstance
     private val _onOpenClickedFormInstance = MutableLiveData<ReportInstance>()
     val onOpenClickedInstance: LiveData<ReportInstance> get() = _onOpenClickedFormInstance
     private val _instanceDeleted = MutableLiveData<String?>()
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
-    private val _reportInstance = MutableLiveData<ReportInstance>()
+    private val _reportInstance = SingleLiveEvent<ReportInstance>()
     val reportInstance: LiveData<ReportInstance> get() = _reportInstance
     private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
     private val _entityStatus = MutableLiveData<ReportInstance>()

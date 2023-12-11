@@ -40,7 +40,6 @@
   <string name="collect.sent_tab.title">Terkirim</string>
   <string name="home_expl_cancel.quick.delete">Ketuk mana saja untuk membatalkan</string>
   <string name="recorder_app.bar">Recorder</string>
-  <string name="collect_app.bar">Kumpulkan</string>
   <string name="settings.docu_field_username">Nama pengguna</string>
   <string name="collect.draft_meta_date.updated">Diperbarui: %1$s</string>
   <string name="settings.about_app.version">Versi</string>
@@ -118,8 +117,6 @@
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>
-  <string name="collect.help_app.bar">Collect Help</string>
-  <string name="collect.help_expl_intro">Collect is a tool to collect data by filling forms and surveys directly on your device</string>
   <string name="settings.gen_crash.reports_action">Share crash reports</string>
   <string name="settings.gen_crash.reports_action.expl">Crash reports help us improve Tella. They are automatically sent and include data such as device model and Android version.</string>
   <string name="collect.form_dialog.action_add.group">Tambahkan</string>
@@ -378,4 +375,15 @@ connecting to a server</string>
   <string name="settings.camo_weather3">Weather now</string>
   <string name="settings.camo_weather2">Local weather</string>
   <string name="settings.camo_weather1">Weather</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

@@ -17,8 +17,18 @@ public class TellaKeysUI {
     private static UnlockRegistry mUnlockRegistry;
     private static CredentialsCallback mCredentialsCallback;
 
+    private static long mNumFailedAttempts;
+    private static long mRemainingAttempts;
 
-    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder, UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback) {
+    private static boolean misShowRemainingAttempts;
+
+    private TellaKeysUI() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static void initialize(MainKeyStore mainKeyStore, LifecycleMainKey mainKeyHolder,
+                                  UnlockRegistry unlockRegistry, CredentialsCallback credentialsCallback,
+                                  long numFailedAttempts,long remainingAttempts, boolean isShowRemainingAttempts) {
         if (initialized) {
             return;
         }
@@ -26,6 +36,9 @@ public class TellaKeysUI {
         mMainKeyHolder = mainKeyHolder;
         mUnlockRegistry = unlockRegistry;
         mCredentialsCallback = credentialsCallback;
+        mNumFailedAttempts = numFailedAttempts;
+        mRemainingAttempts = remainingAttempts;
+        misShowRemainingAttempts = isShowRemainingAttempts;
         initialized = true;
     }
 
@@ -43,5 +56,29 @@ public class TellaKeysUI {
 
     public static CredentialsCallback getCredentialsCallback() {
         return mCredentialsCallback;
+    }
+
+    public static long getNumFailedAttempts() {
+        return mNumFailedAttempts;
+    }
+
+    public static long setNumFailedAttempts(long numFailedAttempts) {
+        return mNumFailedAttempts = numFailedAttempts;
+    }
+
+    public static void setRemainingAttempts(long remainingAttempts) {
+        mRemainingAttempts = remainingAttempts;
+    }
+
+    public static long getRemainingAttempts() {
+        return mRemainingAttempts;
+    }
+
+    public static boolean isShowRemainingAttempts() {
+        return misShowRemainingAttempts;
+    }
+
+    public static void setIsShowRemainingAttempts(boolean isShowRemainingAttempts) {
+        TellaKeysUI.misShowRemainingAttempts = isShowRemainingAttempts;
     }
 }

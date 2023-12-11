@@ -17,30 +17,42 @@ object VaultSheetUtils {
         fun save()
         fun info()
         fun delete()
+        fun edit()
     }
 
     @JvmStatic
-    fun showVaultActionsSheet(fragmentManager: FragmentManager, titleText: String?, uploadLabel: String, shareLabel: String, moveLabel: String, renameLabel: String, saveLabel: String, infoLabel: String, deleteLabel: String, isDirectory: Boolean = false, isMultipleFiles: Boolean = false, isUploadVisible: Boolean = false, isMoveVisible: Boolean = false, action: IVaultActions) {
+    fun showVaultActionsSheet(fragmentManager: FragmentManager, titleText: String?, uploadLabel: String, shareLabel: String, moveLabel: String, renameLabel: String, saveLabel: String, infoLabel: String, deleteLabel: String, editLabel: String, isDirectory: Boolean = false, isMultipleFiles: Boolean = false, isUploadVisible: Boolean = false, isMoveVisible: Boolean = false, isEditVisible: Boolean = false, action: IVaultActions) {
         val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.vault_actions_sheet_layout).cancellable(true).screenTag("vaultActionSheet")
         vaultActionSheet.holder(VaultActionsSheetHolder(), object : CustomBottomSheetFragment.Binder<VaultActionsSheetHolder> {
             override fun onBind(holder: VaultActionsSheetHolder) {
                 with(holder) {
                     title.text = titleText
                     //Actions visibility
+                    if (!isEditVisible) {
+                        actionEdit.visibility = View.GONE
+                    }
                     if (isDirectory) {
                         seperator.visibility = View.GONE
                         actionShare.visibility = View.GONE
                         actionUpload.visibility = View.GONE
+                        actionEdit.visibility = View.GONE
                     }
                     if (isMultipleFiles) {
                         actionRename.visibility = View.GONE
                         actionInfo.visibility = View.GONE
+                        actionEdit.visibility = View.GONE
                     }
                     //Rename action
                     actionRename.text = renameLabel
                     actionRename.setOnClickListener {
                         vaultActionSheet.dismiss()
                         action.rename()
+                    }
+                    //Edit action
+                    actionEdit.text = editLabel
+                    actionEdit.setOnClickListener {
+                        vaultActionSheet.dismiss()
+                        action.edit()
                     }
                     //Delete action
                     actionDelete.text = deleteLabel
@@ -91,6 +103,7 @@ object VaultSheetUtils {
 
     class VaultActionsSheetHolder : CustomBottomSheetFragment.PageHolder() {
         lateinit var actionRename: TextView
+        lateinit var actionEdit: TextView
         lateinit var actionDelete: TextView
         lateinit var actionUpload: TextView
         lateinit var actionShare: TextView
@@ -102,6 +115,7 @@ object VaultSheetUtils {
 
         override fun bindView(view: View) {
             actionRename = view.findViewById(R.id.renameActionTV)
+            actionEdit = view.findViewById(R.id.editActionTV)
             actionDelete = view.findViewById(R.id.deleteActionTV)
             actionUpload = view.findViewById(R.id.uploadActionTV)
             actionShare = view.findViewById(R.id.shareActionTV)

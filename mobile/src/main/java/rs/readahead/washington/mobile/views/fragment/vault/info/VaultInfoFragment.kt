@@ -8,7 +8,7 @@ import rs.readahead.washington.mobile.databinding.FragmentVaultInfoBinding
 import rs.readahead.washington.mobile.util.DateUtil
 import rs.readahead.washington.mobile.util.FileUtil
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.VAULT_FILE_ARG
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 
 class VaultInfoFragment : BaseBindingFragment<FragmentVaultInfoBinding>(FragmentVaultInfoBinding::inflate) {
 
@@ -34,10 +34,10 @@ class VaultInfoFragment : BaseBindingFragment<FragmentVaultInfoBinding>(Fragment
 
 
     private fun initView() {
-        binding?.toolbar?.backClickListener = {back()}
+        binding.toolbar.backClickListener = {back()}
          arguments?.getSerializable(VAULT_FILE_ARG)?.let {
              (it as VaultFile).run {
-                 binding?.run {
+                 binding.run {
                      fileInfoTv.text = name
                      fileFormatTv.text = mimeType
                      fileCreatedTv.text = DateUtil.getDate(created)
@@ -48,6 +48,6 @@ class VaultInfoFragment : BaseBindingFragment<FragmentVaultInfoBinding>(Fragment
              }
          }
         val isToolbarShown = arguments?.getBoolean(VAULT_FILE_INFO_TOOLBAR) ?: false
-        binding?.toolbar?.isVisible = isToolbarShown
+        binding.toolbar.isVisible = isToolbarShown
     }
 }
