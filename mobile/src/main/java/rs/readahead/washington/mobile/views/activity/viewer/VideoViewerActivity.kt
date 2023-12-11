@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
+//import com.google.android.exoplayer2.SimpleExoPlayer
+
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
@@ -12,7 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -30,10 +32,14 @@ import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import timber.log.Timber
+
 
 @AndroidEntryPoint
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
@@ -65,14 +71,19 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         setContentView(binding.root)
+        // binding.progressBar.show()
         actionsDisabled = intent.hasExtra(NO_ACTIONS)
         initContracts()
         setupToolbar()
         shouldAutoPlay = true
         clearResumePosition()
+        // player.onIsLoadingChanged(Boolean isLoading){
+
+        //}
         simpleExoPlayerView = binding.playerView
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
+
         initObservers()
     }
 
@@ -103,7 +114,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
             // Observer for media file deletion confirmation.
             onMediaFileDeleteConfirmed.observe(this@VideoViewerActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                mediaFileDeletedConfirmation.vaultFile.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
                         deletedVaultFile,
                         mediaFileDeletedConfirmation.showConfirmDelete
@@ -261,14 +272,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
         // Initialize the player if it doesn't exist, otherwise stop the existing player.
         if (player == null) {
-            player = SimpleExoPlayer.Builder(this).build().apply {
+            player = ExoPlayer.Builder(this).build().apply {
                 playWhenReady = shouldAutoPlay
                 simpleExoPlayerView.player = this
             }
         } else {
             player?.stop()
         }
-
+        // player!!.addListener(PlayerEventListener())
         // Apply the resume position if available, set the media source, and prepare the player.
         player?.apply {
             if (haveResumePosition) {
@@ -276,7 +287,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
             setMediaSource(mediaSource, !haveResumePosition)
             prepare()
+
         }
+
+        player!!.addListener(PlayerEventListener())
+        // player.onIsLoadingChanged
 
         // Reset the retry source flag.
         needRetrySource = false
@@ -366,6 +381,21 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                 showMetadata()
                 false
             }
+        }
+    }
+
+    private class PlayerEventListener : Player.Listener {
+        override fun onIsLoadingChanged(isLoading: Boolean) {
+            Timber.d("+++ isloading %s", isLoading)
+            //showLoading(isLoading)
+        }
+    }
+
+    fun showLoading(visible: Boolean) {
+        if (visible) {
+            binding.progressBar.show()
+        } else {
+            binding.progressBar.hide()
         }
     }
 
