@@ -184,6 +184,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         this.servers.addAll(tellaReportServers);
         createServerViews(servers);
         tuServers = tellaReportServers;
+
        /* if (tuServers.size() > 0) {
              binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
@@ -279,6 +280,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+        if (tuServers.size() == 0) {
+            Preferences.setAutoUpload(false);
+            Preferences.setAutoDelete(false);
+        }
+
     }
 
     @Override
