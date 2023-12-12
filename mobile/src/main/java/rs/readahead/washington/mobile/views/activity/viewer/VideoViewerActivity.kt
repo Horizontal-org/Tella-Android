@@ -38,7 +38,6 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -69,17 +68,14 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
+        binding.progressBar.show()
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         setContentView(binding.root)
-        // binding.progressBar.show()
         actionsDisabled = intent.hasExtra(NO_ACTIONS)
         initContracts()
         setupToolbar()
         shouldAutoPlay = true
         clearResumePosition()
-        // player.onIsLoadingChanged(Boolean isLoading){
-
-        //}
         simpleExoPlayerView = binding.playerView
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
@@ -175,6 +171,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
     override fun onDestroy() {
+        binding.progressBar.hide()
         alertDialog?.takeIf { it.isShowing }?.dismiss()
         hideProgressDialog()
         super.onDestroy()
@@ -279,7 +276,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         } else {
             player?.stop()
         }
-        // player!!.addListener(PlayerEventListener())
         // Apply the resume position if available, set the media source, and prepare the player.
         player?.apply {
             if (haveResumePosition) {
@@ -287,11 +283,9 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
             setMediaSource(mediaSource, !haveResumePosition)
             prepare()
-
         }
 
-        player!!.addListener(PlayerEventListener())
-        // player.onIsLoadingChanged
+        player?.addListener(PlayerEventListener(binding.progressBar))
 
         // Reset the retry source flag.
         needRetrySource = false
@@ -384,18 +378,12 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
-    private class PlayerEventListener : Player.Listener {
-        override fun onIsLoadingChanged(isLoading: Boolean) {
-            Timber.d("+++ isloading %s", isLoading)
-            //showLoading(isLoading)
-        }
-    }
-
-    fun showLoading(visible: Boolean) {
-        if (visible) {
-            binding.progressBar.show()
-        } else {
-            binding.progressBar.hide()
+    /**
+     * Listener which hides the loading wheel when the video starts
+     */
+    private class PlayerEventListener(val loaderWheel: View) : Player.Listener {
+        override fun onRenderedFirstFrame() {
+            loaderWheel.hide()
         }
     }
 
