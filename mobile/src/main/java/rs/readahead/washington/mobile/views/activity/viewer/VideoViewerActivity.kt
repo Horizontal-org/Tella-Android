@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
-//import com.google.android.exoplayer2.SimpleExoPlayer
-
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
@@ -9,7 +7,6 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
@@ -53,7 +50,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private var resumePosition: Long = 0
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
-    private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var isInfoShown = false
     private val viewModel: SharedMediaFileViewModel by viewModels()
@@ -172,7 +168,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
     override fun onDestroy() {
         binding.progressBar.hide()
-        alertDialog?.takeIf { it.isShowing }?.dismiss()
         hideProgressDialog()
         super.onDestroy()
     }
@@ -322,7 +317,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         toolbar = binding.playerToolbar
 
         // Set up the navigation icon and its onClickListener to handle back navigation.
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationIcon(R.drawable.ic_back_white)
+        toolbar.setTitleTextColor(resources.getColor(R.color.wa_white))
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         // If actions are not disabled, inflate the menu and set up the menu item click listener.
