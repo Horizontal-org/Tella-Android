@@ -51,7 +51,7 @@ class SendFeedbackFragment :
      */
     private fun initViews() {
         setupFeedbackSwitchView()
-        KeyboardUtil(activity, view)
+        KeyboardUtil.hideKeyboard(baseActivity, binding.root)
         (activity as SettingsActivity).toolbar.setStartTextTitle(getString(R.string.feedback_title))
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
@@ -233,15 +233,13 @@ class SendFeedbackFragment :
      * Displays a bottom message with a thank you message for successful feedback submission.
      */
     private fun onFeedbackSubmittedSuccess() {
-        activity?.let {
-            // Show a bottom message with success message
-            DialogUtils.showBottomMessage(
-                it,
-                getString(R.string.thanks_for_your_feedback),
-                false,
-                4000
-            )
-        }
+        // Show a bottom message with success message
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.thanks_for_your_feedback),
+            false,
+            4000
+        )
     }
 
     /**

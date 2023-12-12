@@ -83,36 +83,36 @@ class LoginFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            twoFactorAuthentication.observe(viewLifecycleOwner, {
-                KeyboardUtil.hideKeyboard(baseActivity)
+            twoFactorAuthentication.observe(viewLifecycleOwner) {
+                KeyboardUtil.hideKeyboard(baseActivity, binding.root)
                 baseActivity.addFragment(
                     TwoFactorAuthenticationFragment.newInstance(
                         serverUwazi,
                         isUpdate
                     ), R.id.container
                 )
-            })
+            }
 
-            authenticationError.observe(viewLifecycleOwner, { error ->
+            authenticationError.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     binding.passwordLayout.error =
                         getString(R.string.settings_docu_error_wrong_credentials)
                 }
-            })
+            }
 
-            authenticationSuccess.observe(viewLifecycleOwner, { isSuccess ->
+            authenticationSuccess.observe(viewLifecycleOwner) { isSuccess ->
                 if (isSuccess) {
-                    KeyboardUtil.hideKeyboard(baseActivity)
+                    KeyboardUtil.hideKeyboard(baseActivity, binding.root)
                     baseActivity.addFragment(
                         LanguageFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
                 }
-            })
+            }
 
-            progress.observe(viewLifecycleOwner,{
+            progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
-            })
+            }
         }
         binding.backBtn.setOnClickListener {
             baseActivity.supportFragmentManager.popBackStack()

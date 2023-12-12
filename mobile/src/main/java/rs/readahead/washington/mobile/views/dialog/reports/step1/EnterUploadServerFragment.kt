@@ -90,7 +90,7 @@ class EnterUploadServerFragment : BaseFragment() {
                     false
                 )
             } else {
-                KeyboardUtil.hideKeyboard(activity)
+                KeyboardUtil.hideKeyboard(baseActivity,view)
                 baseActivity.addFragment(
                     LoginReportsFragment.newInstance(
                         serverReports,

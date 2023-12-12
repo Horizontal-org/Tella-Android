@@ -1,80 +1,62 @@
-/*
- * Copyright 2015 Mike Penz All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.hzontal.shared_ui.bottomsheet;
 
 import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.Objects;
+
 public class KeyboardUtil {
-    private final View decorView;
+
     private final View contentView;
+    private final ViewGroup.LayoutParams params;
+    private final int initialHeight;
+    private boolean isKeyboardOpen = false;
 
-    public KeyboardUtil(Activity act, View contentView) {
-        this.decorView = act.getWindow().getDecorView();
-        this.contentView = contentView;
+    private static final double KEYBOARD_HEIGHT_THRESHOLD_RATIO = 0.15;
 
-        //only required on newer android versions. it was working on API level 19
-        decorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
+    public KeyboardUtil(final View contentView) {
+        this.contentView = Objects.requireNonNull(contentView);
+        this.params = contentView.getLayoutParams();
+        this.initialHeight = params.height;
 
-    public void enable() {
-        decorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
-
-    public void disable() {
-        decorView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
-
-
-    //a small helper to allow showing the editText focus
-    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-        @Override
-        public void onGlobalLayout() {
+        contentView.getViewTreeObserver().addOnPreDrawListener(() -> {
             Rect r = new Rect();
-            decorView.getWindowVisibleDisplayFrame(r);
+            contentView.getWindowVisibleDisplayFrame(r);
 
-            int screenHeight = decorView.getContext().getResources().getDisplayMetrics().heightPixels;
+            int screenHeight = contentView.getContext().getResources().getDisplayMetrics().heightPixels;
 
-            int keyboardHeight = screenHeight - r.bottom;
+            int keypadHeight = screenHeight - r.bottom;
 
-            int bottomPadding = keyboardHeight > 0 ? keyboardHeight : (int) (10 * decorView.getContext().getResources().getDisplayMetrics().density + 0.5f);
+            if (keypadHeight > screenHeight * KEYBOARD_HEIGHT_THRESHOLD_RATIO) {
+                if (!isKeyboardOpen) {
+                    isKeyboardOpen = true;
+                    adjustViewForKeyboard(true, 0);
+                }
+            } else {
+                if (isKeyboardOpen) {
+                    isKeyboardOpen = false;
+                    adjustViewForKeyboard(false, 0);
+                }
+            }
 
-            contentView.setPadding(
-                    contentView.getPaddingLeft(),
-                    contentView.getPaddingTop(),
-                    contentView.getPaddingRight(),
-                    bottomPadding
-            );
+            return true;
+        });
+    }
+
+    private void adjustViewForKeyboard(boolean keyboardOpen, int keypadHeight) {
+        if (keyboardOpen) {
+            params.height = initialHeight + keypadHeight;
+        } else {
+            params.height = initialHeight;
         }
-    };
+        contentView.setLayoutParams(params);
+    }
 
-
-    /**
-     * Helper to hide the keyboard
-     *
-     * @param act
-     */
-    public static void hideKeyboard(Activity act) {
-        if (act != null && act.getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) act.getSystemService(Activity.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(), 0);
-        }
+    public static void hideKeyboard(Activity activity, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

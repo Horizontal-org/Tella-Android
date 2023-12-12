@@ -1,5 +1,6 @@
 package org.hzontal.shared_ui.bottomsheet
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
@@ -20,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import java.util.*
+
 
 class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -219,7 +221,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        KeyboardUtil(activity, view)
+        KeyboardUtil(view)
     }
 
     private fun configBackPressCallback() {
@@ -257,6 +259,15 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         return dialog
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun setupDialog(dialog: Dialog, style: Int) {
+        super.setupDialog(dialog, style)
+        val contentView = View.inflate(context, layoutRes, null)
+        dialog.setContentView(contentView)
+        (dialog as BottomSheetDialog).behavior.peekHeight =
+            resources.displayMetrics.heightPixels
     }
 
     interface Binder<T : PageHolder> {
