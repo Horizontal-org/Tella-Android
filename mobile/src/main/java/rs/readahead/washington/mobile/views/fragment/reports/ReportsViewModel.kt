@@ -52,9 +52,9 @@ class ReportsViewModel @Inject constructor(
     val error: LiveData<Throwable> get() = _error
     private val _draftListReportFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
-    private val _outboxReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
+    private val _outboxReportListFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
-    private val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
+    private val _submittedReportListFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
     val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
     private val _onMoreClickedFormInstance = SingleLiveEvent<ReportInstance>()
     val onMoreClickedInstance: LiveData<ReportInstance> get() = _onMoreClickedFormInstance
@@ -64,9 +64,8 @@ class ReportsViewModel @Inject constructor(
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
     private val _reportInstance = SingleLiveEvent<ReportInstance>()
     val reportInstance: LiveData<ReportInstance> get() = _reportInstance
-    private val _progressInfo = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
+
     private val _entityStatus = MutableLiveData<ReportInstance>()
-    val entityStatus: LiveData<ReportInstance> get() = _entityStatus
     private val _exitAfterSave = MutableLiveData<Boolean>()
     val exitAfterSave: LiveData<Boolean> get() = _exitAfterSave
 
@@ -330,7 +329,7 @@ class ReportsViewModel @Inject constructor(
         })
     }
 
-    fun submitReport(instance: ReportInstance,backButtonPressed: Boolean) {
+    fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
             reportsRepository.submitReport(
