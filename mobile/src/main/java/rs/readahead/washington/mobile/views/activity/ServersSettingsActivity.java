@@ -205,15 +205,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         tuServers.add(server);
         saveAutoUploadServer(server);
-       /* if (tuServers.size() == 1) {
-            binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
-            setupAutoUploadSwitch();
-        }
-
-        if (tuServers.size()== 1) {
-            binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
-        }*/
-
+        Preferences.setAutoUpload(isAutoUploadEnabled(servers));
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 

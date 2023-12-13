@@ -49,7 +49,7 @@ class SuccessfulSetServerFragment :
     }
 
     private fun initListeners() {
-        binding?.okBtn?.setOnClickListener {
+        binding.okBtn.setOnClickListener {
             save(server)
         }
 

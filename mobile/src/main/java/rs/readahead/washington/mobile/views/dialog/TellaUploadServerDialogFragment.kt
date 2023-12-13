@@ -72,7 +72,7 @@ class TellaUploadServerDialogFragment : AppCompatDialogFragment(), ICheckTUSServ
         if (dialog == null) {
             return
         }
-        dialog!!.window!!.setWindowAnimations(
+        dialog?.window?.setWindowAnimations(
             R.style.CollectDialogAnimation
         )
         super.onStart()
