@@ -50,17 +50,17 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     }
 
     private fun initListeners() {
-        binding?.goToAdvancedSettingsBtn?.setOnClickListener {
-            binding?.goToAdvancedSettingsBtn?.isChecked = true
-            binding?.goToReportsBtn?.isChecked = false
+        binding.goToAdvancedSettingsBtn.setOnClickListener {
+            binding.goToAdvancedSettingsBtn.isChecked = true
+            binding.goToReportsBtn.isChecked = false
             baseActivity.addFragment(
                 ServerAdvancedSettingsFragment.newInstance(server), R.id.container
             )
         }
 
-        binding?.goToReportsBtn?.setOnClickListener {
-            binding?.goToAdvancedSettingsBtn?.isChecked = false
-            binding?.goToReportsBtn?.isChecked = true
+        binding.goToReportsBtn.setOnClickListener {
+            binding.goToAdvancedSettingsBtn.isChecked = false
+            binding.goToReportsBtn.isChecked = true
             saveServerAndGoToReportsScreen()
         }
     }
