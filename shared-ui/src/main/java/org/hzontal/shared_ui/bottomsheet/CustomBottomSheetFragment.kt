@@ -1,6 +1,5 @@
 package org.hzontal.shared_ui.bottomsheet
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.graphics.Color
@@ -228,6 +227,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 backClickListener?.invoke()
+                dismiss() // Dismiss the bottom sheet when back is pressed
                 return@OnKeyListener true
             }
             false
@@ -261,14 +261,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         return dialog
     }
 
-    @SuppressLint("RestrictedApi")
-    override fun setupDialog(dialog: Dialog, style: Int) {
-        super.setupDialog(dialog, style)
-        val contentView = View.inflate(context, layoutRes, null)
-        dialog.setContentView(contentView)
-        (dialog as BottomSheetDialog).behavior.peekHeight =
-            resources.displayMetrics.heightPixels
-    }
 
     interface Binder<T : PageHolder> {
         fun onBind(holder: T)
