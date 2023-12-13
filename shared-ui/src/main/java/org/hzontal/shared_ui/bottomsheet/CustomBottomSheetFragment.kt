@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import java.util.*
 
+
 class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
     @LayoutRes
@@ -219,13 +220,14 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        KeyboardUtil(activity, view)
+        KeyboardUtil(view)
     }
 
     private fun configBackPressCallback() {
         dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 backClickListener?.invoke()
+                dismiss() // Dismiss the bottom sheet when back is pressed
                 return@OnKeyListener true
             }
             false
@@ -258,6 +260,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
         return dialog
     }
+
 
     interface Binder<T : PageHolder> {
         fun onBind(holder: T)
