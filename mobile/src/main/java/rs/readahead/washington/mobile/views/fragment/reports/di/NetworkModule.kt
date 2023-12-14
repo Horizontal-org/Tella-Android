@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import rs.readahead.washington.mobile.BuildConfig
+import rs.readahead.washington.mobile.data.feedback.remote.FeedbackApiService
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService.Companion.BASE_URL
 import rs.readahead.washington.mobile.data.uwazi.UvCookieJar
@@ -28,7 +29,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesApiService(retrofit: Retrofit): ReportsApiService =
-        retrofit.create(ReportsApiService::class.java)
+            retrofit.create(ReportsApiService::class.java)
 
     @Provides
     fun providesOkHttpClient(): OkHttpClient {

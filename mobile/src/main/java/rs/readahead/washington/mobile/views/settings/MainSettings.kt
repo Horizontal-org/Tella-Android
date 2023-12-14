@@ -1,50 +1,59 @@
 package rs.readahead.washington.mobile.views.settings
 
 import android.os.Bundle
-import android.view.*
+import android.view.View
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.R.*
+import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.databinding.FragmentMainSettingsBinding
-import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class MainSettings : BaseBindingFragment<FragmentMainSettingsBinding>(
-    FragmentMainSettingsBinding::inflate
-) {
+class MainSettings :
+    BaseBindingFragment<FragmentMainSettingsBinding>(FragmentMainSettingsBinding::inflate),
+    View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
 
-    private fun initView() {
+    fun initView(view: View) {
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
+        initListeners()
+    }
 
-        binding.generalSettingsButton.setOnClickListener {
-            nav().navigate(R.id.action_main_to_general_settings)
-        }
+    private fun initListeners() {
+        binding.generalSettingsButton.setOnClickListener(this)
+        binding.securitySettingsButton.setOnClickListener(this)
+        binding.serversSettingsButton.setOnClickListener(this)
+        binding.aboutNHelpSettingsButton.setOnClickListener(this)
+        binding.feedbackButton.setOnClickListener(this)
+    }
 
-        binding.securitySettingsButton.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_security_settings)
-        }
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.general_settings_button -> {
+                nav().navigate(R.id.action_main_to_general_settings)
+            }
 
-        binding.serversSettingsButton.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_servers_settings)
-        }
+            R.id.security_settings_button -> {
+                nav().navigate(R.id.action_main_settings_to_security_settings)
+            }
 
-        binding.aboutNHelpSettingsButton.setOnClickListener {
-            nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
+            R.id.servers_settings_button -> {
+                nav().navigate(R.id.action_main_settings_to_servers_settings)
+            }
+
+            R.id.about_n_help_settings_button -> {
+                nav().navigate(R.id.action_main_settings_to_about_n_help_settings)
+            }
+
+            R.id.feedback_button -> {
+                nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
+            }
         }
 
         binding.toolbar.backClickListener = { back() }
 
         setUpToolbar()
     }
-
-
-    private fun setUpToolbar() {
-        val activity = context as MainActivity
-        activity.setSupportActionBar(binding.toolbar)
-    }
-
 }

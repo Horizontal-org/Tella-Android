@@ -30,7 +30,6 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
     private CompositeDisposable disposable;
     private final KeyDataSource keyDataSource;
 
-
     public HomeScreenPresenter(IHomeScreenPresenterContract.IView view) {
         this.view = view;
         appContext = view.getContext().getApplicationContext();

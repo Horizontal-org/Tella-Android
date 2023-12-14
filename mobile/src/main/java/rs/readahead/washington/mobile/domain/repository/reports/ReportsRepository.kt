@@ -1,10 +1,10 @@
 package rs.readahead.washington.mobile.domain.repository.reports
 
-import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -44,9 +44,9 @@ interface ReportsRepository {
 
     fun getDisposable(): CompositeDisposable
 
-    fun getReportProgress(): MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>
+    fun getReportProgress(): SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
 
-    fun geInstanceProgress(): MutableLiveData<ReportInstance>
+    fun geInstanceProgress(): SingleLiveEvent<ReportInstance>
 
     fun cleanup()
 }

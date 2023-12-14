@@ -50,7 +50,7 @@ class HideTella : BaseFragment() {
             hideNotPossible.setOnClickListener {
                 baseActivity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
             }
-            btnTwoLabel.setAlpha(0.38f)
+            btnTwoLabel.setAlpha(0.65f)
             btnTwo.setClickable(false)
             btnTwo.setOnClickListener { }
         } else {

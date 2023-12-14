@@ -6,7 +6,11 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -20,6 +24,9 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import java.util.concurrent.atomic.AtomicInteger
 
 object BottomSheetUtils {
+
+    const val LONG_TIMEOUT: Long = 3000
+    const val SHORT_TIMEOUT: Long = 1500
 
     @JvmStatic
     fun showStandardSheet(
@@ -615,7 +622,7 @@ object BottomSheetUtils {
                         Handler().postDelayed({
                             consumer.accept(isConfirmed = true)
                             //customSheetFragment2.dismiss()
-                        }, 3000)
+                        }, LONG_TIMEOUT)
 
                     }
                 }
@@ -672,7 +679,8 @@ object BottomSheetUtils {
         timeoutTitleText: String?,
         timeoutTitleDesc: String?,
         confirmDrawable: Drawable? = null,
-        consumer: ActionConfirmed
+        consumer: ActionConfirmed,
+        timeout: Long
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -691,7 +699,8 @@ object BottomSheetUtils {
 
                         Handler().postDelayed({
                             consumer.accept(isConfirmed = true)
-                        }, 3000)
+                            customSheetFragment.dismiss()
+                        }, timeout)
 
                     }
                 }
@@ -701,7 +710,6 @@ object BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
-
 
     @JvmStatic
     fun showChooseAutoUploadServerSheet(

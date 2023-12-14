@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SharedPrefs {
     public static final String NONE = "";
-
+    public static final String FEEDBACK_SHARING_ENBALED = "feedback_sharing_enabled";
     private static final String SHARED_PREFS_NAME = "washington_shared_prefs";
 
     static final String SECRET_PASSWORD = "secret_password";
@@ -69,6 +69,8 @@ public class SharedPrefs {
     static final String TEMP_TIMEOUT = "temp_timeout";
     static final String EXIT_TIMEOUT = "exit_timeout";
     static final String JAVAROSA_3_UPGRADE = "javarosa_3_upgrade";
+    static final String TEXT_JUSTIFICATION = "text_justification";
+    static final String TEXT_SPACING = "text_spacing";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

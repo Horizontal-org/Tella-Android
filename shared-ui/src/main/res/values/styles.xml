@@ -142,6 +142,7 @@
         <item name="indicatorColor">@color/tigers_eye</item>
         <item name="trackThickness">4dp</item>
     </style>
+
     <style name="Unlock_White_Text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -152,10 +153,12 @@
         <item name="android:textStyle">normal</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="Unlock_White_Text_Back" parent="Unlock_White_Text">
         <item name="android:layout_marginBottom">18dp</item>
         <item name="android:layout_marginStart">34dp</item>
     </style>
+
     <style name="Unlock_White_Text_Pin" parent="Unlock_White_Text_Back">
         <item name="android:layout_width">54dp</item>
         <item name="android:layout_height">54dp</item>
@@ -166,10 +169,12 @@
         <item name="android:clickable">true</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
+
     <style name="Calculator_Light_Keys" parent="Calculator_Keys">
         <item name="android:background">@drawable/rounded_light_button_background</item>
         <item name="android:textColor">@color/wa_dark_gray</item>
     </style>
+
     <style name="Calculator_Keys">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>
@@ -180,14 +185,17 @@
         <item name="android:fontFamily">@font/open_sans</item>
         <item name="android:clickable">true</item>
     </style>
+
     <style name="Calculator_Dark_Green_Keys" parent="Calculator_Keys">
         <item name="android:background">@drawable/rounded_dark_green_button_background</item>
         <item name="android:textColor">@color/wa_white</item>
     </style>
+
     <style name="Calculator_Gray_Keys" parent="Calculator_Keys">
         <item name="android:background">@drawable/rounded_gray_button_background</item>
         <item name="android:textColor">@color/wa_white</item>
     </style>
+
     <style name="Calculator_Green_Keys" parent="Calculator_Keys">
         <item name="android:background">@drawable/rounded_light_green_button_background</item>
         <item name="android:textColor">@color/wa_black</item>
@@ -210,6 +218,31 @@
     <style name="TopSheetAnimation" parent="android:Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_top</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_top</item>
+    </style>
+
+
+    <style name="MainEditTextStyle">
+        <item name="android:background">@drawable/bg_edittext</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textColorHint">@color/wa_white</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/default_edittext_layout_height</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
+    </style>
+
+    <style name="TextInputLayoutDescriptionStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/wa_white</item>
+        <item name="boxStrokeColor">@color/edit_text_box_border</item>
+        <item name="hintTextColor">@color/wa_white</item>
     </style>
 
 </resources>

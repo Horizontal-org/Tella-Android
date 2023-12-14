@@ -240,7 +240,7 @@
                 android:text="@string/action_save"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/wa_white"
+                android:textColor="@color/btn_dark_letter"
                 android:textSize="17sp" />
         </LinearLayout>
     </LinearLayout>

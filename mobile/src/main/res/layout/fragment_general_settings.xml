@@ -40,6 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
+
                         android:gravity="center_vertical"
                         android:text="@string/settings.lang_app.bar"
                         android:textColor="@color/wa_white" />
@@ -120,6 +121,7 @@
                 app:titleText="@string/settings.docu_verification_action" />
 
             <LinearLayout
+                android:id="@+id/favorites"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_vertical_margin"
@@ -151,6 +153,31 @@
                     android:layout_height="wrap_content"
                     app:explainText="@string/Uwazi_General_Favorite_Template_Switch_Expl"
                     app:titleText="@string/Uwazi_General_Favorite_Template_Switch_Title" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:background="@drawable/rounded_light_purple_background"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/favorites">
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/text_justification_Switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/Settings_General_TextJustificationExpl"
+                    app:titleText="@string/Settings_General_TextJustificationTitle" />
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/text_spacing_Switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:explainText="@string/Settings_General_TextSpacingExpl"
+                    app:titleText="@string/Settings_General_TextSpacingTitle" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

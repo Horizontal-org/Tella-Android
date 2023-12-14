@@ -219,13 +219,14 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        KeyboardUtil(activity, view)
+        KeyboardUtil(view)
     }
 
     private fun configBackPressCallback() {
         dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 backClickListener?.invoke()
+                dismiss() // Dismiss the bottom sheet when back is pressed
                 return@OnKeyListener true
             }
             false

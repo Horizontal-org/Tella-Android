@@ -18,6 +18,7 @@
         <attr name="text" format="reference|string" />
         <attr name="check_state" format="boolean" />
         <attr name="tint_color" format="color|reference" />
+        <attr name="text_color" format="color|reference" />
     </declare-styleable>
 
 

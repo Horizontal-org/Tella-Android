@@ -11,7 +11,6 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.core.content.ContextCompat;
 
-import org.hzontal.shared_ui.utils.DialogUtils;
 import com.hzontal.tella_locking_ui.R;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetConfirmActivity;
 
@@ -20,6 +19,8 @@ import java.util.List;
 
 import static com.hzontal.tella_locking_ui.ConstantsKt.FINISH_ACTIVITY_REQUEST_CODE;
 import static com.hzontal.tella_locking_ui.ConstantsKt.IS_FROM_SETTINGS;
+
+import org.hzontal.shared_ui.utils.DialogUtils;
 
 
 /*
