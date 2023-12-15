@@ -5,23 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_purple"
-    android:fitsSystemWindows="true"
     android:textDirection="locale"
     android:theme="@style/Theme.MaterialComponents.Bridge"
     tools:context=".views.fragment.feedback.SendFeedbackFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:background="@color/wa_purple"
-        android:fillViewport="true"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="100dp"
+        android:background="@color/wa_purple"
         android:clipToPadding="false"
+        android:fillViewport="true"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_view"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginTop="48dp"
+                android:layout_marginBottom="100dp"
                 app:hintAnimationEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,19 +128,30 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/send_feedback_btn"
-        style="@style/Submit_Text_Button"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="@dimen/activity_horizontal_large_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
-        android:layout_marginBottom="18dp"
-        android:background="@drawable/action_button_background"
-        android:text="@string/collect.end_action_submit"
-        android:textStyle="bold"
+    <RelativeLayout
+        android:id="@+id/bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/wa_purple"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/send_feedback_btn"
+            style="@style/Submit_Text_Button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/activity_horizontal_large_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/action_button_background"
+            android:text="@string/collect.end_action_submit"
+            android:textColor="@color/btn_dark_letter"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
