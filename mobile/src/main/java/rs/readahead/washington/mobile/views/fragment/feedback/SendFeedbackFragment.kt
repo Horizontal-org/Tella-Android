@@ -14,6 +14,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import com.hzontal.utils.Util
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
@@ -26,6 +27,7 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
 import rs.readahead.washington.mobile.util.jobs.WorkerSendFeedBack
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightContributeFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -83,7 +85,9 @@ class SendFeedbackFragment :
                     viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
                 }
             }
-
+        }
+        binding.feedbackSwitch.setTextAndAction(R.string.action_learn_more) {
+            Util.startBrowserIntent(requireContext(), getString(R.string.config_feedback_url))
         }
         // Set up the toolbar icons
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
