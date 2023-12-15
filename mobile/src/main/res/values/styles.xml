@@ -278,7 +278,7 @@
     <style name="ExplanatoryEmptyMessage" parent="@style/TopExplanatoryLayout">
         <item name="android:textSize">18sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/wa_dark_gray</item>
+        <item name="android:textColor">@color/wa_white_50</item>
     </style>
 
     <style name="TopExplanatoryLayout">
