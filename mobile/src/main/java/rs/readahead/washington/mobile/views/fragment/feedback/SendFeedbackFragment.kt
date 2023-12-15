@@ -292,7 +292,7 @@ class SendFeedbackFragment :
                     // Check if the work has succeeded
                     if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
                         // Show a success message with a duration of 4000 milliseconds (4 seconds)
-                        activity?.let {
+                        baseActivity.let {
                             DialogUtils.showBottomMessage(
                                 it,
                                 getString(R.string.feedback_sent_msg),
