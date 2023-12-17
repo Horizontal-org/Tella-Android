@@ -123,7 +123,6 @@
   <string name="settings.docu_verification_action.expl">بە کۆکردنەوەی زانیاری دەربارەی ئامێرەکەت و شوێنەکەت فایلە میدیاییەکانت سەلمێندراو دەبن.</string>
   <string name="collect_no.form_heading">کۆکردنەوەیی ئاسانی داتا</string>
   <string name="collect_expl_not.connected.to.server">بۆ وەرگرتنی فۆرمەکان و پێشکەشکردنی داتا، پێویستە سەرەتا پەیوەندی بکەیت بە سێرڤەرێکی گونجاوەوە. داوا لە ڕێکخراوەکەت بکە بۆ زانیاری سێرڤەرەکە و <a href="tella_scheme://open.collect.manage.servers.activity">لێرە سێرڤەرەکە دابمەزرێنە</a>.</string>
-  <string name="collect.draft_expl_no.forms">هیچ فۆرمێکی ڕەشنووس نییە بۆ پیشاندان.</string>
   <string name="collect.sent_expl_no.forms">هیچ فۆرمێکی پێشکەشکراو نییە بۆ پیشاندان.</string>
   <string name="collect.blank_expl_no.forms">هیچ فۆرمێک نییە بۆ پیشاندان. پەنجە بنێ بە دوگمەی تازەکردنەوە بۆ ئەوەی بزانیت ئایا فۆرمەکان لەو سێرڤەرانەدا بەردەستن کە تۆ پەیوەندیت پێوە کردووە.</string>
   <string name="settings.camo_heading">ناو و لۆگۆیەکی جیاواز هەڵبژێرە</string>

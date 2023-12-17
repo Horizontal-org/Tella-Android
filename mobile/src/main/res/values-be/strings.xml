@@ -113,7 +113,6 @@
   <string name="settings.docu_verification_action.expl">Зрабіць вашыя медыя-файлы праверанымі, збіраючы інфармацыю пра прыладу і месцазнаходжанне.</string>
   <string name="collect_no.form_heading">Лёгкі збор дадзеных</string>
   <string name="collect_expl_not.connected.to.server">Каб атрымліваць формы і адпраўляць дадзеныя, неабходна спачатку падключыцца да сумяшчальнага сервера. Запытайце ў вашай спонсарскай арганізацыі інфармацыю аб серверы і <a href="tella_scheme://open.collect.manage.servers.activity"> наладзьце сервер тут </a> .</string>
-  <string name="collect.draft_expl_no.forms">Няма праектаў формаў для паказу</string>
   <string name="collect.sent_expl_no.forms">Няма адпраўленых формаў для паказу</string>
   <string name="collect.blank_expl_no.forms">Няма формаў для паказу. Націсніце кнопку абнаўлення, каб праверыць наяўнасць пустых формаў на серверах, да якіх вы падлучаныя.</string>
   <string name="settings.camo_heading">Абярыце іншае імя і лагатып</string>

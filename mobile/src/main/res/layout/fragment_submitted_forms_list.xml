@@ -15,12 +15,27 @@
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/blank_submitted_forms_info"
-        style="@style/ExplanatoryEmptyMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="top"
-        android:text="@string/collect.sent_expl_no.forms"
-        android:visibility="gone"/>
+        android:layout_marginTop="@dimen/activity_horizontal_larger_margin"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            style="@style/ExplanatoryEmptyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/collect.sent_expl_no.forms"
+            android:src="@drawable/odk_empty_icon" />
+
+        <TextView
+            style="@style/ExplanatoryEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/collect.sent_expl_no.forms" />
+    </LinearLayout>
 </RelativeLayout>

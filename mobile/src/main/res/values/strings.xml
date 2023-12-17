@@ -124,7 +124,6 @@ mode activation</string>
   <string name="settings.docu_verification_action.expl">Makes your media files verifiable by collecting information about your device and location.</string>
   <string name="collect_no.form_heading">Easy data collection</string>
   <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
-  <string name="collect.draft_expl_no.forms">There are no draft forms to display.</string>
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>
@@ -217,8 +216,6 @@ mode activation</string>
   <string name="collect_toast_form.saved.for.later.submission">Form saved for later submission</string>
   <string name="collect.blank_action_unpin">Unpin from the top</string>
   <string name="collect.blank_action_pin">Pin to the top</string>
-  <string name="collect.blank_subheading_forms.on.servers">Forms available on server</string>
-  <string name="collect.blank_subheading_downloaded.forms">Downloaded forms</string>
   <string name="verification.prompt_dialog.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the position of your evidence.</string>
   <string name="verification.prompt_action_ignore">Ignore</string>
   <string name="verification.prompt_action_enable.GPS">Turn on GPS</string>
@@ -848,6 +845,8 @@ they are uploaded to this project as a report.</string>
   <string name="feedback_title">Feedback</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
-  <string name="Forms_NoOutboxforms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
-  <string name="Forms_NoDraftforms">You have no draft forms.</string>
+  <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
+  <string name="Forms_NoDraftForms">You have no draft forms.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
 </resources>

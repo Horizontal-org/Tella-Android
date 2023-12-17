@@ -19,12 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/light_yellow"
-            android:padding="16dp"
             android:text="@string/collect.blank_banner_forms.updated"
+            android:padding="16dp"
             android:textAlignment="center"
             android:textColor="@color/wa_gray"
-            android:textSize="14sp"
             android:textStyle="bold"
+            android:textSize="14sp"
             android:visibility="visible" />
 
         <ScrollView
@@ -48,9 +48,9 @@
                     android:layout_height="50dp"
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
-                    android:text="@string/collect.blank_subheading_downloaded.forms"
+                    android:text="@string/Forms_BlankSubheadingDownloadedForms"
                     android:textAlignment="center"
-                    android:textColor="@color/wa_gray"
+                    android:textColor="@color/wa_white_80"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -60,11 +60,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/downloaded_forms_title"
-                    android:background="@color/space_cadet"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:scrollbarStyle="outsideOverlay"
                     android:scrollbars="vertical"
+                    android:background="@color/space_cadet"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                 <TextView
@@ -73,9 +73,9 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/downloadedForms"
                     android:gravity="center_vertical"
-                    android:text="@string/collect.blank_subheading_forms.on.servers"
+                    android:text="@string/Forms_BlankSubheadingFormsOnServers"
                     android:textAlignment="center"
-                    android:textColor="@color/wa_gray"
+                    android:textColor="@color/wa_white_80"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -96,28 +96,14 @@
         </ScrollView>
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
         android:id="@+id/blank_forms_info"
+        style="@style/ExplanatoryEmptyMessage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <ImageView
-            style="@style/ExplanatoryEmptyMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/odk_empty_icon"
-            android:text="@string/Forms_NoDraftforms"
-            />
-
-        <TextView
-            style="@style/ExplanatoryEmptyMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Forms_NoDraftforms" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:text="@string/collect.blank_expl_no.forms"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
