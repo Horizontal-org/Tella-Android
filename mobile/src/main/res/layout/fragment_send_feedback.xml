@@ -146,10 +146,10 @@
             android:layout_marginStart="@dimen/activity_horizontal_large_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
             android:layout_marginBottom="18dp"
-            android:background="@drawable/action_button_background"
+            android:background="@drawable/bg_round_orange16_btn"
             android:text="@string/collect.end_action_submit"
-            android:textColor="@color/btn_dark_letter"
             android:textStyle="bold"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
