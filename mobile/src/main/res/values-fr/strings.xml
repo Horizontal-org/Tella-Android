@@ -122,7 +122,6 @@
     <string name="settings.docu_verification_action.expl">Rend vos fichiers multimédias vérifiables en recueillant des renseignements sur votre appareil et sur votre position géographique.</string>
     <string name="collect_no.form_heading">Collecte de données facile</string>
     <string name="collect_expl_not.connected.to.server">Pour recevoir des formulaires et envoyer des données, vous devez d’abord vous connecter à un serveur compatible. Demandez à votre organisation les renseignements sur le serveur et <a href="tella_scheme://open.collect.manage.servers.activity"> configurez le serveur ici </a>.</string>
-    <string name="collect.draft_expl_no.forms">Il n’y a aucun brouillon à afficher</string>
     <string name="collect.sent_expl_no.forms">Il n’y a aucun formulaire envoyé à afficher.</string>
     <string name="collect.blank_expl_no.forms">Il n’y a aucun formulaire à afficher. Toucher le bouton d’actualisation pour vérifier si des formulaires sont disponibles sur les serveurs auxquels vous êtes connecté.</string>
     <string name="settings.camo_heading">Sélectionner un nom et un logo différents</string>

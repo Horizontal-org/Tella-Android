@@ -113,7 +113,6 @@
   <string name="settings.docu_verification_action.expl">Makes your media files verifiable by collecting information about your device and location.</string>
   <string name="collect_no.form_heading">Easy data collection</string>
   <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
-  <string name="collect.draft_expl_no.forms">There are no draft forms to display.</string>
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>

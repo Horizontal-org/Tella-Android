@@ -123,7 +123,6 @@
   <string name="settings.docu_verification_action.expl">Hace tus archivos verificables al recopilar información sobre tu dispositivo y su ubicación.</string>
   <string name="collect_no.form_heading">Recopilación de datos fácil</string>
   <string name="collect_expl_not.connected.to.server">Para recibir formularios y enviar datos, primero debes conectarte a un servidor compatible. Solicita a tu organización la información del servidor y <a href="tella_scheme://open.collect.manage.servers.activity">configúralo aquí</a>.</string>
-  <string name="collect.draft_expl_no.forms">No hay borradores de formularios para mostrar.</string>
   <string name="collect.sent_expl_no.forms">No hay formularios enviados para mostrar.</string>
   <string name="collect.blank_expl_no.forms">No hay formularios para mostrar. Pulsa el botón de actualización para comprobar si hay formularios disponibles en los servidores a los que estás conectada(o).</string>
   <string name="settings.camo_heading">Selecciona un nombre y un logo diferentes</string>

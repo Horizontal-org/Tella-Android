@@ -113,7 +113,6 @@
   <string name="settings.docu_verification_action.expl">Обеспечивает возможность верификации мультимедийных файлов путем сбора информации о вашем устройстве и местоположении.</string>
   <string name="collect_no.form_heading">Простой сбор данных</string>
   <string name="collect_expl_not.connected.to.server">Для получения форм и отправки данных необходимо сначала подключиться к совместимому серверу. За информацией о сервере обратитесь в свою организацию и настройте <a href="tella_scheme://open.collect.manage.servers.activity">сервер здесь</a>.</string>
-  <string name="collect.draft_expl_no.forms">Нет черновиков форм для просмотра</string>
   <string name="collect.sent_expl_no.forms">Нет отправленных форм для просмотра</string>
   <string name="collect.blank_expl_no.forms">Нет форм для просмотра. Нажмите кнопку \"обновить\", чтобы проверить, есть ли доступные для заполнения формы на серверах, к которым Вы подключены.</string>
   <string name="settings.camo_heading">Выберите другое имя и логотип</string>

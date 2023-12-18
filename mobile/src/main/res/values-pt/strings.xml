@@ -120,7 +120,6 @@ ativação do modo</string>
     <string name="settings.docu_verification_action.expl">Torna seus arquivos de mídia verificáveis, coletando informações sobre seu aparelho celular e localização.</string>
     <string name="collect_no.form_heading">Coleta de dados fácil</string>
     <string name="collect_expl_not.connected.to.server">Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor compatível. Peça à organização patrocinadora as informações do servidor e <a href="tella_scheme://open.collect.manage.servers.activity"> configure o servidor aqui </a> .</string>
-    <string name="collect.draft_expl_no.forms">Não há rascunhos de formulários a serem exibidos.</string>
     <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
     <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
     <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
