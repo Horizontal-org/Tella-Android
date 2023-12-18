@@ -148,10 +148,9 @@
             android:layout_marginBottom="18dp"
             android:background="@drawable/bg_round_orange16_btn"
             android:text="@string/collect.end_action_submit"
-            android:textStyle="bold"
-            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

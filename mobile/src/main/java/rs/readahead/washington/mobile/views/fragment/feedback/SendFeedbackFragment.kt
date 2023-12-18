@@ -159,10 +159,12 @@ class SendFeedbackFragment :
      */
     @SuppressLint("ResourceAsColor")
     private fun highLightButton() {
+        val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
         // Determine the background resource based on the value of isSubmitEnabled
         binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
-        binding.sendFeedbackBtn.setTextColor(if (isSubmitEnabled) R.color.btn_dark_letter else R.color.wa_white)
-        // Set the background resource of the button
+        binding.sendFeedbackBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
     }
 
