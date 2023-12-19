@@ -6,6 +6,7 @@
     <string name="config_faq_url" translatable="false">https://docs.tella-app.org</string>
     <string name="config_contact_url" translatable="false">mailto:contact@tella-app.org</string>
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy</string>
+    <string name="config_feedback_url" translatable="false">https://tella-app.org/features#feedback</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
         <item>be</item>
