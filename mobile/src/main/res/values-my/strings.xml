@@ -121,7 +121,6 @@
   <string name="settings.docu_verification_action.expl">သင့်စက်ပစ္စည်းနှင့် တည်နေရာအကြောင်း အချက်အလက်များကို စုဆောင်းခြင်းဖြင့် သင့်မီဒီယာဖိုင်များကို အတည်ပြုနိုင်စေပါသည်။</string>
   <string name="collect_no.form_heading">လွယ်ကူသောဒေတာ စုဆောင်းခြင်း</string>
   <string name="collect_expl_not.connected.to.server">ဖောင်ပုံစံများ လက်ခံရရှိရန်နှင့် ဒေတာပေးပို့ရန်၊ သင်သည် လိုက်ဖက်ညီသော ဆာဗာသို့ ဦးစွာ ချိတ်ဆက်ရပါမည်။ ဆာဗာအချက်အလက်အတွက် သင့်အဖွဲ့အစည်းကို မေးမြန်းပြီး <a href="tella_scheme://open.collect.manage.servers.activity"> ဆာဗာကို ဤနေရာတွင် တည်ဆောက်ပါ </a> ။</string>
-  <string name="collect.draft_expl_no.forms">ပြသရန် မူကြမ်းပုံစံများ မရှိပါ။</string>
   <string name="collect.sent_expl_no.forms">ပြသရန် တင်သွင်းထားသော ပုံစံများ မရှိပါ။</string>
   <string name="collect.blank_expl_no.forms">ပြသရန် ပုံစံများ မရှိပါ။ သင်ချိတ်ဆက်ထားသော ဆာဗာများတွင် ပုံစံများ ရရှိနိုင်ပါက ပြန်လည်ဆန်းသစ်ခလုတ်ကို နှိပ်ပါ။</string>
   <string name="settings.camo_heading">အခြားအမည်နှင့် လိုဂိုကို ရွေးပါ</string>
@@ -433,7 +432,7 @@
   <string name="settings.camo_weather1">ရာသီဥတု</string>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">ဖိုင်များကို ရွေးချယ်ပါ</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
-  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
   <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>

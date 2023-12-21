@@ -850,7 +850,6 @@ class AttachmentsFragment :
 
 
     private fun onGetProgressPercent(progressPercent: Pair<Double, Int>) {
-        val numberFilesImported = progressPercent.first
         val totalFilesToImport = progressPercent.second
         showProgressImportSheet(
             baseActivity.supportFragmentManager,

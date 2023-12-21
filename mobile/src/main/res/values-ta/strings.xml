@@ -113,7 +113,6 @@
   <string name="settings.docu_verification_action.expl">உங்கள் சாதனம் மற்றும் இருப்பிடம் பற்றிய தகவல்களைச் சேகரிப்பதன் மூலம் உங்கள் மீடியா கோப்புகளை சரிபார்க்க முடியும்.</string>
   <string name="collect_no.form_heading">எளிதான தரவு சேகரிப்பு</string>
   <string name="collect_expl_not.connected.to.server">படிவங்களைப் பெற மற்றும் படிவத் தரவைச் சமர்ப்பிக்க, நீங்கள் முதலில் இணக்கமான சேவையகத்துடன் இணைக்க வேண்டும். சேவையக தகவலை உங்கள் நிறுவனத்திடம் கேட்டு சேவையக விவரங்களை இங்கே அமைக்கவும்</string>
-  <string name="collect.draft_expl_no.forms">உங்களுக்கு காண்பிக்க வரைவு படிவங்கள் எதுவும் இல்லை.</string>
   <string name="collect.sent_expl_no.forms">உங்களுக்கு காண்பிக்க சமர்ப்பிக்கப்பட்ட படிவங்கள் எதுவும் இல்லை.</string>
   <string name="collect.blank_expl_no.forms">உங்களுக்கு காண்பிக்க படிவங்கள் எதுவும் இல்லை. நீங்கள் இணைக்கப்பட்ட சேவையகங்களில் படிவங்கள் உள்ளனவா என்பதை அறிய \"புத்தாக்க\" பொத்தானைத் தட்டவும்.</string>
   <string name="settings.camo_heading">வேறு பெயர் மற்றும் சின்னத்தை தேர்ந்தெடுக்கவும்</string>
@@ -374,8 +373,14 @@ connecting to a server</string>
   <string name="settings.camo_weather3">தற்போதைய வானிலை</string>
   <string name="settings.camo_weather2">உள்ளூர் வானிலை</string>
   <string name="settings.camo_weather1">Weather</string>
+  <string name="Settings_General_TextJustificationTitle">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
+  <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
-  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
   <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>
@@ -385,4 +390,8 @@ connecting to a server</string>
   <string name="feedback_title">Feedback</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
+  <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
+  <string name="Forms_NoDraftForms">You have no draft forms.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
 </resources>

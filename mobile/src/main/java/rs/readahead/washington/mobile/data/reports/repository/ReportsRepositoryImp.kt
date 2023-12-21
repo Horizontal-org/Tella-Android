@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.webkit.MimeTypeMap
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.MutableLiveData
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.*
 import io.reactivex.Observable
@@ -13,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.LoginEntity
 import rs.readahead.washington.mobile.data.entity.reports.ReportBodyEntity
@@ -46,8 +46,8 @@ class ReportsRepositoryImp @Inject internal constructor(
     private val statusProvider: StatusProvider
 ) : ReportsRepository {
 
-    private val reportProgress = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
-    private val instanceProgress = MutableLiveData<ReportInstance>()
+    private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
+    private val instanceProgress = SingleLiveEvent<ReportInstance>()
     private val disposables = CompositeDisposable()
 
     override fun login(server: TellaReportServer, slug: String): Single<TellaReportServer> {

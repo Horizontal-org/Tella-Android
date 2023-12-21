@@ -52,19 +52,14 @@ class ReportsSendFragment :
             }
 
             instanceProgress.observe(viewLifecycleOwner) { entity ->
-                if (entity == null) {
-                    return@observe
-                }
                 if (entity.id == this@ReportsSendFragment.reportInstance?.id) {
                     when (entity.status) {
                         EntityStatus.SUBMITTED -> {
                             viewModel.saveSubmitted(entity)
-                            instanceProgress.postValue(null)
                         }
 
-                        EntityStatus.SUBMISSION_ERROR, EntityStatus.FINALIZED -> {
+                         EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
-                            instanceProgress.postValue(null)
                         }
 
                         EntityStatus.PAUSED -> {
@@ -91,7 +86,7 @@ class ReportsSendFragment :
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
 
-                    EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
+                     EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
 
@@ -124,20 +119,21 @@ class ReportsSendFragment :
             showFormEndView()
         }
 
-        binding?.toolbar?.backClickListener = {
+        binding.toolbar.backClickListener = {
             handleBackButton()
         }
-        binding?.toolbar?.setRightIcon(icon = -1)
+        binding.toolbar.setRightIcon(icon = -1)
 
         if (reportInstance?.status == EntityStatus.SUBMITTED) {
-            binding?.nextBtn?.hide()
+            binding.nextBtn.hide()
         }
         highlightSubmitButton()
     }
 
     private fun checkAndSubmitEntity(isOnline: Boolean) {
         if (!isOnline) {
-            binding?.nextBtn?.text = getString(R.string.Reports_Resume)
+            binding.nextBtn.text = getString(R.string.Reports_Resume)
+            return
         } else {
             if (isFromDraft) {
                 submitEntity()
@@ -148,7 +144,7 @@ class ReportsSendFragment :
     }
 
     private fun highlightSubmitButton() {
-        binding?.nextBtn?.setOnClickListener {
+        binding.nextBtn.setOnClickListener {
             if (reportInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
                 viewModel.clearDisposable()
             } else {
@@ -160,9 +156,9 @@ class ReportsSendFragment :
 
     private fun pauseResumeLabel(reportFormInstance: ReportInstance?) {
         if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
-            binding?.nextBtn?.text = getString(R.string.Reports_Pause)
+            binding.nextBtn.text = getString(R.string.Reports_Pause)
         } else {
-            binding?.nextBtn?.text = getString(R.string.Reports_Resume)
+            binding.nextBtn.text = getString(R.string.Reports_Resume)
         }
     }
 
@@ -181,8 +177,8 @@ class ReportsSendFragment :
             endView.setInstance(
                 reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), false
             )
-            binding?.endViewContainer?.removeAllViews()
-            binding?.endViewContainer?.addView(endView)
+            binding.endViewContainer.removeAllViews()
+            binding.endViewContainer.addView(endView)
             endView.clearPartsProgress(reportFormInstance)
         }
     }

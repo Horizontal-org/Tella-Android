@@ -88,25 +88,25 @@ class TwoFactorAuthenticationFragment : BaseFragment() {
     private fun initObservers() {
         with(viewModel) {
 
-            authenticationError.observe(viewLifecycleOwner, { error ->
+            authenticationError.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     binding.passwordLayout.error = getString(R.string.Inavlid_Token_Msg_Error)
                 }
-            })
+            }
 
-            authenticationSuccess.observe(viewLifecycleOwner, { isSuccess ->
+            authenticationSuccess.observe(viewLifecycleOwner) { isSuccess ->
                 if (isSuccess) {
-                    KeyboardUtil.hideKeyboard(baseActivity)
+                    KeyboardUtil.hideKeyboard(baseActivity,binding.root)
                     baseActivity.addFragment(
                         LanguageFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
                 }
-            })
+            }
 
-            progress.observe(viewLifecycleOwner,{
+            progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
-            })
+            }
         }
     }
 
@@ -140,9 +140,9 @@ class TwoFactorAuthenticationFragment : BaseFragment() {
             isUpdate = it
         }
 
-        KeyboardLiveData(binding.root).observe(this,{
+        KeyboardLiveData(binding.root).observe(this) {
             binding.backBtn.isVisible = !it.first
-        })
+        }
 
     }
 

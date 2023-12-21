@@ -19,26 +19,22 @@ object DialogUtils {
         isError: Boolean,
         duration: Long = 2000L
     ) {
-        context?.let {
-            showBottomMessage(
-                it,
-                msg,
-                if (isError) R.color.light_red else R.color.tigers_eye,
-                duration
-            )
-        }
+        showBottomMessage(
+            context,
+            msg,
+            if (isError) R.color.light_red else R.color.tigers_eye,
+            duration
+        )
     }
 
     @JvmStatic
     fun showBottomMessage(context: Activity, msg: String, isError: Boolean) {
-        context?.let {
-            showBottomMessage(
-                it,
-                msg,
-                if (isError) R.color.light_red else R.color.tigers_eye,
-                2000L
-            )
-        }
+        showBottomMessage(
+            context,
+            msg,
+            if (isError) R.color.light_red else R.color.tigers_eye,
+            2000L
+        )
     }
 
     @JvmStatic
@@ -46,8 +42,8 @@ object DialogUtils {
         val container = context.findViewById<ViewGroup>(android.R.id.content)
         val view =
             LayoutInflater.from(context).inflate(R.layout.layout_bottom_message, container, false)
-        val txv_msg = view.findViewById<TextView>(R.id.txv_msg)
-        txv_msg.text = msg
+        val textViewMsg = view.findViewById<TextView>(R.id.txv_msg)
+        textViewMsg.text = msg
         container.addView(view)
 
         view.requestFocus()

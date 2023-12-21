@@ -33,11 +33,7 @@ public class AudioCapturePresenter implements IAudioCapturePresenterContract.IPr
                     StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
                     long freeSpace;
 
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                        freeSpace = ((long) statFs.getAvailableBlocks() * statFs.getBlockSize());
-                    } else {
-                        freeSpace = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong());
-                    }
+                    freeSpace = (statFs.getAvailableBlocksLong() * statFs.getBlockSizeLong());
 
                     return freeSpace;
                 })

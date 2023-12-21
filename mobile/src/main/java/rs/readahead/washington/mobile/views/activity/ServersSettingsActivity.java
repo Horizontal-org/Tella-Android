@@ -184,6 +184,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         this.servers.addAll(tellaReportServers);
         createServerViews(servers);
         tuServers = tellaReportServers;
+
        /* if (tuServers.size() > 0) {
              binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
@@ -204,15 +205,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         tuServers.add(server);
         saveAutoUploadServer(server);
-       /* if (tuServers.size() == 1) {
-            binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
-            setupAutoUploadSwitch();
-        }
-
-        if (tuServers.size()== 1) {
-            binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
-        }*/
-
+        Preferences.setAutoUpload(isAutoUploadEnabled(servers));
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
@@ -279,6 +272,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+        if (tuServers.size() == 0) {
+            Preferences.setAutoUpload(false);
+            Preferences.setAutoDelete(false);
+        }
+
     }
 
     @Override

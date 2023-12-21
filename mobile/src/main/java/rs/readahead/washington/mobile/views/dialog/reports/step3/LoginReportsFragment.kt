@@ -77,7 +77,7 @@ class LoginReportsFragment :
         }
 
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
-            KeyboardUtil.hideKeyboard(baseActivity)
+            KeyboardUtil.hideKeyboard(baseActivity,binding.root)
             baseActivity.addFragment(
                 EditTellaServerFragment.newInstance(server,false), R.id.container
             )

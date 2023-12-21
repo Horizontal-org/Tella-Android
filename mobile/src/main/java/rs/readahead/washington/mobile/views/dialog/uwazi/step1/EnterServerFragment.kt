@@ -139,7 +139,7 @@ class EnterServerFragment : BaseFragment() {
                         R.id.container
                     )
                 }
-                KeyboardUtil.hideKeyboard(baseActivity)
+                KeyboardUtil.hideKeyboard(baseActivity,binding.root)
             }
 
             progress.observe(viewLifecycleOwner) {

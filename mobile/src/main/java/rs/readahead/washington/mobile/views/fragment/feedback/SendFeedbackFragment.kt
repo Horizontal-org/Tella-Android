@@ -14,6 +14,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import com.hzontal.utils.Util
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
@@ -26,6 +27,7 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
 import rs.readahead.washington.mobile.util.jobs.WorkerSendFeedBack
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightContributeFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -51,7 +53,7 @@ class SendFeedbackFragment :
      */
     private fun initViews() {
         setupFeedbackSwitchView()
-        KeyboardUtil(activity, view)
+        KeyboardUtil.hideKeyboard(baseActivity, binding.root)
         (activity as SettingsActivity).toolbar.setStartTextTitle(getString(R.string.feedback_title))
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
@@ -83,7 +85,9 @@ class SendFeedbackFragment :
                     viewModel.saveFeedbackToBeSubmitted(feedbackInstance!!)
                 }
             }
-
+        }
+        binding.feedbackSwitch.setTextAndAction(R.string.action_learn_more) {
+            Util.startBrowserIntent(requireContext(), getString(R.string.config_feedback_url))
         }
         // Set up the toolbar icons
         (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
@@ -155,10 +159,12 @@ class SendFeedbackFragment :
      */
     @SuppressLint("ResourceAsColor")
     private fun highLightButton() {
+        val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+
         // Determine the background resource based on the value of isSubmitEnabled
         binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
-        binding.sendFeedbackBtn.setTextColor(if (isSubmitEnabled) R.color.wa_black_contrast else R.color.wa_white)
-        // Set the background resource of the button
+        binding.sendFeedbackBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
     }
 
@@ -233,15 +239,13 @@ class SendFeedbackFragment :
      * Displays a bottom message with a thank you message for successful feedback submission.
      */
     private fun onFeedbackSubmittedSuccess() {
-        activity?.let {
-            // Show a bottom message with success message
-            DialogUtils.showBottomMessage(
-                it,
-                getString(R.string.thanks_for_your_feedback),
-                false,
-                4000
-            )
-        }
+        // Show a bottom message with success message
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(R.string.thanks_for_your_feedback),
+            false,
+            4000
+        )
     }
 
     /**
@@ -290,7 +294,7 @@ class SendFeedbackFragment :
                     // Check if the work has succeeded
                     if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
                         // Show a success message with a duration of 4000 milliseconds (4 seconds)
-                        activity?.let {
+                        baseActivity.let {
                             DialogUtils.showBottomMessage(
                                 it,
                                 getString(R.string.feedback_sent_msg),
