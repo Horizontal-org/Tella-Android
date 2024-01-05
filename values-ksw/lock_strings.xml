@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">ဆိကတီၢ်</string>
+  <string name="LockSelect_Action_Back">ဆူလီၢ်ခံ</string>
+  <string name="LockSelect_Action_Confirm">ဆူညါတခါ</string>
+  <string name="LockPatternConfirm_Action_Confirm">ပာ်ဂၢၢ်ပာ်ကျၢၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအံၤတက့ၢ်</string>
+  <string name="LockSelect_Action_Continue">ဆူညါတခါ</string>
+  <string name="LockPatternSet_Draw_Pattern">ဆွဲလီၤဘၣ် နီၣ်ဝံာ်အိးထီၣ်အတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤ</string>
+  <string name="UnlockPattern_DrawToUnlock">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအံၤ လၢတၢ်ကဝံာ်အိးထီၣ်ဝဲ Tella အဂီၢ်</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">နနီၣ်ဝံာ်အိးထီၣ်အတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအသီတခါ</string>
+  <string name="LockPatternSet_Pattern_Recorded">တၢ်မၤနီၣ်မၤဃါဝဲဒၣ်တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအံၤဝံၤဝဲလံ</string>
+  <string name="UnlockPattern_PatternTooShort">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤခီဖျိ
+ တၢ်ဒုးဘျးစဲဝဲ တၢ်အဖျၢၣ်ဖိတဖၣ်အစှၤကတၢၢ်ဃုဖျၢၣ်</string>
+  <string name="LockPatternSet_RecordingPattern">ပျၢ်လီၤကွံာ်နစုမုၢ် ဖဲနတ့အီၤဝံၤအကတီၢ်</string>
+  <string name="LockPatternSet_Action_Redraw">မၤဆှဲမၤပျီ</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤတဘၣ်ဘၣ်,
+ဝံသးစူၤကျဲးစၢးမၤကဒီးအသီတဘျီ</string>
+  <string name="LockPatternSet_Message_PatternStarted">တၢ်စးထီၣ်တ့ထီၣ် တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအံၤလံ</string>
+  <string name="LockPatternSet_Message_PatternCleared">တၢ်မၤဆှဲမၤပျီကွံာ် တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤ ဝံၤဝဲလံ</string>
+  <string name="LockPatternSet_Message_CellAdded">တၢ်မၤအါထီၣ် (Cell) ဝံၤဝဲလံ</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell)  <xliff:g id="cell_index" example="3">%1$d</xliff:g> တၢ်ထၢနုာ်လီၤအီၤဝံၤလံ</string>
+  <string name="LockPatternSet_Message_PatternDetected">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအံၤတၢ်တ့ထီၣ်အီၤဝံၤဝဲဒၣ်လံ</string>
+  <string name="UnLockPattern_PatternArea">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအလီၢ်.</string>
+  <string name="UnLockPattern_Message_DrawPattern">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤ လၢတၢ်ကဝံာ်အိးထီၣ်ဝဲTella အဂီၢ်</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">ဝံသးစူၤမၤကဒီးအသီတဘျီတက့ၢ်. နတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤအံၤတဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်န့ၣ်လီၤ.</string>
+  <string name="LockPinSet_Message_EnterPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်</string>
+  <string name="UnlockPin_Message_EnterPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်လၢတၢ်ကဝံာ်အိးထီၣ်ဝဲ Tella အဂီၢ်</string>
+  <string name="LockPinSet_Message_Hint">စူးကါနီၣ်ဂံၢ်ဖျၢၣ်အစှၤကတၢၢ် ၆ ဖျၢၣ်
+ဟးဆှဲးသူဘၣ်နီၣ်ဂံၢ်လၢတၢ်တယးဘၣ်အီၤညီတဖၣ်, ဒ်အမ့ၢ်နံၤအိၣ်ဖျဲၣ်မုၢ်နံၤ.</string>
+  <string name="LockPinSet_Message_Confirm">ပာ်ဂၢၢ်ပာ်ကျၢၤဘၣ်န PIN နီၣ်ဂံၢ်တက့ၢ်</string>
+  <string name="LockPinConfirm_Message_Confirm">ဝံသးစူၤထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်အသီကဒီးတဘျီ, 
+ထဲဒၣ်တၢ်မၤလီၤတံၢ်ဒိၣ်ထီၣ်အဂီၢ်.</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">ဝံသးစူၤမၤကဒီးအသီတဘျီ. န PIN နီၣ်ဂံၢ်တဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN အနီၣ်ဂံၢ်တဘၣ်ဘၣ်,
+ ဝံသးစူၤမၤကဒီးအသီတဘျီ</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်</string>
+  <string name="LockPasswordSet_Message_Hint">စူးကါလံာ်မဲာ်ဖျၢၣ်အစှၤကတၢၢ် ၆ ဖျၢၣ်ဒီးဟးဆှဲး
+ တၢ်စူးကါဘၣ် လံာ်ဖျၢၣ်ခူသူၣ်လၢတၢ်တယးဘၣ်အီၤညီသ့ၣ်တဖၣ်
+ဒ်အမ့ၢ် “password.” အသိးန့ၣ်တက့ၢ်. လံာ်ဖျၢၣ်ခူသူၣ်
+ ဒံးထီ, အတၢ်ဘံၣ်တၢ်ဘၢဒံးအါန့ၣ်လီၤ.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">ဝံသးစူၤမၤကဒီးအသီတဘျီတက့ၢ်. နလံာ်ဖျၢၣ်ခူသူၣ်အံၤတဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်န့ၣ်လီၤ.</string>
+  <string name="LockSuccess_Message_AllDone">နမၤဝံၤဝဲဒၣ်ခဲလၢာ်လံ.</string>
+  <string name="LockSuccess_Message_Hint">နဆီတလဲဃုထၢ နနီၣ်ဝံတံာ်အကျိၤအကျဲသ့ဝဲထီဘိဒီး နဆီတလဲမၤဂ့ၤအါထီၣ် Tellaအံၤ ဖဲ အတၢ်ဆီလီၤပာ်လီၤအလီၢ်အပူၤသ့ဝဲထီဘိန့ၣ်လီၤ.</string>
+  <string name="LockSuccess_Action_GoToTella">လဲဆူ Tella အအိၣ်</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">လံာ်ဖျၢၣ်ခူသူၣ်အံၤတဘၣ်ဝဲဘၣ်,
+ ဝံသးစူၤကျဲးစၢးမၤကဒီးအသီတဘျီ</string>
+  <string name="UnlockPassword_Message_EnterPassword">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်လၢ
+တၢ်ဝံာ်အိးထီၣ်ဝဲ Tella အဂီၢ်</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">ပာ်ဂၢၢ်ပာ်ကျၢၤနလံာ်ဖျၢၣ်ခူသူၣ်အံၤန့ၣ်တက့ၢ်</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">ဝံသးစူၤထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်အသီကဒီးတဘျီန့ၣ်တက့ၢ်. 
+ထဲဒၣ်တၢ်မၤလီၤတံၢ်ဒိၣ်ထီၣ်အဂီၢ်.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်
+ လၢတၢ်ကဆီတလဲထီၣ်ဝဲ နနီၣ်ဝံာ်တံာ်အဂီၢ်န့ၣ်တက့ၢ်</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤ လၢနသူအီၤအဖၢမုၢ်
+ လၢတၢ်ကဆီတလဲထီၣ်ဝဲနနီၣ်ဝံာ်တံာ်အဂီၢ်န့ၣ်တက့ၢ်. </string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ် လၢနသူအီၤအဖၢမုၢ်
+လၢတၢ်ကဆီတလဲထီၣ်ဝဲနနီၣ်ဝံာ်တံာ်အဂီၢ်န့ၣ်တက့ၢ်</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ် လၢနသူအီၤအဖၢမုၢ်
+ လၢတၢ်ကဆီတလဲထီၣ်ဝဲနတၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အဂီၢ်န့ၣ်တက့ၢ်</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤ လၢနသူအီၤအဖၢမုၢ်
+ လၢတၢ်ကဆီတလဲထီၣ်ဝဲနတၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အဂီၢ်န့ၣ်တက့ၢ်</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ် လၢနသူအီၤအဖၢမုၢ်
+ လၢတၢ်ကဆီတလဲထီၣ်ဝဲ နတၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အဂီၢ်န့ၣ်တက့ၢ်. </string>
+  <string name="Settings_Action_SetLock">နီၣ်ဝံာ်တံာ်</string>
+  <string name="Settings_Message_LockChanged">နနီၣ်ဝံာ်တံာ်အဆီတလဲအသးလံန့ၣ်လီၤ</string>
+</resources>
