@@ -7,19 +7,34 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/draftFormInstances"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/blank_draft_forms_info"
-        style="@style/ExplanatoryEmptyMessage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="top"
-        android:text="@string/collect.draft_expl_no.forms"
-        android:visibility="gone"/>
+        android:layout_marginTop="@dimen/activity_horizontal_larger_margin"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            style="@style/ExplanatoryEmptyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/Forms_NoDraftForms"
+            android:src="@drawable/odk_empty_icon" />
+
+        <TextView
+            style="@style/ExplanatoryEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Forms_NoDraftForms" />
+    </LinearLayout>
 </RelativeLayout>

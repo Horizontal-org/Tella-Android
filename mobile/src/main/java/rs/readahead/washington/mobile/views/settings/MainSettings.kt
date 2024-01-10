@@ -16,7 +16,7 @@ class MainSettings :
         initView()
     }
 
-    fun initView(view: View) {
+    fun initView() {
         (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
         initListeners()
     }
@@ -54,6 +54,5 @@ class MainSettings :
 
         binding.toolbar.backClickListener = { back() }
 
-        setUpToolbar()
     }
 }

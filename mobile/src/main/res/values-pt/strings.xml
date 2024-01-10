@@ -120,7 +120,6 @@ ativação do modo</string>
     <string name="settings.docu_verification_action.expl">Torna seus arquivos de mídia verificáveis, coletando informações sobre seu aparelho celular e localização.</string>
     <string name="collect_no.form_heading">Coleta de dados fácil</string>
     <string name="collect_expl_not.connected.to.server">Para receber formulários e enviar dados, você deve primeiro se conectar a um servidor compatível. Peça à organização patrocinadora as informações do servidor e <a href="tella_scheme://open.collect.manage.servers.activity"> configure o servidor aqui </a> .</string>
-    <string name="collect.draft_expl_no.forms">Não há rascunhos de formulários a serem exibidos.</string>
     <string name="collect.sent_expl_no.forms">Não há formulários enviados a serem exibidos.</string>
     <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
     <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
@@ -445,7 +444,7 @@ ativação do modo</string>
     <string name="Vault_DeleteFile_SheetTitle">Excluir o arquivo?</string>
     <string name="Vault_deleteFile_SheetDesc">O arquivo selecionado será excluído permanentemente do Tella</string>
     <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
-    <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk. Learn more.</string>
+    <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
     <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
     <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
     <string name="save_draft">Save draft?</string>
