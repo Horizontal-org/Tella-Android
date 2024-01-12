@@ -9,7 +9,9 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
@@ -17,6 +19,7 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
@@ -39,6 +42,7 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.activity.camera.SharedCameraViewModel
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
@@ -56,12 +60,14 @@ import timber.log.Timber
 const val VAULT_FILTER = "vf"
 
 //TODO REFACTOR THIS TO MVVM
+@AndroidEntryPoint
 class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaultBinding::inflate),
     VaultClickListener, IHomeVaultPresenter.IView {
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private lateinit var homeVaultPresenter: HomeVaultPresenter
+
     private val bundle by lazy { Bundle() }
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
@@ -74,6 +80,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
+    private val viewModel by viewModels<SharedCameraViewModel>()
+
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,6 +97,28 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         initListeners()
         initPermissions()
         fixAppBarShadow()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.lastBackgroundActivityModel.observe(baseActivity) { activityList ->
+         //   if (activityList.hasItems()) {
+                binding.counterNotification.show()
+               // binding.counterNotification.text = event.size().toString()
+                backgroundActivitiesAdapter.updateData(arrayListOf(activityList))
+          ///  } else {
+             //   binding.counterNotification.hide()
+           // }
+        }
+
+        binding.counterNotification.setOnClickListener {
+            showBackgroundActivitiesSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.background_activities),
+                getString(R.string.current_background_activities),
+                backgroundActivitiesAdapter = backgroundActivitiesAdapter
+            )
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -247,28 +277,33 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun setUpToolbar() {
-        val activity = context as MainActivity
-        activity.setSupportActionBar(binding.toolbar)
-        maybeShowRecentBackgroundActivities()
+        val baseActivity = activity as MainActivity
+        baseActivity.setSupportActionBar(binding.toolbar)
+        //   maybeShowRecentBackgroundActivities()
     }
 
-    private fun maybeShowRecentBackgroundActivities(){
+    private fun maybeShowRecentBackgroundActivities() {
         disposables?.wire(
             RecentBackgroundActivitiesEvent::class.java,
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
-                    if (event.hasItems()){
+                    if (event.hasItems()) {
                         binding.counterNotification.show()
                         binding.counterNotification.text = event.size().toString()
                         backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
-                    }else {
+                    } else {
                         binding.counterNotification.hide()
                     }
                 }
             })
 
         binding.counterNotification.setOnClickListener {
-            showBackgroundActivitiesSheet(baseActivity.supportFragmentManager, getString(R.string.background_activities), getString(R.string.current_background_activities), backgroundActivitiesAdapter = backgroundActivitiesAdapter )
+            showBackgroundActivitiesSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.background_activities),
+                getString(R.string.current_background_activities),
+                backgroundActivitiesAdapter = backgroundActivitiesAdapter
+            )
         }
     }
 

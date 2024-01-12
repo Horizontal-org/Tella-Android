@@ -138,7 +138,6 @@ public class MainActivity extends MetadataActivity implements
             switch (navDestination.getId()) {
                 case (R.id.micScreen):
                 case (R.id.homeScreen):
-                case R.id.cameraScreen:
                     showBottomNavigation();
                     break;
                 default:

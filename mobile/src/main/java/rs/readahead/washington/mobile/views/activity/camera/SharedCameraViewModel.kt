@@ -17,7 +17,7 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class CameraViewModel @Inject constructor() : ViewModel() {
+class SharedCameraViewModel @Inject constructor() : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private var currentRotation = 0

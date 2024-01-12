@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.settings
 import android.os.Bundle
 import android.view.View
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.databinding.FragmentMainSettingsBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
@@ -17,7 +16,7 @@ class MainSettings :
     }
 
     fun initView() {
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
+        //(baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
         initListeners()
     }
 
