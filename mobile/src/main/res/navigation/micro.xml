@@ -22,9 +22,4 @@
             app:exitAnim="@anim/fade_out" />
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/attachments_screen"-->
-<!--        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"-->
-<!--        tools:layout="@layout/fragment_vault_attachments">-->
-<!--    </fragment>-->
 </navigation>
