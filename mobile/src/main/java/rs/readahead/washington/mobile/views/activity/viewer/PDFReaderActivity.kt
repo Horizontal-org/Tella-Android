@@ -1,35 +1,15 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.activity.viewModels
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
-import com.github.barteksc.pdfviewer.listener.OnPageErrorListener
-import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle
-import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
-import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPdfReaderBinding
-import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import java.io.InputStream
 
 @AndroidEntryPoint
-class PDFReaderActivity : BaseLockActivity(), OnPageChangeListener, OnLoadCompleteListener,
-    OnPageErrorListener {
+class PDFReaderActivity : BaseLockActivity() {
     private val viewModel: SharedMediaFileViewModel by viewModels()
     private lateinit var binding: ActivityPdfReaderBinding
     private var vaultFile: VaultFile? = null
@@ -46,11 +26,13 @@ class PDFReaderActivity : BaseLockActivity(), OnPageChangeListener, OnLoadComple
         super.onCreate(savedInstanceState)
         binding = ActivityPdfReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initVaultMediaFile()
-        initObservers()
+      //  initVaultMediaFile()
+       // initObservers()
         initContracts()
-        setupToolbar()
+      //  setupToolbar()
     }
+
+    /*
 
     private fun initVaultMediaFile() {
         val vaultFile = intent.getSerializableExtra(VIEW_PDF) as? VaultFile
@@ -232,5 +214,5 @@ class PDFReaderActivity : BaseLockActivity(), OnPageChangeListener, OnLoadComple
         viewMetadata.putExtra(Metadata.VIEW_METADATA, vaultFile)
         startActivity(viewMetadata)
     }
-
+*/
 }
