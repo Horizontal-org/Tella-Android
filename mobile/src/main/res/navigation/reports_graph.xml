@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/reports_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/reports_graph"
+             app:startDestination="@id/reportsScreen">
+        <fragment
+            android:id="@+id/reportsScreen"
+            android:name="rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment"
+            android:label="@string/Home_BottomNav_Reports"
+            tools:layout="@layout/fragment_reports">
+
+            <action
+                android:id="@+id/action_reportsScreen_to_newReport_screen"
+                app:destination="@id/newReportScreen"
+                app:enterAnim="@anim/slide_in_start"
+                app:exitAnim="@anim/fade_out" />
+
+            <action
+                android:id="@+id/action_reportsScreen_to_reportSendScreen"
+                app:destination="@id/reportSendScreen"
+                app:enterAnim="@anim/slide_in_start"
+                app:exitAnim="@anim/fade_out" />
+
+            <action
+                android:id="@+id/action_reportsScreen_to_reportSubmittedScreen"
+                app:destination="@id/reportSubmittedScreen"
+                app:enterAnim="@anim/slide_in_start"
+                app:exitAnim="@anim/fade_out" />
+        </fragment>
+        <fragment
+            android:id="@+id/newReportScreen"
+            android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
+            android:label="@string/Reports_Title_Screen"
+            tools:layout="@layout/fragment_reports_entry">
+
+            <action
+                android:id="@+id/action_newReport_to_micScreen"
+                app:destination="@id/micScreen"
+                app:enterAnim="@anim/slide_in_start"
+                app:exitAnim="@anim/fade_out" />
+
+            <action
+                android:id="@+id/action_newReport_to_reportSendScreen"
+                app:destination="@id/reportSendScreen"
+                app:enterAnim="@anim/slide_in_start"
+                app:exitAnim="@anim/fade_out"
+                app:popUpToInclusive="true" />
+        </fragment>
+    <fragment
+        android:id="@+id/reportSendScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
+    <fragment
+        android:id="@+id/reportSubmittedScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.reports.submitted.ReportSubmittedFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
 
 </navigation>
