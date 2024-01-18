@@ -97,6 +97,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                     EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
+                    else -> {}
                 }
             }
         }
