@@ -62,6 +62,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
@@ -317,7 +318,8 @@ class AttachmentsFragment :
 
             override fun goToRecorder() {
                 bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                findNavController().navigate(R.id.action_attachments_screen_to_micro, bundle)
+                NavigationManager.navigateToMicro(nav(),bundle)
+                //findNavController().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 
             override fun chooseImportAndDelete() {
