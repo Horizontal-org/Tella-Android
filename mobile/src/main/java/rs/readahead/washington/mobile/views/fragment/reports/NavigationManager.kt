@@ -21,5 +21,8 @@ object NavigationManager {
     fun navigateToMicro(navController: NavController,bundle:Bundle) {
         navController.navigate(R.id.mic,bundle)
     }
+    fun navigateToNewReportScreen(navController: NavController,bundle:Bundle?) {
+        navController.navigate(R.id.action_reportsScreen_to_newReport_screen,bundle)
+    }
 
 }

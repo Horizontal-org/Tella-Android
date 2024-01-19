@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
              android:id="@+id/reports_graph"
              app:startDestination="@id/reportsScreen">
-    <include app:graph="@navigation/micro" />
 
     <fragment
             android:id="@+id/reportsScreen"
@@ -35,8 +34,6 @@
             android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
             android:label="@string/Reports_Title_Screen"
             tools:layout="@layout/fragment_reports_entry">
-
-
             <action
                 android:id="@+id/action_newReport_to_reportSendScreen"
                 app:destination="@id/reportSendScreen"

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.work.*
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +51,10 @@ class ReportsFragment :
         )
 
         binding.newReportBtn.setOnClickListener {
-            nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
+            NavigationManager.navigateToNewReportScreen(nav(),null)
+           // nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
+
+
         }
         binding.toolbar.backClickListener = { nav().popBackStack() }
 
