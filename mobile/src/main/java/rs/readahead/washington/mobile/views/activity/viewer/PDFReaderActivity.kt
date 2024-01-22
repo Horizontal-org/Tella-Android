@@ -1,11 +1,24 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
+import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
+import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPdfReaderBinding
+import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 
 @AndroidEntryPoint
@@ -26,13 +39,11 @@ class PDFReaderActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPdfReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
-      //  initVaultMediaFile()
-       // initObservers()
+        initVaultMediaFile()
+        initObservers()
         initContracts()
-      //  setupToolbar()
+        setupToolbar()
     }
-
-    /*
 
     private fun initVaultMediaFile() {
         val vaultFile = intent.getSerializableExtra(VIEW_PDF) as? VaultFile
@@ -40,7 +51,7 @@ class PDFReaderActivity : BaseLockActivity() {
         if (vaultFile != null) {
             this.vaultFile = vaultFile
 
-            val vaultFileStream = MediaFileHandler.getStream(vaultFile)
+            val vaultFileStream = MediaFileHandler.getEncryptedUri(this, vaultFile)
 
             vaultFileStream?.let {
                 displayFromUri(it)
@@ -54,7 +65,7 @@ class PDFReaderActivity : BaseLockActivity() {
         with(viewModel) {
             // Observer for the error LiveData, displays the error message when it is triggered
             error.observe(this@PDFReaderActivity) { errorResId ->
-               onShowError(errorResId)
+                onShowError(errorResId)
             }
             // Observer for the onMediaFileExportStatus LiveData, handles different export status cases
             onMediaFileExportStatus.observe(this@PDFReaderActivity) { status ->
@@ -112,6 +123,7 @@ class PDFReaderActivity : BaseLockActivity() {
             this, getString(errorResId), true
         )
     }
+
     private fun onExportStarted() {
         binding.progressBar.visibility = View.VISIBLE
     }
@@ -138,32 +150,9 @@ class PDFReaderActivity : BaseLockActivity() {
         )
     }
 
-    private fun displayFromUri(vaultFileStream: InputStream) {
-        binding.pdfView.fromStream(vaultFileStream)
-            .defaultPage(pageNumber)
-            .onPageChange(this)
-            .enableAnnotationRendering(true)
-            .onLoad(this)
-            .scrollHandle(DefaultScrollHandle(this))
-            .spacing(10) // in dp
-            .onPageError(this)
-            .load()
+    private fun displayFromUri(vaultFileStream: Uri) {
+        binding.pdfRendererView.initWithUri(vaultFileStream)
     }
-
-    override fun onPageChanged(page: Int, pageCount: Int) {
-        pageNumber = page
-        title = String.format("%s %s / %s", pdfFileName, page + 1, pageCount)
-    }
-
-    override fun loadComplete(nbPages: Int) {
-
-    }
-
-    @SuppressLint("LogNotTimber")
-    override fun onPageError(page: Int, t: Throwable?) {
-        Log.e("PDFViewActivity.TAG", "Cannot load page $page")
-    }
-
 
     private fun setupToolbar() {
 
@@ -211,8 +200,8 @@ class PDFReaderActivity : BaseLockActivity() {
 
     private fun showMetadata() {
         val viewMetadata = Intent(this, MetadataViewerActivity::class.java)
-        viewMetadata.putExtra(Metadata.VIEW_METADATA, vaultFile)
+        viewMetadata.putExtra(VIEW_METADATA, vaultFile)
         startActivity(viewMetadata)
     }
-*/
+
 }

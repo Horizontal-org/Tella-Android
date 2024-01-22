@@ -70,6 +70,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
     implementation project(':clean-insights')
+    implementation project(':pdfviewer')
+
     api project(':tella-locking-ui')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
@@ -115,9 +117,6 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
-    implementation 'com.github.afreakyelf:Pdf-Viewer:v2.0.4'
-
-
 
     // digest auth
     implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
@@ -127,7 +126,6 @@ dependencies {
     implementation "org.opendatakit:opendatakit-javarosa:$versions.javarosa"
     implementation "net.sf.kxml:kxml2:$versions.kxml2"
     implementation "commons-io:commons-io:$versions.commonsIo"
-
 
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
@@ -158,7 +156,7 @@ dependencies {
     //optional - RxJava2 support
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+   // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
 

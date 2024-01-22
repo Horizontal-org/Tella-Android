@@ -29,5 +29,13 @@
         android:layout_gravity="center"
         android:indeterminate="true" />
 
+    <com.horizontal.pdfviewer.PdfRendererView
+        android:id="@+id/pdfRendererView"
+        android:layout_marginTop="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.horizontal.pdfviewer.PdfRendererView>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
