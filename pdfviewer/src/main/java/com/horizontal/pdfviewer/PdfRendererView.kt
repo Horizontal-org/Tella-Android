@@ -124,19 +124,7 @@ class PdfRendererView @JvmOverloads constructor(
         init(fileDescriptor)
     }
 
-    /**
-     * Initializes the PDF with a byte array.
-     *
-     * @param pdfData The byte array containing the PDF content.
-     * @throws IOException If an I/O error occurs.
-     */
-    @Throws(IOException::class)
-    fun initWithByteArray(pdfData: ByteArray) {
-        val byteArrayInputStream = ByteArrayInputStream(pdfData)
-        val fileDescriptor = ParcelFileDescriptorUtil.pipeFrom(byteArrayInputStream)
-        init(fileDescriptor)
-    }
-
+    
     override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
         val savedState = Bundle()
