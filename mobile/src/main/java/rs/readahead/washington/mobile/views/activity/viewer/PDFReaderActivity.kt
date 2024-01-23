@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import java.io.InputStream
 
 @AndroidEntryPoint
 class PDFReaderActivity : BaseLockActivity() {
@@ -51,7 +52,7 @@ class PDFReaderActivity : BaseLockActivity() {
         if (vaultFile != null) {
             this.vaultFile = vaultFile
 
-            val vaultFileStream = MediaFileHandler.getEncryptedUri(this, vaultFile)
+            val vaultFileStream = MediaFileHandler.getStream(vaultFile)
 
             vaultFileStream?.let {
                 displayFromUri(it)
@@ -150,8 +151,8 @@ class PDFReaderActivity : BaseLockActivity() {
         )
     }
 
-    private fun displayFromUri(vaultFileStream: Uri) {
-        binding.pdfRendererView.initWithUri(vaultFileStream)
+    private fun displayFromUri(vaultFileStream: InputStream) {
+        binding.pdfRendererView.initWithStream(vaultFileStream)
     }
 
     private fun setupToolbar() {
