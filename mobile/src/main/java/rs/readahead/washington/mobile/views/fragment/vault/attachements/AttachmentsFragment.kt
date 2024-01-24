@@ -317,8 +317,8 @@ class AttachmentsFragment :
             }
 
             override fun goToRecorder() {
-                bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                NavigationManager.navigateToMicro(nav(),bundle)
+                baseActivity.bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                baseActivity.navigationManager.navigateToMicro()
                 //findNavController().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 

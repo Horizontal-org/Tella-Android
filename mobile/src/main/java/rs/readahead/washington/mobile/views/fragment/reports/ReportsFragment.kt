@@ -51,7 +51,7 @@ class ReportsFragment :
         )
 
         binding.newReportBtn.setOnClickListener {
-            NavigationManager.navigateToNewReportScreen(nav(),null)
+            baseActivity.navigationManager.navigateToNewReportScreen()
            // nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
 
 

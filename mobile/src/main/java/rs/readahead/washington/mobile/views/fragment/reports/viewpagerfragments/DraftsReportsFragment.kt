@@ -103,10 +103,9 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun openEntityInstance(reportInstance: ReportInstance) {
-        val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        baseActivity.bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
        // nav().navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
-        NavigationManager.navigateToNewReportScreen(nav(),bundle)
+        baseActivity.navigationManager.navigateToNewReportScreen()
 
     }
 
