@@ -8,13 +8,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdk versions.compileSdk
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 169
+        versionCode 170
         versionName "2.5"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
@@ -43,12 +43,12 @@ android {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     buildFeatures {
         viewBinding = true
@@ -58,7 +58,10 @@ android {
     }
     hilt {
         enableExperimentalClasspathAggregation = true
+        enableAggregatingTask = true
+
     }
+    namespace 'rs.readahead.washington.mobile'
 }
 
 dependencies {
@@ -136,8 +139,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     //hilt-view-model
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
+   // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
+    //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
 
     implementation "com.simplify:ink:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
@@ -158,4 +162,8 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
 
     implementation("com.vanniktech:android-image-cropper:4.3.3")
+}
+
+kapt {
+    correctErrorTypes true
 }
