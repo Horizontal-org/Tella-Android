@@ -62,7 +62,8 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
     }
 
     protected open fun nav(): NavController {
-        return NavControllerProvider(this).navController
+       // return NavControllerProvider(this).navController
+        return baseActivity.navControllerProvider.navController
     }
 
     protected fun showTooltip(v: View, text: String, gravity: Int) {

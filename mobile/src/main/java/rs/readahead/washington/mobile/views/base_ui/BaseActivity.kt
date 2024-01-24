@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -20,8 +21,19 @@ import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.setupForAccessibility
+import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
+import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
+import javax.inject.Inject
 
+@AndroidEntryPoint
 abstract class BaseActivity : AppCompatActivity() {
+    @Inject
+    lateinit var navigationManager: NavigationManager
+    @Inject
+    lateinit var navControllerProvider: NavControllerProvider
+    @Inject
+    lateinit var bundle: Bundle
+    
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View

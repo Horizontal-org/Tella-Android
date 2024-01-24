@@ -411,8 +411,8 @@ class ReportsEntryFragment :
         try {
             val bundle = Bundle()
             bundle.putBoolean(REPORT_ENTRY, true)
-           // nav().navigate(R.id.action_newReport_to_micScreen, bundle)
-            NavigationManager.navigateToMicro(nav(),bundle)
+           //nav().navigate(R.id.action_newReport_to_micScreen, bundle)
+            baseActivity.navigationManager.navigateToMicro()
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
