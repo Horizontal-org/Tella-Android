@@ -19,18 +19,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideNavigationManager(navControllerProvider:NavControllerProvider,bundle:Bundle): NavigationManager {
-        return NavigationManager(navControllerProvider,bundle)
-    }
-
-    @Provides
-    @Singleton
-    fun provideBundle(): Bundle {
-        return Bundle()
-    }
-
-    @Provides
-    @Singleton
     fun provideNavControllerProvider(fragment: Fragment): NavControllerProvider {
         return NavControllerProvider(fragment)
     }

@@ -103,10 +103,9 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun openEntityInstance(reportInstance: ReportInstance) {
-        baseActivity.bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+       bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
        // nav().navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
-        baseActivity.navigationManager.navigateToNewReportScreen()
-
+        this.navManager().navigateToNewReportScreen()
     }
 
     override fun onResume() {

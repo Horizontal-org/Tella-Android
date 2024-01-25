@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
 import com.tooltip.Tooltip
+import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
+import javax.inject.Inject
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
@@ -20,6 +23,10 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
 
     protected lateinit var baseActivity: BaseActivity
     private var _binding: VB? = null
+    private val navigationManager by lazy { NavigationManager(navController,bundle) }
+    protected val bundle by lazy { Bundle() }
+    private val navController by lazy { NavControllerProvider(this) }
+
     protected val binding: VB
         get() = _binding ?: throw IllegalStateException("ViewBinding is not initialized.")
     private var rootView: View? = null
@@ -62,8 +69,11 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
     }
 
     protected open fun nav(): NavController {
-       // return NavControllerProvider(this).navController
-        return baseActivity.navControllerProvider.navController
+        return NavControllerProvider(this).navController
+    }
+
+    protected open fun navManager(): NavigationManager {
+        return NavigationManager(navController, bundle)
     }
 
     protected fun showTooltip(v: View, text: String, gravity: Int) {

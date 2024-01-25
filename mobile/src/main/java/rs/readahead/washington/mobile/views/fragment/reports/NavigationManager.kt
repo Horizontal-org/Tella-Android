@@ -8,7 +8,7 @@ import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerPro
 import javax.inject.Inject
 
 
-class NavigationManager @Inject constructor(private val navControllerProvider: NavControllerProvider, val bundle: Bundle){
+class NavigationManager (private val navControllerProvider: NavControllerProvider, val bundle: Bundle){
 
     fun navigateTo(destinationId: Int) {
         navControllerProvider.navController.navigate(destinationId)

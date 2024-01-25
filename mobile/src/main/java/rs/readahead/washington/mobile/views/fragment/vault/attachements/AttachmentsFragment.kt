@@ -97,7 +97,6 @@ class AttachmentsFragment :
     private var isMoveModeEnabled = false
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
-    private val bundle by lazy { Bundle() }
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
 
@@ -317,8 +316,8 @@ class AttachmentsFragment :
             }
 
             override fun goToRecorder() {
-                baseActivity.bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                baseActivity.navigationManager.navigateToMicro()
+                bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                navManager().navigateToMicro()
                 //findNavController().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 
