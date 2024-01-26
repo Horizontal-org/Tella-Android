@@ -17,10 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleObserver
+import android.widget.TextView import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.horizontal.pdfviewer.util.ParcelFileDescriptorUtil
 import com.horizontal.pdfviewer.util.PdfEngine
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -73,38 +69,6 @@ class PdfRendererView @JvmOverloads constructor(
         fun onPdfLoadSuccess(absolutePath: String) {}
         fun onError(error: Throwable) {}
         fun onPageChanged(currentPage: Int, totalPage: Int) {}
-    }
-
-    fun initWithUrl(
-        url: String,
-        headers: HeaderData = HeaderData(),
-        lifecycleCoroutineScope: LifecycleCoroutineScope,
-        lifecycle: Lifecycle
-    ) {
-        lifecycle.addObserver(this) // Register as LifecycleObserver
-        PdfDownloader(lifecycleCoroutineScope, headers, url, object : PdfDownloader.StatusListener {
-            override fun getContext(): Context = context
-            override fun onDownloadStart() {
-                statusListener?.onPdfLoadStart()
-            }
-
-            override fun onDownloadProgress(currentBytes: Long, totalBytes: Long) {
-                var progress = (currentBytes.toFloat() / totalBytes.toFloat() * 100F).toInt()
-                if (progress >= 100)
-                    progress = 100
-                statusListener?.onPdfLoadProgress(progress, currentBytes, totalBytes)
-            }
-
-            override fun onDownloadSuccess(absolutePath: String) {
-                initWithFile(File(absolutePath))
-                statusListener?.onPdfLoadSuccess(absolutePath)
-            }
-
-            override fun onError(error: Throwable) {
-                error.printStackTrace()
-                statusListener?.onError(error)
-            }
-        })
     }
 
     fun initWithFile(file: File) {
