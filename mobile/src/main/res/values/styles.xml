@@ -19,6 +19,36 @@
         <item name="android:fontFamily">@font/open_sans</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.LineSpacing" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Justify" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.LineSpacingJustify" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="patternViewStyle">@style/PatternView</item>
+        <item name="android:textColorPrimaryInverse">@color/colorPrimaryInverse</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
     <style name="AppTheme.DarkNoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -56,6 +86,31 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="PlayerTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="PlayerTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="AppTheme.NoActionBarToolbar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -69,6 +124,31 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="CameraTheme.Justify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+    </style>
+
+    <style name="CameraTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/wa_black</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
     </style>
 
     <style name="SettingsMainLine">
@@ -198,7 +278,7 @@
     <style name="ExplanatoryEmptyMessage" parent="@style/TopExplanatoryLayout">
         <item name="android:textSize">18sp</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textColor">@color/wa_dark_gray</item>
+        <item name="android:textColor">@color/wa_white_80</item>
     </style>
 
     <style name="TopExplanatoryLayout">
@@ -352,6 +432,10 @@
         <item name="android:textColorHint">@color/wa_white</item>
     </style>
 
+    <style name="TextEntryLayoutErrorStyle">
+        <item name="android:textColor">@color/light_red</item>
+    </style>
+
     <style name="CollectDialogAnimation" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
         <item name="android:windowExitAnimation">@anim/slide_out_down</item>
@@ -422,9 +506,32 @@
         <item name="android:layout_marginBottom">5dp</item>
     </style>
 
-
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">14sp</item>
         <item name="fontFamily">@font/open_sans</item>
+    </style>
+
+    <style name="Submit_Text_Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/btn_dark_letter</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginBottom">18dp</item>
+        <item name="android:layout_marginStart">34dp</item>
+    </style>
+
+    <style name="MainSettingsTextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginEnd">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginStart">@dimen/activity_vertical_margin</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/wa_white</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 </resources>

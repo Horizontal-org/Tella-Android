@@ -123,7 +123,6 @@
   <string name="settings.docu_verification_action.expl">بە کۆکردنەوەی زانیاری دەربارەی ئامێرەکەت و شوێنەکەت فایلە میدیاییەکانت سەلمێندراو دەبن.</string>
   <string name="collect_no.form_heading">کۆکردنەوەیی ئاسانی داتا</string>
   <string name="collect_expl_not.connected.to.server">بۆ وەرگرتنی فۆرمەکان و پێشکەشکردنی داتا، پێویستە سەرەتا پەیوەندی بکەیت بە سێرڤەرێکی گونجاوەوە. داوا لە ڕێکخراوەکەت بکە بۆ زانیاری سێرڤەرەکە و <a href="tella_scheme://open.collect.manage.servers.activity">لێرە سێرڤەرەکە دابمەزرێنە</a>.</string>
-  <string name="collect.draft_expl_no.forms">هیچ فۆرمێکی ڕەشنووس نییە بۆ پیشاندان.</string>
   <string name="collect.sent_expl_no.forms">هیچ فۆرمێکی پێشکەشکراو نییە بۆ پیشاندان.</string>
   <string name="collect.blank_expl_no.forms">هیچ فۆرمێک نییە بۆ پیشاندان. پەنجە بنێ بە دوگمەی تازەکردنەوە بۆ ئەوەی بزانیت ئایا فۆرمەکان لەو سێرڤەرانەدا بەردەستن کە تۆ پەیوەندیت پێوە کردووە.</string>
   <string name="settings.camo_heading">ناو و لۆگۆیەکی جیاواز هەڵبژێرە</string>
@@ -761,4 +760,15 @@
   <string name="action_show_pin">pin پیشاندان بە</string>
   <string name="action_hide_pin">pin بشارەوە</string>
   <string name="action_go_back">بگەڕێوە دواوە</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

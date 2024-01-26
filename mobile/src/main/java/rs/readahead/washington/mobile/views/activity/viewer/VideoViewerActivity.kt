@@ -7,12 +7,11 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -30,10 +29,13 @@ import rs.readahead.washington.mobile.databinding.ActivityVideoViewerBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.media.exo.MediaFileDataSourceFactory
 import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+
 
 @AndroidEntryPoint
 class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibilityListener {
@@ -48,7 +50,6 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private var resumePosition: Long = 0
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
-    private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
     private var isInfoShown = false
     private val viewModel: SharedMediaFileViewModel by viewModels()
@@ -63,6 +64,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoViewerBinding.inflate(layoutInflater)
+        binding.progressBar.show()
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out)
         setContentView(binding.root)
         actionsDisabled = intent.hasExtra(NO_ACTIONS)
@@ -73,6 +75,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         simpleExoPlayerView = binding.playerView
         simpleExoPlayerView.setControllerVisibilityListener(this)
         simpleExoPlayerView.requestFocus()
+
         initObservers()
     }
 
@@ -103,7 +106,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             }
             // Observer for media file deletion confirmation.
             onMediaFileDeleteConfirmed.observe(this@VideoViewerActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile?.let { deletedVaultFile ->
+                mediaFileDeletedConfirmation.vaultFile.let { deletedVaultFile ->
                     onMediaFileDeleteConfirmation(
                         deletedVaultFile,
                         mediaFileDeletedConfirmation.showConfirmDelete
@@ -164,7 +167,7 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     }
 
     override fun onDestroy() {
-        alertDialog?.takeIf { it.isShowing }?.dismiss()
+        binding.progressBar.hide()
         hideProgressDialog()
         super.onDestroy()
     }
@@ -261,14 +264,13 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
         // Initialize the player if it doesn't exist, otherwise stop the existing player.
         if (player == null) {
-            player = SimpleExoPlayer.Builder(this).build().apply {
+            player = ExoPlayer.Builder(this).build().apply {
                 playWhenReady = shouldAutoPlay
                 simpleExoPlayerView.player = this
             }
         } else {
             player?.stop()
         }
-
         // Apply the resume position if available, set the media source, and prepare the player.
         player?.apply {
             if (haveResumePosition) {
@@ -277,6 +279,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             setMediaSource(mediaSource, !haveResumePosition)
             prepare()
         }
+
+        player?.addListener(PlayerEventListener(binding.progressBar))
 
         // Reset the retry source flag.
         needRetrySource = false
@@ -313,7 +317,8 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         toolbar = binding.playerToolbar
 
         // Set up the navigation icon and its onClickListener to handle back navigation.
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        toolbar.setNavigationIcon(R.drawable.ic_back_white)
+        toolbar.setTitleTextColor(resources.getColor(R.color.wa_white))
         toolbar.setNavigationOnClickListener { onBackPressed() }
 
         // If actions are not disabled, inflate the menu and set up the menu item click listener.
@@ -366,6 +371,15 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                 showMetadata()
                 false
             }
+        }
+    }
+
+    /**
+     * Listener which hides the loading wheel when the video starts
+     */
+    private class PlayerEventListener(val loaderWheel: View) : Player.Listener {
+        override fun onRenderedFirstFrame() {
+            loaderWheel.hide()
         }
     }
 

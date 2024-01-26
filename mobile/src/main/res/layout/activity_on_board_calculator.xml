@@ -114,7 +114,7 @@
         android:paddingEnd="16dp"
         android:text="@string/onboard.calculator_button"
         android:textAllCaps="true"
-        android:textColor="@color/wa_white"
+        android:textColor="@color/btn_dark_letter"
         android:textSize="16sp"
         android:textStyle="bold"
         app:backgroundTint="@color/wa_orange"

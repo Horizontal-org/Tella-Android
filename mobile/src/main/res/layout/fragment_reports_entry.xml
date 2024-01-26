@@ -89,6 +89,7 @@
                 android:textColorHint="@color/wa_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                 app:layout_constraintTop_toBottomOf="@id/separator">
 
                 <EditText
@@ -100,6 +101,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/wa_white"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     app:backgroundTint="@color/wa_white" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,6 +116,7 @@
                 android:textColorHint="@color/wa_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                 app:layout_constraintTop_toBottomOf="@id/report_title_layout">
 
                 <EditText
@@ -126,6 +129,7 @@
                     android:inputType="text|textMultiLine"
                     android:textColor="@color/wa_white"
                     app:backgroundTint="@color/wa_white"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     tools:text="felf,ef,lk,frlezf,elfelkferf,er,ff
 knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,ef,e" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -219,7 +223,7 @@ knkerfkefkfekfkekekl,f,klferkl,f,lkefe,fe,lf,lef,lef,lef,er,f,ref,f,,llkf,elk,f,
             android:gravity="center"
             android:text="@string/collect.end_action_submit"
             android:textAlignment="center"
-            android:textColor="@color/wa_white"
+            android:textColor="@color/btn_dark_letter"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:ignore="RtlCompat" />

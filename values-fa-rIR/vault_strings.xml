@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">همه فایل‌ها</string>
+  <string name="Vault_Images_Title">تصاویر</string>
+  <string name="Vault_Files_Title">فایل‌های Tella</string>
+  <string name="Vault_Documents_Title">اسناد</string>
+  <string name="Vault_Audios_Title">صدا</string>
+  <string name="Vault_Videos_Title">ویدئو</string>
+  <string name="Vault_Others_Title">سایر</string>
+  <string name="Vault_Select_Title">انتخاب فایل</string>
+  <string name="Vault_RecentFiles">فایل‌های اخیر</string>
+  <string name="Vault_PhotosAndVideos_Title">عکس و ویدئو</string>
+  <string name="Vault_FavoriteForms_Title">فرم‌های موردعلاقه</string>
+  <string name="Vault_Empty_Msg">هنوز هیچ فایلی در Tella ندارد. برای وارد کردن اولین فایل، روی دکمه «+» کلیک کنید، یا فایل موردنظر را با «دوربین» یا «میکروفون» ایجاد نمایید. همچنین، با ایجاد پوشه می‌توانید فایل‌ها را مرتب نگه دارید.</string>
+  <string name="Vault_Move_SheetDesc">انتقال به پوشه دیگر</string>
+  <string name="Vault_Rename_SheetAction">تغییر نام</string>
+  <string name="Vault_Save_SheetAction">ذخیره</string>
+  <string name="Vault_Delete_SheetAction">حذف</string>
+  <string name="Vault_Share_SheetAction">اشتراک‌گذاری</string>
+  <string name="Vault_Upload_SheetAction">بارگذاری</string>
+  <string name="Vault_File_SheetAction">اطلاعات فایل</string>
+  <string name="Vault_FileInfo">اطلاعات فایل</string>
+  <string name="Vault_FileSize">اندازه</string>
+  <string name="Vault_FileFormat">قالب</string>
+  <string name="Vault_FileCreated">تاریخ ایجاد</string>
+  <string name="Vault_FileResolution">وضوح</string>
+  <string name="Vault_FileLength">طول</string>
+  <string name="Vault_FilePath">مسیر فایل</string>
+  <string name="Vault_RenameFile_SheetTitle">تغییر نام فایل</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">فايل حذف شود؟</item>
+    <item quantity="other">خالی</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">فایل انتخاب‌شده به‌صورت دائم از Tella حذف می‌شود.</item>
+    <item quantity="other">خالی</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">نام A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">نام Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">از تازه‌ترین به قدیمی‌ترین</string>
+  <string name="Vault_SortDateDesc_SheetAction">از قدیمی‌ترین به تازه‌ترین</string>
+  <string name="Vault_ManageFiles_SheetTitle">مدیریت فایل‌ها</string>
+  <string name="Vault_DeleteFile_SheetDesc">پس از وارد کردن فایل به Tella، فایل اصلی از دستگاه شما حذف می‌شود. فقط رونوشت موجود در Tella باقی می‌ماند.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">گرفتن عکس/ویدئو</string>
+  <string name="Vault_RecordAudio_SheetAction">ضبط صدا</string>
+  <string name="Vault_Import_SheetAction">وارد کردن از دستگاه</string>
+  <string name="Vault_ImportDelete_SheetAction">وارد کردن و حذف فایل اصلی</string>
+  <string name="Vault_CreateFolder_SheetTitle">ایجاد پوشه جدید</string>
+  <string name="Vault_MoveHere">به اینجا منتقل کن</string>
+  <string name="Vault_ViewerOther_SheetDesc">این قالب فایل را نمی‌توان در Tella باز کرد. آیا می‌خواهید فایل را به دستگاه خود منتقل کنید و آنجا با برنامه دیگری باز کنید؟ این کار ممکن است باعث افشای محتوای فایل شود.</string>
+  <string name="Vault_Export_SheetAction">انتقال</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">آیتم‌ها</item>
+    <item quantity="other">خالی</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">هنوز هیچ فایلی در Tella ندارید.</string>
+  <string name="Vault_FavoriteTemplates_Title">قالب‌های موردعلاقه</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">فایل با موفقیت حذف شد.</item>
+    <item quantity="other">فایل با موفقیت حذف شد.</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">برخی از فایل‌های انتخاب‌شده هم‌اکنون در اتصال‌های شما به کار گرفته شده‌اند. حذف کردن آن‌ها ممکن است بر فرم‌ها و گزارش‌های ارسال‌نشده تاثیر بگذارد.</string>
+  <string name="Vault_Warning_Title" translatable="false">Warning</string>
+  <string name="Vault_Delete_anyway">به هر حال حذف شود</string>
+  <string name="Vault_Keep_Original">حفظ نسخه اصلی</string>
+  <string name="Vault_Delete_Original">حذف نسخه اصلی</string>
+  <string name="Vault_deleteFileImported_SheetDesc">پس از وارد کردن فایل در Tella، آیا فایل اصلی در دستگاه شما حفظ شود یا حذف شود؟
+ 
+ اگر آن را حذف کنید، فایل واردشده در Tella یگانه نسخه باقی‌مانده خواهد بود.</string>
+  <string name="Vault_FileEdit_SheetAction">Edit</string>
+</resources>

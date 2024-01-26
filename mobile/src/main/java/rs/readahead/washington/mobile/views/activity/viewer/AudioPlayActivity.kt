@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
@@ -29,7 +30,7 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
@@ -56,7 +57,6 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -402,8 +402,9 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
      */
     private fun disablePlay() {
         // Set the play button to display the pause icon.
-        binding.content.playAudio?.setImageDrawable(
-            this.resources.getDrawable(
+        binding.content.playAudio.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
                 R.drawable.big_white_pause_24p,
                 theme
             )
@@ -415,8 +416,9 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
     }
 
     private fun enablePlay() {
-        binding.content.playAudio?.setImageDrawable(
-            this.resources.getDrawable(
+        binding.content.playAudio.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                resources,
                 R.drawable.ic_play_arrow_white_24dp,
                 theme
             )

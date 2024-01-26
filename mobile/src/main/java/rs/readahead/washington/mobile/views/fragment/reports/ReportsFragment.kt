@@ -45,7 +45,7 @@ class ReportsFragment :
         }
 
         binding.tabs.setTabTextColors(
-            ContextCompat.getColor(baseActivity, R.color.wa_white_44),
+            ContextCompat.getColor(baseActivity, R.color.wa_white_50),
             ContextCompat.getColor(baseActivity, R.color.wa_white)
         )
 

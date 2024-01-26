@@ -77,7 +77,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     private fun onFormInstanceDeleted(success: Boolean) {
         if (success) {
             DialogUtils.showBottomMessage(
-                activity,
+                baseActivity,
                 getString(R.string.collect_toast_form_deleted),
                 false
             )
@@ -86,7 +86,7 @@ class OutboxFormListFragment : BaseBindingFragment<FragmentOutboxFormListBinding
     }
 
     private fun onFormInstanceListSuccess(instances: List<CollectFormInstance?>) {
-        binding.blankSubmittedFormsInfo.visibility =
+        binding.blankOutboxFormsInfo.visibility =
             if (instances.isEmpty()) View.VISIBLE else View.GONE
         adapter!!.setInstances(instances)
     }

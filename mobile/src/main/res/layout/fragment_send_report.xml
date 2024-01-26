@@ -19,7 +19,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-
     <org.hzontal.shared_ui.appbar.ToolbarComponent
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -34,10 +33,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
-        style="@style/Unlock_White_Text"
+        style="@style/Submit_Text_Button"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_large_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
         android:layout_marginBottom="18dp"
         android:background="@drawable/action_button_background"
         android:text="@string/Reports_Pause"

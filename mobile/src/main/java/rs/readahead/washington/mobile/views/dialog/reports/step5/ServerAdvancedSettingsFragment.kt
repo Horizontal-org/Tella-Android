@@ -46,21 +46,21 @@ class ServerAdvancedSettingsFragment :
     }
 
     private fun initListeners() {
-        binding?.backBtn?.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             baseActivity.onBackPressed()
         }
-        binding?.nextBtn?.setOnClickListener {
+        binding.nextBtn.setOnClickListener {
             baseActivity.addFragment(
                 SuccessfulSetServerFragment.newInstance(copyFields(serverReports)),
                 R.id.container
             )
         }
 
-        binding?.backgroundUploadSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked: Boolean ->
             serverReports.isActivatedBackgroundUpload = isChecked
         }
 
-        binding?.shareVerificationSwitch?.mSwitch?.setOnCheckedChangeListener { _, isChecked: Boolean ->
+        binding.shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked: Boolean ->
             serverReports.isActivatedMetadata = isChecked
         }
 

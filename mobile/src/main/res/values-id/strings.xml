@@ -113,7 +113,6 @@
   <string name="settings.docu_verification_action.expl">Makes your media files verifiable by collecting information about your device and location.</string>
   <string name="collect_no.form_heading">Easy data collection</string>
   <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
-  <string name="collect.draft_expl_no.forms">There are no draft forms to display.</string>
   <string name="collect.sent_expl_no.forms">There are no submitted forms to display.</string>
   <string name="collect.blank_expl_no.forms">There are no forms to display. Tap the refresh button to check if there are forms available on the servers you\'re connected to.</string>
   <string name="settings.camo_heading">Select a different name and logo</string>
@@ -375,4 +374,15 @@ connecting to a server</string>
   <string name="settings.camo_weather3">Weather now</string>
   <string name="settings.camo_weather2">Local weather</string>
   <string name="settings.camo_weather1">Weather</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

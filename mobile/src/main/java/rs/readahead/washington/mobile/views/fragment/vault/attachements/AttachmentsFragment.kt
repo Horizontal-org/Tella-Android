@@ -214,7 +214,7 @@ class AttachmentsFragment :
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     changedPosition.toString(),
                     false
                 )
@@ -320,7 +320,7 @@ class AttachmentsFragment :
 
             override fun goToRecorder() {
                 bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                nav().navigate(R.id.action_attachments_screen_to_micScreen, bundle)
+                nav().navigate(R.id.action_attachments_screen_to_micro, bundle)
             }
 
             override fun chooseImportAndDelete() {
@@ -853,7 +853,6 @@ class AttachmentsFragment :
 
 
     private fun onGetProgressPercent(progressPercent: Pair<Double, Int>) {
-        val numberFilesImported = progressPercent.first
         val totalFilesToImport = progressPercent.second
         showProgressImportSheet(
             baseActivity.supportFragmentManager,
