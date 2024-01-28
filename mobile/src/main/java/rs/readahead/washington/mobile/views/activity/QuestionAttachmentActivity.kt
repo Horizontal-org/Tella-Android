@@ -18,8 +18,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
+import com.hzontal.utils.MediaFile.isPDFFile
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
@@ -32,6 +34,7 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.adapters.GalleryRecycleViewAdapter
@@ -218,6 +221,10 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
             val intent = Intent(this, VideoViewerActivity::class.java)
             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
             intent.putExtra(VideoViewerActivity.NO_ACTIONS, true)
+            startActivity(intent)
+        }else if (isPDFFile(vaultFile.name,vaultFile.mimeType)){
+            val intent = Intent(this, PDFReaderActivity::class.java)
+            intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
             startActivity(intent)
         }
     }
