@@ -72,6 +72,7 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepos
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.domain.repository.feedback.ITellaFeedBackRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
+import rs.readahead.washington.mobile.domain.repository.resources.ITellaResourcesRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -79,7 +80,7 @@ import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository, ITellaFeedBackRepository {
+        IMediaFileRecordRepository, ITellaFeedBackRepository, ITellaResourcesRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 

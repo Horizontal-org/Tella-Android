@@ -849,4 +849,5 @@ they are uploaded to this project as a report.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
   <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
+  <string name="Home_BottomNav_Resources">Resources</string>
 </resources>

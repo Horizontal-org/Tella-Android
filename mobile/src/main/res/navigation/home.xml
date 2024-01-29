@@ -40,6 +40,12 @@
             app:destination="@id/formScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_resources_screen"
+            app:destination="@id/resourcesScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment
@@ -194,4 +200,10 @@
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
         tools:layout="@layout/fragment_sumbitted_preview"></fragment>
+
+    <fragment
+        android:id="@+id/resourcesScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.resources.ResourcesListFragment"
+        android:label="@string/Home_BottomNav_Resources"
+        tools:layout="@layout/fragment_resources_list" />
 </navigation>
