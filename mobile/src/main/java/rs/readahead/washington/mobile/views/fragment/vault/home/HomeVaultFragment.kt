@@ -42,6 +42,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
@@ -276,6 +277,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
+                startActivity(intent)
+            }
+            MediaFile.isPDFFile(vaultFile.name,vaultFile.mimeType) -> {
+                val intent = Intent(baseActivity, PDFReaderActivity::class.java)
+                intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
                 startActivity(intent)
             }
             else -> {

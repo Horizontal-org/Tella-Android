@@ -23,8 +23,10 @@ import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
+import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
+import com.hzontal.utils.MediaFile.isPDFFile
 import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -57,6 +59,8 @@ import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity.Companion.PLAY_MEDIA_FILE_ID_KEY
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.VIEW_PDF
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.Companion.VIEW_PHOTO
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
@@ -471,6 +475,7 @@ class AttachmentsFragment :
                 isImageFileType(it) -> openActivity<PhotoViewerActivity>(VIEW_PHOTO, vaultFile)
                 isAudioFileType(it) -> openActivity<AudioPlayActivity>(vaultFile.id)
                 isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO, vaultFile)
+                isPDFFile(vaultFile.name, it) -> openActivity<PDFReaderActivity>(VIEW_PDF, vaultFile)
                 else -> showBottomSheet(vaultFile)
             }
         }
@@ -799,7 +804,6 @@ class AttachmentsFragment :
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, num, num),
             false
         )
-
     }
 
     private fun onExportStarted(state: Boolean) {

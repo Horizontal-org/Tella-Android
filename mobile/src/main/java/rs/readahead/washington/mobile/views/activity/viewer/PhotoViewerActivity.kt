@@ -111,12 +111,10 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             // Observer for the onMediaFileDeleteConfirmed LiveData, handles the action when media file deletion is confirmed
             onMediaFileDeleteConfirmed.observe(this@PhotoViewerActivity) { mediaFileDeletedConfirmation ->
-                mediaFileDeletedConfirmation.vaultFile.let { deletedVaultFile ->
-                    onMediaFileDeleteConfirmation(
-                        deletedVaultFile,
-                        mediaFileDeletedConfirmation.showConfirmDelete
-                    )
-                }
+                onMediaFileDeleteConfirmation(
+                    mediaFileDeletedConfirmation.vaultFile,
+                    mediaFileDeletedConfirmation.showConfirmDelete
+                )
             }
         }
     }
@@ -248,7 +246,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
-    fun onMediaExported() {
+   private fun onMediaExported() {
         DialogUtils.showBottomMessage(
             this,
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),
@@ -256,11 +254,11 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         )
     }
 
-    fun onExportStarted() {
+    private fun onExportStarted() {
         binding.content.progressBar.visibility = View.VISIBLE
     }
 
-    fun onExportEnded() {
+    private fun onExportEnded() {
         binding.content.progressBar.visibility = View.GONE
     }
 

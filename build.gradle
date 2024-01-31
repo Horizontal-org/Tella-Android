@@ -70,7 +70,7 @@ buildscript {
     versions.hilt_android_compiler = "2.50"
     versions.permissionDispatcher = "4.8.0"
     versions.googlePlayServices = "17.0.0"
-
+    versions.pdf_viewer = "2.8.2"
 
     repositories {
         mavenCentral()
