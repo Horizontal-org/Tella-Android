@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
@@ -114,8 +115,8 @@ class LoginReportsFragment :
             binding.username.setText(serverReports.username)
             binding.password.setText(serverReports.password)
         }
-//        KeyboardLiveData(binding.root).observe(baseActivity) {
-//            binding.backBtn.isVisible = !it.first
-//        }
+        KeyboardLiveData(binding.root).observe(baseActivity) {
+            binding.backBtn.isVisible = !it.first
+        }
     }
 }
