@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportServerAdvancedSettingsBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
@@ -50,10 +51,13 @@ class ServerAdvancedSettingsFragment :
             baseActivity.onBackPressed()
         }
         binding.nextBtn.setOnClickListener {
-            baseActivity.addFragment(
-                SuccessfulSetServerFragment.newInstance(copyFields(serverReports)),
-                R.id.container
-            )
+            bundle.putSerializable(ID_KEY, serverReports.id)
+            bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
+            navManager().navigateToWithBundle(R.id.action_serverAdvancedSettingsFragment_to_successfulSetServerFragment)
+//            baseActivity.addFragment(
+//                SuccessfulSetServerFragment.newInstance(copyFields(serverReports)),
+//                R.id.container
+//            )
         }
 
         binding.backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked: Boolean ->

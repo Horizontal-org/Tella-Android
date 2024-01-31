@@ -9,11 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
 import com.tooltip.Tooltip
-import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
-import javax.inject.Inject
 
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 

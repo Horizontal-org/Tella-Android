@@ -1,9 +1,7 @@
 package rs.readahead.washington.mobile.views.dialog.reports.step1
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -13,20 +11,21 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEnterServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ConnectFlowUtils.validateUrl
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
-import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment
+import rs.readahead.washington.mobile.views.dialog.reports.step3.OBJECT_SLUG
 
 @AndroidEntryPoint
-class EnterUploadServerFragment : BaseFragment() {
+class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding>(
+    FragmentEnterServerBinding::inflate
+) {
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
     private val serverReports: TellaReportServer by lazy {
         TellaReportServer()
     }
     private var projectSlug = ""
-    private lateinit var binding: FragmentEnterServerBinding
 
     companion object {
         val TAG: String = EnterUploadServerFragment::class.java.simpleName
@@ -44,20 +43,14 @@ class EnterUploadServerFragment : BaseFragment() {
         fun newInstance() = EnterUploadServerFragment()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentEnterServerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+        initView()
+
     }
 
-    override fun initView(view: View) {
+    fun initView() {
         with(binding) {
             backBtn.setOnClickListener {
                 baseActivity.finish()
@@ -90,13 +83,16 @@ class EnterUploadServerFragment : BaseFragment() {
                     false
                 )
             } else {
-                KeyboardUtil.hideKeyboard(baseActivity,view)
-                baseActivity.addFragment(
-                    LoginReportsFragment.newInstance(
-                        serverReports,
-                        projectSlug
-                    ), R.id.container
-                )
+                KeyboardUtil.hideKeyboard(baseActivity, view)
+                bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
+                bundle.putString(OBJECT_SLUG, projectSlug)
+                navManager().navigateToWithBundle(R.id.action_enterUploadServerFragment_to_loginReportsFragment)
+
+//                baseActivity.addFragment(
+//                    LoginReportsFragment.newInstance(
+//                        serverReports,
+//                        projectSlug
+//                    ), R.id.container )
             }
         }
     }

@@ -28,4 +28,12 @@ class NavigationManager (private val navControllerProvider: NavControllerProvide
         navControllerProvider.navController.navigate(R.id.action_reportsScreen_to_newReport_screen,bundle)
     }
 
+    fun navigateToEditTellaServerFragment() {
+        navControllerProvider.navController.navigate(R.id.action_loginToReportsScreen_to_editTellaServerFragment,bundle)
+    }
+
+    fun navigateToEnterUrlScreen() {
+        navControllerProvider.navController.navigate(R.id.reports_settings)
+    }
+
 }

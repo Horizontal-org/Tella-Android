@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
@@ -50,7 +51,13 @@ class EditTellaServerFragment :
             return editTellaServerFragment
         }
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            it.getString(OBJECT_KEY)
+            it.getBoolean(EDIT_MODE_KEY)
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -108,6 +115,9 @@ class EditTellaServerFragment :
                     SharedLiveData.updateReportsServer.postValue(reportServer)
                     baseActivity.finish()
                 } else {
+//                    bundle.putSerializable(ID_KEY, copyFields(reportServer).id)
+//                    bundle.putString(OBJECT_KEY, Gson().toJson(copyFields(reportServer)))
+//                    navManager().navigateToWithBundle(R.id.action_editTellaServerFragment_to_successfulSetServerFragment)
                     baseActivity.addFragment(
                         SuccessfulSetServerFragment.newInstance(copyFields(reportServer)),
                         R.id.container

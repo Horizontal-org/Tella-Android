@@ -53,9 +53,11 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
         binding.goToAdvancedSettingsBtn.setOnClickListener {
             binding.goToAdvancedSettingsBtn.isChecked = true
             binding.goToReportsBtn.isChecked = false
-            baseActivity.addFragment(
-                ServerAdvancedSettingsFragment.newInstance(server), R.id.container
-            )
+            bundle.putString(OBJECT_KEY, Gson().toJson(server))
+            navManager().navigateToWithBundle(R.id.action_successfulLoginFragment_to_serverAdvancedSettingsFragment)
+//            baseActivity.addFragment(
+//                ServerAdvancedSettingsFragment.newInstance(server), R.id.container
+//            )
         }
 
         binding.goToReportsBtn.setOnClickListener {
@@ -67,7 +69,9 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
 
     private fun saveServerAndGoToReportsScreen() {
         SharedLiveData.createReportsServerAndCloseActivity.postValue(server)
-        baseActivity.replaceFragmentNoAddToBackStack(ReportsFragment(),R.id.container)
+        navManager().navigateTo(R.id.reports_graph)
+       // to check  by wafa
+//       baseActivity.replaceFragmentNoAddToBackStack(ReportsFragment(),R.id.container)
         baseActivity.finish()
     }
 
