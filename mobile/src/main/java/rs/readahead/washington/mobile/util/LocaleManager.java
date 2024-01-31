@@ -59,24 +59,18 @@ public class LocaleManager {
 
     @Nullable
     public String getLanguageSetting() {
-        String language = Single.fromCallable( new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                String language = SharedPrefs.getInstance().getAppLanguage();
-                return language != null ? language : NONE_LANGUAGE;
-            }
+        String language = Single.fromCallable(() -> {
+            String language1 = SharedPrefs.getInstance().getAppLanguage();
+            return language1 != null ? language1 : NONE_LANGUAGE;
         }).subscribeOn(Schedulers.io()).blockingGet();
 
         return NONE_LANGUAGE.equals(language) ? null : language;
     }
 
     private void setLanguageSetting(@Nullable final String language) {
-        Completable.fromCallable(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                SharedPrefs.getInstance().setAppLanguage(language);
-                return null;
-            }
+        Completable.fromCallable((Callable<Void>) () -> {
+            SharedPrefs.getInstance().setAppLanguage(language);
+            return null;
         }).subscribeOn(Schedulers.io()).subscribe(); // leaks?
     }
 
@@ -130,9 +124,7 @@ public class LocaleManager {
         Configuration configuration = resources.getConfiguration();
         configuration.locale = locale;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            configuration.setLayoutDirection(locale);
-        }
+        configuration.setLayoutDirection(locale);
 
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
 
