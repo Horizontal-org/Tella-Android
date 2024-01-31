@@ -115,7 +115,7 @@ class LoginReportsFragment :
             binding.username.setText(serverReports.username)
             binding.password.setText(serverReports.password)
         }
-        KeyboardLiveData(binding.root).observe(baseActivity) {
+        KeyboardLiveData(binding.root).observe(viewLifecycleOwner) {
             binding.backBtn.isVisible = !it.first
         }
     }

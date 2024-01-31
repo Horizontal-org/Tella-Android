@@ -62,8 +62,6 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     private fun saveServerAndGoToReportsScreen() {
         SharedLiveData.createReportsServerAndCloseActivity.postValue(server)
         navManager().navigateTo(R.id.reports_graph)
-        // to check  by wafa
-//       baseActivity.replaceFragmentNoAddToBackStack(ReportsFragment(),R.id.container)
         baseActivity.finish()
     }
 
