@@ -86,7 +86,7 @@ class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding
                 KeyboardUtil.hideKeyboard(baseActivity, view)
                 bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
                 bundle.putString(OBJECT_SLUG, projectSlug)
-                navManager().navigateToWithBundle(R.id.action_enterUploadServerFragment_to_loginReportsFragment)
+                navManager().navigateFromEnterUploadServerFragmentToLoginReportsFragment()
 
 //                baseActivity.addFragment(
 //                    LoginReportsFragment.newInstance(

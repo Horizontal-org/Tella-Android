@@ -6,16 +6,15 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
 class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
@@ -106,7 +105,7 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
     private fun openEntityInstance(reportInstance: ReportInstance) {
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        nav().navigate(R.id.action_reportsScreen_to_reportSubmittedScreen, bundle)
+        navManager().navigateFromReportsScreenToReportSubmittedScreen()
     }
 
     override fun onResume() {

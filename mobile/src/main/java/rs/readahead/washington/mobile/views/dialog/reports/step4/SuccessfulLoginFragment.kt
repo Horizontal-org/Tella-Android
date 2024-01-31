@@ -3,17 +3,12 @@ package rs.readahead.washington.mobile.views.dialog.reports.step4
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.CloseSettingsActivityEvent
-import rs.readahead.washington.mobile.bus.event.GoToReportsScreenEvent
 import rs.readahead.washington.mobile.databinding.FragmentSuccessfulLoginBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
-import rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment
 
 class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBinding>(
     FragmentSuccessfulLoginBinding::inflate
@@ -54,10 +49,7 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
             binding.goToAdvancedSettingsBtn.isChecked = true
             binding.goToReportsBtn.isChecked = false
             bundle.putString(OBJECT_KEY, Gson().toJson(server))
-            navManager().navigateToWithBundle(R.id.action_successfulLoginFragment_to_serverAdvancedSettingsFragment)
-//            baseActivity.addFragment(
-//                ServerAdvancedSettingsFragment.newInstance(server), R.id.container
-//            )
+            navManager().navigateFromSuccessfulLoginFragmentToServerAdvancedSettingsFragment()
         }
 
         binding.goToReportsBtn.setOnClickListener {
@@ -70,7 +62,7 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     private fun saveServerAndGoToReportsScreen() {
         SharedLiveData.createReportsServerAndCloseActivity.postValue(server)
         navManager().navigateTo(R.id.reports_graph)
-       // to check  by wafa
+        // to check  by wafa
 //       baseActivity.replaceFragmentNoAddToBackStack(ReportsFragment(),R.id.container)
         baseActivity.finish()
     }

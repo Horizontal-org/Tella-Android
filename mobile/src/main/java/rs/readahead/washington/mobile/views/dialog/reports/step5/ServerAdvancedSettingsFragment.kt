@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportServerAdvancedSettingsBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
 @AndroidEntryPoint
 class ServerAdvancedSettingsFragment :
@@ -53,11 +51,7 @@ class ServerAdvancedSettingsFragment :
         binding.nextBtn.setOnClickListener {
             bundle.putSerializable(ID_KEY, serverReports.id)
             bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
-            navManager().navigateToWithBundle(R.id.action_serverAdvancedSettingsFragment_to_successfulSetServerFragment)
-//            baseActivity.addFragment(
-//                SuccessfulSetServerFragment.newInstance(copyFields(serverReports)),
-//                R.id.container
-//            )
+            navManager().navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment()
         }
 
         binding.backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked: Boolean ->
@@ -69,6 +63,7 @@ class ServerAdvancedSettingsFragment :
         }
 
     }
+
     private fun copyFields(server: TellaReportServer): TellaReportServer {
         server.url = serverReports.url
         server.username = serverReports.username

@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
-import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
 internal const val EDIT_MODE_KEY = "edit_mode_key"
 
@@ -51,6 +50,7 @@ class EditTellaServerFragment :
             return editTellaServerFragment
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -58,6 +58,7 @@ class EditTellaServerFragment :
             it.getBoolean(EDIT_MODE_KEY)
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -115,15 +116,10 @@ class EditTellaServerFragment :
                     SharedLiveData.updateReportsServer.postValue(reportServer)
                     baseActivity.finish()
                 } else {
-//                    bundle.putSerializable(ID_KEY, copyFields(reportServer).id)
-//                    bundle.putString(OBJECT_KEY, Gson().toJson(copyFields(reportServer)))
-//                    navManager().navigateToWithBundle(R.id.action_editTellaServerFragment_to_successfulSetServerFragment)
-                    baseActivity.addFragment(
-                        SuccessfulSetServerFragment.newInstance(copyFields(reportServer)),
-                        R.id.container
-                    )
+                    bundle.putSerializable(ID_KEY, copyFields(reportServer).id)
+                    bundle.putString(OBJECT_KEY, Gson().toJson(copyFields(reportServer)))
+                    navManager().navigateFromEditTellaServerFragmentToSuccessfulSetServerFragment()
                 }
-
             }
 
             autoDeleteSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->

@@ -15,7 +15,6 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
-import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowViewModel
@@ -31,17 +30,6 @@ class LoginReportsFragment :
     private val viewModel by viewModels<ReportsConnectFlowViewModel>()
     private var projectSlug = ""
 
-//    companion object {
-//        @JvmStatic
-//        fun newInstance(server: TellaReportServer, slug: String): LoginReportsFragment {
-//            val frag = LoginReportsFragment()
-//            val args = Bundle()
-//            args.putString(OBJECT_KEY, Gson().toJson(server))
-//            args.putString(OBJECT_SLUG, slug)
-//            frag.arguments = args
-//            return frag
-//        }
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,9 +43,9 @@ class LoginReportsFragment :
         binding.loginButton.setOnClickListener {
             if (!MyApplication.isConnectedToInternet(baseActivity)) {
                 DialogUtils.showBottomMessage(
-                        baseActivity,
-                        getString(R.string.settings_docu_error_no_internet),
-                        true
+                    baseActivity,
+                    getString(R.string.settings_docu_error_no_internet),
+                    true
                 )
             } else {
                 validate()
@@ -77,10 +65,10 @@ class LoginReportsFragment :
         }
 
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
-            KeyboardUtil.hideKeyboard(baseActivity,binding.root)
+            KeyboardUtil.hideKeyboard(baseActivity, binding.root)
             bundle.putString(OBJECT_KEY, Gson().toJson(server))
             bundle.putBoolean(EDIT_MODE_KEY, false)
-            navManager().navigateToEditTellaServerFragment()
+            navManager().navigateFromLoginToReportsScreenToEditTellaServerFragment()
 //            baseActivity.addFragment(
 //                EditTellaServerFragment.newInstance(server,false), R.id.container
 //            )

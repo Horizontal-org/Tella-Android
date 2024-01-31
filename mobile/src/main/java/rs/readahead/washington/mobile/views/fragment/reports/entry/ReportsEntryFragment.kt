@@ -180,8 +180,8 @@ class ReportsEntryFragment :
             isTitleEnabled && isServerSelected && (isDescriptionEnabled || filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty())
 
-        val disabled : Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
-        val enabled : Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
+        val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
+        val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
 
         binding.sendReportBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
         binding.sendLaterBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
@@ -410,7 +410,7 @@ class ReportsEntryFragment :
     private fun showAudioRecorderActivity() {
         try {
             bundle.putBoolean(REPORT_ENTRY, true)
-           //nav().navigate(R.id.action_newReport_to_micScreen, bundle)
+            //nav().navigate(R.id.action_newReport_to_micScreen, bundle)
             this.navManager().navigateToMicro()
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -458,9 +458,7 @@ class ReportsEntryFragment :
         val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
-        // nav().navigateUp()
-        nav().navigate(R.id.action_newReport_to_reportSendScreen, bundle)
-        nav().clearBackStack(R.id.action_newReport_to_reportSendScreen)
+        navManager().navigateFromNewReportsScreenToReportSendScreen()
     }
 
     private fun showDeleteBottomSheet(reportInstance: ReportInstance) {
