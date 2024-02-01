@@ -27,27 +27,10 @@ class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding
     }
     private var projectSlug = ""
 
-    companion object {
-        val TAG: String = EnterUploadServerFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance(server: TellaReportServer): EnterUploadServerFragment {
-            val frag = EnterUploadServerFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
-        }
-
-        @JvmStatic
-        fun newInstance() = EnterUploadServerFragment()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
         initView()
-
     }
 
     fun initView() {
@@ -87,12 +70,6 @@ class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding
                 bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
                 bundle.putString(OBJECT_SLUG, projectSlug)
                 navManager().navigateFromEnterUploadServerFragmentToLoginReportsFragment()
-
-//                baseActivity.addFragment(
-//                    LoginReportsFragment.newInstance(
-//                        serverReports,
-//                        projectSlug
-//                    ), R.id.container )
             }
         }
     }

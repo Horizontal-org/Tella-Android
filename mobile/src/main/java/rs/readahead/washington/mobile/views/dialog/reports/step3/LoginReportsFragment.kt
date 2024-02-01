@@ -70,9 +70,6 @@ class LoginReportsFragment :
             bundle.putString(OBJECT_KEY, Gson().toJson(server))
             bundle.putBoolean(EDIT_MODE_KEY, false)
             navManager().navigateFromLoginToReportsScreenToEditTellaServerFragment()
-//            baseActivity.addFragment(
-//                EditTellaServerFragment.newInstance(server,false), R.id.container
-//            )
         }
 
         viewModel.progress.observe(baseActivity) {

@@ -15,21 +15,6 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
 ) {
     private lateinit var server: TellaReportServer
 
-    companion object {
-        val TAG: String = SuccessfulLoginFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance(
-            server: TellaReportServer
-        ): SuccessfulLoginFragment {
-            val frag = SuccessfulLoginFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()

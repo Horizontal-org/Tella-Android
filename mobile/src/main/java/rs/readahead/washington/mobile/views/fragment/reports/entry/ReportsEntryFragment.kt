@@ -33,7 +33,6 @@ import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Compa
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.REPORT_ENTRY
-import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
@@ -410,7 +409,6 @@ class ReportsEntryFragment :
     private fun showAudioRecorderActivity() {
         try {
             bundle.putBoolean(REPORT_ENTRY, true)
-            //nav().navigate(R.id.action_newReport_to_micScreen, bundle)
             this.navManager().navigateToMicro()
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)

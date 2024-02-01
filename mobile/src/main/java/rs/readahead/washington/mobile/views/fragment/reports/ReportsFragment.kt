@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
@@ -52,9 +55,6 @@ class ReportsFragment :
 
         binding.newReportBtn.setOnClickListener {
             this.navManager().navigateFromReportsScreenToNewReportScreen()
-            // nav().navigate(R.id.action_reportsScreen_to_newReport_screen)
-
-
         }
         binding.toolbar.backClickListener = { nav().popBackStack() }
 

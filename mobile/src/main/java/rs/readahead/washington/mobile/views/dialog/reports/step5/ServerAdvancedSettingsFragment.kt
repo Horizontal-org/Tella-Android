@@ -17,21 +17,6 @@ class ServerAdvancedSettingsFragment :
     ) {
     private lateinit var serverReports: TellaReportServer
 
-    companion object {
-        val TAG: String = ServerAdvancedSettingsFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance(
-            server: TellaReportServer
-        ): ServerAdvancedSettingsFragment {
-            val frag = ServerAdvancedSettingsFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()

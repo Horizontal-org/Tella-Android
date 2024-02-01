@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.reports.di
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.hzontal.tella_vault.rx.RxVault
 import dagger.Module
@@ -9,16 +8,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.KeyDataSource
-import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import javax.inject.Singleton
-
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
     @Provides
-    @Singleton
     fun provideNavControllerProvider(fragment: Fragment): NavControllerProvider {
         return NavControllerProvider(fragment)
     }
