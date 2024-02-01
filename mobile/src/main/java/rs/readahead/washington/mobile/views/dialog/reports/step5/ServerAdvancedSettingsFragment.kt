@@ -34,8 +34,8 @@ class ServerAdvancedSettingsFragment :
             baseActivity.onBackPressed()
         }
         binding.nextBtn.setOnClickListener {
-            bundle.putSerializable(ID_KEY, serverReports.id)
-            bundle.putString(OBJECT_KEY, Gson().toJson(serverReports))
+            bundle.putSerializable(ID_KEY, copyFields(serverReports).id)
+            bundle.putString(OBJECT_KEY, Gson().toJson(copyFields(serverReports)))
             navManager().navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment()
         }
 
@@ -48,7 +48,6 @@ class ServerAdvancedSettingsFragment :
         }
 
     }
-
     private fun copyFields(server: TellaReportServer): TellaReportServer {
         server.url = serverReports.url
         server.username = serverReports.username
