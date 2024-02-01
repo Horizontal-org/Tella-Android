@@ -61,6 +61,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity.Co
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.VIEW_PDF
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.Companion.CURRENT_EDIT_PARENT
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.Companion.VIEW_PHOTO
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
@@ -473,7 +474,11 @@ class AttachmentsFragment :
                 isImageFileType(it) -> openActivity<PhotoViewerActivity>(VIEW_PHOTO, vaultFile)
                 isAudioFileType(it) -> openActivity<AudioPlayActivity>(vaultFile.id)
                 isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO, vaultFile)
-                isPDFFile(vaultFile.name, it) -> openActivity<PDFReaderActivity>(VIEW_PDF, vaultFile)
+                isPDFFile(vaultFile.name, it) -> openActivity<PDFReaderActivity>(
+                    VIEW_PDF,
+                    vaultFile
+                )
+
                 else -> showBottomSheet(vaultFile)
             }
         }
@@ -488,10 +493,12 @@ class AttachmentsFragment :
 
     private inline fun <reified T : Activity> openActivity(
         VIEW_TYPE: String,
-        vaultFile: VaultFile
+        vaultFile: VaultFile,
+        currentParent: String? = null
     ) {
         val intent = Intent(baseActivity, T::class.java).apply {
             putExtra(VIEW_TYPE, vaultFile)
+            putExtra(CURRENT_EDIT_PARENT, currentRootID)
         }
         startActivity(intent)
     }
@@ -575,6 +582,7 @@ class AttachmentsFragment :
                         val bundle = Bundle()
                         bundle.putSerializable(VAULT_FILE_ARG, it)
                         bundle.putBoolean(VaultEditFragment.CALLER_PARAM, true)
+                        bundle.putString(VaultEditFragment.CURRENT_EDIT_PARENT, currentRootID)
                         nav().navigate(R.id.action_attachments_screen_to_edit_screen, bundle)
                     }
                 }

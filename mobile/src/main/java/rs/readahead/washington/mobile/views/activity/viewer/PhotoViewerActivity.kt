@@ -37,6 +37,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     companion object {
         const val VIEW_PHOTO = "vp"
         const val NO_ACTIONS = "na"
+        const val CURRENT_EDIT_PARENT = "cep"
     }
 
     private val viewModel: SharedMediaFileViewModel by viewModels()
@@ -47,6 +48,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
     private var alertDialog: AlertDialog? = null
     private var isInfoShown = false
     private lateinit var binding: ActivityPhotoViewerBinding
+    private var currentParent: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoViewerBinding.inflate(layoutInflater)
@@ -74,6 +76,9 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
         if (intent.hasExtra(NO_ACTIONS)) {
             actionsDisabled = true
+        }
+        if (intent.hasExtra(CURRENT_EDIT_PARENT)) {
+            currentParent = intent.getStringExtra(CURRENT_EDIT_PARENT)
         }
     }
 
@@ -196,7 +201,13 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
                     vaultFile?.let { file ->
                         toolbar.visibility = View.GONE
                         addFragment(
-                            vaultFile.let { VaultEditFragment.newInstance(file, false) },
+                            vaultFile.let {
+                                VaultEditFragment.newInstance(
+                                    file,
+                                    false,
+                                    currentParent
+                                )
+                            },
                             R.id.container
                         )
                     }
@@ -246,7 +257,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
-   private fun onMediaExported() {
+    private fun onMediaExported() {
         DialogUtils.showBottomMessage(
             this,
             resources.getQuantityString(R.plurals.gallery_toast_files_exported, 1, 1),

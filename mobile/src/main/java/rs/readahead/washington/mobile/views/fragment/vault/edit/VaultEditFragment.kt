@@ -28,15 +28,22 @@ class VaultEditFragment :
     CropImageView.OnSetImageUriCompleteListener {
     private val viewModel by viewModels<EditMediaViewModel>()
     private var isNavigationCall = true
+    private var currentParent: String? = null
 
     companion object {
         const val CALLER_PARAM = "cp"
+        const val CURRENT_EDIT_PARENT = "cep"
 
         @JvmStatic
-        fun newInstance(vaultFile: VaultFile, isFromViewer: Boolean): VaultEditFragment {
+        fun newInstance(
+            vaultFile: VaultFile,
+            isFromViewer: Boolean,
+            currentParent: String? = null
+        ): VaultEditFragment {
             val args = Bundle().apply {
                 putSerializable(VAULT_FILE_ARG, vaultFile)
                 putBoolean(CALLER_PARAM, isFromViewer)
+                putString(CURRENT_EDIT_PARENT, currentParent)
             }
             val fragment = VaultEditFragment()
             fragment.arguments = args
@@ -62,6 +69,10 @@ class VaultEditFragment :
         }
         arguments?.getBoolean(CALLER_PARAM)?.let {
             isNavigationCall = it
+        }
+
+        arguments?.getString(CURRENT_EDIT_PARENT)?.let {
+            currentParent = it
         }
     }
 
@@ -122,7 +133,7 @@ class VaultEditFragment :
 
         bitmap?.let {
             //binding.cropImageView.setImageBitmap(it)
-            viewModel.saveBitmapAsJpeg(it, null)
+            viewModel.saveBitmapAsJpeg(it, currentParent)
         }
     }
 
@@ -158,7 +169,7 @@ class VaultEditFragment :
     override fun onSetImageUriComplete(view: CropImageView, uri: Uri, error: Exception?) {
     }
 
-    private fun checkSaveOrExit(){
+    private fun checkSaveOrExit() {
         BottomSheetUtils.showStandardSheet(
             baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Edit_Dialog_confirm_exit_title),
