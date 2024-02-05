@@ -127,27 +127,18 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     //TODO needs an improvement
     @Override
     public void onBackPressed() {
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+        super.onBackPressed();
 
-        if (navHostFragment != null) {
-            Fragment currentFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
 
-            // Now 'currentFragment' represents the currently displayed fragment within the NavHostFragment.
-            if (currentFragment != null) {
-                // Do something with the current fragment
-                if ((currentFragment instanceof SendFeedbackFragment)) {
-                    ((SendFeedbackFragment) currentFragment).handleBackButton();
-                } else {
-                    super.onBackPressed();
-                    if (currentFragment instanceof MainSettings) {
-                        showAppbar();
-                        setToolbarLabel(R.string.settings_app_bar);
-                    } else if (currentFragment instanceof SecuritySettings) {
-                        showAppbar();
-                        setToolbarLabel(R.string.settings_sec_app_bar);
-                    }
-                }
-            }
+        if (f instanceof MainSettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_app_bar);
+        } else if (f instanceof SecuritySettings) {
+            showAppbar();
+            setToolbarLabel(R.string.settings_sec_app_bar);
+        } else if (f instanceof SendFeedbackFragment) {
+            ((SendFeedbackFragment) f).handleBackButton();
         }
     }
 }
