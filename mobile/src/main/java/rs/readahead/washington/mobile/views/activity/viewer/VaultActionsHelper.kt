@@ -88,7 +88,7 @@ object VaultActionsHelper {
                     getString(R.string.Vault_CreateFolder_SheetAction),
                     getString(R.string.action_cancel),
                     getString(R.string.action_ok), this@showVaultActionsDialog,
-                    chosenVaultFile?.name
+                    chosenVaultFile.name
                 ) { name: String? ->
                     name?.let { viewModel.run { renameVaultFile(chosenVaultFile.id, it) } }
                 }
