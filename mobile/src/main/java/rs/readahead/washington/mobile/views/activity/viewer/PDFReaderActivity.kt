@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -28,8 +27,6 @@ class PDFReaderActivity : BaseLockActivity() {
     private lateinit var binding: ActivityPdfReaderBinding
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
-    private var pageNumber = 0
-    private var pdfFileName: String? = null
     private var isInfoShown = false
 
     companion object {
