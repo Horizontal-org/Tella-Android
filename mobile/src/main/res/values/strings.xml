@@ -410,7 +410,7 @@ connecting to a server</string>
   <string name="Home_BottomNav_Forms">Forms</string>
   <string name="Home_BottomNav_Reports">Reports</string>
   <string name="Vault_Move_AppBar">Move \"%s\"</string>
-  <string name="Vault_CreateFolder_SheetAction">Create</string>
+  <string name="Vault_CreateFolder_SheetAction">Create a new folder</string>
   <string name="ServerSettings_ServerName_ToolTip">Give your server a name to recognize it if you add more servers later. It could be the organization’s name, the project’s name, etc.</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="one">%s file imported</item>

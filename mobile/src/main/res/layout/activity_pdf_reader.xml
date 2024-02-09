@@ -16,6 +16,7 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:navigationContentDescription="@string/action_go_back"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:titleMarginStart="0dp"
         app:titleTextAppearance="@style/Toolbar.TitleText"
@@ -36,6 +37,10 @@
         android:layout_height="match_parent">
     </com.horizontal.pdfviewer.PdfRendererView>
 
-
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
