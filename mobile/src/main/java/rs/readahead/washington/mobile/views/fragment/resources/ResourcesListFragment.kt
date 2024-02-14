@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ResourceTemplate
@@ -81,98 +85,115 @@ class ResourcesListFragment :
         if (resource != null) {
             name.text = resource.fileName
             organization.text = resource.title
-  /*          if (collectForm.isDownloaded) {
-                dlOpenButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_more,
-                        null
-                    )
+            dlOpenButton.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_download,
+                    null
                 )
-                dlOpenButton.contentDescription =
-                    getString(R.string.collect_blank_action_desc_more_options)
-                dlOpenButton.setOnClickListener { view: View? ->
-                    showDownloadedMenu(
-                        collectForm
-                    )
-                }
-                rowLayout.setOnClickListener { view: View? ->
-                    model.getBlankFormDef(
-                        collectForm
-                    )
-                }
-                pinnedIcon.setOnClickListener { view: View? ->
-                    model.toggleFavorite(collectForm)
-                    updateFormViews()
-                }
-                if (collectForm.isUpdated) {
-                    pinnedIcon.visibility = View.VISIBLE
-                    updateButton.visibility = View.VISIBLE
-                    updateButton.setOnClickListener { view: View? ->
-                        if (MyApplication.isConnectedToInternet(requireContext())) {
-                            model.updateBlankFormDef(collectForm)
-                        } else {
-                            DialogUtils.showBottomMessage(
-                                baseActivity,
-                                getString(R.string.collect_blank_toast_not_connected),
-                                true
-                            )
-                        }
-                    }
+            )
+            dlOpenButton.setOnClickListener { view: View? ->
+                if (MyApplication.isConnectedToInternet(requireContext())) {
+                    model.downloadResource(resource)
                 } else {
-                    updateButton.visibility = View.GONE
-                }
-            } else {
-                pinnedIcon.visibility = View.GONE
-                dlOpenButton.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.ic_download,
-                        null
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(R.string.collect_blank_toast_not_connected),
+                        true
                     )
-                )
-                dlOpenButton.contentDescription =
-                    getString(R.string.collect_blank_action_download_form)
-                dlOpenButton.setOnClickListener { view: View? ->
-                    if (MyApplication.isConnectedToInternet(requireContext())) {
-                        model.downloadBlankFormDef(collectForm)
-                    } else {
-                        DialogUtils.showBottomMessage(
-                            baseActivity,
-                            getString(R.string.collect_blank_toast_not_connected),
-                            true
-                        )
-                    }
                 }
             }
-            if (collectForm.isPinned) {
-                pinnedIcon.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.star_filled_24dp,
-                        null
-                    )
-                )
-                pinnedIcon.contentDescription = getString(R.string.action_unfavorite)
-            } else {
-                pinnedIcon.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.star_border_24dp,
-                        null
-                    )
-                )
-                pinnedIcon.contentDescription = getString(R.string.action_favorite)
-            }*/
+            /*          if (collectForm.isDownloaded) {
+                          dlOpenButton.setImageDrawable(
+                              ResourcesCompat.getDrawable(
+                                  resources,
+                                  R.drawable.ic_more,
+                                  null
+                              )
+                          )
+                          dlOpenButton.contentDescription =
+                              getString(R.string.collect_blank_action_desc_more_options)
+                          dlOpenButton.setOnClickListener { view: View? ->
+                              showDownloadedMenu(
+                                  collectForm
+                              )
+                          }
+                          rowLayout.setOnClickListener { view: View? ->
+                              model.getBlankFormDef(
+                                  collectForm
+                              )
+                          }
+                          pinnedIcon.setOnClickListener { view: View? ->
+                              model.toggleFavorite(collectForm)
+                              updateFormViews()
+                          }
+                          if (collectForm.isUpdated) {
+                              pinnedIcon.visibility = View.VISIBLE
+                              updateButton.visibility = View.VISIBLE
+                              updateButton.setOnClickListener { view: View? ->
+                                  if (MyApplication.isConnectedToInternet(requireContext())) {
+                                      model.updateBlankFormDef(collectForm)
+                                  } else {
+                                      DialogUtils.showBottomMessage(
+                                          baseActivity,
+                                          getString(R.string.collect_blank_toast_not_connected),
+                                          true
+                                      )
+                                  }
+                              }
+                          } else {
+                              updateButton.visibility = View.GONE
+                          }
+                      } else {
+                          pinnedIcon.visibility = View.GONE
+                          dlOpenButton.setImageDrawable(
+                              ResourcesCompat.getDrawable(
+                                  resources,
+                                  R.drawable.ic_download,
+                                  null
+                              )
+                          )
+                          dlOpenButton.contentDescription =
+                              getString(R.string.collect_blank_action_download_form)
+                          dlOpenButton.setOnClickListener { view: View? ->
+                              if (MyApplication.isConnectedToInternet(requireContext())) {
+                                  model.downloadBlankFormDef(collectForm)
+                              } else {
+                                  DialogUtils.showBottomMessage(
+                                      baseActivity,
+                                      getString(R.string.collect_blank_toast_not_connected),
+                                      true
+                                  )
+                              }
+                          }
+                      }
+                      if (collectForm.isPinned) {
+                          pinnedIcon.setImageDrawable(
+                              ResourcesCompat.getDrawable(
+                                  resources,
+                                  R.drawable.star_filled_24dp,
+                                  null
+                              )
+                          )
+                          pinnedIcon.contentDescription = getString(R.string.action_unfavorite)
+                      } else {
+                          pinnedIcon.setImageDrawable(
+                              ResourcesCompat.getDrawable(
+                                  resources,
+                                  R.drawable.star_border_24dp,
+                                  null
+                              )
+                          )
+                          pinnedIcon.contentDescription = getString(R.string.action_favorite)
+                      }*/
         }
         return itemBinding.root
     }
     private fun initView() {
-       /* binding.resourcesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(baseActivity)
-            // adapter =
-        }*/
+        binding.toolbar.backClickListener = { nav().popBackStack() }
+        /* binding.resourcesRecyclerView.apply {
+             layoutManager = LinearLayoutManager(baseActivity)
+             // adapter =
+         }*/
     }
-
-
 }

@@ -14,7 +14,10 @@ import rs.readahead.washington.mobile.domain.entity.reports.ResourceTemplate
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.resources.ResourcesRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
+import rs.readahead.washington.mobile.media.MediaFileHandler
 import timber.log.Timber
+import java.io.PrintWriter
+import java.io.StringWriter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,16 +66,35 @@ class ResourcesViewModel @Inject constructor(
                 it.map { instance ->
                     resourcesList.addAll(instance.resources)
                 }
-                resourcesList.forEach {
-                    Timber.d("++++ id %s", it.id)
-                    Timber.d("++++ name %s", it.fileName)
-                    Timber.d("++++ size %s", it.size)
-                    Timber.d("++++ created %s", it.createdAt)
-                }
                 _resources.postValue(resourcesList)
             })
             { throwable: Throwable? ->
                 Timber.d("+++ %s", throwable.toString())
+                /*FirebaseCrashlytics.getInstance().recordException(
+                    throwable
+                        ?: throw NullPointerException("Expression 'throwable' must not be null")
+                )*/
+            })
+    }
+
+    fun downloadResource(resource: ResourceTemplate) {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .doOnSubscribe { _progress.postValue(true) }
+            .flatMap { dataSource: DataSource ->
+                dataSource.listTellaUploadServers().toObservable()
+            }
+            .flatMap { servers: List<TellaReportServer> ->
+                resourcesRepository.downloadResource(servers[0], resource.fileName).toObservable()
+            }
+            .subscribe({
+                MediaFileHandler.downloadPdfInputstream(it.byteStream(),resource.fileName, null)
+            })
+            { throwable: Throwable? ->
+                val sw = StringWriter()
+                val pw = PrintWriter(sw)
+                throwable?.printStackTrace(pw)
+                Timber.d("+++ %s", sw.toString())
                 /*FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")

@@ -334,6 +334,17 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
+    public static Single<VaultFile> downloadPdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) throws Exception {
+
+        return MyApplication.rxVault
+                .builder(inputStream)
+                .setMimeType("application/pdf")
+                .setName(fileName)
+                .setType(VaultFile.Type.FILE)
+                .build(parentId)
+                .subscribeOn(Schedulers.io());
+    }
+
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
