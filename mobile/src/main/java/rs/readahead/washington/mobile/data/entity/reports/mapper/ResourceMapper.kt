@@ -1,21 +1,24 @@
 package rs.readahead.washington.mobile.data.entity.reports.mapper
 
 import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResourceResponse
-import rs.readahead.washington.mobile.domain.entity.reports.ResourceTemplate
+import rs.readahead.washington.mobile.domain.entity.resources.Resource
 
 fun ProjectSlugResourceResponse.mapToDomainModel() = ProjectSlugResourceResponse(
     id = id,
     name = name,
     slug = slug,
     url = url,
-    resources = resources.map { it.mapToDomainModel() } ?: emptyList(),
+    resources = resources.map { it.mapToDomainModel() },
     createdAt = createdAt
 )
 
-fun ResourceTemplate.mapToDomainModel() = ResourceTemplate(
+fun Resource.mapToDomainModel() = Resource(
+    resourceId = -1,
     id = id,
     title = title,
     fileName = fileName,
     size = size,
-    createdAt = createdAt
+    createdAt = createdAt,
+    savedAt = 0,
+    fileId = null
 )

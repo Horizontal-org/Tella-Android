@@ -1,20 +1,25 @@
 package rs.readahead.washington.mobile.views.fragment.resources
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
-import rs.readahead.washington.mobile.domain.entity.reports.ResourceTemplate
+import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
+import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.VIEW_PDF
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
 @AndroidEntryPoint
@@ -23,8 +28,8 @@ class ResourcesListFragment :
 
     private val model: ResourcesViewModel by viewModels()
 
-    private var availableResources = arrayListOf<ResourceTemplate>()
-    private var downloadedResources = arrayListOf<ResourceTemplate>()
+    private var availableResources = HashMap<String, Resource>()
+    private var downloadedResources = HashMap<String, Resource>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,11 +38,12 @@ class ResourcesListFragment :
             initView()
         }
         initObservers()
+        model.listResources()
+        model.getResources()
     }
 
     override fun onResume() {
         super.onResume()
-        model.getResources()
     }
 
     private fun initObservers() {
@@ -50,18 +56,27 @@ class ResourcesListFragment :
                     listFormResult!!
                 )
             }
-            serversList.observe(viewLifecycleOwner, {
-            })
+            serversList.observe(viewLifecycleOwner) {
+            }
 
-            downloadedResource.observe(viewLifecycleOwner, {
-                availableResources.remove(it)
-                downloadedResources.add(it)
+            savedResources.observe(viewLifecycleOwner) { resources ->
+                resources.forEach { downloadedResources.put(it.fileName, it) }
                 updateResourcesViews()
-            })
+            }
 
-            progress.observe(viewLifecycleOwner, {
+            downloadedResource.observe(viewLifecycleOwner) {
+                availableResources.remove(it.fileName)
+                downloadedResources.put(it.fileName, it)
+                updateResourcesViews()
+            }
+
+            pdfFile.observe(viewLifecycleOwner) {
+                openPdf(it)
+            }
+
+            progress.observe(viewLifecycleOwner) {
                 showProgress(it)
-            })
+            }
         }
     }
 
@@ -75,7 +90,7 @@ class ResourcesListFragment :
 
     private fun updateResourcesViews() {
         binding.blankResources.removeAllViews()
-        createResourcesViews(availableResources, binding.blankResources, false)
+        createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
         if (availableResources.isEmpty()) {
             binding.avaivableResourcesTitle.hide()
         } else {
@@ -87,16 +102,20 @@ class ResourcesListFragment :
         } else {
             binding.downloadedResourcesTitle.show()
         }
-        createResourcesViews(downloadedResources, binding.downloadedResources, true)
+        createResourcesViews(downloadedResources.values.toList(), binding.downloadedResources, true)
     }
 
-    private fun onAvailableResourcesList(listFormResult: List<ResourceTemplate>) {
-        availableResources.addAll(listFormResult)
+    private fun onAvailableResourcesList(listFormResult: List<Resource>) {
+        listFormResult.forEach {
+            if (!downloadedResources.containsKey(it.fileName)) {
+                availableResources.put(it.fileName, it)
+            }
+        }
         updateResourcesViews()
     }
 
     private fun createResourcesViews(
-        resources: List<ResourceTemplate>,
+        resources: List<Resource>,
         listView: LinearLayout,
         isDownloaded: Boolean
     ) {
@@ -106,7 +125,7 @@ class ResourcesListFragment :
         }
     }
 
-    private fun getResourceItem(resource: ResourceTemplate?, isDownloaded: Boolean): View {
+    private fun getResourceItem(resource: Resource?, isDownloaded: Boolean): View {
         val itemBinding =
             BlankCollectFormRowBinding.inflate(
                 LayoutInflater.from(context),
@@ -149,7 +168,7 @@ class ResourcesListFragment :
             } else {
                 dlOpenButton.hide()
                 row.setOnClickListener { view: View? ->
-
+                    model.getMediaFile(resource.fileId)
                 }
             }
 
@@ -238,6 +257,15 @@ class ResourcesListFragment :
                       }*/
         }
         return itemBinding.root
+    }
+
+    private fun openPdf(
+        vaultFile: VaultFile
+    ) {
+        val intent = Intent(baseActivity, PDFReaderActivity::class.java).apply {
+            putExtra(VIEW_PDF, vaultFile)
+        }
+        startActivity(intent)
     }
 
     private fun initView() {

@@ -63,6 +63,7 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
+import rs.readahead.washington.mobile.domain.entity.resources.Resource;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -158,6 +159,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Single<TellaReportServer> createTellaUploadServer(final TellaReportServer server) {
         return Single.fromCallable(() -> dataSource.createTUServer(server))
+                .compose(applySchedulers());
+    }
+
+    public Single<List<Resource>> listResources() {
+        return Single.fromCallable(() -> dataSource.listResourcesDB())
                 .compose(applySchedulers());
     }
 
@@ -2447,6 +2453,20 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
+    private Resource cursorToResource(Cursor cursor) {
+
+        Long ResourceId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+        String Id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_ID));
+        String title = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_TITLE));
+        String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_NAME));
+        Long size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SIZE));
+        String createdAt = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_CREATED));
+        Long savedAt = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SAVED));
+        String fileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_ID));
+
+        return new Resource(ResourceId,Id, title,fileName,size,createdAt,savedAt,fileId);
+    }
+
     private String cn(String table, String column) {
         return table + "." + column;
     }
@@ -2487,6 +2507,81 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @NonNull
     public Single<FeedbackInstance> saveFeedbackInstance(@NonNull FeedbackInstance instance) {
         return Single.fromCallable(() -> updateTellaFeedbackInstance(instance)).compose(applySchedulers());
+    }
+
+    @NonNull
+    public Single<Resource> saveResource(@NonNull Resource instance) {
+        return Single.fromCallable(() -> updateResourceInstance(instance)).compose(applySchedulers());
+    }
+
+    private Resource updateResourceInstance(Resource instance) {
+        try {
+            ContentValues values = new ContentValues();
+
+            if (instance.getResourceId() > 0) {
+                values.put(D.C_ID, instance.getResourceId());
+            }
+
+            values.put(D.C_RESOURCES_ID, instance.getId());
+            values.put(D.C_RESOURCES_TITLE, instance.getTitle());
+            values.put(D.C_RESOURCES_FILE_NAME, instance.getFileName());
+            values.put(D.C_RESOURCES_SIZE, instance.getSize());
+            values.put(D.C_RESOURCES_CREATED, instance.getCreatedAt());
+            values.put(D.C_RESOURCES_SAVED, Util.currentTimestamp());
+            values.put(D.C_RESOURCES_FILE_ID, instance.getFileId());
+            database.beginTransaction();
+
+            // insert/update resource instance
+            long id = database.insertWithOnConflict(
+                    D.T_RESOURCES,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
+            instance.setResourceId(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            database.endTransaction();
+        }
+        return instance;
+    }
+
+    private List<Resource> listResourcesDB() {
+        Cursor cursor = null;
+        List<Resource> resources = new ArrayList<>();
+
+        try {
+            cursor = database.query(
+                    D.T_RESOURCES,
+                    new String[]{D.C_ID,
+                            D.C_RESOURCES_ID,
+                            D.C_RESOURCES_TITLE,
+                            D.C_RESOURCES_FILE_NAME,
+                            D.C_RESOURCES_SIZE,
+                            D.C_RESOURCES_CREATED,
+                            D.C_RESOURCES_SAVED,
+                            D.C_RESOURCES_FILE_ID
+                    },
+                    null,
+                    null,
+                    null, null,
+                    D.C_ID + " ASC",
+                    null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                Resource resource = cursorToResource(cursor);
+                resources.add(resource);
+            }
+        } catch (Exception e) {
+            Timber.d(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return resources;
     }
 
     private FeedbackInstance updateTellaFeedbackInstance(FeedbackInstance instance) {
