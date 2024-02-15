@@ -78,6 +78,7 @@
                 android:id="@+id/resources"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:background="@color/space_cadet"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -94,12 +95,13 @@
                     android:textColor="@color/wa_white_80"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/downloadedResources"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:layout_below="@id/downloaded_resources_title"
                     android:clipToPadding="false"
                     android:orientation="vertical"
@@ -125,6 +127,7 @@
                     android:id="@+id/blankResources"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:layout_below="@id/avaivable_resources_title"
                     android:background="@color/space_cadet"
                     android:clipToPadding="false"
@@ -136,4 +139,21 @@
             </RelativeLayout>
         </ScrollView>
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone" />
+    </FrameLayout>
+
    </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,8 @@ package rs.readahead.washington.mobile.views.fragment.resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -36,6 +38,11 @@ class ResourcesViewModel @Inject constructor(
     val progress: LiveData<Boolean> get() = _progress
     private val _serversList = MutableLiveData<List<TellaReportServer>>()
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
+
+    /* private val _mediaImported = MutableLiveData<VaultFile>()
+     val mediaImported: LiveData<VaultFile> = _mediaImported*/
+    private val _downloadedResource = MutableLiveData<ResourceTemplate>()
+    val downloadedResource: LiveData<ResourceTemplate> = _downloadedResource
     private var _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
 
@@ -61,6 +68,9 @@ class ResourcesViewModel @Inject constructor(
             .flatMap { servers: List<TellaReportServer> ->
                 resourcesRepository.getResourcesResult(servers).toObservable()
             }
+            .doFinally {
+                _progress.postValue(false)
+            }
             .subscribe({
                 val resourcesList = mutableListOf<ResourceTemplate>()
                 it.map { instance ->
@@ -69,11 +79,10 @@ class ResourcesViewModel @Inject constructor(
                 _resources.postValue(resourcesList)
             })
             { throwable: Throwable? ->
-                Timber.d("+++ %s", throwable.toString())
-                /*FirebaseCrashlytics.getInstance().recordException(
+                FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )*/
+                )
             })
     }
 
@@ -87,18 +96,24 @@ class ResourcesViewModel @Inject constructor(
             .flatMap { servers: List<TellaReportServer> ->
                 resourcesRepository.downloadResource(servers[0], resource.fileName).toObservable()
             }
+            .flatMap {
+                MediaFileHandler.downloadPdfInputstream(
+                    it.byteStream(),
+                    resource.fileName,
+                    null
+                ).toObservable()
+            }
+            .doFinally {
+                _progress.postValue(false)
+            }
             .subscribe({
-                MediaFileHandler.downloadPdfInputstream(it.byteStream(),resource.fileName, null)
+                _downloadedResource.postValue(resource)
             })
             { throwable: Throwable? ->
-                val sw = StringWriter()
-                val pw = PrintWriter(sw)
-                throwable?.printStackTrace(pw)
-                Timber.d("+++ %s", sw.toString())
-                /*FirebaseCrashlytics.getInstance().recordException(
+                FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )*/
+                )
             })
     }
 

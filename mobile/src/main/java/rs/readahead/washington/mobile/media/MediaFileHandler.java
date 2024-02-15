@@ -47,6 +47,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -335,10 +337,10 @@ public class MediaFileHandler {
     }
 
     public static Single<VaultFile> downloadPdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) throws Exception {
-
         return MyApplication.rxVault
                 .builder(inputStream)
                 .setMimeType("application/pdf")
+                .setAnonymous(true)
                 .setName(fileName)
                 .setType(VaultFile.Type.FILE)
                 .build(parentId)

@@ -13,7 +13,8 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ResourceTemplate
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
 @AndroidEntryPoint
@@ -21,10 +22,9 @@ class ResourcesListFragment :
     BaseBindingFragment<FragmentResourcesListBinding>(FragmentResourcesListBinding::inflate) {
 
     private val model: ResourcesViewModel by viewModels()
-    private lateinit var selectedServer: TellaReportServer
 
     private var availableResources = arrayListOf<ResourceTemplate>()
-    private var downloadedResources: MutableList<ResourceTemplate>? = null
+    private var downloadedResources = arrayListOf<ResourceTemplate>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +52,42 @@ class ResourcesListFragment :
             }
             serversList.observe(viewLifecycleOwner, {
             })
+
+            downloadedResource.observe(viewLifecycleOwner, {
+                availableResources.remove(it)
+                downloadedResources.add(it)
+                updateResourcesViews()
+            })
+
+            progress.observe(viewLifecycleOwner, {
+                showProgress(it)
+            })
         }
+    }
+
+    private fun showProgress(show: Boolean) {
+        if (show) {
+            binding.progressBar.show()
+        } else {
+            binding.progressBar.hide()
+        }
+    }
+
+    private fun updateResourcesViews() {
+        binding.blankResources.removeAllViews()
+        createResourcesViews(availableResources, binding.blankResources, false)
+        if (availableResources.isEmpty()) {
+            binding.avaivableResourcesTitle.hide()
+        } else {
+            binding.avaivableResourcesTitle.show()
+        }
+        binding.downloadedResources.removeAllViews()
+        if (downloadedResources.isEmpty()) {
+            binding.downloadedResourcesTitle.hide()
+        } else {
+            binding.downloadedResourcesTitle.show()
+        }
+        createResourcesViews(downloadedResources, binding.downloadedResources, true)
     }
 
     private fun onAvailableResourcesList(listFormResult: List<ResourceTemplate>) {
@@ -60,21 +95,24 @@ class ResourcesListFragment :
         updateResourcesViews()
     }
 
-    private fun updateResourcesViews() {
-        binding.blankResources.removeAllViews()
-        createResourcesViews(availableResources, binding.blankResources)
-    }
-
-    private fun createResourcesViews(resources: List<ResourceTemplate>, listView: LinearLayout) {
+    private fun createResourcesViews(
+        resources: List<ResourceTemplate>,
+        listView: LinearLayout,
+        isDownloaded: Boolean
+    ) {
         for (resource in resources) {
-            val view = getResourceItem(resource)
+            val view = getResourceItem(resource, isDownloaded)
             listView.addView(view, resources.indexOf(resource))
         }
     }
 
-    private fun getResourceItem(resource: ResourceTemplate?): View {
+    private fun getResourceItem(resource: ResourceTemplate?, isDownloaded: Boolean): View {
         val itemBinding =
-            BlankCollectFormRowBinding.inflate(LayoutInflater.from(context), binding.resources, false)
+            BlankCollectFormRowBinding.inflate(
+                LayoutInflater.from(context),
+                binding.resources,
+                false
+            )
         val row = itemBinding.formRow
         val name = itemBinding.name
         val organization = itemBinding.organization
@@ -85,24 +123,36 @@ class ResourcesListFragment :
         if (resource != null) {
             name.text = resource.fileName
             organization.text = resource.title
-            dlOpenButton.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.ic_download,
-                    null
-                )
-            )
-            dlOpenButton.setOnClickListener { view: View? ->
-                if (MyApplication.isConnectedToInternet(requireContext())) {
-                    model.downloadResource(resource)
-                } else {
-                    DialogUtils.showBottomMessage(
-                        baseActivity,
-                        getString(R.string.collect_blank_toast_not_connected),
-                        true
+
+            if (!isDownloaded) {
+                dlOpenButton.show()
+
+                dlOpenButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_download,
+                        null
                     )
+                )
+                dlOpenButton.setOnClickListener { view: View? ->
+                    if (MyApplication.isConnectedToInternet(requireContext())) {
+                        dlOpenButton.hide()
+                        model.downloadResource(resource)
+                    } else {
+                        DialogUtils.showBottomMessage(
+                            baseActivity,
+                            getString(R.string.collect_blank_toast_not_connected),
+                            true
+                        )
+                    }
+                }
+            } else {
+                dlOpenButton.hide()
+                row.setOnClickListener { view: View? ->
+
                 }
             }
+
             /*          if (collectForm.isDownloaded) {
                           dlOpenButton.setImageDrawable(
                               ResourcesCompat.getDrawable(
@@ -189,6 +239,7 @@ class ResourcesListFragment :
         }
         return itemBinding.root
     }
+
     private fun initView() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
         /* binding.resourcesRecyclerView.apply {
