@@ -52,6 +52,7 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/appbar">
 
@@ -90,11 +91,24 @@
                     android:layout_height="50dp"
                     android:layout_alignParentTop="true"
                     android:gravity="center_vertical"
-                    android:text="@string/Forms_BlankSubheadingDownloadedForms"
+                    android:text="@string/Resources_DownloadedTitle"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_80"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:visibility="visible"/>
+
+                <TextView
+                    android:id="@+id/downloaded_resources_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_DownloadedEmptyMessage"
+                    android:layout_below="@id/downloaded_resources_title"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_80"
+                    android:textSize="16sp"
                     android:visibility="gone"/>
 
                 <LinearLayout
@@ -102,7 +116,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:animateLayoutChanges="true"
-                    android:layout_below="@id/downloaded_resources_title"
+                    android:layout_below="@id/downloaded_resources_empty"
                     android:clipToPadding="false"
                     android:orientation="vertical"
                     android:scrollbarStyle="outsideOverlay"
@@ -116,19 +130,32 @@
                     android:layout_height="50dp"
                     android:layout_below="@id/downloadedResources"
                     android:gravity="center_vertical"
-                    android:text="@string/Forms_BlankSubheadingFormsOnServers"
+                    android:text="@string/Resources_AvailableTitle"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_80"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
+                <TextView
+                    android:id="@+id/avaivable_resources_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_AvailableEmptyMessage"
+                    android:layout_below="@id/avaivable_resources_title"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_80"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/blankResources"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:animateLayoutChanges="true"
-                    android:layout_below="@id/avaivable_resources_title"
+                    android:layout_below="@id/avaivable_resources_empty"
                     android:background="@color/space_cadet"
                     android:clipToPadding="false"
                     android:orientation="vertical"

@@ -655,7 +655,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Nullable
-    private TellaReportServer getTUServer(long id) {
+    private TellaReportServer  getTUServer(long id) {
 
         try (
                 Cursor cursor = database.query(
@@ -2456,15 +2456,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private Resource cursorToResource(Cursor cursor) {
 
         Long ResourceId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+        Long ServerId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SERVER_ID));
         String Id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_ID));
         String title = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_TITLE));
         String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_NAME));
         Long size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SIZE));
         String createdAt = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_CREATED));
         Long savedAt = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SAVED));
+        String project = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_PROJECT));
         String fileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_ID));
 
-        return new Resource(ResourceId,Id, title,fileName,size,createdAt,savedAt,fileId);
+        return new Resource(ResourceId,ServerId, Id, title,fileName,size,createdAt,savedAt, project, fileId);
     }
 
     private String cn(String table, String column) {
@@ -2523,11 +2525,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
             values.put(D.C_RESOURCES_ID, instance.getId());
+            values.put(D.C_SERVER_ID, instance.getServerId());
             values.put(D.C_RESOURCES_TITLE, instance.getTitle());
             values.put(D.C_RESOURCES_FILE_NAME, instance.getFileName());
             values.put(D.C_RESOURCES_SIZE, instance.getSize());
             values.put(D.C_RESOURCES_CREATED, instance.getCreatedAt());
             values.put(D.C_RESOURCES_SAVED, Util.currentTimestamp());
+            values.put(D.C_RESOURCES_PROJECT, instance.getProject());
             values.put(D.C_RESOURCES_FILE_ID, instance.getFileId());
             database.beginTransaction();
 
@@ -2555,12 +2559,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             cursor = database.query(
                     D.T_RESOURCES,
                     new String[]{D.C_ID,
+                            D.C_SERVER_ID,
                             D.C_RESOURCES_ID,
                             D.C_RESOURCES_TITLE,
                             D.C_RESOURCES_FILE_NAME,
                             D.C_RESOURCES_SIZE,
                             D.C_RESOURCES_CREATED,
                             D.C_RESOURCES_SAVED,
+                            D.C_RESOURCES_PROJECT,
                             D.C_RESOURCES_FILE_ID
                     },
                     null,
@@ -2961,7 +2967,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private ReportInstanceBundle getReportInstanceBundle(long id) {
         Cursor cursor = null;
-        Gson gson = new Gson();
         ReportInstanceBundle bundle = new ReportInstanceBundle();
 
         try {

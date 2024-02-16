@@ -17,7 +17,6 @@ import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
-import rs.readahead.washington.mobile.views.activity.CollectFormEntryActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.VIEW_PDF
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -92,15 +91,15 @@ class ResourcesListFragment :
         binding.blankResources.removeAllViews()
         createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
         if (availableResources.isEmpty()) {
-            binding.avaivableResourcesTitle.hide()
+            binding.avaivableResourcesEmpty.show()
         } else {
-            binding.avaivableResourcesTitle.show()
+            binding.avaivableResourcesEmpty.hide()
         }
         binding.downloadedResources.removeAllViews()
         if (downloadedResources.isEmpty()) {
-            binding.downloadedResourcesTitle.hide()
+            binding.downloadedResourcesEmpty.show()
         } else {
-            binding.downloadedResourcesTitle.show()
+            binding.downloadedResourcesEmpty.hide()
         }
         createResourcesViews(downloadedResources.values.toList(), binding.downloadedResources, true)
     }
@@ -143,6 +142,14 @@ class ResourcesListFragment :
             name.text = resource.fileName
             organization.text = resource.title
 
+            pinnedIcon.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.pdf_file_24px,
+                    null
+                )
+            )
+
             if (!isDownloaded) {
                 dlOpenButton.show()
 
@@ -166,10 +173,18 @@ class ResourcesListFragment :
                     }
                 }
             } else {
-                dlOpenButton.hide()
+                dlOpenButton.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_more,
+                        null
+                    )
+                )
+
                 row.setOnClickListener { view: View? ->
                     model.getMediaFile(resource.fileId)
                 }
+
             }
 
             /*          if (collectForm.isDownloaded) {
@@ -270,9 +285,5 @@ class ResourcesListFragment :
 
     private fun initView() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
-        /* binding.resourcesRecyclerView.apply {
-             layoutManager = LinearLayoutManager(baseActivity)
-             // adapter =
-         }*/
     }
 }

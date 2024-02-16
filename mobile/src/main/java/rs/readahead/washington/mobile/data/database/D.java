@@ -127,6 +127,7 @@ class D {
     static final String C_RESOURCES_SIZE = "c_resources_size";
     static final String C_RESOURCES_CREATED = "c_resources_created";
     static final String C_RESOURCES_SAVED = "c_resources_saved";
+    static final String C_RESOURCES_PROJECT = "c_resources_project";
     static final String C_RESOURCES_FILE_ID = "c_resources_file_id";
 
 

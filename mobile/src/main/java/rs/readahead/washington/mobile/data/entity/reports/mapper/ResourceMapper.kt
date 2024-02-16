@@ -14,11 +14,13 @@ fun ProjectSlugResourceResponse.mapToDomainModel() = ProjectSlugResourceResponse
 
 fun Resource.mapToDomainModel() = Resource(
     resourceId = -1,
+    serverId = -1,
     id = id,
     title = title,
     fileName = fileName,
     size = size,
     createdAt = createdAt,
     savedAt = 0,
+    project = null,
     fileId = null
 )

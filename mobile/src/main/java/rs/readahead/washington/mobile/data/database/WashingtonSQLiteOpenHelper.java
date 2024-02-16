@@ -298,12 +298,14 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String createTableResources() {
         return "CREATE TABLE " + sq(D.T_RESOURCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_SERVER_ID, D.INTEGER) + " , " +
                 cddl(D.C_RESOURCES_ID, D.TEXT, false) + " UNIQUE, " +
                 cddl(D.C_RESOURCES_TITLE, D.TEXT, false) + " , " +
                 cddl(D.C_RESOURCES_FILE_NAME, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_RESOURCES_SIZE, D.INTEGER) + " , " +
                 cddl(D.C_RESOURCES_CREATED, D.TEXT, false) + " , " +
                 cddl(D.C_RESOURCES_SAVED, D.INTEGER, false) + " , " +
+                cddl(D.C_RESOURCES_PROJECT, D.TEXT, false) + " , " +
                 cddl(D.C_RESOURCES_FILE_ID, D.TEXT, false) +
                 ");";
     }

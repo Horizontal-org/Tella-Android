@@ -71,12 +71,23 @@ class ResourcesViewModel @Inject constructor(
                 dataSource.listTellaUploadServers().toObservable()
             }
             .flatMap { servers: List<TellaReportServer> ->
+                servers.forEach {
+                    Timber.d(
+                        "++++ server id - %s, project name: %s, project id: %s, url: %s",
+                        it.id,
+                        it.projectId,
+                        it.projectName,
+                        it.url
+                    )
+                }
                 resourcesRepository.getResourcesResult(servers).toObservable()
             }
             .doFinally { _progress.postValue(false) }
             .subscribe({
                 val resourcesList = mutableListOf<Resource>()
                 it.map { instance ->
+                    // You'll need to map server id
+                    instance.resources.forEach { resource: Resource -> resource.project = instance.name }
                     resourcesList.addAll(instance.resources)
                 }
                 resourcesList.forEach {
