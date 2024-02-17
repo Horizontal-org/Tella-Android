@@ -63,6 +63,7 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun getResources() {
+        val projectMap = HashMap<String, Long>()
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -71,32 +72,24 @@ class ResourcesViewModel @Inject constructor(
                 dataSource.listTellaUploadServers().toObservable()
             }
             .flatMap { servers: List<TellaReportServer> ->
+                // Save server id to download resource
                 servers.forEach {
-                    Timber.d(
-                        "++++ server id - %s, project name: %s, project id: %s, url: %s",
-                        it.id,
-                        it.projectId,
-                        it.projectName,
-                        it.url
-                    )
+                    projectMap[it.projectId] = it.id
                 }
+                // There should be a call for each server
                 resourcesRepository.getResourcesResult(servers).toObservable()
             }
             .doFinally { _progress.postValue(false) }
             .subscribe({
                 val resourcesList = mutableListOf<Resource>()
                 it.map { instance ->
-                    // You'll need to map server id
-                    instance.resources.forEach { resource: Resource -> resource.project = instance.name }
+                    instance.resources.forEach { resource: Resource ->
+                        resource.project = instance.name
+                        if (projectMap[instance.id] != null) {
+                            resource.serverId = projectMap[instance.id]!!
+                        }
+                    }
                     resourcesList.addAll(instance.resources)
-                }
-                resourcesList.forEach {
-                    Timber.d(
-                        "++++ resource %s, %s, %s",
-                        it.fileName,
-                        it.createdAt,
-                        it.size
-                    )
                 }
                 _resources.postValue(resourcesList)
             })
@@ -116,10 +109,10 @@ class ResourcesViewModel @Inject constructor(
                 _progress.postValue(false)
             }
             .flatMap { dataSource: DataSource ->
-                dataSource.listTellaUploadServers().toObservable()
+                dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
-            .flatMap { servers: List<TellaReportServer> ->
-                resourcesRepository.downloadResource(servers[0], resource.fileName).toObservable()
+            .flatMap {
+                resourcesRepository.downloadResource(it, resource.fileName).toObservable()
             }
             .flatMap {
                 MediaFileHandler.downloadPdfInputstream(
@@ -143,7 +136,7 @@ class ResourcesViewModel @Inject constructor(
             })
     }
 
-    fun getMediaFile(id: String?) {
+    fun getPdfFile(id: String?) {
         disposables.add(Single
             .fromCallable<Single<VaultFile>> {
                 MyApplication.rxVault[id]

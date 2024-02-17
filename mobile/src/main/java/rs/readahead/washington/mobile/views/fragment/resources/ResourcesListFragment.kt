@@ -91,9 +91,9 @@ class ResourcesListFragment :
         binding.blankResources.removeAllViews()
         createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
         if (availableResources.isEmpty()) {
-            binding.avaivableResourcesEmpty.show()
+            binding.availableResourcesEmpty.show()
         } else {
-            binding.avaivableResourcesEmpty.hide()
+            binding.availableResourcesEmpty.hide()
         }
         binding.downloadedResources.removeAllViews()
         if (downloadedResources.isEmpty()) {
@@ -140,7 +140,7 @@ class ResourcesListFragment :
         val updateButton = itemBinding.laterButton
         if (resource != null) {
             name.text = resource.fileName
-            organization.text = resource.title
+            organization.text = resource.project
 
             pinnedIcon.setImageDrawable(
                 ResourcesCompat.getDrawable(
@@ -182,7 +182,7 @@ class ResourcesListFragment :
                 )
 
                 row.setOnClickListener { view: View? ->
-                    model.getMediaFile(resource.fileId)
+                    model.getPdfFile(resource.fileId)
                 }
 
             }
