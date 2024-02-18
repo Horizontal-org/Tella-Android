@@ -369,6 +369,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
+    public Single<String> deleteResource(final Resource resource) {
+        return Single.fromCallable(() -> deleteResourceDB(resource))
+                .compose(applySchedulers());
+    }
+
     @Override
     public Completable scheduleUploadMediaFiles(final List<VaultFile> vaultFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -384,7 +389,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             return null;
         }).compose(applyCompletableSchedulers());
     }
-
 
     @Override
     public Completable scheduleUploadReportInstances(List<ReportInstance> reportInstances) {
@@ -655,7 +659,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Nullable
-    private TellaReportServer  getTUServer(long id) {
+    private TellaReportServer getTUServer(long id) {
 
         try (
                 Cursor cursor = database.query(
@@ -1584,6 +1588,16 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private String deleteResourceDB(Resource resource) throws NotFountException {
+        int count = database.delete(D.T_RESOURCES, D.C_ID + " = ?", new String[]{Long.toString(resource.getResourceId())});
+
+        if (count != 1) {
+            throw new NotFountException();
+        }
+        return resource.getFileId();
+    }
+
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
     private void deleteFileUploadInstancesInStatusDB(UploadStatus status) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
     }
@@ -2466,7 +2480,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         String project = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_PROJECT));
         String fileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_ID));
 
-        return new Resource(ResourceId,ServerId, Id, title,fileName,size,createdAt,savedAt, project, fileId);
+        return new Resource(ResourceId, ServerId, Id, title, fileName, size, createdAt, savedAt, project, fileId);
     }
 
     private String cn(String table, String column) {

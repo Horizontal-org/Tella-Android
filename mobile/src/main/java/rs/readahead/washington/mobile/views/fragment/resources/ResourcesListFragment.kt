@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -37,8 +38,7 @@ class ResourcesListFragment :
             initView()
         }
         initObservers()
-        model.listResources()
-        model.getResources()
+        refreshLists()
     }
 
     override fun onResume() {
@@ -47,7 +47,6 @@ class ResourcesListFragment :
 
     private fun initObservers() {
         with(model) {
-
             resources.observe(
                 viewLifecycleOwner
             ) { listFormResult ->
@@ -76,6 +75,16 @@ class ResourcesListFragment :
             progress.observe(viewLifecycleOwner) {
                 showProgress(it)
             }
+
+            deletedResource.observe(viewLifecycleOwner) {
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ),
+                    false
+                )
+            }
         }
     }
 
@@ -92,7 +101,9 @@ class ResourcesListFragment :
         createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
         if (availableResources.isEmpty()) {
             binding.availableResourcesEmpty.show()
+            binding.availableResourcesInfo.hide()
         } else {
+            binding.availableResourcesInfo.show()
             binding.availableResourcesEmpty.hide()
         }
         binding.downloadedResources.removeAllViews()
@@ -136,9 +147,10 @@ class ResourcesListFragment :
         val organization = itemBinding.organization
         val dlOpenButton = itemBinding.dlOpenButton
         val pinnedIcon = itemBinding.favoritesButton
-        val rowLayout = itemBinding.rowLayout
-        val updateButton = itemBinding.laterButton
+        //val rowLayout = itemBinding.rowLayout
+        //val updateButton = itemBinding.laterButton
         if (resource != null) {
+            dlOpenButton.alpha = 1F
             name.text = resource.fileName
             organization.text = resource.project
 
@@ -151,8 +163,6 @@ class ResourcesListFragment :
             )
 
             if (!isDownloaded) {
-                dlOpenButton.show()
-
                 dlOpenButton.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
@@ -160,6 +170,9 @@ class ResourcesListFragment :
                         null
                     )
                 )
+
+                dlOpenButton.contentDescription = getString(R.string.action_download)
+
                 dlOpenButton.setOnClickListener { view: View? ->
                     if (MyApplication.isConnectedToInternet(requireContext())) {
                         dlOpenButton.hide()
@@ -181,97 +194,53 @@ class ResourcesListFragment :
                     )
                 )
 
+                dlOpenButton.contentDescription = getString(R.string.collect_blank_action_desc_more_options)
+
+                dlOpenButton.setOnClickListener { view: View? ->
+                    showDownloadedMenu(
+                        resource
+                    )
+                }
+
                 row.setOnClickListener { view: View? ->
                     model.getPdfFile(resource.fileId)
                 }
-
             }
-
-            /*          if (collectForm.isDownloaded) {
-                          dlOpenButton.setImageDrawable(
-                              ResourcesCompat.getDrawable(
-                                  resources,
-                                  R.drawable.ic_more,
-                                  null
-                              )
-                          )
-                          dlOpenButton.contentDescription =
-                              getString(R.string.collect_blank_action_desc_more_options)
-                          dlOpenButton.setOnClickListener { view: View? ->
-                              showDownloadedMenu(
-                                  collectForm
-                              )
-                          }
-                          rowLayout.setOnClickListener { view: View? ->
-                              model.getBlankFormDef(
-                                  collectForm
-                              )
-                          }
-                          pinnedIcon.setOnClickListener { view: View? ->
-                              model.toggleFavorite(collectForm)
-                              updateFormViews()
-                          }
-                          if (collectForm.isUpdated) {
-                              pinnedIcon.visibility = View.VISIBLE
-                              updateButton.visibility = View.VISIBLE
-                              updateButton.setOnClickListener { view: View? ->
-                                  if (MyApplication.isConnectedToInternet(requireContext())) {
-                                      model.updateBlankFormDef(collectForm)
-                                  } else {
-                                      DialogUtils.showBottomMessage(
-                                          baseActivity,
-                                          getString(R.string.collect_blank_toast_not_connected),
-                                          true
-                                      )
-                                  }
-                              }
-                          } else {
-                              updateButton.visibility = View.GONE
-                          }
-                      } else {
-                          pinnedIcon.visibility = View.GONE
-                          dlOpenButton.setImageDrawable(
-                              ResourcesCompat.getDrawable(
-                                  resources,
-                                  R.drawable.ic_download,
-                                  null
-                              )
-                          )
-                          dlOpenButton.contentDescription =
-                              getString(R.string.collect_blank_action_download_form)
-                          dlOpenButton.setOnClickListener { view: View? ->
-                              if (MyApplication.isConnectedToInternet(requireContext())) {
-                                  model.downloadBlankFormDef(collectForm)
-                              } else {
-                                  DialogUtils.showBottomMessage(
-                                      baseActivity,
-                                      getString(R.string.collect_blank_toast_not_connected),
-                                      true
-                                  )
-                              }
-                          }
-                      }
-                      if (collectForm.isPinned) {
-                          pinnedIcon.setImageDrawable(
-                              ResourcesCompat.getDrawable(
-                                  resources,
-                                  R.drawable.star_filled_24dp,
-                                  null
-                              )
-                          )
-                          pinnedIcon.contentDescription = getString(R.string.action_unfavorite)
-                      } else {
-                          pinnedIcon.setImageDrawable(
-                              ResourcesCompat.getDrawable(
-                                  resources,
-                                  R.drawable.star_border_24dp,
-                                  null
-                              )
-                          )
-                          pinnedIcon.contentDescription = getString(R.string.action_favorite)
-                      }*/
         }
         return itemBinding.root
+    }
+
+    private fun showDownloadedMenu(resource: Resource) {
+        BottomSheetUtils.showViewDeleteMenuSheet(
+            requireActivity().supportFragmentManager,
+            resource.title,
+            requireContext().getString(R.string.View_Report),
+            requireContext().getString(R.string.Resources_RemoveFromDownloads),
+            object : BottomSheetUtils.ActionSeleceted {
+                override fun accept(action: BottomSheetUtils.Action) {
+                    if (action === BottomSheetUtils.Action.VIEW) {
+                        model.getPdfFile(resource.fileId)
+                    }
+                    if (action === BottomSheetUtils.Action.DELETE) {
+                        downloadedResources.remove(resource.fileName)
+                        model.removeResource(resource)
+                        refreshLists()
+                    }
+                }
+            },
+            requireContext().getString(R.string.Resources_RemoveFromDownloads),
+            String.format(
+                requireContext().resources.getString(R.string.Collect_Subtitle_RemoveForm),
+                resource.title
+            ),
+            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_cancel)
+        )
+    }
+
+    private fun refreshLists() {
+        model.listResources()
+        model.getResources()
     }
 
     private fun openPdf(
@@ -285,5 +254,6 @@ class ResourcesListFragment :
 
     private fun initView() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.toolbar.onRightClickListener = { refreshLists() }
     }
 }

@@ -31,11 +31,13 @@ class ResourcesViewModel @Inject constructor(
 
     private val disposables = CompositeDisposable()
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
+
     private val _progress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean> get() = _progress
 
     private val _resources = MutableLiveData<List<Resource>>()
     val resources: LiveData<List<Resource>> get() = _resources
-    val progress: LiveData<Boolean> get() = _progress
+
     private val _serversList = MutableLiveData<List<TellaReportServer>>()
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
 
@@ -50,6 +52,9 @@ class ResourcesViewModel @Inject constructor(
 
     private var _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
+
+    private val _deletedResource = MutableLiveData<String>()
+    val deletedResource: LiveData<String> get() = _deletedResource
 
     fun listServers() {
         _progress.postValue(true)
@@ -170,6 +175,26 @@ class ResourcesViewModel @Inject constructor(
             .subscribe(
                 { list: List<Resource> ->
                     _savedResources.postValue(list)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                _error.postValue(throwable!!)
+            }
+        )
+    }
+
+    fun removeResource(resource: Resource) {
+        disposables.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { _progress.postValue(true) }
+            .flatMapSingle { dataSource: DataSource -> dataSource.deleteResource(resource) }
+            .flatMapSingle {MyApplication.rxVault[it]}
+            .flatMapSingle {MyApplication.rxVault.delete(it)}
+            .doFinally { _progress.postValue(false) }
+            .subscribe(
+                {
+                    if (it) _deletedResource.postValue(resource.fileName)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
