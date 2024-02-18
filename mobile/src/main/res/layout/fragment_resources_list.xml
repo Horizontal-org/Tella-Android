@@ -91,7 +91,7 @@
                 <TextView
                     android:id="@+id/downloaded_resources_empty"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/downloadedResources"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_DownloadedEmptyMessage"
@@ -102,6 +102,7 @@
 
                 <TextView
                     android:id="@+id/available_resources_title"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/downloaded_resources_empty"
@@ -116,24 +117,26 @@
                 <TextView
                     android:id="@+id/available_resources_empty"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/available_resources_title"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_AvailableEmptyMessage"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/available_resources_info"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/available_resources_title"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_AvailableInfoMessage"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:textSize="16sp"
                     android:visibility="gone" />
 
