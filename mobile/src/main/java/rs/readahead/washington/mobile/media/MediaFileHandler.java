@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.media;
 
 import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
+import static rs.readahead.washington.mobile.util.C.RESOURCE_PDF;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -47,8 +48,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -336,10 +335,10 @@ public class MediaFileHandler {
                 .blockingGet();
     }
 
-    public static Single<VaultFile> downloadPdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) throws Exception {
+    public static Single<VaultFile> downloadResourcePdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) {
         return MyApplication.rxVault
                 .builder(inputStream)
-                .setMimeType("application/pdf")
+                .setMimeType(RESOURCE_PDF)
                 .setAnonymous(true)
                 .setName(fileName)
                 .setType(VaultFile.Type.FILE)

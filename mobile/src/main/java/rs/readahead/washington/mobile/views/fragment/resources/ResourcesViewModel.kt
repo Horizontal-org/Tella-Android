@@ -19,7 +19,6 @@ import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.domain.repository.resources.ResourcesRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -120,7 +119,7 @@ class ResourcesViewModel @Inject constructor(
                 resourcesRepository.downloadResource(it, resource.fileName).toObservable()
             }
             .flatMap {
-                MediaFileHandler.downloadPdfInputstream(
+                MediaFileHandler.downloadResourcePdfInputstream(
                     it.byteStream(),
                     resource.fileName,
                     null
