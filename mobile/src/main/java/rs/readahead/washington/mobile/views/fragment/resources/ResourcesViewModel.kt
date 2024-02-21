@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResourceResponse
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.domain.exception.NotFountException
@@ -68,6 +69,7 @@ class ResourcesViewModel @Inject constructor(
 
     fun getResources() {
         val projectMap = HashMap<String, Long>()
+        val urlProjects = HashMap<String, ArrayList<TellaReportServer>>()
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -75,13 +77,45 @@ class ResourcesViewModel @Inject constructor(
             .flatMap { dataSource: DataSource ->
                 dataSource.listTellaUploadServers().toObservable()
             }
-            .flatMap { servers: List<TellaReportServer> ->
-                // Save server id to download resource
-                servers.forEach {
-                    projectMap[it.projectId] = it.id
+            .flatMap { projects: List<TellaReportServer> ->
+                // Save server id to download resource of the Project
+                val urls = ArrayList<String>()
+                projects.forEach { project ->
+                    if (!urls.contains(project.url)){
+                        urls.add(project.url)
+                    }
+                    projectMap[project.projectId] = project.id
                 }
-                // There should be a call for each server
-                resourcesRepository.getResourcesResult(servers).toObservable()
+
+                urls.forEach {url ->
+                    val projectList = ArrayList<TellaReportServer>()
+                    projects.forEach { project ->
+                        if (project.url.equals(url)){
+                            projectList.add(project)
+                        }
+                    }
+                    urlProjects[url] = projectList
+                }
+
+                val singles: MutableList<Single<List<ProjectSlugResourceResponse>>> =
+                    ArrayList()
+
+                urlProjects.forEach {
+                    // We are making a call for each distinct url and it's projects
+                    singles.add( resourcesRepository.getAllResourcesResult(it.key, it.value))
+                }
+
+                Single.zip(
+                    singles
+                ) { objects: Array<Any?> ->
+                    val allResults = ArrayList<ProjectSlugResourceResponse>()
+                    for (obj in objects) {
+                        if (obj is List<*>) {
+                            allResults.addAll(obj as List<ProjectSlugResourceResponse>)
+                        }
+                    }
+                    allResults
+                }.toObservable()
             }
             .doFinally { _progress.postValue(false) }
             .subscribe({

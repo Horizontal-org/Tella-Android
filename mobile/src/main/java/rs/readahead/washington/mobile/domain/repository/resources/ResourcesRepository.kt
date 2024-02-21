@@ -8,7 +8,9 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 
 interface ResourcesRepository {
 
-    fun getResourcesResult(server: List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>>
+    fun getResourcesResult(projects: List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>>
+
+    fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<List<ProjectSlugResourceResponse>>
 
     fun downloadResource(server: TellaReportServer, filename : String?): Single<ResponseBody>
 

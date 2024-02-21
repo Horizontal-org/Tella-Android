@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.data.resources.repository
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -28,13 +26,39 @@ class ResourcesRepositoryImp @Inject internal constructor(
     /**
      * Gets list of resources from the server.
      *
-     * @param server Project server connection to get resources from.
+     * @param projects List of Project server connections to get resources from.
      */
-    override fun getResourcesResult(servers:List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
+    override fun getResourcesResult(projects:List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
         //use proper Builder
-        var url = servers[0].url + URL_RESOURCE + URL_PROJECTS + '?'
-        val token = servers[0].accessToken
-        servers.forEach {
+        var url = projects[0].url + URL_RESOURCE + URL_PROJECTS + '?'
+        val token = projects[0].accessToken
+        projects.forEach {
+            url = url.plus("&").plus("projectId[]=${it.projectId}")
+        }
+        return apiService.getResources(url, access_token = token)
+            .subscribeOn(Schedulers.io())
+            .map { results ->
+
+                val slugs = mutableListOf<ProjectSlugResourceResponse>()
+                results.forEach {
+                    slugs.add(it.mapToDomainModel())
+                }
+
+                return@map slugs
+            }
+    }
+
+    /**
+     * Gets list of resources from the url.
+     *
+     * @param urlServer url of the server connection.
+     * @param projects List of projects to get resources from.
+     */
+    override fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
+        //use proper Builder
+        var url = "$urlServer$URL_RESOURCE$URL_PROJECTS?"
+        val token = projects[0].accessToken
+        projects.forEach {
             url = url.plus("&").plus("projectId[]=${it.projectId}")
         }
         return apiService.getResources(url, access_token = token)
