@@ -4,7 +4,6 @@ import io.reactivex.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
-import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResourceResponse
 import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 
 class ResourcesRepositoryImp @Inject internal constructor(
-    private val apiService: ResourcesApiService,
-    private val dataSource: DataSource
+    private val apiService: ResourcesApiService
 ) : ResourcesRepository {
 
     private val disposables = CompositeDisposable()
@@ -49,10 +47,10 @@ class ResourcesRepositoryImp @Inject internal constructor(
     }
 
     /**
-     * Gets list of resources from the url.
+     * Gets list of resources from the server.
      *
      * @param urlServer url of the server connection.
-     * @param projects List of projects to get resources from.
+     * @param projects List of projects on the server.
      */
     override fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
         //use proper Builder
@@ -74,7 +72,13 @@ class ResourcesRepositoryImp @Inject internal constructor(
             }
     }
 
-    override fun downloadResource(server: TellaReportServer, filename: String?): Single<ResponseBody> {
+    /**
+     * Gets list of resources from the server.
+     *
+     * @param server server connection.
+     * @param filename Name of the file we are downloading.
+     */
+    override fun downloadResourceByFileName(server: TellaReportServer, filename: String?): Single<ResponseBody> {
         val url = server.url + URL_RESOURCE + URL_MOBILE_ASSET + filename
         val token = server.accessToken
         return apiService.getResource(url, access_token = token)

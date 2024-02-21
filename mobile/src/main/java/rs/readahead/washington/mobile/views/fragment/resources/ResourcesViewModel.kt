@@ -18,13 +18,11 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.domain.repository.resources.ResourcesRepository
-import rs.readahead.washington.mobile.domain.usecases.reports.GetReportsServersUseCase
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import javax.inject.Inject
 
 @HiltViewModel
 class ResourcesViewModel @Inject constructor(
-    private val getReportsServersUseCase: GetReportsServersUseCase,
     private val resourcesRepository: ResourcesRepository,
     private val dataSource: DataSource
 ) : ViewModel() {
@@ -55,17 +53,6 @@ class ResourcesViewModel @Inject constructor(
 
     private val _deletedResource = MutableLiveData<String>()
     val deletedResource: LiveData<String> get() = _deletedResource
-
-    fun listServers() {
-        _progress.postValue(true)
-        getReportsServersUseCase.execute(onSuccess = { result ->
-            _serversList.postValue(result)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
-    }
 
     fun getResources() {
         val projectMap = HashMap<String, Long>()
@@ -107,11 +94,11 @@ class ResourcesViewModel @Inject constructor(
 
                 Single.zip(
                     singles
-                ) { objects: Array<Any?> ->
+                ) { lists: Array<Any?> ->
                     val allResults = ArrayList<ProjectSlugResourceResponse>()
-                    for (obj in objects) {
-                        if (obj is List<*>) {
-                            allResults.addAll(obj as List<ProjectSlugResourceResponse>)
+                    for (list in lists) {
+                        if (list is List<*>) {
+                            allResults.addAll(list as List<ProjectSlugResourceResponse>)
                         }
                     }
                     allResults
@@ -150,7 +137,7 @@ class ResourcesViewModel @Inject constructor(
                 dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
             .flatMap {
-                resourcesRepository.downloadResource(it, resource.fileName).toObservable()
+                resourcesRepository.downloadResourceByFileName(it, resource.fileName).toObservable()
             }
             .flatMap {
                 MediaFileHandler.downloadResourcePdfInputstream(

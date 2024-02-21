@@ -12,7 +12,7 @@ interface ResourcesRepository {
 
     fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<List<ProjectSlugResourceResponse>>
 
-    fun downloadResource(server: TellaReportServer, filename : String?): Single<ResponseBody>
+    fun downloadResourceByFileName(server: TellaReportServer, filename : String?): Single<ResponseBody>
 
     fun getDisposable(): CompositeDisposable
 

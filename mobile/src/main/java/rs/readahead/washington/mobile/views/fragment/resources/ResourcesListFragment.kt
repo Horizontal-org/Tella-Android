@@ -58,13 +58,13 @@ class ResourcesListFragment :
             }
 
             savedResources.observe(viewLifecycleOwner) { resources ->
-                resources.forEach { downloadedResources.put(it.fileName, it) }
+                resources.forEach { downloadedResources[it.fileName] = it }
                 updateResourcesViews()
             }
 
             downloadedResource.observe(viewLifecycleOwner) {
                 availableResources.remove(it.fileName)
-                downloadedResources.put(it.fileName, it)
+                downloadedResources[it.fileName] = it
                 updateResourcesViews()
             }
 
@@ -118,7 +118,7 @@ class ResourcesListFragment :
     private fun onAvailableResourcesList(listFormResult: List<Resource>) {
         listFormResult.forEach {
             if (!downloadedResources.containsKey(it.fileName)) {
-                availableResources.put(it.fileName, it)
+                availableResources[it.fileName] = it
             }
         }
         updateResourcesViews()
@@ -173,7 +173,7 @@ class ResourcesListFragment :
 
                 dlOpenButton.contentDescription = getString(R.string.action_download)
 
-                dlOpenButton.setOnClickListener { view: View? ->
+                dlOpenButton.setOnClickListener {
                     if (MyApplication.isConnectedToInternet(requireContext())) {
                         dlOpenButton.hide()
                         model.downloadResource(resource)
@@ -196,13 +196,13 @@ class ResourcesListFragment :
 
                 dlOpenButton.contentDescription = getString(R.string.collect_blank_action_desc_more_options)
 
-                dlOpenButton.setOnClickListener { view: View? ->
+                dlOpenButton.setOnClickListener {
                     showDownloadedMenu(
                         resource
                     )
                 }
 
-                row.setOnClickListener { view: View? ->
+                row.setOnClickListener {
                     model.getPdfFile(resource.fileId)
                 }
             }
