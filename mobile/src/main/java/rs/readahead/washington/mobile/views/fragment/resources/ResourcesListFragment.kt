@@ -19,8 +19,10 @@ import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
+import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.HIDE_MENU
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity.Companion.VIEW_PDF
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+
 
 @AndroidEntryPoint
 class ResourcesListFragment :
@@ -54,8 +56,6 @@ class ResourcesListFragment :
                     listFormResult!!
                 )
             }
-            serversList.observe(viewLifecycleOwner) {
-            }
 
             savedResources.observe(viewLifecycleOwner) { resources ->
                 resources.forEach { downloadedResources[it.fileName] = it }
@@ -63,9 +63,7 @@ class ResourcesListFragment :
             }
 
             downloadedResource.observe(viewLifecycleOwner) {
-                availableResources.remove(it.fileName)
-                downloadedResources[it.fileName] = it
-                updateResourcesViews()
+                downloadedResource(it)
             }
 
             pdfFile.observe(viewLifecycleOwner) {
@@ -115,6 +113,43 @@ class ResourcesListFragment :
         createResourcesViews(downloadedResources.values.toList(), binding.downloadedResources, true)
     }
 
+    private fun downloadedResource(resource: Resource) {
+        if (downloadedResources.isEmpty()) {
+            binding.downloadedResourcesEmpty.hide()
+        }
+
+        binding.blankResources.removeView(
+            binding.blankResources.findViewWithTag(resource.fileName)
+        )
+
+        availableResources.remove(resource.fileName)
+        downloadedResources[resource.fileName] = resource
+        binding.downloadedResources.addView(getResourceItem(resource, true))
+
+        if (availableResources.isEmpty()) {
+            binding.availableResourcesEmpty.show()
+            binding.availableResourcesInfo.hide()
+        }
+    }
+
+    private fun deletedResource(resource: Resource) {
+        if (availableResources.isEmpty()) {
+            binding.availableResourcesEmpty.hide()
+            binding.availableResourcesInfo.show()
+        }
+
+        binding.downloadedResources.removeView(
+            binding.downloadedResources.findViewWithTag(resource.fileName)
+        )
+        downloadedResources.remove(resource.fileName)
+        availableResources[resource.fileName] = resource
+        binding.blankResources.addView(getResourceItem(resource, false))
+
+        if (downloadedResources.isEmpty()) {
+            binding.downloadedResourcesEmpty.show()
+        }
+    }
+
     private fun onAvailableResourcesList(listFormResult: List<Resource>) {
         listFormResult.forEach {
             if (!downloadedResources.containsKey(it.fileName)) {
@@ -142,6 +177,7 @@ class ResourcesListFragment :
                 binding.resources,
                 false
             )
+        itemBinding.root.tag = resource?.fileName
         val row = itemBinding.formRow
         val name = itemBinding.name
         val organization = itemBinding.organization
@@ -194,7 +230,8 @@ class ResourcesListFragment :
                     )
                 )
 
-                dlOpenButton.contentDescription = getString(R.string.collect_blank_action_desc_more_options)
+                dlOpenButton.contentDescription =
+                    getString(R.string.collect_blank_action_desc_more_options)
 
                 dlOpenButton.setOnClickListener {
                     showDownloadedMenu(
@@ -222,9 +259,9 @@ class ResourcesListFragment :
                         model.getPdfFile(resource.fileId)
                     }
                     if (action === BottomSheetUtils.Action.DELETE) {
-                        downloadedResources.remove(resource.fileName)
                         model.removeResource(resource)
-                        refreshLists()
+                        deletedResource(resource)
+                        //refreshLists()
                     }
                 }
             },
@@ -248,6 +285,7 @@ class ResourcesListFragment :
     ) {
         val intent = Intent(baseActivity, PDFReaderActivity::class.java).apply {
             putExtra(VIEW_PDF, vaultFile)
+            putExtra(HIDE_MENU, true)
         }
         startActivity(intent)
     }

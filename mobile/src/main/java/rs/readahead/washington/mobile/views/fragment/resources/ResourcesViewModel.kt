@@ -36,9 +36,6 @@ class ResourcesViewModel @Inject constructor(
     private val _resources = MutableLiveData<List<Resource>>()
     val resources: LiveData<List<Resource>> get() = _resources
 
-    private val _serversList = MutableLiveData<List<TellaReportServer>>()
-    val serversList: LiveData<List<TellaReportServer>> get() = _serversList
-
     private val _downloadedResource = MutableLiveData<Resource>()
     val downloadedResource: LiveData<Resource> = _downloadedResource
 
