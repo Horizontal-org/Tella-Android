@@ -856,4 +856,5 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
   <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
   <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
+  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
 </resources>

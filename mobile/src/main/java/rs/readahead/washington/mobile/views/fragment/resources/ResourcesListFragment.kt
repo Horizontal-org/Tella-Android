@@ -80,7 +80,7 @@ class ResourcesListFragment :
                 DialogUtils.showBottomMessage(
                     baseActivity,
                     getString(
-                        R.string.Report_Deleted_Confirmation, it
+                        R.string.Resources_RemovedResource, it
                     ),
                     false
                 )
