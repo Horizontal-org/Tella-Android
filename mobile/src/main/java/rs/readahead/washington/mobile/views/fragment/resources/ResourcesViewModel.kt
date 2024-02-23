@@ -13,8 +13,8 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
-import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResourceResponse
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.domain.entity.resources.ListResourceResult
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.domain.repository.resources.ResourcesRepository
@@ -45,8 +45,8 @@ class ResourcesViewModel @Inject constructor(
     private val _pdfFile = MutableLiveData<VaultFile>()
     val pdfFile: LiveData<VaultFile> = _pdfFile
 
-    private var _error = MutableLiveData<Throwable>()
-    val error: LiveData<Throwable> get() = _error
+    private var _error = MutableLiveData<Throwable?>()
+    val error: MutableLiveData<Throwable?> get() = _error
 
     private val _deletedResource = MutableLiveData<String>()
     val deletedResource: LiveData<String> get() = _deletedResource
@@ -81,7 +81,7 @@ class ResourcesViewModel @Inject constructor(
                     urlProjects[url] = projectList
                 }
 
-                val singles: MutableList<Single<List<ProjectSlugResourceResponse>>> =
+                val singles: MutableList<Single<ListResourceResult>> =
                     ArrayList()
 
                 urlProjects.forEach {
@@ -92,10 +92,15 @@ class ResourcesViewModel @Inject constructor(
                 Single.zip(
                     singles
                 ) { lists: Array<Any?> ->
-                    val allResults = ArrayList<ProjectSlugResourceResponse>()
+                    val allResults = ListResourceResult()
                     for (list in lists) {
-                        if (list is List<*>) {
-                            allResults.addAll(list as List<ProjectSlugResourceResponse>)
+                        if (list is ListResourceResult) {
+                            val slugs =
+                                list.slugs
+                            val errors =
+                                list.errors
+                            allResults.slugs += slugs
+                            allResults.errors += errors
                         }
                     }
                     allResults
@@ -104,7 +109,7 @@ class ResourcesViewModel @Inject constructor(
             .doFinally { _progress.postValue(false) }
             .subscribe({
                 val resourcesList = mutableListOf<Resource>()
-                it.map { instance ->
+                it.slugs.map { instance ->
                     instance.resources.forEach { resource: Resource ->
                         resource.project = instance.name
                         if (projectMap[instance.id] != null) {
@@ -120,6 +125,7 @@ class ResourcesViewModel @Inject constructor(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
+                _error.postValue(throwable)
             })
     }
 
@@ -155,6 +161,7 @@ class ResourcesViewModel @Inject constructor(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
+                _error.postValue(throwable)
             })
     }
 
@@ -195,7 +202,7 @@ class ResourcesViewModel @Inject constructor(
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable!!)
+                _error.postValue(throwable)
             }
         )
     }
@@ -215,7 +222,7 @@ class ResourcesViewModel @Inject constructor(
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable!!)
+                _error.postValue(throwable)
             }
         )
     }

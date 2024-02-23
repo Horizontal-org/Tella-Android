@@ -83,6 +83,16 @@ class ResourcesListFragment :
                     false
                 )
             }
+
+            error.observe(viewLifecycleOwner) {
+                it?.message?.let { it1 ->
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        it1,
+                        true
+                    )
+                }
+            }
         }
     }
 
