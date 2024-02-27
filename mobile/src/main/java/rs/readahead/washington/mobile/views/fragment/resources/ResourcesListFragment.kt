@@ -302,6 +302,16 @@ class ResourcesListFragment :
 
     private fun initView() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
-        binding.toolbar.onRightClickListener = { refreshLists() }
+        binding.toolbar.onRightClickListener = {
+            if (MyApplication.isConnectedToInternet(requireContext())) {
+                refreshLists()
+            } else {
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    getString(R.string.collect_blank_toast_not_connected),
+                    true
+                )
+            }
+        }
     }
 }
