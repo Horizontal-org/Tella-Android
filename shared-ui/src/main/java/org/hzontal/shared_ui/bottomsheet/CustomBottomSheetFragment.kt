@@ -236,11 +236,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun applyStatusBarColor(@ColorRes colorInt: Int) {
         val window = dialog!!.window
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (window != null) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
-            }
+        if (window != null) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
         }
     }
 

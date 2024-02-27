@@ -16,6 +16,7 @@
             android:background="@color/space_cadet"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:navigationContentDescription="@string/action_go_back"
             app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleTextColor="@color/wa_white"
             app:contentInsetLeft="0dp"

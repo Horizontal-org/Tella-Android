@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.fragment
 import android.Manifest
 import android.animation.AnimatorInflater
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.fragment.app.setFragmentResult
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -138,14 +140,14 @@ class MicFragment : MetadataBaseLockFragment(),
 
         updateRecordingName()
         recordingName.setOnClickListener {
-            BottomSheetUtils.showFileRenameSheet(
+            VaultSheetUtils.showVaultRenameSheet(
                 activity.supportFragmentManager,
                 getString(R.string.mic_rename_recording),
                 getString(R.string.action_cancel),
                 getString(R.string.action_ok),
                 requireActivity(),
                 recordingName.text.toString()
-            ) { it1 -> updateRecordingName(it1) }
+            ) { name -> updateRecordingName(name) }
         }
 
         mPause.setOnClickListener { handlePause() }
@@ -202,13 +204,10 @@ class MicFragment : MetadataBaseLockFragment(),
 
 
     private fun hastRecordingPermissions(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.RECORD_AUDIO
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestRecordingPermissions(requestCode: Int) {
@@ -508,6 +507,7 @@ class MicFragment : MetadataBaseLockFragment(),
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateRecordingName() {
         recordingName.text = UUID.randomUUID().toString() + ".aac"
     }

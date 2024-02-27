@@ -290,9 +290,9 @@ class SendFeedbackFragment :
         // Observe the work's status using LiveData
         WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
             .observeForever(object : Observer<WorkInfo> {
-                override fun onChanged(value: WorkInfo) {
+                override fun onChanged(workInfo: WorkInfo) {
                     // Check if the work has succeeded
-                    if (value.state == WorkInfo.State.SUCCEEDED) {
+                    if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                         // Show a success message with a duration of 4000 milliseconds (4 seconds)
                         baseActivity.let {
                             DialogUtils.showBottomMessage(
