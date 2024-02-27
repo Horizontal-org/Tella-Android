@@ -103,7 +103,6 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun openEntityInstance(reportInstance: ReportInstance) {
-        val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
         navManager().navigateFromReportsScreenToReportSendScreen()

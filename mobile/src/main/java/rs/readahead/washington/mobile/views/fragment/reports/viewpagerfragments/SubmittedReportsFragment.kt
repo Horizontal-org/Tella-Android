@@ -103,7 +103,6 @@ class SubmittedReportsFragment : BaseBindingFragment<FragmentReportsListBinding>
     }
 
     private fun openEntityInstance(reportInstance: ReportInstance) {
-        val bundle = Bundle()
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         navManager().navigateFromReportsScreenToReportSubmittedScreen()
     }
