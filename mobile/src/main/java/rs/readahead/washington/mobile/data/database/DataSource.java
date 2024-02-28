@@ -2290,6 +2290,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_REPORT_FORM_INSTANCE);
         deleteTable(D.T_REPORT_FILES_UPLOAD);
         deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
+        deleteTable(D.T_RESOURCES);
     }
 
     public void deleteForms() {
@@ -2298,6 +2299,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
+        deleteTable(D.T_RESOURCES);
     }
 
     private void deleteAllServersDB() {
@@ -2307,6 +2309,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_UWAZI_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
+        deleteTable(D.T_RESOURCES);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
 
