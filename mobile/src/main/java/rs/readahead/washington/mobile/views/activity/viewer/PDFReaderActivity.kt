@@ -1,7 +1,9 @@
 package rs.readahead.washington.mobile.views.activity.viewer
 
 import android.content.Intent
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.OrientationEventListener
 import android.view.View
 import androidx.activity.viewModels
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
@@ -19,6 +21,7 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import timber.log.Timber
 import java.io.InputStream
 
 @AndroidEntryPoint
@@ -28,6 +31,7 @@ class PDFReaderActivity : BaseLockActivity() {
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
     private var isInfoShown = false
+    private lateinit var mOrientationEventListener: OrientationEventListener
 
     companion object {
         const val VIEW_PDF = "vp"
@@ -61,6 +65,7 @@ class PDFReaderActivity : BaseLockActivity() {
     }
 
     private fun initObservers() {
+        setOrientationListener()
         with(viewModel) {
             // Observer for the error LiveData, displays the error message when it is triggered
             error.observe(this@PDFReaderActivity) { errorResId ->
@@ -92,7 +97,37 @@ class PDFReaderActivity : BaseLockActivity() {
                     mediaFileDeletedConfirmation.showConfirmDelete
                 )
             }
+
+            viewModel.rotationUpdate.observe(this@PDFReaderActivity) { rotation ->
+                rotateViews(rotation)
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mOrientationEventListener.enable()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mOrientationEventListener.disable()
+    }
+
+    private fun setOrientationListener() {
+        mOrientationEventListener =
+            object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
+                override fun onOrientationChanged(orientation: Int) {
+                    if (orientation != ORIENTATION_UNKNOWN) {
+                        Timber.d("++++++ switch orientation %s", orientation.toString())
+                        viewModel.handleRotation(orientation)
+                    }
+                }
+            }
+    }
+
+    private fun rotateViews(rotation: Int) {
+        binding.pdfRendererView.animate().rotation(rotation.toFloat()).start()
     }
 
     private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {

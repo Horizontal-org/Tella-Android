@@ -619,8 +619,10 @@
 
         <activity
             android:name=".views.activity.viewer.PDFReaderActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:launchMode="singleTop"
+            android:screenOrientation="fullSensor"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".views.activity.clean_insights.CleanInsightsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

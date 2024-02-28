@@ -15,6 +15,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
@@ -30,6 +31,7 @@ class SharedMediaFileViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     private val disposables = CompositeDisposable()
+    private var currentRotation = 0
     private var _error = MutableLiveData<Int>()
     val error: LiveData<Int> get() = _error
     private lateinit var mediaFileDeleteConfirmation: MediaFileDeleteConfirmation
@@ -48,6 +50,9 @@ class SharedMediaFileViewModel @Inject constructor(
 
     private var _onMediaFileGot = MutableLiveData<VaultFile>()
     val onMediaFileGot: LiveData<VaultFile> get() = _onMediaFileGot
+
+    private val _rotationUpdate = SingleLiveEvent<Int>()
+    val rotationUpdate: LiveData<Int> = _rotationUpdate
 
     /**
      * Exports the given [vaultFile] to the specified [path] on the device, optionally including its metadata.
@@ -203,6 +208,28 @@ class SharedMediaFileViewModel @Inject constructor(
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
                     _error.postValue(R.string.default_error_msg)
                 })
+    }
+
+    fun handleRotation(orientation: Int) {
+        var degrees = 270
+
+        if (orientation < 45 || orientation > 315) {
+            degrees = 0
+        } else if (orientation < 135) {
+            degrees = 90
+        } else if (orientation < 225) {
+            degrees = 180
+        }
+
+        var rotation = (360 - degrees) % 360
+
+        if (rotation == 270) {
+            rotation = -90
+        }
+
+        currentRotation = rotation
+
+        _rotationUpdate.postValue(rotation)
     }
 
 }

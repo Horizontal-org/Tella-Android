@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/wa_black"
     android:fitsSystemWindows="true"
-    tools:context="rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity">
+    tools:context="rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
