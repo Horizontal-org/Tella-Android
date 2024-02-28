@@ -2239,6 +2239,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private void removeTUServerDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
+        database.delete(D.T_RESOURCES, D.C_SERVER_ID + " = ?", new String[]{Long.toString(id)});
         //deleteTable(D.T_REPORT_FILES_UPLOAD);
     }
 
