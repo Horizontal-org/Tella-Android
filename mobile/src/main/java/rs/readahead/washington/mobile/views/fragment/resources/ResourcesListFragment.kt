@@ -117,6 +117,11 @@ class ResourcesListFragment :
         binding.downloadedResources.removeAllViews()
         if (downloadedResources.isEmpty()) {
             binding.downloadedResourcesEmpty.show()
+            if (availableResources.isEmpty()) {
+                binding.downloadedResourcesEmpty.setText(R.string.Resources_DownloadedEmptyMessage_NoAvailable)
+            } else {
+                binding.downloadedResourcesEmpty.setText(R.string.Resources_DownloadedEmptyMessage)
+            }
         } else {
             binding.downloadedResourcesEmpty.hide()
         }
@@ -157,6 +162,11 @@ class ResourcesListFragment :
 
         if (downloadedResources.isEmpty()) {
             binding.downloadedResourcesEmpty.show()
+            if (availableResources.isEmpty()) {
+                binding.downloadedResourcesEmpty.setText(R.string.Resources_DownloadedEmptyMessage_NoAvailable)
+            } else {
+                binding.downloadedResourcesEmpty.setText(R.string.Resources_DownloadedEmptyMessage)
+            }
         }
     }
 

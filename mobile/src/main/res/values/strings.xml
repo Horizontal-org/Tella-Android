@@ -852,6 +852,7 @@ they are uploaded to this project as a report.</string>
   <string name="Home_BottomNav_Resources">Resources</string>
   <string name="Resources_DownloadedTitle">Downloaded</string>
   <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
   <string name="Resources_AvailableTitle">Available for download</string>
   <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
   <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
