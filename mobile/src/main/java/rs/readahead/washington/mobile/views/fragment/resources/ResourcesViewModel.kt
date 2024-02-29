@@ -133,9 +133,6 @@ class ResourcesViewModel @Inject constructor(
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { _progress.postValue(true) }
-            .doFinally {
-                _progress.postValue(false)
-            }
             .flatMap { dataSource: DataSource ->
                 dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
@@ -152,6 +149,9 @@ class ResourcesViewModel @Inject constructor(
             .flatMap {
                 resource.fileId = it.id
                 dataSource.saveResource(resource).toObservable()
+            }
+            .doFinally {
+                _progress.postValue(false)
             }
             .subscribe({
                 _downloadedResource.postValue(resource)
@@ -193,9 +193,9 @@ class ResourcesViewModel @Inject constructor(
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { _progress.postValue(true) }
+            //.doOnSubscribe { _progress.postValue(true) }
             .flatMapSingle<List<Resource>> { obj: DataSource -> obj.listResources() }
-            .doFinally { _progress.postValue(false) }
+           // .doFinally { _progress.postValue(false) }
             .subscribe(
                 { list: List<Resource> ->
                     _savedResources.postValue(list)
