@@ -5,6 +5,8 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.OrientationEventListener
 import android.view.View
+import android.widget.FrameLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.activity.viewModels
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
@@ -119,7 +121,6 @@ class PDFReaderActivity : BaseLockActivity() {
             object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
                 override fun onOrientationChanged(orientation: Int) {
                     if (orientation != ORIENTATION_UNKNOWN) {
-                        Timber.d("++++++ switch orientation %s", orientation.toString())
                         viewModel.handleRotation(orientation)
                     }
                 }
@@ -127,7 +128,11 @@ class PDFReaderActivity : BaseLockActivity() {
     }
 
     private fun rotateViews(rotation: Int) {
-        binding.pdfRendererView.animate().rotation(rotation.toFloat()).start()
+        binding.rootView.animate().rotation(rotation.toFloat()).start()
+       /* binding.rootView.layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )*/
     }
 
     private fun onMediaFileDeleteConfirmation(vaultFile: VaultFile, showConfirmDelete: Boolean) {
