@@ -25,13 +25,18 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:animateLayoutChanges="true"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/appbar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/banner"
@@ -71,7 +76,7 @@
                     android:text="@string/Resources_DownloadedTitle"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
@@ -110,7 +115,7 @@
                     android:text="@string/Resources_AvailableTitle"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
@@ -156,13 +161,6 @@
             </RelativeLayout>
         </ScrollView>
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/appbar">
 
         <ProgressBar
             android:id="@+id/progressBar"
