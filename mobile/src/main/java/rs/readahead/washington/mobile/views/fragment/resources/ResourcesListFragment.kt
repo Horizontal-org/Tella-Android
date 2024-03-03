@@ -43,10 +43,6 @@ class ResourcesListFragment :
         refreshLists()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun initObservers() {
         with(model) {
             resources.observe(
@@ -59,7 +55,7 @@ class ResourcesListFragment :
 
             savedResources.observe(viewLifecycleOwner) { resources ->
                 resources.forEach { downloadedResources[it.fileName] = it }
-                updateResourcesViews()
+                updateDownloadedListView()
             }
 
             downloadedResource.observe(viewLifecycleOwner) {
@@ -104,16 +100,7 @@ class ResourcesListFragment :
         }
     }
 
-    private fun updateResourcesViews() {
-        binding.blankResources.removeAllViews()
-        createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
-        if (availableResources.isEmpty()) {
-            binding.availableResourcesEmpty.show()
-            binding.availableResourcesInfo.hide()
-        } else {
-            binding.availableResourcesInfo.show()
-            binding.availableResourcesEmpty.hide()
-        }
+    private fun updateDownloadedListView() {
         binding.downloadedResources.removeAllViews()
         if (downloadedResources.isEmpty()) {
             binding.downloadedResourcesEmpty.show()
@@ -126,6 +113,18 @@ class ResourcesListFragment :
             binding.downloadedResourcesEmpty.hide()
         }
         createResourcesViews(downloadedResources.values.toList(), binding.downloadedResources, true)
+    }
+
+    private fun updateAvailableListView() {
+        binding.blankResources.removeAllViews()
+        createResourcesViews(availableResources.values.toList(), binding.blankResources, false)
+        if (availableResources.isEmpty()) {
+            binding.availableResourcesEmpty.show()
+            binding.availableResourcesInfo.hide()
+        } else {
+            binding.availableResourcesInfo.show()
+            binding.availableResourcesEmpty.hide()
+        }
     }
 
     private fun downloadedResource(resource: Resource) {
@@ -176,7 +175,7 @@ class ResourcesListFragment :
                 availableResources[it.fileName] = it
             }
         }
-        updateResourcesViews()
+        updateAvailableListView()
     }
 
     private fun createResourcesViews(
@@ -203,8 +202,6 @@ class ResourcesListFragment :
         val organization = itemBinding.organization
         val dlOpenButton = itemBinding.dlOpenButton
         val pinnedIcon = itemBinding.favoritesButton
-        //val rowLayout = itemBinding.rowLayout
-        //val updateButton = itemBinding.laterButton
         if (resource != null) {
             dlOpenButton.alpha = 1F
             name.text = resource.fileName
@@ -281,7 +278,6 @@ class ResourcesListFragment :
                     if (action === BottomSheetUtils.Action.DELETE) {
                         model.removeResource(resource)
                         deletedResource(resource)
-                        //refreshLists()
                     }
                 }
             },

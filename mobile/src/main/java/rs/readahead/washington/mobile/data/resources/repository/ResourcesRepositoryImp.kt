@@ -27,12 +27,9 @@ class ResourcesRepositoryImp @Inject internal constructor(
      *
      * @param projects List of Project server connections to get resources from.
      */
-    override fun getResourcesResult(projects:List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
-        var url = projects[0].url + URL_RESOURCE + URL_PROJECTS + '?'
+    override fun getResourcesResult(projects: List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
         val token = projects[0].accessToken
-        projects.forEach {
-            url = url.plus("&").plus("projectId[]=${it.projectId}")
-        }
+        val url = prepareResourcesUrl(projects[0].url, projects)
         return apiService.getResources(url, access_token = token)
             .subscribeOn(Schedulers.io())
             .map { results ->
@@ -51,12 +48,12 @@ class ResourcesRepositoryImp @Inject internal constructor(
      * @param urlServer url of the server connection.
      * @param projects List of projects on the server.
      */
-    override fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<ListResourceResult> {
-        var url = "$urlServer$URL_RESOURCE$URL_PROJECTS?"
+    override fun getAllResourcesResult(
+        urlServer: String,
+        projects: ArrayList<TellaReportServer>
+    ): Single<ListResourceResult> {
         val token = projects[0].accessToken
-        projects.forEach {
-            url = url.plus("&").plus("projectId[]=${it.projectId}")
-        }
+        val url = prepareResourcesUrl(urlServer, projects)
         return apiService.getResources(url, access_token = token)
             .subscribeOn(Schedulers.io())
             .map { results ->
@@ -83,7 +80,10 @@ class ResourcesRepositoryImp @Inject internal constructor(
      * @param server server connection.
      * @param filename Name of the file we are downloading.
      */
-    override fun downloadResourceByFileName(server: TellaReportServer, filename: String?): Single<ResponseBody> {
+    override fun downloadResourceByFileName(
+        server: TellaReportServer,
+        filename: String?
+    ): Single<ResponseBody> {
         val url = server.url + URL_RESOURCE + URL_MOBILE_ASSET + filename
         val token = server.accessToken
         return apiService.getResource(url, access_token = token)
@@ -94,5 +94,19 @@ class ResourcesRepositoryImp @Inject internal constructor(
 
     override fun cleanup() {
         disposables.clear()
+    }
+
+    /**
+     *  This fun prepares url to get resources of projects from one server that hosts those projects.
+     *
+     * @param baseUrl url of a server.
+     * @param projects List of projects that the server hosts.
+     */
+    private fun prepareResourcesUrl(baseUrl: String, projects: List<TellaReportServer>): String {
+        var url = "$baseUrl$URL_RESOURCE$URL_PROJECTS?"
+        projects.forEach {
+            url = url.plus("&").plus("projectId[]=${it.projectId}")
+        }
+        return url
     }
 }
