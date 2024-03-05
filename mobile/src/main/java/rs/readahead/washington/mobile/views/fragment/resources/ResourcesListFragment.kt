@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
@@ -32,6 +33,7 @@ class ResourcesListFragment :
 
     private var availableResources = HashMap<String, Resource>()
     private var downloadedResources = HashMap<String, Resource>()
+    private var downloadInProgress = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,6 +66,10 @@ class ResourcesListFragment :
 
             pdfFile.observe(viewLifecycleOwner) {
                 openPdf(it)
+            }
+
+            downloadProgress.observe(viewLifecycleOwner) {
+                downloadInProgress += it
             }
 
             progress.observe(viewLifecycleOwner) {
@@ -201,6 +207,7 @@ class ResourcesListFragment :
         val name = itemBinding.name
         val organization = itemBinding.organization
         val dlOpenButton = itemBinding.dlOpenButton
+        val downloading = itemBinding.progress
         val pinnedIcon = itemBinding.favoritesButton
         if (resource != null) {
             dlOpenButton.alpha = 1F
@@ -229,6 +236,7 @@ class ResourcesListFragment :
                 dlOpenButton.setOnClickListener {
                     if (MyApplication.isConnectedToInternet(requireContext())) {
                         dlOpenButton.hide()
+                        downloading.show()
                         model.downloadResource(resource)
                     } else {
                         DialogUtils.showBottomMessage(
@@ -307,7 +315,7 @@ class ResourcesListFragment :
     }
 
     private fun initView() {
-        binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.toolbar.backClickListener = { handleBackPressed() }
         binding.toolbar.onRightClickListener = {
             if (MyApplication.isConnectedToInternet(requireContext())) {
                 refreshLists()
@@ -318,6 +326,29 @@ class ResourcesListFragment :
                     true
                 )
             }
+        }
+    }
+
+    private fun handleBackPressed() {
+        if (downloadInProgress == 0) {
+            nav().popBackStack()
+        } else {
+            BottomSheetUtils.showConfirmSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.Report_Dialog_Draft_Title),
+                getString(R.string.collect_form_exit_dialog_expl),
+                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
+                getString(R.string.action_cancel),
+                object : BottomSheetUtils.ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            nav().popBackStack()
+                        } else {
+                            return
+                        }
+                    }
+                }
+            )
         }
     }
 }

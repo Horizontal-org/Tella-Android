@@ -33,6 +33,9 @@ class ResourcesViewModel @Inject constructor(
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
 
+    private val _downloadProgress = MutableLiveData<Int>()
+    val downloadProgress: LiveData<Int> get() = _downloadProgress
+
     private val _resources = MutableLiveData<List<Resource>>()
     val resources: LiveData<List<Resource>> get() = _resources
 
@@ -132,7 +135,7 @@ class ResourcesViewModel @Inject constructor(
     fun downloadResource(resource: Resource) {
         disposables.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
-            .doOnSubscribe { _progress.postValue(true) }
+            .doOnSubscribe { _downloadProgress.postValue(1) }
             .flatMap { dataSource: DataSource ->
                 dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
@@ -151,7 +154,7 @@ class ResourcesViewModel @Inject constructor(
                 dataSource.saveResource(resource).toObservable()
             }
             .doFinally {
-                _progress.postValue(false)
+                _downloadProgress.postValue(-1)
             }
             .subscribe({
                 _downloadedResource.postValue(resource)
