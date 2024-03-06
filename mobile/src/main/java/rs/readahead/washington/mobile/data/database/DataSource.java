@@ -63,7 +63,6 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
-import rs.readahead.washington.mobile.domain.entity.resources.Resource;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -109,18 +108,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }
 
         return dataSource;
-    }
-
-    private static String createSQLInsert(final String tableName, final String[] columnNames) {
-        if (tableName == null || columnNames == null || columnNames.length == 0) {
-            throw new IllegalArgumentException();
-        }
-
-        return "INSERT INTO " + tableName + " (" +
-                TextUtils.join(", ", columnNames) +
-                ") VALUES( " +
-                TextUtils.join(", ", Collections.nCopies(columnNames.length, "?")) +
-                ")";
     }
 
     private <T> SingleTransformer<T, T> applySchedulers() {

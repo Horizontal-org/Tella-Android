@@ -23,8 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResourcesViewModel @Inject constructor(
-    private val resourcesRepository: ResourcesRepository,
-    private val dataSource: ResourceDataSource
+    private val resourcesRepository: ResourcesRepository
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -133,10 +132,12 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun downloadResource(resource: Resource) {
+        lateinit var resourceDataSource : ResourceDataSource
         disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { _downloadProgress.postValue(1) }
             .flatMap { dataSource: ResourceDataSource ->
+                resourceDataSource = dataSource
                 dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
             .flatMap {
@@ -151,7 +152,7 @@ class ResourcesViewModel @Inject constructor(
             }
             .flatMap {
                 resource.fileId = it.id
-                dataSource.saveResource(resource).toObservable()
+                resourceDataSource.saveResource(resource).toObservable()
             }
             .doFinally {
                 _downloadProgress.postValue(-1)

@@ -12,10 +12,11 @@ public class KeyDataSource {
     private final AsyncSubject<DataSource> asyncSubject;
     private final AsyncSubject<UwaziDataSource> asyncUwaziSubject;
     private final AsyncSubject<ResourceDataSource> asyncResourceSubject;
-    private Context context;
+    private final Context context;
 
 
     public KeyDataSource(Context context) {
+        this.context = context.getApplicationContext();
         asyncSubject = AsyncSubject.create();
         asyncUwaziSubject = AsyncSubject.create();
         asyncResourceSubject = AsyncSubject.create();

@@ -234,7 +234,7 @@ class ResourcesListFragment :
                 dlOpenButton.contentDescription = getString(R.string.action_download)
 
                 dlOpenButton.setOnClickListener {
-                    if (MyApplication.isConnectedToInternet(requireContext())) {
+                    if (MyApplication.isConnectedToInternet(baseActivity)) {
                         dlOpenButton.hide()
                         downloading.show()
                         model.downloadResource(resource)
@@ -276,8 +276,8 @@ class ResourcesListFragment :
         BottomSheetUtils.showViewDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             resource.title,
-            requireContext().getString(R.string.View_Report),
-            requireContext().getString(R.string.Resources_RemoveFromDownloads),
+            baseActivity.getString(R.string.View_Report),
+            baseActivity.getString(R.string.Resources_RemoveFromDownloads),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.VIEW) {
@@ -289,13 +289,13 @@ class ResourcesListFragment :
                     }
                 }
             },
-            requireContext().getString(R.string.Resources_RemoveFromDownloads),
+            baseActivity.getString(R.string.Resources_RemoveFromDownloads),
             String.format(
-                requireContext().resources.getString(R.string.Collect_Subtitle_RemoveForm),
+                baseActivity.resources.getString(R.string.Collect_Subtitle_RemoveForm),
                 resource.title
             ),
-            requireContext().getString(R.string.action_remove),
-            requireContext().getString(R.string.action_cancel)
+            baseActivity.getString(R.string.action_remove),
+            baseActivity.getString(R.string.action_cancel)
         )
     }
 
@@ -317,7 +317,7 @@ class ResourcesListFragment :
     private fun initView() {
         binding.toolbar.backClickListener = { handleBackPressed() }
         binding.toolbar.onRightClickListener = {
-            if (MyApplication.isConnectedToInternet(requireContext())) {
+            if (MyApplication.isConnectedToInternet(baseActivity)) {
                 refreshLists()
             } else {
                 DialogUtils.showBottomMessage(
@@ -332,6 +332,7 @@ class ResourcesListFragment :
     private fun handleBackPressed() {
         if (downloadInProgress == 0) {
             nav().popBackStack()
+            return
         } else {
             BottomSheetUtils.showConfirmSheet(
                 baseActivity.supportFragmentManager,

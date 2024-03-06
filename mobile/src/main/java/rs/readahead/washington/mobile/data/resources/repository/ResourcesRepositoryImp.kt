@@ -35,12 +35,7 @@ class ResourcesRepositoryImp @Inject internal constructor(
         return apiService.getResources(url, access_token = token)
             .subscribeOn(Schedulers.io())
             .map { results ->
-
-                val slugs = mutableListOf<ProjectSlugResourceResponse>()
-                results.forEach {
-                    slugs.add(it.mapToDomainModel())
-                }
-                return@map slugs
+                results.map { it.mapToDomainModel() }
             }
     }
 
