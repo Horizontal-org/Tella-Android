@@ -14,8 +14,4 @@ interface ResourcesRepository {
     fun getAllResourcesResult(urlServer: String, projects: ArrayList<TellaReportServer>): Single<ListResourceResult>
 
     fun downloadResourceByFileName(server: TellaReportServer, filename : String?): Single<ResponseBody>
-
-    fun getDisposable(): CompositeDisposable
-
-    fun cleanup()
 }

@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.data.resources.repository
 
 import io.reactivex.*
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import rs.readahead.washington.mobile.data.entity.reports.ProjectSlugResourceResponse
@@ -12,6 +11,7 @@ import rs.readahead.washington.mobile.data.resources.utils.ParamsNetwork.URL_MOB
 import rs.readahead.washington.mobile.data.resources.utils.ParamsNetwork.URL_RESOURCE
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.resources.ListResourceResult
+import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.domain.repository.resources.ResourcesRepository
 import javax.inject.Inject
 
@@ -20,14 +20,16 @@ class ResourcesRepositoryImp @Inject internal constructor(
     private val apiService: ResourcesApiService
 ) : ResourcesRepository {
 
-    private val disposables = CompositeDisposable()
-
     /**
      * Gets list of resources from the server.
      *
      * @param projects List of Project server connections to get resources from.
      */
     override fun getResourcesResult(projects: List<TellaReportServer>): Single<List<ProjectSlugResourceResponse>> {
+        if (projects.isEmpty()) {
+            return Single.error(NotFountException())
+        }
+
         val token = projects[0].accessToken
         val url = prepareResourcesUrl(projects[0].url, projects)
         return apiService.getResources(url, access_token = token)
@@ -52,6 +54,10 @@ class ResourcesRepositoryImp @Inject internal constructor(
         urlServer: String,
         projects: ArrayList<TellaReportServer>
     ): Single<ListResourceResult> {
+        if (projects.isEmpty()) {
+            return Single.error(NotFountException())
+        }
+
         val token = projects[0].accessToken
         val url = prepareResourcesUrl(urlServer, projects)
         return apiService.getResources(url, access_token = token)
@@ -88,12 +94,6 @@ class ResourcesRepositoryImp @Inject internal constructor(
         val token = server.accessToken
         return apiService.getResource(url, access_token = token)
             .subscribeOn(Schedulers.io())
-    }
-
-    override fun getDisposable() = disposables
-
-    override fun cleanup() {
-        disposables.clear()
     }
 
     /**

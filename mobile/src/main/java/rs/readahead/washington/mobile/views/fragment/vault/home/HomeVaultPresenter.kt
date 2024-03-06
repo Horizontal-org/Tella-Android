@@ -55,7 +55,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     dataSource.deleteDatabase()
                 } else {
                     if (Preferences.isEraseForms()) {
-                        dataSource.deleteForms()
+                        dataSource.deleteFormsAndRelatedTables()
                     }
                 }
                 clearSharedPreferences()

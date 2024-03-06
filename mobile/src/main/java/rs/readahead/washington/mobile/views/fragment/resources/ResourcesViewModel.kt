@@ -11,8 +11,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.ResourceDataSource
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.resources.ListResourceResult
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ResourcesViewModel @Inject constructor(
     private val resourcesRepository: ResourcesRepository,
-    private val dataSource: DataSource
+    private val dataSource: ResourceDataSource
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -57,27 +57,27 @@ class ResourcesViewModel @Inject constructor(
     fun getResources() {
         val projectMap = HashMap<String, Long>()
         val urlProjects = HashMap<String, ArrayList<TellaReportServer>>()
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _progress.postValue(true) }
-            .flatMap { dataSource: DataSource ->
+            .flatMap { dataSource: ResourceDataSource ->
                 dataSource.listTellaUploadServers().toObservable()
             }
             .flatMap { projects: List<TellaReportServer> ->
                 // Save server id to download resource of the Project
                 val urls = ArrayList<String>()
                 projects.forEach { project ->
-                    if (!urls.contains(project.url)){
+                    if (!urls.contains(project.url)) {
                         urls.add(project.url)
                     }
                     projectMap[project.projectId] = project.id
                 }
 
-                urls.forEach {url ->
+                urls.forEach { url ->
                     val projectList = ArrayList<TellaReportServer>()
                     projects.forEach { project ->
-                        if (project.url.equals(url)){
+                        if (project.url.equals(url)) {
                             projectList.add(project)
                         }
                     }
@@ -89,7 +89,7 @@ class ResourcesViewModel @Inject constructor(
 
                 urlProjects.forEach {
                     // We are making a call for each distinct url and it's projects
-                    singles.add( resourcesRepository.getAllResourcesResult(it.key, it.value))
+                    singles.add(resourcesRepository.getAllResourcesResult(it.key, it.value))
                 }
 
                 Single.zip(
@@ -133,10 +133,10 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun downloadResource(resource: Resource) {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { _downloadProgress.postValue(1) }
-            .flatMap { dataSource: DataSource ->
+            .flatMap { dataSource: ResourceDataSource ->
                 dataSource.getTellaUploadServer(resource.serverId).toObservable()
             }
             .flatMap {
@@ -193,12 +193,12 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun listResources() {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             //.doOnSubscribe { _progress.postValue(true) }
-            .flatMapSingle<List<Resource>> { obj: DataSource -> obj.listResources() }
-           // .doFinally { _progress.postValue(false) }
+            .flatMapSingle<List<Resource>> { obj: ResourceDataSource -> obj.listResources() }
+            // .doFinally { _progress.postValue(false) }
             .subscribe(
                 { list: List<Resource> ->
                     _savedResources.postValue(list)
@@ -211,13 +211,17 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun removeResource(resource: Resource) {
-        disposables.add(keyDataSource.dataSource
+        disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { _progress.postValue(true) }
-            .flatMapSingle { dataSource: DataSource -> dataSource.deleteResource(resource) }
-            .flatMapSingle {MyApplication.rxVault[it]}
-            .flatMapSingle {MyApplication.rxVault.delete(it)}
+            .flatMapSingle { dataSource: ResourceDataSource ->
+                dataSource.deleteResource(
+                    resource
+                )
+            }
+            .flatMapSingle { MyApplication.rxVault[it] }
+            .flatMapSingle { MyApplication.rxVault.delete(it) }
             .doFinally { _progress.postValue(false) }
             .subscribe(
                 {
@@ -234,14 +238,9 @@ class ResourcesViewModel @Inject constructor(
         disposables.dispose()
     }
 
-    fun clearDisposable() {
-        resourcesRepository.getDisposable().clear()
-    }
-
     override fun onCleared() {
         super.onCleared()
         dispose()
-        resourcesRepository.cleanup()
     }
 }
 

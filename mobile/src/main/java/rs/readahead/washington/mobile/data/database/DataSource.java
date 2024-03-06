@@ -73,7 +73,6 @@ import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepos
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
 import rs.readahead.washington.mobile.domain.repository.feedback.ITellaFeedBackRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
-import rs.readahead.washington.mobile.domain.repository.resources.ITellaResourcesRepository;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
@@ -81,7 +80,7 @@ import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
 public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository, ITellaFeedBackRepository, ITellaResourcesRepository {
+        IMediaFileRecordRepository, ITellaFeedBackRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 
@@ -162,10 +161,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    public Single<List<Resource>> listResources() {
-        return Single.fromCallable(() -> dataSource.listResourcesDB())
-                .compose(applySchedulers());
-    }
 
     @Override
     public Single<TellaReportServer> updateTellaUploadServer(TellaReportServer server) {
@@ -207,9 +202,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Completable removeTUServer(final long id) {
+    public Completable removeTellaServerAndResources(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.removeTUServerDB(id);
+            dataSource.deleteTellaServerAndResourcesDB(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -369,11 +364,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    public Single<String> deleteResource(final Resource resource) {
-        return Single.fromCallable(() -> deleteResourceDB(resource))
-                .compose(applySchedulers());
-    }
-
     @Override
     public Completable scheduleUploadMediaFiles(final List<VaultFile> vaultFiles) {
         return Completable.fromCallable((Callable<Void>) () -> {
@@ -466,7 +456,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -496,7 +486,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -600,7 +590,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 servers.add(tuServer);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -629,7 +619,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 servers.add(collectServer);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -652,7 +642,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToCollectServer(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return CollectServer.NONE;
@@ -687,7 +677,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToTellaUploadServer(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return TellaReportServer.NONE;
@@ -743,7 +733,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return collectForm;
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -805,7 +795,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 forms.add(collectForm);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -867,7 +857,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 forms.add(collectForm);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -906,7 +896,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 files.add(new CollectInstanceVaultFile(id, instanceId, vaultFileId, status));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -932,7 +922,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -1063,7 +1053,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return null;
@@ -1086,7 +1076,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1108,7 +1098,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             database.setTransactionSuccessful();
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -1153,7 +1143,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 mediaFiles.add(cursorToMediaFile(cursor));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1189,7 +1179,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToMediaFile(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1226,7 +1216,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToMediaFile(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1275,7 +1265,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     SQLiteDatabase.CONFLICT_IGNORE);
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -1306,7 +1296,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                         SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -1348,7 +1338,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1425,7 +1415,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                         SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -1463,7 +1453,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             return newSet;
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1495,7 +1485,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             return maxRetries + 1;
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1568,7 +1558,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return instance;
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1585,16 +1575,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (count != 1) {
             throw new NotFountException();
         }
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private String deleteResourceDB(Resource resource) throws NotFountException {
-        int count = database.delete(D.T_RESOURCES, D.C_ID + " = ?", new String[]{Long.toString(resource.getResourceId())});
-
-        if (count != 1) {
-            throw new NotFountException();
-        }
-        return resource.getFileId();
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
@@ -1647,12 +1627,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     VaultFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
                     instance.setMediaFile(mediaFile);
                 } catch (NotFountException e) {
-                    Timber.d(e, getClass().getName());
+                    Timber.e(e, getClass().getName());
                 }
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1692,12 +1672,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     VaultFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
                     instance.setMediaFile(mediaFile);
                 } catch (NotFountException e) {
-                    Timber.d(e, getClass().getName());
+                    Timber.e(e, getClass().getName());
                 }
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1731,7 +1711,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 ids.put(vaultFileId, fileStatus);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1764,7 +1744,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 }
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1795,7 +1775,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 }
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return null;
@@ -1814,7 +1794,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     D.C_ID + "= ?",
                     new String[]{vaultFile.id});
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return vaultFile;
@@ -1855,7 +1835,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 }*/
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1899,7 +1879,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 mediaFiles.add(mediaFile);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1942,7 +1922,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1988,7 +1968,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -2011,7 +1991,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             form.setDownloaded(true);
             form.setUpdated(false);
         } catch (IOException e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return formDef;
@@ -2030,7 +2010,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             form.setDownloaded(true);
             form.setUpdated(false);
         } catch (IOException e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -2110,7 +2090,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -2177,7 +2157,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.setTransactionSuccessful();
         } catch (IOException e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -2237,7 +2217,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private void removeTUServerDB(long id) {
+    private void deleteTellaServerAndResourcesDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
         database.delete(D.T_RESOURCES, D.C_SERVER_ID + " = ?", new String[]{Long.toString(id)});
         //deleteTable(D.T_REPORT_FILES_UPLOAD);
@@ -2293,12 +2273,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_RESOURCES);
     }
 
-    public void deleteForms() {
+    public void deleteFormsAndRelatedTables() {
         //deleteTable(D.T_COLLECT_BLANK_FORM); // only draft and sent forms are to be deleted
+        // Delete ODK form instances
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+
+        // Delete tables related to Uwazi entity instances
         deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
+
+        // Delete tables related to Tella Report instances
+        deleteTable(D.T_REPORT_FORM_INSTANCE);
+        deleteTable(D.T_REPORT_FILES_UPLOAD);
+        deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
+
+        // Delete resources table
         deleteTable(D.T_RESOURCES);
     }
 
@@ -2471,22 +2461,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
-    private Resource cursorToResource(Cursor cursor) {
-
-        Long ResourceId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
-        Long ServerId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_SERVER_ID));
-        String Id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_ID));
-        String title = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_TITLE));
-        String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_NAME));
-        Long size = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SIZE));
-        String createdAt = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_CREATED));
-        Long savedAt = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_RESOURCES_SAVED));
-        String project = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_PROJECT));
-        String fileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_RESOURCES_FILE_ID));
-
-        return new Resource(ResourceId, ServerId, Id, title, fileName, size, createdAt, savedAt, project, fileId);
-    }
-
     private String cn(String table, String column) {
         return table + "." + column;
     }
@@ -2529,85 +2503,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> updateTellaFeedbackInstance(instance)).compose(applySchedulers());
     }
 
-    @NonNull
-    public Single<Resource> saveResource(@NonNull Resource instance) {
-        return Single.fromCallable(() -> updateResourceInstance(instance)).compose(applySchedulers());
-    }
-
-    private Resource updateResourceInstance(Resource instance) {
-        try {
-            ContentValues values = new ContentValues();
-
-            if (instance.getResourceId() > 0) {
-                values.put(D.C_ID, instance.getResourceId());
-            }
-
-            values.put(D.C_RESOURCES_ID, instance.getId());
-            values.put(D.C_SERVER_ID, instance.getServerId());
-            values.put(D.C_RESOURCES_TITLE, instance.getTitle());
-            values.put(D.C_RESOURCES_FILE_NAME, instance.getFileName());
-            values.put(D.C_RESOURCES_SIZE, instance.getSize());
-            values.put(D.C_RESOURCES_CREATED, instance.getCreatedAt());
-            values.put(D.C_RESOURCES_SAVED, Util.currentTimestamp());
-            values.put(D.C_RESOURCES_PROJECT, instance.getProject());
-            values.put(D.C_RESOURCES_FILE_ID, instance.getFileId());
-            database.beginTransaction();
-
-            // insert/update resource instance
-            long id = database.insertWithOnConflict(
-                    D.T_RESOURCES,
-                    null,
-                    values,
-                    SQLiteDatabase.CONFLICT_REPLACE);
-            instance.setResourceId(id);
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            database.endTransaction();
-        }
-        return instance;
-    }
-
-    private List<Resource> listResourcesDB() {
-        Cursor cursor = null;
-        List<Resource> resources = new ArrayList<>();
-
-        try {
-            cursor = database.query(
-                    D.T_RESOURCES,
-                    new String[]{D.C_ID,
-                            D.C_SERVER_ID,
-                            D.C_RESOURCES_ID,
-                            D.C_RESOURCES_TITLE,
-                            D.C_RESOURCES_FILE_NAME,
-                            D.C_RESOURCES_SIZE,
-                            D.C_RESOURCES_CREATED,
-                            D.C_RESOURCES_SAVED,
-                            D.C_RESOURCES_PROJECT,
-                            D.C_RESOURCES_FILE_ID
-                    },
-                    null,
-                    null,
-                    null, null,
-                    D.C_ID + " ASC",
-                    null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                Resource resource = cursorToResource(cursor);
-                resources.add(resource);
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return resources;
-    }
-
     private FeedbackInstance updateTellaFeedbackInstance(FeedbackInstance instance) {
         try {
             int statusOrdinal;
@@ -2631,7 +2526,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             instance.setId(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -2703,7 +2598,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -2753,7 +2648,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -2798,7 +2693,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -2853,7 +2748,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToFeedbackInstance(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -2952,7 +2847,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -3019,7 +2914,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return bundle;
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
             throw e;
         } finally {
             if (cursor != null) {
@@ -3048,7 +2943,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 ids.add(vaultFileId);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();

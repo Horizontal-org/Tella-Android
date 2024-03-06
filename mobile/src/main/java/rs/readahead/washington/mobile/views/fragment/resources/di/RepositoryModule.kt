@@ -26,6 +26,6 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideResourcesDataSource(): ITellaResourcesRepository {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
+        return MyApplication.getKeyDataSource().resourceDataSource.blockingFirst()
     }
 }
