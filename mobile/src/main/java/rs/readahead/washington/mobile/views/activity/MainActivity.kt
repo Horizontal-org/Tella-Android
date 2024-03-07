@@ -186,20 +186,17 @@ class MainActivity : MetadataActivity(),
                         return true
                     }
                 }
-
                 is DownloadedTemplatesFragment,
                 is SubmittedPreviewFragment,
                 is UwaziSendFragment -> {
                     navController.popBackStack()
                     return true
                 }
-
                 is UwaziEntryFragment -> {
                     if (fragment.onBackPressed()) {
                         return true
                     }
                 }
-
                 is ReportsSendFragment -> {
                     if (fragment.onBackPressed()) {
                         return true
