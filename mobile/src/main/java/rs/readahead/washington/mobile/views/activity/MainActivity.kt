@@ -3,14 +3,16 @@ package rs.readahead.washington.mobile.views.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.OrientationEventListener
 import android.view.View
+import android.widget.ProgressBar
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -35,6 +37,7 @@ import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
+import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -46,6 +49,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
 import java.util.*
+
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(),
     IHomeScreenPresenterContract.IView,
@@ -58,30 +62,39 @@ class MainActivity : MetadataActivity(),
     }
 
     private var mExit = false
-    private var handler = Handler()
-    private lateinit var disposables : EventCompositeDisposable
+    private var handler = Handler(Looper.getMainLooper())
+    private lateinit var disposables: EventCompositeDisposable
     private lateinit var homeScreenPresenter: HomeScreenPresenter
     private lateinit var mediaImportPresenter: MediaImportPresenter
-    private var progressDialog: ProgressDialog? = null
+    private var progressBar: ProgressBar? = null
     private var mOrientationEventListener: OrientationEventListener? = null
     private lateinit var btmNavMain: BottomNavigationView
     private lateinit var navController: NavController
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            // Your onBackPressed logic here
+            if (checkCurrentFragment()) return
+            if (!checkIfShouldExit()) return
+            closeApp()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setupNavigation()
-        handler = Handler()
         homeScreenPresenter = HomeScreenPresenter(this)
         mediaImportPresenter = MediaImportPresenter(this)
         initSetup()
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
-        if (intent.hasExtra(MainActivity.PHOTO_VIDEO_FILTER)) {
+        if (intent.hasExtra(PHOTO_VIDEO_FILTER)) {
             val bundle = Bundle()
             bundle.putString(VAULT_FILTER, FilterType.PHOTO_VIDEO.name)
             navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
         }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
     }
 
     private fun initSetup() {
@@ -109,7 +122,7 @@ class MainActivity : MetadataActivity(),
         navController = navHostFragment.navController
         btmNavMain = findViewById(R.id.btm_nav_main)
         setupWithNavController(btmNavMain, navController)
-        navController.addOnDestinationChangedListener { navController1: NavController?, navDestination: NavDestination, bundle: Bundle? ->
+        navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, _: Bundle? ->
             when (navDestination.id) {
                 R.id.micScreen, R.id.homeScreen, R.id.cameraScreen -> showBottomNavigation()
                 else -> hideBottomNavigation()
@@ -117,49 +130,42 @@ class MainActivity : MetadataActivity(),
         }
     }
 
-    private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
-        return requestCode == C.START_CAMERA_CAPTURE ||
-                requestCode == C.START_AUDIO_RECORD
+    private fun handleImportResult(requestCode: Int, data: Intent?) {
+        if (data != null) {
+            val uri = data.data
+            if (uri != null) {
+                when (requestCode) {
+                    C.IMPORT_VIDEO -> mediaImportPresenter.importVideo(uri)
+                    C.IMPORT_IMAGE -> mediaImportPresenter.importImage(uri)
+                    C.IMPORT_FILE -> mediaImportPresenter.importFile(uri)
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == C.IMPORT_VIDEO) {
-            if (data != null) {
-                val video = data.data
-                if (video != null) {
-                    mediaImportPresenter.importVideo(video)
-                }
-            }
+
+        // Handle import results
+        if (requestCode == C.IMPORT_VIDEO || requestCode == C.IMPORT_IMAGE || requestCode == C.IMPORT_FILE) {
+            handleImportResult(requestCode, data)
             return
         }
-        if (requestCode == C.IMPORT_IMAGE) {
-            if (data != null) {
-                val image = data.data
-                if (image != null) {
-                    mediaImportPresenter.importImage(image)
-                }
-            }
+
+        // Handle location settings requests and non-import cases
+        if (resultCode != RESULT_OK && !isLocationSettingsRequestCode(requestCode)) {
+            // User canceled evidence acquiring
             return
         }
-        if (requestCode == C.IMPORT_FILE) {
-            if (data != null) {
-                val file = data.data
-                if (file != null) {
-                    mediaImportPresenter.importFile(file)
-                }
-            }
-            return
+
+        // Delegate onActivityResult to child fragments
+        supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach {
+            it.onActivityResult(requestCode, resultCode, data)
         }
-        if (!isLocationSettingsRequestCode(requestCode) && resultCode != RESULT_OK) {
-            return  // user canceled evidence acquiring
-        }
-        val fragments = Objects.requireNonNull(
-            supportFragmentManager.primaryNavigationFragment
-        )?.childFragmentManager?.fragments
-        for (fragment in fragments!!) {
-            fragment.onActivityResult(requestCode, resultCode, data)
-        }
+    }
+
+    private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
+        return requestCode == C.START_CAMERA_CAPTURE || requestCode == C.START_AUDIO_RECORD
     }
 
     @SuppressLint("NeedOnRequestPermissionsResult")
@@ -168,14 +174,6 @@ class MainActivity : MetadataActivity(),
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
-
-    override fun onBackPressed() {
-        // if (maybeCloseCamera()) return;
-        if (checkCurrentFragment()) return
-        if (!checkIfShouldExit()) return
-        closeApp()
     }
 
     private fun checkCurrentFragment(): Boolean {
@@ -227,19 +225,12 @@ class MainActivity : MetadataActivity(),
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        if (disposables != null) {
-            disposables.dispose()
-        }
+        disposables.dispose()
         stopPresenter()
-        hideProgressDialog()
+        hideProgressBar()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -251,10 +242,6 @@ class MainActivity : MetadataActivity(),
         super.onPause()
         stopLocationMetadataListening()
         mOrientationEventListener!!.disable()
-    }
-
-    override fun onStop() {
-        super.onStop()
     }
 
     override fun onMetadataAttached(vaultFile: VaultFile) {
@@ -288,15 +275,15 @@ class MainActivity : MetadataActivity(),
 
     override fun onImportEnded() {}
 
-    override fun getContext(): Context? {
+    override fun getContext(): Context {
         return this
     }
 
     override fun onCountTUServersEnded(num: Long) {
-        if (num > 0) {
-            //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
-            //  maybeShowTUserver(num);
-        }
+        //if (num > 0) {
+        //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
+        //  maybeShowTUserver(num);
+        //   }
     }
 
     override fun onCountTUServersFailed(throwable: Throwable?) {
@@ -320,16 +307,13 @@ class MainActivity : MetadataActivity(),
     override fun onCountUwaziServersFailed(throwable: Throwable?) {}
 
     private fun stopPresenter() {
-        if (homeScreenPresenter != null) {
-            homeScreenPresenter.destroy()
-         //   homeScreenPresenter = null
-        }
+        homeScreenPresenter.destroy()
         mediaImportPresenter.destroy()
-       // mediaImportPresenter = null
+        // mediaImportPresenter = null
     }
 
-    private fun hideProgressDialog() {
-        progressDialog?.dismiss()
+    private fun hideProgressBar() {
+        progressBar?.hide()
     }
 
     private fun setOrientationListener() {
