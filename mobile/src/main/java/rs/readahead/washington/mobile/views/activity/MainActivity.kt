@@ -177,28 +177,34 @@ class MainActivity : MetadataActivity(),
     }
 
     private fun checkCurrentFragment(): Boolean {
-        val fragments = Objects.requireNonNull(
-            supportFragmentManager.primaryNavigationFragment
-        )?.childFragmentManager?.fragments
-        for (fragment in fragments!!) {
-            if (fragment is AttachmentsFragment) {
-                fragment.onBackPressed()
-                return true
-            }
-            if (fragment is DownloadedTemplatesFragment ||
-                fragment is SubmittedPreviewFragment ||
-                fragment is UwaziSendFragment
-            ) {
-                navController.popBackStack()
-                return true
-            }
-            if (fragment is UwaziEntryFragment) {
-                fragment.onBackPressed()
-                return true
-            }
-            if (fragment is ReportsSendFragment) {
-                fragment.onBackPressed()
-                return true
+        val fragments =
+            supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments
+        fragments?.forEach { fragment ->
+            when (fragment) {
+                is AttachmentsFragment -> {
+                    if (fragment.onBackPressed()) {
+                        return true
+                    }
+                }
+
+                is DownloadedTemplatesFragment,
+                is SubmittedPreviewFragment,
+                is UwaziSendFragment -> {
+                    navController.popBackStack()
+                    return true
+                }
+
+                is UwaziEntryFragment -> {
+                    if (fragment.onBackPressed()) {
+                        return true
+                    }
+                }
+
+                is ReportsSendFragment -> {
+                    if (fragment.onBackPressed()) {
+                        return true
+                    }
+                }
             }
         }
         return false
