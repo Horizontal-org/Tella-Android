@@ -87,10 +87,12 @@ class ResourcesListFragment :
             }
 
             error.observe(viewLifecycleOwner) {
-                it?.message?.let { it1 ->
+                it?.message?.let {
                     DialogUtils.showBottomMessage(
                         baseActivity,
-                        it1,
+                        getString(
+                            R.string.Error_DownloadFailed
+                        ),
                         true
                     )
                 }
@@ -336,10 +338,10 @@ class ResourcesListFragment :
         } else {
             BottomSheetUtils.showConfirmSheet(
                 baseActivity.supportFragmentManager,
-                getString(R.string.Report_Dialog_Draft_Title),
-                getString(R.string.collect_form_exit_dialog_expl),
-                getString(R.string.collect_form_exit_dialog_action_exit_anyway),
-                getString(R.string.action_cancel),
+                getString(R.string.Resources_DialogTitle_StopDownload),
+                getString(R.string.Resources_DialogMsg_StopDownload),
+                getString(R.string.action_exit),
+                getString(R.string.Resources_KeepDownloading),
                 object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {

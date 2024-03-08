@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/later_button"
+            android:layout_marginEnd="34dp"
+            android:layout_alignParentStart="true"
             android:orientation="horizontal">
 
             <ImageView
@@ -91,6 +92,7 @@
             android:layout_marginStart="10dp"
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/collect.blank_action_download.form"
+            android:indeterminateTint="@color/tigers_eye"
             android:background="@color/wa_transparent"
             android:visibility="gone" />
     </RelativeLayout>

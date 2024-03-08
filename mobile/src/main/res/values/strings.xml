@@ -858,4 +858,9 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
   <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
   <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
+  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
+  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
+  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
+  <string name="Resources_Exit">EXIT</string>
+  <string name="Error_DownloadFailed">Error: Download failed</string>
 </resources>
