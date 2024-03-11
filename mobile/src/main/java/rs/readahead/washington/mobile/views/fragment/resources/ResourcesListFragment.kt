@@ -15,7 +15,6 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.BlankCollectFormRowBinding
 import rs.readahead.washington.mobile.databinding.FragmentResourcesListBinding
-import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.resources.Resource
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
@@ -96,6 +95,7 @@ class ResourcesListFragment :
                         true
                     )
                 }
+                model.dispose()
             }
         }
     }
