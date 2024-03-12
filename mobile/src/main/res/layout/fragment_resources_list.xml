@@ -21,22 +21,17 @@
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
             app:rightIcon="@drawable/refresh_spin"
             app:rightIconContentDescription="@string/action_refresh"
-            app:toolbarTitle="@string/Home_BottomNav_Resources"
-            />
+            app:toolbarTitle="@string/Home_BottomNav_Resources" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/appbar">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
         android:animateLayoutChanges="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
 
         <TextView
             android:id="@+id/banner"
@@ -107,10 +102,10 @@
 
                 <TextView
                     android:id="@+id/available_resources_title"
-                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/downloaded_resources_empty"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_AvailableTitle"
                     android:textAlignment="gravity"
@@ -124,11 +119,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/available_resources_title"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_AvailableEmptyMessage"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
                     android:visibility="gone" />
 
@@ -137,39 +132,45 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/available_resources_title"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:gravity="center_vertical"
                     android:text="@string/Resources_AvailableInfoMessage"
                     android:textAlignment="gravity"
                     android:textColor="@color/wa_white_92"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:textSize="14sp"
                     android:visibility="gone" />
 
-                <LinearLayout
-                    android:id="@+id/blankResources"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@id/available_resources_info"
-                    android:animateLayoutChanges="true"
-                    android:background="@color/space_cadet"
-                    android:clipToPadding="false"
-                    android:orientation="vertical"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:scrollbars="vertical"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/blankResources"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:background="@color/space_cadet"
+                        android:clipToPadding="false"
+                        android:orientation="vertical"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:scrollbars="vertical"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/tigers_eye"
+                        android:visibility="gone" />
+                </FrameLayout>
 
             </RelativeLayout>
         </ScrollView>
     </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/tigers_eye"
-            android:visibility="gone" />
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
