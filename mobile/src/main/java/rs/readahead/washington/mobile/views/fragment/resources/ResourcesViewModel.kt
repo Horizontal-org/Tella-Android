@@ -123,16 +123,12 @@ class ResourcesViewModel @Inject constructor(
                 _resources.postValue(resourcesList)
             })
             { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
-                    throwable
-                        ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
-                _error.postValue(throwable)
+                handleError(throwable)
             })
     }
 
     fun downloadResource(resource: Resource) {
-        lateinit var resourceDataSource : ResourceDataSource
+        lateinit var resourceDataSource: ResourceDataSource
         disposables.add(keyDataSource.resourceDataSource
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { _downloadProgress.postValue(1) }
@@ -161,11 +157,7 @@ class ResourcesViewModel @Inject constructor(
                 _downloadedResource.postValue(resource)
             })
             { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
-                    throwable
-                        ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
-                _error.postValue(throwable)
+                handleError(throwable)
             })
     }
 
@@ -189,7 +181,7 @@ class ResourcesViewModel @Inject constructor(
                     }
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                handleError(throwable)
             })
     }
 
@@ -205,8 +197,7 @@ class ResourcesViewModel @Inject constructor(
                     _savedResources.postValue(list)
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
+                handleError(throwable)
             }
         )
     }
@@ -229,10 +220,16 @@ class ResourcesViewModel @Inject constructor(
                     if (it) _deletedResource.postValue(resource.fileName)
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
+                handleError(throwable)
             }
         )
+    }
+
+    private fun handleError(throwable: Throwable?) {
+        FirebaseCrashlytics.getInstance().recordException(
+            throwable ?: throw NullPointerException("Expression 'throwable' must not be null")
+        )
+        _error.postValue(throwable)
     }
 
     fun dispose() {
