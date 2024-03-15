@@ -209,7 +209,7 @@ class ResourcesListFragment :
         val name = itemBinding.name
         val organization = itemBinding.organization
         val dlOpenButton = itemBinding.dlOpenButton
-        val downloading = itemBinding.progress
+        val downloading = itemBinding.progressBar
         val pinnedIcon = itemBinding.favoritesButton
         if (resource != null) {
             dlOpenButton.alpha = 1F
@@ -340,7 +340,7 @@ class ResourcesListFragment :
                 baseActivity.supportFragmentManager,
                 getString(R.string.Resources_DialogTitle_StopDownload),
                 getString(R.string.Resources_DialogMsg_StopDownload),
-                getString(R.string.action_exit),
+                getString(R.string.action_exit).uppercase(),
                 getString(R.string.Resources_KeepDownloading),
                 object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {

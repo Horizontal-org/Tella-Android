@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:textDirection="locale">
 
     <LinearLayout
@@ -84,17 +85,16 @@
             android:src="@drawable/ic_update_black_24dp"
             android:visibility="gone" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_gravity="center"
             android:layout_centerVertical="true"
+            app:indicatorSize="24dp"
             android:layout_marginStart="10dp"
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/collect.blank_action_download.form"
-            android:indeterminateTint="@color/tigers_eye"
-            android:background="@color/wa_transparent"
-            android:visibility="gone" />
+            android:visibility="gone"
+            style="@style/Tella_Progress_Circular_Small" />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
