@@ -63,7 +63,8 @@ class UwaziParser(private val context: Context?) {
             context?.getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles)
                 ?: "Supporting Entities",
             false,
-            context?.getString(R.string.Uwazi_RelationShipWidget_Select_Entities) ?: "Select Entities"
+            context?.getString(R.string.Uwazi_RelationShipWidget_Select_Entities)
+                ?: "Select Entities"
         )
     }
 
@@ -190,6 +191,7 @@ class UwaziParser(private val context: Context?) {
                         is List<*> -> {
                             hashmap[answer.key] = (answer.value) as List<UwaziValue>
                         }
+
                         is UwaziValueAttachment -> {
                             hashmap[answer.key] = arrayListOf(
                                 UwaziValueAttachment(
@@ -198,6 +200,7 @@ class UwaziParser(private val context: Context?) {
                                 )
                             )
                         }
+
                         else -> {
                             hashmap[answer.key] =
                                 arrayListOf(UwaziValue((answer.value as UwaziValue).value))
@@ -219,7 +222,8 @@ class UwaziParser(private val context: Context?) {
         entityInstance.template = template?.entityRow?.name.toString()
         return true
     }
-// parse to check by wafa
+
+    // parse to check by wafa
     fun prepareFormView(): UwaziFormView {
         entryPrompts.clear()
 
@@ -261,7 +265,7 @@ class UwaziParser(private val context: Context?) {
         return Gson().toJson(entityInstance)
     }
 
-    fun setInstanceStatus(entityStatus: EntityStatus){
+    fun setInstanceStatus(entityStatus: EntityStatus) {
         entityInstance.status = entityStatus
     }
 }

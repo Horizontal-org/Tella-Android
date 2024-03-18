@@ -49,12 +49,8 @@
         tools:layout="@layout/uwazi_entry_fragment">
         <action
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
-            app:destination="@id/uwaziSendScreen"
-            >
+            app:destination="@id/uwaziSendScreen">
         </action>
-        <action
-            android:id="@+id/action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen"
-            app:destination="@id/uwaziSelectEntitiesScreen" />
     </fragment>
 
     <fragment
@@ -62,12 +58,6 @@
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
         tools:layout="@layout/uwazi_send_fragment">
-    </fragment>
-    <fragment
-        android:id="@+id/uwaziSelectEntitiesScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziSelectEntitiesFragment"
-        android:label="Select"
-        tools:layout="@layout/uwazi_select_entities_fragment">
     </fragment>
 
     <fragment

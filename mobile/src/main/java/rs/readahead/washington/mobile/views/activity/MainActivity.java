@@ -64,7 +64,7 @@ public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
         IMetadataAttachPresenterContract.IView,
-        IMainNavigationInterface,OnSelectEntitiesClickListener {
+        IMainNavigationInterface, OnSelectEntitiesClickListener {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
 
     private boolean mExit = false;
@@ -212,7 +212,7 @@ public class MainActivity extends MetadataActivity implements
             if (fragment instanceof DownloadedTemplatesFragment ||
                     fragment instanceof SubmittedPreviewFragment ||
                     fragment instanceof UwaziSendFragment) {
-                 navController.popBackStack();
+                navController.popBackStack();
                 return true;
             }
 
