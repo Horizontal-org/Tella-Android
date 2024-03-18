@@ -53,6 +53,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragm
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment;
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener;
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment;
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface;
 import timber.log.Timber;
@@ -63,7 +64,7 @@ public class MainActivity extends MetadataActivity implements
         IHomeScreenPresenterContract.IView,
         IMediaImportPresenterContract.IView,
         IMetadataAttachPresenterContract.IView,
-        IMainNavigationInterface {
+        IMainNavigationInterface,OnSelectEntitiesClickListener {
     public static final String PHOTO_VIDEO_FILTER = "gallery_filter";
 
     private boolean mExit = false;
@@ -421,6 +422,11 @@ public class MainActivity extends MetadataActivity implements
     public void selectHome() {
         btmNavMain.getMenu().findItem(R.id.home).setChecked(true);
         navController.navigate(R.id.home);
+    }
+
+    @Override
+    public void onSelectEntitiesClicked() {
+        navController.navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen);
     }
 }
 

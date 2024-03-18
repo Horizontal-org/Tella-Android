@@ -55,6 +55,17 @@ class UwaziParser(private val context: Context?) {
                 ?: "Attach PDF files"
         )
     }
+    private val uwaziRelationShipPrompt by lazy {
+        UwaziEntryPrompt(
+            UWAZI_SUPPORTING_FILES,
+            "10242051",
+            UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP,
+            context?.getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles)
+                ?: "Supporting Entities",
+            false,
+            context?.getString(R.string.Uwazi_RelationShipWidget_Select_Entities) ?: "Select Entities"
+        )
+    }
 
     fun getInstance(): UwaziEntityInstance {
         return entityInstance
@@ -208,13 +219,14 @@ class UwaziParser(private val context: Context?) {
         entityInstance.template = template?.entityRow?.name.toString()
         return true
     }
-
+// parse to check by wafa
     fun prepareFormView(): UwaziFormView {
         entryPrompts.clear()
 
         //TODO Handle this special common props smarter
         entryPrompts.add(uwaziPdfsPrompt)
         entryPrompts.add(uwaziFilesPrompt)
+        entryPrompts.add(uwaziRelationShipPrompt)
 
         if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0) {
             uwaziTitlePrompt.question =

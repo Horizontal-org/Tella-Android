@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.Gson;
@@ -25,6 +26,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,17 +42,21 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
-import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
+import rs.readahead.washington.mobile.views.settings.HideTella;
+import rs.readahead.washington.mobile.views.settings.MainSettings;
+import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
 @SuppressLint("ViewConstructor")
-public class UwaziMultiFileWidget extends UwaziQuestionWidget {
+public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
 
     Context context;
@@ -62,8 +68,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     Boolean isPdf;
     View infoFilePanel;
 
-
-    public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
+    public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
         this.context = context;
         this.isPdf = isPdf;
@@ -101,12 +106,12 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     public void setFocus(Context context) {
 
     }
-
-  //click to check wafa
+//click to check wafa
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         View view = inflater.inflate(R.layout.uwazi_widget_multifile, linearLayout, true);
+
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
@@ -119,7 +124,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         filesToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
         numberOfFiles = view.findViewById(R.id.numOfFiles);
         addFiles = view.findViewById(R.id.addText);
-        addFiles.setOnClickListener(v -> showSelectFilesSheet()); //showAttachmentsFragment()
+        addFiles.setOnClickListener(v -> showSelectEntitiesScreen()); //showAttachmentsFragment()
     }
 
     @Override
@@ -218,72 +223,8 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         }
     }
 
-    private void showSelectFilesSheet() {
-        if (isPdf) {
-            VaultSheetUtils.showVaultSelectFilesSheet(
-                    ((BaseActivity) getContext()).getSupportFragmentManager(),
-                    null,
-                    null,
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectPdfFiles),
-                    new VaultSheetUtils.IVaultFilesSelector() {
-
-                        @Override
-                        public void importFromVault() {
-                            showAttachmentsFragment();
-                        }
-
-                        @Override
-                        public void goToRecorder() {
-
-                        }
-
-                        @Override
-                        public void goToCamera() {
-                            showCameraActivity();
-                        }
-
-                        @Override
-                        public void importFromDevice() {
-                            importMedia();
-                        }
-                    }
-            );
-        } else {
-            VaultSheetUtils.showVaultSelectFilesSheet(
-                    ((BaseActivity) getContext()).getSupportFragmentManager(),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo),
-                    null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
-                    getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_ChooseHowToAddFiles),
-                    getContext().getString(R.string.Uwazi_MiltiFileWidget_SelectFiles),
-                    new VaultSheetUtils.IVaultFilesSelector() {
-
-                        @Override
-                        public void importFromVault() {
-                            showAttachmentsFragment();
-                        }
-
-                        @Override
-                        public void goToRecorder() {
-
-                        }
-
-                        @Override
-                        public void goToCamera() {
-                            showCameraActivity();
-                        }
-
-                        @Override
-                        public void importFromDevice() {
-                            importMedia();
-                        }
-                    }
-            );
-        }
+    private void showSelectEntitiesScreen() {
+        ((OnSelectEntitiesClickListener)getContext()).onSelectEntitiesClicked();
     }
 
     public void showAudioRecorderActivity() {
