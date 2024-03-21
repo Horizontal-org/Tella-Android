@@ -41,6 +41,16 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+            ServerType.TELLA_RESORCES -> {
+                reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Resources)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.resource_info,
+                        null
+                    )
+                )
+            }
             ServerType.ODK_COLLECT -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Forms)
                 reportTypeImg.setImageDrawable(

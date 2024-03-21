@@ -31,6 +31,7 @@ class PDFReaderActivity : BaseLockActivity() {
 
     companion object {
         const val VIEW_PDF = "vp"
+        const val HIDE_MENU = "hide_menu"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +57,7 @@ class PDFReaderActivity : BaseLockActivity() {
             }
         }
 
-        actionsDisabled = intent.hasExtra(PhotoViewerActivity.NO_ACTIONS)
+        actionsDisabled = intent.hasExtra(HIDE_MENU)
     }
 
     private fun initObservers() {

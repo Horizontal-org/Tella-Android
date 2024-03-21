@@ -436,7 +436,7 @@ public class VaultDataSource implements IVaultDatabase {
                         + "'application/zip'" + ""
                         + ")";
             case ALL_WITHOUT_DIRECTORY:
-                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "'";
+                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "' AND " + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "resource/%" + "'";
             case PHOTO_VIDEO:
                 return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "' OR " + cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
             default:
