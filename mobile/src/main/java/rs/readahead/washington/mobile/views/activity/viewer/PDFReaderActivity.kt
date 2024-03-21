@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.marginTop
+import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,10 +17,13 @@ import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPdfReaderBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import timber.log.Timber
 import java.io.InputStream
 
 @AndroidEntryPoint
@@ -181,6 +186,76 @@ class PDFReaderActivity : BaseLockActivity() {
                     false
                 }
         }
+
+        binding.pdfRendererView.recyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+            private val DIRECTION_NONE = -1
+            private val DIRECTION_UP = 0
+            private val DIRECTION_DOWN = 1
+            var totalDy = 0
+
+
+            var scrollDirection = DIRECTION_NONE
+            var listStatus = RecyclerView.SCROLL_STATE_IDLE
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                listStatus = newState
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    scrollDirection = DIRECTION_NONE
+                }
+
+               /*if (isOnTop() && newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    view.postDelayed({
+                        if (getDragDirection() == DIRECTION_DOWN){
+                            // Drag down from top
+                        } else if (getDragDirection() == DIRECTION_UP) {
+                            // Drag Up from top
+                        }
+                    }, 10)
+                }*/
+                if (newState  == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    if (getDragDirection() == DIRECTION_DOWN){
+                        binding.toolbar.hide()
+                        binding.pdfRendererView.marginTop.
+                    } else if (getDragDirection() == DIRECTION_UP) {
+                        binding.toolbar.show()
+                        binding.pdfRendererView.marginTop.plus(600)
+                    }
+                    Timber.d("++++ RecyclerView.SCROLL_STATE_DRAGGING")
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                this.totalDy += dy
+                scrollDirection = when {
+                    dy > 0 -> DIRECTION_UP
+                    dy < 0 -> DIRECTION_DOWN
+                    else -> DIRECTION_NONE
+                }
+            }
+            private fun isOnTop():Boolean{
+                return totalDy == 0
+            }
+            private fun getDragDirection():Int {
+                if (listStatus != RecyclerView.SCROLL_STATE_DRAGGING) {
+                    return DIRECTION_NONE
+                }
+
+                return when (scrollDirection) {
+                    DIRECTION_NONE -> if (totalDy == 0){
+                        DIRECTION_DOWN  // drag down from top
+                    }else{
+                        DIRECTION_UP  // drag up from bottom
+                    }
+                    DIRECTION_UP -> DIRECTION_UP
+                    DIRECTION_DOWN -> DIRECTION_DOWN
+                    else -> DIRECTION_NONE
+                }
+            }
+        })
     }
 
     private fun setupMetadataMenuItem(visible: Boolean) {
