@@ -7,6 +7,6 @@
 
     <include app:graph="@navigation/camera"/>
 
-    <include app:graph="@navigation/mic"/>
+    <include app:graph="@navigation/micro"/>
 
 </navigation>

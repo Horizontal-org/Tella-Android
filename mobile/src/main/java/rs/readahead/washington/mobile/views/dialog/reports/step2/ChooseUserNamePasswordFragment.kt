@@ -7,31 +7,12 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentChooseUsernamePasswordBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.dialog.ID_KEY
-import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment
-import rs.readahead.washington.mobile.views.dialog.uwazi.step2.LoginTypeFragment
 
 class ChooseUserNamePasswordFragment :
     BaseBindingFragment<FragmentChooseUsernamePasswordBinding>(FragmentChooseUsernamePasswordBinding::inflate),
     View.OnClickListener {
     private var server: TellaReportServer? = null
-
-    companion object {
-        val TAG = LoginTypeFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance(
-            server: TellaReportServer): ChooseUserNamePasswordFragment {
-            val frag = ChooseUserNamePasswordFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,12 +47,15 @@ class ChooseUserNamePasswordFragment :
             R.id.yes_btn -> {
 
             }
+
             R.id.no_btn -> {
 
             }
+
             R.id.back_btn -> {
                 baseActivity.onBackPressed()
             }
+
             R.id.next_btn -> {
                 validateAndLogin()
             }

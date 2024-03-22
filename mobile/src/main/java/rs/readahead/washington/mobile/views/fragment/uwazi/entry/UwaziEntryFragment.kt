@@ -47,7 +47,6 @@ class UwaziEntryFragment :
     private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
 
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
-    private val bundle by lazy { Bundle() }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
 
