@@ -316,6 +316,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+            ServerType.TELLA_RESORCES -> {
+                nav().navigate(R.id.action_homeScreen_to_resources_screen)
+            }
             else -> {}
         }
     }
@@ -479,9 +482,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         reportServersCounted = true
         tuServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
+        serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
         if (!servers.isNullOrEmpty()) {
             tuServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_RESORCES))
         }
         maybeShowConnections()
     }

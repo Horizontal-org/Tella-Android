@@ -13,7 +13,7 @@ class D {
     static final String DATABASE_NAME = "tella.db";
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 12;
+    static final int DATABASE_VERSION = 13;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";
@@ -117,5 +117,18 @@ class D {
 
     //Feedback
     static final String T_FEEDBACK = "t_feedback";
+
+
+    /* RESOURCES */
+    static final String T_RESOURCES = "t_resources";
+    static final String C_RESOURCES_ID = "c_resources_id";
+    static final String C_RESOURCES_TITLE = "c_resources_title";
+    static final String C_RESOURCES_FILE_NAME = "c_resources_file_name";
+    static final String C_RESOURCES_SIZE = "c_resources_size";
+    static final String C_RESOURCES_CREATED = "c_resources_created";
+    static final String C_RESOURCES_SAVED = "c_resources_saved";
+    static final String C_RESOURCES_PROJECT = "c_resources_project";
+    static final String C_RESOURCES_FILE_ID = "c_resources_file_id";
+
 
 }

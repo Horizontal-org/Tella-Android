@@ -1195,6 +1195,90 @@ object BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
+
+    @JvmStatic
+    fun showViewDeleteMenuSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        actionEditLabel: String? = null,
+        actionDeleteLabel: String? = null,
+        consumer: ActionSeleceted,
+        titleText2: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        iconView: Int = -1
+    ) {
+
+        val customSheetFragment2 =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(),
+            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText2
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            consumer.accept(action = Action.DELETE)
+                            customSheetFragment2.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment2.dismiss()
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                    }
+                }
+            })
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.view_delete_menu_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(ServerMenuSheetHolder(),
+            object : CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
+                override fun onBind(holder: ServerMenuSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+
+                        if (iconView != -1) {
+                            actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView, 0, 0, 0)
+                        }
+                        actionEditLabel?.let {
+                            actionEdit.text = it
+                        }
+                        actionDeleteLabel?.let {
+                            actionDelete.text = it
+                        }
+
+                        actionEdit.setOnClickListener {
+                            consumer.accept(action = Action.VIEW)
+                            customSheetFragment.dismiss()
+                        }
+
+                        actionDelete.setOnClickListener {
+                            //consumer.accept(action = Action.DELETE)
+                            fragmentManager.beginTransaction()
+                                .add(customSheetFragment2, customSheetFragment2.tag).commit()
+                            customSheetFragment.dismiss()
+                        }
+                    }
+                }
+            })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
 }
 
 

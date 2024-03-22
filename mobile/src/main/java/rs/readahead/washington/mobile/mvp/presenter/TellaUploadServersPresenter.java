@@ -85,7 +85,7 @@ public class TellaUploadServersPresenter implements ITellaUploadServersPresenter
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> view.showLoading())
-                .flatMapCompletable(dataSource -> dataSource.removeTUServer(server.getId()))
+                .flatMapCompletable(dataSource -> dataSource.removeTellaServerAndResources(server.getId()))
                 .doFinally(() -> view.hideLoading())
                 .subscribe(() -> {
                             OpenRosaService.clearCache();
