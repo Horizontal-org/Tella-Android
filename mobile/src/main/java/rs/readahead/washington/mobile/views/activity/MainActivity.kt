@@ -18,6 +18,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -29,6 +30,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
+import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -62,7 +64,9 @@ class MainActivity : MetadataActivity(),
     }
 
     private var mExit = false
-    private var handler = Handler(Looper.getMainLooper())
+    private val handler: Handler by lazy {
+        Handler(Looper.getMainLooper())
+    }
     private lateinit var disposables: EventCompositeDisposable
     private lateinit var homeScreenPresenter: HomeScreenPresenter
     private lateinit var mediaImportPresenter: MediaImportPresenter
@@ -85,7 +89,7 @@ class MainActivity : MetadataActivity(),
         setupNavigation()
         homeScreenPresenter = HomeScreenPresenter(this)
         mediaImportPresenter = MediaImportPresenter(this)
-        initSetup()
+        initializeListeners()
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
         if (intent.hasExtra(PHOTO_VIDEO_FILTER)) {
@@ -97,7 +101,7 @@ class MainActivity : MetadataActivity(),
 
     }
 
-    private fun initSetup() {
+    private fun initializeListeners() {
         setOrientationListener()
         disposables = MyApplication.bus().createCompositeDisposable()
         disposables.wire(
@@ -131,15 +135,26 @@ class MainActivity : MetadataActivity(),
     }
 
     private fun handleImportResult(requestCode: Int, data: Intent?) {
-        if (data != null) {
-            val uri = data.data
-            if (uri != null) {
-                when (requestCode) {
-                    C.IMPORT_VIDEO -> mediaImportPresenter.importVideo(uri)
-                    C.IMPORT_IMAGE -> mediaImportPresenter.importImage(uri)
-                    C.IMPORT_FILE -> mediaImportPresenter.importFile(uri)
+        try {
+            if (data != null) {
+                val uri = data.data
+                if (uri != null) {
+                    when (requestCode) {
+                        C.IMPORT_VIDEO -> mediaImportPresenter.importVideo(uri)
+                        C.IMPORT_IMAGE -> mediaImportPresenter.importImage(uri)
+                        C.IMPORT_FILE -> mediaImportPresenter.importFile(uri)
+                    }
                 }
             }
+        } catch (e: NullPointerException) {
+            // Handle null pointer exception
+            showToast(R.string.gallery_toast_fail_importing_file)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Timber.e(e, "NullPointerException occurred: ${e.message}")
+        } catch (e: Exception) {
+            // Handle other exceptions
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Timber.e(e, "NullPointerException occurred: ${e.message}")
         }
     }
 
@@ -186,17 +201,20 @@ class MainActivity : MetadataActivity(),
                         return true
                     }
                 }
+
                 is DownloadedTemplatesFragment,
                 is SubmittedPreviewFragment,
                 is UwaziSendFragment -> {
                     navController.popBackStack()
                     return true
                 }
+
                 is UwaziEntryFragment -> {
                     if (fragment.onBackPressed()) {
                         return true
                     }
                 }
+
                 is ReportsSendFragment -> {
                     if (fragment.onBackPressed()) {
                         return true

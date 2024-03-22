@@ -30,17 +30,18 @@ class SuccessfulLoginFragment : BaseBindingFragment<FragmentSuccessfulLoginBindi
     }
 
     private fun initListeners() {
-        binding.goToAdvancedSettingsBtn.setOnClickListener {
-            binding.goToAdvancedSettingsBtn.isChecked = true
-            binding.goToReportsBtn.isChecked = false
-            bundle.putString(OBJECT_KEY, Gson().toJson(server))
-            navManager().navigateFromSuccessfulLoginFragmentToServerAdvancedSettingsFragment()
-        }
-
-        binding.goToReportsBtn.setOnClickListener {
-            binding.goToAdvancedSettingsBtn.isChecked = false
-            binding.goToReportsBtn.isChecked = true
-            saveServerAndGoToReportsScreen()
+        with(binding) {
+            goToAdvancedSettingsBtn.setOnClickListener {
+                goToAdvancedSettingsBtn.isChecked = true
+                goToReportsBtn.isChecked = false
+                bundle.putString(OBJECT_KEY, Gson().toJson(server))
+                navManager().navigateFromSuccessfulLoginFragmentToServerAdvancedSettingsFragment()
+            }
+            goToReportsBtn.setOnClickListener {
+                goToAdvancedSettingsBtn.isChecked = false
+                goToReportsBtn.isChecked = true
+                saveServerAndGoToReportsScreen()
+            }
         }
     }
 

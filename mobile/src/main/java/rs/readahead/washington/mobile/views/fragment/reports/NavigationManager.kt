@@ -1,11 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.reports
 
 import android.os.Bundle
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.navigateSafe
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
-import javax.inject.Inject
 
 
 class NavigationManager(
@@ -14,15 +12,11 @@ class NavigationManager(
 ) {
 
     fun navigateTo(destinationId: Int) {
-        navControllerProvider.navController.navigate(destinationId)
-    }
-
-    fun navigateTo(directions: NavDirections) {
-        navControllerProvider.navController.navigate(directions)
+        navControllerProvider.navController.navigateSafe(destinationId)
     }
 
     private fun navigateToWithBundle(destinationId: Int) {
-        navControllerProvider.navController.navigate(destinationId, bundle)
+        navControllerProvider.navController.navigateSafe(destinationId, bundle)
     }
 
     fun navigateFromEnterUploadServerFragmentToLoginReportsFragment() {
@@ -30,7 +24,7 @@ class NavigationManager(
     }
 
     fun navigateToMicro() {
-        navControllerProvider.navController.navigate(R.id.mic, bundle)
+        navControllerProvider.navController.navigateSafe(R.id.mic, bundle)
     }
 
     fun navigateFromReportsScreenToNewReportScreen() {
@@ -62,12 +56,16 @@ class NavigationManager(
     }
 
     fun navigateFromNewReportsScreenToReportSendScreen() {
-        navigateToWithBundle(R.id.action_newReport_to_reportSendScreen)
-        navControllerProvider.navController.clearBackStack(R.id.action_newReport_to_reportSendScreen)
+        navigateWithBundleAndClearBackStack(R.id.action_newReport_to_reportSendScreen)
+    }
+
+    private fun navigateWithBundleAndClearBackStack(destinationId: Int) {
+        navigateToWithBundle(destinationId)
+        navControllerProvider.navController.clearBackStack(destinationId)
     }
 
     fun navigateToEnterUrlScreen() {
-        navControllerProvider.navController.navigate(R.id.reports_settings)
+        navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
 }

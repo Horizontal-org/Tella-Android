@@ -64,14 +64,12 @@ class LoginReportsFragment :
             binding.passwordLayout.error =
                 getString(R.string.settings_docu_error_wrong_credentials)
         }
-
         viewModel.authenticationSuccess.observe(baseActivity) { server ->
             KeyboardUtil.hideKeyboard(baseActivity, binding.root)
             bundle.putString(OBJECT_KEY, Gson().toJson(server))
             bundle.putBoolean(EDIT_MODE_KEY, false)
             navManager().navigateFromLoginToReportsScreenToEditTellaServerFragment()
         }
-
         viewModel.progress.observe(baseActivity) {
             binding.progressBar.isVisible = it
         }
