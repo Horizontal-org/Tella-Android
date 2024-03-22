@@ -14,7 +14,6 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,7 +29,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -122,14 +120,27 @@ class MainActivity : MetadataActivity(),
 
     private fun setupNavigation() {
         val navHostFragment =
-            (supportFragmentManager.findFragmentById(R.id.fragment_nav_host) as NavHostFragment?)!!
+            supportFragmentManager.findFragmentById(R.id.fragment_nav_host) as NavHostFragment
         navController = navHostFragment.navController
         btmNavMain = findViewById(R.id.btm_nav_main)
-        setupWithNavController(btmNavMain, navController)
-        navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, _: Bundle? ->
-            when (navDestination.id) {
-                R.id.micScreen, R.id.homeScreen, R.id.cameraScreen -> showBottomNavigation()
-                else -> hideBottomNavigation()
+
+        setupBottomNavigation(btmNavMain, navController)
+        setupNavControllerListener(navController)
+    }
+
+    private fun setupBottomNavigation(
+        bottomNavigationView: BottomNavigationView,
+        navController: NavController
+    ) {
+        setupWithNavController(bottomNavigationView, navController)
+    }
+
+    private fun setupNavControllerListener(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, navDestination, _ ->
+            if (navDestination.id in listOf(R.id.micScreen, R.id.homeScreen, R.id.cameraScreen)) {
+                showBottomNavigation()
+            } else {
+                hideBottomNavigation()
             }
         }
     }
@@ -162,21 +173,30 @@ class MainActivity : MetadataActivity(),
         super.onActivityResult(requestCode, resultCode, data)
 
         // Handle import results
-        if (requestCode == C.IMPORT_VIDEO || requestCode == C.IMPORT_IMAGE || requestCode == C.IMPORT_FILE) {
+        if (isImportRequestCode(requestCode)) {
             handleImportResult(requestCode, data)
             return
         }
 
-        // Handle location settings requests and non-import cases
-        if (resultCode != RESULT_OK && !isLocationSettingsRequestCode(requestCode)) {
-            // User canceled evidence acquiring
+        // Handle location settings requests
+        if (!isLocationSettingsRequestCode(requestCode)) {
+            // User canceled evidence acquiring or other non-import cases
             return
         }
 
         // Delegate onActivityResult to child fragments
-        supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach {
-            it.onActivityResult(requestCode, resultCode, data)
+        delegateToChildFragments(requestCode, resultCode, data)
+
+    }
+
+    private fun delegateToChildFragments(requestCode: Int, resultCode: Int, data: Intent?) {
+        supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach { fragment ->
+            fragment.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun isImportRequestCode(requestCode: Int): Boolean {
+        return requestCode == C.IMPORT_VIDEO || requestCode == C.IMPORT_IMAGE || requestCode == C.IMPORT_FILE
     }
 
     private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
