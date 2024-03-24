@@ -3,8 +3,8 @@ package rs.readahead.washington.mobile.views.activity.viewer
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
@@ -218,10 +218,15 @@ class PDFReaderActivity : BaseLockActivity() {
                 if (newState  == RecyclerView.SCROLL_STATE_DRAGGING) {
                     if (getDragDirection() == DIRECTION_DOWN){
                         binding.toolbar.hide()
-                        binding.pdfRendererView.marginTop.
+                        val param = binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(0,0,0,0)
+                        binding.pdfRendererView.layoutParams = param
+
                     } else if (getDragDirection() == DIRECTION_UP) {
                         binding.toolbar.show()
-                        binding.pdfRendererView.marginTop.plus(600)
+                        val param = binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(0,100,0,0)
+                        binding.pdfRendererView.layoutParams = param
                     }
                     Timber.d("++++ RecyclerView.SCROLL_STATE_DRAGGING")
                 }

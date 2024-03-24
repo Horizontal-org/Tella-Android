@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_black"
+    android:animateLayoutChanges="true"
     android:fitsSystemWindows="true"
     tools:context="rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity">
 
