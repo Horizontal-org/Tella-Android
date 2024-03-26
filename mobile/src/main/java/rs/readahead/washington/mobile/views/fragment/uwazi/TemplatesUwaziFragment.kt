@@ -23,8 +23,6 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
 ) {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val uwaziTemplatesAdapter: UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
-    private val bundle by lazy { Bundle() }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

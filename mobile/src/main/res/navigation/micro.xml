@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mic"
+    app:startDestination="@+id/micScreen">
+
+    <fragment
+        android:id="@+id/micScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.recorder.MicFragment"
+        android:label="@string/fragment_mic"
+        tools:layout="@layout/fragment_mic">
+
+        <action
+            android:id="@+id/action_micScreen_to_attachments_screen"
+            app:destination="@id/attachments_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+
+</navigation>

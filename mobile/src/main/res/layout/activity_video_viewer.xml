@@ -28,6 +28,7 @@
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:navigationContentDescription="@string/action_go_back"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:titleMarginStart="0dp"
         app:titleTextAppearance="@style/Toolbar.TitleText" />

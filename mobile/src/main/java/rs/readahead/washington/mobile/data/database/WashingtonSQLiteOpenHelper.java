@@ -94,6 +94,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(alterTableTellaUploadServerAddAutoDelete());
         db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
         db.execSQL(createTableFeedback());
+
+        //DBV12
+        db.execSQL(createTableResources());
     }
 
     @Override
@@ -148,6 +151,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 11:
                 db.execSQL(createTableFeedback());
+
+            case 12:
+                db.execSQL(createTableResources());
         }
     }
 
@@ -286,6 +292,21 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_SET, D.INTEGER) + " , " +
                 "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
                 sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +
+                ");";
+    }
+
+    private String createTableResources() {
+        return "CREATE TABLE " + sq(D.T_RESOURCES) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_SERVER_ID, D.INTEGER) + " , " +
+                cddl(D.C_RESOURCES_ID, D.TEXT, false) + " UNIQUE, " +
+                cddl(D.C_RESOURCES_TITLE, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_FILE_NAME, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_RESOURCES_SIZE, D.INTEGER) + " , " +
+                cddl(D.C_RESOURCES_CREATED, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_SAVED, D.INTEGER, false) + " , " +
+                cddl(D.C_RESOURCES_PROJECT, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_FILE_ID, D.TEXT, false) +
                 ");";
     }
 

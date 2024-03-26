@@ -43,6 +43,7 @@ class PatternSetActivity : SetPatternActivity() {
                     updateStage(Stage.ConfirmWrong);
                 }
             }
+            else -> {}
         }
     }
 

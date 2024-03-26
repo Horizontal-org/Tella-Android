@@ -52,7 +52,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                     } else {
 
                         if (Preferences.isEraseForms()) {
-                            dataSource.deleteForms();
+                            dataSource.deleteFormsAndRelatedTables();
                         }
 
                     }

@@ -8,14 +8,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdk versions.compileSdk
     defaultConfig {
         applicationId "org.hzontal.tella"
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 170
-        versionName "2.5"
+        versionCode 174
+        versionName "2.7.0"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
@@ -43,12 +43,12 @@ android {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     buildFeatures {
         viewBinding = true
@@ -58,7 +58,10 @@ android {
     }
     hilt {
         enableExperimentalClasspathAggregation = true
+        enableAggregatingTask = true
+
     }
+    namespace 'rs.readahead.washington.mobile'
 }
 
 dependencies {
@@ -67,6 +70,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
     implementation project(':clean-insights')
+    implementation project(':pdfviewer')
+
     api project(':tella-locking-ui')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
@@ -122,7 +127,6 @@ dependencies {
     implementation "net.sf.kxml:kxml2:$versions.kxml2"
     implementation "commons-io:commons-io:$versions.commonsIo"
 
-
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
@@ -136,8 +140,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     //hilt-view-model
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
+   // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
+    //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
 
     implementation "com.simplify:ink:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
@@ -151,11 +156,15 @@ dependencies {
     //optional - RxJava2 support
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+   // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
 
     implementation("com.vanniktech:android-image-cropper:4.3.3")
+}
+
+kapt {
+    correctErrorTypes true
 }

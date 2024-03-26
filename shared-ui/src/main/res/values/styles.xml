@@ -143,6 +143,16 @@
         <item name="trackThickness">4dp</item>
     </style>
 
+    <style name="Tella_Progress_Circular_Small">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:indeterminate">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="trackColor">@color/wa_white</item>
+        <item name="indicatorColor">@color/tigers_eye</item>
+        <item name="trackThickness">4dp</item>
+    </style>
+
     <style name="Unlock_White_Text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

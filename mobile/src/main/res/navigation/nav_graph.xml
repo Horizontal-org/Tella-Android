@@ -7,7 +7,7 @@
 
     <include app:graph="@navigation/camera"/>
 
-    <include app:graph="@navigation/mic"/>
+    <include app:graph="@navigation/micro"/>
 
     <include app:graph="@navigation/settings_navigation"/>
 

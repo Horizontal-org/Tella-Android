@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     app:startDestination="@+id/homeScreen">
-    <include app:graph="@navigation/mic" />
-
+    <include app:graph="@navigation/uwazi" />
+    <include app:graph="@navigation/reports_graph" />
     <fragment
         android:id="@+id/homeScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
@@ -25,19 +25,25 @@
 
         <action
             android:id="@+id/action_homeScreen_to_reports_screen"
-            app:destination="@id/reportsScreen"
+            app:destination="@id/reports_graph"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
 
         <action
             android:id="@+id/action_homeScreen_to_uwazi_screen"
-            app:destination="@id/uwaziScreen"
+            app:destination="@id/uwazi"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
 
         <action
             android:id="@+id/action_homeScreen_to_forms_screen"
             app:destination="@id/formScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_resources_screen"
+            app:destination="@id/resourcesScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
     </fragment>
@@ -59,9 +65,6 @@
         <action
             android:id="@+id/action_attachments_screen_to_camera"
             app:destination="@id/cameraScreen" />
-        <action
-            android:id="@+id/action_attachments_screen_to_micro"
-            app:destination="@id/mic" />
     </fragment>
 
     <fragment
@@ -81,63 +84,6 @@
         android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
         android:label="@string/settings_app.bar"
         tools:layout="@layout/activity_settings" />
-
-    <fragment
-        android:id="@+id/reportsScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.ReportsFragment"
-        android:label="@string/Home_BottomNav_Reports"
-        tools:layout="@layout/fragment_reports">
-
-        <action
-            android:id="@+id/action_reportsScreen_to_newReport_screen"
-            app:destination="@id/newReportScreen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out" />
-
-        <action
-            android:id="@+id/action_reportsScreen_to_reportSendScreen"
-            app:destination="@id/reportSendScreen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out" />
-
-        <action
-            android:id="@+id/action_reportsScreen_to_reportSubmittedScreen"
-            app:destination="@id/reportSubmittedScreen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/newReportScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
-        android:label="@string/Reports_Title_Screen"
-        tools:layout="@layout/fragment_reports_entry">
-
-        <action
-            android:id="@+id/action_newReport_to_micScreen"
-            app:destination="@id/micScreen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out" />
-
-        <action
-            android:id="@+id/action_newReport_to_reportSendScreen"
-            app:destination="@id/reportSendScreen"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out"
-            app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/reportSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment"
-        android:label="Send"
-        tools:layout="@layout/fragment_send_report"></fragment>
-
-    <fragment
-        android:id="@+id/reportSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.submitted.ReportSubmittedFragment"
-        android:label="Send"
-        tools:layout="@layout/fragment_send_report"></fragment>
 
     <fragment
         android:id="@+id/formScreen"
@@ -194,4 +140,10 @@
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
         tools:layout="@layout/fragment_sumbitted_preview"></fragment>
+
+    <fragment
+        android:id="@+id/resourcesScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.resources.ResourcesListFragment"
+        android:label="@string/Home_BottomNav_Resources"
+        tools:layout="@layout/fragment_resources_list" />
 </navigation>

@@ -85,10 +85,10 @@ object VaultActionsHelper {
             override fun rename() {
                 VaultSheetUtils.showVaultRenameSheet(
                     supportFragmentManager,
-                    getString(R.string.Vault_CreateFolder_SheetAction),
+                    getString(R.string.Vault_RenameFile_SheetTitle),
                     getString(R.string.action_cancel),
                     getString(R.string.action_ok), this@showVaultActionsDialog,
-                    chosenVaultFile?.name
+                    chosenVaultFile.name
                 ) { name: String? ->
                     name?.let { viewModel.run { renameVaultFile(chosenVaultFile.id, it) } }
                 }
@@ -248,7 +248,7 @@ object VaultActionsHelper {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun BaseActivity.exportMediaFile() {
-        if (chosenVaultFile?.metadata != null && withMetadata) {
+        if (chosenVaultFile.metadata != null && withMetadata) {
             showExportWithMetadataDialog()
         } else {
             withMetadata = false

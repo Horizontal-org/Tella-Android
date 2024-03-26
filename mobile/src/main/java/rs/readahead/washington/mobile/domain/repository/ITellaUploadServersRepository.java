@@ -12,6 +12,6 @@ public interface ITellaUploadServersRepository {
     Single<TellaReportServer> createTellaUploadServer(TellaReportServer server);
     Single<TellaReportServer> updateTellaUploadServer(TellaReportServer server);
     Single<TellaReportServer> getTellaUploadServer(long id);
-    Completable removeTUServer(long id);
+    Completable removeTellaServerAndResources(long id);
     Single<Long> countTUServers();
 }
