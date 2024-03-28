@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     app:startDestination="@+id/homeScreen">
-    <include app:graph="@navigation/mic" />
-
+    <include app:graph="@navigation/uwazi" />
+    <include app:graph="@navigation/reports_graph" />
     <fragment
         android:id="@+id/homeScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
@@ -25,19 +25,25 @@
 
         <action
             android:id="@+id/action_homeScreen_to_reports_screen"
-            app:destination="@id/reportsScreen"
+            app:destination="@id/reports_graph"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
 
         <action
             android:id="@+id/action_homeScreen_to_uwazi_screen"
-            app:destination="@id/uwaziScreen"
+            app:destination="@id/uwazi"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
 
         <action
             android:id="@+id/action_homeScreen_to_forms_screen"
             app:destination="@id/formScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_resources_screen"
+            app:destination="@id/resourcesScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
     </fragment>
@@ -59,9 +65,6 @@
         <action
             android:id="@+id/action_attachments_screen_to_camera"
             app:destination="@id/cameraScreen" />
-        <action
-            android:id="@+id/action_attachments_screen_to_micro"
-            app:destination="@id/mic" />
     </fragment>
 
     <fragment
@@ -202,5 +205,11 @@
         android:id="@+id/uwaziSubmittedPreviewScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
-        tools:layout="@layout/fragment_sumbitted_preview" />
+        tools:layout="@layout/fragment_sumbitted_preview"></fragment>
+
+    <fragment
+        android:id="@+id/resourcesScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.resources.ResourcesListFragment"
+        android:label="@string/Home_BottomNav_Resources"
+        tools:layout="@layout/fragment_resources_list" />
 </navigation>

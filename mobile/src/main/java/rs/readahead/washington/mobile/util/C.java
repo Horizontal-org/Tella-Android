@@ -43,4 +43,7 @@ public class C {
     public static final long UPLOAD_SET_DURATION = 3600000;
 
     public static final long UPLOAD_REPORT_DURATION = 1800000;
+
+    //Resource file type
+    public static final String RESOURCE_PDF = "resource/pdf";
 }

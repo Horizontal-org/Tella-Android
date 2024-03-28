@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
@@ -315,6 +316,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+            ServerType.TELLA_RESORCES -> {
+                nav().navigate(R.id.action_homeScreen_to_resources_screen)
+            }
             else -> {}
         }
     }
@@ -478,9 +482,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         reportServersCounted = true
         tuServers?.clear()
         serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
+        serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
         if (!servers.isNullOrEmpty()) {
             tuServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_RESORCES))
         }
         maybeShowConnections()
     }
@@ -581,7 +587,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
-        nav().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
+        findNavController().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
     }
 
     private fun exportVaultFiles(vaultFile: VaultFile) {

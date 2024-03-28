@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.media;
 
 import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
+import static rs.readahead.washington.mobile.util.C.RESOURCE_PDF;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -332,6 +333,17 @@ public class MediaFileHandler {
                 .build()
                 .subscribeOn(Schedulers.io())
                 .blockingGet();
+    }
+
+    public static Single<VaultFile> downloadResourcePdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) {
+        return MyApplication.rxVault
+                .builder(inputStream)
+                .setMimeType(RESOURCE_PDF)
+                .setAnonymous(true)
+                .setName(fileName)
+                .setType(VaultFile.Type.FILE)
+                .build(parentId)
+                .subscribeOn(Schedulers.io());
     }
 
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {

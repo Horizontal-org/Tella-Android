@@ -20,7 +20,7 @@ import rs.readahead.washington.mobile.data.entity.reports.mapper.mapToDomainMode
 import rs.readahead.washington.mobile.data.http.HttpStatus
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
-import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECTS
+import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -229,7 +229,7 @@ class ReportsRepositoryImp @Inject internal constructor(
     ): Single<ReportPostResult> {
         return apiService.submitReport(
             reportBodyEntity = reportBody,
-            url = server.url + URL_PROJECTS + "/${server.projectId}",
+            url = server.url + URL_PROJECT + "/${server.projectId}",
             access_token = server.accessToken
         ).map { it.mapToDomainModel() }
             .subscribeOn(Schedulers.io())

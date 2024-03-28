@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportServerAdvancedSettingsBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment
 
 @AndroidEntryPoint
 class ServerAdvancedSettingsFragment :
@@ -17,21 +16,6 @@ class ServerAdvancedSettingsFragment :
         FragmentReportServerAdvancedSettingsBinding::inflate
     ) {
     private lateinit var serverReports: TellaReportServer
-
-    companion object {
-        val TAG: String = ServerAdvancedSettingsFragment::class.java.simpleName
-
-        @JvmStatic
-        fun newInstance(
-            server: TellaReportServer
-        ): ServerAdvancedSettingsFragment {
-            val frag = ServerAdvancedSettingsFragment()
-            val args = Bundle()
-            args.putString(OBJECT_KEY, Gson().toJson(server))
-            frag.arguments = args
-            return frag
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,10 +34,9 @@ class ServerAdvancedSettingsFragment :
             baseActivity.onBackPressed()
         }
         binding.nextBtn.setOnClickListener {
-            baseActivity.addFragment(
-                SuccessfulSetServerFragment.newInstance(copyFields(serverReports)),
-                R.id.container
-            )
+            bundle.putSerializable(ID_KEY, copyFields(serverReports).id)
+            bundle.putString(OBJECT_KEY, Gson().toJson(copyFields(serverReports)))
+            navManager().navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment()
         }
 
         binding.backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked: Boolean ->
