@@ -55,7 +55,6 @@ import rs.readahead.washington.mobile.views.fragment.forms.QuestionAttachmentMod
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
-import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment.Companion.newInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
@@ -70,7 +69,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     IFormSaverContract.IView{
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
-
     //private int sectionIndex;
     private var formTitle: String? = null
     private var formParser: FormParser? = null
@@ -458,6 +456,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
+        super.onBackPressed()
         if (isSubmitting) {
             alertDialog = DialogsUtil.showExitWithSubmitDialog(this,
                 { dialog: DialogInterface?, which: Int ->
@@ -990,7 +989,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
 
     override fun openAudioRecorder() {
         binding.entryLayout.visibility = View.GONE
-        micFragment = newInstance(true)
+        micFragment = MicFragment.newInstance(true)
         addFragment(micFragment!!, R.id.rootCollectEntry)
     }
 

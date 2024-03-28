@@ -263,7 +263,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddingEnd() {
-        //    hideProgressDialog()
+        hideProgressDialog()
         DialogUtils.showBottomMessage(
             baseActivity, getString(R.string.gallery_toast_file_encrypted), false
         )
@@ -682,16 +682,20 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun setupCameraFlashButton(supported: Collection<Flash>) {
-        if (cameraView.flash == Flash.AUTO) {
-            flashButton.displayFlashAuto()
-        } else if (cameraView.flash == Flash.OFF) {
-            flashButton.displayFlashOff()
-            flashButton.contentDescription = getString(R.string.action_enable_flash)
-        } else {
-            flashButton.displayFlashOn()
-            flashButton.contentDescription = getString(R.string.action_disable_flash)
+        when (cameraView.flash) {
+            Flash.AUTO -> {
+                flashButton.displayFlashAuto()
+            }
+            Flash.OFF -> {
+                flashButton.displayFlashOff()
+                flashButton.contentDescription = getString(R.string.action_enable_flash)
+            }
+            else -> {
+                flashButton.displayFlashOn()
+                flashButton.contentDescription = getString(R.string.action_disable_flash)
+            }
         }
-        flashButton.setOnClickListener { view: View? ->
+        flashButton.setOnClickListener {
             if (cameraView.mode == Mode.VIDEO) {
                 if (cameraView.flash == Flash.OFF && supported.contains(Flash.TORCH)) {
                     flashButton.displayFlashOn()

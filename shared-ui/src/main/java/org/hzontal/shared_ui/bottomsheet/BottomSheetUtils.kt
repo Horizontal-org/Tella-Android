@@ -1214,7 +1214,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
                 .cancellable(true)
         customSheetFragment2.holder(GenericSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<GenericSheetHolder> {
+            object : Binder<GenericSheetHolder> {
                 override fun onBind(holder: GenericSheetHolder) {
                     with(holder) {
                         title.text = titleText2
@@ -1246,7 +1246,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.view_delete_menu_sheet_layout)
                 .cancellable(true)
         customSheetFragment.holder(ServerMenuSheetHolder(),
-            object : CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
+            object : Binder<ServerMenuSheetHolder> {
                 override fun onBind(holder: ServerMenuSheetHolder) {
                     with(holder) {
                         title.text = titleText
