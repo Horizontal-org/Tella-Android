@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.settings
 import android.os.Bundle
 import android.view.View
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.databinding.FragmentMainSettingsBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
@@ -13,11 +12,11 @@ class MainSettings :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(view)
+        initView()
     }
 
-    fun initView(view: View) {
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
+    fun initView() {
+        //(baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
         initListeners()
     }
 
@@ -51,5 +50,8 @@ class MainSettings :
                 nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
             }
         }
+
+        binding.toolbar.backClickListener = { back() }
+
     }
 }

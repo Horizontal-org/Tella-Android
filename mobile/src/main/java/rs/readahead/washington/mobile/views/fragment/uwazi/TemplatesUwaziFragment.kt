@@ -36,29 +36,29 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
     private fun initObservers() {
         with(viewModel) {
 
-            templates.observe(viewLifecycleOwner, {
+            templates.observe(viewLifecycleOwner) {
                 if (it.size == 1) {
-                    binding?.textViewEmpty!!.isVisible = true
-                    binding!!.templatesRecyclerView.isVisible = false
+                    binding.textViewEmpty.isVisible = true
+                    binding.templatesRecyclerView.isVisible = false
                 } else {
-                    binding!!.textViewEmpty.isVisible = false
-                    binding!!.templatesRecyclerView.isVisible = true
+                    binding.textViewEmpty.isVisible = false
+                    binding.templatesRecyclerView.isVisible = true
                     uwaziTemplatesAdapter.setEntityTemplates(it)
                 }
-            })
+            }
 
-            showSheetMore.observe(viewLifecycleOwner, {
+            showSheetMore.observe(viewLifecycleOwner) {
                 showDownloadedMenu(it)
-            })
+            }
 
-            openEntity.observe(viewLifecycleOwner, {
+            openEntity.observe(viewLifecycleOwner) {
                 openEntity(it)
-            })
+            }
         }
     }
 
     private fun initView() {
-        binding?.templatesRecyclerView?.apply {
+        binding.templatesRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziTemplatesAdapter
         }

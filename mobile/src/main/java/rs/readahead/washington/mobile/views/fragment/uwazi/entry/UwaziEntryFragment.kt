@@ -107,7 +107,7 @@ class UwaziEntryFragment :
 
     private fun initObservers() {
         with(viewModel) {
-            progress.observe(viewLifecycleOwner, { status ->
+            progress.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_ERROR -> {
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
@@ -130,7 +130,7 @@ class UwaziEntryFragment :
 
                     else -> {}
                 }
-            })
+            }
         }
     }
 
@@ -200,13 +200,10 @@ class UwaziEntryFragment :
     }
 
     private fun hasGpsPermissions(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestGpsPermissions(requestCode: Int) {

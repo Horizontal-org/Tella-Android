@@ -13,7 +13,7 @@ import timber.log.Timber
 
 open class MetadataBaseLockFragment  : Fragment(){
 
-    protected lateinit var activity: MetadataActivity
+    protected lateinit var metadataActivity: MetadataActivity
 
 
     override fun onAttach(context: Context) {
@@ -21,7 +21,7 @@ open class MetadataBaseLockFragment  : Fragment(){
 
         super.onAttach(context)
 
-        activity = context as MetadataActivity
+        metadataActivity = context as MetadataActivity
     }
 
     override fun onCreateView(
@@ -40,7 +40,7 @@ open class MetadataBaseLockFragment  : Fragment(){
         super.onViewCreated(view, savedInstanceState)
     }
     override fun onResume() {
-        activity.restrictActivity()
+        metadataActivity.restrictActivity()
         super.onResume()
     }
 
@@ -56,7 +56,7 @@ open class MetadataBaseLockFragment  : Fragment(){
 
     protected fun showToast(message: String) {
         if (isAdded) {
-            activity.showToast(message)
+            metadataActivity.showToast(message)
         }
     }
 }
