@@ -5,10 +5,10 @@
         android:right="-2px"
         android:top="-2px">
         <shape android:shape="rectangle">
-            <solid android:color="#00000000" />
+            <solid android:color="@color/transparent" />
             <stroke
                 android:width="1px"
-                android:color="#213232" />
+                android:color="@color/wa_white" />
         </shape>
     </item>
 </layer-list>

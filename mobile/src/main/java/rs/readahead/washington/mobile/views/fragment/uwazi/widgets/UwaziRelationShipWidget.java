@@ -82,24 +82,14 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         clearAnswer();
     }
 
+
     @Override
-    public List<UwaziValue> getAnswer() {
-        if (formFiles.isEmpty()) {
-            return null;
-        } else {
-            ArrayList<UwaziValue> resultList = new ArrayList<>();
-            resultList.add(new UwaziValue(getFileIds()));
-            return (resultList);
-        }
+    public Object getAnswer() {
+        return null;
     }
 
     @Override
     public void clearAnswer() {
-        formFiles.clear();
-        infoFilePanel.setVisibility(GONE);
-        clearButton.setVisibility(View.GONE);
-        filesPanel.removeAllViews();
-        addFiles.setText(isPdf ? R.string.Uwazi_MiltiFileWidget_SelectPdfFiles : R.string.Uwazi_MiltiFileWidget_SelectFiles);
     }
 
     @Override
@@ -121,140 +111,18 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         infoFilePanel = view.findViewById(R.id.infoFilePanel);
         filesPanel = view.findViewById(R.id.files);
         filesToggle = view.findViewById(R.id.toggle_button);
-        filesToggle.setOnStateChangedListener(open -> maybeShowAdvancedPanel());
+        filesToggle.setVisibility(GONE);
         numberOfFiles = view.findViewById(R.id.numOfFiles);
         addFiles = view.findViewById(R.id.addText);
-        addFiles.setOnClickListener(v -> showSelectEntitiesScreen()); //showAttachmentsFragment()
+        addFiles.setText(R.string.select_entities);
+        addFiles.setOnClickListener(v -> showSelectEntitiesScreen());
     }
 
-    @Override
-    public String setBinaryData(@NonNull Object data) {
-        List<VaultFile> files;
-        List<String> result;
-        if (data instanceof ArrayList) {
-            result = ((List<String>) data);
-
-        } else {
-            result = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
-            }.getType());
-        }
-        if (result != null && !result.isEmpty()) {
-
-            String[] ids = Arrays.copyOf(
-                    result.toArray(), result.size(),
-                    String[].class);
-            files = MyApplication.rxVault
-                    .get(ids)
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet();
-            if (!files.isEmpty()) {
-                for (VaultFile file : files) {
-                    FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(file);
-                    if (!formFiles.containsKey(file.name)) {
-                        formFiles.put(file.name, formMediaFile);
-                    }
-                }
-                showPreview();
-                return getFilenames().toString();
-            }
-        }
-
-        return null;
-    }
-
-    private void showAttachmentsFragment() {
-        try {
-
-            Activity activity = (Activity) getContext();
-            waitingForAData = true;
-
-            String[] ids = getFileIds() != null ? getFileIds() : null;
-
-            activity.startActivityForResult(new Intent(activity, AttachmentsActivitySelector.class)
-                            .putExtra(VAULT_FILE_KEY, new Gson().toJson(ids))
-                            .putExtra(VAULT_FILES_FILTER, isPdf ? FilterType.PDF : FilterType.ALL_WITHOUT_DIRECTORY)
-                            .putExtra(VAULT_PICKER_SINGLE, false),
-                    C.MEDIA_FILE_ID);
-
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-        }
-    }
-
-    private void showCameraActivity() {
-        try {
-            Activity activity = (Activity) getContext();
-            waitingForAData = true;
-
-            activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
-                            .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
-                    ,  //.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name())
-                    C.MEDIA_FILE_ID
-            );
-        } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-        }
-    }
-
-    private void maybeShowAdvancedPanel() {
-        if (filesToggle.isOpen()) {
-            filesPanel.setVisibility(View.VISIBLE);
-            filesToggle.setText(R.string.Uwazi_MiltiFileWidget_Hide);
-        } else {
-            filesPanel.setVisibility(View.GONE);
-            filesToggle.setText(R.string.Uwazi_MiltiFileWidget_Show);
-        }
-    }
-
-    public String[] getFileIds() {
-        String[] Ids = new String[formFiles.size()];
-        int i = 0;
-        for (FormMediaFile file : formFiles.values()) {
-            Ids[i++] = file.id;
-        }
-        return Ids;
-    }
-
-    protected List<String> getFilenames() {
-        if (formFiles != null) {
-            return new ArrayList<>(formFiles.keySet());
-        } else {
-            return null;
-        }
-    }
 
     private void showSelectEntitiesScreen() {
         ((OnSelectEntitiesClickListener)getContext()).onSelectEntitiesClicked();
     }
 
-    public void showAudioRecorderActivity() {
 
-    }
 
-    public void importMedia() {
-        BaseActivity activity = (BaseActivity) getContext();
-        activity.maybeChangeTemporaryTimeout(() -> {
-            waitingForAData = true;
-            MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
-            return Unit.INSTANCE;
-        });
-    }
-
-    public Collection<FormMediaFile> getFiles() {
-        return formFiles.values();
-    }
-
-    private void showPreview() {
-        filesPanel.removeAllViews();
-        infoFilePanel.setVisibility(VISIBLE);
-        clearButton.setVisibility(VISIBLE);
-        for (FormMediaFile file : formFiles.values()) {
-            CollectAttachmentPreviewView previewView = new CollectAttachmentPreviewView(context, null, 0);
-            previewView.showPreview(file.id);
-            filesPanel.addView(previewView);
-        }
-        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_MiltiFileWidget_FilesAttached, formFiles.size(), formFiles.size()));
-        addFiles.setText(R.string.Uwazi_MiltiFileWidget_AddMoreFiles);
-        filesToggle.setOpen();
-    }
 }

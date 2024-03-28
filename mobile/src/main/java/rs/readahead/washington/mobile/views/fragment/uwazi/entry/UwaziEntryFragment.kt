@@ -30,6 +30,8 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListenerFromEntry
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
@@ -42,7 +44,7 @@ const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
-    OnNavBckListener {
+    OnNavBckListener, OnSelectEntitiesClickListenerFromEntry {
 
     private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
 
@@ -214,6 +216,9 @@ class UwaziEntryFragment :
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
     private fun onGpsPermissionsListener() {
         disposables.wire(
             LocationPermissionRequiredEvent::class.java,
@@ -251,5 +256,10 @@ class UwaziEntryFragment :
             nav().popBackStack()
         }
         return true
+    }
+
+
+    override fun onSelectEntitiesClickedInEntryFragment() {
+        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen)
     }
 }

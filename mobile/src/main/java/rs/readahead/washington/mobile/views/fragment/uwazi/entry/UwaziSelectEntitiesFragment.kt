@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
@@ -19,16 +20,19 @@ class UwaziSelectEntitiesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            items.add(SearchableItem("City Hall protest", "0"))
-            items.add(SearchableItem("Highway accident", "1"))
-            items.add(SearchableItem("BERSIH rally", "2"))
-            items.add(SearchableItem("Miscellaneous incidents", "3"))
-            items.add(SearchableItem("General Election - 2018", "4"))
-            items.add(SearchableItem("Fake LGBT protest", "5"))
-            items.add(SearchableItem("Red shirt rally", "6"))
-            items.add(SearchableItem("Border crossing", "7"))
-            items.add(SearchableItem("Seaport protest", "8"))
+        items.add(SearchableItem("City Hall protest", "0"))
+        items.add(SearchableItem("Highway accident", "1"))
+        items.add(SearchableItem("BERSIH rally", "2"))
+        items.add(SearchableItem("Miscellaneous incidents", "3"))
+        items.add(SearchableItem("General Election - 2018", "4"))
+        items.add(SearchableItem("Fake LGBT protest", "5"))
+        items.add(SearchableItem("Red shirt rally", "6"))
+        items.add(SearchableItem("Border crossing", "7"))
+        items.add(SearchableItem("Seaport protest", "8"))
 
+        binding.toolbar.backClickListener = {
+            nav().popBackStack()
+        }
 
         val mLayoutManager = LinearLayoutManager(context)
         val adapter =
@@ -50,7 +54,8 @@ class UwaziSelectEntitiesFragment :
                         }
                     }
 
-                },false)
+                }, false
+            )
         binding.recyclerView.itemAnimator = null
         binding.recyclerView.layoutManager = mLayoutManager
         binding.recyclerView.adapter = adapter

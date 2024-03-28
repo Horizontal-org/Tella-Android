@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/xml_border_bottom"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -10,7 +10,8 @@
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp" />
+        android:background="@drawable/checkbox_background"
+        app:buttonTint="@color/radio_buttons_color" />
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"

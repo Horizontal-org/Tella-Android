@@ -30,7 +30,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -46,18 +45,19 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FIL
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListenerFromEntry
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(),
     IHomeScreenPresenterContract.IView,
     IMediaImportPresenterContract.IView,
     IMetadataAttachPresenterContract.IView,
-    IMainNavigationInterface {
+    IMainNavigationInterface, OnSelectEntitiesClickListener {
 
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
@@ -82,6 +82,7 @@ class MainActivity : MetadataActivity(),
             closeApp()
         }
     }
+    private val bundle by lazy { Bundle() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -366,5 +367,12 @@ class MainActivity : MetadataActivity(),
         btmNavMain.menu.findItem(R.id.home).isChecked = true
         navController.navigate(R.id.home)
     }
+
+    override fun onSelectEntitiesClicked() {
+        val fragment =
+            supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)
+        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment()
+    }
+
 
 }

@@ -60,8 +60,7 @@ class UwaziParser(private val context: Context?) {
             UWAZI_SUPPORTING_FILES,
             "10242051",
             UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP,
-            context?.getString(R.string.Uwazi_MiltiFileWidget_SupportingFiles)
-                ?: "Supporting Entities",
+            "Entities",
             false,
             context?.getString(R.string.Uwazi_RelationShipWidget_Select_Entities)
                 ?: "Select Entities"
