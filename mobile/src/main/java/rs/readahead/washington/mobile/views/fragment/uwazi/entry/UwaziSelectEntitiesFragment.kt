@@ -1,25 +1,28 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableMultiSelectSpinner
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SelectionCompleteListener
 
 class UwaziSelectEntitiesFragment :
-    BaseBindingFragment<UwaziSelectEntitiesFragmentBinding>(UwaziSelectEntitiesFragmentBinding::inflate) {
+    BaseBindingDialogFragment<UwaziSelectEntitiesFragmentBinding>(UwaziSelectEntitiesFragmentBinding::inflate) {
     private var items: MutableList<SearchableItem> = ArrayList()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(
+            STYLE_NORMAL,
+            R.style.FullScreenDialogStyle
+        );
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         items.add(SearchableItem("City Hall protest", "0"))
         items.add(SearchableItem("Highway accident", "1"))
         items.add(SearchableItem("BERSIH rally", "2"))

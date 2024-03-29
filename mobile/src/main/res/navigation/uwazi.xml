@@ -45,12 +45,12 @@
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen"
             app:destination="@id/uwaziSelectEntitiesScreen" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/uwaziSelectEntitiesScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziSelectEntitiesFragment"
         android:label="Select"
         tools:layout="@layout/uwazi_select_entities_fragment">
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/uwaziSendScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
