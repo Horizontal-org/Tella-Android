@@ -46,7 +46,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTe
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListenerFromEntry
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
@@ -82,7 +81,6 @@ class MainActivity : MetadataActivity(),
             closeApp()
         }
     }
-    private val bundle by lazy { Bundle() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

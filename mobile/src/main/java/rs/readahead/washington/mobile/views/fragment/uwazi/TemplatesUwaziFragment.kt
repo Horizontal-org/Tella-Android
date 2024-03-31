@@ -91,7 +91,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
             requireContext().getString(R.string.action_cancel)
         )
     }
-// ckeck wafa
+
     private fun openEntity(template: CollectTemplate) {
         val gsonTemplate = Gson().toJson(template)
         bundle.putString(COLLECT_TEMPLATE, gsonTemplate)

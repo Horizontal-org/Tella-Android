@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchableAdapter(
-    internal var context: Context,
-    private val mValues: List<SearchableItem>,
+    private val items: List<SearchableItem>,
     private var filteredList: List<SearchableItem>,
-    clickListener: ItemClickListener,
-
-    private var singleSelection: Boolean = false
+    private val itemClickListener: ItemClickListener,
+    private val singleSelection: Boolean = false
 ) : Filterable, RecyclerView.Adapter<SearchableAdapter.ViewHolder>() {
-    private var itemClickListener: ItemClickListener = clickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,93 +25,55 @@ class SearchableAdapter(
         return ViewHolder(view)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var mItem: SearchableItem? = null
-        val titleTextView: TextView = view.findViewById(R.id.titleTextView)
-        val checkBox: CheckBox = view.findViewById(R.id.checkBox)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val titleTextView: TextView = view.findViewById(R.id.titleTextView)
+        private val checkBox: CheckBox = view.findViewById(R.id.checkBox)
 
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mItem = filteredList[holder.adapterPosition]
-
-        holder.checkBox.setOnCheckedChangeListener(null)
-        holder.titleTextView.text = holder.mItem!!.text
-        holder.checkBox.isChecked = holder.mItem!!.isSelected
-        if (singleSelection) {
-            holder.checkBox.visibility = View.GONE
-        } else {
-            holder.checkBox.visibility = View.VISIBLE
-        }
-        var productPosition = 0
-        for (i in mValues.indices) {
-            if (mValues[i].code.equals(holder.mItem!!.code)) {
-                productPosition = i
+        init {
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
+                val position = this.adapterPosition
+                val item = filteredList[position]
+                item.isSelected = isChecked
+                itemClickListener.onItemClicked(item, position, isChecked)
+            }
+            itemView.setOnClickListener {
+                checkBox.isChecked = !checkBox.isChecked
             }
         }
 
-        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) holder.itemView.setBackgroundResource(R.drawable.light_selected_background)
-            else holder.itemView.setBackgroundResource(0)
-            itemClickListener.onItemClicked(
-                filteredList[holder.adapterPosition],
-                productPosition,
-                isChecked
-            )
+        fun bind(item: SearchableItem) {
+            titleTextView.text = item.text
+            checkBox.isChecked = item.isSelected
+            checkBox.visibility = if (singleSelection) View.GONE else View.VISIBLE
         }
-        holder.itemView.setOnClickListener { _ ->
-            holder.checkBox.isChecked = !holder.checkBox.isChecked
-        }
+    }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(filteredList[position])
     }
 
     override fun getFilter(): Filter {
         return object : Filter() {
-            override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
-                val charString = charSequence.toString()
-                if (charString.isEmpty()) {
-                    filteredList = mValues
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
+                val charString = charSequence.toString().lowercase(Locale.getDefault())
+                filteredList = if (charString.isEmpty()) {
+                    items
                 } else {
-                    val tempList = ArrayList<SearchableItem>()
-                    for (row in mValues) {
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
-                        if (row.text.lowercase(Locale.getDefault())
-                                .contains(charString.lowercase(Locale.getDefault()))
-                        ) {
-                            tempList.add(row)
-                        }
-                    }
-
-                    filteredList = tempList
+                    items.filter { it.text.lowercase(Locale.getDefault()).contains(charString) }
                 }
-
-                val filterResults = Filter.FilterResults()
-                filterResults.values = filteredList
-                return filterResults
+                return FilterResults().apply { values = filteredList }
             }
 
-            override fun publishResults(
-                charSequence: CharSequence,
-                filterResults: Filter.FilterResults
-            ) {
+            override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
                 filteredList = filterResults.values as ArrayList<SearchableItem>
-
-                // refresh the list with filtered data
                 notifyDataSetChanged()
             }
         }
     }
 
-    override fun getItemCount(): Int {
-        return filteredList.size
-    }
+    override fun getItemCount(): Int = filteredList.size
 
     interface ItemClickListener {
-        fun onItemClicked(
-            item: SearchableItem,
-            position: Int,
-            b: Boolean)
+        fun onItemClicked(item: SearchableItem, position: Int, isChecked: Boolean)
     }
-
 }

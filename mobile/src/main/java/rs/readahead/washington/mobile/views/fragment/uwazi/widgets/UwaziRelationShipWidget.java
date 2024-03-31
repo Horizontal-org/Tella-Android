@@ -1,13 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
-import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
-import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
-import static rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,42 +12,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.hzontal.tella_vault.VaultFile;
-import com.hzontal.tella_vault.filter.FilterType;
-
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.buttons.PanelToggleButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.schedulers.Schedulers;
-import kotlin.Unit;
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
-import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.MainActivity;
-import rs.readahead.washington.mobile.views.activity.camera.CameraActivity;
-import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
-import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
-import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
-import rs.readahead.washington.mobile.views.settings.HideTella;
-import rs.readahead.washington.mobile.views.settings.MainSettings;
-import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 
 @SuppressLint("ViewConstructor")
@@ -70,8 +40,9 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     View infoFilePanel;
     private final ArrayList<AppCompatCheckBox> checkBoxes;
     // counter of all checkboxes which can be in result set
-   // List of all Ids which can be in result set (Ids from all checkboxes without header checkboxes)
+    // List of all Ids which can be in result set (Ids from all checkboxes without header checkboxes)
     private final ArrayList<String> checkIds = new ArrayList<>();
+
     public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
         checkBoxes = new ArrayList<>();
@@ -118,7 +89,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     public void setFocus(Context context) {
 
     }
-//click to check wafa
+
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -142,9 +113,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
 
     private void showSelectEntitiesScreen() {
-        ((OnSelectEntitiesClickListener)getContext()).onSelectEntitiesClicked();
+        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked();
     }
-
 
 
 }

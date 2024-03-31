@@ -27,93 +27,77 @@ class UwaziSelectEntitiesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        items.add(SearchableItem("City Hall protest", "0"))
-        items.add(SearchableItem("Highway accident", "1"))
-        items.add(SearchableItem("BERSIH rally", "2"))
-        items.add(SearchableItem("Miscellaneous incidents", "3"))
-        items.add(SearchableItem("General Election - 2018", "4"))
-        items.add(SearchableItem("Fake LGBT protest", "5"))
-        items.add(SearchableItem("Red shirt rally", "6"))
-        items.add(SearchableItem("Border crossing", "7"))
-        items.add(SearchableItem("Seaport protest", "8"))
+        initializeData()
+        initViews()
+    }
 
-        binding.toolbar.backClickListener = {
-            nav().popBackStack()
-        }
+    private fun initializeData() {
+        items.addAll(
+            listOf(
+                SearchableItem("City Hall protest", "0"),
+                SearchableItem("Highway accident", "1"),
+                SearchableItem("BERSIH rally", "2"),
+                SearchableItem("Miscellaneous incidents", "3"),
+                SearchableItem("General Election - 2018", "4"),
+                SearchableItem("Fake LGBT protest", "5"),
+                SearchableItem("Red shirt rally", "6"),
+                SearchableItem("Border crossing", "7"),
+                SearchableItem("Seaport protest", "8")
+            )
+        )
+    }
+
+    private fun initViews() {
         val txtSearch: EditText =
             binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text)
         txtSearch.setHintTextColor(Color.WHITE)
         txtSearch.setTextColor(Color.WHITE)
 
         val mLayoutManager = LinearLayoutManager(context)
-        val adapter =
-            SearchableAdapter(
-                requireContext(),
-                items,
-                items,
-                object : SearchableAdapter.ItemClickListener {
-                    override fun onItemClicked(
-                        item: SearchableItem,
-                        position: Int,
-                        b: Boolean,
-                    ) {
-                        for (i in items.indices) {
-                            if (items[i].code == item.code) {
-                                items[i].isSelected = b
-                                break
-                            }
-
-                        }
-                        val resultList = ArrayList<SearchableItem>()
-                        for (index in items.indices) {
-                            if (items[index].isSelected) {
-                                resultList.add(items[index])
-                            }
-                        }
-                        binding.toolbar.setRightIconVisibility(resultList.isNotEmpty())
-                    }
-
-                }, false
-            )
-        binding.recyclerView.itemAnimator = null
-        binding.recyclerView.layoutManager = mLayoutManager
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.apply {
+            itemAnimator = null
+            layoutManager = mLayoutManager
+            adapter = setupAdapter()
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // do something on text submit
-                return false
-            }
+            override fun onQueryTextSubmit(query: String) = false
 
             override fun onQueryTextChange(newText: String): Boolean {
-                // do something when text changes
-                adapter.filter.filter(newText)
+                (binding.recyclerView.adapter as? SearchableAdapter)?.filter?.filter(newText)
                 return false
             }
         })
 
-        binding.searchView.setOnQueryTextFocusChangeListener(object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                binding.searchView.isSelected = hasFocus
-                binding.searchView.isIconified = !hasFocus
-            }
+        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            binding.searchView.isSelected = hasFocus
+            binding.searchView.isIconified = !hasFocus
+        }
 
-        })
-        binding.toolbar.setRightIcon(R.drawable.ic_check_white)
-        binding.toolbar.setRightIconVisibility(false)
-        binding.toolbar.onRightClickListener =
-            {
-                resultList = ArrayList()
-                for (index in items.indices) {
-                    if (items[index].isSelected) {
-                        resultList.add(items[index])
-                    }
-                }
-
+        binding.toolbar.apply {
+            setRightIcon(R.drawable.ic_check_white)
+            setRightIconVisibility(false)
+            onRightClickListener = {
+                (items.filter { it.isSelected }
+                    .toMutableList() as ArrayList<SearchableItem>).also { resultList = it }
                 nav().popBackStack()
-
             }
+            backClickListener = { nav().popBackStack() }
+        }
     }
 
+    private fun setupAdapter(): SearchableAdapter {
+        return SearchableAdapter(
+            context = requireContext(),
+            mValues = items,
+            filteredList = items,
+            clickListener = object : SearchableAdapter.ItemClickListener {
+                override fun onItemClicked(item: SearchableItem, position: Int, b: Boolean) {
+                    items.firstOrNull { it.code == item.code }?.isSelected = b
+                    binding.toolbar.setRightIconVisibility(items.any { it.isSelected })
+                }
+            }, singleSelection = false
+        )
+    }
 
 }

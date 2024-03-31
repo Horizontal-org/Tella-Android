@@ -222,7 +222,6 @@ class UwaziParser(private val context: Context?) {
         return true
     }
 
-    // parse to check by wafa
     fun prepareFormView(): UwaziFormView {
         entryPrompts.clear()
 

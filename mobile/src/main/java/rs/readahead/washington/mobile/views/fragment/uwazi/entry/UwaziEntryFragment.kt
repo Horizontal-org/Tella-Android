@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
@@ -32,10 +31,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListenerFromEntry
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SelectionCompleteListener
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
-import timber.log.Timber
 
 
 const val COLLECT_TEMPLATE = "collect_template"
@@ -47,7 +43,7 @@ const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
-    OnNavBckListener, OnSelectEntitiesClickListenerFromEntry{
+    OnNavBckListener, OnSelectEntitiesClickListenerFromEntry {
 
     private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
 
@@ -219,9 +215,6 @@ class UwaziEntryFragment :
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
     private fun onGpsPermissionsListener() {
         disposables.wire(
             LocationPermissionRequiredEvent::class.java,
