@@ -46,7 +46,6 @@ class SearchableMultiSelectSpinner {
                                 }
                             }
                         }
-
                     },false)
             recyclerView.itemAnimator = null
             recyclerView.layoutManager = mLayoutManager

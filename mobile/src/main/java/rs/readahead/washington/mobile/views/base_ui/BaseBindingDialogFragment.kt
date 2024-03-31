@@ -28,7 +28,7 @@ abstract class BaseBindingDialogFragment<VB : ViewBinding>(
         get() = _binding ?: throw IllegalStateException("ViewBinding is not initialized.")
     private var rootView: View? = null
     var hasInitializedRootView = false
-    var isViewInitialized: Boolean = false
+    private var isViewInitialized: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,

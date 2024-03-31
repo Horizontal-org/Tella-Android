@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -67,11 +68,14 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     TextView numberOfFiles;
     Boolean isPdf;
     View infoFilePanel;
-
+    private final ArrayList<AppCompatCheckBox> checkBoxes;
+    // counter of all checkboxes which can be in result set
+   // List of all Ids which can be in result set (Ids from all checkboxes without header checkboxes)
+    private final ArrayList<String> checkIds = new ArrayList<>();
     public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
+        checkBoxes = new ArrayList<>();
         this.context = context;
-        this.isPdf = isPdf;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -85,7 +89,25 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public Object getAnswer() {
-        return null;
+        List<String> vc = new ArrayList<>();
+        List<UwaziValue> selection = new ArrayList<>();
+
+        for (int i = 0; i < checkBoxes.size(); ++i) {
+            AppCompatCheckBox c = checkBoxes.get(i);
+            if (c.isChecked()) {
+                vc.add(checkIds.get(i));
+            }
+        }
+
+        if (vc.size() == 0) {
+            return null;
+        } else {
+            for (String answer : vc) {
+                UwaziValue uValue = new UwaziValue(answer);
+                selection.add(uValue);
+            }
+            return selection;
+        }
     }
 
     @Override

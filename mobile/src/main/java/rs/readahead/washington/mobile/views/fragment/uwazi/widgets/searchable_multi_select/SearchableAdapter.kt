@@ -17,7 +17,8 @@ class SearchableAdapter(
     private val mValues: List<SearchableItem>,
     private var filteredList: List<SearchableItem>,
     clickListener: ItemClickListener,
-    private var singleSelection:Boolean=false
+
+    private var singleSelection: Boolean = false
 ) : Filterable, RecyclerView.Adapter<SearchableAdapter.ViewHolder>() {
     private var itemClickListener: ItemClickListener = clickListener
 
@@ -31,17 +32,19 @@ class SearchableAdapter(
         var mItem: SearchableItem? = null
         val titleTextView: TextView = view.findViewById(R.id.titleTextView)
         val checkBox: CheckBox = view.findViewById(R.id.checkBox)
+
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = filteredList[holder.adapterPosition]
 
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.titleTextView.text = holder.mItem!!.text
         holder.checkBox.isChecked = holder.mItem!!.isSelected
-        if(singleSelection){
-            holder.checkBox.visibility=View.GONE
-        }else{
-            holder.checkBox.visibility=View.VISIBLE
+        if (singleSelection) {
+            holder.checkBox.visibility = View.GONE
+        } else {
+            holder.checkBox.visibility = View.VISIBLE
         }
         var productPosition = 0
         for (i in mValues.indices) {
@@ -50,14 +53,15 @@ class SearchableAdapter(
             }
         }
 
-        holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) holder.itemView.setBackgroundResource(R.drawable.light_selected_background)
+            else holder.itemView.setBackgroundResource(0)
             itemClickListener.onItemClicked(
                 filteredList[holder.adapterPosition],
                 productPosition,
                 isChecked
             )
         }
-
         holder.itemView.setOnClickListener { _ ->
             holder.checkBox.isChecked = !holder.checkBox.isChecked
         }
@@ -75,8 +79,8 @@ class SearchableAdapter(
                     for (row in mValues) {
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.text.toLowerCase(Locale.getDefault())
-                                .contains(charString.toLowerCase(Locale.getDefault()))
+                        if (row.text.lowercase(Locale.getDefault())
+                                .contains(charString.lowercase(Locale.getDefault()))
                         ) {
                             tempList.add(row)
                         }
@@ -106,12 +110,11 @@ class SearchableAdapter(
         return filteredList.size
     }
 
-    companion object {
-        lateinit var itemClickListener: ItemClickListener
-    }
-
-
     interface ItemClickListener {
-        fun onItemClicked(item: SearchableItem, position: Int, b: Boolean)
+        fun onItemClicked(
+            item: SearchableItem,
+            position: Int,
+            b: Boolean)
     }
+
 }

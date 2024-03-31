@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:orientation="horizontal">
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -22,6 +22,7 @@
         android:gravity="start"
         android:padding="2dp"
         android:text=""
+        style="@style/Tella_Main_White_Text.Meduim"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/wa_white"
         android:textStyle="normal" />
