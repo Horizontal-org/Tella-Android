@@ -190,7 +190,6 @@ class UwaziParser(private val context: Context?) {
                         is List<*> -> {
                             hashmap[answer.key] = (answer.value) as List<UwaziValue>
                         }
-
                         is UwaziValueAttachment -> {
                             hashmap[answer.key] = arrayListOf(
                                 UwaziValueAttachment(
@@ -199,7 +198,6 @@ class UwaziParser(private val context: Context?) {
                                 )
                             )
                         }
-
                         else -> {
                             hashmap[answer.key] =
                                 arrayListOf(UwaziValue((answer.value as UwaziValue).value))
