@@ -220,13 +220,10 @@ class MicFragment : MetadataBaseLockFragment(),
 
 
     private fun hastRecordingPermissions(context: Context): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.RECORD_AUDIO
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-            return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestRecordingPermissions(requestCode: Int) {

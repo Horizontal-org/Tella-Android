@@ -17,9 +17,7 @@ data class BackgroundActivityModel(
         if (type != other.type) return false
         if (mimeType != other.mimeType) return false
         if (!thumb.contentEquals(other.thumb)) return false
-        if (status != other.status) return false
-
-        return true
+        return status == other.status
     }
 
     override fun hashCode(): Int {

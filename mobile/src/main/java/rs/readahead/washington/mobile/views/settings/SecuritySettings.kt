@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
@@ -32,7 +30,6 @@ import rs.readahead.washington.mobile.util.FailedUnlockManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import timber.log.Timber
 
 
@@ -50,9 +47,9 @@ class SecuritySettings :
     }
 
     private fun initView() {
-        val fragmentSelected = baseActivity as OnFragmentSelected?
-        fragmentSelected?.showAppbar()
-        fragmentSelected?.setToolbarLabel(R.string.settings_sec_app_bar)
+       // val fragmentSelected = baseActivity as OnFragmentSelected?
+        //fragmentSelected?.showAppbar()
+        //fragmentSelected?.setToolbarLabel(R.string.settings_sec_app_bar)
         setUpSettingsVisibility()
         setUpLockTimeoutText()
         binding.lockSettingsButton.setOnClickListener { checkCamouflageAndLockSetting() }

@@ -39,8 +39,8 @@ class GeneralSettings :
     }
 
     private fun initView() {
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
-        (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
+      //  (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
+       // (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
 
         binding.languageSettingsButton.setOnClickListener {
             Navigation.findNavController(it)

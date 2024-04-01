@@ -9,12 +9,15 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import java.io.File
 import javax.inject.Inject
+
 
 @HiltViewModel
 class SharedCameraViewModel @Inject constructor() : ViewModel() {
@@ -41,9 +44,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
     private val _lastMediaFileError = SingleLiveEvent<Throwable>()
     val lastMediaFileError: LiveData<Throwable> = _lastMediaFileError
 
-    private val _lastBackgroundActivityModel = SingleLiveEvent<BackgroundActivityModel>()
-    val lastBackgroundActivityModel: LiveData<BackgroundActivityModel> =
-        _lastBackgroundActivityModel
+    private val eventBus = PublishSubject.create<RecentBackgroundActivitiesEvent>()
 
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
@@ -55,8 +56,10 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                     status = BackgroundActivityStatus.IN_PROGRESS,
                     thumb = null
                 )
-                _lastBackgroundActivityModel.postValue(backgroundVideoFile)
                 _addingInProgress.postValue(true)
+
+                eventBus.onNext(RecentBackgroundActivitiesEvent(listOf(backgroundVideoFile)))
+
             }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { vaultFile ->
@@ -81,8 +84,11 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                     status = BackgroundActivityStatus.IN_PROGRESS,
                     thumb = null
                 )
-                _lastBackgroundActivityModel.postValue(backgroundVideoFile)
                 _addingInProgress.postValue(true)
+
+                // Emitting the initial status to the event bus
+                eventBus.onNext(RecentBackgroundActivitiesEvent(listOf(backgroundVideoFile)))
+
             }.doOnNext { vaultFile ->
                   handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
@@ -97,14 +103,14 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
 
     private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
 
-        val backgroundVideoFile = BackgroundActivityModel(
+        val completedActivity = BackgroundActivityModel(
             id = vaultFile.id,
             name = vaultFile.name,
             mimeType = vaultFile.mimeType,
             status = status,
             thumb = vaultFile.thumb
         )
-        _lastBackgroundActivityModel.postValue(backgroundVideoFile)
+        eventBus.onNext(RecentBackgroundActivitiesEvent(listOf(completedActivity)))
     }
 
     private fun handleAddError(throwable: Throwable) {

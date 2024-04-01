@@ -97,28 +97,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         initListeners()
         initPermissions()
         fixAppBarShadow()
-        initObservers()
-    }
-
-    private fun initObservers() {
-        viewModel.lastBackgroundActivityModel.observe(baseActivity) { activityList ->
-         //   if (activityList.hasItems()) {
-                binding.counterNotification.show()
-               // binding.counterNotification.text = event.size().toString()
-                backgroundActivitiesAdapter.updateData(arrayListOf(activityList))
-          ///  } else {
-             //   binding.counterNotification.hide()
-           // }
-        }
-
-        binding.counterNotification.setOnClickListener {
-            showBackgroundActivitiesSheet(
-                baseActivity.supportFragmentManager,
-                getString(R.string.background_activities),
-                getString(R.string.current_background_activities),
-                backgroundActivitiesAdapter = backgroundActivitiesAdapter
-            )
-        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -279,7 +257,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private fun setUpToolbar() {
         val baseActivity = activity as MainActivity
         baseActivity.setSupportActionBar(binding.toolbar)
-        //   maybeShowRecentBackgroundActivities()
+        maybeShowRecentBackgroundActivities()
     }
 
     private fun maybeShowRecentBackgroundActivities() {
@@ -288,16 +266,16 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
                     if (event.hasItems()) {
-                        binding.counterNotification.show()
-                        binding.counterNotification.text = event.size().toString()
+                        binding.backgroundActivityNotification.show()
+                        binding.backgroundActivityNotification.text = event.size().toString()
                         backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
                     } else {
-                        binding.counterNotification.hide()
+                        binding.backgroundActivityNotification.hide()
                     }
                 }
             })
 
-        binding.counterNotification.setOnClickListener {
+        binding.backgroundActivityNotification.setOnClickListener {
             showBackgroundActivitiesSheet(
                 baseActivity.supportFragmentManager,
                 getString(R.string.background_activities),

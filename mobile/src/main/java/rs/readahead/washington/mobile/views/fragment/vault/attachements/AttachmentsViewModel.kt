@@ -34,16 +34,16 @@ class AttachmentsViewModel @Inject constructor(
     private val disposables = CompositeDisposable()
     private val _filesData = MutableLiveData<List<VaultFile?>>()
     val filesData: LiveData<List<VaultFile?>> = _filesData
-    private val _error = MutableLiveData<Throwable>()
-    val error: LiveData<Throwable> = _error
+    private val _error = MutableLiveData<Throwable?>()
+    val error: LiveData<Throwable?> = _error
     private val _filesSize = MutableLiveData<Int>()
     val filesSize: LiveData<Int> = _filesSize
-    private val _moveFilesError = MutableLiveData<Throwable>()
-    val moveFilesError: LiveData<Throwable> = _moveFilesError
+    private val _moveFilesError = MutableLiveData<Throwable?>()
+    val moveFilesError: LiveData<Throwable?> = _moveFilesError
     private val _deletedFiles = MutableLiveData<Int>()
     val deletedFiles: LiveData<Int> = _deletedFiles
-    private val _deletedFileError = MutableLiveData<Throwable>()
-    val deletedFileError: LiveData<Throwable> = _deletedFileError
+    private val _deletedFileError = MutableLiveData<Throwable?>()
+    val deletedFileError: LiveData<Throwable?> = _deletedFileError
     private val _deletedFile = MutableLiveData<VaultFile>()
     val deletedFile: LiveData<VaultFile> = _deletedFile
     private val _folderCreated = MutableLiveData<VaultFile>()
@@ -76,7 +76,9 @@ class AttachmentsViewModel @Inject constructor(
                         .subscribeOn(Schedulers.io())
                         .doOnSubscribe { }
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally { }
+                        .doFinally {
+
+                        }
                         .subscribe(
                             { vaultFiles: List<VaultFile?> ->
                                 _filesData.postValue(vaultFiles)
@@ -251,7 +253,9 @@ class AttachmentsViewModel @Inject constructor(
                     _onConfirmDeleteFiles.postValue(Pair(vaultFiles, doesFileExist))
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                if (throwable != null) {
+                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                }
                 _error.postValue(throwable)
             }
         )

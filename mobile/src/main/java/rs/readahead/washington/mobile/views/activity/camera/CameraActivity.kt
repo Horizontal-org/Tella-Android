@@ -175,7 +175,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         }
 
         viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
-            if (isAdding) onAddingStart() else onAddingEnd()
+            //if (isAdding) onAddingStart() else onAddingEnd()
         }
 
         viewModel.lastMediaFileSuccess.observe(viewLifecycleOwner) { mediaFile ->
@@ -188,12 +188,6 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
 
         viewModel.rotationUpdate.observe(viewLifecycleOwner) { rotation ->
             rotateViews(rotation)
-        }
-
-        viewModel.lastBackgroundActivityModel.observe(viewLifecycleOwner) { backgroundActivity ->
-            //   MyApplication.bus().post(
-            //     RecentBackgroundActivitiesEvent(mutableListOf(backgroundActivity))
-            //)
         }
 
         uploadViewModel.mediaFilesUploadScheduled.observe(viewLifecycleOwner) {

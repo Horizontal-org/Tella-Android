@@ -30,7 +30,7 @@
                 app:toolbarTitle="@string/app_name" />
 
             <TextView
-                android:id="@+id/counterNotification"
+                android:id="@+id/backgroundActivityNotification"
                 style="@style/Tella_Main_White_Text.Small"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
