@@ -266,7 +266,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
                     if (event.hasItems()) {
-                        binding.backgroundActivityNotification.show()
                         binding.backgroundActivityNotification.text = event.size().toString()
                         backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
                     } else {
@@ -279,7 +278,11 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             showBackgroundActivitiesSheet(
                 baseActivity.supportFragmentManager,
                 getString(R.string.background_activities),
-                getString(R.string.current_background_activities),
+                if (backgroundActivitiesAdapter.itemCount == 0) {
+                    getString(R.string.no_background_activity)
+                } else {
+                    getString(R.string.current_background_activities)
+                },
                 backgroundActivitiesAdapter = backgroundActivitiesAdapter
             )
         }
@@ -304,11 +307,13 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
-            MediaFile.isPDFFile(vaultFile.name,vaultFile.mimeType) -> {
+
+            MediaFile.isPDFFile(vaultFile.name, vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, PDFReaderActivity::class.java)
                 intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
                 startActivity(intent)
             }
+
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     baseActivity.supportFragmentManager,
@@ -343,9 +348,11 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+
             ServerType.TELLA_RESORCES -> {
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
+
             else -> {}
         }
     }

@@ -50,8 +50,5 @@ class MainSettings :
                 nav().navigate(R.id.action_main_settings_to_sendFeedbackFragment)
             }
         }
-
-        binding.toolbar.backClickListener = { back() }
-
     }
 }

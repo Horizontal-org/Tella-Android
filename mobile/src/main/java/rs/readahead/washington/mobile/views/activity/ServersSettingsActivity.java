@@ -89,11 +89,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             return null;
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.appbar.setOutlineProvider(null);
-        } else {
-            binding.appbar.bringToFront();
-        }
+        binding.appbar.setOutlineProvider(null);
 
         setupAutoDeleteAndMetadataUploadCheck();
 

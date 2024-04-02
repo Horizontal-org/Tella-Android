@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -26,6 +27,7 @@ import rs.readahead.washington.mobile.databinding.FragmentSendFeedbackBinding
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
 import rs.readahead.washington.mobile.util.jobs.WorkerSendFeedBack
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightContributeFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -49,12 +51,12 @@ class SendFeedbackFragment :
     }
 
     /**
-     * Initializes the views in the fragment, sets up the feedback switch, and configures the toolbar.
+     * Initializes the views in the fragment, sets up the feedback switch.
      */
     private fun initViews() {
+        handleOnBackPressed()
         setupFeedbackSwitchView()
         KeyboardUtil.hideKeyboard(baseActivity, binding.root)
-        (activity as SettingsActivity).toolbar.setStartTextTitle(getString(R.string.feedback_title))
         val feedbackSwitch = binding.feedbackSwitch
         feedbackSwitch.mSwitch.isChecked = Preferences.isFeedbackSharingEnabled()
         // Set an event listener for changes in the feedback switch state
@@ -89,8 +91,6 @@ class SendFeedbackFragment :
         binding.feedbackSwitch.setTextAndAction(R.string.action_learn_more) {
             Util.startBrowserIntent(requireContext(), getString(R.string.config_feedback_url))
         }
-        // Set up the toolbar icons
-        (activity as SettingsActivity).setToolbarHomeIcon(R.drawable.ic_close_white)
     }
 
     /**
@@ -306,6 +306,19 @@ class SendFeedbackFragment :
                     // Remove the observer when it's no longer needed
                     WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
                         .removeObserver(this)
+                }
+            })
+    }
+
+    private fun handleOnBackPressed() {
+        binding.toolbar.backClickListener = {
+            nav().popBackStack()
+        }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    nav().popBackStack()
                 }
             })
     }

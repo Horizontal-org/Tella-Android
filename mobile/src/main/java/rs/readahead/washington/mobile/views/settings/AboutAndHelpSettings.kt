@@ -1,52 +1,56 @@
 package rs.readahead.washington.mobile.views.settings
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentAboutNHelpSettingsBinding
 import rs.readahead.washington.mobile.util.Util
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
 
-class AboutAndHelpSettings : BaseFragment() {
-
-    private var binding: FragmentAboutNHelpSettingsBinding? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = FragmentAboutNHelpSettingsBinding.inflate(inflater, container, false)
-        return binding?.root!!
-    }
+class AboutAndHelpSettings : BaseBindingFragment<FragmentAboutNHelpSettingsBinding>(FragmentAboutNHelpSettingsBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView(view)
+        initView()
     }
 
-    override fun initView(view: View) {
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_about_app_bar)
+    private fun initView() {
 
-        binding?.version?.setText(
-            String.format(
-                "%s %s",
-                getString(R.string.settings_about_app_version),
-                BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")"
-            )
+        binding.version?.text = String.format(
+            "%s %s",
+            getString(R.string.settings_about_app_version),
+            BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")"
         )
 
-        binding?.faq?.setOnClickListener {
+        binding.faq.setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_faq_url))
         }
 
-        binding?.contactUs?.setOnClickListener {
+        binding.contactUs.setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_contact_url))
         }
 
-        binding?.privacyPolicy?.setOnClickListener {
+        binding.privacyPolicy.setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_privacy_url))
         }
+
+        handleOnBackPressed()
+    }
+
+    private fun handleOnBackPressed() {
+        binding.toolbar.backClickListener = {
+            nav().popBackStack()
+        }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    nav().popBackStack()
+                }
+            })
     }
 }

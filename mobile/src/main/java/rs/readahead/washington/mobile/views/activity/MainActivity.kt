@@ -128,7 +128,7 @@ class MainActivity : MetadataActivity(),
         setupWithNavController(btmNavMain, navController)
         navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, _: Bundle? ->
             when (navDestination.id) {
-                R.id.micScreen, R.id.homeScreen-> showBottomNavigation()
+                R.id.micScreen, R.id.homeScreen, R.id.main_settings-> showBottomNavigation()
                 else -> hideBottomNavigation()
             }
         }

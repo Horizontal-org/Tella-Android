@@ -11,23 +11,13 @@
     android:paddingBottom="16dp">
 
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_circular"
-        style="@style/Tella_Progress_Circular"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="0dp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/sheet_title_tv"
         style="@style/Tella_Main_White_Text.MeduimbBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@id/progress_circular"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Background activities" />
 
@@ -37,8 +27,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="@id/progress_circular"
-        app:layout_constraintTop_toBottomOf="@id/progress_circular"
+        app:layout_constraintStart_toStartOf="@id/sheet_title_tv"
+        app:layout_constraintTop_toBottomOf="@id/sheet_title_tv"
         tools:text="These are the activities currently ongoing in the \nbackground." />
 
     <androidx.recyclerview.widget.RecyclerView

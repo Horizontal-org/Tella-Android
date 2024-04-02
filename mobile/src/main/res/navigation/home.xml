@@ -126,20 +126,20 @@
         tools:layout="@layout/uwazi_entry_fragment">
         <action
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
-            app:destination="@id/uwaziSendScreen"></action>
+            app:destination="@id/uwaziSendScreen" />
     </fragment>
 
     <fragment
         android:id="@+id/uwaziSendScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
-        tools:layout="@layout/uwazi_send_fragment"></fragment>
+        tools:layout="@layout/uwazi_send_fragment" />
 
     <fragment
         android:id="@+id/uwaziSubmittedPreviewScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
-        tools:layout="@layout/fragment_sumbitted_preview"></fragment>
+        tools:layout="@layout/fragment_sumbitted_preview" />
 
     <fragment
         android:id="@+id/resourcesScreen"

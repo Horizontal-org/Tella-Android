@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
@@ -29,6 +30,7 @@ import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.util.FailedUnlockManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
 
@@ -47,11 +49,9 @@ class SecuritySettings :
     }
 
     private fun initView() {
-       // val fragmentSelected = baseActivity as OnFragmentSelected?
-        //fragmentSelected?.showAppbar()
-        //fragmentSelected?.setToolbarLabel(R.string.settings_sec_app_bar)
         setUpSettingsVisibility()
         setUpLockTimeoutText()
+        handleOnBackPressed()
         binding.lockSettingsButton.setOnClickListener { checkCamouflageAndLockSetting() }
 
         binding.lockTimeoutSettingsButton.setOnClickListener { showLockTimeoutSettingDialog() }
@@ -397,5 +397,18 @@ class SecuritySettings :
             quickExitSwitch.isChecked = false
             binding.quickExitSettingsLayout.visibility = View.GONE
         }
+    }
+
+    private fun handleOnBackPressed() {
+        binding.toolbar.backClickListener = {
+            nav().popBackStack()
+        }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    nav().popBackStack()
+                }
+            })
     }
 }
