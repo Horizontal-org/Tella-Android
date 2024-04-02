@@ -88,10 +88,9 @@ class UwaziSelectEntitiesFragment :
 
     private fun setupAdapter(): SearchableAdapter {
         return SearchableAdapter(
-            context = requireContext(),
-            mValues = items,
+            items = items,
             filteredList = items,
-            clickListener = object : SearchableAdapter.ItemClickListener {
+            itemClickListener = object : SearchableAdapter.ItemClickListener {
                 override fun onItemClicked(item: SearchableItem, position: Int, b: Boolean) {
                     items.firstOrNull { it.code == item.code }?.isSelected = b
                     binding.toolbar.setRightIconVisibility(items.any { it.isSelected })
