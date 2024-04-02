@@ -20,7 +20,7 @@ public class UwaziConstants {
     public static final String UWAZI_DATATYPE_GEOLOCATION = "geolocation";
     public static final String UWAZI_DATATYPE_MULTIFILES = "multifiles";
     public static final String UWAZI_DATATYPE_MULTIPDFFILES = "multipdffiles";
-    public static final String UWAZI_DATATYPE_RELATIONSHIP = "relationships";
+    public static final String UWAZI_DATATYPE_RELATIONSHIP = "relationship";
     public static final String UWAZI_DATATYPE_GENERATEDID = "generatedid";
 
 

@@ -226,7 +226,6 @@ class UwaziParser(private val context: Context?) {
         //TODO Handle this special common props smarter
         entryPrompts.add(uwaziPdfsPrompt)
         entryPrompts.add(uwaziFilesPrompt)
-        entryPrompts.add(uwaziRelationShipPrompt)
 
         if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0) {
             uwaziTitlePrompt.question =

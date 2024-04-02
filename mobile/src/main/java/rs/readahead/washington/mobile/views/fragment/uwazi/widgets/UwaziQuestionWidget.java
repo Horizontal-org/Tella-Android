@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -78,10 +79,13 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
         if (formEntryPrompt.isRequired()) {
             builder.append(" *");
             int end = builder.length();
-            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        questionTitleView.setText(builder);
+        if (formEntryPrompt.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP)) {
+            String modifiedString = String.valueOf(builder.replace(0, 8, ""));
+            String capitalizedString = Character.toUpperCase(modifiedString.charAt(0)) + modifiedString.substring(1);
+            questionTitleView.setText(capitalizedString);
+        } else questionTitleView.setText(builder);
 
         helpTextView = findViewById(R.id.questionHelpText);
         helpTextView.setVisibility(GONE);
@@ -233,8 +237,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
             try {
                 FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
                 formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion()
-                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                while (formController.currentCaptionPromptIsQuestion() && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
                     formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
                     formController.stepToNextScreenEvent();
                 }

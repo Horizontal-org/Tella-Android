@@ -52,8 +52,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
         addImageWidgetViews(linearLayout);
         addAnswerView(linearLayout);
-
-        setHelpTextView(formEntryPrompt.getHelpText());
+        setHelpTextView(getContext().getString(R.string.Uwazi_RelationShipWidget_Select_Entities));
         clearAnswer();
     }
 
@@ -110,8 +109,6 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         addFiles.setText(R.string.select_entities);
         addFiles.setOnClickListener(v -> showSelectEntitiesScreen());
     }
-
-
     private void showSelectEntitiesScreen() {
         ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked();
     }
