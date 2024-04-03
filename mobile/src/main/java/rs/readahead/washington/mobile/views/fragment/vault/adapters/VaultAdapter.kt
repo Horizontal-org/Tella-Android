@@ -41,7 +41,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private var favoriteTemplates = listOf<DataItem.FavoriteTemplates>()
     private var actions = listOf<DataItem.FileActions>()
     private var titles = listOf<DataItem.Titles>()
-    private var improveInsights = listOf<DataItem.ImproveAction>()
+    private var analyticsBanner = listOf<DataItem.ImproveAction>()
     private var connections = listOf<DataItem.ConnectionsItem>()
     private var items = listOf<DataItem>()
 
@@ -113,16 +113,16 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         renderList()
     }
 
-    fun addImprovementSection() {
+    fun addAnalyticsBanner() {
         if ((Preferences.isShowVaultImprovementSection() && !Preferences.hasAcceptedImprovements()) || Preferences.isTimeToShowReminderImprovements()) {
-            improveInsights = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
+            analyticsBanner = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
             renderList()
         }
     }
 
     fun removeImprovementSection() {
         adapterScope.launch {
-            items = items - improveInsights.toSet()
+            items = items - analyticsBanner.toSet()
             withContext(Dispatchers.Main) { submitList(items) }
         }
     }
@@ -144,7 +144,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     private fun renderList() {
         adapterScope.launch {
-            items = connections + improveInsights + favoriteForms + favoriteTemplates + recentFiles + titles + actions
+            items = analyticsBanner + connections + favoriteForms + favoriteTemplates + recentFiles + titles + actions
             withContext(Dispatchers.Main.immediate) {
                 submitList(items)
             }
@@ -154,6 +154,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private fun renderListAfterward() {
         adapterScope.launch {
             items = emptyList()
+            if ((Preferences.isShowVaultImprovementSection() && !Preferences.hasAcceptedImprovements()) || Preferences.isTimeToShowReminderImprovements()) {
+                items = items + analyticsBanner
+            }
             if (Preferences.isShowFavoriteForms()) {
                 items = items + favoriteForms
             }

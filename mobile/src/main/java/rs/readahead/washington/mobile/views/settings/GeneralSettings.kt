@@ -21,6 +21,7 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
@@ -47,15 +48,16 @@ class GeneralSettings :
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
+        binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { Util.startBrowserIntent(context, getString(R.string.config_analytics_learn_url)) }
+
         setLanguageSetting()
 
         initSwitch(
             binding.shareDataSwitch,
             Preferences::setIsAcceptedImprovements
         ) { isChecked ->
-            CleanInsightUtils.grantCampaign(isChecked)
-            if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
-            binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
+           // CleanInsightUtils.grantCampaign(isChecked)
+           // if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
         }
 
         initSwitch(

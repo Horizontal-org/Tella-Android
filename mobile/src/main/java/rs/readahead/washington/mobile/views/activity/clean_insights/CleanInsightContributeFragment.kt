@@ -21,7 +21,7 @@ class CleanInsightContributeFragment : BaseFragment() {
     private lateinit var onPrevious: () -> Unit
 
     companion object {
-        private const val URL_MORE_INFO = "https://docs.tella-app.org/v/faq/privacy/analytics"
+        private const val URL_MORE_INFO = "https://tella-app.org/security-and-privacy#analytics"
 
         @JvmStatic
         fun newInstance(
@@ -57,8 +57,8 @@ class CleanInsightContributeFragment : BaseFragment() {
     private fun setMoreInfoText(textView: TextView) {
         with(textView) {
             text =""
-            val firstPart = SpannableString(getString(R.string.clean_insights_contribute_more_info1))
-            val link = SpannableString(getString(R.string.clean_insights_contribute_more_info2))
+            val firstPart = SpannableString(getString(R.string.Analytics_contribute_more_info))
+            val link = SpannableString(getString(R.string.Analytics_contribute_more_info2))
             link.setSpan(getClickableSpan(), 0, link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             movementMethod = LinkMovementMethod.getInstance()
             append(firstPart)

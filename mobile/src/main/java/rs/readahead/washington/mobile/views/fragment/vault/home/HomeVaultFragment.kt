@@ -132,7 +132,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             layoutManager = LinearLayoutManager(baseActivity)
         }
         //Uncomment to add improvement section
-        // vaultAdapter.addImprovementSection()
+        vaultAdapter.addAnalyticsBanner()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
         serversList = ArrayList()

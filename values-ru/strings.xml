@@ -664,26 +664,26 @@ connecting to a server</string>
   <string name="action_yes_in">YES, I’M IN!</string>
   <string name="clean_insights.reminder_title">You are sharing data</string>
   <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.
-• Your data is aggregated weekly on your device before it is sent to us.
+  <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
+  <string name="Analytics_contribute_more_info2">visit this page</string>
+  <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
+  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
+  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+  <string name="Analytics_how_works_title">How it works</string>
+  <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
+• We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week
+  <string name="Analytics_questions_title">Data we collect</string>
+  <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
+  <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
 💾  32 files stored in Tella
 📖  Spanish language selected
-⚡  1 server connected
-😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will never share your data or sell it to anyone</string>
+⚡  1 server connected</string>
+  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
+  <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
+  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
+  <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
+• Even if we wanted to, we would not able to link the analytics data to you.</string>
   <string name="clean_insights.improve_title">Help us improve Tella</string>
   <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
 
