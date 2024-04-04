@@ -215,7 +215,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             }
         })
         binding.content.panicModeView.setOnClickListener { onPanicClicked() }
-        binding.toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
         binding.toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
@@ -266,15 +265,15 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
                     if (event.hasItems()) {
-                        binding.backgroundActivityNotification.text = event.size().toString()
+                        binding.toolbar.setLeftIcon(R.drawable.ic_notification_on)
                         backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
                     } else {
-                        binding.backgroundActivityNotification.hide()
+                        binding.toolbar.setLeftIcon(R.drawable.ic_notification_off)
                     }
                 }
             })
 
-        binding.backgroundActivityNotification.setOnClickListener {
+        binding.toolbar.onLeftClickListener = {
             showBackgroundActivitiesSheet(
                 baseActivity.supportFragmentManager,
                 getString(R.string.background_activities),
@@ -285,6 +284,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
                 },
                 backgroundActivitiesAdapter = backgroundActivitiesAdapter
             )
+
+
         }
     }
 
@@ -663,11 +664,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun fixAppBarShadow() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.appbar.outlineProvider = null
-        } else {
-            binding.appbar.bringToFront()
-        }
+        binding.appbar.outlineProvider = null
     }
 
 }

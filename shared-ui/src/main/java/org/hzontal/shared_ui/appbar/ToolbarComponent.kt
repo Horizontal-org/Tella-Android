@@ -151,6 +151,15 @@ class ToolbarComponent @JvmOverloads constructor(
         }
     }
 
+    fun setLeftIcon(icon: Int){
+        if (icon != -1){
+            leftImg.setBackgroundResource(icon)
+            leftImg.isVisible = true
+        }else{
+            leftImg.isVisible = false
+        }
+    }
+
     private fun bindView() {
         if (arrowBackIcon != -1) {
             btnBack.setBackgroundResource(arrowBackIcon)

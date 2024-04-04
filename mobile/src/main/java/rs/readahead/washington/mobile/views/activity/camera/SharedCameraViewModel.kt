@@ -45,8 +45,6 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
     private val _lastMediaFileError = SingleLiveEvent<Throwable>()
     val lastMediaFileError: LiveData<Throwable> = _lastMediaFileError
 
-    private val eventBus = PublishSubject.create<RecentBackgroundActivitiesEvent>()
-
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
             .doOnSubscribe {

@@ -26,21 +26,9 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_constraintTop_toTopOf="parent"
                 app:rightIcon="@drawable/ic_close"
+                app:leftIcon="@drawable/ic_notification_off"
                 app:rightIconContentDescription="@string/quick_exit_action"
                 app:toolbarTitle="@string/app_name" />
-
-            <TextView
-                android:id="@+id/backgroundActivityNotification"
-                style="@style/Tella_Main_White_Text.Small"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="16dp"
-                android:background="@drawable/bg_circle_counter"
-                android:gravity="center"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

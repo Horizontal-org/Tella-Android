@@ -16,7 +16,6 @@ class MainSettings :
     }
 
     fun initView() {
-        //(baseActivity as OnFragmentSelected?)?.setToolbarLabel(string.settings_app_bar)
         initListeners()
     }
 

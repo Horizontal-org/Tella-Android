@@ -9,13 +9,12 @@
     <org.hzontal.shared_ui.appbar.ToolbarComponent
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startTitle="@string/settings_app.bar"
         android:layout_height="?attr/actionBarSize"
         app:arrowBackIconContentDescription="@string/action_go_back"
-        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startTitle="@string/settings_app.bar" />
 
     <LinearLayout
         android:id="@+id/settings_layout"

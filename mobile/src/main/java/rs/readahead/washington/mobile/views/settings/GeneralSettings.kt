@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
@@ -22,6 +23,7 @@ import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -39,8 +41,8 @@ class GeneralSettings :
     }
 
     private fun initView() {
-      //  (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_select_general)
-       // (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_arrow_back_white_24dp)
+
+        handleOnBackPressed()
 
         binding.languageSettingsButton.setOnClickListener {
             Navigation.findNavController(it)
@@ -213,11 +215,9 @@ class GeneralSettings :
 
     private fun hasLocationPermission(context: Context): Boolean {
         baseActivity.maybeChangeTemporaryTimeout()
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermission(requestCode: Int) {
@@ -226,5 +226,18 @@ class GeneralSettings :
                 Manifest.permission.ACCESS_FINE_LOCATION
             ), requestCode
         )
+    }
+
+    private fun handleOnBackPressed() {
+        binding.toolbar.backClickListener = {
+            nav().popBackStack()
+        }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    nav().popBackStack()
+                }
+            })
     }
 }
