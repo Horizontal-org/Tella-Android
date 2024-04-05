@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
@@ -56,7 +55,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                     thumb = null
                 )
                 _addingInProgress.postValue(true)
-                MyApplication.bus().post(listOf(backgroundVideoFile))
+                MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
 
             }
             .observeOn(AndroidSchedulers.mainThread())
@@ -85,7 +84,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                 _addingInProgress.postValue(true)
 
                 // Emitting the initial status to the event bus
-                MyApplication.bus().post(listOf(backgroundVideoFile))
+                MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
             }.doOnNext { vaultFile ->
                   handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
@@ -107,7 +106,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
             status = status,
             thumb = vaultFile.thumb
         )
-        MyApplication.bus().post(listOf(completedActivity))
+        MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(completedActivity)))
     }
 
     private fun handleAddError(throwable: Throwable) {

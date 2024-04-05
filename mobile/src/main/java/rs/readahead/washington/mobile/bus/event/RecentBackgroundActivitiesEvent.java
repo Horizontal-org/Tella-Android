@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.bus.event;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class RecentBackgroundActivitiesEvent implements IEvent {
 
 
     public RecentBackgroundActivitiesEvent(List<BackgroundActivityModel> backgroundActivityModels) {
-        this.backgroundActivityModels = backgroundActivityModels;
+        this.backgroundActivityModels = backgroundActivityModels != null ? backgroundActivityModels : new ArrayList<>();
 
         removeFinishedItems();
     }
@@ -22,9 +23,6 @@ public class RecentBackgroundActivitiesEvent implements IEvent {
         return backgroundActivityModels;
     }
 
-    public void setBackgroundActivityModels(List<BackgroundActivityModel> backgroundActivityModels) {
-        this.backgroundActivityModels = backgroundActivityModels;
-    }
 
     // Method to remove finished items from the list
     public void removeFinishedItems() {
