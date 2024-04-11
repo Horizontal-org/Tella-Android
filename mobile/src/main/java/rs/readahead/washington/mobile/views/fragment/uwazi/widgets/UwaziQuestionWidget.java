@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 
+import static org.hzontal.shared_ui.pinview.ResourceUtils.getDrawable;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -50,9 +52,9 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
     protected UwaziEntryPrompt formEntryPrompt;
 
-    private LinearLayout questionHeader;
-    private TextView helpTextView;
-    private TextView constraintValidationView;
+    private final LinearLayout questionHeader;
+    private final TextView helpTextView;
+    private final TextView constraintValidationView;
     public Boolean waitingForAData = false;
 
     public UwaziQuestionWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
@@ -122,7 +124,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     }
 
     public boolean checkValidationConstraint() {
-        return constraintValidationView.getText().toString().length() > 0;
+        return !constraintValidationView.getText().toString().isEmpty();
     }
 
     public UwaziEntryPrompt getPrompt() {
@@ -243,15 +245,15 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e, null);
+                Timber.e(e);
             }
         }
     }
 
     protected ImageButton addButton(int drawableResource) {
         ImageButton button = new ImageButton(getContext());
-        button.setBackground(getResources().getDrawable(R.drawable.collect_widget_menu_background));
-        button.setImageDrawable(getResources().getDrawable(drawableResource));
+        button.setBackground(getDrawable(getContext(),R.drawable.collect_widget_menu_background));
+        button.setImageDrawable(getDrawable(getContext(),drawableResource));
 
         int padding = getResources().getDimensionPixelSize(R.dimen.collect_widget_icon_padding);
         button.setPadding(padding, 0, padding, 0);

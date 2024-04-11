@@ -249,6 +249,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 )
             )
         } else {
+            // to check wafa  return list files to entry
             setResult(
                 Activity.RESULT_OK,
                 Intent().putExtra(

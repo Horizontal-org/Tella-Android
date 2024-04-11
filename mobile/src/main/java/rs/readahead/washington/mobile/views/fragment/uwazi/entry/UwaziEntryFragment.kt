@@ -60,6 +60,11 @@ class UwaziEntryFragment :
             hasInitializedRootView = true
             initView()
         }
+        parentFragmentManager
+            .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner ) { requestKey, bundle ->
+                val resultReceived = bundle.getString("resultListJson")?: ""
+                putVaultFileInForm(resultReceived)
+            }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,6 +78,7 @@ class UwaziEntryFragment :
                 data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
             putLocationInForm(UwaziGeoData("", myLocation.latitude, myLocation.longitude))
         }
+
     }
 
     private fun initView() {

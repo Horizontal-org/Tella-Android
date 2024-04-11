@@ -1,11 +1,14 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
@@ -80,6 +83,13 @@ class UwaziSelectEntitiesFragment :
             onRightClickListener = {
                 (items.filter { it.isSelected }
                     .toMutableList() as ArrayList<SearchableItem>).also { resultList = it }
+                val bundle = Bundle()
+                val jsonResultList = Gson().toJson(resultList.map { it.text })
+                bundle.putString("resultListJson", jsonResultList)
+                setFragmentResult(
+                    "RELATIONSHIP",
+                       bundle
+                    )
                 nav().popBackStack()
             }
             backClickListener = { nav().popBackStack() }
