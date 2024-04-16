@@ -9,6 +9,7 @@ data class UwaziEntityInstance(
     var id: Long = -1,
     var updated: Long = 0,
     var collectTemplate: CollectTemplate? = null,
+    var relationShipEntities: List<Value> = emptyList(),
     var metadata: Map<String, List<Any>> = mutableMapOf(),
     var status : EntityStatus = EntityStatus.UNKNOWN,
     var widgetMediaFiles: List<FormMediaFile> = emptyList(),

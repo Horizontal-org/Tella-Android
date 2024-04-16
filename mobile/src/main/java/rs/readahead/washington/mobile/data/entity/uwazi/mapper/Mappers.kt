@@ -1,15 +1,32 @@
 package rs.readahead.washington.mobile.data.entity.uwazi.mapper
 
 import rs.readahead.washington.mobile.data.entity.uwazi.*
+import rs.readahead.washington.mobile.data.entity.uwazi.Value
 import rs.readahead.washington.mobile.domain.entity.uwazi.*
 
 /**
  * Mapper for template response
  */
+fun RelationShipEntitiesResponse.mapToDomainModel() = rows?.map {
+    it.mapToDomainModel()
+} ?: emptyList()
+
 fun TemplateResponse.mapToDomainModel() = rows?.map {
     it.mapToDomainModel()
 } ?: emptyList()
 
+fun UwaziRelationShipRow.mapToDomainModel() = RelationShipRow(
+    version = __v,
+    _id = _id,
+    values = values?.map { it.mapToDomainModel() } ?: emptyList(),
+    type = type,
+    name = name,
+    entityViewPage = entityViewPage
+)
+fun Value.mapToDomainModel() = rs.readahead.washington.mobile.domain.entity.uwazi.Value(
+    label = label,
+    id = id
+)
 fun UwaziEntityRow.mapToDomainModel() = UwaziRow(
     version = __v,
     _id = _id,

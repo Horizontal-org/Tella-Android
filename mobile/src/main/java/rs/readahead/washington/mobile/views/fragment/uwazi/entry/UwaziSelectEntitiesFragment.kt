@@ -20,6 +20,8 @@ class UwaziSelectEntitiesFragment :
     BaseBindingDialogFragment<UwaziSelectEntitiesFragmentBinding>(UwaziSelectEntitiesFragmentBinding::inflate) {
     private var items: MutableList<SearchableItem> = ArrayList()
     private lateinit var resultList: ArrayList<SearchableItem>
+    private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(
@@ -35,19 +37,16 @@ class UwaziSelectEntitiesFragment :
     }
 
     private fun initializeData() {
-        items.addAll(
-            listOf(
-                SearchableItem("City Hall protest", "0"),
-                SearchableItem("Highway accident", "1"),
-                SearchableItem("BERSIH rally", "2"),
-                SearchableItem("Miscellaneous incidents", "3"),
-                SearchableItem("General Election - 2018", "4"),
-                SearchableItem("Fake LGBT protest", "5"),
-                SearchableItem("Red shirt rally", "6"),
-                SearchableItem("Border crossing", "7"),
-                SearchableItem("Seaport protest", "8")
-            )
-        )
+        if (arguments?.getString(UWAZI_TEMPLATE) != null) {
+            arguments?.getString(UWAZI_TEMPLATE)?.let {
+                uwaziParser.parseTemplateForRelationShipEntities(it)
+            }
+        }
+        var i = 0
+        uwaziParser.getTemplate()?.relationShipEntities?.forEach { entity ->
+            items.add(SearchableItem(entity.label,i.toString()))
+            i++
+        }
     }
 
     private fun initViews() {

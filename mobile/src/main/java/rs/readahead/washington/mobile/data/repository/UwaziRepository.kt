@@ -43,10 +43,11 @@ class UwaziRepository : IUwaziUserRepository {
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
         return Single.zip(getTemplates(server),
+            getRelationShipEntities(server),
             getDictionary(server),
             getTranslation(server),
             getFullSettings(server)
-        ) { templates, dictionary, translations, settings ->
+        ) { templates, relationShipEntities,dictionary, translations, settings ->
 
             templates.forEach {
                 it.properties.forEach { property ->
@@ -56,7 +57,9 @@ class UwaziRepository : IUwaziUserRepository {
                         }
                     }
                 }
+
             }
+
             var resultTemplates = mutableListOf<UwaziRow>()
 
             if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()) {
@@ -110,16 +113,35 @@ class UwaziRepository : IUwaziUserRepository {
 
                     }
             }
+            var entities = mutableListOf<Value>()
+            resultTemplates.forEach { template ->
 
-            val listTemplates = mutableListOf<CollectTemplate>()
-            resultTemplates.forEach { entity ->
-                val collectTemplate = CollectTemplate(
-                    serverId = server.id,
-                    entityRow = entity,
-                    serverName = server.name
-                )
-                listTemplates.add(collectTemplate)
             }
+            val listTemplates = mutableListOf<CollectTemplate>()
+           resultTemplates.forEach { entity ->
+               relationShipEntities.filter { row -> row.type == "template" && row._id == entity._id}
+               relationShipEntities.forEach { relationShipEntity ->
+                }
+                relationShipEntities.filter { row -> row.type == "template" && row._id == entity._id}.forEach { relationShipEntity ->
+                val collectTemplate = CollectTemplate(
+                            serverId = server.id,
+                            entityRow = entity,
+                            serverName = server.name,
+                            relationShipEntities = relationShipEntity.values
+                        )
+                        listTemplates.add(collectTemplate)
+                    }
+                }
+
+//                val collectTemplate = CollectTemplate(
+//                    serverId = server.id,
+//                    entityRow = entity,
+//                    serverName = server.name,
+//                    relationShipEntities = null
+//
+//                )
+//                listTemplates.add(collectTemplate)
+//            }
 
             val listTemplateResult = ListTemplateResult()
             listTemplateResult.templates = listTemplates
@@ -132,6 +154,23 @@ class UwaziRepository : IUwaziUserRepository {
             listTemplateResult.errors = listOf(errorBundle)
             Single.just(listTemplateResult)
         }
+    }
+
+    override fun getRelationShipEntities(server: UWaziUploadServer): Single<List<RelationShipRow>> {
+        val cookies = server.connectCookie + ";locale=" + server.localeCookie
+       // listCookies.add("connect.sid=s%3A39yjYHSGZ_lb0atKuhGG0i5FRT46Sd1A.PIKX0XbbTfzBATaK%2FXkrTagNjXUK7r8B4jGkJPo5NKY;locale=en")
+        //listCookies.add(server.localeCookie)
+        return uwaziApi.getRelationShipEntities(
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_THESAURIS
+            ), cookies = cookies
+        )
+            .subscribeOn(Schedulers.io())
+            .map { result ->
+                result.mapToDomainModel() }
+
     }
 
     override fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>> {

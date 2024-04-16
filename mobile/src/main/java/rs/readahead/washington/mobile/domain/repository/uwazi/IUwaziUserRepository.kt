@@ -42,4 +42,6 @@ interface IUwaziUserRepository {
         attachmentsOriginalName: List<String>,
         documents: List<MultipartBody.Part?>
     ): Single<UwaziEntityRow>
+
+    fun getRelationShipEntities(server: UWaziUploadServer): Single<List<RelationShipRow>>
 }

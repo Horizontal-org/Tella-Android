@@ -55,17 +55,6 @@ class UwaziParser(private val context: Context?) {
                 ?: "Attach PDF files"
         )
     }
-    private val uwaziRelationShipPrompt by lazy {
-        UwaziEntryPrompt(
-            UWAZI_SUPPORTING_FILES,
-            "10242051",
-            UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP,
-            "Entities",
-            false,
-            context?.getString(R.string.Uwazi_RelationShipWidget_Select_Entities)
-                ?: "Select Entities"
-        )
-    }
 
     fun getInstance(): UwaziEntityInstance {
         return entityInstance
@@ -80,7 +69,9 @@ class UwaziParser(private val context: Context?) {
         template = entityInstance.collectTemplate
         return prepareFormView()
     }
-
+    fun parseTemplateForRelationShipEntities(templateString: String){
+        template = Gson().fromJson(templateString, CollectTemplate::class.java)
+    }
     fun parseTemplate(templateString: String): UwaziFormView {
         template = Gson().fromJson(templateString, CollectTemplate::class.java)
         entityInstance.collectTemplate = template
@@ -259,7 +250,9 @@ class UwaziParser(private val context: Context?) {
     fun getGsonTemplate(): String {
         return Gson().toJson(entityInstance)
     }
-
+    fun getToGsonTemplate(): String {
+        return Gson().toJson(template)
+    }
     fun setInstanceStatus(entityStatus: EntityStatus) {
         entityInstance.status = entityStatus
     }

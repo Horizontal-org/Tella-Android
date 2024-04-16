@@ -25,6 +25,11 @@ interface IUwaziApi {
         @Header(X_REQUESTED_WITH) requested: String = "XMLHttpRequest"
     ): Single<Response<LoginResponse>>
 
+    @GET
+    fun getRelationShipEntities(
+        @Url url: String,
+        @Header(COOKIE) cookies: String
+    ): Single<RelationShipEntitiesResponse>
 
     @GET
     fun getSettings(

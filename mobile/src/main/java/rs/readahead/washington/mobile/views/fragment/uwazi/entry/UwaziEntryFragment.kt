@@ -40,6 +40,7 @@ const val UWAZI_TITLE = "title"
 const val UWAZI_SUPPORTING_FILES = "supporting_files"
 const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
+const val UWAZI_TEMPLATE = "uwazi_template"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
@@ -262,7 +263,8 @@ class UwaziEntryFragment :
 
 
     override fun onSelectEntitiesClickedInEntryFragment() {
-        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen)
+        bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
+        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen,bundle)
     }
 
 }
