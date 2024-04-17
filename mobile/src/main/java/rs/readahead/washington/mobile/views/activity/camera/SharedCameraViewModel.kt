@@ -149,9 +149,5 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
         _rotationUpdate.postValue(rotation)
     }
 
-    override fun onCleared() {
-        disposables.clear()
-        super.onCleared()
-    }
 
 }

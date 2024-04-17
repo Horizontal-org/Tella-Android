@@ -398,7 +398,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
             val mgr = baseActivity.getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+//            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()

@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,9 +10,8 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,7 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
@@ -39,11 +40,8 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
-import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.setMargins
-import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.camera.SharedCameraViewModel
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
@@ -76,12 +74,12 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private var tuServers: ArrayList<TellaReportServer>? = null
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
-    private var disposables: EventCompositeDisposable? = null
+    private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
-    private val viewModel by viewModels<SharedCameraViewModel>()
-
+    private var isBackgroundEncryptionEnabled = false;
+    private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -221,31 +219,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             MyApplication.exit(baseActivity)
             baseActivity.finish()
         }
-        vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-                binding.vaultRecyclerView.scrollToPosition(0)
-            }
-        })
     }
 
     private fun startCleanInsightActivity() {
@@ -260,32 +233,60 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun maybeShowRecentBackgroundActivities() {
-        disposables?.wire(
+        disposables.wire(
             RecentBackgroundActivitiesEvent::class.java,
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
-                    if (event.hasItems()) {
-                        binding.toolbar.setLeftIcon(R.drawable.ic_notification_on)
-                        backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
-                    } else {
-                        binding.toolbar.setLeftIcon(R.drawable.ic_notification_off)
-                    }
+                    handleBackgroundActivityEvent(event)
                 }
             })
 
+        setupToolbarClickListener()
+    }
+
+    private fun handleBackgroundActivityEvent(event: RecentBackgroundActivitiesEvent) {
+        isBackgroundEncryptionEnabled = event.hasItems()
+        Timber.i("RecentBackgroundActivitiesEvent came from event")
+
+        if (isBackgroundEncryptionEnabled) {
+            descriptionLiveData.postValue(getString(R.string.current_background_activities))
+        } else {
+            descriptionLiveData.postValue(getString(R.string.no_background_activity))
+        }
+        backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
+        updateToolbarIcon()
+    }
+
+    private fun updateToolbarIcon() {
+        if (view == null) {
+            Timber.i("RecentBackgroundActivitiesEvent **** view is null")
+
+            // Fragment's view is not available, cannot update the toolbar icon
+            return
+        }
+        val iconRes = if (isBackgroundEncryptionEnabled) {
+            R.drawable.ic_notification_on
+        } else {
+            R.drawable.ic_notification_off
+        }
+        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setLeftIcon(iconRes)
+    }
+
+    private fun setupToolbarClickListener() {
         binding.toolbar.onLeftClickListener = {
+            val description = if (backgroundActivitiesAdapter.itemCount == 0) {
+                getString(R.string.no_background_activity)
+            } else {
+                getString(R.string.current_background_activities)
+            }
             showBackgroundActivitiesSheet(
                 baseActivity.supportFragmentManager,
                 getString(R.string.background_activities),
-                if (backgroundActivitiesAdapter.itemCount == 0) {
-                    getString(R.string.no_background_activity)
-                } else {
-                    getString(R.string.current_background_activities)
-                },
-                backgroundActivitiesAdapter = backgroundActivitiesAdapter
+                description,
+                backgroundActivitiesAdapter,
+                descriptionLiveData,
+                lifecycleOwner = this
             )
-
-
         }
     }
 
@@ -431,6 +432,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+        Timber.i("RecentBackgroundActivitiesEvent came from onResume ****")
+        updateToolbarIcon()
     }
 
     override fun onStart() {
@@ -510,7 +513,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables?.dispose()
+        disposables.dispose()
+       // descriptionLiveData.removeObservers(viewLifecycleOwner)
     }
 
 

@@ -3,6 +3,9 @@ package rs.readahead.washington.mobile.util
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.R
@@ -17,8 +20,11 @@ object TopSheetTestUtils {
         fragmentManager: FragmentManager,
         titleText: String,
         description: String,
-        backgroundActivitiesAdapter: BackgroundActivitiesAdapter
-    ) {
+        backgroundActivitiesAdapter: BackgroundActivitiesAdapter,
+        descriptionText: LiveData<String>,
+        lifecycleOwner: LifecycleOwner,
+        ) {
+
         val renameFileSheet =
             CustomTopSheetFragment.with(fragmentManager)
                 .page(R.layout.background_activities_topsheet)
@@ -35,6 +41,9 @@ object TopSheetTestUtils {
                             adapter = backgroundActivitiesAdapter
                             layoutManager = LinearLayoutManager(context)
                         }
+                    }
+                    descriptionText.observe(lifecycleOwner) {
+                        holder.descriptionTv.text = it
                     }
                 }
             })

@@ -176,12 +176,6 @@ class MicFragment : MetadataBaseLockFragment(),
             viewLifecycleOwner,
             ::onMediaFilesUploadScheduleError
         )
-
-        viewModel.lastBackgroundActivityModel.observe(viewLifecycleOwner) { backgroundActivity ->
-            MyApplication.bus().post(
-                RecentBackgroundActivitiesEvent(mutableListOf(backgroundActivity))
-            )
-        }
     }
 
     override fun onStart() {

@@ -6,7 +6,7 @@ data class BackgroundActivityModel(
     val type: BackgroundActivityType = BackgroundActivityType.FILE,
     val mimeType: String,
     val thumb: ByteArray? = null,
-    val status: BackgroundActivityStatus = BackgroundActivityStatus.IN_PROGRESS
+    var status: BackgroundActivityStatus = BackgroundActivityStatus.IN_PROGRESS
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
