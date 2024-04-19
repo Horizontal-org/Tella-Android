@@ -23,8 +23,8 @@ import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
-import timber.log.Timber
 import java.io.InputStream
+
 
 @AndroidEntryPoint
 class PDFReaderActivity : BaseLockActivity() {
@@ -33,6 +33,7 @@ class PDFReaderActivity : BaseLockActivity() {
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
     private var isInfoShown = false
+    private var pdfTopMargin = 0
 
     companion object {
         const val VIEW_PDF = "vp"
@@ -63,6 +64,8 @@ class PDFReaderActivity : BaseLockActivity() {
         }
 
         actionsDisabled = intent.hasExtra(HIDE_MENU)
+
+        pdfTopMargin = resources.getDimensionPixelSize(R.dimen.pdf_top_margin)
     }
 
     private fun initObservers() {
@@ -206,29 +209,23 @@ class PDFReaderActivity : BaseLockActivity() {
                     scrollDirection = DIRECTION_NONE
                 }
 
-               /*if (isOnTop() && newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    view.postDelayed({
-                        if (getDragDirection() == DIRECTION_DOWN){
-                            // Drag down from top
-                        } else if (getDragDirection() == DIRECTION_UP) {
-                            // Drag Up from top
-                        }
-                    }, 10)
-                }*/
-                if (newState  == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    if (getDragDirection() == DIRECTION_DOWN){
-                        binding.toolbar.hide()
-                        val param = binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(0,0,0,0)
+                if ( newState == RecyclerView.SCROLL_STATE_SETTLING) {
+                    if (getDragDirection() == DIRECTION_DOWN || isOnTop()) {
+                        binding.toolbar.show()
+                        val param =
+                            binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(0, pdfTopMargin, 0, 0)
                         binding.pdfRendererView.layoutParams = param
+                        binding.toolbar.outlineProvider = null
 
                     } else if (getDragDirection() == DIRECTION_UP) {
-                        binding.toolbar.show()
-                        val param = binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(0,100,0,0)
+                        binding.toolbar.hide()
+                        val param =
+                            binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
+                        param.setMargins(0, 0, 0, 0)
                         binding.pdfRendererView.layoutParams = param
+                        binding.pdfRendererView.outlineProvider = null
                     }
-                    Timber.d("++++ RecyclerView.SCROLL_STATE_DRAGGING")
                 }
             }
 
@@ -241,20 +238,23 @@ class PDFReaderActivity : BaseLockActivity() {
                     else -> DIRECTION_NONE
                 }
             }
-            private fun isOnTop():Boolean{
+
+            private fun isOnTop(): Boolean {
                 return totalDy == 0
             }
-            private fun getDragDirection():Int {
-                if (listStatus != RecyclerView.SCROLL_STATE_DRAGGING) {
+
+            private fun getDragDirection(): Int {
+                if (listStatus !=  RecyclerView.SCROLL_STATE_SETTLING) {
                     return DIRECTION_NONE
                 }
 
                 return when (scrollDirection) {
-                    DIRECTION_NONE -> if (totalDy == 0){
+                    DIRECTION_NONE -> if (totalDy == 0) {
                         DIRECTION_DOWN  // drag down from top
-                    }else{
+                    } else {
                         DIRECTION_UP  // drag up from bottom
                     }
+
                     DIRECTION_UP -> DIRECTION_UP
                     DIRECTION_DOWN -> DIRECTION_DOWN
                     else -> DIRECTION_NONE
