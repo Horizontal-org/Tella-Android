@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/enterUrlScreen"
     android:id="@+id/reports_settings">
 
     <fragment
@@ -12,6 +13,13 @@
         <action
             android:id="@+id/action_server_url_to_username_password"
             app:destination="@id/chooseCredentialsScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+        <action
+            android:id="@+id/action_enterUploadServerFragment_to_loginReportsFragment"
+            app:destination="@id/loginToReportsScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
@@ -36,7 +44,59 @@
         android:id="@+id/loginToReportsScreen"
         android:name="rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment"
         tools:layout="@layout/fragment_login_reports_screen">
-
+        <action
+            android:id="@+id/action_loginToReportsScreen_to_editTellaServerFragment"
+            app:destination="@id/editTellaServerFragment"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
     </fragment>
+
+    <fragment
+        android:id="@+id/editTellaServerFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment"
+        android:label="EditTellaServerFragment"
+        tools:layout="@layout/fragment_edit_server">
+
+        <action
+            android:id="@+id/action_editTellaServerFragment_to_successfulSetServerFragment"
+            app:destination="@id/successfulSetServerFragment"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+    </fragment>
+    <fragment
+        android:id="@+id/successfulLoginFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step4.SuccessfulLoginFragment"
+        android:label="SuccessfulLoginFragment"
+        tools:layout="@layout/fragment_successful_login">
+        <action
+            android:id="@+id/action_successfulLoginFragment_to_serverAdvancedSettingsFragment"
+            app:destination="@id/serverAdvancedSettingsFragment"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+    </fragment>
+    <fragment
+        android:id="@+id/serverAdvancedSettingsFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment"
+        android:label="ServerAdvancedSettingsFragment"
+        tools:layout="@layout/fragment_advanced_settings_success">
+        <action
+            android:id="@+id/action_serverAdvancedSettingsFragment_to_successfulSetServerFragment"
+            app:destination="@id/successfulSetServerFragment"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+    </fragment>
+    <fragment
+        android:id="@+id/successfulSetServerFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment"
+        tools:layout="@layout/fragment_successful_set_server"
+        android:label="SuccessfulSetServerFragment" />
 
 </navigation>

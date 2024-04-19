@@ -12,6 +12,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
@@ -102,9 +103,8 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     }
 
     private fun openEntityInstance(reportInstance: ReportInstance) {
-        val bundle = Bundle()
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        nav().navigate(R.id.action_reportsScreen_to_newReport_screen, bundle)
+       bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        this.navManager().navigateFromReportsScreenToNewReportScreen()
     }
 
     override fun onResume() {

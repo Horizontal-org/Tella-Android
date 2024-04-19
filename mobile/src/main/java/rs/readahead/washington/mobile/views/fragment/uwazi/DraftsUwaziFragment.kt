@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(FragmentDraftsUwaziBinding::inflate) {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val uwaziDraftsAdapter: UwaziDraftsAdapter by lazy { UwaziDraftsAdapter() }
-    private val bundle by lazy { Bundle() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

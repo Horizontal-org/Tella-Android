@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
@@ -66,6 +67,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
@@ -100,7 +102,6 @@ class AttachmentsFragment :
     private var isMoveModeEnabled = false
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
-    private val bundle by lazy { Bundle() }
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
 
@@ -321,7 +322,7 @@ class AttachmentsFragment :
 
             override fun goToRecorder() {
                 bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                nav().navigate(R.id.action_attachments_screen_to_micro, bundle)
+                navManager().navigateToMicro()
             }
 
             override fun chooseImportAndDelete() {

@@ -6,8 +6,7 @@
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_purple"
-    >
+    android:background="@color/wa_purple">
 
     <ScrollView
         android:id="@+id/server_input"

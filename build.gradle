@@ -66,7 +66,7 @@ buildscript {
     versions.hilt_version = "1.1.0"
     versions.hilt_android = "2.50"
     versions.hilt_viewmodel = '1.0.0-alpha03'
-    versions.leakCanaryVersion = "2.7"
+    versions.leakCanaryVersion = "3.0-alpha-1"
     versions.hilt_android_compiler = "2.50"
     versions.permissionDispatcher = "4.8.0"
     versions.googlePlayServices = "17.0.0"
