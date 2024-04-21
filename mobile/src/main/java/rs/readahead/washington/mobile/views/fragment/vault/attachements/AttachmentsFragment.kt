@@ -997,7 +997,6 @@ class AttachmentsFragment :
         return requestCode == C.START_CAMERA_CAPTURE || requestCode == C.START_AUDIO_RECORD
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {

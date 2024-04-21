@@ -432,7 +432,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
-        Timber.i("RecentBackgroundActivitiesEvent came from onResume ****")
         updateToolbarIcon()
     }
 

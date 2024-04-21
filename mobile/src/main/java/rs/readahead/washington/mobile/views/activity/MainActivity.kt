@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import permissions.dispatcher.NeedsPermission
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -30,6 +31,7 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
@@ -53,10 +55,8 @@ import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
-class MainActivity : MetadataActivity(),
-    IHomeScreenPresenterContract.IView,
-    IMediaImportPresenterContract.IView,
-    IMetadataAttachPresenterContract.IView,
+class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
+    IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
     IMainNavigationInterface {
 
     companion object {
@@ -64,6 +64,7 @@ class MainActivity : MetadataActivity(),
     }
 
     private var mExit = false
+    private var isBackgroundEncryptionEnabled = false;
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
@@ -76,6 +77,10 @@ class MainActivity : MetadataActivity(),
     private lateinit var navController: NavController
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (isBackgroundEncryptionEnabled) {
+                showBackgroundTasksExitPrompt()
+                return
+            }
             // Your onBackPressed logic here
             if (checkCurrentFragment()) return
             if (!checkIfShouldExit()) return
@@ -98,26 +103,24 @@ class MainActivity : MetadataActivity(),
             navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-
     }
 
     private fun initializeListeners() {
         setOrientationListener()
         disposables = MyApplication.bus().createCompositeDisposable()
-        disposables.wire(
-            LocaleChangedEvent::class.java,
+        disposables.wire(LocaleChangedEvent::class.java,
             object : EventObserver<LocaleChangedEvent?>() {
                 override fun onNext(event: LocaleChangedEvent) {
                     recreate()
                 }
             })
-        disposables.wire(
-            CamouflageAliasChangedEvent::class.java,
+        disposables.wire(CamouflageAliasChangedEvent::class.java,
             object : EventObserver<CamouflageAliasChangedEvent?>() {
                 override fun onNext(event: CamouflageAliasChangedEvent) {
                     closeApp()
                 }
             })
+        checkRecentBackgroundActivities()
     }
 
     private fun setupNavigation() {
@@ -128,10 +131,34 @@ class MainActivity : MetadataActivity(),
         setupWithNavController(btmNavMain, navController)
         navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, _: Bundle? ->
             when (navDestination.id) {
-                R.id.micScreen, R.id.homeScreen, R.id.main_settings-> showBottomNavigation()
+                R.id.micScreen, R.id.homeScreen, R.id.main_settings -> showBottomNavigation()
                 else -> hideBottomNavigation()
             }
         }
+    }
+
+    private fun checkRecentBackgroundActivities() {
+        disposables.wire(RecentBackgroundActivitiesEvent::class.java,
+            object : EventObserver<RecentBackgroundActivitiesEvent?>() {
+                override fun onNext(event: RecentBackgroundActivitiesEvent) {
+                    isBackgroundEncryptionEnabled = event.hasItems()
+                }
+            })
+    }
+
+    private fun showBackgroundTasksExitPrompt() {
+        BottomSheetUtils.showConfirmSheet(supportFragmentManager,
+            getString(R.string.encryption_in_progress),
+            getString(R.string.encryption_exit_prompt),
+            getString(R.string.exit_discard_files),
+            getString(R.string.action_cancel),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        closeApp()
+                    }
+                }
+            })
     }
 
     private fun handleImportResult(requestCode: Int, data: Intent?) {
@@ -185,8 +212,7 @@ class MainActivity : MetadataActivity(),
 
     @SuppressLint("NeedOnRequestPermissionsResult")
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String?>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<String?>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
@@ -202,9 +228,7 @@ class MainActivity : MetadataActivity(),
                     }
                 }
 
-                is DownloadedTemplatesFragment,
-                is SubmittedPreviewFragment,
-                is UwaziSendFragment -> {
+                is DownloadedTemplatesFragment, is SubmittedPreviewFragment, is UwaziSendFragment -> {
                     navController.popBackStack()
                     return true
                 }
@@ -284,9 +308,7 @@ class MainActivity : MetadataActivity(),
         val list: MutableList<String> = ArrayList()
         list.add(vaultFile.id)
         onActivityResult(
-            C.MEDIA_FILE_ID,
-            RESULT_OK,
-            Intent().putExtra(VAULT_FILE_KEY, Gson().toJson(list))
+            C.MEDIA_FILE_ID, RESULT_OK, Intent().putExtra(VAULT_FILE_KEY, Gson().toJson(list))
         )
     }
 

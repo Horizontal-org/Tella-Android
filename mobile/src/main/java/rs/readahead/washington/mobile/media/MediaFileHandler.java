@@ -742,6 +742,25 @@ public class MediaFileHandler {
         return vaultFile;
     }
 
+    public static List<Single<VaultFile>> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
+        List<Single<VaultFile>> vaultFiles = new ArrayList<>();
+        assert uris != null;
+        for (Uri uri : uris) {
+            String mimeType = getMimeType(uri, context.getContentResolver());
+            if (mimeType != null) {
+                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
+                    vaultFiles.add(importPhotoUri(context, uri, parentId));
+                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
+                    vaultFiles.add(importVideoUri(context, uri, parentId));
+                } else {
+                    vaultFiles.add(importOthersUri(context, uri, parentId));
+                }
+            }
+        }
+        return vaultFiles;
+    }
+
+
 
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {
         FileWalker fileWalker = new FileWalker();

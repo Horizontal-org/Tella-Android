@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AttachmentsViewModel @Inject constructor(
-    application: Application,
+    private val application: Application,
     private val keyDataSource: KeyDataSource,
     private val rxVault: RxVault
     ) : AndroidViewModel(
@@ -229,7 +229,7 @@ class AttachmentsViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread()).doFinally { _exportState.postValue(false) }
             .subscribe({ num: Int? ->
                 if (num != null) {
-                    _mediaExported.postValue(num)
+                    _mediaExported.postValue(num!!)
                 }
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
