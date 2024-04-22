@@ -8,6 +8,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -17,6 +18,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
 
@@ -782,5 +784,29 @@ public class MediaFileHandler {
         while ((bytesRead = source.read(buf)) != -1) {
             destination.write(buf, 0, bytesRead);
         }
+    }
+
+    public static VaultFile getUriInfo(Context context, Uri uri) {
+        VaultFile file = new VaultFile();
+        if (uri.getScheme().equals("content")) {
+            ContentResolver contentResolver = context.getContentResolver();
+            try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    int mimeTypeIndex = cursor.getColumnIndex("mime_type"); // Custom column name
+                    if (nameIndex != -1) {
+                        file.name = cursor.getString(nameIndex);
+                    }
+                    if (mimeTypeIndex != -1) {
+                        file.mimeType = cursor.getString(mimeTypeIndex);
+                    }
+                }
+            }
+        } else if (uri.getScheme().equals("file")) {
+            String fileName = uri.getLastPathSegment();
+            file.name = fileName;
+            file.mimeType = null;
+        }
+        return file;
     }
 }

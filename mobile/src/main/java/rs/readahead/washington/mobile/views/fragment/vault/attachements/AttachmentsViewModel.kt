@@ -17,10 +17,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -172,32 +176,58 @@ class AttachmentsViewModel @Inject constructor(
 
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        counterData.value = 0
-        var counter = 1
-        var currentUri: Uri? = null
-        disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
-            currentUri = uri
-            MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
-        }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {
-                if (counter == 1) {
-                    _progressPercent.postValue(Pair(counter.toDouble(), uris.size))
-                    counterData.postValue(counter++)
-                } else counterData.postValue(counter++)
-            }.subscribe({ vaultFile ->
-                if (deleteOriginal) {
-                    currentUri?.let { uri -> _mediaImportedWithDelete.postValue(uri) }
-                } else {
-                    _mediaImported.postValue(vaultFile)
+       // counterData.value = 0
+      //  var counter = 1
+         val currentUri: Uri? = null
+        disposables.add(
+            Flowable.fromIterable(uris)
+                .flatMap { uri ->
+                    MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId)
+                        .toFlowable()
+                        .doOnSubscribe {
+                            val file = MediaFileHandler.getUriInfo(application, uri)
+                            val backgroundVideoFile = BackgroundActivityModel(
+                                id = file.name,
+                                name = file.name,
+                                mimeType = file.mimeType,
+                                status = BackgroundActivityStatus.IN_PROGRESS,
+                                thumb = null
+                            )
+
+                            // Emitting the initial status to the event bus
+                            MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
+                        }
                 }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ vaultFile ->
+                    handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
 
-            }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
-            })
+                    if (deleteOriginal) {
+                        currentUri?.let { uri -> _mediaImportedWithDelete.postValue(uri) }
+                    } else {
+                        _mediaImported.postValue(vaultFile)
+                    }
 
+                }) { throwable: Throwable? ->
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    _error.postValue(throwable)
+                }
+        )
+    }
+
+    private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
+
+        val completedActivity = BackgroundActivityModel(
+            id = vaultFile.id,
+            name = vaultFile.name,
+            mimeType = vaultFile.mimeType,
+            status = status,
+            thumb = vaultFile.thumb
+        )
+        Timber.d("send BackgroundActivityModel inside attachments viewModel handleAddSuccess")
+        MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(completedActivity)))
     }
 
     fun renameVaultFile(id: String, name: String) {
@@ -266,7 +296,7 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        disposables.dispose()
+       // disposables.dispose()
         super.onCleared()
     }
 }
