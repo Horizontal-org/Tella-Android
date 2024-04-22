@@ -25,6 +25,7 @@ import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.uwazi.SelectValue;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
@@ -46,6 +47,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     TextView numberOfFiles;
     Boolean isPdf;
     View infoFilePanel;
+    private final List<SelectValue> items;
+
     private final ArrayList<AppCompatCheckBox> checkBoxes;
     // counter of all checkboxes which can be in result set
     // List of all Ids which can be in result set (Ids from all checkboxes without header checkboxes)
@@ -54,6 +57,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
         checkBoxes = new ArrayList<>();
+        items = formEntryPrompt.getSelectValues();
+
         this.context = context;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -67,25 +72,25 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public Object getAnswer() {
-        List<String> vc = new ArrayList<>();
-        List<UwaziValue> selection = new ArrayList<>();
-
-        for (int i = 0; i < checkBoxes.size(); ++i) {
-            AppCompatCheckBox c = checkBoxes.get(i);
-            if (c.isChecked()) {
-                vc.add(checkIds.get(i));
-            }
-        }
-
-        if (vc.size() == 0) {
-            return null;
-        } else {
-            for (String answer : vc) {
-                UwaziValue uValue = new UwaziValue(answer);
-                selection.add(uValue);
-            }
-            return selection;
-        }
+//        List<String> vc = new ArrayList<>();
+//        List<UwaziValue> selection = new ArrayList<>();
+//
+//        for (int i = 0; i < checkBoxes.size(); ++i) {
+//            AppCompatCheckBox c = checkBoxes.get(i);
+//            if (c.isChecked()) {
+//                vc.add(checkIds.get(i));
+//            }
+//        }
+//
+//        if (vc.size() == 0) {
+//            return null;
+//        } else {
+//            for (String answer : vc) {
+//                UwaziValue uValue = new UwaziValue(answer);
+//                selection.add(uValue);
+//            }
+            return relationShipFiles;
+        //}
     }
 
     @Override
@@ -173,7 +178,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     private void showSelectEntitiesScreen() {
         waitingForAData = true;
-        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked();
+        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt);
     }
 
 

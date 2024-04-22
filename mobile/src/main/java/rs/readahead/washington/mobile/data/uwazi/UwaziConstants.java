@@ -23,5 +23,6 @@ public class UwaziConstants {
     public static final String UWAZI_DATATYPE_RELATIONSHIP = "relationship";
     public static final String UWAZI_DATATYPE_GENERATEDID = "generatedid";
 
+    public static final String UWAZI_DATATYPE_TEMPLATE = "template";
 
 }

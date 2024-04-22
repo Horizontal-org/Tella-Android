@@ -84,11 +84,15 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
             builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         if (formEntryPrompt.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP)) {
-            String modifiedString = String.valueOf(builder.replace(0, 8, ""));
-            String capitalizedString = Character.toUpperCase(modifiedString.charAt(0)) + modifiedString.substring(1);
-            questionTitleView.setText(capitalizedString);
-        } else questionTitleView.setText(builder);
-
+//            String capitalizedString;
+//           if(builder.length()> 7) {
+//               String modifiedString = String.valueOf(builder.replace(0, 8, ""));
+//               capitalizedString = Character.toUpperCase(modifiedString.charAt(0)) + modifiedString.substring(1);
+//               questionTitleView.setText(capitalizedString);
+//           }
+//          else
+              questionTitleView.setText(builder);
+        }
         helpTextView = findViewById(R.id.questionHelpText);
         helpTextView.setVisibility(GONE);
         /*if (!TextUtils.isEmpty(formEntryPrompt.getHelpText())) {
@@ -98,8 +102,8 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
         }*/
 
         constraintValidationView = findViewById(R.id.constraintValidationView);
-    }
 
+    }
     public TextView getHelpTextView() {
         return helpTextView;
     }

@@ -42,11 +42,16 @@ class UwaziSelectEntitiesFragment :
                 uwaziParser.parseTemplateForRelationShipEntities(it)
             }
         }
-        var i = 0
-        uwaziParser.getTemplate()?.relationShipEntities?.forEach { entity ->
-            items.add(SearchableItem(entity.label,i.toString()))
-            i++
-        }
+
+        if (arguments?.getString(UWAZI_ENTRY_PROMPT_ID) != null) {
+            val id = arguments?.getString(UWAZI_ENTRY_PROMPT_ID)
+        val property = uwaziParser.getTemplate()?.entityRow?.properties?.find { property ->  property._id == id}
+            var i = 0
+            property?.entities?.forEach { value ->
+                    items.add(SearchableItem(value.label,i.toString()))
+                    i++
+                }
+            }
     }
 
     private fun initViews() {

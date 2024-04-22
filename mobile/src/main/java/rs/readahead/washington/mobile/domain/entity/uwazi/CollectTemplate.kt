@@ -6,7 +6,7 @@ data class CollectTemplate(
     var serverName: String? = "",
     var username: String? = "",
     var entityRow: UwaziRow,
-    var relationShipEntities: List<Value>?,
+    var relationShipEntities: List<Value> = emptyList(),
     var isDownloaded: Boolean = false,
     var isFavorite: Boolean = false,
     var isUpdated: Boolean = false)

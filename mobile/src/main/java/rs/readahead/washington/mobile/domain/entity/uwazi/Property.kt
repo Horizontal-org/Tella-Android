@@ -10,4 +10,5 @@ data class Property( val _id: String,
                      val required: Boolean,
                      val showInCard: Boolean,
                      val type: String,
+                     var entities : List<Value> ? = null,
                      var values : List<SelectValue>? = null)

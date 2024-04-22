@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.repository
 
+import android.annotation.SuppressLint
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -11,6 +12,7 @@ import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
 import rs.readahead.washington.mobile.data.entity.uwazi.LoginResult
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.entity.uwazi.mapper.mapToDomainModel
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_TEMPLATE
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.*
@@ -113,35 +115,21 @@ class UwaziRepository : IUwaziUserRepository {
 
                     }
             }
-            var entities = mutableListOf<Value>()
-            resultTemplates.forEach { template ->
 
-            }
             val listTemplates = mutableListOf<CollectTemplate>()
-           resultTemplates.forEach { entity ->
-               relationShipEntities.filter { row -> row.type == "template" && row._id == entity._id}
-               relationShipEntities.forEach { relationShipEntity ->
-                }
-                relationShipEntities.filter { row -> row.type == "template" && row._id == entity._id}.forEach { relationShipEntity ->
-                val collectTemplate = CollectTemplate(
-                            serverId = server.id,
-                            entityRow = entity,
-                            serverName = server.name,
-                            relationShipEntities = relationShipEntity.values
-                        )
-                        listTemplates.add(collectTemplate)
-                    }
-                }
-
-//                val collectTemplate = CollectTemplate(
-//                    serverId = server.id,
-//                    entityRow = entity,
-//                    serverName = server.name,
-//                    relationShipEntities = null
-//
-//                )
-//                listTemplates.add(collectTemplate)
-//            }
+           resultTemplates.forEach { template ->
+             val relationShipEntity: List<RelationShipRow> = relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE}
+                   template.properties.forEach { property ->
+                       val listRelationShipEntities  = relationShipEntity.find {(property.content == it._id) }
+                       listRelationShipEntities.also { property.entities = it?.values }
+                   }
+               val collectTemplate = CollectTemplate(
+                   serverId = server.id,
+                   entityRow = template,
+                   serverName = server.name
+               )
+               listTemplates.add(collectTemplate)
+           }
 
             val listTemplateResult = ListTemplateResult()
             listTemplateResult.templates = listTemplates

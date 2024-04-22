@@ -441,7 +441,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 boolean updated = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_UPDATED)) == 1;
                 String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_NAME));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(D.A_SERVER_USERNAME));
-                CollectTemplate collectTemplate = new CollectTemplate(id, serverId, serverName, username, entity, relationShipEntities, downloaded, favorite, updated);
+                CollectTemplate collectTemplate = new CollectTemplate(id, serverId, serverName, username, entity,null, downloaded, favorite, updated);
                 templates.add(collectTemplate);
             }
 

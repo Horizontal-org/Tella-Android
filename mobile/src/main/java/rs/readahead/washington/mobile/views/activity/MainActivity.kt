@@ -44,6 +44,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragm
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
@@ -366,10 +367,10 @@ class MainActivity : MetadataActivity(),
         navController.navigate(R.id.home)
     }
 
-    override fun onSelectEntitiesClicked() {
+    override fun onSelectEntitiesClicked(formEntryPrompt: UwaziEntryPrompt) {
         val fragment =
             supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)
-        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment()
+        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment(formEntryPrompt)
     }
 
 

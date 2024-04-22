@@ -227,7 +227,7 @@ class UwaziParser(private val context: Context?) {
         for (property in template!!.entityRow.properties) {
             val entryPrompt = UwaziEntryPrompt(
                 property.name,
-                property.id,
+                property._id,
                 property.type,
                 property.translatedLabel,
                 property.required,
