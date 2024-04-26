@@ -12,24 +12,24 @@ class PdfScrollListener(
     private val pdfView: PdfRendererView,
     private val pdfTopMargin: Int
 ) : RecyclerView.OnScrollListener() {
-    private val DIRECTION_NONE = -1
-    private val DIRECTION_UP = 0
-    private val DIRECTION_DOWN = 1
-    var totalDy = 0
+    private val directionNone = -1
+    private val directionUp = 0
+    private val directionDown = 1
+    private var totalDy = 0
 
-    var scrollDirection = DIRECTION_NONE
-    var listStatus = RecyclerView.SCROLL_STATE_IDLE
+    private var scrollDirection = directionNone
+    private var listStatus = RecyclerView.SCROLL_STATE_IDLE
 
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         listStatus = newState
 
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            scrollDirection = DIRECTION_NONE
+            scrollDirection = directionNone
         }
 
         if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-            if (getDragDirection() == DIRECTION_DOWN || isOnTop()) {
+            if (getDragDirection() == directionDown || isOnTop()) {
                 toolbar.show()
                 val param =
                     pdfView.layoutParams as ViewGroup.MarginLayoutParams
@@ -37,7 +37,7 @@ class PdfScrollListener(
                 pdfView.layoutParams = param
                 toolbar.outlineProvider = null
 
-            } else if (getDragDirection() == DIRECTION_UP) {
+            } else if (getDragDirection() == directionUp) {
                 toolbar.hide()
                 val param =
                     pdfView.layoutParams as ViewGroup.MarginLayoutParams
@@ -52,9 +52,9 @@ class PdfScrollListener(
         super.onScrolled(recyclerView, dx, dy)
         this.totalDy += dy
         scrollDirection = when {
-            dy > 0 -> DIRECTION_UP
-            dy < 0 -> DIRECTION_DOWN
-            else -> DIRECTION_NONE
+            dy > 0 -> directionUp
+            dy < 0 -> directionDown
+            else -> directionNone
         }
     }
 
@@ -64,19 +64,19 @@ class PdfScrollListener(
 
     private fun getDragDirection(): Int {
         if (listStatus != RecyclerView.SCROLL_STATE_SETTLING) {
-            return DIRECTION_NONE
+            return directionNone
         }
 
         return when (scrollDirection) {
-            DIRECTION_NONE -> if (totalDy == 0) {
-                DIRECTION_DOWN  // drag down from top
+            directionNone -> if (totalDy == 0) {
+                directionDown  // drag down from top
             } else {
-                DIRECTION_UP  // drag up from bottom
+                directionUp  // drag up from bottom
             }
 
-            DIRECTION_UP -> DIRECTION_UP
-            DIRECTION_DOWN -> DIRECTION_DOWN
-            else -> DIRECTION_NONE
+            directionUp -> directionUp
+            directionDown -> directionDown
+            else -> directionNone
         }
     }
 }
