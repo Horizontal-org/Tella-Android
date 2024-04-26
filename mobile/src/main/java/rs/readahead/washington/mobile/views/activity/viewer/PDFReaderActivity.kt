@@ -3,9 +3,7 @@ package rs.readahead.washington.mobile.views.activity.viewer
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.Metadata.VIEW_METADATA
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,8 +15,6 @@ import rs.readahead.washington.mobile.bus.event.MediaFileDeletedEvent
 import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.databinding.ActivityPdfReaderBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.MetadataViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
@@ -190,77 +186,13 @@ class PDFReaderActivity : BaseLockActivity() {
                 }
         }
 
-        binding.pdfRendererView.recyclerView.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            private val DIRECTION_NONE = -1
-            private val DIRECTION_UP = 0
-            private val DIRECTION_DOWN = 1
-            var totalDy = 0
-
-
-            var scrollDirection = DIRECTION_NONE
-            var listStatus = RecyclerView.SCROLL_STATE_IDLE
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                listStatus = newState
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    scrollDirection = DIRECTION_NONE
-                }
-
-                if ( newState == RecyclerView.SCROLL_STATE_SETTLING) {
-                    if (getDragDirection() == DIRECTION_DOWN || isOnTop()) {
-                        binding.toolbar.show()
-                        val param =
-                            binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(0, pdfTopMargin, 0, 0)
-                        binding.pdfRendererView.layoutParams = param
-                        binding.toolbar.outlineProvider = null
-
-                    } else if (getDragDirection() == DIRECTION_UP) {
-                        binding.toolbar.hide()
-                        val param =
-                            binding.pdfRendererView.layoutParams as ViewGroup.MarginLayoutParams
-                        param.setMargins(0, 0, 0, 0)
-                        binding.pdfRendererView.layoutParams = param
-                        binding.pdfRendererView.outlineProvider = null
-                    }
-                }
-            }
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                this.totalDy += dy
-                scrollDirection = when {
-                    dy > 0 -> DIRECTION_UP
-                    dy < 0 -> DIRECTION_DOWN
-                    else -> DIRECTION_NONE
-                }
-            }
-
-            private fun isOnTop(): Boolean {
-                return totalDy == 0
-            }
-
-            private fun getDragDirection(): Int {
-                if (listStatus !=  RecyclerView.SCROLL_STATE_SETTLING) {
-                    return DIRECTION_NONE
-                }
-
-                return when (scrollDirection) {
-                    DIRECTION_NONE -> if (totalDy == 0) {
-                        DIRECTION_DOWN  // drag down from top
-                    } else {
-                        DIRECTION_UP  // drag up from bottom
-                    }
-
-                    DIRECTION_UP -> DIRECTION_UP
-                    DIRECTION_DOWN -> DIRECTION_DOWN
-                    else -> DIRECTION_NONE
-                }
-            }
-        })
+        binding.pdfRendererView.recyclerView.addOnScrollListener(
+            PdfScrollListener(
+                binding.toolbar,
+                binding.pdfRendererView,
+                pdfTopMargin
+            )
+        )
     }
 
     private fun setupMetadataMenuItem(visible: Boolean) {
