@@ -97,8 +97,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV12
         db.execSQL(createTableResources());
-
-
     }
 
     @Override
