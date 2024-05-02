@@ -26,6 +26,8 @@ import java.util.List;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.uwazi.SelectValue;
+import rs.readahead.washington.mobile.domain.entity.uwazi.Value;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
@@ -47,7 +49,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     TextView numberOfFiles;
     Boolean isPdf;
     View infoFilePanel;
-    private final List<SelectValue> items;
+    private final List<UwaziRelationShipEntity> items;
 
     private final ArrayList<AppCompatCheckBox> checkBoxes;
     // counter of all checkboxes which can be in result set
@@ -57,21 +59,24 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
         checkBoxes = new ArrayList<>();
-        items = formEntryPrompt.getSelectValues();
+        items = formEntryPrompt.getEntities();
 
         this.context = context;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
+
         addImageWidgetViews(linearLayout);
         addAnswerView(linearLayout);
         setHelpTextView(getContext().getString(R.string.Uwazi_RelationShipWidget_Select_Entities));
         clearAnswer();
+        if(items != null) showPreviewFromDraft();
+
     }
 
 
     @Override
-    public Object getAnswer() {
+    public ArrayList<String> getAnswer() {
 //        List<String> vc = new ArrayList<>();
 //        List<UwaziValue> selection = new ArrayList<>();
 //
@@ -91,10 +96,6 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 //            }
             return relationShipFiles;
         //}
-    }
-
-    @Override
-    public void clearAnswer() {
     }
 
     @Override
@@ -150,11 +151,22 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
             CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null,file);
             filesPanel.addView(previewView);
         }
-        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_MiltiFileWidget_FilesAttached, formFiles.size(), formFiles.size()));
-        addFiles.setText(R.string.Uwazi_MiltiFileWidget_AddMoreFiles);
+        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
+        addFiles.setText("Add more entities");
         filesToggle.setOpen();
     }
-
+    private void showPreviewFromDraft() {
+         filesPanel.removeAllViews();
+        infoFilePanel.setVisibility(VISIBLE);
+        clearButton.setVisibility(VISIBLE);
+        for (UwaziRelationShipEntity entry : items) {
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null,entry.getLabel());
+            filesPanel.addView(previewView);
+        }
+        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
+        addFiles.setText("Add more entities");
+        filesToggle.setOpen();
+    }
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -178,8 +190,16 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     private void showSelectEntitiesScreen() {
         waitingForAData = true;
-        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt);
+        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt,getFilenames());
     }
 
+    @Override
+    public void clearAnswer() {
+        relationShipFiles.clear();
+        infoFilePanel.setVisibility(GONE);
+        clearButton.setVisibility(View.GONE);
+        filesPanel.removeAllViews();
+        addFiles.setText(R.string.select_entities);
+    }
 
 }

@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.domain.entity.uwazi
 
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
+
 data class Property( val _id: String,
                      val content: String,
                      val id: String,
@@ -11,4 +13,5 @@ data class Property( val _id: String,
                      val showInCard: Boolean,
                      val type: String,
                      var entities : List<Value> ? = null,
+                     var selectedEntities : List<UwaziRelationShipEntity> ? = null,
                      var values : List<SelectValue>? = null)

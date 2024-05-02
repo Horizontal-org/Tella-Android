@@ -3,6 +3,8 @@ package rs.readahead.washington.mobile.views.fragment.uwazi.entry;
 import java.util.List;
 
 import rs.readahead.washington.mobile.domain.entity.uwazi.SelectValue;
+import rs.readahead.washington.mobile.domain.entity.uwazi.Value;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 
 public class UwaziEntryPrompt {
     private String _id;
@@ -14,6 +16,7 @@ public class UwaziEntryPrompt {
     private final Boolean readonly = false;
     private final String helpText;
     private List<SelectValue> selectValues = null;
+    private List<UwaziRelationShipEntity> entities = null;
 
     public UwaziEntryPrompt(String formIndex, String type, String question, Boolean required, String helpText) {
         this.formIndex = formIndex;
@@ -23,6 +26,19 @@ public class UwaziEntryPrompt {
         this.helpText = helpText;
     }
 
+    public List<UwaziRelationShipEntity> getEntities() {
+        return entities;
+    }
+
+    public UwaziEntryPrompt(String _id, List<UwaziRelationShipEntity> entities, String formIndex, String type, String question, Boolean required, String helpText) {
+        this._id = _id;
+        this.formIndex = formIndex;
+        this.type = type;
+        this.question = question;
+        this.required = required;
+        this.helpText = helpText;
+        this.entities = entities;
+    }
     public UwaziEntryPrompt(String _id, String formIndex, String type, String question, Boolean required, String helpText) {
         this._id = _id;
         this.formIndex = formIndex;
@@ -31,7 +47,6 @@ public class UwaziEntryPrompt {
         this.required = required;
         this.helpText = helpText;
     }
-
     public UwaziEntryPrompt(String _id, String formIndex, String type, String question, Boolean required, String helpText, List<SelectValue> values) {
         this._id = _id;
         this.formIndex = formIndex;

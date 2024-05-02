@@ -13,6 +13,7 @@ data class UwaziEntityInstance(
     var metadata: Map<String, List<Any>> = mutableMapOf(),
     var status : EntityStatus = EntityStatus.UNKNOWN,
     var widgetMediaFiles: List<FormMediaFile> = emptyList(),
+    var relationShipEntitiesSelected: List<String> = emptyList(),
     var formPartStatus : FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
     var template: String = "",
     var title: String = "",

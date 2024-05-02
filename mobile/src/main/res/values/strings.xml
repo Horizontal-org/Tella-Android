@@ -501,6 +501,10 @@ button to add a new template.</string>
     <item quantity="one">%1$d file attached</item>
     <item quantity="other">%1$d files attached</item>
   </plurals>
+  <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
+  </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Primary documents</string>

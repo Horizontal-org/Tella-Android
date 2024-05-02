@@ -367,10 +367,15 @@ class MainActivity : MetadataActivity(),
         navController.navigate(R.id.home)
     }
 
-    override fun onSelectEntitiesClicked(formEntryPrompt: UwaziEntryPrompt) {
+    override fun onSelectEntitiesClicked(
+        formEntryPrompt: UwaziEntryPrompt,
+        entitiesNames: MutableList<String>
+    ) {
         val fragment =
             supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)
-        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment(formEntryPrompt)
+        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment(formEntryPrompt,
+            entitiesNames
+        )
     }
 
 

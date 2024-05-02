@@ -431,8 +431,6 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 UwaziRow entity = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TEMPLATE_ENTITY)), new TypeToken<UwaziRow>() {
                 }.getType());
-                ArrayList<Value> relationShipEntities = gson.fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_RELATIONSHIP_ENTITY)), new TypeToken<ArrayList<Value>>() {
-                }.getType());
                 // todo: implement cursorToCollectForm
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(D.A_COLLECT_BLANK_FORM_ID));
                 long serverId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UWAZI_SERVER_ID));

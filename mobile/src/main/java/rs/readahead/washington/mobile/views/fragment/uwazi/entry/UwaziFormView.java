@@ -20,10 +20,13 @@ import java.util.List;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
+import rs.readahead.washington.mobile.domain.entity.uwazi.Value;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziMultiFileWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziRelationShipWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
 
 
@@ -107,7 +110,7 @@ public class UwaziFormView extends LinearLayout {
     }
 
     public void setFocus(Context context) {
-        if (widgets.size() > 0) {
+        if (!widgets.isEmpty()) {
             widgets.get(0).setFocus(context);
         }
     }
@@ -159,6 +162,17 @@ public class UwaziFormView extends LinearLayout {
         }
         return files;
     }
+
+    public List<String> getEntities() {
+        List<String> entities = new ArrayList<>();
+        for (UwaziQuestionWidget widget : widgets) {
+            if (widget instanceof UwaziRelationShipWidget) {
+                entities.addAll(((UwaziRelationShipWidget) widget).getAnswer());
+            }
+        }
+        return entities;
+    }
+
 
     public List<String> getFilesNames() {
         List<FormMediaFile> files =  getFiles();

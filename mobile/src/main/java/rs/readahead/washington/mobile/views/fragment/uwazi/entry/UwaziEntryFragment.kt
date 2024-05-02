@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
+import org.javarosa.form.api.FormEntryPrompt
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
@@ -42,6 +44,7 @@ const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
 const val UWAZI_TEMPLATE = "uwazi_template"
 const val UWAZI_ENTRY_PROMPT_ID = "uwazi_entry_prompt_id"
+const val UWAZI_SELECTED_ENTITIES = "uwazi_selected_entities"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
@@ -65,7 +68,7 @@ class UwaziEntryFragment :
         parentFragmentManager
             .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner ) { requestKey, bundle ->
                 val resultReceived = bundle.getString("resultListJson")?: ""
-                putVaultFileInForm(resultReceived)
+                putRelationShipEntitiesInForm(resultReceived)
             }
     }
 
@@ -172,6 +175,9 @@ class UwaziEntryFragment :
         vaultFile.let { uwaziFormView.setBinaryData(it) }
     }
 
+    private fun putRelationShipEntitiesInForm(entitiesList: String) {
+        entitiesList.let { uwaziFormView.setBinaryData(it) }
+    }
     private fun putLocationInForm(location: UwaziGeoData) {
         uwaziFormView.setBinaryData(location)
     }
@@ -263,9 +269,12 @@ class UwaziEntryFragment :
     }
 
 
-    override fun onSelectEntitiesClickedInEntryFragment(formEntryPrompt: UwaziEntryPrompt) {
+    override fun onSelectEntitiesClickedInEntryFragment(
+        formEntryPrompt: UwaziEntryPrompt,
+        entitiesNames: MutableList<String>) {
         bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
-        bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index)
+        bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
+        bundle.putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
         nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen,bundle)
     }
 

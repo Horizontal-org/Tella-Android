@@ -9,9 +9,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
+import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
+import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem
 
@@ -45,13 +50,29 @@ class UwaziSelectEntitiesFragment :
 
         if (arguments?.getString(UWAZI_ENTRY_PROMPT_ID) != null) {
             val id = arguments?.getString(UWAZI_ENTRY_PROMPT_ID)
-        val property = uwaziParser.getTemplate()?.entityRow?.properties?.find { property ->  property._id == id}
+            val property =
+                uwaziParser.getTemplate()?.entityRow?.properties?.find { property -> property._id == id }
             var i = 0
             property?.entities?.forEach { value ->
-                    items.add(SearchableItem(value.label,i.toString()))
-                    i++
-                }
+                items.add(SearchableItem(value.label, i.toString()))
+                i++
             }
+        }
+
+        if (arguments?.getString(UWAZI_SELECTED_ENTITIES) != "[]") {
+            val relationShipEntities = arguments?.getString(UWAZI_SELECTED_ENTITIES)
+            val type = object : TypeToken<List<String>>() {}.type
+            val listEntities: List<String> = Gson().fromJson(relationShipEntities, type)
+            if (listEntities.isNotEmpty()) {
+                listEntities.forEach { entity ->
+                    items.forEach { item ->
+                        if (entity == item.text)
+                            item.isSelected = true
+                    }
+                }
+
+            }
+        }
     }
 
     private fun initViews() {
@@ -92,8 +113,8 @@ class UwaziSelectEntitiesFragment :
                 bundle.putString("resultListJson", jsonResultList)
                 setFragmentResult(
                     "RELATIONSHIP",
-                       bundle
-                    )
+                    bundle
+                )
                 nav().popBackStack()
             }
             backClickListener = { nav().popBackStack() }

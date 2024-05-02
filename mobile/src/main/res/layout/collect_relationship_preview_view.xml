@@ -10,15 +10,15 @@
 
             <ImageView
                 android:id="@+id/thumbView"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="centerInside"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/relation_ship_icon"
+                android:src="@drawable/relation_entity_icon"
                 android:contentDescription="@string/action_show_photo" />
 
             <TextView
