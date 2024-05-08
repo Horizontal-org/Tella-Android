@@ -60,7 +60,6 @@ class PDFReaderActivity : BaseLockActivity() {
         }
 
         actionsDisabled = intent.hasExtra(HIDE_MENU)
-
         pdfTopMargin = resources.getDimensionPixelSize(R.dimen.pdf_top_margin)
     }
 
