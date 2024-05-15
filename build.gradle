@@ -40,7 +40,7 @@ buildscript {
     versions.navigationFragment = '2.5.1'
     versions.databindingRuntime = '7.4.2'
     versions.firebaseBom = '26.1.0'
-    versions.okhttp3LoggingInterceptor = '3.6.0'
+    versions.okhttp3LoggingInterceptor = '4.12.0'
     versions.squareupTape = '1.2.3'
     versions.cacheword = '0.1.1'
     versions.glide = '4.15.0'

@@ -50,7 +50,7 @@ public final class QuotePreservingCookieJar implements CookieJar {
             try {
                 cookieHandler.put(url.uri(), multimap);
             } catch (IOException e) {
-                Platform.get().log(WARN, "Saving cookies failed for " + url.resolve("/..."), e);
+                Platform.get().log("Saving cookies failed for " + url.resolve("/..."), WARN, e);
             }
         }
     }
@@ -62,7 +62,7 @@ public final class QuotePreservingCookieJar implements CookieJar {
         try {
             cookieHeaders = cookieHandler.get(url.uri(), headers);
         } catch (IOException e) {
-            Platform.get().log(WARN, "Loading cookies failed for " + url.resolve("/..."), e);
+            Platform.get().log("Loading cookies failed for " + url.resolve("/..."), WARN, e);
             return Collections.emptyList();
         }
 
@@ -90,22 +90,27 @@ public final class QuotePreservingCookieJar implements CookieJar {
     private List<Cookie> decodeHeaderAsJavaNetCookies(HttpUrl url, String header) {
         List<Cookie> result = new ArrayList<>();
         for (int pos = 0, limit = header.length(), pairEnd; pos < limit; pos = pairEnd + 1) {
-            pairEnd = delimiterOffset(header, pos, limit, ";,");
-            int equalsSign = delimiterOffset(header, pos, pairEnd, '=');
-            String name = trimSubstring(header, pos, equalsSign);
-            if (name.startsWith("$")) continue;
+            pairEnd = header.indexOf(';', pos);
+            if (pairEnd == -1) {
+                pairEnd = limit;
+            }
+            int equalsSign = header.indexOf('=', pos);
+            if (equalsSign == -1 || equalsSign > pairEnd) {
+                continue; // Invalid cookie pair, skip it
+            }
+            String name = header.substring(pos, equalsSign).trim();
+            String value = header.substring(equalsSign + 1, pairEnd).trim();
 
-            // We have either name=value or just a name.
-            String value = equalsSign < pairEnd
-                    ? trimSubstring(header, equalsSign + 1, pairEnd)
-                    : "";
-
-            result.add(new Cookie.Builder()
-                    .name(name)
-                    .value(value)
-                    .domain(url.host())
-                    .build());
+            // Ignore cookies with special names starting with '$'
+            if (!name.startsWith("$")) {
+                result.add(new Cookie.Builder()
+                        .name(name)
+                        .value(value)
+                        .domain(url.host())
+                        .build());
+            }
         }
         return result;
     }
+
 }

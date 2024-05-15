@@ -5,6 +5,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.apache.commons.io.IOUtils
@@ -167,7 +168,7 @@ class OpenRosaRepository : IOpenRosaRepository {
 
         parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, "${C.OPEN_ROSA_XML_PART_NAME}.xml")] =
             RequestBody.create(
-                MediaType.parse("text/xml"),
+                "text/xml".toMediaTypeOrNull(),
                 IOUtils.toByteArray(payload.payloadStream)
             )
 
@@ -249,7 +250,7 @@ class OpenRosaRepository : IOpenRosaRepository {
 
         parts[getPartKey(C.OPEN_ROSA_XML_PART_NAME, "${C.OPEN_ROSA_XML_PART_NAME}.xml")] =
             RequestBody.create(
-                MediaType.parse("text/xml"),
+                "text/xml".toMediaTypeOrNull(),
                 IOUtils.toByteArray(payload.payloadStream)
             )
 
