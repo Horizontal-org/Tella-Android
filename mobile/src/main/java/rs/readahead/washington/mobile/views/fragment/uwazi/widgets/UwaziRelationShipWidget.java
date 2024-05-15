@@ -156,16 +156,19 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         filesToggle.setOpen();
     }
     private void showPreviewFromDraft() {
-         filesPanel.removeAllViews();
+        filesPanel.removeAllViews();
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
+        relationShipFiles.clear();
         for (UwaziRelationShipEntity entry : items) {
+            relationShipFiles.add(entry.getLabel());
             CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null,entry.getLabel());
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
         addFiles.setText("Add more entities");
         filesToggle.setOpen();
+
     }
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
