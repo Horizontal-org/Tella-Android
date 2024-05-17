@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -271,7 +272,7 @@ class UwaziEntryFragment :
 
     override fun onSelectEntitiesClickedInEntryFragment(
         formEntryPrompt: UwaziEntryPrompt,
-        entitiesNames: MutableList<String>) {
+        entitiesNames: MutableList<UwaziRelationShipEntity>) {
         bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
         bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
         bundle.putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))

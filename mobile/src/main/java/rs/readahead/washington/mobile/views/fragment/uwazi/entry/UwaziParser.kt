@@ -212,7 +212,7 @@ class UwaziParser(private val context: Context?) {
             ?.forEach { property ->
                 val selectedEntities: ArrayList<Any> = ArrayList()
                 uwaziFormView.entities.forEach { selectedEntity ->
-                    property.entities?.filter { it.label == selectedEntity }?.forEach {
+                    property.entities?.filter { it.id == selectedEntity.value }?.forEach {
                         selectedEntities.add(UwaziRelationShipEntity(it.id, it.label))
                     }
                 }
@@ -221,7 +221,7 @@ class UwaziParser(private val context: Context?) {
                     hashmap[answer.key] = selectedEntities as List<UwaziRelationShipEntity>
                 }
             }
-        val entities = ArrayList<String>()
+        val entities = ArrayList<UwaziRelationShipEntity>()
         for (answer in uwaziFormView.entities) {
             if (answer != null) {
                 entities.add(answer)

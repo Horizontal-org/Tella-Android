@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.databinding.CollectAttachemntPreviewViewBi
 import rs.readahead.washington.mobile.databinding.CollectRelationshipPreviewViewBinding;
 import rs.readahead.washington.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectAttachmentMediaFilePresenter;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity;
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity;
@@ -30,13 +31,13 @@ import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 public class CollectRelationShipPreviewView extends LinearLayout{
     private final CollectRelationshipPreviewViewBinding binding;
 
-    private String relationShip;
+    private UwaziRelationShipEntity relationShip;
 
     public CollectRelationShipPreviewView(Context context) {
         this(context, null,null);
     }
 
-    public CollectRelationShipPreviewView(Context context, AttributeSet attrs, String relationShip) {
+    public CollectRelationShipPreviewView(Context context, AttributeSet attrs, UwaziRelationShipEntity relationShip) {
         this(context, attrs, 0);
         this.relationShip = relationShip;
         showMediaFileInfo();
@@ -51,7 +52,7 @@ public class CollectRelationShipPreviewView extends LinearLayout{
 
 
     private void showMediaFileInfo() {
-        binding.fileName.setText(relationShip);
+        binding.fileName.setText(relationShip.getLabel());
         binding.thumbView.setImageResource(R.drawable.relation_ship_icon);
     }
 }

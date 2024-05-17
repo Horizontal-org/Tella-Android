@@ -41,7 +41,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_mu
 @SuppressLint("ViewConstructor")
 public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
-    private ArrayList<String> relationShipFiles = new ArrayList<>();
+    private ArrayList<UwaziRelationShipEntity> relationShipFiles = new ArrayList<>();
 
     Context context;
     Button addFiles;
@@ -78,7 +78,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
 
     @Override
-    public ArrayList<String> getAnswer() {
+    public ArrayList<UwaziRelationShipEntity> getAnswer() {
 //        List<String> vc = new ArrayList<>();
 //        List<UwaziValue> selection = new ArrayList<>();
 //
@@ -107,26 +107,27 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<UwaziRelationShipEntity> result = new ArrayList<>();
 
         if (data instanceof String) {
-            ArrayList<String> resultList = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+            ArrayList<UwaziRelationShipEntity> resultList = new Gson().fromJson((String) data, new TypeToken<List<UwaziRelationShipEntity>>() {
             }.getType());
             result.addAll(resultList);
         } else {
             for (Object o : (ArrayList) data) {
-                if (o instanceof UwaziValue) {
-                    result.add((String) ((UwaziValue) o).getValue());
+                if (o instanceof UwaziRelationShipEntity) {
+                    result.add((UwaziRelationShipEntity) o);
                 } else {
-                    String value = Objects.requireNonNull(((LinkedTreeMap) o).get("label")).toString();
-                    result.add(value);
+                    String label = Objects.requireNonNull(((LinkedTreeMap) o).get("label")).toString();
+                    String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
+                    result.add(new UwaziRelationShipEntity(value,label,"entity"));
                 }
             }
         }
         if (!result.isEmpty()) {
             relationShipFiles = result;
             if (!relationShipFiles.isEmpty()) {
-                for (String relation : relationShipFiles) {
+                for (UwaziRelationShipEntity relation : relationShipFiles) {
                     if (!relationShipFiles.contains(relation)) {
                         relationShipFiles.add(relation);
                     }
@@ -139,7 +140,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     }
 
 
-    protected List<String> getFilenames() {
+    protected List<UwaziRelationShipEntity> getFilenames() {
         if (relationShipFiles != null) {
             return new ArrayList<>(relationShipFiles);
         } else {
@@ -151,8 +152,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         filesPanel.removeAllViews();
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
-        for (String file : relationShipFiles) {
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, file);
+        for (UwaziRelationShipEntity UwaziRelationShipEntity : relationShipFiles) {
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, UwaziRelationShipEntity);
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
@@ -166,8 +167,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         clearButton.setVisibility(VISIBLE);
         relationShipFiles.clear();
         for (UwaziRelationShipEntity entry : items) {
-            relationShipFiles.add(entry.getLabel());
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry.getLabel());
+            relationShipFiles.add(entry);
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry);
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));

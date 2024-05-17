@@ -14,6 +14,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -54,7 +55,7 @@ class UwaziSelectEntitiesFragment :
                 uwaziParser.getTemplate()?.entityRow?.properties?.find { property -> property._id == id }
             var i = 0
             property?.entities?.forEach { value ->
-                items.add(SearchableItem(value.label, i.toString()))
+                items.add(SearchableItem(value.label,value.id ,i.toString()))
                 i++
             }
         }
@@ -109,7 +110,9 @@ class UwaziSelectEntitiesFragment :
                 (items.filter { it.isSelected }
                     .toMutableList() as ArrayList<SearchableItem>).also { resultList = it }
                 val bundle = Bundle()
-                val jsonResultList = Gson().toJson(resultList.map { it.text })
+                var result: MutableList<UwaziRelationShipEntity> = ArrayList()
+                resultList.forEach { entity -> result.add(UwaziRelationShipEntity(entity.value,entity.text)) }
+                val jsonResultList = Gson().toJson(result)
                 bundle.putString("resultListJson", jsonResultList)
                 setFragmentResult(
                     "RELATIONSHIP",

@@ -35,6 +35,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
@@ -369,7 +370,7 @@ class MainActivity : MetadataActivity(),
 
     override fun onSelectEntitiesClicked(
         formEntryPrompt: UwaziEntryPrompt,
-        entitiesNames: MutableList<String>
+        entitiesNames: MutableList<UwaziRelationShipEntity>
     ) {
         val fragment =
             supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)

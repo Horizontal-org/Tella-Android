@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance;
 import rs.readahead.washington.mobile.domain.entity.uwazi.Value;
 import rs.readahead.washington.mobile.odk.FormController;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziMultiFileWidget;
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
@@ -163,8 +164,8 @@ public class UwaziFormView extends LinearLayout {
         return files;
     }
 
-    public List<String> getEntities() {
-        List<String> entities = new ArrayList<>();
+    public List<UwaziRelationShipEntity> getEntities() {
+        List<UwaziRelationShipEntity> entities = new ArrayList<>();
         for (UwaziQuestionWidget widget : widgets) {
             if (widget instanceof UwaziRelationShipWidget) {
                 entities.addAll(((UwaziRelationShipWidget) widget).getAnswer());
