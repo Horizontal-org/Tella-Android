@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -272,7 +273,7 @@ class UwaziEntryFragment :
 
     override fun onSelectEntitiesClickedInEntryFragment(
         formEntryPrompt: UwaziEntryPrompt,
-        entitiesNames: MutableList<NestedSelectValue>
+        entitiesNames: MutableList<UwaziRelationShipEntity>
     ) {
         bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
         bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())

@@ -8,18 +8,19 @@ import android.widget.LinearLayout;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.databinding.CollectRelationshipPreviewViewBinding;
 import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue;
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 
 
 public class CollectRelationShipPreviewView extends LinearLayout {
     private final CollectRelationshipPreviewViewBinding binding;
 
-    private NestedSelectValue relationShip;
+    private UwaziRelationShipEntity relationShip;
 
     public CollectRelationShipPreviewView(Context context) {
         this(context, null, null);
     }
 
-    public CollectRelationShipPreviewView(Context context, AttributeSet attrs, NestedSelectValue relationShip) {
+    public CollectRelationShipPreviewView(Context context, AttributeSet attrs, UwaziRelationShipEntity relationShip) {
         this(context, attrs, 0);
         this.relationShip = relationShip;
         showMediaFileInfo();

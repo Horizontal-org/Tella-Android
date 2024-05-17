@@ -870,4 +870,5 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_Exit">EXIT</string>
   <string name="Error_DownloadFailed">Error: Download failed</string>
     <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
+    <string name="add_more_entities">Add more entities</string>
 </resources>

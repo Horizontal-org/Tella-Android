@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem
@@ -20,7 +21,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_mu
 class UwaziSelectEntitiesFragment :
     BaseBindingDialogFragment<UwaziSelectEntitiesFragmentBinding>(UwaziSelectEntitiesFragmentBinding::inflate) {
     private var items: MutableList<SearchableItem> = ArrayList()
-    private var resultList: MutableList<NestedSelectValue> = ArrayList()
+    private var resultList: MutableList<UwaziRelationShipEntity> = ArrayList()
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +58,12 @@ class UwaziSelectEntitiesFragment :
 
         if (arguments?.getString(UWAZI_SELECTED_ENTITIES) != "[]") {
             val relationShipEntities = arguments?.getString(UWAZI_SELECTED_ENTITIES)
-            val type = object : TypeToken<List<NestedSelectValue>>() {}.type
-            val listEntities: List<NestedSelectValue> = Gson().fromJson(relationShipEntities, type)
+            val type = object : TypeToken<List<UwaziRelationShipEntity>>() {}.type
+            val listEntities: List<UwaziRelationShipEntity> = Gson().fromJson(relationShipEntities, type)
             if (listEntities.isNotEmpty()) {
                 listEntities.forEach { entity ->
                     items.forEach { item ->
-                        if (entity.id == item.value)
+                        if (entity.value == item.value)
                             item.isSelected = true
                     }
                 }
@@ -105,15 +106,15 @@ class UwaziSelectEntitiesFragment :
                 (items.filter { it.isSelected }
                     .toMutableList() as ArrayList<SearchableItem>).forEach {
                     resultList.add(
-                        NestedSelectValue(it.value, it.text)
+                        UwaziRelationShipEntity(it.value, it.text)
                     )
                 }
                 val bundle = Bundle()
-                var result: MutableList<NestedSelectValue> = ArrayList()
+                var result: MutableList<UwaziRelationShipEntity> = ArrayList()
                 resultList.forEach { entity ->
                     result.add(
-                        NestedSelectValue(
-                            entity.id,
+                        UwaziRelationShipEntity(
+                            entity.value,
                             entity.label
                         )
                     )
