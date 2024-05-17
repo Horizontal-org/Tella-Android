@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import org.hzontal.shared_ui.buttons.PanelToggleButton;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
@@ -70,7 +72,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         addAnswerView(linearLayout);
         setHelpTextView(getContext().getString(R.string.Uwazi_RelationShipWidget_Select_Entities));
         clearAnswer();
-        if(items != null) showPreviewFromDraft();
+        if (items != null) showPreviewFromDraft();
 
     }
 
@@ -94,7 +96,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 //                UwaziValue uValue = new UwaziValue(answer);
 //                selection.add(uValue);
 //            }
-            return relationShipFiles;
+        return relationShipFiles;
         //}
     }
 
@@ -105,21 +107,24 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        List<SearchableItem> files;
-        List<String> result;
-        if (data instanceof ArrayList) {
-            result = ((List<String>) data);
+        ArrayList<String> result = new ArrayList<>();
 
-        } else {
-            result = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
+        if (data instanceof String) {
+            ArrayList<String> resultList = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
             }.getType());
+            result.addAll(resultList);
+        } else {
+            for (Object o : (ArrayList) data) {
+                if (o instanceof UwaziValue) {
+                    result.add((String) ((UwaziValue) o).getValue());
+                } else {
+                    String value = Objects.requireNonNull(((LinkedTreeMap) o).get("label")).toString();
+                    result.add(value);
+                }
+            }
         }
-        if (result != null && !result.isEmpty()) {
-
-            String[] ids = Arrays.copyOf(
-                    result.toArray(), result.size(),
-                    String[].class);
-            relationShipFiles = (ArrayList<String>) result;
+        if (!result.isEmpty()) {
+            relationShipFiles = result;
             if (!relationShipFiles.isEmpty()) {
                 for (String relation : relationShipFiles) {
                     if (!relationShipFiles.contains(relation)) {
@@ -130,7 +135,6 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
                 return getFilenames().toString();
             }
         }
-
         return null;
     }
 
@@ -148,13 +152,14 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
         for (String file : relationShipFiles) {
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null,file);
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, file);
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
         addFiles.setText("Add more entities");
         filesToggle.setOpen();
     }
+
     private void showPreviewFromDraft() {
         filesPanel.removeAllViews();
         infoFilePanel.setVisibility(VISIBLE);
@@ -162,7 +167,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         relationShipFiles.clear();
         for (UwaziRelationShipEntity entry : items) {
             relationShipFiles.add(entry.getLabel());
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null,entry.getLabel());
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry.getLabel());
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
@@ -170,6 +175,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         filesToggle.setOpen();
 
     }
+
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -193,7 +199,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     private void showSelectEntitiesScreen() {
         waitingForAData = true;
-        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt,getFilenames());
+        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt, getFilenames());
     }
 
     @Override
