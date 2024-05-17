@@ -10,8 +10,8 @@ import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
 
@@ -210,18 +210,20 @@ class UwaziParser(private val context: Context?) {
         }
         template?.entityRow?.properties?.filter { property -> property.type == UWAZI_DATATYPE_RELATIONSHIP }
             ?.forEach { property ->
+                val selectedEntitiesValues: ArrayList<Any> = ArrayList()
                 val selectedEntities: ArrayList<Any> = ArrayList()
                 uwaziFormView.entities.forEach { selectedEntity ->
-                    property.entities?.filter { it.id == selectedEntity.value }?.forEach {
-                        selectedEntities.add(UwaziRelationShipEntity(it.id, it.label))
+                    property.entities?.filter { it.id == selectedEntity.id }?.forEach {
+                        selectedEntitiesValues.add(UwaziValue(it.id))
+                        selectedEntities.add(NestedSelectValue(it.id,it.label))
                     }
                 }
-                property.selectedEntities = selectedEntities as List<UwaziRelationShipEntity>
+                property.selectedEntities = selectedEntities as List<NestedSelectValue>
                 answers.filter { answer -> answer.key == property.name }.forEach { answer ->
-                    hashmap[answer.key] = selectedEntities as List<UwaziRelationShipEntity>
+                    hashmap[answer.key] = selectedEntitiesValues as List<UwaziValue>
                 }
             }
-        val entities = ArrayList<UwaziRelationShipEntity>()
+        val entities = ArrayList<NestedSelectValue>()
         for (answer in uwaziFormView.entities) {
             if (answer != null) {
                 entities.add(answer)
@@ -231,7 +233,6 @@ class UwaziParser(private val context: Context?) {
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.collectTemplate = template
         entityInstance.template = template?.entityRow?.name.toString()
-        entityInstance.relationShipEntitiesSelected = entities
         return true
     }
 

@@ -30,12 +30,12 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
+import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
@@ -370,7 +370,7 @@ class MainActivity : MetadataActivity(),
 
     override fun onSelectEntitiesClicked(
         formEntryPrompt: UwaziEntryPrompt,
-        entitiesNames: MutableList<UwaziRelationShipEntity>
+        entitiesNames: MutableList<NestedSelectValue>
     ) {
         val fragment =
             supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)

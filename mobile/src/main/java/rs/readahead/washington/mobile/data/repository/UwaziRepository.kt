@@ -146,8 +146,6 @@ class UwaziRepository : IUwaziUserRepository {
 
     override fun getRelationShipEntities(server: UWaziUploadServer): Single<List<RelationShipRow>> {
         val cookies = server.connectCookie + ";locale=" + server.localeCookie
-       // listCookies.add("connect.sid=s%3A39yjYHSGZ_lb0atKuhGG0i5FRT46Sd1A.PIKX0XbbTfzBATaK%2FXkrTagNjXUK7r8B4jGkJPo5NKY;locale=en")
-        //listCookies.add(server.localeCookie)
         return uwaziApi.getRelationShipEntities(
             url = StringUtils.append(
                 '/',

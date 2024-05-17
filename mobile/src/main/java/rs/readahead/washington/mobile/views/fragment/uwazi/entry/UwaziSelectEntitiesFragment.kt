@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.entry
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -12,12 +11,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
+import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
-import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
-import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem
 
@@ -25,7 +20,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_mu
 class UwaziSelectEntitiesFragment :
     BaseBindingDialogFragment<UwaziSelectEntitiesFragmentBinding>(UwaziSelectEntitiesFragmentBinding::inflate) {
     private var items: MutableList<SearchableItem> = ArrayList()
-    private lateinit var resultList: ArrayList<SearchableItem>
+    private var resultList: MutableList<NestedSelectValue> = ArrayList()
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,19 +50,19 @@ class UwaziSelectEntitiesFragment :
                 uwaziParser.getTemplate()?.entityRow?.properties?.find { property -> property._id == id }
             var i = 0
             property?.entities?.forEach { value ->
-                items.add(SearchableItem(value.label,value.id ,i.toString()))
+                items.add(SearchableItem(value.label, value.id, i.toString()))
                 i++
             }
         }
 
         if (arguments?.getString(UWAZI_SELECTED_ENTITIES) != "[]") {
             val relationShipEntities = arguments?.getString(UWAZI_SELECTED_ENTITIES)
-            val type = object : TypeToken<List<String>>() {}.type
-            val listEntities: List<String> = Gson().fromJson(relationShipEntities, type)
+            val type = object : TypeToken<List<NestedSelectValue>>() {}.type
+            val listEntities: List<NestedSelectValue> = Gson().fromJson(relationShipEntities, type)
             if (listEntities.isNotEmpty()) {
                 listEntities.forEach { entity ->
                     items.forEach { item ->
-                        if (entity == item.text)
+                        if (entity.id == item.value)
                             item.isSelected = true
                     }
                 }
@@ -108,10 +103,21 @@ class UwaziSelectEntitiesFragment :
             setRightIconVisibility(false)
             onRightClickListener = {
                 (items.filter { it.isSelected }
-                    .toMutableList() as ArrayList<SearchableItem>).also { resultList = it }
+                    .toMutableList() as ArrayList<SearchableItem>).forEach {
+                    resultList.add(
+                        NestedSelectValue(it.value, it.text)
+                    )
+                }
                 val bundle = Bundle()
-                var result: MutableList<UwaziRelationShipEntity> = ArrayList()
-                resultList.forEach { entity -> result.add(UwaziRelationShipEntity(entity.value,entity.text)) }
+                var result: MutableList<NestedSelectValue> = ArrayList()
+                resultList.forEach { entity ->
+                    result.add(
+                        NestedSelectValue(
+                            entity.id,
+                            entity.label
+                        )
+                    )
+                }
                 val jsonResultList = Gson().toJson(result)
                 bundle.putString("resultListJson", jsonResultList)
                 setFragmentResult(

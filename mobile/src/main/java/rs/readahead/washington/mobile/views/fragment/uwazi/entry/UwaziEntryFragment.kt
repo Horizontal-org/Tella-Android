@@ -15,15 +15,14 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import org.javarosa.form.api.FormEntryPrompt
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.views.activity.LocationMapActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -67,8 +66,8 @@ class UwaziEntryFragment :
             initView()
         }
         parentFragmentManager
-            .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner ) { requestKey, bundle ->
-                val resultReceived = bundle.getString("resultListJson")?: ""
+            .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner) { requestKey, bundle ->
+                val resultReceived = bundle.getString("resultListJson") ?: ""
                 putRelationShipEntitiesInForm(resultReceived)
             }
     }
@@ -179,6 +178,7 @@ class UwaziEntryFragment :
     private fun putRelationShipEntitiesInForm(entitiesList: String) {
         entitiesList.let { uwaziFormView.setBinaryData(it) }
     }
+
     private fun putLocationInForm(location: UwaziGeoData) {
         uwaziFormView.setBinaryData(location)
     }
@@ -272,11 +272,12 @@ class UwaziEntryFragment :
 
     override fun onSelectEntitiesClickedInEntryFragment(
         formEntryPrompt: UwaziEntryPrompt,
-        entitiesNames: MutableList<UwaziRelationShipEntity>) {
+        entitiesNames: MutableList<NestedSelectValue>
+    ) {
         bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
         bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
         bundle.putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
-        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen,bundle)
+        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen, bundle)
     }
 
 }

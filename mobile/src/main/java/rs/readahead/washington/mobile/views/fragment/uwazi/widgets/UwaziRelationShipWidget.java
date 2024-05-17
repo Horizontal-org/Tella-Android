@@ -20,28 +20,22 @@ import com.google.gson.reflect.TypeToken;
 import org.hzontal.shared_ui.buttons.PanelToggleButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
-import rs.readahead.washington.mobile.domain.entity.uwazi.SelectValue;
-import rs.readahead.washington.mobile.domain.entity.uwazi.Value;
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
-import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
+import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
-import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.custom.CollectRelationShipPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableItem;
 
 
 @SuppressLint("ViewConstructor")
 public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
-    private ArrayList<UwaziRelationShipEntity> relationShipFiles = new ArrayList<>();
+    private ArrayList<NestedSelectValue> relationShipFiles = new ArrayList<>();
 
     Context context;
     Button addFiles;
@@ -51,7 +45,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     TextView numberOfFiles;
     Boolean isPdf;
     View infoFilePanel;
-    private final List<UwaziRelationShipEntity> items;
+    private final List<NestedSelectValue> items;
 
     private final ArrayList<AppCompatCheckBox> checkBoxes;
     // counter of all checkboxes which can be in result set
@@ -78,7 +72,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
 
     @Override
-    public ArrayList<UwaziRelationShipEntity> getAnswer() {
+    public ArrayList<NestedSelectValue> getAnswer() {
 //        List<String> vc = new ArrayList<>();
 //        List<UwaziValue> selection = new ArrayList<>();
 //
@@ -107,27 +101,28 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public String setBinaryData(@NonNull Object data) {
-        ArrayList<UwaziRelationShipEntity> result = new ArrayList<>();
+        ArrayList<NestedSelectValue> result = new ArrayList<>();
 
         if (data instanceof String) {
-            ArrayList<UwaziRelationShipEntity> resultList = new Gson().fromJson((String) data, new TypeToken<List<UwaziRelationShipEntity>>() {
+            ArrayList<NestedSelectValue> resultList = new Gson().fromJson((String) data, new TypeToken<List<NestedSelectValue>>() {
             }.getType());
             result.addAll(resultList);
         } else {
             for (Object o : (ArrayList) data) {
-                if (o instanceof UwaziRelationShipEntity) {
-                    result.add((UwaziRelationShipEntity) o);
+                if (o instanceof NestedSelectValue) {
+                    result.add((NestedSelectValue) o);
                 } else {
                     String label = Objects.requireNonNull(((LinkedTreeMap) o).get("label")).toString();
                     String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
-                    result.add(new UwaziRelationShipEntity(value,label,"entity"));
+                    result.add(new NestedSelectValue(value, label, "entity"));
                 }
             }
         }
-        if (!result.isEmpty()) {
-            relationShipFiles = result;
+        if (result != null && !result.isEmpty()) {
+
+            relationShipFiles = (ArrayList<NestedSelectValue>) result;
             if (!relationShipFiles.isEmpty()) {
-                for (UwaziRelationShipEntity relation : relationShipFiles) {
+                for (NestedSelectValue relation : relationShipFiles) {
                     if (!relationShipFiles.contains(relation)) {
                         relationShipFiles.add(relation);
                     }
@@ -140,7 +135,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     }
 
 
-    protected List<UwaziRelationShipEntity> getFilenames() {
+    protected List<NestedSelectValue> getFilenames() {
         if (relationShipFiles != null) {
             return new ArrayList<>(relationShipFiles);
         } else {
@@ -152,8 +147,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         filesPanel.removeAllViews();
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
-        for (UwaziRelationShipEntity UwaziRelationShipEntity : relationShipFiles) {
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, UwaziRelationShipEntity);
+        for (NestedSelectValue relationShip : relationShipFiles) {
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, relationShip);
             filesPanel.addView(previewView);
         }
         numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
@@ -166,7 +161,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         infoFilePanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
         relationShipFiles.clear();
-        for (UwaziRelationShipEntity entry : items) {
+        for (NestedSelectValue entry : items) {
             relationShipFiles.add(entry);
             CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry);
             filesPanel.addView(previewView);
