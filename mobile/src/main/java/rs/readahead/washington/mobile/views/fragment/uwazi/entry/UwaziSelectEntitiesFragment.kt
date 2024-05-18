@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
@@ -120,9 +122,9 @@ class UwaziSelectEntitiesFragment :
                     )
                 }
                 val jsonResultList = Gson().toJson(result)
-                bundle.putString("resultListJson", jsonResultList)
+                bundle.putString(UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES, jsonResultList)
                 setFragmentResult(
-                    "RELATIONSHIP",
+                    UWAZI_RELATION_SHIP_REQUEST_KEY,
                     bundle
                 )
                 nav().popBackStack()

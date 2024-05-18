@@ -2,7 +2,9 @@ package rs.readahead.washington.mobile.data.uwazi;
 
 public class UwaziConstants {
 
-    /** Empty strig representation */
+    /**
+     * Empty strig representation
+     */
     public static final String EMPTY_STRING = "";
     public static final String UWAZI_DATATYPE_TEXT = "text";
     public static final String UWAZI_DATATYPE_NUMERIC = "numeric";
@@ -22,7 +24,8 @@ public class UwaziConstants {
     public static final String UWAZI_DATATYPE_MULTIPDFFILES = "multipdffiles";
     public static final String UWAZI_DATATYPE_RELATIONSHIP = "relationship";
     public static final String UWAZI_DATATYPE_GENERATEDID = "generatedid";
-
     public static final String UWAZI_DATATYPE_TEMPLATE = "template";
+    public static final String UWAZI_RELATION_SHIP_ENTITIES = "relationShipEntities";
+    public static final String UWAZI_RELATION_SHIP_REQUEST_KEY = "relationShipRequestKey";
 
 }

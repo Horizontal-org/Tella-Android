@@ -19,6 +19,8 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
@@ -63,8 +65,11 @@ class UwaziEntryFragment :
         initObservers()
         initView()
         parentFragmentManager
-            .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner) { requestKey, bundle ->
-                val resultReceived = bundle.getString("resultListJson") ?: ""
+            .setFragmentResultListener(
+                UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY,
+                viewLifecycleOwner
+            ) { requestKey, bundle ->
+                val resultReceived = bundle.getString(UWAZI_RELATION_SHIP_ENTITIES) ?: ""
                 putRelationShipEntitiesInForm(resultReceived)
             }
     }

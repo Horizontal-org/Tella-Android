@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.data.repository
 
-import android.annotation.SuppressLint
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +14,13 @@ import rs.readahead.washington.mobile.data.entity.uwazi.mapper.mapToDomainModel
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_TEMPLATE
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.uwazi.*
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
+import rs.readahead.washington.mobile.domain.entity.uwazi.RelationShipRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.RowDictionary
+import rs.readahead.washington.mobile.domain.entity.uwazi.Settings
+import rs.readahead.washington.mobile.domain.entity.uwazi.TranslationRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
 
@@ -44,12 +49,13 @@ class UwaziRepository : IUwaziUserRepository {
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
-        return Single.zip(getTemplates(server),
+        return Single.zip(
+            getTemplates(server),
             getRelationShipEntities(server),
             getDictionary(server),
             getTranslation(server),
             getFullSettings(server)
-        ) { templates, relationShipEntities,dictionary, translations, settings ->
+        ) { templates, relationShipEntities, dictionary, translations, settings ->
 
             templates.forEach {
                 it.properties.forEach { property ->
@@ -117,19 +123,21 @@ class UwaziRepository : IUwaziUserRepository {
             }
 
             val listTemplates = mutableListOf<CollectTemplate>()
-           resultTemplates.forEach { template ->
-             val relationShipEntity: List<RelationShipRow> = relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE}
-                   template.properties.forEach { property ->
-                       val listRelationShipEntities  = relationShipEntity.find {(property.content == it._id) }
-                       listRelationShipEntities.also { property.entities = it?.values }
-                   }
-               val collectTemplate = CollectTemplate(
-                   serverId = server.id,
-                   entityRow = template,
-                   serverName = server.name
-               )
-               listTemplates.add(collectTemplate)
-           }
+            resultTemplates.forEach { template ->
+                val relationShipEntity: List<RelationShipRow> =
+                    relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE }
+                template.properties.forEach { property ->
+                    val listRelationShipEntities =
+                        relationShipEntity.find { (property.content == it._id) }
+                    listRelationShipEntities.also { property.entities = it?.values }
+                }
+                val collectTemplate = CollectTemplate(
+                    serverId = server.id,
+                    entityRow = template,
+                    serverName = server.name
+                )
+                listTemplates.add(collectTemplate)
+            }
 
             val listTemplateResult = ListTemplateResult()
             listTemplateResult.templates = listTemplates
@@ -155,7 +163,8 @@ class UwaziRepository : IUwaziUserRepository {
         )
             .subscribeOn(Schedulers.io())
             .map { result ->
-                result.mapToDomainModel() }
+                result.mapToDomainModel()
+            }
 
     }
 

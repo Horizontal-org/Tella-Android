@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
@@ -72,9 +71,11 @@ class UwaziParser(private val context: Context?) {
         template = entityInstance.collectTemplate
         return prepareFormView()
     }
-    fun parseTemplateForRelationShipEntities(templateString: String){
+
+    fun parseTemplateForRelationShipEntities(templateString: String) {
         template = Gson().fromJson(templateString, CollectTemplate::class.java)
     }
+
     fun parseTemplate(templateString: String): UwaziFormView {
         template = Gson().fromJson(templateString, CollectTemplate::class.java)
         entityInstance.collectTemplate = template
@@ -214,7 +215,7 @@ class UwaziParser(private val context: Context?) {
                 val selectedEntities: ArrayList<Any> = ArrayList()
                 uwaziFormView.entities.forEach { selectedEntity ->
                     property.entities?.filter { it.id == selectedEntity.value }?.forEach {
-                        selectedEntities.add(UwaziRelationShipEntity(it.id,it.label))
+                        selectedEntities.add(UwaziRelationShipEntity(it.id, it.label))
                     }
                 }
                 property.selectedEntities = selectedEntities as List<UwaziRelationShipEntity>
