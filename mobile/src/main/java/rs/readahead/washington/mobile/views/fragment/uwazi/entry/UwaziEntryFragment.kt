@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -21,7 +21,6 @@ import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
@@ -62,10 +61,7 @@ class UwaziEntryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
-        if (!hasInitializedRootView) {
-            hasInitializedRootView = true
-            initView()
-        }
+        initView()
         parentFragmentManager
             .setFragmentResultListener("RELATIONSHIP", viewLifecycleOwner) { requestKey, bundle ->
                 val resultReceived = bundle.getString("resultListJson") ?: ""
@@ -155,8 +151,7 @@ class UwaziEntryFragment :
         } else {
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
             bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY, true)
-            NavHostFragment.findNavController(this@UwaziEntryFragment)
-                .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+            findNavController().navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }
     }
 
