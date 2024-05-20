@@ -183,7 +183,7 @@ class UwaziParser(private val context: Context?) {
                 } else {
                     when (answer.value) {
                         is List<*> -> {
-                            hashmap[answer.key] = (answer.value) as List<UwaziValue>
+                            hashmap[answer.key] = listOf((answer.value) as List<*>)
                         }
 
                         is UwaziValueAttachment -> {

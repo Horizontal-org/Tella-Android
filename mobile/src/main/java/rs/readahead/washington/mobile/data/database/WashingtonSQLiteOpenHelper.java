@@ -154,9 +154,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 12:
                 db.execSQL(createTableResources());
-            case 13:
-                db.execSQL(alterTableCollectEntityUwazi());
-                db.execSQL(alterTableCollectBlankTemplateUwazi());
+
         }
     }
 
@@ -397,14 +395,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "ALTER TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " ADD COLUMN " +
                 cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
-    private String alterTableCollectEntityUwazi() {
-        return "ALTER TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " ADD COLUMN " +
-            cddl(D.C_RELATIONSHIP_ENTITY, D.TEXT, true);
-    }
-    private String alterTableCollectBlankTemplateUwazi() {
-        return "ALTER TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " ADD COLUMN " +
-            cddl(D.C_RELATIONSHIP_ENTITY, D.TEXT, true);
-    }
+
     private String createTableTellaUploadServer() {
         return "CREATE TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
@@ -422,7 +413,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_DOWNLOAD_URL, D.TEXT) + " , " +
                 cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
-                cddl(D.C_RELATIONSHIP_ENTITY, D.TEXT, true) + " , " +
                 cddl(D.C_DOWNLOADED, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_FAVORITE, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
@@ -437,7 +427,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
                 cddl(D.C_TEMPLATE_ENTITY, D.TEXT, true) + " , " +
-                cddl(D.C_RELATIONSHIP_ENTITY, D.TEXT, true) + " , " +
                 cddl(D.C_METADATA, D.TEXT, true) + " , " +
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
