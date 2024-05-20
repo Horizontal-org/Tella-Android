@@ -35,19 +35,16 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 
 @SuppressLint("ViewConstructor")
 public class UwaziRelationShipWidget extends UwaziQuestionWidget {
-    private final HashMap<String, FormMediaFile> formFiles = new HashMap<>();
-    private ArrayList<UwaziRelationShipEntity> relationShipFiles = new ArrayList<>();
+    private ArrayList<UwaziRelationShipEntity> relationShipEntities = new ArrayList<>();
 
     Context context;
-    Button addFiles;
+    Button addEntities;
     ImageButton clearButton;
-    ViewGroup filesPanel;
-    PanelToggleButton filesToggle;
-    TextView numberOfFiles;
-    Boolean isPdf;
-    View infoFilePanel;
+    ViewGroup entitiesPanel;
+    PanelToggleButton entitiesToggle;
+    TextView numberOfEntities;
+    View infoEntitiesPanel;
     private final List<UwaziRelationShipEntity> items;
-    private final ArrayList<String> checkIds = new ArrayList<>();
 
     public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
@@ -69,7 +66,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
     @Override
     public ArrayList<UwaziRelationShipEntity> getAnswer() {
-        return relationShipFiles;
+        return relationShipEntities;
 
     }
 
@@ -98,55 +95,55 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
             }
         }
         if (result != null && !result.isEmpty()) {
-            relationShipFiles = (ArrayList<UwaziRelationShipEntity>) result;
-            if (!relationShipFiles.isEmpty()) {
-                for (UwaziRelationShipEntity relation : relationShipFiles) {
-                    if (!relationShipFiles.contains(relation)) {
-                        relationShipFiles.add(relation);
+            relationShipEntities = (ArrayList<UwaziRelationShipEntity>) result;
+            if (!relationShipEntities.isEmpty()) {
+                for (UwaziRelationShipEntity relation : relationShipEntities) {
+                    if (!relationShipEntities.contains(relation)) {
+                        relationShipEntities.add(relation);
                     }
                 }
                 showPreview();
-                return getFilenames().toString();
+                return getEntitiesNames().toString();
             }
         }
         return null;
     }
 
 
-    protected List<UwaziRelationShipEntity> getFilenames() {
-        if (relationShipFiles != null) {
-            return new ArrayList<>(relationShipFiles);
+    protected List<UwaziRelationShipEntity> getEntitiesNames() {
+        if (relationShipEntities != null) {
+            return new ArrayList<>(relationShipEntities);
         } else {
             return null;
         }
     }
 
     private void showPreview() {
-        filesPanel.removeAllViews();
-        infoFilePanel.setVisibility(VISIBLE);
+        entitiesPanel.removeAllViews();
+        infoEntitiesPanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
-        for (UwaziRelationShipEntity relationShip : relationShipFiles) {
+        for (UwaziRelationShipEntity relationShip : relationShipEntities) {
             CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, relationShip);
-            filesPanel.addView(previewView);
+            entitiesPanel.addView(previewView);
         }
-        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
-        addFiles.setText(R.string.add_more_entities);
-        filesToggle.setOpen();
+        numberOfEntities.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipEntities.size(), relationShipEntities.size()));
+        addEntities.setText(R.string.add_more_entities);
+        entitiesToggle.setOpen();
     }
 
     private void showPreviewFromDraft() {
-        filesPanel.removeAllViews();
-        infoFilePanel.setVisibility(VISIBLE);
+        entitiesPanel.removeAllViews();
+        infoEntitiesPanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
-        relationShipFiles.clear();
+        relationShipEntities.clear();
         for (UwaziRelationShipEntity entry : items) {
-            relationShipFiles.add(entry);
+            relationShipEntities.add(entry);
             CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry);
-            filesPanel.addView(previewView);
+            entitiesPanel.addView(previewView);
         }
-        numberOfFiles.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipFiles.size(), relationShipFiles.size()));
-        addFiles.setText("Add more entities");
-        filesToggle.setOpen();
+        numberOfEntities.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipEntities.size(), relationShipEntities.size()));
+        addEntities.setText(R.string.select_entities);
+        entitiesToggle.setOpen();
 
     }
 
@@ -161,28 +158,28 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
-        infoFilePanel = view.findViewById(R.id.infoFilePanel);
-        filesPanel = view.findViewById(R.id.files);
-        filesToggle = view.findViewById(R.id.toggle_button);
-        filesToggle.setVisibility(GONE);
-        numberOfFiles = view.findViewById(R.id.numOfFiles);
-        addFiles = view.findViewById(R.id.addText);
-        addFiles.setText(R.string.select_entities);
-        addFiles.setOnClickListener(v -> showSelectEntitiesScreen());
+        infoEntitiesPanel= view.findViewById(R.id.infoFilePanel);
+        entitiesPanel = view.findViewById(R.id.files);
+        entitiesToggle = view.findViewById(R.id.toggle_button);
+        entitiesToggle.setVisibility(GONE);
+        numberOfEntities = view.findViewById(R.id.numOfFiles);
+        addEntities = view.findViewById(R.id.addText);
+        addEntities.setText(R.string.select_entities);
+        addEntities.setOnClickListener(v -> showSelectEntitiesScreen());
     }
 
     private void showSelectEntitiesScreen() {
         waitingForAData = true;
-        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt, getFilenames());
+        ((OnSelectEntitiesClickListener) getContext()).onSelectEntitiesClicked(formEntryPrompt, getEntitiesNames());
     }
 
     @Override
     public void clearAnswer() {
-        relationShipFiles.clear();
-        infoFilePanel.setVisibility(GONE);
+        relationShipEntities.clear();
+        infoEntitiesPanel.setVisibility(GONE);
         clearButton.setVisibility(View.GONE);
-        filesPanel.removeAllViews();
-        addFiles.setText(R.string.select_entities);
+        entitiesPanel.removeAllViews();
+        addEntities.setText(R.string.select_entities);
     }
 
 }
