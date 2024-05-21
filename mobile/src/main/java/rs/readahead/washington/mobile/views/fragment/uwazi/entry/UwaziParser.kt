@@ -66,6 +66,10 @@ class UwaziParser(private val context: Context?) {
         return template
     }
 
+    fun setTemplate(collectTemplate: CollectTemplate){
+         template = collectTemplate
+    }
+
     fun parseInstance(instance: String): UwaziFormView {
         entityInstance = Gson().fromJson(instance, UwaziEntityInstance::class.java)
         template = entityInstance.collectTemplate

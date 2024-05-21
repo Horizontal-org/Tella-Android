@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
@@ -23,6 +24,7 @@ import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES
 import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
@@ -57,11 +59,13 @@ class UwaziEntryFragment :
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
+    private var result: List<CollectTemplate> = ArrayList()
 
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.refreshEntitiesList()
         initObservers()
         initView()
         parentFragmentManager
@@ -144,6 +148,14 @@ class UwaziEntryFragment :
 
                     else -> {}
                 }
+            }
+            templates.observe(viewLifecycleOwner) { list ->
+                result = list.templates
+                result = result.filter { (it.id.equals(uwaziParser.getTemplate()?.id)) }
+                if (!result.isEmpty()) uwaziParser.setTemplate(result.get(0))
+            }
+            progressRefresh.observe(viewLifecycleOwner) {
+                binding.progressCircular.isVisible = it
             }
         }
     }
