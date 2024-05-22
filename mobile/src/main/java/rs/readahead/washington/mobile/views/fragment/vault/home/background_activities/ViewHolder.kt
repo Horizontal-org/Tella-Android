@@ -13,29 +13,29 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: BackgroundActivityModel) {
-        binding.activityNameTextView.text = item.name
+        binding.fileNameTextView.text = item.name
 
         when (item.type) {
             BackgroundActivityType.FILE -> {
-                item.thumb?.let { icPreview(item.mimeType, it, binding.backgroundActivityImg) }
+                item.thumb?.let { icPreview(item.mimeType, it, binding.attachmentImg) }
             }
 
             BackgroundActivityType.OTHER -> {
-                binding.backgroundActivityImg.loadDocumentIcon()
+                binding.icAttachmentImg.showDocumentInfo()
             }
         }
     }
 
     private fun icPreview(mimeType: String, thumb: ByteArray, previewImageView: ImageView) {
         when {
-            MediaFile.isImageFileType(mimeType) -> previewImageView.loadImage(thumb)
-            MediaFile.isAudioFileType(mimeType) -> previewImageView.loadAudioIcon()
+            MediaFile.isImageFileType(mimeType) -> binding.icAttachmentImg.loadImage(thumb)
+            MediaFile.isAudioFileType(mimeType) -> binding.icAttachmentImg.showAudioInfo()
             MediaFile.isVideoFileType(mimeType) -> {
-                previewImageView.loadVideoIcon()
-                previewImageView.loadImage(thumb)
+                binding.icAttachmentImg.showVideoInfo()
+                binding.icAttachmentImg.loadImage(thumb)
             }
-            MediaFile.isTextFileType(mimeType) -> previewImageView.loadDocumentIcon()
-            else -> previewImageView.loadDocumentIcon()
+            MediaFile.isTextFileType(mimeType) -> binding.icAttachmentImg.showDocumentInfo()
+            else -> binding.icAttachmentImg.showDocumentInfo()
         }
     }
 
@@ -45,23 +45,16 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
             .into(this)
     }
 
-    private fun ImageView.loadAudioIcon() {
-        Glide.with(this)
-            .load(R.drawable.ic_audio_w_small)
-            .into(this)
+    private fun ImageView.showVideoInfo() {
+        setBackgroundResource(R.drawable.ic_play)
     }
 
-    private fun ImageView.loadVideoIcon() {
-        Glide.with(this)
-            .load(R.drawable.ic_play)
-            .into(this)
+    private fun ImageView.showAudioInfo() {
+        setBackgroundResource(R.drawable.ic_audio_w_small)
     }
 
-    private fun ImageView.loadDocumentIcon() {
-        Glide.with(this)
-            .load(R.drawable.ic_document_24px_filled)
-            .into(this)
+    private fun ImageView.showDocumentInfo() {
+        setBackgroundResource(R.drawable.ic_document_24px_filled)
     }
-
 
 }

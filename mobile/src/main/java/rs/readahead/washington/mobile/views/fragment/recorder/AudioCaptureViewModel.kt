@@ -48,6 +48,9 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
     val mediaFilesUploadScheduleError: LiveData<Throwable>
         get() = _mediaFilesUploadScheduleError
 
+    private val _addingInProgress = SingleLiveEvent<Boolean>()
+    val addingInProgress: LiveData<Boolean> = _addingInProgress
+
     private val disposables = CompositeDisposable()
     private var audioRecorder: AudioRecorder? = null
 
@@ -82,6 +85,7 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                         BackgroundActivityStatus.IN_PROGRESS
                     )
                 }.doOnSubscribe{
+                    _addingInProgress.postValue(true)
                     val backgroundAudioFile = BackgroundActivityModel(
                         id = filename,
                         name = filename,
@@ -98,6 +102,8 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                         _recordingStoppedLiveData.postValue(
                             vaultFile
                         )
+                        _addingInProgress.postValue(false)
+
                     }
                 ) { throwable: Throwable ->
                     _recordingErrorLiveData.postValue(throwable)

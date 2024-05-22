@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,9 +24,7 @@ import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -59,6 +58,7 @@ class MicFragment : MetadataBaseLockFragment(),
     private var isReport: Boolean = false
     private var notRecording = false
     private var lastUpdateTime: Long = 0
+    private var isAddingInProgress = false
 
     // handling MediaFile
     private var handlingMediaFile: VaultFile? = null
@@ -176,6 +176,31 @@ class MicFragment : MetadataBaseLockFragment(),
             viewLifecycleOwner,
             ::onMediaFilesUploadScheduleError
         )
+        viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
+            isAddingInProgress = isAdding
+        }
+    }
+
+    private fun handleBackStack(){
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!Preferences.isAnonymousMode() && isAddingInProgress) {
+                        BottomSheetUtils.showConfirmSheet(fragmentManager = activity?.supportFragmentManager!!,
+                            getString(R.string.exit_and_discard_verification_info),
+                            getString(R.string.recording_in_progress_exit_warning),
+                            getString(R.string.exit_and_discard_info),
+                            getString(R.string.back),
+                            consumer = object : BottomSheetUtils.ActionConfirmed {
+                                override fun accept(isConfirmed: Boolean) {
+
+                                }
+                            })
+                        return
+                    }
+                }
+            })
     }
 
     override fun onStart() {
@@ -249,12 +274,6 @@ class MicFragment : MetadataBaseLockFragment(),
             lastUpdateTime += UPDATE_SPACE_TIME_MS
             viewModel.checkAvailableStorage()
         }
-    }
-
-    private fun onAddingStart() {
-    }
-
-    private fun onAddingEnd() {
     }
 
     private fun onAddSuccess(vaultFile: VaultFile) {

@@ -3,23 +3,20 @@ package rs.readahead.washington.mobile.views.activity.camera
 import android.Manifest
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.OrientationEventListener
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -41,6 +38,7 @@ import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
 import com.otaliastudios.cameraview.size.SizeSelector
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -53,10 +51,9 @@ import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.DialogsUtil
-import rs.readahead.washington.mobile.util.PermissionUtil
 import rs.readahead.washington.mobile.util.VideoResolutionManager
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.MetaDataFragment
+import rs.readahead.washington.mobile.views.activity.MetadataActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.custom.CameraCaptureButton
@@ -69,7 +66,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FIL
 import java.io.File
 
 @AndroidEntryPoint
-class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IView {
+class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView {
     private lateinit var cameraView: CameraView
     private lateinit var gridButton: CameraGridButton
     private lateinit var switchButton: CameraSwitchButton
@@ -101,62 +98,37 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     private var captureWithAutoUpload = true
     private val viewModel by viewModels<SharedCameraViewModel>()
     private val uploadViewModel by viewModels<TellaFileUploadSchedulerViewModel>()
+    private var isAddingInProgress = false
 
-    fun newInstance(
-        cameraMode: String,
-        intentMode: String,
-        currentRoot: String,
-        captureWithAutoUpload: Boolean
-    ): CameraActivity {
-        return CameraActivity().apply {
-            arguments = Bundle().apply {
-                putString(CAMERA_MODE, cameraMode)
-                putString(INTENT_MODE, intentMode)
-                putString(VAULT_CURRENT_ROOT_PARENT, currentRoot)
-                putBoolean(CAPTURE_WITH_AUTO_UPLOAD, captureWithAutoUpload)
-            }
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = ActivityCameraBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCameraBinding.inflate(
+            layoutInflater
+        )
+        setContentView(binding.getRoot())
         initView()
         initListeners()
-        baseActivity.overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
+        overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         metadataAttacher = MetadataAttacher(this)
         mode = CameraMode.PHOTO
-        //todo change this into fragment
-        arguments?.getString(CAMERA_MODE)?.let { cameraMode ->
+        if (intent.hasExtra(CAMERA_MODE)) {
             mode = CameraMode.valueOf(
-                cameraMode
+                intent.getStringExtra(CAMERA_MODE)!!
             )
             modeLocked = true
         }
         intentMode = IntentMode.RETURN
-
-        arguments?.getString(INTENT_MODE)?.let { intentModeArg ->
+        if (intent.hasExtra(INTENT_MODE)) {
             intentMode = IntentMode.valueOf(
-                intentModeArg
+                intent.getStringExtra(INTENT_MODE)!!
             )
         }
-
-        arguments?.getString(VAULT_CURRENT_ROOT_PARENT)?.let { currentRoot ->
-            currentRootParent = currentRoot
+        if (intent.hasExtra(VAULT_CURRENT_ROOT_PARENT)) {
+            currentRootParent = intent.getStringExtra(VAULT_CURRENT_ROOT_PARENT)
         }
-
-        arguments?.getBoolean(CAPTURE_WITH_AUTO_UPLOAD)?.let { captureWithAutoUploadArg ->
-            captureWithAutoUpload = captureWithAutoUploadArg
-
+        if (intent.hasExtra(CAPTURE_WITH_AUTO_UPLOAD)) {
+            captureWithAutoUpload = intent.getBooleanExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
         }
-
         setupCameraView()
         setupCameraModeButton()
         setupImagePreview()
@@ -166,36 +138,39 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun initObservers() {
-        viewModel.addError.observe(viewLifecycleOwner) { throwable ->
+        viewModel.addError.observe(this) { throwable ->
             onAddError(throwable)
         }
 
-        viewModel.addSuccess.observe(viewLifecycleOwner) { vaultFile ->
+        viewModel.addSuccess.observe(this) { vaultFile ->
             onAddSuccess(vaultFile)
         }
 
-        viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
-            //if (isAdding) onAddingStart() else onAddingEnd()
+        viewModel.addingInProgress.observe(this) { isAdding ->
+            isAddingInProgress = isAdding
+            if (isAdding) {
+                onAddingStart()
+            }
         }
 
-        viewModel.lastMediaFileSuccess.observe(viewLifecycleOwner) { mediaFile ->
+        viewModel.lastMediaFileSuccess.observe(this) { mediaFile ->
             onLastMediaFileSuccess(mediaFile)
         }
 
-        viewModel.lastMediaFileError.observe(viewLifecycleOwner) { throwable ->
+        viewModel.lastMediaFileError.observe(this) { throwable ->
             onLastMediaFileError(throwable)
         }
 
-        viewModel.rotationUpdate.observe(viewLifecycleOwner) { rotation ->
+        viewModel.rotationUpdate.observe(this) { rotation ->
             rotateViews(rotation)
         }
 
-        uploadViewModel.mediaFilesUploadScheduled.observe(viewLifecycleOwner) {
+        uploadViewModel.mediaFilesUploadScheduled.observe(this) {
             onMediaFilesUploadScheduled()
         }
 
-        uploadViewModel.mediaFilesUploadScheduleError.observe(viewLifecycleOwner) {
-            onMediaFilesUploadScheduleError(it)
+        uploadViewModel.mediaFilesUploadScheduleError.observe(this) {
+            onMediaFilesUploadScheduleError()
         }
     }
 
@@ -209,10 +184,10 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         setCameraZoom()
         viewModel.getLastMediaFile()
         if (ContextCompat.checkSelfPermission(
-                baseActivity, Manifest.permission.CAMERA
+                this, Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            baseActivity.maybeChangeTemporaryTimeout()
+            maybeChangeTemporaryTimeout()
         }
     }
 
@@ -221,7 +196,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         stopLocationMetadataListening()
         mOrientationEventListener.disable()
         if (videoRecording) {
-            binding.captureButton.performClick()
+            captureButton.performClick()
         }
         cameraView.close()
     }
@@ -233,34 +208,40 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         cameraView.destroy()
     }
 
-    // todo ahlem change this to fragment
-    /* @Deprecated("Deprecated in Java")
-     override fun onBackPressed() {
-         if (maybeStopVideoRecording()) return
-         super.onBackPressed()
-         finish()
-     }
-
-     override fun finish() {
-         super.finish()
-         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
-     }*/
-
-    private fun onAddingStart() {
-        progressDialog = DialogsUtil.showLightProgressDialog(
-            baseActivity, getString(R.string.gallery_dialog_expl_encrypting)
-        )
-        if (Preferences.isShutterMute()) {
-            val mgr = baseActivity.getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (maybeStopVideoRecording()) return
+        if (!Preferences.isAnonymousMode() && isAddingInProgress) {
+            BottomSheetUtils.showConfirmSheet(fragmentManager = supportFragmentManager,
+                getString(R.string.exit_and_discard_verification_info),
+                getString(R.string.recording_in_progress_exit_warning),
+                getString(R.string.exit_and_discard_info),
+                getString(R.string.back),
+                consumer = object : BottomSheetUtils.ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        finish()
+                    }
+                })
+            return
         }
+
+        super.onBackPressed()
+        finish()
     }
 
-    private fun onAddingEnd() {
-        hideProgressDialog()
-        DialogUtils.showBottomMessage(
-            baseActivity, getString(R.string.gallery_toast_file_encrypted), false
-        )
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
+    }
+
+    private fun onAddingStart() {
+        //  progressDialog = DialogsUtil.showLightProgressDialog(
+        //    this, getString(R.string.gallery_dialog_expl_encrypting)
+        //)
+        if (Preferences.isShutterMute()) {
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+        }
     }
 
     private fun onAddSuccess(file: VaultFile) {
@@ -283,7 +264,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddError(error: Throwable) {
         DialogUtils.showBottomMessage(
-            baseActivity, getString(R.string.gallery_toast_fail_saving_file), true
+            this, getString(R.string.gallery_toast_fail_saving_file), true
         )
     }
 
@@ -297,23 +278,23 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         Intent().apply {
             when (intentMode) {
                 IntentMode.ODK -> {
-                    capturedMediaFile?.metadata = vaultFile.metadata
+                    capturedMediaFile!!.metadata = vaultFile.metadata
                     putExtra(MEDIA_FILE_KEY, capturedMediaFile)
-                    //todo fix this ::ahlem  setResult(RESULT_OK, this)
-                    //finish()
+                    setResult(RESULT_OK, this)
+                    finish()
                 }
 
                 IntentMode.COLLECT -> {
                     val list: MutableList<String> = mutableListOf()
                     list.add(vaultFile.id)
                     putExtra(VAULT_FILE_KEY, Gson().toJson(list))
-                    //todo fix this ::ahlem  setResult(RESULT_OK, this)
-                    //finish()
+                    setResult(RESULT_OK, this)
+                    finish()
                 }
 
                 else -> {
                     putExtra(C.CAPTURED_MEDIA_FILE_ID, vaultFile.metadata)
-                    //todo fix this ::ahlem setResult(RESULT_OK, this)
+                    setResult(RESULT_OK, this)
                 }
             }
         }
@@ -339,7 +320,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun closeCamera() {
-        nav().popBackStack()
+        onBackPressed()
     }
 
     private fun rotateViews(rotation: Int) {
@@ -372,7 +353,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
     }
 
     override fun getContext(): Context {
-        return baseActivity
+        return this
     }
 
     private fun onMediaFilesUploadScheduled() {
@@ -388,17 +369,17 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
             return
         }
 
-        DialogUtils.showBottomMessage(baseActivity, message, false)
+        DialogUtils.showBottomMessage(this, message, false)
     }
 
-    private fun onMediaFilesUploadScheduleError(throwable: Throwable) {
+    private fun onMediaFilesUploadScheduleError() {
 
     }
 
     private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
-            val mgr = baseActivity.getSystemService(AUDIO_SERVICE) as AudioManager
-//            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
@@ -482,7 +463,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         }
     }
 
-    private fun onSwitchClicked() {
+    fun onSwitchClicked() {
         if (cameraView.facing == Facing.BACK) {
             switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera)
         } else {
@@ -508,19 +489,19 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         lastMediaFile?.mimeType?.let {
             when {
                 MediaFile.isImageFileType(it) -> {
-                    intent = Intent(baseActivity, PhotoViewerActivity::class.java).apply {
+                    intent = Intent(this, PhotoViewerActivity::class.java).apply {
                         putExtra(PhotoViewerActivity.VIEW_PHOTO, lastMediaFile)
                     }
                 }
 
                 MediaFile.isVideoFileType(it) -> {
-                    intent = Intent(baseActivity, VideoViewerActivity::class.java).apply {
+                    intent = Intent(this, VideoViewerActivity::class.java).apply {
                         putExtra(VideoViewerActivity.VIEW_VIDEO, lastMediaFile)
                     }
                 }
 
                 else -> {
-                    intent = Intent(baseActivity, MainActivity::class.java).apply {
+                    intent = Intent(this, MainActivity::class.java).apply {
                         putExtra(MainActivity.PHOTO_VIDEO_FILTER, FilterType.PHOTO_VIDEO.name)
                     }
                 }
@@ -535,12 +516,10 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
         setCameraZoom()
     }
 
-    private fun chooseVideoResolution() {
+    fun chooseVideoResolution() {
         if (videoResolutionManager != null) {
             videoQualityDialog = DialogsUtil.showVideoResolutionDialog(
-                baseActivity,
-                { videoSize: SizeSelector -> setVideoSize(videoSize) },
-                videoResolutionManager
+                this, { videoSize: SizeSelector -> setVideoSize(videoSize) }, videoResolutionManager
             )
         }
     }
@@ -578,8 +557,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
             displayVideoCaptureButton()
         }
 
-        cameraView.isEnabled =
-            PermissionUtil.checkPermission(baseActivity, Manifest.permission.CAMERA);
+        //cameraView.setEnabled(PermissionUtil.checkPermission(this, Manifest.permission.CAMERA));
         cameraView.mapGesture(Gesture.TAP, GestureAction.AUTO_FOCUS)
         setOrientationListener()
         cameraView.addCameraListener(object : CameraListener() {
@@ -680,10 +658,12 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
             Flash.AUTO -> {
                 flashButton.displayFlashAuto()
             }
+
             Flash.OFF -> {
                 flashButton.displayFlashOff()
                 flashButton.contentDescription = getString(R.string.action_enable_flash)
             }
+
             else -> {
                 flashButton.displayFlashOn()
                 flashButton.contentDescription = getString(R.string.action_disable_flash)
@@ -725,7 +705,7 @@ class CameraActivity : MetaDataFragment(), IMetadataAttachPresenterContract.IVie
 
     private fun setOrientationListener() {
         mOrientationEventListener =
-            object : OrientationEventListener(baseActivity, SensorManager.SENSOR_DELAY_NORMAL) {
+            object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_NORMAL) {
                 override fun onOrientationChanged(orientation: Int) {
                     if (orientation != ORIENTATION_UNKNOWN) {
                         viewModel.handleRotation(orientation)

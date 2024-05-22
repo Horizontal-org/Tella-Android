@@ -873,4 +873,8 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
   <string name="Resources_Exit">EXIT</string>
   <string name="Error_DownloadFailed">Error: Download failed</string>
+  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
+  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
+  <string name="exit_and_discard_info">EXIT and Discard information</string>
+  <string name="back">back</string>
 </resources>
