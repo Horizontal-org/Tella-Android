@@ -373,10 +373,15 @@ class MainActivity : MetadataActivity(),
         entitiesNames: MutableList<UwaziRelationShipEntity>
     ) {
         val fragment =
-            supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)
-        (fragment as? UwaziEntryFragment)?.onSelectEntitiesClickedInEntryFragment(formEntryPrompt, entitiesNames)
-            ?: Timber.tag(getString(R.string.on_select_entities_clicked_tag)).e(getString(R.string.could_not_find_uwazientryfragment))
+            supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
+        if (fragment is UwaziEntryFragment) {
+            (fragment as? UwaziEntryFragment)?.onSelectEntitiesClickedInEntryFragment(
+                formEntryPrompt,
+                entitiesNames
+            )
+                ?: Timber.tag(getString(R.string.on_select_entities_clicked_tag))
+                    .e(getString(R.string.could_not_find_uwazientryfragment))
+        }
     }
-
 
 }

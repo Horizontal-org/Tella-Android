@@ -36,7 +36,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListenerFromEntry
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnEntityClickInEntryListener
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
@@ -52,7 +52,7 @@ const val UWAZI_SELECTED_ENTITIES = "uwazi_selected_entities"
 
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
-    OnNavBckListener, OnSelectEntitiesClickListenerFromEntry {
+    OnNavBckListener, OnEntityClickInEntryListener {
 
     private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
 
@@ -293,7 +293,6 @@ class UwaziEntryFragment :
         }
         return true
     }
-
 
     override fun onSelectEntitiesClickedInEntryFragment(
         formEntryPrompt: UwaziEntryPrompt,

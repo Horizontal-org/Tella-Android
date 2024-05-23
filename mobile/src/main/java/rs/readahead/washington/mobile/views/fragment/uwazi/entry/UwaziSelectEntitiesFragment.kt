@@ -13,7 +13,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY
 import rs.readahead.washington.mobile.databinding.UwaziSelectEntitiesFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingDialogFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.searchable_multi_select.SearchableAdapter
@@ -61,7 +60,8 @@ class UwaziSelectEntitiesFragment :
         if (arguments?.getString(UWAZI_SELECTED_ENTITIES) != "[]") {
             val relationShipEntities = arguments?.getString(UWAZI_SELECTED_ENTITIES)
             val type = object : TypeToken<List<UwaziRelationShipEntity>>() {}.type
-            val listEntities: List<UwaziRelationShipEntity> = Gson().fromJson(relationShipEntities, type)
+            val listEntities: List<UwaziRelationShipEntity> =
+                Gson().fromJson(relationShipEntities, type)
             if (listEntities.isNotEmpty()) {
                 listEntities.forEach { entity ->
                     items.forEach { item ->
@@ -86,7 +86,6 @@ class UwaziSelectEntitiesFragment :
             layoutManager = mLayoutManager
             adapter = setupAdapter()
         }
-
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = false
 
