@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -20,13 +19,10 @@ import com.google.gson.reflect.TypeToken;
 import org.hzontal.shared_ui.buttons.PanelToggleButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
-import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectRelationShipPreviewView;
@@ -123,7 +119,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         infoEntitiesPanel.setVisibility(VISIBLE);
         clearButton.setVisibility(VISIBLE);
         for (UwaziRelationShipEntity relationShip : relationShipEntities) {
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, relationShip);
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null);
+            previewView.setRelationShip(relationShip);
             entitiesPanel.addView(previewView);
         }
         numberOfEntities.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipEntities.size(), relationShipEntities.size()));
@@ -138,7 +135,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         relationShipEntities.clear();
         for (UwaziRelationShipEntity entry : items) {
             relationShipEntities.add(entry);
-            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null, entry);
+            CollectRelationShipPreviewView previewView = new CollectRelationShipPreviewView(context, null);
+            previewView.setRelationShip(entry);
             entitiesPanel.addView(previewView);
         }
         numberOfEntities.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipEntities.size(), relationShipEntities.size()));
@@ -158,7 +156,7 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
-        infoEntitiesPanel= view.findViewById(R.id.infoFilePanel);
+        infoEntitiesPanel = view.findViewById(R.id.infoFilePanel);
         entitiesPanel = view.findViewById(R.id.files);
         entitiesToggle = view.findViewById(R.id.toggle_button);
         entitiesToggle.setVisibility(GONE);

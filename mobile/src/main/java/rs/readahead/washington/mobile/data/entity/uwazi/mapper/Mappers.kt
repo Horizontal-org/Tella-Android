@@ -17,7 +17,7 @@ fun TemplateResponse.mapToDomainModel() = rows?.map {
 
 fun UwaziRelationShipRow.mapToDomainModel() = RelationShipRow(
     version = __v,
-    _id = _id,
+    id = _id,
     values = values?.map { it.mapToDomainModel() } ?: emptyList(),
     type = type,
     name = name,

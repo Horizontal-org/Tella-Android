@@ -23,6 +23,7 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.TranslationRow
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
+import timber.log.Timber
 
 class UwaziRepository : IUwaziUserRepository {
     private val uwaziApi by lazy { UwaziService.newInstance().services }
@@ -57,8 +58,8 @@ class UwaziRepository : IUwaziUserRepository {
             getFullSettings(server)
         ) { templates, relationShipEntities, dictionary, translations, settings ->
 
-            templates.forEach {
-                it.properties.forEach { property ->
+            templates.forEach { template ->
+                template.properties.forEach { property ->
                     dictionary.forEach { dictionaryItem ->
                         if (dictionaryItem._id == property.content) {
                             property.values = dictionaryItem.values
@@ -128,7 +129,7 @@ class UwaziRepository : IUwaziUserRepository {
                     relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE }
                 template.properties.forEach { property ->
                     val listRelationShipEntities =
-                        relationShipEntity.find { (property.content == it._id) }
+                        relationShipEntity.find { (property.content == it.id) }
                     listRelationShipEntities.also { property.entities = it?.values }
                 }
                 val collectTemplate = CollectTemplate(
@@ -165,23 +166,22 @@ class UwaziRepository : IUwaziUserRepository {
             .map { result ->
                 result.mapToDomainModel()
             }
-
+            .onErrorReturn { error ->
+                Timber.e(error, "getRelationShipEntities failed")
+                emptyList()
+            }
     }
 
     override fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>> {
         val listCookies = ArrayList<String>()
         listCookies.add(server.connectCookie)
         listCookies.add(server.localeCookie)
+        val url = StringUtils.append('/', server.url, ParamsNetwork.URL_THESAURIS)
         return uwaziApi.getTemplates(
-            url = StringUtils.append(
-                '/',
-                server.url,
-                ParamsNetwork.URL_TEMPLATES
-            ), cookies = listCookies
+            url, cookies = listCookies
         )
             .subscribeOn(Schedulers.io())
             .map { result -> result.mapToDomainModel() }
-
     }
 
     override fun getTemplates(url: String): Single<List<UwaziRow>> {

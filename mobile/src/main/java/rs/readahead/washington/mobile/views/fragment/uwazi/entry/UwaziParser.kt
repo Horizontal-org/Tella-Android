@@ -14,6 +14,8 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
+import java.util.Objects
+import java.util.stream.Collectors
 
 class UwaziParser(private val context: Context?) {
 
@@ -228,11 +230,10 @@ class UwaziParser(private val context: Context?) {
                 }
             }
         val entities = ArrayList<UwaziRelationShipEntity>()
-        for (answer in uwaziFormView.entities) {
-            if (answer != null) {
-                entities.add(answer)
-            }
+        uwaziFormView.entities.filterNotNull().let {
+                entities.addAll(it)
         }
+
         entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.collectTemplate = template

@@ -1,7 +1,7 @@
 package rs.readahead.washington.mobile.domain.entity.uwazi
 
 data class RelationShipRow(
-    val _id: String,
+    val id: String,
     val name: String,
     val values: List<Value>,
     val version: Int,

@@ -58,7 +58,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
     }
 
     private fun initView() {
-        this.binding.templatesRecyclerView.apply {
+        binding.templatesRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziTemplatesAdapter
         }

@@ -68,14 +68,26 @@ class UwaziEntryFragment :
         viewModel.refreshEntitiesList()
         initObservers()
         initView()
-        parentFragmentManager
-            .setFragmentResultListener(
-                UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY,
-                viewLifecycleOwner
-            ) { requestKey, bundle ->
-                val resultReceived = bundle.getString(UWAZI_RELATION_SHIP_ENTITIES) ?: ""
-                putRelationShipEntitiesInForm(resultReceived)
-            }
+        setupFragmentResultListener()
+    }
+
+    private fun setupFragmentResultListener() {
+        parentFragmentManager.setFragmentResultListener(
+            UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY,
+            viewLifecycleOwner
+        ) { requestKey, bundle ->
+            handleRelationshipEntitiesResult(requestKey, bundle)
+        }
+    }
+
+    private fun handleRelationshipEntitiesResult(requestKey: String, bundle: Bundle) {
+        if (requestKey == UwaziConstants.UWAZI_RELATION_SHIP_REQUEST_KEY && bundle.containsKey(
+                UWAZI_RELATION_SHIP_ENTITIES
+            )
+        ) {
+            val resultReceived = bundle.getString(UWAZI_RELATION_SHIP_ENTITIES) ?: ""
+            putRelationShipEntitiesInForm(resultReceived)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -287,9 +299,11 @@ class UwaziEntryFragment :
         formEntryPrompt: UwaziEntryPrompt,
         entitiesNames: MutableList<UwaziRelationShipEntity>
     ) {
-        bundle.putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
-        bundle.putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
-        bundle.putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
+        bundle.apply {
+            putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
+            putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
+            putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
+        }
         nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen, bundle)
     }
 

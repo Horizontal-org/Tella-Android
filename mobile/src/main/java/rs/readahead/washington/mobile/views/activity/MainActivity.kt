@@ -30,7 +30,6 @@ import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
-import rs.readahead.washington.mobile.domain.entity.uwazi.NestedSelectValue
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -375,9 +374,8 @@ class MainActivity : MetadataActivity(),
     ) {
         val fragment =
             supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.get(0)
-        (fragment as UwaziEntryFragment).onSelectEntitiesClickedInEntryFragment(formEntryPrompt,
-            entitiesNames
-        )
+        (fragment as? UwaziEntryFragment)?.onSelectEntitiesClickedInEntryFragment(formEntryPrompt, entitiesNames)
+            ?: Timber.tag(getString(R.string.on_select_entities_clicked_tag)).e(getString(R.string.could_not_find_uwazientryfragment))
     }
 
 
