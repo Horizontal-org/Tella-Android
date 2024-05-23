@@ -219,7 +219,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 getString(R.string.back),
                 consumer = object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
-                        finish()
+                        if (isConfirmed) {
+                            finish()
+                        } else {
+                            return
+                        }
                     }
                 })
             return
