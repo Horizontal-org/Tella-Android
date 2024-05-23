@@ -42,6 +42,7 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
 import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -51,17 +52,43 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragmen
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
+import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
 import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
-    IMainNavigationInterface {
+    IMainNavigationInterface, VerificationWorkStatusCallback {
 
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
     }
+
+    private var isBackgroundWorkInProgress: Boolean = false
+
+    override fun isBackgroundWorkInProgress(): Boolean {
+        return isBackgroundWorkInProgress
+    }
+
+    override fun setBackgroundWorkStatus(inProgress: Boolean) {
+        isBackgroundWorkInProgress = isInProgress
+    }
+
+    override fun showBackgroundWorkAlert() {
+        BottomSheetUtils.showConfirmSheet(fragmentManager = supportFragmentManager,
+            getString(R.string.exit_and_discard_verification_info),
+            getString(R.string.recording_in_progress_exit_warning),
+            getString(R.string.exit_and_discard_info),
+            getString(R.string.back),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+
+                }
+            })
+    }
+
+
 
     private var mExit = false
     private var isBackgroundEncryptionEnabled = false;
@@ -129,10 +156,17 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         navController = navHostFragment.navController
         btmNavMain = findViewById(R.id.btm_nav_main)
         setupWithNavController(btmNavMain, navController)
-        navController.addOnDestinationChangedListener { _: NavController?, navDestination: NavDestination, _: Bundle? ->
-            when (navDestination.id) {
-                R.id.micScreen, R.id.homeScreen, R.id.main_settings -> showBottomNavigation()
-                else -> hideBottomNavigation()
+        navController.addOnDestinationChangedListener { controller: NavController?, navDestination: NavDestination, _: Bundle? ->
+            if (isBackgroundWorkInProgress()) {
+                // Prevent navigation and show the alert
+                controller?.navigateUp() // This prevents the navigation
+                showBackgroundWorkAlert()
+            } else {
+                // Handle navigation normally
+                when (navDestination.id) {
+                    R.id.micScreen, R.id.homeScreen, R.id.main_settings -> showBottomNavigation()
+                    else -> hideBottomNavigation()
+                }
             }
         }
     }
@@ -242,6 +276,12 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                 is ReportsSendFragment -> {
                     if (fragment.onBackPressed()) {
                         return true
+                    }
+                }
+
+                is MicFragment -> {
+                    if (isBackgroundWorkInProgress){
+                        showBackgroundTasksExitPrompt()
                     }
                 }
             }
@@ -388,5 +428,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         btmNavMain.menu.findItem(R.id.home).isChecked = true
         navController.navigate(R.id.home)
     }
+
 
 }

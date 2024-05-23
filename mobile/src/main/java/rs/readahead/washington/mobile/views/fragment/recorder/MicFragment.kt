@@ -39,6 +39,7 @@ import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
+import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -66,6 +67,8 @@ class MicFragment : MetadataBaseLockFragment(),
     private val viewModel by viewModels<AudioCaptureViewModel>()
 
     private val bundle by lazy { Bundle() }
+
+    private var callback: VerificationWorkStatusCallback? = null
 
     companion object {
         @JvmStatic
@@ -169,15 +172,12 @@ class MicFragment : MetadataBaseLockFragment(),
         viewModel.recordingStoppedLiveData.observe(viewLifecycleOwner, ::onRecordingStopped)
         viewModel.availableStorageLiveData.observe(viewLifecycleOwner, ::onAvailableStorage)
         viewModel.recordingErrorLiveData.observe(viewLifecycleOwner, ::onRecordingError)
-        viewModel.mediaFilesUploadScheduled.observe(viewLifecycleOwner) {
-            onMediaFilesUploadScheduled()
-        }
         viewModel.mediaFilesUploadScheduleError.observe(
             viewLifecycleOwner,
             ::onMediaFilesUploadScheduleError
         )
         viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
-            isAddingInProgress = isAdding
+            callback?.setBackgroundWorkStatus(isAdding && !Preferences.isAnonymousMode())
         }
     }
 
@@ -201,6 +201,16 @@ class MicFragment : MetadataBaseLockFragment(),
                     }
                 }
             })
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is VerificationWorkStatusCallback) {
+            callback = context
+        } else {
+            throw RuntimeException("$context must implement BackgroundWorkStatusCallback")
+        }
     }
 
     override fun onStart() {
@@ -305,9 +315,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun onAvailableStorage(memory: Long) {
         updateStorageSpaceLeft(memory)
-    }
-
-    private fun onAvailableStorageFailed(throwable: Throwable?) {
     }
 
     override fun onMetadataAttached(vaultFile: VaultFile?) {
