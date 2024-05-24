@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.data.uwazi.UwaziConstants;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.odk.exception.JavaRosaException;
 import rs.readahead.washington.mobile.util.StringUtils;
@@ -76,34 +75,19 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
         TextView questionTitleView = findViewById(R.id.questionTitle);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(formEntryPrompt.getLongText()); //?
+        builder.append(formEntryPrompt.getLongText());
         int start = builder.length();
         if (formEntryPrompt.isRequired()) {
             builder.append(" *");
             int end = builder.length();
             builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
-        if (formEntryPrompt.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP)) {
-//            String capitalizedString;
-//           if(builder.length()> 7) {
-//               String modifiedString = String.valueOf(builder.replace(0, 8, ""));
-//               capitalizedString = Character.toUpperCase(modifiedString.charAt(0)) + modifiedString.substring(1);
-//               questionTitleView.setText(capitalizedString);
-//           }
-//          else
-              questionTitleView.setText(builder);
-        }
+        questionTitleView.setText(builder);
         helpTextView = findViewById(R.id.questionHelpText);
         helpTextView.setVisibility(GONE);
-        /*if (!TextUtils.isEmpty(formEntryPrompt.getHelpText())) {
-            helpTextView.setText(formEntryPrompt.getHelpText());
-        } else {
-            helpTextView.setVisibility(GONE);
-        }*/
-
         constraintValidationView = findViewById(R.id.constraintValidationView);
-
     }
+
     public TextView getHelpTextView() {
         return helpTextView;
     }
@@ -256,8 +240,8 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
     protected ImageButton addButton(int drawableResource) {
         ImageButton button = new ImageButton(getContext());
-        button.setBackground(getDrawable(getContext(),R.drawable.collect_widget_menu_background));
-        button.setImageDrawable(getDrawable(getContext(),drawableResource));
+        button.setBackground(getDrawable(getContext(), R.drawable.collect_widget_menu_background));
+        button.setImageDrawable(getDrawable(getContext(), drawableResource));
 
         int padding = getResources().getDimensionPixelSize(R.dimen.collect_widget_icon_padding);
         button.setPadding(padding, 0, padding, 0);

@@ -42,33 +42,26 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
     View infoEntitiesPanel;
     private final List<UwaziRelationShipEntity> items;
 
-    public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
+    public UwaziRelationShipWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
         items = formEntryPrompt.getEntities();
-
         this.context = context;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-
         addImageWidgetViews(linearLayout);
         addAnswerView(linearLayout);
         setHelpTextView(getContext().getString(R.string.Uwazi_RelationShipWidget_Select_Entities));
         clearAnswer();
         if (items != null) showPreviewFromDraft();
-
     }
-
 
     @Override
     public ArrayList<UwaziRelationShipEntity> getAnswer() {
         return relationShipEntities;
-
     }
 
     @Override
     public void setFocus(Context context) {
-
     }
 
     @Override
@@ -76,35 +69,37 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         ArrayList<UwaziRelationShipEntity> result = new ArrayList<>();
 
         if (data instanceof String) {
-            ArrayList<UwaziRelationShipEntity> resultList = new Gson().fromJson((String) data, new TypeToken<List<UwaziRelationShipEntity>>() {
+            List<UwaziRelationShipEntity> resultList = new Gson().fromJson((String) data, new TypeToken<List<UwaziRelationShipEntity>>() {
             }.getType());
             result.addAll(resultList);
         } else {
-            for (Object o : (ArrayList) data) {
-                if (o instanceof UwaziRelationShipEntity) {
-                    result.add((UwaziRelationShipEntity) o);
-                } else {
-                    String label = Objects.requireNonNull(((LinkedTreeMap) o).get("label")).toString();
-                    String value = Objects.requireNonNull(((LinkedTreeMap) o).get("value")).toString();
-                    result.add(new UwaziRelationShipEntity(value, label, "entity"));
+            if (data instanceof List) {
+                for (Object o : (ArrayList) data) {
+                    if (o instanceof UwaziRelationShipEntity) {
+                        result.add((UwaziRelationShipEntity) o);
+                    } else {
+                        String label = Objects.requireNonNull(((LinkedTreeMap<?, ?>) o).get("label")).toString();
+                        String value = Objects.requireNonNull(((LinkedTreeMap<?, ?>) o).get("value")).toString();
+                        result.add(new UwaziRelationShipEntity(value, label, "entity"));
+                    }
                 }
             }
         }
-        if (result != null && !result.isEmpty()) {
-            relationShipEntities = (ArrayList<UwaziRelationShipEntity>) result;
-            if (!relationShipEntities.isEmpty()) {
-                for (UwaziRelationShipEntity relation : relationShipEntities) {
-                    if (!relationShipEntities.contains(relation)) {
-                        relationShipEntities.add(relation);
-                    }
-                }
+
+        if (!result.isEmpty()) {
+            relationShipEntities = result;
+//            if (!relationShipEntities.isEmpty()) {
+//                for (UwaziRelationShipEntity relation : relationShipEntities) {
+//                    if (!relationShipEntities.contains(relation)) {
+//                        relationShipEntities.add(relation);
+//                    }
+//                }
                 showPreview();
                 return getEntitiesNames().toString();
-            }
+          //  } to test
         }
         return null;
     }
-
 
     protected List<UwaziRelationShipEntity> getEntitiesNames() {
         if (relationShipEntities != null) {
@@ -142,7 +137,6 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
         numberOfEntities.setText(context.getResources().getQuantityString(R.plurals.Uwazi_RelationShipWidget_EntitiesAttached, relationShipEntities.size(), relationShipEntities.size()));
         addEntities.setText(R.string.select_entities);
         entitiesToggle.setOpen();
-
     }
 
     private void addImageWidgetViews(LinearLayout linearLayout) {

@@ -69,10 +69,8 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         this.isPdf = isPdf;
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-
         addImageWidgetViews(linearLayout);
         addAnswerView(linearLayout);
-
         setHelpTextView(formEntryPrompt.getHelpText());
         clearAnswer();
     }

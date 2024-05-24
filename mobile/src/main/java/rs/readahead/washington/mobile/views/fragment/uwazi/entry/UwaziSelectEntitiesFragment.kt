@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
@@ -56,22 +57,25 @@ class UwaziSelectEntitiesFragment :
                 i++
             }
         }
-
-        if (arguments?.getString(UWAZI_SELECTED_ENTITIES) != "[]") {
-            val relationShipEntities = arguments?.getString(UWAZI_SELECTED_ENTITIES)
-            val type = object : TypeToken<List<UwaziRelationShipEntity>>() {}.type
-            val listEntities: List<UwaziRelationShipEntity> =
-                Gson().fromJson(relationShipEntities, type)
-            if (listEntities.isNotEmpty()) {
-                listEntities.forEach { entity ->
-                    items.forEach { item ->
-                        if (entity.value == item.value)
-                            item.isSelected = true
+        arguments?.getString(UWAZI_SELECTED_ENTITIES)?.takeIf { it != "[]" }
+            ?.let { relationShipEntities ->
+                try {
+                    val type = object : TypeToken<List<UwaziRelationShipEntity>>() {}.type
+                    val listEntities: List<UwaziRelationShipEntity> =
+                        Gson().fromJson(relationShipEntities, type)
+                    if (listEntities.isNotEmpty()) {
+                        listEntities.forEach { entity ->
+                            items.forEach { item ->
+                                if (entity.value == item.value) {
+                                    item.isSelected = true
+                                }
+                            }
+                        }
                     }
+                } catch (e: JsonParseException) {
+                    e.printStackTrace()
                 }
-
             }
-        }
     }
 
     private fun initViews() {
@@ -104,14 +108,10 @@ class UwaziSelectEntitiesFragment :
             setRightIcon(R.drawable.ic_check_white)
             setRightIconVisibility(false)
             onRightClickListener = {
-                (items.filter { it.isSelected }
-                    .toMutableList() as ArrayList<SearchableItem>).forEach {
-                    resultList.add(
-                        UwaziRelationShipEntity(it.value, it.text)
-                    )
-                }
-                val bundle = Bundle()
-                var result: MutableList<UwaziRelationShipEntity> = ArrayList()
+                val resultList = items.filter { it.isSelected }
+                    .map { UwaziRelationShipEntity(it.value, it.text) }
+                    .toCollection(ArrayList())
+                val result: MutableList<UwaziRelationShipEntity> = ArrayList()
                 resultList.forEach { entity ->
                     result.add(
                         UwaziRelationShipEntity(
@@ -120,8 +120,12 @@ class UwaziSelectEntitiesFragment :
                         )
                     )
                 }
-                val jsonResultList = Gson().toJson(result)
-                bundle.putString(UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES, jsonResultList)
+                val bundle = Bundle().apply {
+                    putString(
+                        UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES,
+                        Gson().toJson(result)
+                    )
+                }
                 setFragmentResult(
                     UWAZI_RELATION_SHIP_REQUEST_KEY,
                     bundle

@@ -72,7 +72,7 @@ public class UwaziWidgetFactory {
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP:
-                questionWidget = new UwaziRelationShipWidget(context, fep, false);
+                questionWidget = new UwaziRelationShipWidget(context, fep);
                 break;
 
             case UwaziConstants.UWAZI_DATATYPE_LINK:

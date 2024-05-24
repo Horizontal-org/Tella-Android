@@ -9,8 +9,7 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Locale
 
 class SearchableAdapter(
     private val items: List<SearchableItem>,

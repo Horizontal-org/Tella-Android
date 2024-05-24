@@ -56,9 +56,6 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
     private val _progress = MutableLiveData<Boolean>()
     val progressRefresh: LiveData<Boolean> get() = _progress
     private var _connectionAvailable = MutableLiveData<Boolean>()
-    val connectionAvailable: LiveData<Boolean> get() = _connectionAvailable
-
-
     fun saveEntityInstance(instance: UwaziEntityInstance) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
@@ -71,7 +68,6 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                 progress.postValue(instance.status)
                 // _instance.postValue(savedInstance)
             }
-
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(
                     throwable
