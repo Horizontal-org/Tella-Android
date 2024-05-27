@@ -88,15 +88,9 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
 
         if (!result.isEmpty()) {
             relationShipEntities = result;
-//            if (!relationShipEntities.isEmpty()) {
-//                for (UwaziRelationShipEntity relation : relationShipEntities) {
-//                    if (!relationShipEntities.contains(relation)) {
-//                        relationShipEntities.add(relation);
-//                    }
-//                }
                 showPreview();
                 return getEntitiesNames().toString();
-          //  } to test
+
         }
         return null;
     }
