@@ -104,8 +104,9 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
     private fun editDraft(entityInstance: UwaziEntityInstance){
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(UWAZI_INSTANCE, gsonTemplate)
-        NavHostFragment.findNavController(this@DraftsUwaziFragment)
-            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+        navManager().navigateFromUwaziScreenToUwaziEntryScreen()
+//        NavHostFragment.findNavController(this@DraftsUwaziFragment)
+//            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
     }
 
 }

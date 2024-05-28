@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
@@ -28,6 +26,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
@@ -38,13 +37,13 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
@@ -54,7 +53,9 @@ import timber.log.Timber
 
 const val VAULT_FILTER = "vf"
 
-class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
+class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(
+    FragmentVaultBinding::inflate
+), VaultClickListener, IHomeVaultPresenter.IView {
     private lateinit var toolbar: ToolbarComponent
     private lateinit var vaultRecyclerView: RecyclerView
     private lateinit var panicModeView: RelativeLayout
@@ -65,7 +66,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private lateinit var homeVaultPresenter: HomeVaultPresenter
-    private val bundle by lazy { Bundle() }
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
     private var vaultFile: VaultFile? = null
@@ -78,15 +78,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var collectServersCounted = false
     private var uwaziServersCounted = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vault, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+            initView(binding.root)
     }
 
-    override fun initView(view: View) {
+    fun initView(view: View) {
         toolbar = view.findViewById(R.id.toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
         panicModeView = view.findViewById(R.id.panic_mode_view)
@@ -269,21 +266,25 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                 startActivity(intent)
             }
+
             MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, AudioPlayActivity::class.java)
                 intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                 startActivity(intent)
             }
+
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
-            MediaFile.isPDFFile(vaultFile.name,vaultFile.mimeType) -> {
+
+            MediaFile.isPDFFile(vaultFile.name, vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, PDFReaderActivity::class.java)
                 intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
                 startActivity(intent)
             }
+
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     baseActivity.supportFragmentManager,
@@ -310,15 +311,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.ODK_COLLECT -> {
                 nav().navigate(R.id.action_homeScreen_to_forms_screen)
             }
+
             ServerType.TELLA_UPLOAD -> {
                 nav().navigate(R.id.action_homeScreen_to_reports_screen)
             }
+
             ServerType.UWAZI -> {
-                nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
+                // nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
+                navManager().navigateFromHomeScreenToUwaziScreen()
             }
+
             ServerType.TELLA_RESORCES -> {
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
+
             else -> {}
         }
     }
@@ -331,6 +337,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 removeImprovementSection()
                 showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
             }
+
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
@@ -413,7 +420,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * This is used to start counting different connections (servers) to be shown on the home fragment.
      * At the start, the list of servers and shown connections are cleared.
      **/
-    private fun clearServerCount(){
+    private fun clearServerCount() {
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false

@@ -95,8 +95,9 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
     private fun openEntity(template: CollectTemplate) {
         val gsonTemplate = Gson().toJson(template)
         bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-        NavHostFragment.findNavController(this@TemplatesUwaziFragment)
-            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+        navManager().navigateFromUwaziScreenToUwaziEntryScreen()
+//        NavHostFragment.findNavController(this@TemplatesUwaziFragment)
+//            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
     }
 
 }

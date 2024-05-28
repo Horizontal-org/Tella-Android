@@ -180,7 +180,8 @@ class UwaziEntryFragment :
         } else {
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
             bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY, true)
-            findNavController().navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+            navManager().navigateFromUwaziEntryToSendScreen()
+           // findNavController().navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }
     }
 
@@ -303,7 +304,7 @@ class UwaziEntryFragment :
             putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
             putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
         }
-        nav().navigate(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen, bundle)
+        navManager().navigateFromUwaziEntryToSelectEntities()
     }
 
 }

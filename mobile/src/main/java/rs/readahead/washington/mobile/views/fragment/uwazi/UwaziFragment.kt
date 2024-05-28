@@ -35,7 +35,8 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             )
 
             fabButton.setOnClickListener {
-                nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
+                navManager().navigateFromUwaziScreenToDownloadScreen()
+              //  nav().navigate(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
             }
         }
 

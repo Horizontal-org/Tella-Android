@@ -68,4 +68,25 @@ class NavigationManager(
         navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
+     fun navigateFromUwaziEntryToSelectEntities() {
+        navigateToWithBundle(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen)
+    }
+
+    fun navigateFromUwaziEntryToSendScreen() {
+        navigateToWithBundle(R.id.action_uwaziEntryScreen_to_uwaziSendScreen)
+    }
+    fun navigateFromUwaziScreenToDownloadScreen() {
+        navigateTo(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
+    }
+    fun navigateFromUwaziScreenToUwaziEntryScreen() {
+        navigateToWithBundle(R.id.action_uwaziScreen_to_uwaziEntryScreen)
+    }
+    fun navigateFromUwaziScreenToUwaziSubmitedPreview() {
+        navigateToWithBundle(R.id.action_uwaziScreen_to_uwaziSubmittedPreview)
+    }
+    fun navigateFromHomeScreenToUwaziScreen() {
+        navigateTo(R.id.action_homeScreen_to_uwazi_screen)
+    }
+
+
 }

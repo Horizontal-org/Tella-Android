@@ -1,38 +1,23 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentOutboxUwaziBinding
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class OutboxUwaziFragment : UwaziListFragment() {
-
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val outboxAdapter: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
-    private var binding: FragmentOutboxUwaziBinding? = null
-    private val bundle by lazy { Bundle() }
 
-    override fun getFormListType(): Type {
-        return Type.OUTBOX
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentOutboxUwaziBinding.inflate(inflater, container, false)
-        return binding?.root!!
+    override fun getFormListType(): UwaziListFragment.Type {
+        return UwaziListFragment.Type.OUTBOX
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,8 +90,9 @@ class OutboxUwaziFragment : UwaziListFragment() {
     private fun editEntity(entityInstance: UwaziEntityInstance) {
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+        navManager().navigateFromUwaziScreenToUwaziEntryScreen()
+//        NavHostFragment.findNavController(this)
+//            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
     }
 
     override fun onResume() {

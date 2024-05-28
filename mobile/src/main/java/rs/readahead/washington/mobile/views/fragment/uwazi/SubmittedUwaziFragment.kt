@@ -104,8 +104,9 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
     private fun openEntityInstance(entityInstance: UwaziEntityInstance) {
         val bundle = Bundle()
         bundle.putString(SEND_ENTITY, Gson().toJson(entityInstance))
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
+        navManager().navigateFromUwaziScreenToUwaziSubmitedPreview()
+//        NavHostFragment.findNavController(this)
+//            .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
     }
 
 }
