@@ -283,14 +283,22 @@ public class MediaFileHandler {
         opt.inSampleSize = 8;
 
         Bitmap thumb = BitmapFactory.decodeByteArray(jpegPhoto, 0, jpegPhoto.length, opt);
+        if (thumb == null) {
+            throw new IOException("Failed to decode byte array into bitmap");
+        }
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         InputStream input = new ByteArrayInputStream(jpegPhoto);
 
+        // Mark the input stream before modifying orientation
+        input.mark(jpegPhoto.length);
         thumb = modifyOrientation(thumb, input);
+
         thumb.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
+        // Reset input stream after modifying orientation
         input.reset();
+
         String uid = UUID.randomUUID().toString();
         RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
                 .builder(input)
@@ -300,16 +308,23 @@ public class MediaFileHandler {
                 .setType(VaultFile.Type.FILE)
                 .setId(uid)
                 .setThumb(getThumbByteArray(thumb));
+
+        // Ensure the Bitmap object is recycled to free up memory
+        thumb.recycle();
+
         if (parent == null) {
             return rxVaultFileBuilder
                     .build()
-                    .subscribeOn(Schedulers.io());
+                    .subscribeOn(Schedulers.io())
+                    .doOnError(Throwable::printStackTrace);
         } else {
             return rxVaultFileBuilder
                     .build(parent)
-                    .subscribeOn(Schedulers.io());
+                    .subscribeOn(Schedulers.io())
+                    .doOnError(Throwable::printStackTrace);
         }
     }
+
 
     public static VaultFile savePngImage(@NonNull byte[] pngImage) {
         // create thumb

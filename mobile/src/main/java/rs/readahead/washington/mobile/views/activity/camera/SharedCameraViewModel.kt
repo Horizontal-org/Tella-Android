@@ -6,6 +6,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -45,7 +46,13 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
     val lastMediaFileError: LiveData<Throwable> = _lastMediaFileError
 
     fun addJpegPhoto(jpeg: ByteArray, parent: String?) {
-        disposables.add(Observable.fromCallable { MediaFileHandler.saveJpegPhoto(jpeg, parent) }
+        val savePhotoSingle = try {
+            MediaFileHandler.saveJpegPhoto(jpeg, parent)
+        } catch (e: Exception) {
+            Single.error(e)
+        }
+
+        disposables.add(savePhotoSingle
             .doOnSubscribe {
                 val backgroundVideoFile = BackgroundActivityModel(
                     id = "",
@@ -56,20 +63,18 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                 )
                 _addingInProgress.postValue(true)
                 MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
-
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { vaultFile ->
-                handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.IN_PROGRESS)
-            }
             .doFinally { _addingInProgress.postValue(false) }
             .subscribe({ vaultFile ->
-                handleAddSuccess(vaultFile.blockingGet(), BackgroundActivityStatus.COMPLETED)
-                _addSuccess.postValue(vaultFile.blockingGet())
+                handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
+                _addSuccess.postValue(vaultFile)
             }, { throwable ->
                 handleAddError(throwable)
-            }))
+            })
+        )
     }
+
 
     fun addMp4Video(file: File, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveMp4Video(file, parent) }
@@ -84,9 +89,10 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                 _addingInProgress.postValue(true)
 
                 // Emitting the initial status to the event bus
-                MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
+                MyApplication.bus()
+                    .post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
             }.doOnNext { vaultFile ->
-                  handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
+                handleAddSuccess(vaultFile, BackgroundActivityStatus.IN_PROGRESS)
             }.observeOn(AndroidSchedulers.mainThread()).doFinally {
                 _addingInProgress.postValue(false)
             }.subscribe({ vaultFile ->
