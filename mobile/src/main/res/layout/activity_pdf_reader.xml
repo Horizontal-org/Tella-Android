@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_black"
+    android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
+    android:animateLayoutChanges="true"
     tools:context="rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -32,7 +33,7 @@
 
     <com.horizontal.pdfviewer.PdfRendererView
         android:id="@+id/pdfRendererView"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="@dimen/pdf_top_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </com.horizontal.pdfviewer.PdfRendererView>
