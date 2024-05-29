@@ -66,9 +66,7 @@ class UwaziRepository : IUwaziUserRepository {
                         }
                     }
                 }
-
             }
-
             var resultTemplates = mutableListOf<UwaziRow>()
 
             if (server.username.isNullOrEmpty() || server.password.isNullOrEmpty()) {
@@ -84,7 +82,6 @@ class UwaziRepository : IUwaziUserRepository {
             } else {
                 resultTemplates = templates.toMutableList()
             }
-
 
             resultTemplates.forEach { template ->
                 translations.filter { row -> row.locale == server.localeCookie }[0]
@@ -176,7 +173,7 @@ class UwaziRepository : IUwaziUserRepository {
         val listCookies = ArrayList<String>()
         listCookies.add(server.connectCookie)
         listCookies.add(server.localeCookie)
-        val url = StringUtils.append('/', server.url, ParamsNetwork.URL_THESAURIS)
+        val url = StringUtils.append('/', server.url, ParamsNetwork.URL_TEMPLATES)
         return uwaziApi.getTemplates(
             url, cookies = listCookies
         )
