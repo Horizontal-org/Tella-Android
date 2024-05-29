@@ -1,16 +1,14 @@
-package rs.readahead.washington.mobile.views.fragment.reports
+package rs.readahead.washington.mobile.util
 
 import android.os.Bundle
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.navigateSafe
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 
-
 class NavigationManager(
     private val navControllerProvider: NavControllerProvider,
     val bundle: Bundle
 ) {
-
     fun navigateTo(destinationId: Int) {
         navControllerProvider.navController.navigateSafe(destinationId)
     }
@@ -68,25 +66,28 @@ class NavigationManager(
         navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
-     fun navigateFromUwaziEntryToSelectEntities() {
+    fun navigateFromUwaziEntryToSelectEntities() {
         navigateToWithBundle(R.id.action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen)
     }
 
     fun navigateFromUwaziEntryToSendScreen() {
         navigateToWithBundle(R.id.action_uwaziEntryScreen_to_uwaziSendScreen)
     }
+
     fun navigateFromUwaziScreenToDownloadScreen() {
         navigateTo(R.id.action_uwaziScreen_to_uwaziDownloadScreen)
     }
+
     fun navigateFromUwaziScreenToUwaziEntryScreen() {
         navigateToWithBundle(R.id.action_uwaziScreen_to_uwaziEntryScreen)
     }
+
     fun navigateFromUwaziScreenToUwaziSubmitedPreview() {
         navigateToWithBundle(R.id.action_uwaziScreen_to_uwaziSubmittedPreview)
     }
+
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
-
 
 }

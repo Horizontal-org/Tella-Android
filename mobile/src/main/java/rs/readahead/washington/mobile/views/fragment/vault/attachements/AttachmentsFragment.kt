@@ -17,13 +17,11 @@ import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
-import com.hzontal.utils.MediaFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isPDFFile
@@ -67,7 +65,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*

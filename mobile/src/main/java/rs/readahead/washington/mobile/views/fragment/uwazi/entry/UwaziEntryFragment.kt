@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -67,7 +66,10 @@ class UwaziEntryFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.refreshEntitiesList()
         initObservers()
-        initView()
+        if (!hasInitializedRootView) {
+            hasInitializedRootView = true
+            initView()
+        }
         setupFragmentResultListener()
     }
 
@@ -181,7 +183,6 @@ class UwaziEntryFragment :
             bundle.putString(SEND_ENTITY, uwaziParser.getGsonTemplate())
             bundle.putBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY, true)
             navManager().navigateFromUwaziEntryToSendScreen()
-           // findNavController().navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
         }
     }
 

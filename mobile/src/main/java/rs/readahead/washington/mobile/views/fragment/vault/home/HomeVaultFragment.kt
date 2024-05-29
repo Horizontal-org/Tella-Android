@@ -80,7 +80,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-            initView(binding.root)
+        initView(binding.root)
     }
 
     fun initView(view: View) {
@@ -317,7 +317,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(
             }
 
             ServerType.UWAZI -> {
-                // nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
                 navManager().navigateFromHomeScreenToUwaziScreen()
             }
 

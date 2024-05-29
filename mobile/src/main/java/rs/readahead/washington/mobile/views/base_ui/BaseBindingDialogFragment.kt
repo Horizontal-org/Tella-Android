@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.views.fragment.reports.NavigationManager
+import rs.readahead.washington.mobile.util.NavigationManager
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 
 abstract class BaseBindingDialogFragment<VB : ViewBinding>(

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -15,7 +14,8 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 
-class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(FragmentDraftsUwaziBinding::inflate) {
+class DraftsUwaziFragment :
+    BaseBindingFragment<FragmentDraftsUwaziBinding>(FragmentDraftsUwaziBinding::inflate) {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val uwaziDraftsAdapter: UwaziDraftsAdapter by lazy { UwaziDraftsAdapter() }
 
@@ -97,16 +97,14 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
         }
     }
 
-    private fun openDraft(entityInstance: UwaziEntityInstance){
+    private fun openDraft(entityInstance: UwaziEntityInstance) {
         viewModel.getInstanceUwaziEntity(entityInstance.id)
     }
 
-    private fun editDraft(entityInstance: UwaziEntityInstance){
+    private fun editDraft(entityInstance: UwaziEntityInstance) {
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(UWAZI_INSTANCE, gsonTemplate)
         navManager().navigateFromUwaziScreenToUwaziEntryScreen()
-//        NavHostFragment.findNavController(this@DraftsUwaziFragment)
-//            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
     }
 
 }

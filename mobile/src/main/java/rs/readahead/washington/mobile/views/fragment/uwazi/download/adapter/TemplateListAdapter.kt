@@ -7,12 +7,12 @@ import java.util.ArrayList
 
 class TemplateListAdapter : RecyclerView.Adapter<TemplateViewHolder>() {
 
-    private var templates : MutableList<ViewTemplateItem> = ArrayList()
+    private var templates: MutableList<ViewTemplateItem> = ArrayList()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setTemplates(templates :List<ViewTemplateItem> ){
-          this.templates = templates.toMutableList()
-          notifyDataSetChanged()
+    fun setTemplates(templates: List<ViewTemplateItem>) {
+        this.templates = templates.toMutableList()
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TemplateViewHolder {
@@ -20,7 +20,7 @@ class TemplateListAdapter : RecyclerView.Adapter<TemplateViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TemplateViewHolder, position: Int) {
-        val  item = templates[position]
+        val item = templates[position]
         holder.seTemplate(item)
     }
 

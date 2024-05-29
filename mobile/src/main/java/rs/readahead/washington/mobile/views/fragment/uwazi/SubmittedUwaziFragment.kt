@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -105,8 +104,6 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
         val bundle = Bundle()
         bundle.putString(SEND_ENTITY, Gson().toJson(entityInstance))
         navManager().navigateFromUwaziScreenToUwaziSubmitedPreview()
-//        NavHostFragment.findNavController(this)
-//            .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
     }
 
 }
