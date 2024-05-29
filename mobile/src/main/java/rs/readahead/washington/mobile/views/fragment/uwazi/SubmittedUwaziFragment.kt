@@ -94,14 +94,14 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
     }
 
     private fun initView() {
-        binding?.submittedRecyclerView?.apply {
+        binding.submittedRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = adapterSubmitted
         }
     }
 
     private fun openEntityInstance(entityInstance: UwaziEntityInstance) {
-        val bundle = Bundle()
+        this.hasInitializedRootView = false
         bundle.putString(SEND_ENTITY, Gson().toJson(entityInstance))
         navManager().navigateFromUwaziScreenToUwaziSubmitedPreview()
     }
