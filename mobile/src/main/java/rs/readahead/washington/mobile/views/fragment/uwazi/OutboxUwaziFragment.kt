@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -13,11 +14,12 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmitt
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class OutboxUwaziFragment : UwaziListFragment() {
+
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val outboxAdapter: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
 
-    override fun getFormListType(): UwaziListFragment.Type {
-        return UwaziListFragment.Type.OUTBOX
+    override fun getFormListType(): Type {
+        return Type.OUTBOX
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,13 +32,13 @@ class OutboxUwaziFragment : UwaziListFragment() {
         with(viewModel) {
             outboxInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
-                    binding?.textViewEmpty?.isVisible = true
-                    binding?.outboxRecyclerView?.isVisible = false
+                    binding.textViewEmpty.isVisible = true
+                    binding.outboxRecyclerView.isVisible = false
                     outboxAdapter.setEntities(emptyList())
                 } else {
                     (it as ArrayList).add(0, getString(R.string.Uwazi_Outbox_Header_Text))
-                    binding?.textViewEmpty?.isVisible = false
-                    binding?.outboxRecyclerView?.isVisible = true
+                    binding.textViewEmpty.isVisible = false
+                    binding.outboxRecyclerView.isVisible = true
                     outboxAdapter.setEntities(it)
                 }
             }
@@ -90,9 +92,7 @@ class OutboxUwaziFragment : UwaziListFragment() {
     private fun editEntity(entityInstance: UwaziEntityInstance) {
         val gsonTemplate = Gson().toJson(entityInstance)
         bundle.putString(SEND_ENTITY, gsonTemplate)
-        navManager().navigateFromUwaziScreenToUwaziEntryScreen()
-//        NavHostFragment.findNavController(this)
-//            .navigate(R.id.action_uwaziEntryScreen_to_uwaziSendScreen, bundle)
+        navManager().navigateFromUwaziEntryToSendScreen()
     }
 
     override fun onResume() {
@@ -101,7 +101,7 @@ class OutboxUwaziFragment : UwaziListFragment() {
     }
 
     private fun initView() {
-        binding?.outboxRecyclerView?.apply {
+        binding.outboxRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = outboxAdapter
         }
