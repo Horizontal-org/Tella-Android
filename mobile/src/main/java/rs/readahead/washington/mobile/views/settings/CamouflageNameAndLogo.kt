@@ -33,19 +33,19 @@ class CamouflageNameAndLogo : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnFragmentSelected?)?.hideAppbar()
+
 
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
         adapter = CamouflageRecycleViewAdapter()
         val galleryLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireContext(), 3)
-        recyclerView.setLayoutManager(galleryLayoutManager)
+        recyclerView.layoutManager = galleryLayoutManager
         recyclerView.setAdapter(adapter)
 
         adapter.setIcons(cm.options, cm.selectedAliasPosition)
 
         view.findViewById<View>(R.id.back).setOnClickListener {
-            (baseActivity as OnFragmentSelected?)?.showAppbar()
+          //  (baseActivity as OnFragmentSelected?)?.showAppbar()
             baseActivity.onBackPressed()
         }
 

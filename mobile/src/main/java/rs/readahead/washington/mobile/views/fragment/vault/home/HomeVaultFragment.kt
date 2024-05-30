@@ -512,8 +512,10 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables.dispose()
-       // descriptionLiveData.removeObservers(viewLifecycleOwner)
+        if (this::disposables.isInitialized) {
+            disposables.dispose()
+        }
+        // descriptionLiveData.removeObservers(viewLifecycleOwner)
     }
 
 

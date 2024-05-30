@@ -33,8 +33,8 @@ class ChangeRemoveCamouflage : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnFragmentSelected?)?.showAppbar()
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
+        //(baseActivity as OnFragmentSelected?)?.showAppbar()
+      //  (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val fragmentTitle = view.findViewById<TextView>(R.id.title)
         fragmentTitle.text = getString(
@@ -55,7 +55,7 @@ class ChangeRemoveCamouflage : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.change_method).setOnClickListener {
-            baseActivity.addFragment(HideTella(), R.id.my_nav_host_fragment)
+            baseActivity.addFragment(this,HideTella(), R.id.my_nav_host_fragment)
         }
 
         view.findViewById<View>(R.id.remove_camouflage).setOnClickListener {

@@ -11,9 +11,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:rightIconContentDescription="@string/action_save"
         app:startTitle="@string/settings.select_security" />

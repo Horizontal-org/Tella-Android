@@ -142,14 +142,14 @@ class SendFeedbackFragment :
                         } else {
                             // User chose not to save, navigate back
                             nav().popBackStack()
-                            (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
+                          //  (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
                         }
                     }
                 })
         // If not submitting, navigate back without any confirmation or saving
         else {
             nav().popBackStack()
-            (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
+           // (activity as SettingsActivity).toolbar.setBackIcon(R.drawable.ic_arrow_back_white_24dp)
         }
     }
 

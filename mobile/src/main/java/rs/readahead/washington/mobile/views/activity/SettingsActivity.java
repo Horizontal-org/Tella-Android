@@ -29,9 +29,8 @@ import rs.readahead.washington.mobile.views.settings.OnFragmentSelected;
 import rs.readahead.washington.mobile.views.settings.SecuritySettings;
 
 @AndroidEntryPoint
-public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
+public class SettingsActivity extends BaseLockActivity {
     private final CamouflageManager cm = CamouflageManager.getInstance();
-    protected boolean isCamouflage = false;
     private ActivitySettingsBinding binding;
     private EventCompositeDisposable disposables;
 
@@ -40,17 +39,6 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.toolbar.setBackClickListener(() -> {
-            onBackPressed();
-            return null;
-        });
-
-        setSupportActionBar(binding.toolbar);
-        binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_app_bar));
-        setSupportActionBar(binding.toolbar);
-
-        findViewById(R.id.appbar).setOutlineProvider(null);
-
         if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
             addFragment(new MainSettings(), R.id.my_nav_host_fragment);
             addFragment(new SecuritySettings(), R.id.my_nav_host_fragment);
@@ -62,14 +50,14 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();
-        disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
+        disposables.wire(LocaleChangedEvent.class, new EventObserver<>() {
             @Override
             public void onNext(@NotNull LocaleChangedEvent event) {
                 recreate();
             }
         });
 
-        disposables.wire(CloseSettingsActivityEvent.class, new EventObserver<CloseSettingsActivityEvent>() {
+        disposables.wire(CloseSettingsActivityEvent.class, new EventObserver<>() {
             @Override
             public void onNext(@NotNull CloseSettingsActivityEvent event) {
                 finish();
@@ -89,50 +77,17 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
     }
 
     @Override
-    public void setToolbarLabel(int labelRes) {
-        binding.toolbar.setStartTextTitle(getString(labelRes));
-    }
-
-    @Override
-    public void hideAppbar() {
-        binding.toolbar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showAppbar() {
-        binding.toolbar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void setToolbarHomeIcon(int iconRes) {
-        binding.toolbar.setToolbarNavigationIcon(iconRes);
-    }
-
-    public ToolbarComponent getToolbar() {
-        return binding.toolbar;
-    }
-
-    @Override
-    public boolean isCamouflage() {
-        return isCamouflage;
-    }
-
-    //TODO needs an improvement
-    @Override
     public void onBackPressed() {
-        super.onBackPressed();
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
 
-        if (f != null) {
-            if (f instanceof MainSettings) {
-                showAppbar();
-                setToolbarLabel(R.string.settings_app_bar);
-            } else if (f instanceof SecuritySettings) {
-                showAppbar();
-                setToolbarLabel(R.string.settings_sec_app_bar);
-            } else if (f instanceof SendFeedbackFragment) {
-                ((SendFeedbackFragment) f).handleBackButton();
-            }
+        if (f instanceof SendFeedbackFragment) {
+            ((SendFeedbackFragment) f).handleBackButton();
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            // If there are fragments on the back stack, pop the top fragment
+            getSupportFragmentManager().popBackStack();
+        } else {
+            // If there are no fragments on the back stack, let the system handle the back button
+            super.onBackPressed();
         }
     }
 }

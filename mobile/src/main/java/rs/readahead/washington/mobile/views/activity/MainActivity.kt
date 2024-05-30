@@ -42,6 +42,7 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
 import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
 import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment
@@ -282,6 +283,12 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                 is MicFragment -> {
                     if (isBackgroundWorkInProgress){
                         showBackgroundTasksExitPrompt()
+                    }
+                }
+
+                is SendFeedbackFragment -> {
+                    if (fragment.onBackPressed()) {
+                        return true
                     }
                 }
             }

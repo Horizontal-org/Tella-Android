@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
@@ -37,11 +38,12 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     }
 
     override fun initView(view: View) {
-        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
-        (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
-
+        // (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
+        //(baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
         LanguageList = view.findViewById(R.id.language_list)
-
+        view.findViewById<ToolbarComponent>(R.id.toolbar).backClickListener = {
+            nav().popBackStack()
+        }
         createLangViews()
     }
 
@@ -91,7 +93,7 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
         setAppLanguage(v.tag as String?)
     }
 
-    fun setAppLanguage(language: String?) {
+    private fun setAppLanguage(language: String?) {
         val locale = if (language != null) Locale(language) else null
         LocaleManager.getInstance().setLocale(locale)
         MyApplication.bus().post(LocaleChangedEvent(locale))

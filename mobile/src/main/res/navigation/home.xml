@@ -117,7 +117,7 @@
         android:id="@+id/uwaziDownloadScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
         android:label="Uwazi"
-        tools:layout="@layout/fragment_downloaded_templates"></fragment>
+        tools:layout="@layout/fragment_downloaded_templates" />
 
     <fragment
         android:id="@+id/uwaziEntryScreen"

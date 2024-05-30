@@ -53,7 +53,6 @@ class SecuritySettings :
         setUpLockTimeoutText()
         handleOnBackPressed()
         binding.lockSettingsButton.setOnClickListener { checkCamouflageAndLockSetting() }
-
         binding.lockTimeoutSettingsButton.setOnClickListener { showLockTimeoutSettingDialog() }
 
         setupCheckedChangeListener(
@@ -401,13 +400,14 @@ class SecuritySettings :
 
     private fun handleOnBackPressed() {
         binding.toolbar.backClickListener = {
-            nav().popBackStack()
+            baseActivity.onBackPressed()
         }
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+        baseActivity.onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    nav().popBackStack()
+                   // nav().popBackStack()
+                    baseActivity.onBackPressed()
                 }
             })
     }
