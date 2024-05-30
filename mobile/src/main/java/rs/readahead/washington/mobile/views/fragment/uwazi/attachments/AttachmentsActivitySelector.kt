@@ -124,7 +124,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.clearSelected()
                 openDirectory(vaultFile)
             }
-
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
                     when {
@@ -133,13 +132,11 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                             intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                             startActivity(intent)
                         }
-
                         MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, AudioPlayActivity::class.java)
                             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                             startActivity(intent)
                         }
-
                         MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, VideoViewerActivity::class.java)
                             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
@@ -148,9 +145,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     }
                 }
             }
-
             else -> {
-
             }
         }
     }
@@ -291,7 +286,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
                 viewModel.getFiles(currentRootID, filterType, null)
             }
-
             else -> {
                 finish()
             }

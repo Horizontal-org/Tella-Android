@@ -232,7 +232,6 @@ class UwaziParser(private val context: Context?) {
         uwaziFormView.entities.filterNotNull().let {
             entities.addAll(it)
         }
-
         entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.collectTemplate = template
@@ -275,15 +274,12 @@ class UwaziParser(private val context: Context?) {
 
         return UwaziFormView(context, arr)
     }
-
     fun getGsonTemplate(): String {
         return Gson().toJson(entityInstance)
     }
-
     fun getToGsonTemplate(): String {
         return Gson().toJson(template)
     }
-
     fun setInstanceStatus(entityStatus: EntityStatus) {
         entityInstance.status = entityStatus
     }

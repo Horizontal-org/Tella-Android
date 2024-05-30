@@ -94,5 +94,4 @@ abstract class BaseBindingDialogFragment<VB : ViewBinding>(
         _binding = null
         isViewInitialized = false
     }
-
 }

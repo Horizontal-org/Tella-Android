@@ -8,4 +8,5 @@ data class CollectTemplate(
     var entityRow: UwaziRow,
     var isDownloaded: Boolean = false,
     var isFavorite: Boolean = false,
-    var isUpdated: Boolean = false)
+    var isUpdated: Boolean = false
+)

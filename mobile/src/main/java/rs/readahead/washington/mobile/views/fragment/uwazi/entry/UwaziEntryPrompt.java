@@ -29,7 +29,6 @@ public class UwaziEntryPrompt {
     public List<UwaziRelationShipEntity> getEntities() {
         return entities;
     }
-
     public UwaziEntryPrompt(String _id, List<UwaziRelationShipEntity> entities, String formIndex, String type, String question, Boolean required, String helpText) {
         this._id = _id;
         this.formIndex = formIndex;

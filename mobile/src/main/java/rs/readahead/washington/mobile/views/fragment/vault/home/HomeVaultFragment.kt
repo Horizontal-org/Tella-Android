@@ -266,25 +266,21 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(
                 intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                 startActivity(intent)
             }
-
             MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, AudioPlayActivity::class.java)
                 intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                 startActivity(intent)
             }
-
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
-
             MediaFile.isPDFFile(vaultFile.name, vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, PDFReaderActivity::class.java)
                 intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
                 startActivity(intent)
             }
-
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     baseActivity.supportFragmentManager,
@@ -311,19 +307,15 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(
             ServerType.ODK_COLLECT -> {
                 nav().navigate(R.id.action_homeScreen_to_forms_screen)
             }
-
             ServerType.TELLA_UPLOAD -> {
                 nav().navigate(R.id.action_homeScreen_to_reports_screen)
             }
-
             ServerType.UWAZI -> {
                 navManager().navigateFromHomeScreenToUwaziScreen()
             }
-
             ServerType.TELLA_RESORCES -> {
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
-
             else -> {}
         }
     }

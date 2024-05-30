@@ -99,7 +99,6 @@ public class UwaziFormView extends LinearLayout {
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_MULTIPDFFILES)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_GENERATEDID)
                     || p.getDataType().equals(UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP)
-
             ) {
                 UwaziQuestionWidget qw = UwaziWidgetFactory.createWidgetFromPrompt(p, getContext(), readOnlyOverride);
                 qw.setId(VIEW_ID + id++);
@@ -172,8 +171,6 @@ public class UwaziFormView extends LinearLayout {
         }
         return entities;
     }
-
-
     public List<String> getFilesNames() {
         List<FormMediaFile> files =  getFiles();
         List<String> fileNames = new ArrayList<>();

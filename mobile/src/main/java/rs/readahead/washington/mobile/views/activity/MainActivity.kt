@@ -383,5 +383,4 @@ class MainActivity : MetadataActivity(),
                     .e(getString(R.string.could_not_find_uwazientryfragment))
         }
     }
-
 }

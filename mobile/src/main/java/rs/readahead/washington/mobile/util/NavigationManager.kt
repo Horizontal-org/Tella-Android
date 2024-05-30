@@ -89,5 +89,4 @@ class NavigationManager(
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
-
 }
