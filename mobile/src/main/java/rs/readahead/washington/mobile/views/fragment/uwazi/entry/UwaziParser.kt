@@ -68,8 +68,8 @@ class UwaziParser(private val context: Context?) {
         return template
     }
 
-    fun setTemplate(collectTemplate: CollectTemplate){
-         template = collectTemplate
+    fun setTemplate(collectTemplate: CollectTemplate) {
+        template = collectTemplate
     }
 
     fun parseInstance(instance: String): UwaziFormView {
@@ -200,7 +200,6 @@ class UwaziParser(private val context: Context?) {
                                 )
                             )
                         }
-
                         else -> {
                             hashmap[answer.key] =
                                 arrayListOf(UwaziValue((answer.value as UwaziValue).value))
@@ -231,7 +230,7 @@ class UwaziParser(private val context: Context?) {
             }
         val entities = ArrayList<UwaziRelationShipEntity>()
         uwaziFormView.entities.filterNotNull().let {
-                entities.addAll(it)
+            entities.addAll(it)
         }
 
         entityInstance.metadata = hashmap

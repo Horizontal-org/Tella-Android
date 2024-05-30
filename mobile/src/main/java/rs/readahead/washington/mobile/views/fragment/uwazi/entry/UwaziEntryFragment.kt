@@ -99,11 +99,12 @@ class UwaziEntryFragment :
         }
 
         if (requestCode == C.SELECTED_LOCATION && resultCode == Activity.RESULT_OK) {
-            val myLocation: MyLocation =
-                data!!.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
-            putLocationInForm(UwaziGeoData("", myLocation.latitude, myLocation.longitude))
+            if (data != null) {
+                val myLocation: MyLocation =
+                    data.getSerializableExtra(LocationMapActivity.SELECTED_LOCATION) as MyLocation
+                putLocationInForm(UwaziGeoData("", myLocation.latitude, myLocation.longitude))
+            }
         }
-
     }
 
     private fun initView() {
@@ -203,7 +204,7 @@ class UwaziEntryFragment :
     }
 
     private fun putRelationShipEntitiesInForm(entitiesList: String) {
-        entitiesList.let { uwaziFormView.setBinaryData(it) }
+        uwaziFormView.setBinaryData(entitiesList)
     }
 
     private fun putLocationInForm(location: UwaziGeoData) {

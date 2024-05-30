@@ -154,7 +154,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
             case 12:
                 db.execSQL(createTableResources());
-
         }
     }
 
