@@ -12,12 +12,6 @@
         android:label="@string/Home_BottomNav_Home"
         tools:layout="@layout/fragment_vault">
         <action
-            android:id="@+id/action_homeScreen_to_main_settings"
-            app:destination="@id/main_settings"
-            app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out" />
-
-        <action
             android:id="@+id/action_homeScreen_to_attachments_screen"
             app:destination="@id/attachments_screen"
             app:enterAnim="@anim/slide_in_start"
@@ -79,12 +73,6 @@
         android:label="@string/Vault_FileInfo"
         tools:layout="@layout/fragment_vault_info" />
 
-    <activity
-        android:id="@+id/main_settings"
-        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
-        android:label="@string/settings_app.bar"
-        tools:layout="@layout/activity_settings" />
-
     <fragment
         android:id="@+id/formScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.forms.CollectMainFragment"
@@ -98,18 +86,18 @@
         tools:layout="@layout/fragment_uwazi">
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziDownloadScreen"
-            app:destination="@id/uwaziDownloadScreen"></action>
+            app:destination="@id/uwaziDownloadScreen" />
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziEntryScreen"
-            app:destination="@id/uwaziEntryScreen"></action>
+            app:destination="@id/uwaziEntryScreen" />
 
         <action
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
-            app:destination="@id/uwaziSendScreen"></action>
+            app:destination="@id/uwaziSendScreen" />
 
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziSubmittedPreview"
-            app:destination="@id/uwaziSubmittedPreviewScreen"></action>
+            app:destination="@id/uwaziSubmittedPreviewScreen" />
     </fragment>
 
 

@@ -9,6 +9,6 @@
 
     <include app:graph="@navigation/micro"/>
 
-    <include app:graph="@navigation/settings_navigation"/>
+    <include app:graph="@navigation/settings"/>
 
 </navigation>

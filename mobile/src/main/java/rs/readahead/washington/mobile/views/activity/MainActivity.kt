@@ -89,8 +89,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
             })
     }
 
-
-
     private var mExit = false
     private var isBackgroundEncryptionEnabled = false;
     private val handler: Handler by lazy {
