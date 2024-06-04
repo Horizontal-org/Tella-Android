@@ -239,9 +239,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddingStart() {
-        //  progressDialog = DialogsUtil.showLightProgressDialog(
-        //    this, getString(R.string.gallery_dialog_expl_encrypting)
-        //)
         if (Preferences.isShutterMute()) {
             val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
             mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)

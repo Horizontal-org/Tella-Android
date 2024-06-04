@@ -253,7 +253,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         } else {
             descriptionLiveData.postValue(getString(R.string.no_background_activity))
         }
-        backgroundActivitiesAdapter.updateData(event.backgroundActivityModels)
+        backgroundActivitiesAdapter.updateData(event.getBackgroundActivityModels())
         updateToolbarIcon()
     }
 
