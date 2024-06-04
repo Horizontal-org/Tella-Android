@@ -745,18 +745,26 @@ public class MediaFileHandler {
     public static Single<VaultFile> importVaultFileUri(Context context, @Nullable Uri uri, String parentId) throws Exception {
         Single<VaultFile> vaultFile = null;
         if (uri != null) {
-            String mimeType = getMimeType(uri, context.getContentResolver());
+            String mimeType = getMimeTypeFromContentResolver(uri, context.getContentResolver());
             if (mimeType != null) {
-                if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
-                    vaultFile = importPhotoUri(context, uri, parentId);
-                } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
-                    vaultFile = importVideoUri(context, uri, parentId);
-                } else {
-                    vaultFile = importOthersUri(context, uri, parentId);
-                }
+                vaultFile = importUriByMimeType(context, uri, parentId, mimeType);
             }
         }
         return vaultFile;
+    }
+
+    private static Single<VaultFile> importUriByMimeType(Context context, Uri uri, String parentId, String mimeType) throws Exception {
+        if (MediaFile.INSTANCE.isImageFileType(mimeType)) {
+            return importPhotoUri(context, uri, parentId);
+        } else if (MediaFile.INSTANCE.isVideoFileType(mimeType)) {
+            return importVideoUri(context, uri, parentId);
+        } else {
+            return importOthersUri(context, uri, parentId);
+        }
+    }
+
+    private static String getMimeTypeFromContentResolver(Uri uri, ContentResolver contentResolver) {
+        return contentResolver.getType(uri);
     }
 
     public static List<Single<VaultFile>> importVaultFilesUris(Context context, @Nullable List<Uri> uris, String parentId) throws Exception {
@@ -776,7 +784,6 @@ public class MediaFileHandler {
         }
         return vaultFiles;
     }
-
 
 
     private static List<VaultFile> getAllFiles(VaultFile vaultFile) {
