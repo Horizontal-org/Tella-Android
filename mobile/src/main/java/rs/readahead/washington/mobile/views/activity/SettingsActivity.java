@@ -78,10 +78,10 @@ public class SettingsActivity extends BaseLockActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
 
-        if (f instanceof SendFeedbackFragment) {
-            ((SendFeedbackFragment) f).handleBackButton();
+        if (fragment instanceof SendFeedbackFragment) {
+            ((SendFeedbackFragment) fragment).handleBackButton();
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             // If there are fragments on the back stack, pop the top fragment
             getSupportFragmentManager().popBackStack();

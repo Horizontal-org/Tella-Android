@@ -181,7 +181,7 @@ class MicFragment : MetadataBaseLockFragment(),
         }
     }
 
-    private fun handleBackStack(){
+    private fun handleBackStack() {
         (activity as MainActivity).onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -202,7 +202,6 @@ class MicFragment : MetadataBaseLockFragment(),
                 }
             })
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -246,7 +245,6 @@ class MicFragment : MetadataBaseLockFragment(),
         }
         viewModel.checkAvailableStorage()
     }
-
 
     private fun hastRecordingPermissions(context: Context): Boolean {
         return ActivityCompat.checkSelfPermission(
@@ -369,7 +367,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun onMediaFilesUploadScheduleError(throwable: Throwable?) {
     }
-
 
     private fun handleStop() {
         disablePause()

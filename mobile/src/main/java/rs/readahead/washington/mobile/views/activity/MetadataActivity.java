@@ -93,7 +93,6 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private CompositeDisposable disposables;
     private boolean inProgress = false;
 
-
     private static void acceptBetterLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
             return;
