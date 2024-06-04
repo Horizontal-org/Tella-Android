@@ -279,7 +279,7 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                 }
 
                 is MicFragment -> {
-                    if (isBackgroundWorkInProgress){
+                    if (isBackgroundWorkInProgress) {
                         showBackgroundTasksExitPrompt()
                     }
                 }
@@ -433,6 +433,4 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         btmNavMain.menu.findItem(R.id.home).isChecked = true
         navController.navigate(R.id.home)
     }
-
-
 }
