@@ -74,6 +74,9 @@ import timber.log.Timber;
 
 public class MediaFileHandler {
     private static File tmpPath;
+    private static final String CONTENT_SCHEME = "content";
+    private static final String MIME_TYPE_COLUMN = "mime_type";
+
 
     public MediaFileHandler() {
     }
@@ -810,12 +813,12 @@ public class MediaFileHandler {
 
     public static VaultFile getUriInfo(Context context, Uri uri) {
         VaultFile file = new VaultFile();
-        if (uri.getScheme().equals("content")) {
+        if (CONTENT_SCHEME.equals(uri.getScheme())) {
             ContentResolver contentResolver = context.getContentResolver();
             try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    int mimeTypeIndex = cursor.getColumnIndex("mime_type"); // Custom column name
+                    int mimeTypeIndex = cursor.getColumnIndex(MIME_TYPE_COLUMN); // Custom column name
                     if (nameIndex != -1) {
                         file.name = cursor.getString(nameIndex);
                     }
@@ -824,7 +827,7 @@ public class MediaFileHandler {
                     }
                 }
             }
-        } else if (uri.getScheme().equals("file")) {
+        } else if ("file".equals(uri.getScheme())) {
             String fileName = uri.getLastPathSegment();
             file.name = fileName;
             file.mimeType = null;
