@@ -9,6 +9,8 @@ import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.utils.DialogUtils
 
 object VaultSheetUtils {
+    private var lastCheckedId: Int = 0
+
     interface IVaultActions {
         fun upload()
         fun share()
@@ -216,6 +218,7 @@ object VaultSheetUtils {
     fun showVaultSortSheet(fragmentManager: FragmentManager, titleText: String?, filterNameAZ: String?, filterNameZA: String, filterASC: String, filterDESC: String, sort: IVaultSortActions) {
         val vaultSortSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_sort_vault).screenTag("vaultSortSheet").cancellable(true)
         vaultSortSheet.holder(VaultSortSheetHolder(), object : CustomBottomSheetFragment.Binder<VaultSortSheetHolder> {
+
             override fun onBind(holder: VaultSortSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -227,8 +230,10 @@ object VaultSheetUtils {
                     radioBtnASC.text = filterASC
                     //Sort DATE DESC
                     radioBtnDESC.text = filterDESC
+                    radioGroup.check(lastCheckedId)
 
                     radioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
+                        lastCheckedId = checkedId
                         when (radioGroup.checkedRadioButtonId) {
                             R.id.radioBtnNameAZ -> {
                                 vaultSortSheet.dismiss()
