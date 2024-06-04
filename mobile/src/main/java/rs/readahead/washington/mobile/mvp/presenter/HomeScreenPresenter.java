@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.mvp.presenter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInstaller;
 import android.net.Uri;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
