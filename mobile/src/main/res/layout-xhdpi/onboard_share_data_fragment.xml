@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    app:behavior_hideable="true"
-    android:padding="21dp">
+    android:padding="21dp"
+    app:behavior_hideable="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -19,12 +19,12 @@
         android:id="@+id/server_icon"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/onboard_title"
         android:padding="16dp"
         android:src="@drawable/ic_server"
         android:textColor="@color/wa_white"
+        app:layout_constraintBottom_toTopOf="@+id/onboard_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -35,74 +35,80 @@
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:textStyle="bold"
         android:padding="6dp"
         android:text="@string/onboard.title_share_data"
         android:textColor="@color/wa_white"
         android:textSize="18sp"
+        android:textStyle="bold"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/standard_sheet_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans"
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="0dp"
-        android:visibility="visible"
-        android:textAlignment="center"
         android:text="@string/onboard.expl_share_data"
-        android:layout_marginTop="16dp"
+        android:textAlignment="center"
         android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
         android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="RtlCompat" />
 
     <TextView
         android:id="@+id/startBtn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
         android:layout_marginTop="16dp"
+        android:background="@drawable/round_button_selector"
+        android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textAllCaps="true"
         android:text="@string/onboard.connect_btn_share_data"
+        android:textAllCaps="true"
         android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content" />
 
     <TextView
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
         android:layout_height="76dp"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startBtn"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:background="@drawable/round_button_selector"
         android:layout_marginTop="16dp"
+        android:background="@drawable/round_button_selector"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textStyle="bold"
-        android:textAllCaps="true"
         android:text="@string/onboard.continue_btn_share_data"
+        android:textAllCaps="true"
         android:textColor="@color/wa_white"
-        android:fontFamily="@font/open_sans"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startBtn" />
 
+    <TextView
+        android:id="@+id/back_btn"
+        style="@style/Unlock_White_Text_Back"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
