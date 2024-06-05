@@ -21,6 +21,7 @@ import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.s
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import java.io.InputStream
 
+
 @AndroidEntryPoint
 class PDFReaderActivity : BaseLockActivity() {
     private val viewModel: SharedMediaFileViewModel by viewModels()
@@ -28,6 +29,7 @@ class PDFReaderActivity : BaseLockActivity() {
     private var vaultFile: VaultFile? = null
     private var actionsDisabled = false
     private var isInfoShown = false
+    private var pdfTopMargin = 0
 
     companion object {
         const val VIEW_PDF = "vp"
@@ -58,6 +60,7 @@ class PDFReaderActivity : BaseLockActivity() {
         }
 
         actionsDisabled = intent.hasExtra(HIDE_MENU)
+        pdfTopMargin = resources.getDimensionPixelSize(R.dimen.pdf_top_margin)
     }
 
     private fun initObservers() {
@@ -181,6 +184,14 @@ class PDFReaderActivity : BaseLockActivity() {
                     false
                 }
         }
+
+        binding.pdfRendererView.recyclerView.addOnScrollListener(
+            PdfScrollListener(
+                binding.toolbar,
+                binding.pdfRendererView,
+                pdfTopMargin
+            )
+        )
     }
 
     private fun setupMetadataMenuItem(visible: Boolean) {

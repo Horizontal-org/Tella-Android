@@ -48,5 +48,6 @@
     <dimen name="onboardingIndicator">8dp</dimen>
     <dimen name="margin_start">14.5dp</dimen>
     <dimen name="default_edittext_layout_height">120dp</dimen>
+    <dimen name="pdf_top_margin">60dp</dimen>
 
 </resources>
