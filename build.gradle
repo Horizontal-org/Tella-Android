@@ -44,7 +44,7 @@ buildscript {
     versions.squareupTape = '1.2.3'
     versions.cacheword = '0.1.1'
     versions.glide = '4.15.0'
-    versions.burgstallerOkhttpDigest = '2.1'
+    versions.burgstallerOkhttpDigest = '3.1.0'
     versions.javarosa = '2.6.0'
     versions.kxml2 = '2.3.0'
     versions.commonsIo = '2.6'
