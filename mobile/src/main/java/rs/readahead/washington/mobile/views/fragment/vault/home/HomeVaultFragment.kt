@@ -212,7 +212,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
                 }
             }
         })
-        binding.content.panicModeView.setOnClickListener { onPanicClicked() }
+        binding.panicSeekContainer.setOnClickListener { onPanicClicked() }
+        binding.toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
         binding.toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
@@ -267,13 +268,13 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         val iconRes = if (isBackgroundEncryptionEnabled) {
             R.drawable.ic_notification_on
         } else {
-            R.drawable.ic_notification_off
+            -1
         }
-        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setLeftIcon(iconRes)
+        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
     }
 
     private fun setupToolbarClickListener() {
-        binding.toolbar.onLeftClickListener = {
+        binding.toolbar.onRightOfLeftClickListener = {
             val description = if (backgroundActivitiesAdapter.itemCount == 0) {
                 getString(R.string.no_background_activity)
             } else {

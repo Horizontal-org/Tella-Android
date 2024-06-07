@@ -25,8 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_constraintTop_toTopOf="parent"
+                app:rightOfLeftIcon="@drawable/ic_notification_off"
                 app:rightIcon="@drawable/ic_close"
-                app:leftIcon="@drawable/ic_notification_off"
+                app:leftIcon="@drawable/ic_settings"
                 app:rightIconContentDescription="@string/quick_exit_action"
                 app:toolbarTitle="@string/app_name" />
 

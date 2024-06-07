@@ -5,17 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/dark_purple">
 
-
-    <org.hzontal.shared_ui.appbar.ToolbarComponent
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:arrowBackIconContentDescription="@string/action_go_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startTitle="@string/settings_app.bar" />
-
     <LinearLayout
         android:id="@+id/settings_layout"
         android:layout_width="match_parent"
@@ -25,7 +14,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/general_settings_button"

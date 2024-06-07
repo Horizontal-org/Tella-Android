@@ -29,6 +29,8 @@ class ToolbarComponent @JvmOverloads constructor(
     private lateinit var endTitleTv: TextView
     private lateinit var rightImg : AppCompatImageButton
     private lateinit var leftImg : AppCompatImageButton
+    private lateinit var btnRightOfLeftImage: AppCompatImageButton
+
     @DrawableRes
     private var arrowBackIcon: Int = -1
     @DrawableRes
@@ -41,13 +43,21 @@ class ToolbarComponent @JvmOverloads constructor(
     var leftIconContentDescription : Int = -1
     @StringRes
     var arrowBackIconContentDescription : Int = -1
+    @DrawableRes
+    private var rightOfLeftIcon: Int = -1
+    @StringRes
+    private var rightOfLeftIconContentDescription: Int = -1
+
     var toolbarTitle: Int = -1
     var startTitle: Int = -1
     var bigStartTitle: Int = -1
     var endTitle: Int = -1
+
     var backClickListener: (() -> Unit)? = null
     var onRightClickListener: (() -> Unit)? = null
     var onLeftClickListener: (() -> Unit)? = null
+    var onRightOfLeftClickListener: (() -> Unit)? = null
+
 
     init {
         LayoutInflater.from(context)
@@ -67,6 +77,7 @@ class ToolbarComponent @JvmOverloads constructor(
         rightImg = findViewById(R.id.right_img)
         leftImg = findViewById(R.id.left_img)
         bigStartTitleTv = findViewById(R.id.bigStartTitleTv)
+        btnRightOfLeftImage = findViewById(R.id.btn_right_of_left_image)
     }
 
     private fun initListener() {
@@ -78,6 +89,9 @@ class ToolbarComponent @JvmOverloads constructor(
         }
         leftImg.setOnClickListener {
             onLeftClickListener?.invoke()
+        }
+        btnRightOfLeftImage.setOnClickListener {
+            onRightOfLeftClickListener?.invoke()
         }
     }
 
@@ -101,7 +115,8 @@ class ToolbarComponent @JvmOverloads constructor(
                 rightIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_rightIconContentDescription, -1)
                 leftIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_leftIcon, -1)
                 leftIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_leftIconContentDescription, -1)
-
+                rightOfLeftIcon = typedArray.getResourceId(R.styleable.ToolbarComponent_rightOfLeftIcon, -1)
+                rightOfLeftIconContentDescription = typedArray.getResourceId(R.styleable.ToolbarComponent_rightOfLeftIconContentDescription, -1)
             } finally {
                 typedArray.recycle()
             }
@@ -159,6 +174,15 @@ class ToolbarComponent @JvmOverloads constructor(
         }
     }
 
+    fun setRightOfLeftIcon(icon: Int){
+        if (icon != -1){
+            btnRightOfLeftImage.setBackgroundResource(icon)
+            btnRightOfLeftImage.isVisible = true
+        }else{
+            btnRightOfLeftImage.isVisible = false
+        }
+    }
+
     private fun bindView() {
         if (arrowBackIcon != -1) {
             btnBack.setBackgroundResource(arrowBackIcon)
@@ -197,6 +221,14 @@ class ToolbarComponent @JvmOverloads constructor(
         }
         if (leftIconContentDescription != -1){
             leftImg.contentDescription = context.getString(leftIconContentDescription)
+        }
+
+        if (rightOfLeftIcon != -1) {
+            btnRightOfLeftImage.setBackgroundResource(rightOfLeftIcon)
+            btnRightOfLeftImage.isVisible = true
+        }
+        if (rightOfLeftIconContentDescription != -1) {
+            btnRightOfLeftImage.contentDescription = context.getString(rightOfLeftIconContentDescription)
         }
 
 

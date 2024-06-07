@@ -12,6 +12,12 @@
         android:label="@string/Home_BottomNav_Home"
         tools:layout="@layout/fragment_vault">
         <action
+            android:id="@+id/action_homeScreen_to_main_settings"
+            app:destination="@id/main_settings"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
             android:id="@+id/action_homeScreen_to_attachments_screen"
             app:destination="@id/attachments_screen"
             app:enterAnim="@anim/slide_in_start"
@@ -72,6 +78,12 @@
         android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
         android:label="@string/Vault_FileInfo"
         tools:layout="@layout/fragment_vault_info" />
+
+    <activity
+        android:id="@+id/main_settings"
+        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
+        android:label="@string/settings_app.bar"
+        tools:layout="@layout/activity_settings" />
 
     <fragment
         android:id="@+id/formScreen"

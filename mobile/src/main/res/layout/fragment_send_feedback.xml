@@ -9,31 +9,19 @@
     android:theme="@style/Theme.MaterialComponents.Bridge"
     tools:context=".views.fragment.feedback.SendFeedbackFragment">
 
-    <org.hzontal.shared_ui.appbar.ToolbarComponent
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/dark_purple"
-        app:arrowBackIcon="@drawable/ic_close_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:startTitle="@string/feedback_title" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="100dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:background="@color/wa_purple"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      >
+        app:layout_constraintBottom_toTopOf="@+id/bottom_view"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
