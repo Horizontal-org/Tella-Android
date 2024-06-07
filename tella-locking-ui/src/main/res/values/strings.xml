@@ -77,4 +77,5 @@ unlock Tella</string>
     <string name="attempts_remaining_singular">You have 1 attempt remaining until\n everything in your Tella is deleted.</string>
     <string name="attempts_remaining_plural">You have %1$d attempts remaining until\n everything in your Tella is deleted.</string>
     <string name="exceeded_max_attempts">You have exceeded the maximum number of\n incorrect login attempts. All your Tella data\n has been deleted.</string>
+    <string name="unlock">Unlock</string>
 </resources>
