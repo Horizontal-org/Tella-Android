@@ -26,8 +26,8 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
-    private final Context        context;
-    private final DatabaseSecret databaseSecret;
+    final Context        context;
+    final DatabaseSecret databaseSecret;
 
     CipherOpenHelper(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) {
         super(

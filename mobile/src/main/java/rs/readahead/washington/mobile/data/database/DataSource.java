@@ -98,9 +98,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
 
     private DataSource(Context context, byte[] key) throws Exception {
+        System.loadLibrary("sqlcipher");
         DatabaseSecret databaseSecret = new DatabaseSecret(key);
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,databaseSecret);
-        CipherOpenHelper.migrateSqlCipher3To4IfNeeded(context, databaseSecret);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

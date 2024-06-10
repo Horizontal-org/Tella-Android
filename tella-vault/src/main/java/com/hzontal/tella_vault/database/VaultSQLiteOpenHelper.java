@@ -20,6 +20,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
+        db.enableWriteAheadLogging();
     }
 
     @Override
@@ -35,7 +36,20 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
+                try {
+                    migrateSqlCipher3To4IfNeeded(context, databaseSecret);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            // Add cases for other versions if needed
         }
+    }
+
+    private void migrateFromVersion1To2(SQLiteDatabase db) {
+        // Perform migration from SQLCipher version 1 to version 2
+        // For example:
+        db.execSQL("PRAGMA cipher_migrate;");
     }
 
     private void createVaultFileTable(SQLiteDatabase db) {
