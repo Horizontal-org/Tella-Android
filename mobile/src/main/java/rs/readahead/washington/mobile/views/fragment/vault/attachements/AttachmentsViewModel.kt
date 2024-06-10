@@ -17,6 +17,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.MyApplication.rxVault
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
@@ -31,7 +32,6 @@ import javax.inject.Inject
 class AttachmentsViewModel @Inject constructor(
     private val application: Application,
     private val keyDataSource: KeyDataSource,
-    private val rxVault: RxVault
 ) : AndroidViewModel(
     application
 ) {

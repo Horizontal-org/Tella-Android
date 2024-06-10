@@ -51,10 +51,10 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                         // if not vacuumed in a while, perform that operation
                         long currentTime = System.currentTimeMillis();
                         // 7 days
-                        if (currentTime - com.hzontal.tella_vault.database.Preferences.getLastVacuumTime() > 604_800_000) {
-                            connection.execute("VACUUM;", null, null);
-                            com.hzontal.tella_vault.database.Preferences.setLastVacuumNow();
-                        }
+                      //  if (currentTime - com.hzontal.tella_vault.database.Preferences.getLastVacuumTime() > 604_800_000) {
+                       //     connection.execute("VACUUM;", null, null);
+                       //     com.hzontal.tella_vault.database.Preferences.setLastVacuumNow();
+                      //  }
                     }
                 },
                 // Note: Now that we support concurrent database reads the migrations are actually non-blocking

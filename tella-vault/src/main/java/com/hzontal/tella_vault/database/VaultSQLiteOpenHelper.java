@@ -37,6 +37,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         switch (oldVersion) {
             case 1:
                 try {
+                    migrateFromVersion1To2(db);
                     migrateSqlCipher3To4IfNeeded(context, databaseSecret);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
