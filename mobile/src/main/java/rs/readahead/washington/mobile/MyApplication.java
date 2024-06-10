@@ -176,6 +176,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         SharedPrefs.getInstance().init(this);
         configureCrashlytics();
 
+        System.loadLibrary("sqlcipher");
+
+
         // provide custom configuration
      /*   Configuration myConfig = new Configuration.Builder()
                 .setMinimumLoggingLevel(android.util.Log.INFO)

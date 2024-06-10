@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.data.sharedpref;
+package com.hzontal.tella_vault.database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

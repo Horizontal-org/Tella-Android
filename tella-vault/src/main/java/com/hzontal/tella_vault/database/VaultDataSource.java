@@ -16,8 +16,8 @@ import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +42,9 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+        DatabaseSecret databaseSecret = new DatabaseSecret(key);
+        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, databaseSecret);
+        database = sqLiteOpenHelper.getWritableDatabase();
     }
 
     /**

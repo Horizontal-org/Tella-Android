@@ -2,15 +2,24 @@ package rs.readahead.washington.mobile.data.database;
 
 import android.content.Context;
 
-import net.sqlcipher.database.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 
 class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
 
 
-    WashingtonSQLiteOpenHelper(Context context) {
-        super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
+
+    WashingtonSQLiteOpenHelper(Context context, DatabaseSecret databaseSecret) {
+        super(context, databaseSecret);
     }
 
     private static String objQuote(String str) {
@@ -29,133 +38,13 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
     }
 
-    @Override
+   /* @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        // we have started from version 1
-
-        // DBv1
-        db.execSQL(createTableCollectServer());
-        db.execSQL(createTableMediaFile());
-        db.execSQL(createTableCollectBlankForm());
-        db.execSQL(createTableCollectFormInstance());
-        db.execSQL(createTableCollectFormInstanceMediaFile());
-        db.execSQL(createTableSettings());
-
-        // DBv2
-        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-        db.execSQL(alterTableCollectServerAddChecked());
-
-        // DBv3
-        db.execSQL(alterTableCollectBlankFormAddUpdated());
-
-        // DBv4
-        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-
-        // DBv5
-        db.execSQL(alterTableMediaFileAddHash());
-
-        // DBv6
-        db.execSQL(createTableTellaUploadServer());
-
-        // DBv7
-        db.execSQL(createTableMediaFileUploads());
-
-        //DBv8
-        db.execSQL(alterTableMediaFileUploadsAddMetadata());
-        db.execSQL(alterTableMediaFileUploadsAddManual());
-        db.execSQL(alterTableMediaFileUploadsAddServer());
-        db.execSQL(createTableUwaziServer());
-        db.execSQL(createTableCollectEntityUwazi());
-        db.execSQL(createTableCollectBlankTemplateUwazi());
-        db.execSQL(createTableCollectFormInstanceVaultFile());
-        db.execSQL(createTableUwaziEntityInstanceVaultFile());
-
-        //DBV9
-        db.execSQL(alterTableTellaUploadServerAddAccessToken());
-        db.execSQL(alterTableTellaUploadServerAddMetatData());
-        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-        db.execSQL(alterTableTellaUploadServerAddProjectName());
-        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-        db.execSQL(alterTableTellaUploadServerAddProjectID());
-        db.execSQL(createTableReportFormInstance());
-        db.execSQL(createTableReportInstanceVaultFile());
-        db.execSQL(createTableReportFileUploads());
-
-        //DBV11
-        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-        db.execSQL(createTableFeedback());
-
-        //DBV12
-        db.execSQL(createTableResources());
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-                db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-                db.execSQL(alterTableCollectServerAddChecked());
-
-            case 2:
-                db.execSQL(alterTableCollectBlankFormAddUpdated());
-
-            case 3:
-                db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-
-            case 4:
-                db.execSQL(alterTableMediaFileAddHash());
-
-            case 5:
-                db.execSQL(createTableTellaUploadServer());
-
-            case 6:
-                db.execSQL(createTableMediaFileUploads());
-
-            case 7:
-                db.execSQL(alterTableMediaFileUploadsAddServer());
-                db.execSQL(alterTableMediaFileUploadsAddManual());
-                db.execSQL(alterTableMediaFileUploadsAddMetadata());
-
-            case 8:
-                db.execSQL(createTableUwaziServer());
-                db.execSQL(createTableCollectEntityUwazi());
-                db.execSQL(createTableCollectBlankTemplateUwazi());
-                db.execSQL(createTableCollectFormInstanceVaultFile());
-                db.execSQL(createTableUwaziEntityInstanceVaultFile());
-
-            case 9:
-                db.execSQL(alterTableTellaUploadServerAddAccessToken());
-                db.execSQL(alterTableTellaUploadServerAddMetatData());
-                db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-                db.execSQL(alterTableTellaUploadServerAddProjectName());
-                db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-                db.execSQL(alterTableTellaUploadServerAddProjectID());
-                db.execSQL(createTableReportFormInstance());
-                db.execSQL(createTableReportInstanceVaultFile());
-                db.execSQL(createTableReportFileUploads());
-
-            case 10:
-                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-                db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-
-            case 11:
-                db.execSQL(createTableFeedback());
-
-            case 12:
-                db.execSQL(createTableResources());
-        }
-    }
+    }*/
 
     private String createTableCollectServer() {
         return "CREATE TABLE " + sq(D.T_COLLECT_SERVER) + " (" +
@@ -487,5 +376,126 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0  " +
                 ");";
+    }
+
+    @Override
+    public void onCreate(net.zetetic.database.sqlcipher.SQLiteDatabase db) {
+        // we have started from version 1
+
+        // DBv1
+        db.execSQL(createTableCollectServer());
+        db.execSQL(createTableMediaFile());
+        db.execSQL(createTableCollectBlankForm());
+        db.execSQL(createTableCollectFormInstance());
+        db.execSQL(createTableCollectFormInstanceMediaFile());
+        db.execSQL(createTableSettings());
+
+        // DBv2
+        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
+        db.execSQL(alterTableCollectServerAddChecked());
+
+        // DBv3
+        db.execSQL(alterTableCollectBlankFormAddUpdated());
+
+        // DBv4
+        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+
+        // DBv5
+        db.execSQL(alterTableMediaFileAddHash());
+
+        // DBv6
+        db.execSQL(createTableTellaUploadServer());
+
+        // DBv7
+        db.execSQL(createTableMediaFileUploads());
+
+        //DBv8
+        db.execSQL(alterTableMediaFileUploadsAddMetadata());
+        db.execSQL(alterTableMediaFileUploadsAddManual());
+        db.execSQL(alterTableMediaFileUploadsAddServer());
+        db.execSQL(createTableUwaziServer());
+        db.execSQL(createTableCollectEntityUwazi());
+        db.execSQL(createTableCollectBlankTemplateUwazi());
+        db.execSQL(createTableCollectFormInstanceVaultFile());
+        db.execSQL(createTableUwaziEntityInstanceVaultFile());
+
+        //DBV9
+        db.execSQL(alterTableTellaUploadServerAddAccessToken());
+        db.execSQL(alterTableTellaUploadServerAddMetatData());
+        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+        db.execSQL(alterTableTellaUploadServerAddProjectName());
+        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+        db.execSQL(alterTableTellaUploadServerAddProjectID());
+        db.execSQL(createTableReportFormInstance());
+        db.execSQL(createTableReportInstanceVaultFile());
+        db.execSQL(createTableReportFileUploads());
+
+        //DBV11
+        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+        db.execSQL(createTableFeedback());
+
+        //DBV12
+        db.execSQL(createTableResources());
+    }
+
+    @Override
+    public void onUpgrade(net.zetetic.database.sqlcipher.SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (oldVersion) {
+            case 1:
+                db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
+                db.execSQL(alterTableCollectServerAddChecked());
+
+            case 2:
+                db.execSQL(alterTableCollectBlankFormAddUpdated());
+
+            case 3:
+                db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+
+            case 4:
+                db.execSQL(alterTableMediaFileAddHash());
+
+            case 5:
+                db.execSQL(createTableTellaUploadServer());
+
+            case 6:
+                db.execSQL(createTableMediaFileUploads());
+
+            case 7:
+                db.execSQL(alterTableMediaFileUploadsAddServer());
+                db.execSQL(alterTableMediaFileUploadsAddManual());
+                db.execSQL(alterTableMediaFileUploadsAddMetadata());
+
+            case 8:
+                db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectEntityUwazi());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
+                db.execSQL(createTableCollectFormInstanceVaultFile());
+                db.execSQL(createTableUwaziEntityInstanceVaultFile());
+
+            case 9:
+                db.execSQL(alterTableTellaUploadServerAddAccessToken());
+                db.execSQL(alterTableTellaUploadServerAddMetatData());
+                db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+                db.execSQL(alterTableTellaUploadServerAddProjectName());
+                db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+                db.execSQL(alterTableTellaUploadServerAddProjectID());
+                db.execSQL(createTableReportFormInstance());
+                db.execSQL(createTableReportInstanceVaultFile());
+                db.execSQL(createTableReportFileUploads());
+
+            case 10:
+                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+                db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+
+            case 11:
+                db.execSQL(createTableFeedback());
+
+            case 12:
+                db.execSQL(createTableResources());
+        }
+
     }
 }

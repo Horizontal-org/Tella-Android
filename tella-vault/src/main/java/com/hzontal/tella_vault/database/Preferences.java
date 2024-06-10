@@ -1,15 +1,8 @@
-package rs.readahead.washington.mobile.data.sharedpref;
+package com.hzontal.tella_vault.database;
 
-
-import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
-import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
-import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.hzontal.shared_ui.utils.CalculatorTheme;
-import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.Map;
@@ -135,9 +128,7 @@ public class Preferences {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
     }
 
-    public static String getCalculatorTheme() {
-        return getString(SharedPrefs.CALCULATOR_THEME, CalculatorTheme.GREEN_SKIN.name());
-    }
+
 
     public static void setCalculatorTheme(@NonNull String value) {
         setString(SharedPrefs.CALCULATOR_THEME, value);
@@ -297,29 +288,6 @@ public class Preferences {
         setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
-    public static Long getFailedUnlockOption() {
-        return getLong(FAILED_UNLOCK_OPTION, 0);
-    }
-
-    public static void setFailedUnlockOption(Long option) {
-        setLong(FAILED_UNLOCK_OPTION, option);
-    }
-
-    public static boolean isShowUnlockRemainingAttempts() {
-        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, true);
-    }
-
-    public static void setShowUnlockRemainingAttempts(boolean option) {
-        setBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, option);
-    }
-
-    public static long getUnlockRemainingAttempts() {
-        return getLong(REMAINING_UNLOCK_ATTEMPTS, 0);
-    }
-
-    public static void setUnlockRemainingAttempts(long option) {
-        setLong(REMAINING_UNLOCK_ATTEMPTS, option);
-    }
 
     public static boolean isTempTimeout() {
         return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
@@ -444,18 +412,5 @@ public class Preferences {
         setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
     }
 
-    public static boolean isTimeToShowReminderImprovements() {
-        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false;
-        Date currentDate = new Date();
-        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
-        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
-    }
 
-    public static boolean isFeedbackSharingEnabled() {
-        return getBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, false);
-    }
-
-    public static void setFeedbackSharingEnabled(boolean value) {
-        setBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, value);
-    }
 }

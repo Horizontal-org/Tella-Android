@@ -5,12 +5,12 @@ import android.content.Context;
 
 import com.hzontal.tella_vault.VaultFile;
 
-import net.sqlcipher.database.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
-    public VaultSQLiteOpenHelper(Context context) {
-        super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
+    public VaultSQLiteOpenHelper(Context context, DatabaseSecret databaseSecret) {
+        super(context, databaseSecret);
     }
 
     @Override

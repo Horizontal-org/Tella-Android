@@ -17,8 +17,13 @@ android {
         versionCode 177
         versionName "2.8.0"
         multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
+
+
 
     configurations.all {
         // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"
@@ -112,7 +117,9 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
-    implementation "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
+    implementation 'net.zetetic:sqlcipher-android:4.5.4@aar'
+    implementation 'androidx.sqlite:sqlite-ktx:2.3.1'
+    // implementation "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
     implementation "info.guardianproject.cacheword:cachewordlib:$versions.cacheword"
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"

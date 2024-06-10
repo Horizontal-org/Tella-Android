@@ -10,10 +10,14 @@ class D {
     //static final String DATE = " DATE ";
 
     /* DATABASE */
-    static final String DATABASE_NAME = "tella.db";
+    public static final String CIPHER3_DATABASE_NAME    = "tella.db";
+    public static final String  DATABASE_NAME            = "tella_v4.db";
+
+
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
     static final int DATABASE_VERSION = 13;
+    static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
     static final String T_COLLECT_SERVER = "t_collect_server";

@@ -12,6 +12,10 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
     }
 
     buildTypes {
@@ -52,7 +56,7 @@ dependencies {
     api "androidx.lifecycle:lifecycle-process:$versions.lifecycleProcess"
     api "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycleCommonJava8"
 
-    api "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
+    implementation 'net.zetetic:sqlcipher-android:4.5.4@aar'
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
 
