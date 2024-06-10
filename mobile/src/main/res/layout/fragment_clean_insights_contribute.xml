@@ -38,7 +38,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:text="@string/clean_insights.contribute_title"
+        android:text="@string/Analytics_contribute_title"
         android:textColor="@color/wa_white"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -91,7 +91,7 @@
         android:layout_marginBottom="32dp"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:text="@string/clean_insights.contribute_description"
+        android:text="@string/Analytics_contribute_description"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_yes"
@@ -110,7 +110,7 @@
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
         app:layout_constraintStart_toStartOf="@id/guidelineStart05"
         app:layout_constraintTop_toBottomOf="@+id/btn_no"
-        tools:text="@string/clean_insights.contribute_more_info1" />
+        tools:text="@string/Analytics_contribute_more_info" />
 
     <TextView
         android:id="@+id/back_btn"

@@ -19,9 +19,9 @@ import androidx.navigation.NavDirections
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
-import org.cleaninsights.sdk.Campaign
+/*import org. cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
-import org.cleaninsights.sdk.CleanInsightsConfiguration
+import org.cleaninsights.sdk.CleanInsightsConfiguration*/
 import timber.log.Timber
 import java.net.URL
 
@@ -79,7 +79,7 @@ fun Window.changeStatusColor(context: Context, color: Int) {
         statusBarColor = context.resources.getColor(color)
     }
 }
-
+/*
 fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsights? {
     return try {
         val endDate = startDate + (7 * 86400)
@@ -94,7 +94,7 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
         e.printStackTrace()
         null
     }
-}
+}*/
 
 
 fun View.setTint(@ColorRes colorRes: Int) {

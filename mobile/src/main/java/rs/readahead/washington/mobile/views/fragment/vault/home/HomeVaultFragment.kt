@@ -23,6 +23,7 @@ import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -115,7 +116,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
         if (cleanInsightsActions == CleanInsightsActions.YES) {
-            Preferences.setIsAcceptedImprovements(true)
+            CommonPreferences.setIsAcceptedAnalytics(true)
             CleanInsightUtils.grantCampaign(true)
             DialogUtils.showBottomMessage(
                 requireActivity(),
@@ -132,7 +133,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             layoutManager = LinearLayoutManager(baseActivity)
         }
         //Uncomment to add improvement section
-        // vaultAdapter.addImprovementSection()
+        vaultAdapter.addAnalyticsBanner()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
         serversList = ArrayList()
@@ -334,14 +335,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
-                Preferences.setIsAcceptedImprovements(true)
+                CommonPreferences.setIsAcceptedAnalytics(true)
                 nav().navigate(R.id.main_settings)
             }
         }
     }
 
     private fun removeImprovementSection() {
-        Preferences.setShowVaultImprovementSection(false)
+        CommonPreferences.setShowVaultAnalyticsSection(false)
         vaultAdapter.removeImprovementSection()
     }
 

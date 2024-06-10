@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -21,6 +22,7 @@ import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
@@ -47,15 +49,16 @@ class GeneralSettings :
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
+        binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { Util.startBrowserIntent(context, getString(R.string.config_analytics_learn_url)) }
+
         setLanguageSetting()
 
         initSwitch(
             binding.shareDataSwitch,
-            Preferences::setIsAcceptedImprovements
+            CommonPreferences::setIsAcceptedAnalytics
         ) { isChecked ->
-            CleanInsightUtils.grantCampaign(isChecked)
-            if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
-            binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
+           // CleanInsightUtils.grantCampaign(isChecked)
+           // if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
         }
 
         initSwitch(
@@ -165,7 +168,7 @@ class GeneralSettings :
     private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
         when (cleanInsightsActions) {
             CleanInsightsActions.YES -> {
-                Preferences.setIsAcceptedImprovements(true)
+                CommonPreferences.setIsAcceptedAnalytics(true)
                 CleanInsightUtils.grantCampaign(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
@@ -174,7 +177,7 @@ class GeneralSettings :
             }
 
             CleanInsightsActions.NO -> {
-                Preferences.setIsAcceptedImprovements(false)
+                CommonPreferences.setIsAcceptedAnalytics(false)
                 CleanInsightUtils.grantCampaign(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
             }

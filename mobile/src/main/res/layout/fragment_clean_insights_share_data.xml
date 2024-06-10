@@ -37,12 +37,13 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:text="@string/clean_insights.share_data_title"
+        android:text="@string/Analytics_share_data_title"
         android:textColor="@color/wa_white"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/guidelineStart05"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +54,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/open_sans"
         android:gravity="center"
-        android:text="@string/clean_insights.share_data_description"
+        android:text="@string/Analytics_share_data_description"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"

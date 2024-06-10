@@ -53,6 +53,7 @@ class CleanInsightsActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         viewPager.currentItem = viewPagerPosition.dec()
     }
 
