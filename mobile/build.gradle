@@ -17,13 +17,21 @@ android {
         versionCode 177
         versionName "2.8.0"
         multiDexEnabled true
+
         ndk {
-            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
 
-
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            universalApk true
+        }
+    }
 
     configurations.all {
         // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"

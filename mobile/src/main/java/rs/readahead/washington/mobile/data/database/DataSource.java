@@ -83,9 +83,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 
-    static {
-        System.loadLibrary("sqlcipher");
-    }
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -101,7 +98,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
 
     private DataSource(Context context, byte[] key) throws Exception {
-        SQLiteDatabase.loadLibs(context);
         DatabaseSecret databaseSecret = new DatabaseSecret(key);
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,databaseSecret);
         CipherOpenHelper.migrateSqlCipher3To4IfNeeded(context, databaseSecret);

@@ -42,6 +42,7 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
+         System.loadLibrary("sqlcipher");
         DatabaseSecret databaseSecret = new DatabaseSecret(key);
         VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, databaseSecret);
         database = sqLiteOpenHelper.getWritableDatabase();
