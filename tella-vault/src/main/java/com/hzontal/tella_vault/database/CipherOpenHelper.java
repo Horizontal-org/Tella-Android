@@ -5,8 +5,12 @@ import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteDatatypeMismatchException;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,12 +19,14 @@ import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
+import net.zetetic.database.sqlcipher.SQLiteStatement;
 
 import org.hzontal.tella.keys.util.Preferences;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
+import java.sql.PreparedStatement;
 
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
@@ -105,13 +111,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                         int version = newDb.getVersion();
                         newDb.close();
 
-                        // Make sure the new database has it's version set correctly (if not then the migration didn't
-                        // fully succeed and the database will try to create all it's tables and immediately fail so
+                        // Make sure the new database has its version set correctly (if not then the migration didn't
+                        // fully succeed and the database will try to create all its tables and immediately fail so
                         // we will need to remove and remigrate)
                         if (version > 0) {
-                            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has past
-//            //noinspection ResultOfMethodCallIgnored
-//            oldDbFile.delete();
+                            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has passed
+                            // oldDbFile.delete();
                             return;
                         }
                     }
@@ -131,7 +136,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 throw new Exception("Failed to create new database");
             }
 
-            // Open the old database and extract it's version
+            // Open the old database and extract its version
             SQLiteDatabase oldDb = CipherOpenHelper.open(oldDbPath, databaseSecret, false);
             int oldDbVersion = oldDb.getVersion();
 
@@ -145,16 +150,17 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             oldDb.rawExecSQL("DETACH DATABASE sqlcipher4");
             oldDb.close();
 
-            // Open the newly migrated database (to ensure it works) and set it's version so we don't try
+            // Open the newly migrated database (to ensure it works) and set its version so we don't try
             // to run any of our custom migrations
             SQLiteDatabase newDb = CipherOpenHelper.open(newDbPath, databaseSecret, true);
             newDb.setVersion(oldDbVersion);
             newDb.close();
 
-            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has past
-            // Remove the old database file since it will no longer be used
-//      //noinspection ResultOfMethodCallIgnored
-//      oldDbFile.delete();
+            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has passed
+            // oldDbFile.delete();
+
+            // Call the data transfer method after migration
+            transferDataFromOldToNewDatabase(context, databaseSecret);
         }
         catch (Exception e) {
             Log.e(TAG, "Migration from SQLCipher3 to SQLCipher4 failed", e);
@@ -164,31 +170,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 Log.e(TAG, "Unable to delete invalid new database file");
             }
 
-            // Notify the user of the issue so they know they can downgrade until the issue is fixed
-           /* NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            String channelId = context.getString(R.string.NotificationChannel_failures);
-
-            if (NotificationChannels.supported()) {
-                NotificationChannel channel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH);
-                channel.enableVibration(true);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setColor(context.getResources().getColor(R.color.textsecure_primary))
-                    .setCategory(NotificationCompat.CATEGORY_ERROR)
-                    .setContentTitle(context.getString(R.string.ErrorNotifier_migration))
-                    .setContentText(context.getString(R.string.ErrorNotifier_migration_downgrade))
-                    .setAutoCancel(true);
-
-            if (!NotificationChannels.supported()) {
-                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            }
-
-            notificationManager.notify(5874, builder.build());*/
-
-            // Throw the error (app will crash but there is nothing else we can do unfortunately)
             throw e;
         }
     }
@@ -202,6 +183,161 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             public void postKey(SQLiteConnection connection) { CipherOpenHelper.applySQLCipherPragmas(connection, useSQLCipher4); }
         });
     }
+    public static void transferDataFromOldToNewDatabase(Context context, DatabaseSecret databaseSecret) {
+        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
+        String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
+
+        SQLiteDatabase oldDb = null;
+        SQLiteDatabase newDb = null;
+
+        try {
+            oldDb = open(oldDbPath, databaseSecret, false);
+            newDb = open(newDbPath, databaseSecret, true);
+
+            // Check if table structures are compatible
+            if (isTableCompatible(oldDb, newDb, "t_vault_file")) {
+                // Transfer data using prepared statements for efficiency and safety
+                transferDataWithSQLiteStatement(oldDb, newDb, "t_vault_file");
+            } else {
+                Log.e(TAG, "Table structures for 't_vault_file' are incompatible");
+            }
+
+        } catch (SQLiteException e) {
+            // Handle specific SQLite exceptions
+            if (e instanceof SQLiteConstraintException) {
+                Log.e(TAG, "Error transferring data: Constraint violation", e);
+                // Consider retrying with data transformation (if applicable)
+            } else if (e instanceof SQLiteDatatypeMismatchException) {
+                Log.e(TAG, "Error transferring data: Data type mismatch", e);
+                // Handle data type conversion (if feasible)
+            } else {
+                Log.e(TAG, "Error transferring data from old to new database", e);
+            }
+        } finally {
+            if (oldDb != null) oldDb.close();
+            if (newDb != null) newDb.close();
+        }
+    }
+
+    // Function to verify table structure compatibility (improved)
+    private static boolean isTableCompatible(SQLiteDatabase oldDb, SQLiteDatabase newDb, String tableName) {
+        Cursor oldCursor = oldDb.rawQuery("PRAGMA table_info(" + tableName + ")", null);
+        Cursor newCursor = newDb.rawQuery("PRAGMA table_info(" + tableName + ")", null);
+
+        if (oldCursor.getCount() != newCursor.getCount()) {
+            return false;
+        }
+
+        int numColumns = oldCursor.getCount();
+        for (int i = 0; i < numColumns; i++) {
+            oldCursor.moveToPosition(i);
+            newCursor.moveToPosition(i);
+
+            String oldColumnName = oldCursor.getString(1); // Column name
+            String newColumnName = newCursor.getString(1);
+
+            if (!oldColumnName.equals(newColumnName)) {
+                return false;
+            }
+
+            String oldColumnType = oldCursor.getString(2); // Column data type
+            String newColumnType = newCursor.getString(2);
+
+            // Perform more detailed data type comparison if necessary
+            // (e.g., consider casting to common types)
+            if (!oldColumnType.equals(newColumnType)) {
+                return false;
+            }
+        }
+
+        oldCursor.close();
+        newCursor.close();
+        return true;
+    }
+
+    private static void transferDataWithSQLiteStatement(SQLiteDatabase oldDb, SQLiteDatabase newDb, String tableName) {
+        String sql = "INSERT INTO " + tableName + " (" + getColumnsList(oldDb, tableName) + ") VALUES (?, ?...)";
+        Cursor oldCursor = oldDb.rawQuery("SELECT * FROM " + tableName, null);
+        ContentValues values = new ContentValues();
+
+        try (SQLiteStatement stmt = newDb.compileStatement(sql)) {
+            int numColumns = oldCursor.getColumnCount();
+
+            // Bind column names as positional parameters (for SQLiteStatement)
+            for (int i = 1; i <= numColumns; i++) {
+                stmt.bindString(i, oldCursor.getColumnName(i - 1));
+            }
+
+            oldCursor.moveToFirst();
+            while (!oldCursor.isAfterLast()) {
+                values.clear();
+                for (int i = 0; i < numColumns; i++) {
+                    switch (oldCursor.getType(i)) {
+                        case Cursor.FIELD_TYPE_INTEGER:
+                            values.put(oldCursor.getColumnName(i), oldCursor.getInt(i));
+                            break;
+                        case Cursor.FIELD_TYPE_FLOAT:
+                            values.put(oldCursor.getColumnName(i), oldCursor.getDouble(i));
+                            break;
+                        case Cursor.FIELD_TYPE_STRING:
+                            values.put(oldCursor.getColumnName(i), oldCursor.getString(i));
+                            break;
+                        case Cursor.FIELD_TYPE_BLOB:
+                            values.put(oldCursor.getColumnName(i), oldCursor.getBlob(i));
+                            break;
+                        // Add more cases for other data types if needed
+                    }
+                }
+
+                // Individual binding approach (more performant)
+                for (int i = 0; i < numColumns; i++) {
+                    String key = values.keySet().iterator().next();
+                    Object value = values.get(key);
+                    bindContentValuesValue(stmt, i + 1, key, value);
+                }
+
+                stmt.execute();
+                oldCursor.moveToNext();
+            }
+        } finally {
+            oldCursor.close();
+        }
+    }
+
+    // Helper method to bind values based on data type (optional)
+    private static void bindContentValuesValue(SQLiteStatement stmt, int index, String key, Object value) {
+        if (value instanceof Integer) {
+            stmt.bindLong(index, (Long) value);
+        } else if (value instanceof Double) {
+            stmt.bindDouble(index, (Double) value);
+        } else if (value instanceof String) {
+            stmt.bindString(index, (String) value);
+        } else if (value instanceof byte[]) {
+            stmt.bindBlob(index, (byte[]) value);
+        } else {
+            // Handle other data types if needed (consider logging a warning)
+        }
+    }
+
+    // Function to get a comma-separated list of column names
+    private static String getColumnsList(SQLiteDatabase db, String tableName) {
+        String columnsList = "";
+        Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String columnName = cursor.getString(1); // Column name
+                columnsList += columnName + ", ";
+            } while (cursor.moveToNext());
+
+            // Remove the trailing ", "
+            columnsList = columnsList.substring(0, columnsList.length() - 2);
+        }
+
+        cursor.close();
+        return columnsList;
+    }
+
 
 
 

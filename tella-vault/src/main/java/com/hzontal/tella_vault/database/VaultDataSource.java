@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -33,7 +35,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     private static VaultDataSource dataSource;
     private static Gson gson;
-    private final SQLiteDatabase database;
+    private SQLiteDatabase database = null;
 
     /**
      * Constructs a new VaultDataSource instance.
@@ -43,9 +45,13 @@ public class VaultDataSource implements IVaultDatabase {
      */
     public VaultDataSource(Context context, byte[] key) {
          System.loadLibrary("sqlcipher");
-        DatabaseSecret databaseSecret = new DatabaseSecret(key);
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, databaseSecret);
-        database = sqLiteOpenHelper.getWritableDatabase();
+        try (VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, new DatabaseSecret(key))) {
+            database = sqLiteOpenHelper.getReadableDatabase();
+        } catch (SQLException e) {
+            // Handle potential errors creating the database or opening a writable connection
+            Log.e("VaultDataSource", "Error creating database connection", e);
+            // You might throw an exception here or handle it differently based on your app's needs
+        }
     }
 
     /**

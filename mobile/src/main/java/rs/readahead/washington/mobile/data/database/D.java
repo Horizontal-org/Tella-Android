@@ -11,7 +11,7 @@ class D {
 
     /* DATABASE */
     public static final String CIPHER3_DATABASE_NAME    = "tella.db";
-    public static final String  DATABASE_NAME            = "tella_v4.db";
+    public static final String  DATABASE_NAME            = "tella-v4.db";
 
 
     // 1=start,2=form media file status,3=updated flag in xforms
