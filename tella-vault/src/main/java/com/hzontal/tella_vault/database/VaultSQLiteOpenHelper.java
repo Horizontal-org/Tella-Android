@@ -1,5 +1,7 @@
 package com.hzontal.tella_vault.database;
 
+import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
+
 import android.content.ContentValues;
 import android.content.Context;
 
@@ -81,6 +83,11 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
         db.insert(D.T_VAULT_FILE, null, values);
     }
+    private SQLiteDatabase getOldDatabase() {
+        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
+        return SQLiteDatabase.openDatabase(oldDbPath, null, SQLiteDatabase.OPEN_READWRITE);
+    }
+
 
     private static String objQuote(String str) {
         return "`" + str + "`";

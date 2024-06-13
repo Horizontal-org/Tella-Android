@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -31,7 +30,7 @@ import timber.log.Timber;
  * Provides database operations for managing vault files.
  */
 public class VaultDataSource implements IVaultDatabase {
-    public static final String ROOT_UID = "11223344-5566-4777-8899-aabbccddeeff";
+    public static final String ROOT_UID = "11223344-5566-4777-8899-aabbccddeeffe";
 
     private static VaultDataSource dataSource;
     private static Gson gson;
@@ -44,14 +43,14 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
-         System.loadLibrary("sqlcipher");
-        try (VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, new DatabaseSecret(key))) {
-            database = sqLiteOpenHelper.getReadableDatabase();
-        } catch (SQLException e) {
-            // Handle potential errors creating the database or opening a writable connection
-            Log.e("VaultDataSource", "Error creating database connection", e);
-            // You might throw an exception here or handle it differently based on your app's needs
-        }
+        System.loadLibrary("sqlcipher");
+        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, new DatabaseSecret(key));
+        database = sqLiteOpenHelper.getReadableDatabase();
+        //  } catch (SQLException e) {
+        // Handle potential errors creating the database or opening a writable connection
+        //   Log.e("VaultDataSource", "Error creating database connection", e);
+        //    // You might throw an exception here or handle it differently based on your app's needs
+        //   }
     }
 
     /**
@@ -83,8 +82,8 @@ public class VaultDataSource implements IVaultDatabase {
     /**
      * Creates a new vault file.
      *
-     * @param parentId   The ID of the parent vault file.
-     * @param vaultFile  The VaultFile object to create.
+     * @param parentId  The ID of the parent vault file.
+     * @param vaultFile The VaultFile object to create.
      * @return The created VaultFile object.
      */
     @SuppressLint("TimberArgCount")
@@ -142,8 +141,8 @@ public class VaultDataSource implements IVaultDatabase {
         if (limits != null) {
             limit = String.valueOf(limits.limit);
         }
-        where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
-        Timber.d("where %s", where);
+        //   where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
+        // Timber.d("where %s", where);
         try {
             // todo: add support for filter directly in query
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -164,7 +163,7 @@ public class VaultDataSource implements IVaultDatabase {
                             D.C_PATH,
                             D.C_METADATA
                     },
-                    where,
+                    null,
                     null,
                     null,
                     getSortQuery(sort),
@@ -245,6 +244,7 @@ public class VaultDataSource implements IVaultDatabase {
      */
     @Override
     public VaultFile get(String id) {
+
         try (Cursor cursor = database.query(
                 D.T_VAULT_FILE,
                 new String[]{
@@ -296,8 +296,8 @@ public class VaultDataSource implements IVaultDatabase {
     /**
      * Moves a vault file to a new parent.
      *
-     * @param vaultFile  The VaultFile object to move.
-     * @param newParent  The ID of the new parent.
+     * @param vaultFile The VaultFile object to move.
+     * @param newParent The ID of the new parent.
      * @return True if the move operation is successful, false otherwise.
      */
     @Override
@@ -321,9 +321,8 @@ public class VaultDataSource implements IVaultDatabase {
     public List<VaultFile> get(String[] ids) {
         List<VaultFile> files = new ArrayList<>();
 
-        try {
-            for (String id : ids){
-               files.add(get(id));
+        try {for (String id : ids) {
+                files.add(get(id));
             }
             return files;
         } catch (Exception e) {
@@ -394,6 +393,61 @@ public class VaultDataSource implements IVaultDatabase {
         return vaultFile;
     }
 
+    public List<VaultFile> listFilesInRoot(String rootId) {
+        List<VaultFile> files = new ArrayList<>();
+        String where = D.C_PARENT_ID + " = ?";
+        String[] whereArgs = new String[]{rootId};
+        Cursor cursor = null;
+        try {
+            cursor = database.query(
+                    D.T_VAULT_FILE,
+                    new String[]{
+                            D.C_ID,
+                            D.C_TYPE,
+                            D.C_PARENT_ID,
+                            D.C_NAME,
+                            D.C_CREATED,
+                            D.C_DURATION,
+                            D.C_SIZE,
+                            D.C_HASH,
+                            D.C_ANONYMOUS,
+                            D.C_THUMBNAIL,
+                            D.C_MIME_TYPE,
+                            D.C_PATH,
+                            D.C_METADATA
+                    },
+                    where,
+                    whereArgs,
+                    null,
+                    null,
+                    null
+            );
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                files.add(cursorToVaultFile(cursor));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return files;
+    }
+
+    public boolean transferFilesToNewRoot(String oldRootId, String newRootId) {
+        List<VaultFile> files = listFilesInRoot(oldRootId);
+       Log.d("VaultDataSource", ""+files.size());
+
+        boolean success = true;
+        for (VaultFile file : files) {
+            if (!move(file, newRootId)) {
+                success = false;
+                break;
+            }
+        }
+        return success;
+    }
+
+
     /**
      * Constructs a column name with a table alias.
      *
@@ -457,6 +511,6 @@ public class VaultDataSource implements IVaultDatabase {
      * @param table The table name.
      */
     private void deleteTable(String table) {
-        database.delete(table,D.C_ID + " != '" + ROOT_UID + "'",null);
+        database.delete(table, D.C_ID + " != '" + ROOT_UID + "'", null);
     }
 }
