@@ -11,8 +11,8 @@ import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
-    public VaultSQLiteOpenHelper(Context context, DatabaseSecret databaseSecret) {
-        super(context, databaseSecret);
+    public VaultSQLiteOpenHelper(Context context, byte[] password) {
+        super(context, password);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         switch (oldVersion) {
             case 1:
                 try {
-                    migrateSqlCipher3To4IfNeeded(context, databaseSecret);
+                   // migrateSqlCipher3To4IfNeeded(context, databaseSecret);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

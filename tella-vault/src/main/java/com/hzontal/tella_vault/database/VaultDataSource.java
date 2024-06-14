@@ -1,5 +1,7 @@
 package com.hzontal.tella_vault.database;
 
+import static com.hzontal.tella_vault.database.CipherOpenHelper.migrateSqlCipher3To4IfNeeded;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,6 +22,7 @@ import com.hzontal.tella_vault.filter.Sort;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,7 @@ import timber.log.Timber;
  * Provides database operations for managing vault files.
  */
 public class VaultDataSource implements IVaultDatabase {
-    public static final String ROOT_UID = "11223344-5566-4777-8899-aabbccddeeffe";
+    public static final String ROOT_UID = "99887766-5544-3322-1100-aabbccddeeff";
 
     private static VaultDataSource dataSource;
     private static Gson gson;
@@ -44,7 +47,18 @@ public class VaultDataSource implements IVaultDatabase {
      */
     public VaultDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, new DatabaseSecret(key));
+        DatabaseSecret databaseSecret = new DatabaseSecret(key);
+        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, key);
+        String dbName = D.CIPHER3_DATABASE_NAME;
+        File dbFile = context.getDatabasePath(dbName);
+        String dbPath = dbFile.getAbsolutePath();
+        Log.d("TAG", "Database path: " + dbPath);
+        try {
+           migrateSqlCipher3To4IfNeeded(context, key);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         database = sqLiteOpenHelper.getReadableDatabase();
         //  } catch (SQLException e) {
         // Handle potential errors creating the database or opening a writable connection

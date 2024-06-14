@@ -5,12 +5,9 @@ import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteDatatypeMismatchException;
-import android.database.sqlite.SQLiteException;
+import android.database.SQLException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,27 +16,23 @@ import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
-import net.zetetic.database.sqlcipher.SQLiteStatement;
-
-import org.hzontal.tella.keys.util.Preferences;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
-import java.sql.PreparedStatement;
 
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
     final Context context;
-    final DatabaseSecret databaseSecret;
+    //final DatabaseSecret databaseSecret;
 
-    CipherOpenHelper(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) {
+    CipherOpenHelper(@NonNull Context context, byte[] password) {
         super(
                 context,
                 DATABASE_NAME,
-                databaseSecret.asString(),
+                password,
                 null,
                 DATABASE_VERSION,
                 MIN_DATABASE_VERSION,
@@ -72,11 +65,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         );
 
         this.context        = context.getApplicationContext();
-        this.databaseSecret = databaseSecret;
+        //this.databaseSecret = databaseSecret;
     }
 
     private static void applySQLCipherPragmas(SQLiteConnection connection, boolean useSQLCipher4) {
         if (useSQLCipher4) {
+            connection.execute("PRAGMA cipher_compatibility = '4';",null, null);
             connection.execute("PRAGMA kdf_iter = '256000';", null, null);
         }
         else {
@@ -87,92 +81,197 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
     }
 
-    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) throws Exception {
-        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
+
+    /**
+     * Copy the table contents from source to target with only 1 transaction.
+     * Before calling this function, ensure below conditions:
+     * 1) target database file exists
+     * 2) target database SQLiteOpenHelper#onCreate has been called
+     * 3) target database table structure is exactly the same as source database
+     *
+     * @param context             The context to access resources
+     * @param srcWritableDatabase The legacy SQLiteDatabase, i.e. old.db
+     * @param targetDbFileName    The target database file name, i.e. new.db
+     * @param key                 The encryption key for the new database
+     * @param tableNames          The tables to be copied
+     * @return boolean value whether migration succeeded
+     */
+    public static boolean migrateTables(Context context, SQLiteDatabase srcWritableDatabase, String targetDbFileName, String key, String... tableNames) {
+        if (context == null) {
+            Log.d(TAG, "migrateTables: invalid context");
+            return false;
+        }
+        if (srcWritableDatabase == null) {
+            Log.d(TAG, "migrateTables: invalid srcWritableDatabase");
+            return false;
+        }
+        if (targetDbFileName == null || targetDbFileName.isEmpty()) {
+            Log.d(TAG, "migrateTables: invalid targetDbFileName");
+            return false;
+        }
+        if (tableNames == null || tableNames.length == 0) {
+            Log.d(TAG, "migrateTables: invalid tableNames");
+            return false;
+        }
+
+        File targetDbFile = context.getDatabasePath(targetDbFileName);
+        if (targetDbFile == null || !targetDbFile.exists()) {
+            Log.d(TAG, "migrateTables: target db file doesn't exist: " + targetDbFileName);
+            return false;
+        }
+
+        Log.d(TAG, "migrateTables: targetDbFileName=" + targetDbFileName);
+
+        boolean success = true;
+        try {
+            Log.d(TAG, "migrateTables: attach database");
+            srcWritableDatabase.execSQL("ATTACH DATABASE '" + targetDbFile.getPath() + "' AS target KEY '" + key + "'");
+        } catch (SQLException e) {
+            success = false;
+            Log.e(TAG, "migrateTables: exception=" + e);
+        }
+
+        srcWritableDatabase.beginTransaction();
+        try {
+            Log.d(TAG, "migrateTables: start copy tables");
+            for (String tableName : tableNames) {
+                Log.d(TAG, "migrateTables: start copy table: " + tableName);
+                srcWritableDatabase.execSQL("INSERT INTO target." + tableName + " SELECT * FROM " + tableName);
+            }
+            srcWritableDatabase.setTransactionSuccessful();
+            Log.d(TAG, "migrateTables: end copy tables");
+        } catch (Exception e) {
+            Log.e(TAG, "migrateTables: exception=" + e);
+            success = false;
+        } finally {
+            srcWritableDatabase.endTransaction();
+            srcWritableDatabase.execSQL("DETACH DATABASE target");
+            Log.d(TAG, "migrateTables: detach database");
+        }
+        Log.d(TAG, "migrateTables: success=" + success);
+        return success;
+    }
+
+    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, byte[] key) {
+        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getAbsolutePath();
         File oldDbFile = new File(oldDbPath);
 
-        // If the old SQLCipher3 database file doesn't exist then no need to do anything
-        if (!oldDbFile.exists()) { return; }
+        // If the old SQLCipher3 database file doesn't exist then just return early
+        if (!oldDbFile.exists()) {
+            Log.d(TAG, "Old database file does not exist at: " + oldDbPath);
+            return;
+        }
 
-        // Define the location for the new database
+        // Log the path to ensure it's correct
+        Log.d(TAG, "Old database file path: " + oldDbPath);
+
+        // If the new database file already exists then we probably had a failed migration and it's likely in
+        // an invalid state so should delete it
         String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
         File newDbFile = new File(newDbPath);
 
+        if (newDbFile.exists()) {
+            if (!newDbFile.delete()) {
+                Log.e(TAG, "Failed to delete existing new database file at: " + newDbPath);
+                return;
+            }
+        }
+
         try {
-            // If the new database file already exists then check if it's valid first, if it's in an
-            // invalid state we should delete it and try to migrate again
-            if (newDbFile.exists()) {
-                // If the old database hasn't been modified since the new database was created, then we can
-                // assume the user hasn't downgraded for some reason and made changes to the old database and
-                // can remove the old database file (it won't be used anymore)
-                if (oldDbFile.lastModified() <= newDbFile.lastModified()) {
-                    try {
-                        SQLiteDatabase newDb = CipherOpenHelper.open(newDbPath, databaseSecret, true);
-                        int version = newDb.getVersion();
-                        newDb.close();
-
-                        // Make sure the new database has its version set correctly (if not then the migration didn't
-                        // fully succeed and the database will try to create all its tables and immediately fail so
-                        // we will need to remove and remigrate)
-                        if (version > 0) {
-                            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has passed
-                            // oldDbFile.delete();
-                            return;
-                        }
-                    }
-                    catch (Exception e) {
-                        Log.i(TAG, "Failed to retrieve version from new database, assuming invalid and remigrating");
-                    }
-                }
-
-                // If the old database does have newer changes then the new database could have stale/invalid
-                // data and we should re-migrate to avoid losing any data or issues
-                if (!newDbFile.delete()) {
-                    throw new Exception("Failed to remove invalid new database");
-                }
-            }
-
             if (!newDbFile.createNewFile()) {
-                throw new Exception("Failed to create new database");
+                Log.e(TAG, "Failed to create new database file at: " + newDbPath);
+                return;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception while creating new database file", e);
+            return;
+        }
+
+        try {
+            // Open the old database
+            SQLiteDatabase oldDb = SQLiteDatabase.openDatabase(oldDbPath, key, null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_compatibility = 3;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_compatibility = 3;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                }
+            });
+
+            // Verify if old database is opened successfully
+            if (oldDb == null) {
+                Log.e(TAG, "Failed to open old database. Database object is null.");
+                return;
             }
 
-            // Open the old database and extract its version
-            SQLiteDatabase oldDb = CipherOpenHelper.open(oldDbPath, databaseSecret, false);
-            int oldDbVersion = oldDb.getVersion();
+            Log.d(TAG, "Old database opened successfully");
+
+            // Check if the database is actually a valid SQLite database
+            if (!isDatabaseValid(oldDb)) {
+                Log.e(TAG, "Old database is not a valid SQLite database");
+                oldDb.close();
+                return;
+            }
 
             // Export the old database to the new one (will have the default 'kdf_iter' and 'page_size' settings)
-            oldDb.rawExecSQL(
-                    String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, databaseSecret.asString())
-            );
+            int oldDbVersion = oldDb.getVersion();
+            oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, key));
             Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4')");
             cursor.moveToLast();
             cursor.close();
             oldDb.rawExecSQL("DETACH DATABASE sqlcipher4");
             oldDb.close();
 
-            // Open the newly migrated database (to ensure it works) and set its version so we don't try
-            // to run any of our custom migrations
-            SQLiteDatabase newDb = CipherOpenHelper.open(newDbPath, databaseSecret, true);
+            // Open the new database
+            SQLiteDatabase newDb = SQLiteDatabase.openDatabase(newDbPath, key, null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_default_kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_default_page_size = 4096;", null, null);
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_default_kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_default_page_size = 4096;", null, null);
+                }
+            });
+
+            // Set the version of the new database to match the old database
             newDb.setVersion(oldDbVersion);
             newDb.close();
 
-            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has passed
+            // Optional: Delete the old database file if migration is successful
             // oldDbFile.delete();
+        } catch (Exception e) {
+            Log.e(TAG, "Exception during database migration", e);
 
-            // Call the data transfer method after migration
-            transferDataFromOldToNewDatabase(context, databaseSecret);
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Migration from SQLCipher3 to SQLCipher4 failed", e);
-
-            // If an exception was thrown then we should remove the new database file (it's probably invalid)
-            if (!newDbFile.delete()) {
-                Log.e(TAG, "Unable to delete invalid new database file");
+            // Clean up: Delete the new database file if migration failed
+            if (newDbFile.exists() && !newDbFile.delete()) {
+                Log.e(TAG, "Failed to delete new database file after migration failure");
             }
-
-            throw e;
         }
     }
+
+    private static boolean isDatabaseValid(SQLiteDatabase db) {
+        try {
+            // Try to execute a simple query to determine if the database is valid
+            db.rawQuery("SELECT COUNT(*) FROM sqlite_schema", null).close();
+            return true;
+        } catch (Exception e) {
+            // Log any exceptions, indicating the database is invalid
+            Log.e(TAG, "Error validating database", e);
+            return false;
+        }
+    }
+
 
     private static SQLiteDatabase open(String path, DatabaseSecret databaseSecret, boolean useSQLCipher4) {
         return SQLiteDatabase.openDatabase(path, databaseSecret.asString(), null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
@@ -183,162 +282,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             public void postKey(SQLiteConnection connection) { CipherOpenHelper.applySQLCipherPragmas(connection, useSQLCipher4); }
         });
     }
-    public static void transferDataFromOldToNewDatabase(Context context, DatabaseSecret databaseSecret) {
-        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
-        String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
-
-        SQLiteDatabase oldDb = null;
-        SQLiteDatabase newDb = null;
-
-        try {
-            oldDb = open(oldDbPath, databaseSecret, false);
-            newDb = open(newDbPath, databaseSecret, true);
-
-            // Check if table structures are compatible
-            if (isTableCompatible(oldDb, newDb, "t_vault_file")) {
-                // Transfer data using prepared statements for efficiency and safety
-                transferDataWithSQLiteStatement(oldDb, newDb, "t_vault_file");
-            } else {
-                Log.e(TAG, "Table structures for 't_vault_file' are incompatible");
-            }
-
-        } catch (SQLiteException e) {
-            // Handle specific SQLite exceptions
-            if (e instanceof SQLiteConstraintException) {
-                Log.e(TAG, "Error transferring data: Constraint violation", e);
-                // Consider retrying with data transformation (if applicable)
-            } else if (e instanceof SQLiteDatatypeMismatchException) {
-                Log.e(TAG, "Error transferring data: Data type mismatch", e);
-                // Handle data type conversion (if feasible)
-            } else {
-                Log.e(TAG, "Error transferring data from old to new database", e);
-            }
-        } finally {
-            if (oldDb != null) oldDb.close();
-            if (newDb != null) newDb.close();
-        }
-    }
-
-    // Function to verify table structure compatibility (improved)
-    private static boolean isTableCompatible(SQLiteDatabase oldDb, SQLiteDatabase newDb, String tableName) {
-        Cursor oldCursor = oldDb.rawQuery("PRAGMA table_info(" + tableName + ")", null);
-        Cursor newCursor = newDb.rawQuery("PRAGMA table_info(" + tableName + ")", null);
-
-        if (oldCursor.getCount() != newCursor.getCount()) {
-            return false;
-        }
-
-        int numColumns = oldCursor.getCount();
-        for (int i = 0; i < numColumns; i++) {
-            oldCursor.moveToPosition(i);
-            newCursor.moveToPosition(i);
-
-            String oldColumnName = oldCursor.getString(1); // Column name
-            String newColumnName = newCursor.getString(1);
-
-            if (!oldColumnName.equals(newColumnName)) {
-                return false;
-            }
-
-            String oldColumnType = oldCursor.getString(2); // Column data type
-            String newColumnType = newCursor.getString(2);
-
-            // Perform more detailed data type comparison if necessary
-            // (e.g., consider casting to common types)
-            if (!oldColumnType.equals(newColumnType)) {
-                return false;
-            }
-        }
-
-        oldCursor.close();
-        newCursor.close();
-        return true;
-    }
-
-    private static void transferDataWithSQLiteStatement(SQLiteDatabase oldDb, SQLiteDatabase newDb, String tableName) {
-        String sql = "INSERT INTO " + tableName + " (" + getColumnsList(oldDb, tableName) + ") VALUES (?, ?...)";
-        Cursor oldCursor = oldDb.rawQuery("SELECT * FROM " + tableName, null);
-        ContentValues values = new ContentValues();
-
-        try (SQLiteStatement stmt = newDb.compileStatement(sql)) {
-            int numColumns = oldCursor.getColumnCount();
-
-            // Bind column names as positional parameters (for SQLiteStatement)
-            for (int i = 1; i <= numColumns; i++) {
-                stmt.bindString(i, oldCursor.getColumnName(i - 1));
-            }
-
-            oldCursor.moveToFirst();
-            while (!oldCursor.isAfterLast()) {
-                values.clear();
-                for (int i = 0; i < numColumns; i++) {
-                    switch (oldCursor.getType(i)) {
-                        case Cursor.FIELD_TYPE_INTEGER:
-                            values.put(oldCursor.getColumnName(i), oldCursor.getInt(i));
-                            break;
-                        case Cursor.FIELD_TYPE_FLOAT:
-                            values.put(oldCursor.getColumnName(i), oldCursor.getDouble(i));
-                            break;
-                        case Cursor.FIELD_TYPE_STRING:
-                            values.put(oldCursor.getColumnName(i), oldCursor.getString(i));
-                            break;
-                        case Cursor.FIELD_TYPE_BLOB:
-                            values.put(oldCursor.getColumnName(i), oldCursor.getBlob(i));
-                            break;
-                        // Add more cases for other data types if needed
-                    }
-                }
-
-                // Individual binding approach (more performant)
-                for (int i = 0; i < numColumns; i++) {
-                    String key = values.keySet().iterator().next();
-                    Object value = values.get(key);
-                    bindContentValuesValue(stmt, i + 1, key, value);
-                }
-
-                stmt.execute();
-                oldCursor.moveToNext();
-            }
-        } finally {
-            oldCursor.close();
-        }
-    }
-
-    // Helper method to bind values based on data type (optional)
-    private static void bindContentValuesValue(SQLiteStatement stmt, int index, String key, Object value) {
-        if (value instanceof Integer) {
-            stmt.bindLong(index, (Long) value);
-        } else if (value instanceof Double) {
-            stmt.bindDouble(index, (Double) value);
-        } else if (value instanceof String) {
-            stmt.bindString(index, (String) value);
-        } else if (value instanceof byte[]) {
-            stmt.bindBlob(index, (byte[]) value);
-        } else {
-            // Handle other data types if needed (consider logging a warning)
-        }
-    }
-
-    // Function to get a comma-separated list of column names
-    private static String getColumnsList(SQLiteDatabase db, String tableName) {
-        String columnsList = "";
-        Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                String columnName = cursor.getString(1); // Column name
-                columnsList += columnName + ", ";
-            } while (cursor.moveToNext());
-
-            // Remove the trailing ", "
-            columnsList = columnsList.substring(0, columnsList.length() - 2);
-        }
-
-        cursor.close();
-        return columnsList;
-    }
-
-
 
 
     /**
