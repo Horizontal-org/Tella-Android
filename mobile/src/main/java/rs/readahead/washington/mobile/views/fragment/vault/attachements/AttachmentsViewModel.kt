@@ -169,10 +169,11 @@ class AttachmentsViewModel @Inject constructor(
         if (uris.isEmpty()) return
         // counterData.value = 0
         //  var counter = 1
-        val currentUri: Uri? = null
+        var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
                 MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
                     .doOnSubscribe {
+                        currentUri = uri
                         val file = MediaFileHandler.getUriInfo(application, uri)
                         val backgroundVideoFile = BackgroundActivityModel(
                             id = file.name,
