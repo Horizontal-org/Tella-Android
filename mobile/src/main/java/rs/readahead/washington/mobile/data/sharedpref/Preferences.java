@@ -419,6 +419,14 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
     }
 
+    public static boolean isShowUpdateMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowUpdateMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
+    }
+
     public static boolean hasAcceptedImprovements() {
         return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
     }

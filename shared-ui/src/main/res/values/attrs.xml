@@ -60,6 +60,8 @@
         <attr name="startTitle" format="reference|string" />
         <attr name="bigStartTitle" format="reference|string" />
         <attr name="endTitle" format="reference|string" />
+        <attr name="rightOfLeftIcon" format="reference" />
+        <attr name="rightOfLeftIconContentDescription" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="SubmittingItem">

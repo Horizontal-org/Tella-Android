@@ -213,11 +213,9 @@ class GeneralSettings :
 
     private fun hasLocationPermission(context: Context): Boolean {
         baseActivity.maybeChangeTemporaryTimeout()
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermission(requestCode: Int) {

@@ -30,6 +30,20 @@
         android:visibility="gone"
         />
 
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btn_right_of_left_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/left_img"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:padding="11dp"
+        android:clickable="true"
+        android:focusable="true" />
+
     <TextView
         android:id="@+id/startTitleTv"
         android:layout_width="wrap_content"

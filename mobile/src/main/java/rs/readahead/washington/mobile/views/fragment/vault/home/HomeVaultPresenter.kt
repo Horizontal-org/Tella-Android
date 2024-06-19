@@ -42,7 +42,6 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
         disposable.dispose()
         view = null
     }
-
     override fun executePanicMode() {
         keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
