@@ -19,8 +19,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.enableWriteAheadLogging();
     }
 
-    WashingtonSQLiteOpenHelper(Context context, DatabaseSecret databaseSecret) {
-        super(context, databaseSecret);
+    WashingtonSQLiteOpenHelper(Context context, byte[] password) {
+        super(context, password);
+        migrateSqlCipher3To4IfNeeded(context,password);
     }
 
     private static String objQuote(String str) {
@@ -447,34 +448,34 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 1:
                 db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
                 db.execSQL(alterTableCollectServerAddChecked());
-                break;
+             //   break;
             case 2:
                 db.execSQL(alterTableCollectBlankFormAddUpdated());
-                break;
+              //  break;
             case 3:
                 db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-                break;
+             //   break;
             case 4:
                 db.execSQL(alterTableMediaFileAddHash());
-                break;
+              //  break;
             case 5:
                 db.execSQL(createTableTellaUploadServer());
-                break;
+              //  break;
             case 6:
                 db.execSQL(createTableMediaFileUploads());
-                break;
+             //   break;
             case 7:
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
-                break;
+              //  break;
             case 8:
                 db.execSQL(createTableUwaziServer());
                 db.execSQL(createTableCollectEntityUwazi());
                 db.execSQL(createTableCollectBlankTemplateUwazi());
                 db.execSQL(createTableCollectFormInstanceVaultFile());
                 db.execSQL(createTableUwaziEntityInstanceVaultFile());
-                break;
+              //  break;
             case 9:
                 db.execSQL(alterTableTellaUploadServerAddAccessToken());
                 db.execSQL(alterTableTellaUploadServerAddMetatData());
@@ -485,22 +486,21 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
-                break;
+             //   break;
             case 10:
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
                 db.execSQL(alterTableTellaUploadServerAddAutoDelete());
                 db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-                break;
+             //   break;
             case 11:
                 db.execSQL(createTableFeedback());
-                break;
+              //  break;
             case 12:
                 db.execSQL(createTableResources());
-                break;
+              //  break;
             case 13:
                 try {
                    // db.execSQL("PRAGMA cipher_migrate;");
-                    migrateSqlCipher3To4IfNeeded(context, databaseSecret);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

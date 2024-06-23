@@ -13,8 +13,10 @@ class ViewHolder(private val binding: ItemBackgroundActivityBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: BackgroundActivityModel) {
-        binding.fileNameTextView.text = item.name
 
+        val context = binding.fileNameTextView.context
+        val encryptingText = context.getString(R.string.encrypting)
+        binding.fileNameTextView.text = "$encryptingText ${item.name}"
         when (item.type) {
             BackgroundActivityType.FILE -> {
                 item.thumb?.let { icPreview(item.mimeType, it, binding.attachmentImg) }

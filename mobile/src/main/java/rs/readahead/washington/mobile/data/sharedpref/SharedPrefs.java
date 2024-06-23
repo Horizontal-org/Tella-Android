@@ -71,7 +71,7 @@ public class SharedPrefs {
     static final String JAVAROSA_3_UPGRADE = "javarosa_3_upgrade";
     static final String TEXT_JUSTIFICATION = "text_justification";
     static final String TEXT_SPACING = "text_spacing";
-    static final String LAST_VACUUM_TIME = "pref_last_vacuum_time";
+    static final String SHOW_UPDATE_MIGRATION_BOTTOM_SHEET = "SHOW_UPDATE_MIGRATION_BOTTOM_SHEET";
 
 
     private static SharedPrefs instance;

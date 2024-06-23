@@ -419,12 +419,12 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
     }
 
-    public static Long getLastVacuumTime() {
-        return getLong(SharedPrefs.LAST_VACUUM_TIME, 0);
+    public static boolean isShowUpdateMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, true);
     }
 
-    public static void setLastVacuumNow() {
-        setLong(SharedPrefs.LAST_VACUUM_TIME, System.currentTimeMillis());
+    public static void setShowUpdateMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
     }
 
     public static boolean hasAcceptedImprovements() {

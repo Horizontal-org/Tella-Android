@@ -14,7 +14,7 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 177
+        versionCode 178
         versionName "2.8.0"
         multiDexEnabled true
 
@@ -134,7 +134,7 @@ dependencies {
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
 
     // digest auth
-    implementation "com.burgstaller:okhttp-digest:$versions.burgstallerOkhttpDigest"
+    implementation "io.github.rburgst:okhttp-digest:$versions.burgstallerOkhttpDigest"
 
     // collect
     //implementation group: "org.getodk", name: "javarosa", version: "$versions.javarosa"

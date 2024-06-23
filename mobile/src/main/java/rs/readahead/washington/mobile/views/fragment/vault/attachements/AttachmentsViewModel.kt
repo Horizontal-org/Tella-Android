@@ -17,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.MyApplication.rxVault
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
@@ -32,6 +31,7 @@ import javax.inject.Inject
 class AttachmentsViewModel @Inject constructor(
     private val application: Application,
     private val keyDataSource: KeyDataSource,
+    private val rxVault: RxVault
 ) : AndroidViewModel(
     application
 ) {
@@ -169,10 +169,11 @@ class AttachmentsViewModel @Inject constructor(
         if (uris.isEmpty()) return
         // counterData.value = 0
         //  var counter = 1
-        val currentUri: Uri? = null
+        var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
                 MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
                     .doOnSubscribe {
+                        currentUri = uri
                         val file = MediaFileHandler.getUriInfo(application, uri)
                         val backgroundVideoFile = BackgroundActivityModel(
                             id = file.name,

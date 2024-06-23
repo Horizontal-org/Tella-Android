@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
@@ -61,8 +62,8 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     .observeOn(AndroidSchedulers.mainThread());
 
     private UwaziDataSource(Context context, byte[] key) {
-        DatabaseSecret databaseSecret = new DatabaseSecret(key);
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,databaseSecret);
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

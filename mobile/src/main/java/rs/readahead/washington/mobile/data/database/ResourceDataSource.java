@@ -40,8 +40,8 @@ public class ResourceDataSource implements ITellaResourcesRepository {
                     .observeOn(AndroidSchedulers.mainThread());
 
     private ResourceDataSource(Context context, byte[] key) {
-        DatabaseSecret databaseSecret = new DatabaseSecret(key);
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, databaseSecret);
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

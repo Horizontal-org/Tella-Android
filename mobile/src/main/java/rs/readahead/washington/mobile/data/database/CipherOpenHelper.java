@@ -7,9 +7,13 @@ import static rs.readahead.washington.mobile.data.database.D.MIN_DATABASE_VERSIO
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.hzontal.tella_vault.database.DatabaseSecret;
+import com.hzontal.tella_vault.database.Preferences;
 
 import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
@@ -20,20 +24,18 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
 
-import rs.readahead.washington.mobile.data.sharedpref.Preferences;
-
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
-    final Context        context;
-    final DatabaseSecret databaseSecret;
+    final Context context;
+    //final DatabaseSecret databaseSecret;
 
-    CipherOpenHelper(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) {
+    CipherOpenHelper(@NonNull Context context, byte[] password) {
         super(
                 context,
-                DATABASE_NAME,
-                databaseSecret.asString(),
+                com.hzontal.tella_vault.database.D.DATABASE_NAME,
+                password,
                 null,
                 DATABASE_VERSION,
                 MIN_DATABASE_VERSION,
@@ -41,20 +43,20 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 new SQLiteDatabaseHook() {
                     @Override
                     public void preKey(SQLiteConnection connection) {
-                        CipherOpenHelper.applySQLCipherPragmas(connection, true);
+                      applySQLCipherPragmas(connection, true);
                     }
 
                     @Override
                     public void postKey(SQLiteConnection connection) {
-                        CipherOpenHelper.applySQLCipherPragmas(connection, true);
+                        applySQLCipherPragmas(connection, true);
 
                         // if not vacuumed in a while, perform that operation
                         long currentTime = System.currentTimeMillis();
                         // 7 days
-                        if (currentTime - Preferences.getLastVacuumTime() > 604_800_000) {
-                            connection.execute("VACUUM;", null, null);
-                            Preferences.setLastVacuumNow();
-                        }
+                      // if (currentTime - getLastVacuumTime() > 604_800_000) {
+                        //   connection.execute("VACUUM;", null, null);
+                          // Preferences.setLastVacuumNow();
+                          //}
                     }
                 },
                 // Note: Now that we support concurrent database reads the migrations are actually non-blocking
@@ -66,11 +68,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         );
 
         this.context        = context.getApplicationContext();
-        this.databaseSecret = databaseSecret;
+        //this.databaseSecret = databaseSecret;
     }
 
     private static void applySQLCipherPragmas(SQLiteConnection connection, boolean useSQLCipher4) {
         if (useSQLCipher4) {
+            connection.execute("PRAGMA cipher_compatibility = '4';",null, null);
             connection.execute("PRAGMA kdf_iter = '256000';", null, null);
         }
         else {
@@ -81,117 +84,197 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
     }
 
-    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) throws Exception {
-        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
+
+    /**
+     * Copy the table contents from source to target with only 1 transaction.
+     * Before calling this function, ensure below conditions:
+     * 1) target database file exists
+     * 2) target database SQLiteOpenHelper#onCreate has been called
+     * 3) target database table structure is exactly the same as source database
+     *
+     * @param context             The context to access resources
+     * @param srcWritableDatabase The legacy SQLiteDatabase, i.e. old.db
+     * @param targetDbFileName    The target database file name, i.e. new.db
+     * @param key                 The encryption key for the new database
+     * @param tableNames          The tables to be copied
+     * @return boolean value whether migration succeeded
+     */
+    public static boolean migrateTables(Context context, SQLiteDatabase srcWritableDatabase, String targetDbFileName, String key, String... tableNames) {
+        if (context == null) {
+            Log.d(TAG, "migrateTables: invalid context");
+            return false;
+        }
+        if (srcWritableDatabase == null) {
+            Log.d(TAG, "migrateTables: invalid srcWritableDatabase");
+            return false;
+        }
+        if (targetDbFileName == null || targetDbFileName.isEmpty()) {
+            Log.d(TAG, "migrateTables: invalid targetDbFileName");
+            return false;
+        }
+        if (tableNames == null || tableNames.length == 0) {
+            Log.d(TAG, "migrateTables: invalid tableNames");
+            return false;
+        }
+
+        File targetDbFile = context.getDatabasePath(targetDbFileName);
+        if (targetDbFile == null || !targetDbFile.exists()) {
+            Log.d(TAG, "migrateTables: target db file doesn't exist: " + targetDbFileName);
+            return false;
+        }
+
+        Log.d(TAG, "migrateTables: targetDbFileName=" + targetDbFileName);
+
+        boolean success = true;
+        try {
+            Log.d(TAG, "migrateTables: attach database");
+            srcWritableDatabase.execSQL("ATTACH DATABASE '" + targetDbFile.getPath() + "' AS target KEY '" + key + "'");
+        } catch (SQLException e) {
+            success = false;
+            Log.e(TAG, "migrateTables: exception=" + e);
+        }
+
+        srcWritableDatabase.beginTransaction();
+        try {
+            Log.d(TAG, "migrateTables: start copy tables");
+            for (String tableName : tableNames) {
+                Log.d(TAG, "migrateTables: start copy table: " + tableName);
+                srcWritableDatabase.execSQL("INSERT INTO target." + tableName + " SELECT * FROM " + tableName);
+            }
+            srcWritableDatabase.setTransactionSuccessful();
+            Log.d(TAG, "migrateTables: end copy tables");
+        } catch (Exception e) {
+            Log.e(TAG, "migrateTables: exception=" + e);
+            success = false;
+        } finally {
+            srcWritableDatabase.endTransaction();
+            srcWritableDatabase.execSQL("DETACH DATABASE target");
+            Log.d(TAG, "migrateTables: detach database");
+        }
+        Log.d(TAG, "migrateTables: success=" + success);
+        return success;
+    }
+
+    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, byte[] key) {
+        String oldDbPath = context.getDatabasePath(com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME).getAbsolutePath();
         File oldDbFile = new File(oldDbPath);
 
-        // If the old SQLCipher3 database file doesn't exist then no need to do anything
-        if (!oldDbFile.exists()) { return; }
+        // If the old SQLCipher3 database file doesn't exist then just return early
+        if (!oldDbFile.exists()) {
+            Log.d(TAG, "Old database file does not exist at: " + oldDbPath);
+            return;
+        }
 
-        // Define the location for the new database
-        String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
+        // Log the path to ensure it's correct
+        Log.d(TAG, "Old database file path: " + oldDbPath);
+
+        // If the new database file already exists then we probably had a failed migration and it's likely in
+        // an invalid state so should delete it
+        String newDbPath = context.getDatabasePath(com.hzontal.tella_vault.database.D.DATABASE_NAME).getPath();
         File newDbFile = new File(newDbPath);
 
+        if (newDbFile.exists()) {
+            if (!newDbFile.delete()) {
+                Log.e(TAG, "Failed to delete existing new database file at: " + newDbPath);
+                return;
+            }
+        }
+
         try {
-            // If the new database file already exists then check if it's valid first, if it's in an
-            // invalid state we should delete it and try to migrate again
-            if (newDbFile.exists()) {
-                // If the old database hasn't been modified since the new database was created, then we can
-                // assume the user hasn't downgraded for some reason and made changes to the old database and
-                // can remove the old database file (it won't be used anymore)
-                if (oldDbFile.lastModified() <= newDbFile.lastModified()) {
-                    try {
-                        SQLiteDatabase newDb = CipherOpenHelper.open(newDbPath, databaseSecret, true);
-                        int version = newDb.getVersion();
-                        newDb.close();
-
-                        // Make sure the new database has it's version set correctly (if not then the migration didn't
-                        // fully succeed and the database will try to create all it's tables and immediately fail so
-                        // we will need to remove and remigrate)
-                        if (version > 0) {
-                            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has past
-//            //noinspection ResultOfMethodCallIgnored
-//            oldDbFile.delete();
-                            return;
-                        }
-                    }
-                    catch (Exception e) {
-                        Log.i(TAG, "Failed to retrieve version from new database, assuming invalid and remigrating");
-                    }
-                }
-
-                // If the old database does have newer changes then the new database could have stale/invalid
-                // data and we should re-migrate to avoid losing any data or issues
-                if (!newDbFile.delete()) {
-                    throw new Exception("Failed to remove invalid new database");
-                }
-            }
-
             if (!newDbFile.createNewFile()) {
-                throw new Exception("Failed to create new database");
+                Log.e(TAG, "Failed to create new database file at: " + newDbPath);
+                return;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception while creating new database file", e);
+            return;
+        }
+
+        try {
+            // Open the old database
+            SQLiteDatabase oldDb = SQLiteDatabase.openDatabase(oldDbPath, key, null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_compatibility = 3;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_compatibility = 3;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                }
+            });
+
+            // Verify if old database is opened successfully
+            if (oldDb == null) {
+                Log.e(TAG, "Failed to open old database. Database object is null.");
+                return;
             }
 
-            // Open the old database and extract it's version
-            SQLiteDatabase oldDb = CipherOpenHelper.open(oldDbPath, databaseSecret, false);
-            int oldDbVersion = oldDb.getVersion();
+            Log.d(TAG, "Old database opened successfully");
+
+            // Check if the database is actually a valid SQLite database
+            if (!isDatabaseValid(oldDb)) {
+                Log.e(TAG, "Old database is not a valid SQLite database");
+                oldDb.close();
+                return;
+            }
 
             // Export the old database to the new one (will have the default 'kdf_iter' and 'page_size' settings)
-            oldDb.rawExecSQL(
-                    String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, databaseSecret.asString())
-            );
+            int oldDbVersion = oldDb.getVersion();
+            oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, key));
             Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4')");
             cursor.moveToLast();
             cursor.close();
             oldDb.rawExecSQL("DETACH DATABASE sqlcipher4");
             oldDb.close();
 
-            // Open the newly migrated database (to ensure it works) and set it's version so we don't try
-            // to run any of our custom migrations
-            SQLiteDatabase newDb = CipherOpenHelper.open(newDbPath, databaseSecret, true);
+            // Open the new database
+            SQLiteDatabase newDb = SQLiteDatabase.openDatabase(newDbPath, key, null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_default_kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_default_page_size = 4096;", null, null);
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA cipher_default_kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_default_page_size = 4096;", null, null);
+                }
+            });
+
+            // Set the version of the new database to match the old database
             newDb.setVersion(oldDbVersion);
             newDb.close();
 
-            // TODO: Delete 'CIPHER3_DATABASE_NAME' once enough time has past
-            // Remove the old database file since it will no longer be used
-//      //noinspection ResultOfMethodCallIgnored
-//      oldDbFile.delete();
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Migration from SQLCipher3 to SQLCipher4 failed", e);
+            // Optional: Delete the old database file if migration is successful
+            // oldDbFile.delete();
+        } catch (Exception e) {
+            Log.e(TAG, "Exception during database migration", e);
 
-            // If an exception was thrown then we should remove the new database file (it's probably invalid)
-            if (!newDbFile.delete()) {
-                Log.e(TAG, "Unable to delete invalid new database file");
+            // Clean up: Delete the new database file if migration failed
+            if (newDbFile.exists() && !newDbFile.delete()) {
+                Log.e(TAG, "Failed to delete new database file after migration failure");
             }
-
-            // Notify the user of the issue so they know they can downgrade until the issue is fixed
-           /* NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            String channelId = context.getString(R.string.NotificationChannel_failures);
-
-            if (NotificationChannels.supported()) {
-                NotificationChannel channel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_HIGH);
-                channel.enableVibration(true);
-                notificationManager.createNotificationChannel(channel);
-            }
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setColor(context.getResources().getColor(R.color.textsecure_primary))
-                    .setCategory(NotificationCompat.CATEGORY_ERROR)
-                    .setContentTitle(context.getString(R.string.ErrorNotifier_migration))
-                    .setContentText(context.getString(R.string.ErrorNotifier_migration_downgrade))
-                    .setAutoCancel(true);
-
-            if (!NotificationChannels.supported()) {
-                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-            }
-
-            notificationManager.notify(5874, builder.build());*/
-
-            // Throw the error (app will crash but there is nothing else we can do unfortunately)
-            throw e;
         }
     }
+
+    private static boolean isDatabaseValid(SQLiteDatabase db) {
+        try {
+            // Try to execute a simple query to determine if the database is valid
+            db.rawQuery("SELECT COUNT(*) FROM sqlite_schema", null).close();
+            return true;
+        } catch (Exception e) {
+            // Log any exceptions, indicating the database is invalid
+            Log.e(TAG, "Error validating database", e);
+            return false;
+        }
+    }
+
 
     private static SQLiteDatabase open(String path, DatabaseSecret databaseSecret, boolean useSQLCipher4) {
         return SQLiteDatabase.openDatabase(path, databaseSecret.asString(), null, SQLiteDatabase.OPEN_READWRITE, new SQLiteDatabaseHook() {
@@ -202,7 +285,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             public void postKey(SQLiteConnection connection) { CipherOpenHelper.applySQLCipherPragmas(connection, useSQLCipher4); }
         });
     }
-
 
 
     /**
