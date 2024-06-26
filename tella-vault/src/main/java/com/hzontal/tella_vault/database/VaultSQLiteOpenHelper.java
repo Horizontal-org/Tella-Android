@@ -1,18 +1,36 @@
 package com.hzontal.tella_vault.database;
 
 import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
+import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
+import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.util.Log;
 
 import com.hzontal.tella_vault.VaultFile;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
+import java.io.File;
+
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
+    private static final String PREFS_NAME = "VaultSQLiteOpenHelperPrefs";
+    private static final String KEY_ALREADY_MIGRATED = "alreadyMigrated";
+    private final byte[] password;
+    private final SharedPreferences sharedPreferences;
+
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
+        this.password = password;
+        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        boolean alreadyMigrated = sharedPreferences.getBoolean(KEY_ALREADY_MIGRATED, false);
+       if (!alreadyMigrated) {
+            migrateDatabase();
+        }
     }
 
     @Override
@@ -36,24 +54,96 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-                try {
-                   // migrateSqlCipher3To4IfNeeded(context, databaseSecret);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            // Add cases for other versions if needed
+        if (oldVersion < newVersion) {
+            migrateDatabase();
         }
     }
 
-    private void migrateFromVersion1To2(SQLiteDatabase db) {
-        // Perform migration from SQLCipher version 1 to version 2
-        // For example:
-        db.execSQL("PRAGMA cipher_migrate;");
-    }
+    private void migrateDatabase() {
+        SQLiteDatabase oldDb = null;
+        SQLiteDatabase newDb = null;
 
+        try {
+            String databaseDir = context.getApplicationInfo().dataDir; // Path to your app's data directory
+            String databasePathOld = databaseDir + File.separator + CIPHER3_DATABASE_NAME;
+            String databasePathNew = context.getDatabasePath(DATABASE_NAME).getPath();
+
+            // Log paths for debugging
+            Log.d("Migration", "Old DB Path: " + databasePathOld);
+            Log.d("Migration", "New DB Path: " + databasePathNew);
+
+            // Open the old database with the existing 3.x settings
+            oldDb =SQLiteDatabase.openOrCreateDatabase(
+                    databasePathNew,
+                    encodeRawKeyToStr(password),
+                    null,
+                    null
+            );
+
+            // Open the new database with SQLCipher 4 settings
+            newDb = SQLiteDatabase.openOrCreateDatabase(
+                    databasePathNew,
+                    encodeRawKeyToStr(password),
+                    null,
+                    null
+            );
+
+            // Step 1: Attach new database with updated settings
+            oldDb.execSQL("ATTACH DATABASE '" + databasePathNew + "' AS newdb KEY '" + encodeRawKeyToStr(password) + "'");
+
+            // Set PRAGMA statements for new database settings on 'newdb'
+            oldDb.execSQL("PRAGMA newdb.cipher_page_size = 4096");
+            oldDb.execSQL("PRAGMA newdb.kdf_iter = 10000");
+            oldDb.execSQL("PRAGMA newdb.cipher_hmac_algorithm = HMAC_SHA256");
+            oldDb.execSQL("PRAGMA newdb.cipher_kdf_algorithm = PBKDF2_HMAC_SHA256");
+
+            // Step 2: Copy schema from old database to new database
+            Cursor cursor = oldDb.rawQuery("SELECT sql FROM sqlite_master WHERE type='table'", null);
+            while (cursor.moveToNext()) {
+                String sql = cursor.getString(0);
+                newDb.execSQL(sql);
+            }
+            cursor.close();
+
+            // Step 3: Copy data from old tables to corresponding new tables
+            cursor = oldDb.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+            while (cursor.moveToNext()) {
+                String tableName = cursor.getString(0);
+                if (!tableName.startsWith("sqlite_")) { // Exclude SQLite system tables
+                    String copyTable = String.format("INSERT INTO newdb.%s SELECT * FROM %s", tableName, tableName);
+                    oldDb.execSQL(copyTable);
+                }
+            }
+            cursor.close();
+
+            // Step 4: Detach the new database
+            oldDb.execSQL("DETACH DATABASE 'newdb'");
+
+            // Close databases
+            oldDb.close();
+            newDb.close();
+
+            // Rename the new database file to replace the old one
+            File oldFile = context.getDatabasePath(CIPHER3_DATABASE_NAME);
+            File newFile = context.getDatabasePath(DATABASE_NAME);
+            if (oldFile.exists()) {
+               // oldFile.delete();
+            }
+            if (newFile.exists()) {
+                newFile.renameTo(oldFile);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to migrate from SQLCipher 3 to 4", e);
+        } finally {
+            if (oldDb != null && oldDb.isOpen()) {
+                oldDb.close();
+            }
+            if (newDb != null && newDb.isOpen()) {
+                newDb.close();
+            }
+        }
+    }
     private void createVaultFileTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + sq(D.T_VAULT_FILE) + " (" +
                 cddl(D.C_ID, D.TEXT) + " PRIMARY KEY , " +
