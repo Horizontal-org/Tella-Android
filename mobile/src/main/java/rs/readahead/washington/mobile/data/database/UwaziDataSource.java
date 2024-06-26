@@ -62,7 +62,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private UwaziDataSource(Context context, byte[] key) {
         DatabaseSecret databaseSecret = new DatabaseSecret(key);
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,databaseSecret);
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

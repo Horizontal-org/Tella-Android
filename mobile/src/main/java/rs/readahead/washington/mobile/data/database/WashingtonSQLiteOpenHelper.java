@@ -19,8 +19,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.enableWriteAheadLogging();
     }
 
-    WashingtonSQLiteOpenHelper(Context context, DatabaseSecret databaseSecret) {
-        super(context, databaseSecret);
+    WashingtonSQLiteOpenHelper(Context context, byte[] key) {
+        super(context,key);
     }
 
     private static String objQuote(String str) {

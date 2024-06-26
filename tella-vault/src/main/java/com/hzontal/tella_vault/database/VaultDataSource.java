@@ -1,6 +1,8 @@
 package com.hzontal.tella_vault.database;
 
+import static com.hzontal.tella_vault.database.CipherOpenHelper.execute;
 import static com.hzontal.tella_vault.database.CipherOpenHelper.migrateSqlCipher3To4IfNeeded;
+import static com.hzontal.tella_vault.database.CipherOpenHelper.shouldOpenSQLCipher3Database;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -54,12 +56,16 @@ public class VaultDataSource implements IVaultDatabase {
         String dbPath = dbFile.getAbsolutePath();
         Log.d("TAG", "Database path: " + dbPath);
         try {
-           migrateSqlCipher3To4IfNeeded(context, key);
+            shouldOpenSQLCipher3Database(context, key);
+           // migrateSqlCipher3To4IfNeeded(context, key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
+
         database = sqLiteOpenHelper.getReadableDatabase();
+        execute(database, context);
+
         //  } catch (SQLException e) {
         // Handle potential errors creating the database or opening a writable connection
         //   Log.e("VaultDataSource", "Error creating database connection", e);
@@ -336,8 +342,8 @@ public class VaultDataSource implements IVaultDatabase {
         List<VaultFile> files = new ArrayList<>();
 
         try {for (String id : ids) {
-                files.add(get(id));
-            }
+            files.add(get(id));
+        }
             return files;
         } catch (Exception e) {
             Timber.d(e, getClass().getName());
@@ -449,7 +455,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     public boolean transferFilesToNewRoot(String oldRootId, String newRootId) {
         List<VaultFile> files = listFilesInRoot(oldRootId);
-       Log.d("VaultDataSource", ""+files.size());
+        Log.d("VaultDataSource", ""+files.size());
 
         boolean success = true;
         for (VaultFile file : files) {

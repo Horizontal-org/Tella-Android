@@ -26,14 +26,14 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
-    final Context        context;
-    final DatabaseSecret databaseSecret;
+    final Context  context;
+    DatabaseSecret databaseSecret;
 
-    CipherOpenHelper(@NonNull Context context, @NonNull DatabaseSecret databaseSecret) {
+    CipherOpenHelper(@NonNull Context context, byte[] key) {
         super(
                 context,
                 DATABASE_NAME,
-                databaseSecret.asString(),
+                encodeRawKeyToStr(key),
                 null,
                 DATABASE_VERSION,
                 MIN_DATABASE_VERSION,

@@ -32,7 +32,7 @@ public class CipherStreamUtils {
     public static final int IV_SIZE = 16;
 
     private static final SecureRandom secureRandom = new SecureRandom();
-    private static final String transformation2 = "AES/CTR/NoPadding";
+    private static final String transformation2 = "AES/CBC/NoPadding";
     private static final int HASH_BYTE_SIZE = 128;
     private static final int PBKDF2_ITERATIONS = 1000;
 
