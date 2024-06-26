@@ -31,6 +31,8 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.cleaninsights.sdk.CleanInsights;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -160,6 +162,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SQLiteDatabase.loadLibs(this);
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 

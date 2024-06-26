@@ -488,4 +488,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0  " +
                 ");";
     }
+
+
 }

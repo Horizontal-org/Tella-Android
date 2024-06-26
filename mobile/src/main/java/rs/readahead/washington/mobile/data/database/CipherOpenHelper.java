@@ -3,9 +3,8 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.Context;
 import android.util.Log;
 
+
 import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteDatabase.CursorFactory;
-import net.sqlcipher.database.SQLiteException;
 import net.sqlcipher.database.SQLiteOpenHelper;
 
 import java.lang.reflect.Method;
@@ -16,7 +15,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
     CipherOpenHelper(Context context, String name,
-                     CursorFactory factory, int version) {
+                     SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version/*, new CipherV3MigrationHook()*/);
     }
 
@@ -31,10 +30,10 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
      * </p>
      *
      * @return a read/write database object valid until {@link #close} is called
-     * @throws SQLiteException if the database cannot be opened for writing
+     * @throws  if the database cannot be opened for writing
      */
-    synchronized SQLiteDatabase getWritableDatabase(byte[] key) {
-        return super.getWritableDatabase(encodeRawKey(key));
+    public synchronized SQLiteDatabase getWritableDatabase(byte[] key) {
+        return super.getWritableDatabase((encodeRawKey(key)));
     }
 
     /**
@@ -48,10 +47,9 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
      *
      * @return a database object valid until {@link #getWritableDatabase} or
      * {@link #close} is called.
-     * @throws SQLiteException if the database cannot be opened
      */
     public synchronized SQLiteDatabase getReadableDatabase(byte[] key) {
-        return super.getReadableDatabase(encodeRawKey(key));
+        return super.getReadableDatabase((encodeRawKey(key)));
     }
 
     /**

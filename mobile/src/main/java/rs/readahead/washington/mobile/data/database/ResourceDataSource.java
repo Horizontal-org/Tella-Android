@@ -40,7 +40,7 @@ public class ResourceDataSource implements ITellaResourcesRepository {
 
     private ResourceDataSource(Context context, byte[] key) {
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
+        //SQLiteDatabase.loadLibs(context);
         database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 

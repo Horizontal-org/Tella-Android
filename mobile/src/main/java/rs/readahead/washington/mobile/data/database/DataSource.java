@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
+
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
 
@@ -98,7 +99,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private DataSource(Context context, byte[] key) {
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
+        //SQLiteDatabase.loadLibs(context);
         database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 

@@ -1,5 +1,7 @@
 package com.hzontal.tella_vault.database;
 
+import static com.hzontal.tella_vault.database.CipherOpenHelper.encodeRawKeyToStr;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,6 +17,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
+
 
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
@@ -43,9 +46,10 @@ public class VaultDataSource implements IVaultDatabase {
      */
     public VaultDataSource(Context context, byte[] key) {
         VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
+       // SQLiteDatabase.loadLibs(context);
+        DatabaseMigrator.checkAndMigrateDatabase(context,sqLiteOpenHelper.getDatabaseName(),encodeRawKeyToStr(key));
+         database = sqLiteOpenHelper.getWritableDatabase(key);
 
-        database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 
     /**

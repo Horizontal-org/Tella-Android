@@ -11,6 +11,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     public VaultSQLiteOpenHelper(Context context) {
         super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
+
     }
 
     @Override

@@ -11,8 +11,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteQueryBuilder;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,6 @@ import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
 import rs.readahead.washington.mobile.util.Util;
-import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
@@ -61,7 +62,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private UwaziDataSource(Context context, byte[] key) {
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
+        //SQLiteDatabase.loadLibs(context);
         database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 

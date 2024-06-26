@@ -64,21 +64,21 @@ class PinUnlockActivity : BasePinActivity() {
     }
 
     override fun onSuccessSetPin(pin: String?) {
-        TellaKeysUI.getMainKeyStore().load(config.wrapper,
-            PBEKeySpec(pin?.toCharArray()),
-            object : MainKeyStore.IMainKeyLoadCallback {
-                override fun onReady(mainKey: MainKey) {
-                    TellaKeysUI.getMainKeyHolder().set(mainKey)
+//        TellaKeysUI.getMainKeyStore().load(config.wrapper,
+//            PBEKeySpec(pin?.toCharArray()),
+//            object : MainKeyStore.IMainKeyLoadCallback {
+//                override fun onReady(mainKey: MainKey) {
+//                    TellaKeysUI.getMainKeyHolder().set(mainKey)
                     onSuccessfulUnlock()
                     ErrorMessageUtil.resetUnlockAttempts()
                     finish()
-                }
 
-                override fun onError(throwable: Throwable) {
-                    onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
-                    TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
-                }
-            })
+
+//                override fun onError(throwable: Throwable) {
+//                    onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
+//                    TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
+//                }
+//            })
     }
 
     private fun setUnlockText(res: Int) {

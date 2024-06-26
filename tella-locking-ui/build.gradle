@@ -52,7 +52,8 @@ dependencies {
     api "androidx.lifecycle:lifecycle-process:$versions.lifecycleProcess"
     api "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycleCommonJava8"
 
-    api "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
+    implementation 'androidx.sqlite:sqlite-ktx:2.4.0'
+    implementation 'net.zetetic:android-database-sqlcipher:4.5.4@aar'
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
 
