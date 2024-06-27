@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.hzontal.tella_vault.VaultFile;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
@@ -74,7 +76,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
             // Open the old database with the existing 3.x settings
             oldDb =SQLiteDatabase.openOrCreateDatabase(
-                    databasePathNew,
+                    databasePathOld,
                     encodeRawKeyToStr(password),
                     null,
                     null
@@ -89,25 +91,42 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
             );
 
             // Step 1: Attach new database with updated settings
-            oldDb.execSQL("ATTACH DATABASE '" + databasePathNew + "' AS newdb KEY '" + encodeRawKeyToStr(password) + "'");
+           // oldDb.execSQL("ATTACH DATABASE '" + newDb.getPath() + "' AS oldDb KEY '" + encodeRawKeyToStr(password) + "'");
+          //  oldDb.execSQL("PRAGMA newdb.key = '" + encodeRawKeyToStr(password) + "'");
+            String sql1 = String.format("ATTACH DATABASE '%s' AS '%s' KEY '%s'", newDb.getPath(),"oldDb", encodeRawKeyToStr(password));
+            oldDb.rawExecSQL(sql1);
 
             // Set PRAGMA statements for new database settings on 'newdb'
-            oldDb.execSQL("PRAGMA newdb.cipher_page_size = 4096");
-            oldDb.execSQL("PRAGMA newdb.kdf_iter = 10000");
-            oldDb.execSQL("PRAGMA newdb.cipher_hmac_algorithm = HMAC_SHA256");
-            oldDb.execSQL("PRAGMA newdb.cipher_kdf_algorithm = PBKDF2_HMAC_SHA256");
+            oldDb.execSQL("PRAGMA cipher_page_size = 4096");
+            oldDb.execSQL("PRAGMA kdf_iter = 10000");
+            oldDb.execSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA256");
+            oldDb.execSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA256");
+            Cursor cursor1 = oldDb.rawQuery("SELECT sqlcipher_export ('oldDb')");
 
+          //  oldDb.rawExecSQL("SELECT sqlcipher_export('" + oldDb + "')");
+           // oldDb.execSQL("ATTACH DATABASE 'tella-vault-v4' AS tella-vault KEY  " + encodeRawKeyToStr(password)  + "';");
+           // oldDb.execSQL("SELECT sqlcipher_export ('tella-vault')");
+
+            //  oldDb.execSQL("DETACH DATABASE 'newdb';");
             // Step 2: Copy schema from old database to new database
-            Cursor cursor = oldDb.rawQuery("SELECT sql FROM sqlite_master WHERE type='table'", null);
-            while (cursor.moveToNext()) {
-                String sql = cursor.getString(0);
-                newDb.execSQL(sql);
-            }
-            cursor.close();
+//            Cursor cursor = oldDb.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type='table'", null);
+//            while (cursor.moveToNext()) {
+////                String sql = cursor.getString(0);
+////                newDb.execSQL(sql);
+//            }
+//            cursor.close();
 
+            Cursor cursor2 = newDb.rawQuery("SELECT COUNT(*) FROM sqlite_master;", null);
+            if (cursor2 != null && cursor2.moveToFirst()) {
+              cursor2.getColumnNames();
+            }
+
+            cursor2.close();
+            cursor1.close();
             // Step 3: Copy data from old tables to corresponding new tables
-            cursor = oldDb.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+           Cursor cursor = oldDb.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
             while (cursor.moveToNext()) {
+                cursor.getColumnNames();
                 String tableName = cursor.getString(0);
                 if (!tableName.startsWith("sqlite_")) { // Exclude SQLite system tables
                     String copyTable = String.format("INSERT INTO newdb.%s SELECT * FROM %s", tableName, tableName);
@@ -117,21 +136,22 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
             cursor.close();
 
             // Step 4: Detach the new database
-            oldDb.execSQL("DETACH DATABASE 'newdb'");
+            //  oldDb.execSQL("DETACH DATABASE 'newdb'");
+            oldDb.rawExecSQL("DETACH DATABASE ('oldDb')");
 
             // Close databases
             oldDb.close();
             newDb.close();
 
             // Rename the new database file to replace the old one
-            File oldFile = context.getDatabasePath(CIPHER3_DATABASE_NAME);
-            File newFile = context.getDatabasePath(DATABASE_NAME);
-            if (oldFile.exists()) {
-               // oldFile.delete();
-            }
-            if (newFile.exists()) {
-                newFile.renameTo(oldFile);
-            }
+//            File oldFile = context.getDatabasePath(CIPHER3_DATABASE_NAME);
+//            File newFile = context.getDatabasePath(DATABASE_NAME);
+//            if (oldFile.exists()) {
+//               // oldFile.delete();
+//            }
+//            if (newFile.exists()) {
+//                newFile.renameTo(oldFile);
+//            }
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to migrate from SQLCipher 3 to 4", e);
@@ -178,7 +198,14 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         return SQLiteDatabase.openDatabase(oldDbPath, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
-
+    @NonNull
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        synchronized(this) {
+            String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
+            return SQLiteDatabase.openDatabase(newDbPath, null, SQLiteDatabase.OPEN_READWRITE);
+        }
+    }
     private static String objQuote(String str) {
         return "`" + str + "`";
     }
