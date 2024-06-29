@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.hzontal.tella_vault.VaultFile;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
@@ -90,7 +92,14 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         return SQLiteDatabase.openDatabase(oldDbPath, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
-
+    @NonNull
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        synchronized(this) {
+            String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
+            return SQLiteDatabase.openDatabase(newDbPath, null, SQLiteDatabase.OPEN_READWRITE);
+        }
+    }
     private static String objQuote(String str) {
         return "`" + str + "`";
     }
