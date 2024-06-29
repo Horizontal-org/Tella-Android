@@ -2,21 +2,16 @@ package com.hzontal.tella_vault.database;
 
 import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
-import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.VaultFile;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
-
-import java.io.File;
 
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
@@ -27,6 +22,8 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
+        migrateSqlCipher3To4IfNeeded(context, password);
+
         this.password = password;
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         boolean alreadyMigrated = sharedPreferences.getBoolean(KEY_ALREADY_MIGRATED, false);
@@ -48,7 +45,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // we have started from version 1
-      //  migrateDatabase(db);
         // DBv1
         createVaultFileTable(db);
         insertRootVaultFile(db);

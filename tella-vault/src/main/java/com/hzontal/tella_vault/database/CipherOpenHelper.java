@@ -19,13 +19,15 @@ import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
 
     final Context context;
-    final  byte[] password;
+    final byte[] password;
 
 
     CipherOpenHelper(@NonNull Context context, byte[] password) {
@@ -37,14 +39,32 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 DATABASE_VERSION,
                 MIN_DATABASE_VERSION,
                 null,
-                null,
+                new SQLiteDatabaseHook() {
+                    @Override
+                    public void preKey(SQLiteConnection connection) {
+                        connection.execute("PRAGMA kdf_iter = 256000;", null, null);
+                        connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                    }
+
+                    @Override
+                    public void postKey(SQLiteConnection connection) {
+                        connection.execute("PRAGMA kdf_iter = 256000;", null, null);
+                        connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+
+                        // if not vacuumed in a while, perform that operation
+                        long currentTime = System.currentTimeMillis();
+                        // 7 days
+                        // if (currentTime - TextSecurePreferences.getLastVacuumTime(context) > 604_800_000) {
+                        connection.execute("VACUUM;", null, null);
+                        //  TextSecurePreferences.setLastVacuumNow(context);
+                        // }
+                    }
+                },
                 false
         );
 
         this.context = context.getApplicationContext();
         this.password = password;
-
-        migrateSqlCipher3To4IfNeeded(context, password);
     }
 
 
@@ -133,100 +153,125 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getAbsolutePath();
         File oldDbFile = new File(oldDbPath);
 
-        if (oldDbFile.exists()) {
-            long newSize = oldDbFile.length();
-            Log.d("Migration", "old database file size: " + newSize + " bytes");
-            Log.d("Migration", "Old DB Path: " + oldDbPath);
-
+        if (!oldDbFile.exists()) {
+            Log.d("Migration", "Old database does not exist, no migration needed.");
+            return;
         }
 
-        // If the old SQLCipher3 database file doesn't exist then just return early
-        if (!oldDbFile.exists()) { return; }
-
-        // If the new database file already exists then we probably had a failed migration and it's likely in
-        // an invalid state so should delete it
         String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
         File newDbFile = new File(newDbPath);
 
-        if (newDbFile.exists()) { newDbFile.delete(); }
+        if (newDbFile.exists()) {
+            newDbFile.delete();
+        }
 
         try {
             newDbFile.createNewFile();
-        }
-        catch (Exception e) {
-            // TODO: Communicate the error somehow???
+        } catch (Exception e) {
+            Log.e("Migration", "Failed to create new database file", e);
             return;
         }
 
         try {
-            System.loadLibrary("sqlcipher");
+            // Ensure the SQLCipher library is loaded
+          //  SQLiteDatabase.loadLibs(context);
 
-            // Open the old database
-            SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
+            SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key),null, null, new SQLiteDatabaseHook() {
                 @Override
                 public void preKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';",null,null);
-                    connection.execute("PRAGMA cipher_page_size = 1024",null,null);
-                    connection.execute("PRAGMA kdf_iter = 64000",null,null);
-                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1",null,null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1",null,null);
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
+                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
                 }
 
                 @Override
                 public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';",null,null);
-                    connection.execute("PRAGMA cipher_page_size = 1024",null,null);
-                    connection.execute("PRAGMA kdf_iter = 64000",null,null);
-                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1",null,null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1",null,null);                 }
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
+                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                }
             });
 
-            // Export the old database to the new one (will have the default 'kdf_iter' and 'page_size' settings)
-            int oldDbVersion = oldDb.getVersion();
-            oldDb.rawExecSQL(
-                    String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, encodeRawKeyToStr(key))
-            );
-            Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4')");
-            cursor.moveToLast();
-            cursor.close();
-            oldDb.rawExecSQL("DETACH DATABASE sqlcipher4");
-            oldDb.close();
+            // Perform database migration steps
+            oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s'", newDbPath, encodeRawKeyToStr(key)));
 
-            // TODO: Performance testing
+            // Use rawQuery to perform the sqlcipher_export
+            Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4');", null);
+            if (cursor != null && cursor.moveToFirst()) {
+                cursor.close();
+            }
+
+            oldDb.execSQL("DETACH DATABASE sqlcipher4;");
+            oldDb.close();
 
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
                 Log.d("TAG", "New database file size: " + newSize + " bytes");
             }
-            SQLiteDatabase newDb = SQLiteDatabase.openOrCreateDatabase(newDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                   // connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';",null,null);
-                    connection.execute("PRAGMA kdf_iter = '256000';", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 1024",null,null);
-                }
 
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                   // connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';",null,null);
-                    connection.execute("PRAGMA kdf_iter = '256000';", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 1024",null,null);
+            // Rename the new database to replace the old one
+            File finalFile = context.getDatabasePath(DATABASE_NAME);
+            if (finalFile.exists()) {
+                finalFile.delete();
+            }
+            newDbFile.renameTo(finalFile);
 
-                }
-            });
+            if (!oldDbFile.delete()) {
+                Log.e("Migration", "Failed to delete old database file");
+            }
 
-
-
-            newDb.setVersion(oldDbVersion);
-            newDb.close();
-
-            // TODO: Delete 'CIPHER3_DATABASE_NAME'
-            // TODO: What do we do if the deletion fails??? (The current logic will end up re-migrating...)
-//      oldDbFile.delete();
-        }
-        catch (Exception e) {
-            Log.d("Migration Exception", e.getLocalizedMessage());
-            // TODO: Communicate the error somehow???
+            Log.d("Migration", "Database migration from SQLCipher 3 to 4 was successful.");
+        } catch (Exception e) {
+            Log.e("Migration Exception", "Error during migration", e);
         }
     }
+
+
+    private static Map<String, String> getOldDatabasePragmas(SQLiteDatabase db) {
+        Map<String, String> pragmas = new HashMap<>();
+        Cursor cursor;
+
+        cursor = db.rawQuery("PRAGMA cipher_page_size;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("cipher_page_size", cursor.getString(0));
+        }
+        cursor.close();
+
+        cursor = db.rawQuery("PRAGMA kdf_iter;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("kdf_iter", cursor.getString(0));
+        }
+        cursor.close();
+
+        cursor = db.rawQuery("PRAGMA cipher_hmac_algorithm;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("cipher_hmac_algorithm", cursor.getString(0));
+        }
+        cursor.close();
+
+        cursor = db.rawQuery("PRAGMA cipher_kdf_algorithm;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("cipher_kdf_algorithm", cursor.getString(0));
+        }
+        cursor.close();
+
+        cursor = db.rawQuery("PRAGMA cipher_use_hmac;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("cipher_use_hmac", cursor.getString(0));
+        }
+        cursor.close();
+
+        cursor = db.rawQuery("PRAGMA cipher_version;", null);
+        if (cursor.moveToFirst()) {
+            pragmas.put("cipher_version", cursor.getString(0));
+        }
+        cursor.close();
+
+        return pragmas;
+    }
+
 }
