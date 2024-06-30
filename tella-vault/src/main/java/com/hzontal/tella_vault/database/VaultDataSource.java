@@ -44,16 +44,34 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
-        System.loadLibrary("sqlcipher");
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, key);
+        //System.loadLibrary("sqlcipher");
+        VaultSQLiteOpenHelper dbHelper = VaultSQLiteOpenHelper.getInstance(context, key);
+        if (database == null) {
+            database = dbHelper.getReadableDatabase();
+        }
 
-        database = sqLiteOpenHelper.getReadableDatabase();
-        //  } catch (SQLException e) {
-        // Handle potential errors creating the database or opening a writable connection
-        //   Log.e("VaultDataSource", "Error creating database connection", e);
-        //    // You might throw an exception here or handle it differently based on your app's needs
-        //   }
+        List<String> tableNames = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                String tableName = cursor.getString(0);
+                tableNames.add(tableName);
+            }
+            cursor.close();
+        }
+
     }
+
+//        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, key);
+//
+//        database = sqLiteOpenHelper.getReadableDatabase();
+    //  } catch (SQLException e) {
+    // Handle potential errors creating the database or opening a writable connection
+    //   Log.e("VaultDataSource", "Error creating database connection", e);
+    //    // You might throw an exception here or handle it differently based on your app's needs
+    //   }
+
 
     /**
      * Returns a singleton instance of VaultDataSource.
@@ -143,8 +161,8 @@ public class VaultDataSource implements IVaultDatabase {
         if (limits != null) {
             limit = String.valueOf(limits.limit);
         }
-          where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
-         Timber.d("where %s", where);
+        where = getFilterQuery(filterType, (parent != null ? parent.id : ROOT_UID));
+        Timber.d("where %s", where);
         try {
             // todo: add support for filter directly in query
             final String query = SQLiteQueryBuilder.buildQueryString(
@@ -323,7 +341,8 @@ public class VaultDataSource implements IVaultDatabase {
     public List<VaultFile> get(String[] ids) {
         List<VaultFile> files = new ArrayList<>();
 
-        try {for (String id : ids) {
+        try {
+            for (String id : ids) {
                 files.add(get(id));
             }
             return files;
@@ -437,7 +456,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     public boolean transferFilesToNewRoot(String oldRootId, String newRootId) {
         List<VaultFile> files = listFilesInRoot(oldRootId);
-       Log.d("VaultDataSource", ""+files.size());
+        Log.d("VaultDataSource", "" + files.size());
 
         boolean success = true;
         for (VaultFile file : files) {

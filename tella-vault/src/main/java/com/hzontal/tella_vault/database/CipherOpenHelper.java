@@ -38,28 +38,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 null,
                 DATABASE_VERSION,
                 MIN_DATABASE_VERSION,
-                null,
-                new SQLiteDatabaseHook() {
-                    @Override
-                    public void preKey(SQLiteConnection connection) {
-                        connection.execute("PRAGMA kdf_iter = 256000;", null, null);
-                        connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-                    }
-
-                    @Override
-                    public void postKey(SQLiteConnection connection) {
-                        connection.execute("PRAGMA kdf_iter = 256000;", null, null);
-                        connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-
-                        // if not vacuumed in a while, perform that operation
-                        long currentTime = System.currentTimeMillis();
-                        // 7 days
-                        // if (currentTime - TextSecurePreferences.getLastVacuumTime(context) > 604_800_000) {
-                        connection.execute("VACUUM;", null, null);
-                        //  TextSecurePreferences.setLastVacuumNow(context);
-                        // }
-                    }
-                },
+                null,null,
                 false
         );
 
@@ -213,12 +192,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 Log.d("TAG", "New database file size: " + newSize + " bytes");
             }
 
-            // Rename the new database to replace the old one
-            File finalFile = context.getDatabasePath(DATABASE_NAME);
-            if (finalFile.exists()) {
-                finalFile.delete();
-            }
-            newDbFile.renameTo(finalFile);
+//            // Rename the new database to replace the old one
+//            File finalFile = context.getDatabasePath(DATABASE_NAME);
+//            if (finalFile.exists()) {
+//                finalFile.delete();
+//            }
+//            newDbFile.renameTo(finalFile);
 
             if (!oldDbFile.delete()) {
                 Log.e("Migration", "Failed to delete old database file");
@@ -226,7 +205,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
             Log.d("Migration", "Database migration from SQLCipher 3 to 4 was successful.");
         } catch (Exception e) {
-            Log.e("Migration Exception", "Error during migration", e);
+            Log.e("" +
+                    " Exception", "Error during migration", e);
         }
     }
 

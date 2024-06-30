@@ -11,12 +11,17 @@ import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.VaultFile;
 
+import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
+
+import java.io.File;
 
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     private static final String PREFS_NAME = "VaultSQLiteOpenHelperPrefs";
     private static final String KEY_ALREADY_MIGRATED = "alreadyMigrated";
+    private static VaultSQLiteOpenHelper dbHelper;
     private final byte[] password;
     private final SharedPreferences sharedPreferences;
 
@@ -41,6 +46,14 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         db.enableWriteAheadLogging();
 
     }
+    public synchronized static VaultSQLiteOpenHelper getInstance(Context context,byte[] password) {
+        if (dbHelper == null) {
+            dbHelper = new VaultSQLiteOpenHelper(context, password);
+        }
+
+        return dbHelper;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -93,8 +106,31 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     public SQLiteDatabase getReadableDatabase() {
         synchronized(this) {
             String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
-            return SQLiteDatabase.openDatabase(newDbPath, null, SQLiteDatabase.OPEN_READWRITE);
+            File file = new File(newDbPath);
+             return SQLiteDatabase.openDatabase(newDbPath, encodeRawKeyToStr(password), null,SQLiteDatabase.OPEN_READWRITE,new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.execute("PRAGMA kdf_iter = 256000;", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
+
+                    // if not vacuumed in a while, perform that operation
+                    long currentTime = System.currentTimeMillis();
+                    // 7 days
+                    // if (currentTime - TextSecurePreferences.getLastVacuumTime(context) > 604_800_000) {
+                    connection.execute("VACUUM;", null, null);
+                    //  TextSecurePreferences.setLastVacuumNow(context);
+                    // }
+                }
+            });
+           // else return null;
         }
+
     }
     private static String objQuote(String str) {
         return "`" + str + "`";
