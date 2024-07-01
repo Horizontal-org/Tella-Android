@@ -96,42 +96,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
         db.insert(D.T_VAULT_FILE, null, values);
     }
-    private SQLiteDatabase getOldDatabase() {
-        String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getPath();
-        return SQLiteDatabase.openDatabase(oldDbPath, null, SQLiteDatabase.OPEN_READWRITE);
-    }
 
-    @NonNull
-    @Override
-    public SQLiteDatabase getReadableDatabase() {
-        synchronized(this) {
-            String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
-            File file = new File(newDbPath);
-             return SQLiteDatabase.openDatabase(newDbPath, encodeRawKeyToStr(password), null,SQLiteDatabase.OPEN_READWRITE,new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                    connection.execute("PRAGMA kdf_iter = 256000;", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
-                }
-
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                    connection.execute("PRAGMA kdf_iter = 256000;", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
-
-                    // if not vacuumed in a while, perform that operation
-                    long currentTime = System.currentTimeMillis();
-                    // 7 days
-                    // if (currentTime - TextSecurePreferences.getLastVacuumTime(context) > 604_800_000) {
-                    connection.execute("VACUUM;", null, null);
-                    //  TextSecurePreferences.setLastVacuumNow(context);
-                    // }
-                }
-            });
-           // else return null;
-        }
-
-    }
     private static String objQuote(String str) {
         return "`" + str + "`";
     }

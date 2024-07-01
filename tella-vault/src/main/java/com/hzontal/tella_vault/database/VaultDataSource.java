@@ -44,33 +44,12 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
-        //System.loadLibrary("sqlcipher");
+        System.loadLibrary("sqlcipher");
         VaultSQLiteOpenHelper dbHelper = VaultSQLiteOpenHelper.getInstance(context, key);
         if (database == null) {
             database = dbHelper.getReadableDatabase();
         }
-
-        List<String> tableNames = new ArrayList<>();
-        Cursor cursor = database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                String tableName = cursor.getString(0);
-                tableNames.add(tableName);
-            }
-            cursor.close();
-        }
-
     }
-
-//        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context, key);
-//
-//        database = sqLiteOpenHelper.getReadableDatabase();
-    //  } catch (SQLException e) {
-    // Handle potential errors creating the database or opening a writable connection
-    //   Log.e("VaultDataSource", "Error creating database connection", e);
-    //    // You might throw an exception here or handle it differently based on your app's needs
-    //   }
 
 
     /**
