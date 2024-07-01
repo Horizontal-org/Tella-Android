@@ -28,13 +28,8 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
         migrateSqlCipher3To4IfNeeded(context, password);
-
         this.password = password;
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        boolean alreadyMigrated = sharedPreferences.getBoolean(KEY_ALREADY_MIGRATED, false);
-      // if (!alreadyMigrated) {
-       //   migrateDatabase();
-        //}
     }
 
     @Override

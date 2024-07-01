@@ -47,7 +47,7 @@ public class VaultDataSource implements IVaultDatabase {
         System.loadLibrary("sqlcipher");
         VaultSQLiteOpenHelper dbHelper = VaultSQLiteOpenHelper.getInstance(context, key);
         if (database == null) {
-            database = dbHelper.getReadableDatabase();
+            database = dbHelper.getWritableDatabase();
         }
     }
 

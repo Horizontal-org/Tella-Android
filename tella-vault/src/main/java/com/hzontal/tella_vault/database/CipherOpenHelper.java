@@ -122,11 +122,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
                 @Override
                 public void preKey(SQLiteConnection connection) {
-//                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-////                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-////                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
-////                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-////                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
                }
 
                 @Override
@@ -138,7 +133,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                     connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);                }
             });
 
-            hasData(oldDb);
             oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s';", newDbPath, encodeRawKeyToStr(key)));
             Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4');", null);
             if (cursor != null && cursor.moveToFirst()) {
@@ -147,6 +141,17 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
             oldDb.close();
+
+            SQLiteDatabase newDb = SQLiteDatabase.openDatabase(newDbPath, encodeRawKeyToStr(key),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
+                }
+            });
 
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
@@ -159,63 +164,21 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    @Override
-    public void onConfigure(SQLiteDatabase db) {
-        super.onConfigure(db);
-        db.rawExecSQL("PRAGMA cipher_page_size = 4096;");
-        db.rawExecSQL("PRAGMA kdf_iter = 256000;");
-        db.rawExecSQL("PRAGMA cipher_hmac_algorithm = HMAC_SHA_512;");
-        db.rawExecSQL("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA512;");
-    }
-
-    public static boolean hasData(SQLiteDatabase db) {
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + "t_vault_file", null);
-
-        boolean hasData = false;
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                hasData = cursor.getInt(0) > 0;
-            }
-            cursor.close();
-        }
-
-        return hasData;
-    }
+    @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(
-                context.getDatabasePath(DATABASE_NAME).getAbsolutePath(),
-                encodeRawKeyToStr(password),
-                null,
-                null,
-                new SQLiteDatabaseHook() {
-                    @Override
-                    public void preKey(SQLiteConnection connection) {
-                    }
+        SQLiteDatabase db =SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
+            @Override
+            public void preKey(SQLiteConnection connection) {
+            }
 
-                    @Override
-                    public void postKey(SQLiteConnection connection) {
-                        try {
-                            connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
-                          //  connection.execute("PRAGMA cipher_page_size = 4096;", null, null);
-                           // connection.execute("PRAGMA kdf_iter = 64000;", null, null);
-                            connection.execute("PRAGMA cipher_page_size = 3072;", null, null);
-                            connection.execute("PRAGMA kdf_iter = 256000;", null, null);
-                            connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA_512;", null, null);
-                            connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA512;", null, null);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error executing PRAGMA statements in postKey: " + e.getMessage(), e);
-                        }
-                    }
-                }
-        );
+            @Override
+            public void postKey(SQLiteConnection connection) {
+                connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
+            }
+        });
 
-        onConfigure(db);
         return db;
     }
 
-    @Override
-    public SQLiteDatabase getReadableDatabase() {
-        return getWritableDatabase();
-    }
 }
