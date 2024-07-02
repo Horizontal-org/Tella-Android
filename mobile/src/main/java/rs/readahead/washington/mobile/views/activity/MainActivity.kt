@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.activity
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -32,7 +31,6 @@ import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -62,13 +60,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
-    IMainNavigationInterface, VerificationWorkStatusCallback {
-class MainActivity : MetadataActivity(),
-    IHomeScreenPresenterContract.IView,
-    IMediaImportPresenterContract.IView,
-    IMetadataAttachPresenterContract.IView,
-    IMainNavigationInterface, OnSelectEntitiesClickListener {
-
+    IMainNavigationInterface, VerificationWorkStatusCallback, OnSelectEntitiesClickListener {
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
     }
