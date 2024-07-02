@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:checkable="true"
-    android:checkableBehavior="single" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:checkableBehavior="single">
+
     <item
         android:id="@+id/home"
         android:contentDescription="@string/Home_BottomNav_Home"
         android:icon="@drawable/home"
-        android:title="@string/Home_BottomNav_Home" />
+        android:title="@string/Home_BottomNav_Home"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/camera"
         android:contentDescription="@string/Home_BottomNav_Camera"
         android:icon="@drawable/ic_camera_alt_24px"
-        android:title="@string/Home_BottomNav_Camera" />
+        android:title="@string/Home_BottomNav_Camera"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/mic"
         android:contentDescription="@string/Home_BottomNav_Rec"
         android:icon="@drawable/baseline_mic_none_24"
-        android:title="@string/Home_BottomNav_Rec" />
+        android:title="@string/Home_BottomNav_Rec"
+        app:showAsAction="ifRoom" />
 
 </menu>

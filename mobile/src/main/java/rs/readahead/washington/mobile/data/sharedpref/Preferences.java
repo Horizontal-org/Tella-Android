@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.hzontal.shared_ui.utils.CalculatorTheme;
+import org.joda.time.DateTime;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -407,6 +409,46 @@ public class Preferences {
 
     private static void setLong(@NonNull String name, long value) {
         sharedPrefs.setLong(name, value);
+    }
+
+    public static boolean isShowVaultImprovementSection() {
+        return getBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, true);
+    }
+
+    public static void setShowVaultImprovementSection(boolean value) {
+        setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
+    }
+
+    public static boolean isShowUpdateMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowUpdateMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
+    }
+
+    public static boolean hasAcceptedImprovements() {
+        return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
+    }
+
+    public static void setIsAcceptedImprovements(boolean value) {
+        setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
+        setTimeAcceptedImprovements(new Date().getTime());
+    }
+
+    public static Long getTimeAcceptedImprovements() {
+        return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
+    }
+
+    private static void setTimeAcceptedImprovements(Long value) {
+        setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
+    }
+
+    public static boolean isTimeToShowReminderImprovements() {
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
     }
 
     public static boolean isFeedbackSharingEnabled() {

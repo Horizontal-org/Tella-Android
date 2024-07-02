@@ -98,18 +98,18 @@
         tools:layout="@layout/fragment_uwazi">
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziDownloadScreen"
-            app:destination="@id/uwaziDownloadScreen"></action>
+            app:destination="@id/uwaziDownloadScreen" />
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziEntryScreen"
-            app:destination="@id/uwaziEntryScreen"></action>
+            app:destination="@id/uwaziEntryScreen" />
 
         <action
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
-            app:destination="@id/uwaziSendScreen"></action>
+            app:destination="@id/uwaziSendScreen" />
 
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziSubmittedPreview"
-            app:destination="@id/uwaziSubmittedPreviewScreen"></action>
+            app:destination="@id/uwaziSubmittedPreviewScreen" />
     </fragment>
 
 
@@ -117,7 +117,7 @@
         android:id="@+id/uwaziDownloadScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
         android:label="Uwazi"
-        tools:layout="@layout/fragment_downloaded_templates"></fragment>
+        tools:layout="@layout/fragment_downloaded_templates" />
 
     <fragment
         android:id="@+id/uwaziEntryScreen"
@@ -126,20 +126,20 @@
         tools:layout="@layout/uwazi_entry_fragment">
         <action
             android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
-            app:destination="@id/uwaziSendScreen"></action>
+            app:destination="@id/uwaziSendScreen" />
     </fragment>
 
     <fragment
         android:id="@+id/uwaziSendScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
-        tools:layout="@layout/uwazi_send_fragment"></fragment>
+        tools:layout="@layout/uwazi_send_fragment" />
 
     <fragment
         android:id="@+id/uwaziSubmittedPreviewScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
-        tools:layout="@layout/fragment_sumbitted_preview"></fragment>
+        tools:layout="@layout/fragment_sumbitted_preview" />
 
     <fragment
         android:id="@+id/resourcesScreen"
