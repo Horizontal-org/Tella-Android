@@ -4,6 +4,7 @@ import static rs.readahead.washington.mobile.data.database.D.CIPHER3_DATABASE_NA
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_VERSION;
 import static rs.readahead.washington.mobile.data.database.D.MIN_DATABASE_VERSION;
+import static rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
 import static rs.readahead.washington.mobile.data.sharedpref.Preferences.setAlreadyMigratedMainDB;
 
 import android.content.Context;
@@ -29,16 +30,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     final byte[] password;
 
     CipherOpenHelper(@NonNull Context context, byte[] password) {
-        super(
-                context,
-                DATABASE_NAME,
-                encodeRawKeyToStr(password),
-                null,
-                DATABASE_VERSION,
-                MIN_DATABASE_VERSION,
-                null, null,
-                false
-        );
+        super(context, DATABASE_NAME, encodeRawKeyToStr(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
 
         this.context = context.getApplicationContext();
         this.password = password;
@@ -82,15 +74,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
     private static boolean check_sqlcipher_uses_native_key() {
         for (Method method : SQLiteDatabase.class.getDeclaredMethods()) {
-            if (method.getName().equals("native_key"))
-                return true;
+            if (method.getName().equals("native_key")) return true;
         }
         return false;
     }
 
-    private static final char[] HEX_DIGITS_LOWER = {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-    };
+    private static final char[] HEX_DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static char[] encodeHex(final byte[] data, final char[] toDigits) {
         final int l = data.length;
@@ -160,18 +149,25 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
-            @Override
-            public void preKey(SQLiteConnection connection) {
-            }
 
-            @Override
-            public void postKey(SQLiteConnection connection) {
-                connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
-            }
-        });
+        if (isAlreadyMigratedMainDB()) {
 
-        return db;
+            return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                }
+
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
+                }
+            });
+        } else {
+            Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
+            return super.getWritableDatabase(); // or handle appropriately
+
+        }
+
     }
 
 }

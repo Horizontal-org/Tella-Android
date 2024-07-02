@@ -4,6 +4,7 @@ import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
@@ -160,17 +161,21 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
+        Preferences preferences = new Preferences(context);
+        if (preferences.isAlreadyMigratedVaultDB()) {
+            return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
+                @Override
+                public void preKey(SQLiteConnection connection) {
+                }
 
-        return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
-            @Override
-            public void preKey(SQLiteConnection connection) {
-            }
-
-            @Override
-            public void postKey(SQLiteConnection connection) {
-                connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
-            }
-        });
+                @Override
+                public void postKey(SQLiteConnection connection) {
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
+                }
+            });
+        } else {
+            Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
+            return super.getWritableDatabase(); // or handle appropriately
+        }
     }
-
 }
