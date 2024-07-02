@@ -4,13 +4,13 @@ import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
-import static com.hzontal.tella_vault.database.Preferences.setAlreadyMigratedVaultDB;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.hzontal.utils.Preferences;
 
 import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
@@ -108,7 +108,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         File oldDbFile = new File(oldDbPath);
 
         if (!oldDbFile.exists()) {
-            Log.d("Migration", "Old database does not exist, no migration needed.");
+            Timber.tag("Migration").d("Old database does not exist, no migration needed.");
             return;
         }
 
@@ -150,7 +150,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
             }
 
-            setAlreadyMigratedVaultDB(true);
+            new Preferences(context).setAlreadyMigratedVaultDB(true);
             Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
         } catch (Exception e) {
             Timber.tag("Migration").e(e, "Error during migration");

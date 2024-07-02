@@ -1,10 +1,10 @@
 package rs.readahead.washington.mobile.data.database;
 
-import static com.hzontal.tella_vault.database.Preferences.setAlreadyMigratedMainDB;
 import static rs.readahead.washington.mobile.data.database.D.CIPHER3_DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_VERSION;
 import static rs.readahead.washington.mobile.data.database.D.MIN_DATABASE_VERSION;
+import static rs.readahead.washington.mobile.data.sharedpref.Preferences.setAlreadyMigratedMainDB;
 
 import android.content.Context;
 import android.database.Cursor;

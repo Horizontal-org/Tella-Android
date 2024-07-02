@@ -1,12 +1,11 @@
 package com.hzontal.tella_vault.database;
 
-import static com.hzontal.tella_vault.database.Preferences.isAlreadyMigratedVaultDB;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.IntentFilter;
 
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.Preferences;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
@@ -15,7 +14,8 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
-        if (isAlreadyMigratedVaultDB()){
+        Preferences preferences = new Preferences(context);
+        if (!preferences.isAlreadyMigratedVaultDB()) {
             migrateSqlCipher3To4IfNeeded(context, password);
         }
     }
@@ -24,11 +24,12 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         if (!db.isReadOnly()) {
-           db.execSQL("PRAGMA foreign_keys=ON;");
+            db.execSQL("PRAGMA foreign_keys=ON;");
         }
         db.enableWriteAheadLogging();
     }
-    public synchronized static VaultSQLiteOpenHelper getInstance(Context context,byte[] password) {
+
+    public synchronized static VaultSQLiteOpenHelper getInstance(Context context, byte[] password) {
         if (dbHelper == null) {
             dbHelper = new VaultSQLiteOpenHelper(context, password);
         }
