@@ -18,5 +18,4 @@ object ParamsNetwork {
     const val URL_FEEDBACK: String = "https://api.feedback.tella-app.org/opinions/"
     const val FEEDBACK_HEADER = "X-Tella-Platform"
     const val TELLA_PLATFORM = "wearehorizontal"
-
 }

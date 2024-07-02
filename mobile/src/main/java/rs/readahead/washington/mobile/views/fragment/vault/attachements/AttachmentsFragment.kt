@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
@@ -74,8 +75,8 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
 import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
-import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
+import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
 
 
 @AndroidEntryPoint
@@ -312,6 +313,7 @@ class AttachmentsFragment :
     private fun createVaultManageFilesAction(): VaultSheetUtils.IVaultManageFiles {
         return object : VaultSheetUtils.IVaultManageFiles {
             override fun goToCamera() {
+
                 val intent = Intent(activity, CameraActivity::class.java)
                 intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                 baseActivity.startActivity(intent)
@@ -769,7 +771,6 @@ class AttachmentsFragment :
         }
     }
 
-
     private fun onMediaFilesAdded() {
         viewModel.getFiles(currentRootID, filterType, sort)
     }
@@ -996,7 +997,6 @@ class AttachmentsFragment :
         return requestCode == C.START_CAMERA_CAPTURE || requestCode == C.START_AUDIO_RECORD
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {

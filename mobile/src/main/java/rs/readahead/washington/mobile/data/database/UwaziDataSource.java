@@ -40,6 +40,7 @@ import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.IUWAZIServersRepository;
 import rs.readahead.washington.mobile.domain.repository.uwazi.ICollectUwaziTemplatesRepository;
 import rs.readahead.washington.mobile.util.Util;
+import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTemplatesRepository {

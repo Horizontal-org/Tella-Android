@@ -12,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import rs.readahead.washington.mobile.MyApplication
@@ -196,7 +197,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
 
     private fun createRequestBody(s: String): RequestBody {
         return RequestBody.create(
-            MediaType.parse(MULTIPART_FORM_DATA), s
+            MULTIPART_FORM_DATA.toMediaTypeOrNull(), s
         )
     }
 

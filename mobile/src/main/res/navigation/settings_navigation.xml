@@ -23,21 +23,21 @@
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"></action>
+            app:popExitAnim="@anim/slide_out_start" />
         <action
             android:id="@+id/action_main_settings_to_servers_settings"
             app:destination="@id/servers_settings"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"></action>
+            app:popExitAnim="@anim/slide_out_start" />
         <action
             android:id="@+id/action_main_settings_to_about_n_help_settings"
             app:destination="@id/about_n_help_settings"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"></action>
+            app:popExitAnim="@anim/slide_out_start" />
 
         <action
             android:id="@+id/action_main_settings_to_hide_tella"
@@ -45,14 +45,14 @@
             app:enterAnim="@anim/slide_in_end"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_end"></action>
+            app:popExitAnim="@anim/slide_out_end" />
         <action
             android:id="@+id/action_main_settings_to_camouflage_change_or_remove"
             app:destination="@id/camouflage_change_or_remove"
             app:enterAnim="@anim/slide_in_end"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_end"></action>
+            app:popExitAnim="@anim/slide_out_end" />
         <action
             android:id="@+id/action_main_settings_to_sendFeedbackFragment"
             app:destination="@id/send_feedback_fragment"
@@ -80,31 +80,31 @@
         android:id="@+id/security_settings"
         android:name="rs.readahead.washington.mobile.views.settings.SecuritySettings"
         android:label="fragment_security_settings"
-        tools:layout="@layout/fragment_security_settings"></fragment>
+        tools:layout="@layout/fragment_security_settings" />
 
     <activity
         android:id="@+id/servers_settings"
         android:name="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity"
         android:label="activity_servers_settings"
-        tools:layout="@layout/activity_documentation_settings"></activity>
+        tools:layout="@layout/activity_documentation_settings" />
 
     <fragment
         android:id="@+id/about_n_help_settings"
         android:name="rs.readahead.washington.mobile.views.settings.AboutAndHelpSettings"
         android:label="fragment_about_n_help_settings"
-        tools:layout="@layout/fragment_about_n_help_settings"></fragment>
+        tools:layout="@layout/fragment_about_n_help_settings" />
 
     <fragment
         android:id="@+id/language_settings"
         android:name="rs.readahead.washington.mobile.views.settings.LanguageSettings"
         android:label="fragment_language_settings"
-        tools:layout="@layout/fragment_language_settings"></fragment>
+        tools:layout="@layout/fragment_language_settings" />
 
     <fragment
         android:id="@+id/camouflage_name_logo"
         android:name="rs.readahead.washington.mobile.views.settings.CamouflageNameAndLogo"
         android:label="fragment_name_logo"
-        tools:layout="@layout/fragment_name_and_logo"></fragment>
+        tools:layout="@layout/fragment_name_and_logo" />
 
     <fragment
         android:id="@+id/camouflage_change_or_remove"

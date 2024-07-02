@@ -850,6 +850,16 @@ they are uploaded to this project as a report.</string>
   <string name="feedback_title">Feedback</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
+  <string name="background_activities">Background activities</string>
+  <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
+  <string name="file_encryption_in_progress">File encryption in progress</string>
+  <string name="no_background_activity">There are currently no ongoing activities in the background.</string>
+  <string name="encryption_in_progress">File encryption in progress</string>
+  <string name="encryption_exit_prompt">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
+  <string name="exit_discard_files">Exit and discard files</string>
+
+  <string name="exit_and_discard_files">Exit and discard files</string>
+  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
   <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
@@ -873,4 +883,12 @@ they are uploaded to this project as a report.</string>
     <string name="add_more_entities">Add more entities</string>
     <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
   <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
+  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
+  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
+  <string name="back">BACK</string>
+  <string name="encrypting">Encrypting </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. \n\n If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.\n\n Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
+  <string name="Learn_More">LEARN MORE</string>
 </resources>
