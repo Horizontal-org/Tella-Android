@@ -1,17 +1,9 @@
 package rs.readahead.washington.mobile.data.database;
 
 
-import static rs.readahead.washington.mobile.data.database.D.CIPHER3_DATABASE_NAME;
-import static rs.readahead.washington.mobile.data.database.D.DATABASE_NAME;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-
 
 class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
@@ -498,9 +490,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 12:
                 db.execSQL(createTableResources());
               //  break;
-              //  break;
         }
-
     }
 
 }

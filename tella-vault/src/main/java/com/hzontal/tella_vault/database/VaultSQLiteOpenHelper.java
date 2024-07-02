@@ -1,35 +1,18 @@
 package com.hzontal.tella_vault.database;
 
-import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
-import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
-
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-
-import androidx.annotation.NonNull;
 
 import com.hzontal.tella_vault.VaultFile;
 
-import net.zetetic.database.sqlcipher.SQLiteConnection;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
-import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
-
-import java.io.File;
-
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
-    private static final String PREFS_NAME = "VaultSQLiteOpenHelperPrefs";
-    private static final String KEY_ALREADY_MIGRATED = "alreadyMigrated";
     private static VaultSQLiteOpenHelper dbHelper;
-    private final byte[] password;
-    private final SharedPreferences sharedPreferences;
 
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
         migrateSqlCipher3To4IfNeeded(context, password);
-        this.password = password;
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -48,7 +31,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         return dbHelper;
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         // we have started from version 1
@@ -59,6 +41,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //Upgrade here
     }
 
     private void createVaultFileTable(SQLiteDatabase db) {
