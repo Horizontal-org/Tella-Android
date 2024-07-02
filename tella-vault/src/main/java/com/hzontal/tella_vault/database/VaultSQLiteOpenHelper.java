@@ -1,7 +1,10 @@
 package com.hzontal.tella_vault.database;
 
+import static com.hzontal.tella_vault.database.Preferences.isAlreadyMigratedVaultDB;
+
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.IntentFilter;
 
 import com.hzontal.tella_vault.VaultFile;
 
@@ -12,7 +15,9 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     public VaultSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
-        migrateSqlCipher3To4IfNeeded(context, password);
+        if (isAlreadyMigratedVaultDB()){
+            migrateSqlCipher3To4IfNeeded(context, password);
+        }
     }
 
     @Override

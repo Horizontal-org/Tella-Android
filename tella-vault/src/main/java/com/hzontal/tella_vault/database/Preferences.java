@@ -337,6 +337,23 @@ public class Preferences {
         setBoolean(SharedPrefs.METADATA_AUTO_UPLOAD, value);
     }
 
+
+    public static boolean isAlreadyMigratedMainDB() {
+        return getBoolean(SharedPrefs.IS_MIGRATED_MAIN_DB, false);
+    }
+
+    public static void setAlreadyMigratedMainDB(boolean value) {
+        setBoolean(SharedPrefs.IS_MIGRATED_MAIN_DB, value);
+    }
+
+    public static boolean isAlreadyMigratedVaultDB() {
+        return getBoolean(SharedPrefs.IS_MIGRATED_MAIN_DB, false);
+    }
+
+    public static void setAlreadyMigratedVaultDB(boolean value) {
+        setBoolean(SharedPrefs.IS_MIGRATED_MAIN_DB, value);
+    }
+
     private static boolean getBoolean(String name, boolean def) {
         Boolean value = bCache.get(name);
 

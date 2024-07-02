@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.database;
 
+import static com.hzontal.tella_vault.database.Preferences.setAlreadyMigratedMainDB;
 import static rs.readahead.washington.mobile.data.database.D.CIPHER3_DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_VERSION;
@@ -7,7 +8,6 @@ import static rs.readahead.washington.mobile.data.database.D.MIN_DATABASE_VERSIO
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +19,8 @@ import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
+
+import timber.log.Timber;
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
@@ -50,11 +52,11 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         final String kSuffix;
 
         if (sqlcipher_uses_native_key) {
-            Log.d(TAG, "sqlcipher uses native method to set key");
+            Timber.tag(TAG).d("sqlcipher uses native method to set key");
             kPrefix = "x'";
             kSuffix = "'";
         } else {
-            Log.d(TAG, "sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
+            Timber.tag(TAG).d("sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
             kPrefix = "x''";
             kSuffix = "''";
         }
@@ -105,7 +107,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         File oldDbFile = new File(oldDbPath);
 
         if (!oldDbFile.exists()) {
-            Log.d("Migration", "Old database does not exist, no migration needed.");
+            Timber.tag("Migration").d("Old database does not exist, no migration needed.");
             return;
         }
 
@@ -128,7 +130,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                     connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
                     connection.execute("PRAGMA kdf_iter = 64000;", null, null);
                     connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);                }
+                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                }
             });
 
             oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s';", newDbPath, encodeRawKeyToStr(key)));
@@ -140,32 +143,24 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
             oldDb.close();
 
-            SQLiteDatabase newDb = SQLiteDatabase.openDatabase(newDbPath, encodeRawKeyToStr(key),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                }
-
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-                }
-            });
 
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
-                Log.d("TAG", "New database file size: " + newSize + " bytes");
+                Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
             }
 
-            Log.d("Migration", "Database migration from SQLCipher 3 to 4 was successful.");
+            Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
+
+            setAlreadyMigratedMainDB(true);
         } catch (Exception e) {
-            Log.e("Migration", "Error during migration", e);
+            Timber.tag("Migration").e(e, "Error during migration");
         }
     }
 
     @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db =SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
             @Override
             public void preKey(SQLiteConnection connection) {
             }

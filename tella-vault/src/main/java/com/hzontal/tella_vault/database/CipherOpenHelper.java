@@ -4,6 +4,7 @@ import static com.hzontal.tella_vault.database.D.CIPHER3_DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
+import static com.hzontal.tella_vault.database.Preferences.setAlreadyMigratedVaultDB;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -122,7 +123,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
                 @Override
                 public void preKey(SQLiteConnection connection) {
-               }
+                }
 
                 @Override
                 public void postKey(SQLiteConnection connection) {
@@ -130,7 +131,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                     connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
                     connection.execute("PRAGMA kdf_iter = 64000;", null, null);
                     connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);                }
+                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                }
             });
 
             oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s';", newDbPath, encodeRawKeyToStr(key)));
@@ -148,6 +150,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
             }
 
+            setAlreadyMigratedVaultDB(true);
             Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
         } catch (Exception e) {
             Timber.tag("Migration").e(e, "Error during migration");
@@ -158,7 +161,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     @Override
     public SQLiteDatabase getWritableDatabase() {
 
-        return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
+        return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
             @Override
             public void preKey(SQLiteConnection connection) {
             }
