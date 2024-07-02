@@ -452,7 +452,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                // break;
             case 4:
                 db.execSQL(alterTableMediaFileAddHash());
-                break;
+              //  break;
             case 5:
                 db.execSQL(createTableTellaUploadServer());
                // break;
@@ -486,7 +486,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
                 db.execSQL(alterTableTellaUploadServerAddAutoDelete());
                 db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-                break;
+              //  break;
             case 11:
                 db.execSQL(createTableFeedback());
                // break;
