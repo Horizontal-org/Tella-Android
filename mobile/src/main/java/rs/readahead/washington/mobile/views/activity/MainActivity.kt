@@ -32,15 +32,12 @@ import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
 import rs.readahead.washington.mobile.bus.event.LocaleChangedEvent
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.mvp.contract.IHomeScreenPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
 import rs.readahead.washington.mobile.util.C
-import rs.readahead.washington.mobile.util.CleanInsightUtils
-import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
@@ -379,17 +376,11 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     }
 
     override fun onCountCollectServersEnded(num: Long) {
-        // maybeShowFormsMenu(num);
-        if (num > 0) {
-            measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT)
-        }
     }
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {}
 
     override fun onCountUwaziServersEnded(num: Long) {
-        // maybeShowUwaziMenu(num);
-        if (num > 0) measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI)
     }
 
     override fun onCountUwaziServersFailed(throwable: Throwable?) {}

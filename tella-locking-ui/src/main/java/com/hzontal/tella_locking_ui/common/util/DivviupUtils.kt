@@ -23,9 +23,9 @@ object DivviupUtils {
                     context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
                 )
                 client.sendMeasurement(true)
-                Timber.d("+++ measurement sent")
+                Timber.d("Divviup runUnlockEvent measurement sent")
             } catch (e: Exception) {
-                Timber.e(e, "++++ sending runUnlockEvent failed")
+                Timber.e(e, "Divviup sending runUnlockEvent failed")
             }
         }
 
