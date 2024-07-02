@@ -15,11 +15,6 @@ import java.nio.charset.StandardCharsets;
 
 class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
-    private  final byte[] password;
-
-    private static final String PREFS_NAME = "VaultSQLiteOpenHelperPrefs2";
-    private static final String KEY_ALREADY_MIGRATED = "alreadyMigrated2";
-    private final SharedPreferences sharedPreferences;
 
     @Override
     public void onOpen(SQLiteDatabase db) {
@@ -33,12 +28,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     WashingtonSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
-        this.password = password;
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        boolean alreadyMigrated = sharedPreferences.getBoolean(KEY_ALREADY_MIGRATED, false);
-        if (!alreadyMigrated) {
-            migrateDatabase();
-        }
+        migrateSqlCipher3To4IfNeeded(context,password);
     }
 
     private static String objQuote(String str) {
@@ -508,74 +498,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 12:
                 db.execSQL(createTableResources());
               //  break;
-            case 13:
-                try {
-                    migrateDatabase();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
               //  break;
         }
 
-    }
-
-    private void migrateDatabase() {
-        SQLiteDatabase oldDb = null;
-
-        try {
-            String databaseDir = context.getApplicationInfo().dataDir; // Path to your app's data directory
-            String databasePath = databaseDir + File.separator + CIPHER3_DATABASE_NAME;
-
-            // Open the old database with the existing 3.x settings
-            oldDb = SQLiteDatabase.openOrCreateDatabase(
-                    databasePath,
-                    encodeRawKeyToStr(password),
-                    null,
-                    null
-            );
-
-            // Step 1: Create and Attach new database with updated settings
-            String newDatabasePath = context.getDatabasePath(DATABASE_NAME).getPath(); // Path to the new database
-            oldDb.execSQL("ATTACH DATABASE '" + newDatabasePath + "' AS newdb KEY '" + encodeRawKeyToStr(password) + "'");
-
-            // Set PRAGMA statements for new database settings on 'newdb'
-            oldDb.execSQL("PRAGMA newdb.cipher_page_size = 4096");
-            oldDb.execSQL("PRAGMA newdb.kdf_iter = 10000");
-            oldDb.execSQL("PRAGMA newdb.cipher_hmac_algorithm = HMAC_SHA256");
-            oldDb.execSQL("PRAGMA newdb.cipher_kdf_algorithm = PBKDF2_HMAC_SHA256");
-
-            // Step 4: Export the contents from the attached database
-            oldDb.rawQuery("PRAGMA newdb.sqlcipher_export;", null).close();
-
-            // Step 2: Detach the new database (important)
-            oldDb.execSQL("DETACH DATABASE 'newdb'");
-
-            // Close the old database
-            oldDb.close();
-
-            // Step 5: Rename the new database to replace the old one
-            File oldFile = context.getDatabasePath(CIPHER3_DATABASE_NAME);
-            File newFile = context.getDatabasePath(DATABASE_NAME);
-            File finalFile = context.getDatabasePath(DATABASE_NAME);
-
-            if (oldFile.exists()) {
-              //  oldFile.delete();
-            }
-            if (newFile.exists()) {
-                newFile.renameTo(finalFile);
-            }
-
-            // Set the migration flag to true
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(KEY_ALREADY_MIGRATED, true);
-            editor.apply();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to migrate from SQLCipher 3 to 4", e);
-        } finally {
-            if (oldDb != null && oldDb.isOpen()) {
-                oldDb.close();
-            }
-        }
     }
 
 }

@@ -19,8 +19,8 @@ import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.List;
+
+import timber.log.Timber;
 
 abstract class CipherOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = "CipherOpenHelper";
@@ -142,32 +142,23 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
             oldDb.close();
 
-            SQLiteDatabase newDb = SQLiteDatabase.openDatabase(newDbPath, encodeRawKeyToStr(key),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                }
-
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-                }
-            });
 
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
-                Log.d("TAG", "New database file size: " + newSize + " bytes");
+                Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
             }
 
-            Log.d("Migration", "Database migration from SQLCipher 3 to 4 was successful.");
+            Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
         } catch (Exception e) {
-            Log.e("Migration", "Error during migration", e);
+            Timber.tag("Migration").e(e, "Error during migration");
         }
     }
 
     @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db =SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
+
+        return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password),null,SQLiteDatabase.OPEN_READWRITE ,null, new SQLiteDatabaseHook() {
             @Override
             public void preKey(SQLiteConnection connection) {
             }
@@ -177,8 +168,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
             }
         });
-
-        return db;
     }
 
 }
