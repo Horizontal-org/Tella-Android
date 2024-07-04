@@ -4,7 +4,6 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,9 @@ import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
+import net.zetetic.database.DatabaseUtils;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.DeserializationException;
@@ -83,6 +83,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     private static DataSource dataSource;
     private final SQLiteDatabase database;
 
+
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
@@ -97,14 +98,18 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
 
     private DataSource(Context context, byte[] key) {
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        database = sqLiteOpenHelper.getWritableDatabase();
     }
 
     public static synchronized DataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
-            dataSource = new DataSource(context.getApplicationContext(), key);
+            try {
+                dataSource = new DataSource(context.getApplicationContext(), key);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return dataSource;
@@ -537,11 +542,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private long countDBCollectServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
+        return DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
     }
 
     private long countDBTUServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
+        return DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
     }
 
     private List<TellaReportServer> getTUServers() {

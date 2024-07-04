@@ -31,6 +31,10 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 
+
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+
+import org.cleaninsights.sdk.CleanInsights;
 import org.hzontal.shared_ui.data.CommonPrefs;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
@@ -171,6 +175,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         CommonPrefs.getInstance().init(this);
         SharedPrefs.getInstance().init(this);
         configureCrashlytics();
+        System.loadLibrary("sqlcipher");
+
 
         // provide custom configuration
      /*   Configuration myConfig = new Configuration.Builder()

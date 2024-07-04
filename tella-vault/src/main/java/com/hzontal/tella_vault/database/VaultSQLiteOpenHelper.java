@@ -1,31 +1,44 @@
 package com.hzontal.tella_vault.database;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.utils.Preferences;
 
-import net.sqlcipher.database.SQLiteDatabase;
-
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 public class VaultSQLiteOpenHelper extends CipherOpenHelper {
-    public VaultSQLiteOpenHelper(Context context) {
-        super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
+    private static VaultSQLiteOpenHelper dbHelper;
+
+    public VaultSQLiteOpenHelper(Context context, byte[] password) {
+        super(context, password);
+        Preferences preferences = new Preferences(context);
+        if (!preferences.isAlreadyMigratedVaultDB()) {
+            migrateSqlCipher3To4IfNeeded(context, password);
+        }
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
     }
 
+    public synchronized static VaultSQLiteOpenHelper getInstance(Context context, byte[] password) {
+        if (dbHelper == null) {
+            dbHelper = new VaultSQLiteOpenHelper(context, password);
+        }
+
+        return dbHelper;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // we have started from version 1
-
         // DBv1
         createVaultFileTable(db);
         insertRootVaultFile(db);
@@ -33,9 +46,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-        }
+        //Upgrade here
     }
 
     private void createVaultFileTable(SQLiteDatabase db) {

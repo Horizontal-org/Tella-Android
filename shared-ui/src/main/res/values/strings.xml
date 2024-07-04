@@ -17,4 +17,6 @@
     <string name="action_hide_pin">hide pin</string>
     <string name="action_delete">delete</string>
     <string name="action_go_back">go back</string>
+    <string name="Migration_Failed_Title" translatable="false">Migration Failed"</string>
+    <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
 </resources>
