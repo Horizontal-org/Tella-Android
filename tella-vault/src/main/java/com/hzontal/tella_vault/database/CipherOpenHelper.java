@@ -148,11 +148,11 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
                 @Override
                 public void postKey(SQLiteConnection connection) {
-                //    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-                    //    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-                    //    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
-                    //   connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-                    //   connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
+                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
+                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
                 }
             });
 
