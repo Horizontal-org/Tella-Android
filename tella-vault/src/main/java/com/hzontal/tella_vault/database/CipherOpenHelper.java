@@ -5,11 +5,15 @@ import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.hzontal.utils.Preferences;
 
@@ -19,8 +23,12 @@ import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
 
 import timber.log.Timber;
 
@@ -109,16 +117,28 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         File oldDbFile = new File(oldDbPath);
 
         if (!oldDbFile.exists()) {
-            Timber.tag("Migration").d("Old database does not exist, no migration needed.");
+            Timber.tag(TAG).d("Old database does not exist, no migration needed.");
             return;
         }
 
         String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
         File newDbFile = new File(newDbPath);
+        String backupDbPath = oldDbPath + ".backup";
+
+        // Backup the old database
+        try {
+            copyFile(oldDbFile, new File(backupDbPath));
+            Timber.tag(TAG).d("Backup of old database created at: " + backupDbPath);
+        } catch (IOException e) {
+            Log.e(TAG, "Error creating backup of old database", e);
+            return;
+        }
 
         if (newDbFile.exists()) {
             newDbFile.delete();
         }
+
+        boolean migrationSuccess = false;
 
         try {
             SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
@@ -128,11 +148,11 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
                 @Override
                 public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
-                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                //    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
+                    //    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                    //    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                    //   connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
+                    //   connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
                 }
             });
 
@@ -145,16 +165,35 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
             oldDb.close();
 
-
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
-                Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
+                Timber.tag(TAG).d("New database file size: " + newSize + " bytes");
             }
 
             new Preferences(context).setAlreadyMigratedVaultDB(true);
-            Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
+            Timber.tag(TAG).d("Database migration from SQLCipher 3 to 4 was successful.");
+            migrationSuccess = true;
         } catch (Exception e) {
-            Timber.tag("Migration").e(e, "Error during migration");
+            Timber.tag(TAG).e(e, "Error during migration");
+        }
+
+        // Handle the result of the migration
+        if (migrationSuccess) {
+            Timber.tag(TAG).d("Migration successful, deleting old database...");
+            oldDbFile.delete();
+        } else {
+            Timber.tag(TAG).d("Migration failed, keeping the old database.");
+        }
+    }
+
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        try (FileChannel sourceChannel = new FileInputStream(sourceFile).getChannel();
+             FileChannel destChannel = new FileOutputStream(destFile).getChannel()) {
+            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
         }
     }
 

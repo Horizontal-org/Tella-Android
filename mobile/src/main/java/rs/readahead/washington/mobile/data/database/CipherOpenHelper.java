@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.data.database;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static rs.readahead.washington.mobile.data.database.D.CIPHER3_DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_NAME;
 import static rs.readahead.washington.mobile.data.database.D.DATABASE_VERSION;
@@ -18,6 +19,7 @@ import net.zetetic.database.sqlcipher.SQLiteDatabaseHook;
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.CharBuffer;
 
@@ -96,16 +98,28 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         File oldDbFile = new File(oldDbPath);
 
         if (!oldDbFile.exists()) {
-            Timber.tag("Migration").d("Old database does not exist, no migration needed.");
+            Timber.tag(TAG).d("Old database does not exist, no migration needed.");
             return;
         }
 
         String newDbPath = context.getDatabasePath(DATABASE_NAME).getPath();
         File newDbFile = new File(newDbPath);
+        String backupDbPath = oldDbPath + ".backup";
+
+        // Backup the old database
+        try {
+            copyFile(oldDbFile, new File(backupDbPath));
+            Timber.tag(TAG).d("Backup of old database created at: %s", backupDbPath);
+        } catch (IOException e) {
+            Timber.tag(TAG).e(e, "Error creating backup of old database");
+            return;
+        }
 
         if (newDbFile.exists()) {
             newDbFile.delete();
         }
+
+        boolean migrationSuccess = false;
 
         try {
             SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
@@ -132,17 +146,24 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             oldDb.execSQL("DETACH DATABASE sqlcipher4;");
             oldDb.close();
 
-
             if (newDbFile.exists()) {
                 long newSize = newDbFile.length();
-                Timber.tag("Migration").d("New database file size: " + newSize + " bytes");
+                Timber.tag(TAG).d("New database file size: " + newSize + " bytes");
             }
 
-            Timber.tag("Migration").d("Database migration from SQLCipher 3 to 4 was successful.");
-
             setAlreadyMigratedMainDB(true);
+            Timber.tag(TAG).d("Database migration from SQLCipher 3 to 4 was successful.");
+            migrationSuccess = true;
         } catch (Exception e) {
-            Timber.tag("Migration").e(e, "Error during migration");
+            Timber.tag(TAG).e(e, "Error during migration");
+        }
+
+        // Handle the result of the migration
+        if (migrationSuccess) {
+            Timber.tag(TAG).d("Migration successful, deleting old database...");
+            oldDbFile.delete();
+        } else {
+            Timber.tag(TAG).d("Migration failed, keeping the old database.");
         }
     }
 

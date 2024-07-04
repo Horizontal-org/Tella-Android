@@ -427,6 +427,13 @@ public class Preferences {
     public static void setShowUpdateMigrationSheet(boolean value) {
         setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
     }
+    public static boolean isShowFailedMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowFailedMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, value);
+    }
 
     public static boolean hasAcceptedImprovements() {
         return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);

@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.vault.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -24,17 +22,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
-import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowUpdateMigrationSheet
-import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowUpdateMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
 import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
-import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
@@ -44,7 +41,6 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
-import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
@@ -680,23 +676,24 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun showUpdateMigrationBottomSheet() {
+        if (!isAlreadyMigratedMainDB() || !com.hzontal.utils.Preferences(baseActivity.applicationContext)
+                .isAlreadyMigratedVaultDB()
+        ) {
+            if (isShowFailedMigrationSheet()) {
 
-        val versionName = BuildConfig.VERSION_NAME
-
-        if (isShowUpdateMigrationSheet() && versionName == "2.8.0") {
-            BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
-                getString(R.string.Sensitive_Chnage_Title),
-                getString(R.string.Sensitive_Chnage_Description),
-                getString(R.string.action_learn_more).uppercase(),
-                getString(R.string.action_ok).uppercase(),
-                onConfirmClick = {
-                    Util.startBrowserIntent(context, "https://tella-app.org/releases")
-                    setShowUpdateMigrationSheet(false)
-                },
-                onCancelClick = {
-                    setShowUpdateMigrationSheet(false)
-                }
-            )
+                BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
+                    getString(R.string.Migration_Failed_Title),
+                    getString(R.string.Migration_Failed_Description),
+                    null,
+                    getString(R.string.action_ok).uppercase(),
+                    onConfirmClick = {
+                        setShowFailedMigrationSheet(false)
+                    },
+                    onCancelClick = {
+                        setShowFailedMigrationSheet(false)
+                    }
+                )
+            }
         }
 
     }
