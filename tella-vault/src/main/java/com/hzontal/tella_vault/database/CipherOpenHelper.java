@@ -34,16 +34,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     final byte[] password;
 
     CipherOpenHelper(@NonNull Context context, byte[] password) {
-        super(
-                context,
-                DATABASE_NAME,
-                encodeRawKeyToStr(password),
-                null,
-                DATABASE_VERSION,
-                MIN_DATABASE_VERSION,
-                null, null,
-                false
-        );
+        super(context, DATABASE_NAME, encodeRawKeyToStr(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
 
         this.context = context.getApplicationContext();
         this.password = password;
@@ -87,15 +78,12 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
     private static boolean check_sqlcipher_uses_native_key() {
         for (Method method : SQLiteDatabase.class.getDeclaredMethods()) {
-            if (method.getName().equals("native_key"))
-                return true;
+            if (method.getName().equals("native_key")) return true;
         }
         return false;
     }
 
-    private static final char[] HEX_DIGITS_LOWER = {
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'
-    };
+    private static final char[] HEX_DIGITS_LOWER = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     private static char[] encodeHex(final byte[] data, final char[] toDigits) {
         final int l = data.length;
@@ -176,6 +164,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         if (migrationSuccess) {
             Timber.tag(TAG).d("Migration successful, deleting old database...");
             oldDbFile.delete();
+            new File(backupDbPath).delete();
         } else {
             Timber.tag(TAG).d("Migration failed, keeping the old database.");
         }
@@ -186,8 +175,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             destFile.createNewFile();
         }
 
-        try (FileChannel sourceChannel = new FileInputStream(sourceFile).getChannel();
-             FileChannel destChannel = new FileOutputStream(destFile).getChannel()) {
+        try (FileChannel sourceChannel = new FileInputStream(sourceFile).getChannel(); FileChannel destChannel = new FileOutputStream(destFile).getChannel()) {
             destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
         }
     }

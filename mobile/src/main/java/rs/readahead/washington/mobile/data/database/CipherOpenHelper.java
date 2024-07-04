@@ -162,6 +162,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         if (migrationSuccess) {
             Timber.tag(TAG).d("Migration successful, deleting old database...");
             oldDbFile.delete();
+            new File(backupDbPath).delete();
         } else {
             Timber.tag(TAG).d("Migration failed, keeping the old database.");
         }
