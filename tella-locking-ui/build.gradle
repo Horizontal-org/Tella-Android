@@ -55,5 +55,6 @@ dependencies {
     api "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
+    implementation "org.divviup.android:divviup-android:$versions.divviup"
 
 }

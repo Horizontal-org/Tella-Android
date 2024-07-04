@@ -11,19 +11,20 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentGeneralSettingsBinding
 import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
-import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import java.util.Locale
 
@@ -47,15 +48,16 @@ class GeneralSettings :
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
+        binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { Util.startBrowserIntent(context, getString(R.string.config_analytics_learn_url)) }
+
         setLanguageSetting()
 
         initSwitch(
             binding.shareDataSwitch,
-            Preferences::setIsAcceptedImprovements
+            CommonPreferences::setIsAcceptedAnalytics
         ) { isChecked ->
-            CleanInsightUtils.grantCampaign(isChecked)
-            if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
-            binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { startCleanInsightActivity() }
+           // CleanInsightUtils.grantCampaign(isChecked)
+           // if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
         }
 
         initSwitch(
@@ -148,16 +150,16 @@ class GeneralSettings :
     }
 
     private fun startCleanInsightActivity() {
-        val intent = Intent(context, CleanInsightsActivity::class.java)
-        startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+        val intent = Intent(context, AnalyticsIntroActivity::class.java)
+        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
+        if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             val cleanInsightsActions =
-                data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
             showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
@@ -165,8 +167,7 @@ class GeneralSettings :
     private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
         when (cleanInsightsActions) {
             CleanInsightsActions.YES -> {
-                Preferences.setIsAcceptedImprovements(true)
-                CleanInsightUtils.grantCampaign(true)
+                CommonPreferences.setIsAcceptedAnalytics(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.clean_insights_signed_for_days), false
@@ -174,8 +175,7 @@ class GeneralSettings :
             }
 
             CleanInsightsActions.NO -> {
-                Preferences.setIsAcceptedImprovements(false)
-                CleanInsightUtils.grantCampaign(false)
+                CommonPreferences.setIsAcceptedAnalytics(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
             }
 

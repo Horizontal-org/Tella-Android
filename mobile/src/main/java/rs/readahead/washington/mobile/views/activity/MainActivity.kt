@@ -38,8 +38,6 @@ import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
-import rs.readahead.washington.mobile.util.CleanInsightUtils
-import rs.readahead.washington.mobile.util.CleanInsightUtils.measureEvent
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
@@ -378,17 +376,11 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     }
 
     override fun onCountCollectServersEnded(num: Long) {
-        // maybeShowFormsMenu(num);
-        if (num > 0) {
-            measureEvent(CleanInsightUtils.ServerType.SERVER_COLLECT)
-        }
     }
 
     override fun onCountCollectServersFailed(throwable: Throwable?) {}
 
     override fun onCountUwaziServersEnded(num: Long) {
-        // maybeShowUwaziMenu(num);
-        if (num > 0) measureEvent(CleanInsightUtils.ServerType.SERVER_UWAZI)
     }
 
     override fun onCountUwaziServersFailed(throwable: Throwable?) {}

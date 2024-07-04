@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.hzontal.tella_locking_ui.*
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
@@ -23,6 +24,7 @@ open class BaseActivity : AppCompatActivity() {
     private var isConfirmSettingsUpdate: Boolean = false
     protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
@@ -71,6 +73,7 @@ open class BaseActivity : AppCompatActivity() {
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
             }
         }
+        sendUnlockMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -108,5 +111,9 @@ open class BaseActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE
             )
         }
+    }
+
+    private fun sendUnlockMeasure(context: Context) {
+        DivviupUtils.runUnlockEvent(context)
     }
 }

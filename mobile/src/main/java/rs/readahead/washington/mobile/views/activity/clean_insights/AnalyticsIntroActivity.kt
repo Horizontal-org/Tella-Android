@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 
-class CleanInsightsActivity : BaseActivity() {
+class AnalyticsIntroActivity : BaseActivity() {
 
     companion object {
         const val RESULT_FOR_ACTIVITY = "result_from_activity"
@@ -26,7 +26,7 @@ class CleanInsightsActivity : BaseActivity() {
                 CleanInsightHowWorksFragment.newInstance({ onNextPage() }, { onBackPressed() }),
                 CleanInsightWeWillNotFragment.newInstance({ onNextPage() }, { onBackPressed() }),
                 CleanInsightQuestionsFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                CleanInsightContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBackPressed() })
+                AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBackPressed() })
             )
         )
     }
@@ -53,6 +53,7 @@ class CleanInsightsActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         viewPager.currentItem = viewPagerPosition.dec()
     }
 

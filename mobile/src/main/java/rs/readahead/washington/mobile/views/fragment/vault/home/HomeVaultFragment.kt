@@ -21,6 +21,7 @@ import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
@@ -32,21 +33,19 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowUpdateMigrationSheet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowUpdateMigrationSheet
 import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
-import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
@@ -104,18 +103,17 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
+        if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             removeImprovementSection()
             val cleanInsightsActions =
-                data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
             showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
 
     private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
         if (cleanInsightsActions == CleanInsightsActions.YES) {
-            Preferences.setIsAcceptedImprovements(true)
-            CleanInsightUtils.grantCampaign(true)
+            CommonPreferences.setIsAcceptedAnalytics(true)
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.clean_insights_signed_for_days),
@@ -131,15 +129,13 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             layoutManager = LinearLayoutManager(baseActivity)
         }
         //Uncomment to add improvement section
-        // vaultAdapter.addImprovementSection()
+        vaultAdapter.addAnalyticsBanner()
         timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
 
         serversList = ArrayList()
         tuServers = ArrayList()
         uwaziServers = ArrayList()
         collectServers = ArrayList()
-
-        CleanInsightUtils.measureEvent()
     }
 
     private fun initPermissions() {
@@ -227,8 +223,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun startCleanInsightActivity() {
-        val intent = Intent(context, CleanInsightsActivity::class.java)
-        startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+        val intent = Intent(context, AnalyticsIntroActivity::class.java)
+        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     private fun setUpToolbar() {
@@ -376,14 +372,14 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
-                Preferences.setIsAcceptedImprovements(true)
+                CommonPreferences.setIsAcceptedAnalytics(true)
                 nav().navigate(R.id.main_settings)
             }
         }
     }
 
     private fun removeImprovementSection() {
-        Preferences.setShowVaultImprovementSection(false)
+        CommonPreferences.setShowVaultAnalyticsSection(false)
         vaultAdapter.removeImprovementSection()
     }
 
@@ -527,8 +523,12 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
         reportServersCounted = true
         tuServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
-        serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
+        }
         if (!servers.isNullOrEmpty()) {
             tuServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
@@ -545,7 +545,9 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
         collectServersCounted = true
         collectServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
+        }
         if (!servers.isNullOrEmpty()) {
             collectServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
@@ -562,7 +564,9 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
         uwaziServersCounted = true
         uwaziServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        }
         if (!servers.isNullOrEmpty()) {
             uwaziServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
