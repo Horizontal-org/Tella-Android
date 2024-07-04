@@ -9,7 +9,8 @@ buildscript {
     versions.minSdk = 21
     versions.targetSdk = 34
     versions.kotlin = '1.9.20'
-    versions.sqlcipher = '3.5.9'
+    versions.sqlcipher = '4.6.0'
+    versions.sqlite = '2.4.0'
     versions.biometric = '1.0.1'
     versions.junit = '4.13'
     versions.testJunit = '1.1.2'

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -20,7 +19,6 @@ import com.hzontal.tella_vault.filter.Sort;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -392,61 +390,6 @@ public class VaultDataSource implements IVaultDatabase {
 
         return vaultFile;
     }
-
-    public List<VaultFile> listFilesInRoot(String rootId) {
-        List<VaultFile> files = new ArrayList<>();
-        String where = D.C_PARENT_ID + " = ?";
-        String[] whereArgs = new String[]{rootId};
-        Cursor cursor = null;
-        try {
-            cursor = database.query(
-                    D.T_VAULT_FILE,
-                    new String[]{
-                            D.C_ID,
-                            D.C_TYPE,
-                            D.C_PARENT_ID,
-                            D.C_NAME,
-                            D.C_CREATED,
-                            D.C_DURATION,
-                            D.C_SIZE,
-                            D.C_HASH,
-                            D.C_ANONYMOUS,
-                            D.C_THUMBNAIL,
-                            D.C_MIME_TYPE,
-                            D.C_PATH,
-                            D.C_METADATA
-                    },
-                    where,
-                    whereArgs,
-                    null,
-                    null,
-                    null
-            );
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                files.add(cursorToVaultFile(cursor));
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return files;
-    }
-
-    public boolean transferFilesToNewRoot(String oldRootId, String newRootId) {
-        List<VaultFile> files = listFilesInRoot(oldRootId);
-        Log.d("VaultDataSource", "" + files.size());
-
-        boolean success = true;
-        for (VaultFile file : files) {
-            if (!move(file, newRootId)) {
-                success = false;
-                break;
-            }
-        }
-        return success;
-    }
-
 
     /**
      * Constructs a column name with a table alias.

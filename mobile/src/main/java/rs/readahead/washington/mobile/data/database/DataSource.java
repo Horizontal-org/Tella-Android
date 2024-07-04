@@ -97,7 +97,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     .observeOn(AndroidSchedulers.mainThread());
 
 
-    private DataSource(Context context, byte[] key) throws Exception {
+    private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
         database = sqLiteOpenHelper.getWritableDatabase();
