@@ -39,7 +39,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
-import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.Util
@@ -115,7 +114,6 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
         if (cleanInsightsActions == CleanInsightsActions.YES) {
             CommonPreferences.setIsAcceptedAnalytics(true)
-            CleanInsightUtils.grantCampaign(true)
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.clean_insights_signed_for_days),

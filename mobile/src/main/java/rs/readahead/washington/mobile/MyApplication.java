@@ -60,7 +60,6 @@ import rs.readahead.washington.mobile.javarosa.JavaRosa;
 import rs.readahead.washington.mobile.javarosa.PropertyManager;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.util.CleanInsightUtils;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;

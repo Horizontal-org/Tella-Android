@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentGeneralSettingsBinding
 import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
-import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
@@ -169,7 +168,6 @@ class GeneralSettings :
         when (cleanInsightsActions) {
             CleanInsightsActions.YES -> {
                 CommonPreferences.setIsAcceptedAnalytics(true)
-                CleanInsightUtils.grantCampaign(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.clean_insights_signed_for_days), false
@@ -178,7 +176,6 @@ class GeneralSettings :
 
             CleanInsightsActions.NO -> {
                 CommonPreferences.setIsAcceptedAnalytics(false)
-                CleanInsightUtils.grantCampaign(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
             }
 
