@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <corners android:radius="12dp"/> <!-- Half of the width and height for a perfect circle -->
+    <solid android:color="@color/wa_white_20"/>
+</shape>

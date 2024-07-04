@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 175
-        versionName "2.7.1"
+        versionCode 178
+        versionName "2.8.0"
         multiDexEnabled true
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }

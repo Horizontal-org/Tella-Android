@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.recorder.MicFragment"
         android:label="@string/fragment_mic"
         tools:layout="@layout/fragment_mic">
 
@@ -15,7 +15,7 @@
             android:id="@+id/action_micScreen_to_attachments_screen"
             app:destination="@id/attachments_screen"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out"/>
+            app:exitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/attachments_screen"

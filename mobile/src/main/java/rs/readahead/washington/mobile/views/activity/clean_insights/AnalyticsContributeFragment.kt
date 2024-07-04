@@ -15,7 +15,7 @@ import com.hzontal.utils.Util
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class CleanInsightContributeFragment : BaseFragment() {
+class AnalyticsContributeFragment : BaseFragment() {
 
     private lateinit var onNext: (CleanInsightsActions) -> Unit
     private lateinit var onPrevious: () -> Unit
@@ -28,7 +28,7 @@ class CleanInsightContributeFragment : BaseFragment() {
             onNext: (CleanInsightsActions) -> Unit,
             onPrevious: () -> Unit
         ) =
-            CleanInsightContributeFragment().apply {
+            AnalyticsContributeFragment().apply {
                 this.onNext = onNext
                 this.onPrevious = onPrevious
             }

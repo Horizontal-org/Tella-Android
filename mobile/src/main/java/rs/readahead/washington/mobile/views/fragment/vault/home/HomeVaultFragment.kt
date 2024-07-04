@@ -5,30 +5,34 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
+import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowUpdateMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowUpdateMigrationSheet
+import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
@@ -37,36 +41,35 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.CleanInsightUtils
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.custom.CountdownTextView
+import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
+import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 import timber.log.Timber
+
 
 const val VAULT_FILTER = "vf"
 
-class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
-    private lateinit var toolbar: ToolbarComponent
-    private lateinit var vaultRecyclerView: RecyclerView
-    private lateinit var panicModeView: RelativeLayout
-    private lateinit var countDownTextView: CountdownTextView
-    private lateinit var seekBar: SeekBar
-    private lateinit var seekBarContainer: View
+//TODO REFACTOR THIS TO MVVM
+@AndroidEntryPoint
+class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaultBinding::inflate),
+    VaultClickListener, IHomeVaultPresenter.IView {
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private lateinit var homeVaultPresenter: HomeVaultPresenter
-    private val bundle by lazy { Bundle() }
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
     private var vaultFile: VaultFile? = null
@@ -74,42 +77,37 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var tuServers: ArrayList<TellaReportServer>? = null
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
-    private var disposables: EventCompositeDisposable? = null
+    private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
+    private var isBackgroundEncryptionEnabled = false;
+    private var descriptionLiveData = MutableLiveData<String>()
+    private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vault, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
     }
 
-    override fun initView(view: View) {
-        toolbar = view.findViewById(R.id.toolbar)
-        vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
-        panicModeView = view.findViewById(R.id.panic_mode_view)
-        countDownTextView = view.findViewById(R.id.countdown_timer)
-        seekBar = view.findViewById(R.id.panic_seek)
-        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
+    fun initView() {
         disposables = MyApplication.bus().createCompositeDisposable()
 
         setUpToolbar()
         initData()
         initListeners()
         initPermissions()
-        fixAppBarShadow(view)
+        fixAppBarShadow()
+        showUpdateMigrationBottomSheet()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
+        if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             removeImprovementSection()
             val cleanInsightsActions =
-                data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
             showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
@@ -128,7 +126,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun initData() {
         homeVaultPresenter = HomeVaultPresenter(this)
-        vaultRecyclerView.apply {
+        binding.vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -140,8 +138,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         tuServers = ArrayList()
         uwaziServers = ArrayList()
         collectServers = ArrayList()
-
-        CleanInsightUtils.measureEvent()
     }
 
     private fun initPermissions() {
@@ -200,7 +196,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun initListeners() {
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.panicSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
 
             }
@@ -209,58 +205,92 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (seekBar.progress == 100) {
-                    seekBar.progress = 0
+                if (binding.panicSeek.progress == 100) {
+                    binding.panicSeek.progress = 0
                     showPanicScreens()
                 } else {
-                    seekBar.progress = 0
+                    binding.panicSeek.progress = 0
                     hidePanicScreens()
                 }
             }
         })
-        panicModeView.setOnClickListener { onPanicClicked() }
-        toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
-        toolbar.onRightClickListener = {
+        binding.panicSeekContainer.setOnClickListener { onPanicClicked() }
+        binding.toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
+        binding.toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
             MyApplication.exit(baseActivity)
             baseActivity.finish()
         }
-        vaultAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onChanged() {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-
-            override fun onItemRangeChanged(positionStart: Int, itemCount: Int, payload: Any?) {
-                vaultRecyclerView.scrollToPosition(0)
-            }
-        })
     }
 
     private fun startCleanInsightActivity() {
-        val intent = Intent(context, CleanInsightsActivity::class.java)
-        startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+        val intent = Intent(context, AnalyticsIntroActivity::class.java)
+        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     private fun setUpToolbar() {
-        val activity = context as MainActivity
-        activity.setSupportActionBar(toolbar)
+        val baseActivity = activity as MainActivity
+        baseActivity.setSupportActionBar(binding.toolbar)
+        maybeShowRecentBackgroundActivities()
+    }
+
+    private fun maybeShowRecentBackgroundActivities() {
+        disposables.wire(
+            RecentBackgroundActivitiesEvent::class.java,
+            object : EventObserver<RecentBackgroundActivitiesEvent?>() {
+                override fun onNext(event: RecentBackgroundActivitiesEvent) {
+                    handleBackgroundActivityEvent(event)
+                }
+            })
+
+        setupToolbarClickListener()
+    }
+
+    private fun handleBackgroundActivityEvent(event: RecentBackgroundActivitiesEvent) {
+        isBackgroundEncryptionEnabled = event.hasItems()
+        Timber.i("RecentBackgroundActivitiesEvent came from event")
+
+        if (isBackgroundEncryptionEnabled) {
+            descriptionLiveData.postValue(getString(R.string.current_background_activities))
+        } else {
+            descriptionLiveData.postValue(getString(R.string.no_background_activity))
+        }
+        backgroundActivitiesAdapter.updateData(event.getBackgroundActivityModels())
+        updateToolbarIcon()
+    }
+
+    private fun updateToolbarIcon() {
+        if (view == null) {
+            Timber.i("RecentBackgroundActivitiesEvent **** view is null")
+
+            // Fragment's view is not available, cannot update the toolbar icon
+            return
+        }
+        val iconRes = if (isBackgroundEncryptionEnabled) {
+            R.drawable.ic_notification_on
+        } else {
+            -1
+        }
+        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
+    }
+
+    private fun setupToolbarClickListener() {
+        binding.toolbar.onRightOfLeftClickListener = {
+            val description = if (backgroundActivitiesAdapter.itemCount == 0) {
+                getString(R.string.no_background_activity)
+            } else {
+                getString(R.string.current_background_activities)
+            }
+            showBackgroundActivitiesSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.background_activities),
+                description,
+                backgroundActivitiesAdapter,
+                descriptionLiveData,
+                lifecycleOwner = this
+            )
+        }
     }
 
     override fun onRecentFilesItemClickListener(vaultFile: VaultFile) {
@@ -270,21 +300,25 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                 startActivity(intent)
             }
+
             MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, AudioPlayActivity::class.java)
                 intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                 startActivity(intent)
             }
+
             MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, VideoViewerActivity::class.java)
                 intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
                 startActivity(intent)
             }
-            MediaFile.isPDFFile(vaultFile.name,vaultFile.mimeType) -> {
+
+            MediaFile.isPDFFile(vaultFile.name, vaultFile.mimeType) -> {
                 val intent = Intent(baseActivity, PDFReaderActivity::class.java)
                 intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
                 startActivity(intent)
             }
+
             else -> {
                 BottomSheetUtils.showStandardSheet(
                     baseActivity.supportFragmentManager,
@@ -311,15 +345,19 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.ODK_COLLECT -> {
                 nav().navigate(R.id.action_homeScreen_to_forms_screen)
             }
+
             ServerType.TELLA_UPLOAD -> {
                 nav().navigate(R.id.action_homeScreen_to_reports_screen)
             }
+
             ServerType.UWAZI -> {
                 nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
             }
+
             ServerType.TELLA_RESORCES -> {
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
+
             else -> {}
         }
     }
@@ -332,6 +370,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 removeImprovementSection()
                 showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
             }
+
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
@@ -377,8 +416,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun stopPanicking() {
-        countDownTextView.cancel()
-        countDownTextView.setCountdownNumber(timerDuration)
+        binding.content.countdownTimer.cancel()
+        binding.content.countdownTimer.setCountdownNumber(timerDuration)
         panicActivated = false
         // showMainControls()
     }
@@ -396,6 +435,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
+        updateToolbarIcon()
     }
 
     override fun onStart() {
@@ -414,7 +454,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * This is used to start counting different connections (servers) to be shown on the home fragment.
      * At the start, the list of servers and shown connections are cleared.
      **/
-    private fun clearServerCount(){
+    private fun clearServerCount() {
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false
@@ -423,7 +463,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun maybeClosePanic(): Boolean {
-        if (panicModeView.visibility == View.VISIBLE) {
+        if (binding.content.panicModeView.visibility == View.VISIBLE) {
             stopPanicking()
             hidePanicScreens()
         }
@@ -433,17 +473,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun hidePanicScreens() {
         (baseActivity as MainActivity).showBottomNavigation()
         setupPanicView()
-        panicModeView.visibility = View.GONE
-        toolbar.visibility = View.VISIBLE
+        binding.content.panicModeView.visibility = View.GONE
+        binding.toolbar.visibility = View.VISIBLE
     }
 
     private fun showPanicScreens() {
         // really show panic screen
         (baseActivity as MainActivity).hideBottomNavigation()
-        toolbar.visibility = View.GONE
-        panicModeView.visibility = View.VISIBLE
-        panicModeView.alpha = 1f
-        countDownTextView.start(
+        binding.toolbar.visibility = View.GONE
+        binding.content.panicModeView.visibility = View.VISIBLE
+        binding.content.panicModeView.alpha = 1f
+        binding.content.countdownTimer.start(
             timerDuration
         ) {
             executePanicMode()
@@ -452,11 +492,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            seekBarContainer.visibility = View.VISIBLE
-            vaultRecyclerView.setMargins(null, null, null, 110)
+            binding.panicSeekContainer.visibility = View.VISIBLE
+            binding.vaultRecyclerView.setMargins(null, null, null, 110)
         } else {
-            seekBarContainer.visibility = View.GONE
-            vaultRecyclerView.setMargins(null, null, null, 55)
+            binding.panicSeekContainer.visibility = View.GONE
+            binding.vaultRecyclerView.setMargins(null, null, null, 55)
         }
     }
 
@@ -475,15 +515,22 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     override fun onDestroy() {
         super.onDestroy()
-        disposables?.dispose()
+        if (this::disposables.isInitialized) {
+            disposables.dispose()
+        }
+        // descriptionLiveData.removeObservers(viewLifecycleOwner)
     }
 
 
     override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
         reportServersCounted = true
         tuServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
-        serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
+        }
         if (!servers.isNullOrEmpty()) {
             tuServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
@@ -500,7 +547,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
         collectServersCounted = true
         collectServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
+        }
         if (!servers.isNullOrEmpty()) {
             collectServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
@@ -517,7 +566,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
         uwaziServersCounted = true
         uwaziServers?.clear()
-        serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.UWAZI }
+        }
         if (!servers.isNullOrEmpty()) {
             uwaziServers?.addAll(servers)
             serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
@@ -628,12 +679,30 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun fixAppBarShadow(view: View) {
-        val appBar = view.findViewById<View>(R.id.appbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appBar.outlineProvider = null
-        } else {
-            appBar.bringToFront()
-        }
+    private fun fixAppBarShadow() {
+        binding.appbar.outlineProvider = null
     }
+
+    private fun showUpdateMigrationBottomSheet() {
+
+        val versionName = BuildConfig.VERSION_NAME
+
+        if (isShowUpdateMigrationSheet() && versionName == "2.8.0") {
+            BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
+                getString(R.string.Sensitive_Chnage_Title),
+                getString(R.string.Sensitive_Chnage_Description),
+                getString(R.string.action_learn_more).uppercase(),
+                getString(R.string.action_ok).uppercase(),
+                onConfirmClick = {
+                    Util.startBrowserIntent(context, "https://tella-app.org/releases")
+                    setShowUpdateMigrationSheet(false)
+                },
+                onCancelClick = {
+                    setShowUpdateMigrationSheet(false)
+                }
+            )
+        }
+
+    }
+
 }

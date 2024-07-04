@@ -25,7 +25,7 @@ import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActivity
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import java.util.Locale
 
@@ -151,16 +151,16 @@ class GeneralSettings :
     }
 
     private fun startCleanInsightActivity() {
-        val intent = Intent(context, CleanInsightsActivity::class.java)
-        startActivityForResult(intent, CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+        val intent = Intent(context, AnalyticsIntroActivity::class.java)
+        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CleanInsightsActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
+        if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             val cleanInsightsActions =
-                data?.extras?.getSerializable(CleanInsightsActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
             showMessageForCleanInsightsApprove(cleanInsightsActions)
         }
     }
@@ -216,11 +216,9 @@ class GeneralSettings :
 
     private fun hasLocationPermission(context: Context): Boolean {
         baseActivity.maybeChangeTemporaryTimeout()
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) return true
-        return false
+        return ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermission(requestCode: Int) {

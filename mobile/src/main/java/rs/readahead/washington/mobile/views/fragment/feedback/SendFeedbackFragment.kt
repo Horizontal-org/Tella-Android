@@ -27,7 +27,6 @@ import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance
 import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus
 import rs.readahead.washington.mobile.util.jobs.WorkerSendFeedBack
 import rs.readahead.washington.mobile.views.activity.SettingsActivity
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightContributeFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
