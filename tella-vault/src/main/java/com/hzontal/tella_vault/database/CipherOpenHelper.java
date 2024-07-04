@@ -5,15 +5,10 @@ import static com.hzontal.tella_vault.database.D.DATABASE_NAME;
 import static com.hzontal.tella_vault.database.D.DATABASE_VERSION;
 import static com.hzontal.tella_vault.database.D.MIN_DATABASE_VERSION;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
 import com.hzontal.utils.Preferences;
 
@@ -62,11 +57,11 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         final String kSuffix;
 
         if (sqlcipher_uses_native_key) {
-            Log.d(TAG, "sqlcipher uses native method to set key");
+            Timber.tag(TAG).d("sqlcipher uses native method to set key");
             kPrefix = "x'";
             kSuffix = "'";
         } else {
-            Log.d(TAG, "sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
+            Timber.tag(TAG).d("sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
             kPrefix = "x''";
             kSuffix = "''";
         }
@@ -128,9 +123,9 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         // Backup the old database
         try {
             copyFile(oldDbFile, new File(backupDbPath));
-            Timber.tag(TAG).d("Backup of old database created at: " + backupDbPath);
+            Timber.tag(TAG).d("Backup of old database created at: %s", backupDbPath);
         } catch (IOException e) {
-            Log.e(TAG, "Error creating backup of old database", e);
+            Timber.tag(TAG).e(e, "Error creating backup of old database");
             return;
         }
 

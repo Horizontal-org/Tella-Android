@@ -16,7 +16,6 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
-        db.enableWriteAheadLogging();
     }
 
     WashingtonSQLiteOpenHelper(Context context, byte[] password) {

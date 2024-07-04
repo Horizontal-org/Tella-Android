@@ -26,7 +26,6 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
-        db.enableWriteAheadLogging();
     }
 
     public synchronized static VaultSQLiteOpenHelper getInstance(Context context, byte[] password) {
