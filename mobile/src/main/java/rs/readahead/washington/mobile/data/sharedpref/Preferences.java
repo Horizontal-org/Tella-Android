@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.data.sharedpref;
 
 
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_FRESH_INSTALL;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_MIGRATED_MAIN_DB;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
@@ -473,5 +474,13 @@ public class Preferences {
 
     public static void setAlreadyMigratedMainDB(boolean value) {
         setBoolean(IS_MIGRATED_MAIN_DB, value);
+    }
+
+    public static boolean isFreshInstall() {
+        return getBoolean(IS_FRESH_INSTALL, false);
+    }
+
+    public static void setFreshInstall(boolean value) {
+        setBoolean(IS_FRESH_INSTALL, value);
     }
 }

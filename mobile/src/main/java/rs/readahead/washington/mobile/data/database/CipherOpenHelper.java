@@ -7,6 +7,7 @@ import static rs.readahead.washington.mobile.data.database.D.DATABASE_VERSION;
 import static rs.readahead.washington.mobile.data.database.D.MIN_DATABASE_VERSION;
 import static rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
 import static rs.readahead.washington.mobile.data.sharedpref.Preferences.setAlreadyMigratedMainDB;
+import static rs.readahead.washington.mobile.data.sharedpref.Preferences.setFreshInstall;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -99,6 +100,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
         if (!oldDbFile.exists()) {
             Timber.tag(TAG).d("Old database does not exist, no migration needed.");
+            setFreshInstall(true);
             return;
         }
 

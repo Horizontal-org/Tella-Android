@@ -30,6 +30,7 @@ import rs.readahead.washington.mobile.bus.EventObserver
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isFreshInstall
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
 import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
@@ -681,26 +682,29 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun showUpdateMigrationBottomSheet() {
-        if (!isAlreadyMigratedMainDB() || !com.hzontal.utils.Preferences(baseActivity.applicationContext)
-                .isAlreadyMigratedVaultDB()
-        ) {
-            if (isShowFailedMigrationSheet()) {
+        if (isFreshInstall()) return
 
-                BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
-                    getString(R.string.Migration_Failed_Title),
-                    getString(R.string.Migration_Failed_Description),
-                    null,
-                    getString(R.string.action_ok).uppercase(),
-                    onConfirmClick = {
-                        setShowFailedMigrationSheet(false)
-                    },
-                    onCancelClick = {
-                        setShowFailedMigrationSheet(false)
-                    }
-                )
-            }
+        val preferences = com.hzontal.utils.Preferences(baseActivity.applicationContext)
+        val isMainDBMigrated = isAlreadyMigratedMainDB()
+        val isVaultDBMigrated = preferences.isAlreadyMigratedVaultDB()
+
+        if (isMainDBMigrated && isVaultDBMigrated) return
+
+        if (isShowFailedMigrationSheet()) {
+            BottomSheetUtils.showStandardSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.Migration_Failed_Title),
+                getString(R.string.Migration_Failed_Description),
+                null,
+                getString(R.string.action_ok).uppercase(),
+                onConfirmClick = {
+                    setShowFailedMigrationSheet(false)
+                },
+                onCancelClick = {
+                    setShowFailedMigrationSheet(false)
+                }
+            )
         }
-
     }
 
 }
