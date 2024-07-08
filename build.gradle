@@ -1,6 +1,5 @@
 ext {
     var = '4.7.1'
-    sourceCompatibility = sourceCompatibility
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
