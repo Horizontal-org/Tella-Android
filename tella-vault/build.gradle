@@ -12,6 +12,19 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            universalApk true
+        }
     }
 
     buildTypes {
@@ -37,7 +50,9 @@ dependencies {
     implementation "com.google.android.material:material:$versions.material"
     api "io.reactivex.rxjava2:rxjava:$versions.rxjava"
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
-    implementation "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
+    //sqlite dependency
+    api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
+    api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
     api "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 
     implementation project(path: ':tella-keys')

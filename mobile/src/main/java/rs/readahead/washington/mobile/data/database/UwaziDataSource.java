@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
@@ -11,8 +12,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
+import net.zetetic.database.DatabaseUtils;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +62,9 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                     .observeOn(AndroidSchedulers.mainThread());
 
     private UwaziDataSource(Context context, byte[] key) {
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        database = sqLiteOpenHelper.getWritableDatabase();
     }
 
     public static synchronized UwaziDataSource getInstance(Context context, byte[] key) {
@@ -343,7 +345,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
     }
 
     private long countDBUwaziServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_UWAZI_SERVER);
+        return DatabaseUtils.queryNumEntries(database, D.T_UWAZI_SERVER);
     }
 
     private List<CollectTemplate> getBlankCollectTemplates() {
@@ -442,13 +444,15 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
                 templates.add(collectTemplate);
             }
 
-            resultTemplates.replaceAll
-                    (oldTemplate ->
-                            templates.stream()
-                                    .filter(template -> template.getEntityRow().get_id().equals(oldTemplate.getEntityRow().get_id()))
-                                    .findFirst()
-                                    .orElse(oldTemplate)
-                    );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                resultTemplates.replaceAll
+                        (oldTemplate ->
+                                templates.stream()
+                                        .filter(template -> template.getEntityRow().get_id().equals(oldTemplate.getEntityRow().get_id()))
+                                        .findFirst()
+                                        .orElse(oldTemplate)
+                        );
+            }
 
 
         } catch (Exception e) {

@@ -6,7 +6,8 @@ import android.database.Cursor;
 
 import androidx.annotation.NonNull;
 
-import net.sqlcipher.database.SQLiteDatabase;
+
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,9 @@ public class ResourceDataSource implements ITellaResourcesRepository {
                     .observeOn(AndroidSchedulers.mainThread());
 
     private ResourceDataSource(Context context, byte[] key) {
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
+        database = sqLiteOpenHelper.getWritableDatabase();
     }
 
     public static synchronized ResourceDataSource getInstance(Context context, byte[] key) {
