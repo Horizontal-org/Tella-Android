@@ -123,7 +123,8 @@ dependencies {
     kapt("org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
-    implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
+    implementation "com.squareup:tape:$versions.squareupTape"
+    // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
     //sqlite dependency
     implementation "net.zetetic:sqlcipher-android:$versions.sqlcipher"
@@ -156,7 +157,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     //hilt-view-model
-   // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
+    // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
     //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
 
@@ -165,20 +166,22 @@ dependencies {
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
-   //worker manager
+    //worker manager
     implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
     implementation("androidx.hilt:hilt-work:$versions.hilt_version")
 
     //optional - RxJava2 support
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
-   // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+    // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
 
     implementation("com.vanniktech:android-image-cropper:4.3.3")
+    //Next cloud
+    implementation "com.github.nextcloud:android-library:$versions.nextcloud"
 }
 
 kapt {

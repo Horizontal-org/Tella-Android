@@ -21,7 +21,6 @@ class UwaziConnectFlowActivity : BaseLockActivity() {
                 val server = Gson().fromJson(it, UWaziUploadServer::class.java)
                 addFragment(EnterServerFragment.newInstance(server, true), R.id.container)
             }
-
         }
     }
 
