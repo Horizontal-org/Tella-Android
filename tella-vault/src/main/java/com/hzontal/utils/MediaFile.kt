@@ -204,7 +204,7 @@ object MediaFile {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(fileType)
     }
 
-    fun getFileNameFromCursor(uri: Uri?, context: Context): String? {
+    private fun getFileNameFromCursor(uri: Uri?, context: Context): String? {
         val fileCursor: Cursor? = uri?.let {
             context.contentResolver
                     .query(it, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
@@ -252,6 +252,25 @@ object MediaFile {
     fun getMimeTypeForFile(path: String?): String? {
         val mediaFileType = getFileType(path)
         return mediaFileType?.mimeType
+    }
+   private fun isPDFFile(extension: String): Boolean {
+        val pdfExtensions = setOf("PDF")
+        return pdfExtensions.contains(extension.uppercase())
+    }
+
+    // Add this function to the MediaFile object
+    fun isPDFFile(fileName: String, mimeType: String?): Boolean {
+        if (mimeType != null) {
+            return mimeType.equals("application/pdf", ignoreCase = true)
+        }
+
+        val lastDot = fileName.lastIndexOf('.')
+        if (lastDot > 0) {
+            val extension = fileName.substring(lastDot + 1).uppercase(Locale.ROOT)
+            return isPDFFile(extension)
+        }
+
+        return false
     }
 
     fun getFormatCode(fileName: String, mimeType: String?): Int {

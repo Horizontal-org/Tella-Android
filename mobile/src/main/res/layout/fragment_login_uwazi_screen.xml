@@ -78,6 +78,7 @@
                     style="@style/DialogDataCollectionTextEntryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     android:textColorHint="@color/wa_white">
 
                     <EditText
@@ -90,6 +91,7 @@
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
                         app:backgroundTint="@color/wa_white"
+                        app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                         android:autofillHints="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -101,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/wa_white"
                     app:passwordToggleEnabled="true"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     app:passwordToggleTint="@color/dark_orange">
 
                     <EditText

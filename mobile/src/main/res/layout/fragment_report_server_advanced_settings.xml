@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_reports_settings"
+        android:contentDescription="@string/Server_Connect_Icon"
+        app:layout_constraintBottom_toTopOf="@+id/titleTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/titleTv"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="@string/onboard.advanced_btn_all_done"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/advanced_settings_options_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <LinearLayout
+        android:id="@+id/advanced_settings_options_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/rounded_light_purple_background"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTv">
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/share_verification_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:explainText="@string/Setting_Reports_Share_Information_Description"
+            app:titleText="@string/Setting_Reports_Share_Information_Title" />
+
+        <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+            android:id="@+id/background_upload_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:titleText="@string/Setting_Reports_Background_Upload"
+            app:explainText="@string/Setting_Reports_Background_Upload_Description"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/back_btn"
+        style="@style/Tella_Main_White_Text"
+        android:layout_marginStart="10dp"
+        android:text="@string/LockSelect_Action_Back"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/next_btn"
+        style="@style/Tella_Main_White_Text"
+        android:layout_marginEnd="10dp"
+        android:text="@string/action_next"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

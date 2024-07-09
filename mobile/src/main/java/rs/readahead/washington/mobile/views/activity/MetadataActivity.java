@@ -91,6 +91,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private AlertDialog locationAlertDialog;
     private Relay<MetadataHolder> metadataCancelRelay;
     private CompositeDisposable disposables;
+    private boolean inProgress = false;
 
     private static void acceptBetterLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
@@ -346,7 +347,11 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     }
                     break;
                 case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                    listener.onContinue();
+                    if (isAirplaneModeOn(this)) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    } else {
+                        listener.onContinue();
+                    }
                     break;
             }
         });
@@ -360,7 +365,13 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     getString(R.string.verification_prompt_dialog_expl),
                     getString(R.string.verification_prompt_action_enable_GPS),
                     getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> manageLocationSettings(requestCode, listener)
+                    isConfirmed -> {
+                        if (isConfirmed) {
+                            manageLocationSettings(requestCode, listener);
+                        } else {
+                            listener.onContinue();
+                        }
+                    }
             );
             return Unit.INSTANCE;
         });
@@ -391,10 +402,10 @@ public abstract class MetadataActivity extends BaseLockActivity implements
      */
     public Observable<MetadataHolder> observeMetadata() {
         return Observable.combineLatest(
-                observeLocationData().startWith(MyLocation.createEmpty()),
-                observeWifiData().startWith(Collections.<String>emptyList()),
-                MetadataHolder::new
-        )
+                        observeLocationData().startWith(MyLocation.createEmpty()),
+                        observeWifiData().startWith(Collections.<String>emptyList()),
+                        MetadataHolder::new
+                )
                 .filter(mh -> (!mh.getWifis().isEmpty() || !mh.getLocation().isEmpty()))
                 .take((5 * 60 * 1000) / LOCATION_REQUEST_INTERVAL) // approx max 5 min of trying limit
                 .takeUntil(mh -> !mh.getWifis().isEmpty() && !mh.getLocation().isEmpty());
@@ -450,6 +461,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> showMetadataProgressBarDialog())
                 .takeUntil(metadataCancelRelay) // this observable emits when user press skip in dialog.
+                .doOnNext(data -> setInProgress(true))
                 .doFinally(this::hideMetadataProgressBarDialog)
                 .subscribeWith(new DisposableObserver<MetadataHolder>() {
                     @Override
@@ -480,6 +492,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     @Override
                     public void onComplete() {
                         metadataAttacher.attachMetadata(vaultFile, metadata);
+                        setInProgress(false);
                     }
                 })
         );
@@ -490,6 +503,14 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         metadataAlertDialog = DialogsUtil.showMetadataProgressBarDialog(this, (dialog, which) -> {
             metadataCancelRelay.accept(MetadataHolder.createEmpty()); // :)
         });
+    }
+
+    protected void setInProgress(boolean inProgress) {
+        this.inProgress = inProgress;
+    }
+
+    protected boolean isInProgress() {
+        return inProgress;
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
@@ -533,6 +554,11 @@ public abstract class MetadataActivity extends BaseLockActivity implements
             Location location = locationResult.getLastLocation();
             acceptBetterLocation(location);
         }
+    }
+
+    public static boolean isAirplaneModeOn(Context context) {
+        return Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
     }
 
     // Helper Classes

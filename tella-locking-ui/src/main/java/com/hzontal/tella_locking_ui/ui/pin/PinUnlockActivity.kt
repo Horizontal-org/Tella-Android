@@ -7,6 +7,8 @@ import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.ErrorMessageUtil
+import com.hzontal.tella_locking_ui.patternlock.ConfirmPatternActivity
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import org.hzontal.tella.keys.MainKeyStore
 import org.hzontal.tella.keys.key.MainKey
@@ -16,10 +18,18 @@ private const val TAG = "PinUnlockActivity"
 
 class PinUnlockActivity : BasePinActivity() {
     private lateinit var backBtn: ImageView
+    private val enterCurrentPinRes = R.string.LockPinSet_Settings_EnterCurrentPin
+    private val enterPinToCamouflageRes =
+        R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage
+    private val enterPinToUnlockRes = R.string.UnlockPin_Message_EnterPin
+    private var mNumFailedAttempts = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+
+        mNumFailedAttempts =
+            savedInstanceState?.getInt(ConfirmPatternActivity.KEY_NUM_FAILED_ATTEMPTS) ?: 0
     }
 
     private fun initView() {
@@ -32,49 +42,96 @@ class PinUnlockActivity : BasePinActivity() {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
-                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPin)
+                setUnlockText(enterCurrentPinRes)
             }
+
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 backBtn = findViewById(R.id.backBtn)
                 backBtn.visibility = View.VISIBLE
                 backBtn.setOnClickListener { finish() }
-                pinTopText.text = getString(R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage)
+                setUnlockText(enterPinToCamouflageRes)
             }
+
             else -> {
-                pinTopText.text = getString(R.string.UnlockPin_Message_EnterPin)
+                setUnlockText(enterPinToUnlockRes)
             }
         }
     }
 
-    override fun onSuccessSetPin(pin: String?) {
-        TellaKeysUI.getMainKeyStore().load(config.wrapper, PBEKeySpec(pin?.toCharArray()), object : MainKeyStore.IMainKeyLoadCallback {
-            override fun onReady(mainKey: MainKey) {
-                TellaKeysUI.getMainKeyHolder().set(mainKey);
-                onSuccessfulUnlock()
-                finish()
-            }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ConfirmPatternActivity.KEY_NUM_FAILED_ATTEMPTS, mNumFailedAttempts)
+    }
 
-            override fun onError(throwable: Throwable) {
-                onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
-                TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
-            }
-        })
+    override fun onSuccessSetPin(pin: String?) {
+        TellaKeysUI.getMainKeyStore().load(config.wrapper,
+            PBEKeySpec(pin?.toCharArray()),
+            object : MainKeyStore.IMainKeyLoadCallback {
+                override fun onReady(mainKey: MainKey) {
+                    TellaKeysUI.getMainKeyHolder().set(mainKey)
+                    onSuccessfulUnlock()
+                    ErrorMessageUtil.resetUnlockAttempts()
+                    finish()
+                }
+
+                override fun onError(throwable: Throwable) {
+                    onFailureSetPin(getString(R.string.LockPinConfirm_Message_Error_IncorrectPin))
+                    TellaKeysUI.getCredentialsCallback().onUnSuccessfulUnlock(TAG, throwable)
+                }
+            })
+    }
+
+    private fun setUnlockText(res: Int) {
+        pinTopText.text = getString(res)
+        pinEditText.setHint(res)
     }
 
     override fun onFailureSetPin(error: String) {
-        pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_red_error))
-        pinTopText.text = error
+        if (TellaKeysUI.getNumFailedAttempts() == 0L) {
+            pinTopText.setTextColor(ContextCompat.getColor(this, R.color.light_red))
+            pinTopText.text = error
+            pinTopText.requestFocus()
+            pinTopText.announceForAccessibility(error)
+        } else {
+            onWrongPattern()
+        }
     }
 
     override fun onPinChange(pinLength: Int, intermediatePin: String?) {
         super.onPinChange(pinLength, intermediatePin)
         pinTopText.setTextColor(ContextCompat.getColor(this, R.color.wa_white))
-        pinTopText.text =  getString(
-            when (returnActivity) {
-                ReturnActivity.SETTINGS.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPin
-                ReturnActivity.CAMOUFLAGE.getActivityOrder() -> R.string.LockPinSet_Settings_EnterCurrentPinToChangeCamouflage
-                else -> R.string.UnlockPin_Message_EnterPin
-            })
+
+        val pinTextRes = when (returnActivity) {
+            ReturnActivity.SETTINGS.getActivityOrder() -> {
+                enterCurrentPinRes
+            }
+
+            ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
+                enterPinToCamouflageRes
+            }
+
+            else -> {
+                enterPinToUnlockRes
+            }
+        }
+        setUnlockText(pinTextRes)
     }
+
+    private fun onWrongPattern() {
+        showErrorMessage()
+    }
+
+    private fun showErrorMessage() {
+        val error = ErrorMessageUtil.generateErrorMessage(
+            this,
+            R.string.incorrect_pin,
+            R.string.LockPinConfirm_Message_Error_IncorrectPin,
+            TellaKeysUI.isShowRemainingAttempts()
+        )
+        pinTopText.text = error
+        pinTopText.requestFocus()
+        pinTopText.announceForAccessibility(error)
+    }
+
 
 }

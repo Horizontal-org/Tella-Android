@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.hzontal.shared_ui.submission.SubmittedItem
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.SubmittedCollectFormInstanceRowBinding
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
 import rs.readahead.washington.mobile.views.adapters.uwazi.VIEW_TYPE_HEADER
@@ -54,17 +53,22 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             submittedItem = view.findViewById(R.id.submittedItem)
             submittedItem.apply {
                 setName(entityRow.instanceName)
-                 setOrganization(entityRow.translatedTemplateName)
-                if (entityRow.status == UwaziEntityStatus.SUBMITTED) {
-                    setDates(entityRow.updated)
-                    setSubmittedIcon()
-                } else if (entityRow.status == UwaziEntityStatus.SUBMISSION_ERROR) {
-                    setSubmitErrorIcon()
-                } else if (entityRow.status == UwaziEntityStatus.FINALIZED || entityRow.status == UwaziEntityStatus.SUBMISSION_PENDING || entityRow.status == UwaziEntityStatus.SUBMISSION_PARTIAL_PARTS) {
-                    setPendingIcon()
+                setOrganization(entityRow.translatedTemplateName)
+                when (entityRow.status) {
+                    EntityStatus.SUBMITTED -> {
+                        setDates(entityRow.updated)
+                        setSubmittedIcon()
+                    }
+                    EntityStatus.SUBMISSION_ERROR -> {
+                        setSubmitErrorIcon()
+                    }
+                    EntityStatus.FINALIZED, EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_PARTIAL_PARTS -> {
+                        setPendingIcon()
+                    }
+                    else -> {}
                 }
                 setOnClickListener { entityRow.onOpenClicked() }
-               popClickListener = { entityRow.onMoreClicked() }
+                popClickListener = { entityRow.onMoreClicked() }
 
             }
         }
@@ -92,7 +96,7 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private fun setSubmitErrorIcon() {
             val drawable =
                 ViewUtil.getTintedDrawable(
-                   submittedItem.context,
+                    submittedItem.context,
                     R.drawable.ic_error,
                     R.color.wa_red
                 )
@@ -105,7 +109,7 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private fun setPendingIcon() {
             val drawable = ViewUtil.getTintedDrawable(
                 submittedItem.context,
-                R.drawable.ic_watch_later_black_24dp,
+                R.drawable.ic_watch_later_orange_24dp,
                 R.color.dark_orange
             )
             if (drawable != null) {
@@ -114,12 +118,10 @@ class UwaziSubmittedAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-
     override fun getItemCount() = submitted.size
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) VIEW_TYPE_HEADER else VIEW_TYPE_LIST
     }
-
 
 }

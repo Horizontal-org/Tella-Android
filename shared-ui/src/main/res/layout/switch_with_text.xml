@@ -31,6 +31,7 @@
             style="@style/SettingsMessageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:padding="2dp" />
 
         <TextView
@@ -46,15 +47,32 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <TextView
+        android:id="@+id/labelTv"
+        style="@style/SettingsTitleText"
+        android:textColor="@color/wa_white_64"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:gravity="end"
+        android:visibility="gone"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_weight=".18"
+       />
+
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/mSwitch"
         style="@style/SwitchWithMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:layout_weight=".18" />
+        android:layout_weight=".18"
+        />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

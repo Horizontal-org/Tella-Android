@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
-import rs.readahead.washington.mobile.views.settings.OnFragmentSelected
 
 class OnBoardIntroFragment : BaseFragment() {
 
@@ -21,25 +20,31 @@ class OnBoardIntroFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = false, isTabLayoutVisible = false
+        )
+        (baseActivity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = false, isBackButtonVisible = false
+        )
+    }
+
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
+        (baseActivity as OnBoardActivityInterface).hideProgress()
 
         val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
         enterCodeButton.setOnClickListener {
-            (activity as OnBoardActivityInterface).enterCustomizationCode()
+            (baseActivity as OnBoardActivityInterface).enterCustomizationCode()
         }
 
         val startBtn = view.findViewById<TextView>(R.id.startBtn)
         startBtn.setOnClickListener {
-            activity.addFragment(
-                this,
-                OnBoardCameraFragment(),
-                R.id.rootOnboard
-            )
+            (baseActivity as OnBoardingActivity).onNextPressed()
+
         }
     }
 }

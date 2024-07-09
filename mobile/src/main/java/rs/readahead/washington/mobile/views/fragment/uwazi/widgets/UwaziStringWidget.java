@@ -29,10 +29,12 @@ public class UwaziStringWidget extends UwaziQuestionWidget {
         super(context, prompt);
 
         answer = new EditText(context);
-        answer.setTextColor(getResources().getColor(R.color.wa_white_80));
+        answer.setTextColor(getResources().getColor(R.color.wa_white_90));
         answer.getBackground().setColorFilter(getResources().getColor(R.color.wa_white_80),
                 PorterDuff.Mode.SRC_ATOP);
 
+        answer.setHint(prompt.getQuestion());
+        answer.setHintTextColor(getResources().getColor(R.color.wa_white_64));
         answer.setId(QuestionWidget.newUniqueId());
         readOnly = prompt.isReadOnly() || readOnlyOverride;
 

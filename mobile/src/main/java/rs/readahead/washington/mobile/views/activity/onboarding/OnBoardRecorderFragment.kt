@@ -13,9 +13,9 @@ class OnBoardRecorderFragment : BaseFragment() {
     private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.onboard_recorder_fragment, container, false)
     }
@@ -26,22 +26,26 @@ class OnBoardRecorderFragment : BaseFragment() {
         initView(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = true,
+            isTabLayoutVisible = true
+        )
+        (baseActivity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = true,
+            isBackButtonVisible = true
+        )
+
+
+    }
+
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).setCurrentIndicator(1)
-
         backBtn = view.findViewById(R.id.back_btn)
-        backBtn.setOnClickListener {
-            (activity as OnBoardActivityInterface).setCurrentIndicator(0)
-            activity.onBackPressed()
-        }
-
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
-                    this,
-                    OnBoardFilesFragment(),
-                    R.id.rootOnboard
-            )
+            (baseActivity as OnBoardingActivity).onNextPressed()
+
         }
     }
 }

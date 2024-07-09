@@ -6,7 +6,7 @@
         <attr name="bottomTextCenter" format="reference|string" />
         <attr name="bottomText" format="reference|string" />
         <attr name="startImg" format="reference" />
-        <attr name="state_checked" format="boolean"/>
+        <attr name="state_checked" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="HomeButton">
@@ -16,37 +16,52 @@
 
     <declare-styleable name="RoundButton">
         <attr name="text" format="reference|string" />
-        <attr name="check_state" format="boolean"/>
+        <attr name="check_state" format="boolean" />
+        <attr name="tint_color" format="color|reference" />
+        <attr name="text_color" format="color|reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CustomDropdownList">
+        <attr name="name" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="CenterMessageTextView">
         <attr name="textMessage" format="reference|string" />
-        <attr name="topImg" format="reference"/>
+        <attr name="topImg" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="TellaSwitchWithMessage">
         <attr name="titleText" format="reference|string" />
         <attr name="explainText" format="reference|string" />
-        <attr name="is_checked" format="boolean"/>
+        <attr name="is_checked" format="boolean" />
+        <attr name="is_disabled" format="boolean" />
+        <attr name="isSwitchVisible" format="boolean" />
+        <attr name="labelText" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="CollapsableAppBar">
         <attr name="titleRes" format="reference|string" />
         <attr name="barHeightRes" format="reference" />
-        <attr name="contentScrimRes" format="reference"/>
-        <attr name="backgroundRes" format="reference"/>
+        <attr name="contentScrimRes" format="reference" />
+        <attr name="backgroundRes" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="ToolbarComponent">
         <attr name="leftIcon" format="reference" />
+        <attr name="leftIconContentDescription" format="reference|string" />
         <attr name="editIcon" format="reference" />
         <attr name="arrowBackIcon" format="reference" />
+        <attr name="arrowBackIconContentDescription" format="reference|string" />
         <attr name="rightIcon" format="reference" />
+        <attr name="rightIconContentDescription" format="reference|string" />
         <attr name="toolbarTitle" format="reference" />
         <attr name="titleIcon" format="reference" />
         <attr name="startTitle" format="reference|string" />
         <attr name="bigStartTitle" format="reference|string" />
         <attr name="endTitle" format="reference|string" />
+        <attr name="rightOfLeftIcon" format="reference" />
+        <attr name="rightOfLeftIconContentDescription" format="reference|string" />
     </declare-styleable>
 
     <declare-styleable name="SubmittingItem">
@@ -65,11 +80,44 @@
     </declare-styleable>
 
     <declare-styleable name="BreadcrumbsView">
-        <attr name="popupTheme"/>
-        <attr name="crumbsTextColor" format="color"/>
-        <attr name="crumbsSelectedTextColor" format="color"/>
-        <attr name="crumbsTextSize" format="dimension"/>
-        <attr name="crumbsPadding" format="dimension"/>
-        <attr name="homeIcon" format="reference"/>
+        <attr name="popupTheme" />
+        <attr name="crumbsTextColor" format="color" />
+        <attr name="crumbsSelectedTextColor" format="color" />
+        <attr name="crumbsTextSize" format="dimension" />
+        <attr name="crumbsPadding" format="dimension" />
+        <attr name="homeIcon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PinLockView">
+        <attr name="pinLength" format="integer" />
+        <attr name="keypadTextColor" format="color" />
+        <attr name="keypadOffTextColor" format="color" />
+        <attr name="keypadTextSize" format="dimension" />
+        <attr name="keypadButtonSize" format="dimension" />
+        <attr name="keypadVerticalSpacing" format="dimension" />
+        <attr name="keypadHorizontalSpacing" format="dimension" />
+        <attr name="keypadButtonBackgroundDrawable" format="integer" />
+        <attr name="keypadDeleteButtonDrawable" format="integer" />
+        <attr name="keypadDeleteButtonSize" format="dimension" />
+        <attr name="keypadShowDeleteButton" format="boolean" />
+        <attr name="keypadDeleteButtonPressedColor" format="color" />
+
+        <attr name="dotEmptyBackground" format="reference" />
+        <attr name="dotFilledBackground" format="reference" />
+        <attr name="dotDiameter" format="dimension" />
+        <attr name="dotSpacing" format="dimension" />
+        <attr name="indicatorType" format="enum">
+            <enum name="fixed" value="0" />
+            <enum name="fill" value="1" />
+            <enum name="fillWithAnimation" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="InfoSettingsView">
+        <attr name="settingsTitleText" format="reference|string" />
+        <attr name="settingsLabelText" format="reference|string" />
+        <attr name="settingsInfoText" format="reference|string" />
+        <attr name="isBottomLineVisible" format="boolean" />
     </declare-styleable>
 </resources>

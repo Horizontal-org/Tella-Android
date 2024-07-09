@@ -33,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allDoneTv" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/doneImgV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
 
     <Button
         android:id="@+id/finishUnlockingBtn"
-        style="@style/Unlock_White_Text"
+        style="@style/Unlock_Black_Text"
         android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"

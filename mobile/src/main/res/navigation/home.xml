@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     app:startDestination="@+id/homeScreen">
+    <include app:graph="@navigation/uwazi" />
+    <include app:graph="@navigation/reports_graph" />
     <fragment
         android:id="@+id/homeScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
@@ -14,60 +15,135 @@
             android:id="@+id/action_homeScreen_to_main_settings"
             app:destination="@id/main_settings"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out"/>
+            app:exitAnim="@anim/fade_out" />
+
         <action
             android:id="@+id/action_homeScreen_to_attachments_screen"
             app:destination="@id/attachments_screen"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out"/>
-    </fragment>
+            app:exitAnim="@anim/fade_out" />
 
+        <action
+            android:id="@+id/action_homeScreen_to_reports_screen"
+            app:destination="@id/reports_graph"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_uwazi_screen"
+            app:destination="@id/uwazi"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_forms_screen"
+            app:destination="@id/formScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+
+        <action
+            android:id="@+id/action_homeScreen_to_resources_screen"
+            app:destination="@id/resourcesScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
 
     <fragment
         android:id="@+id/attachments_screen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
         tools:layout="@layout/fragment_vault_attachments">
         <action
+            android:id="@+id/action_attachments_screen_to_edit_screen"
+            app:destination="@id/edit_screen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
             android:id="@+id/action_attachments_screen_to_info_screen"
             app:destination="@id/info_screen"
             app:enterAnim="@anim/slide_in_start"
-            app:exitAnim="@anim/fade_out">
-        </action>
+            app:exitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_attachments_screen_to_camera"
-            app:destination="@id/cameraScreen">
-        </action>
-        <action
-            android:id="@+id/action_attachments_screen_to_micScreen"
-            app:destination="@id/micScreen" />
+            app:destination="@id/cameraScreen" />
     </fragment>
 
+    <fragment
+        android:id="@+id/edit_screen"
+        android:name="rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment"
+        android:label="@string/Vault_FileEdit_SheetAction"
+        tools:layout="@layout/fragment_vault_info" />
 
     <fragment
         android:id="@+id/info_screen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
         android:label="@string/Vault_FileInfo"
-        tools:layout="@layout/fragment_vault_attachments">
-    </fragment>
+        tools:layout="@layout/fragment_vault_info" />
 
     <activity
         android:id="@+id/main_settings"
         android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
         android:label="@string/settings_app.bar"
-        tools:layout="@layout/activity_settings">
-    </activity>
-
-    <activity
-        android:id="@+id/cameraScreen"
-        android:name="rs.readahead.washington.mobile.views.activity.CameraActivity"
-        android:label="@string/Home_BottomNav_Camera"
-        tools:layout="@layout/activity_camera">
-    </activity>
+        tools:layout="@layout/activity_settings" />
 
     <fragment
-        android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.MicFragment"
-        android:label="@string/Home_BottomNav_Rec"
-        tools:layout="@layout/fragment_mic">
+        android:id="@+id/formScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.forms.CollectMainFragment"
+        android:label="@string/Home_BottomNav_Forms"
+        tools:layout="@layout/activity_collect_main" />
+
+    <fragment
+        android:id="@+id/uwaziScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.UwaziFragment"
+        android:label="Uwazi"
+        tools:layout="@layout/fragment_uwazi">
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziDownloadScreen"
+            app:destination="@id/uwaziDownloadScreen" />
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziEntryScreen"
+            app:destination="@id/uwaziEntryScreen" />
+
+        <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
+            app:destination="@id/uwaziSendScreen" />
+
+        <action
+            android:id="@+id/action_uwaziScreen_to_uwaziSubmittedPreview"
+            app:destination="@id/uwaziSubmittedPreviewScreen" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/uwaziDownloadScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
+        android:label="Uwazi"
+        tools:layout="@layout/fragment_downloaded_templates" />
+
+    <fragment
+        android:id="@+id/uwaziEntryScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
+        android:label="Entry"
+        tools:layout="@layout/uwazi_entry_fragment">
+        <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
+            app:destination="@id/uwaziSendScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/uwaziSendScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
+        android:label="Send"
+        tools:layout="@layout/uwazi_send_fragment" />
+
+    <fragment
+        android:id="@+id/uwaziSubmittedPreviewScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_sumbitted_preview" />
+
+    <fragment
+        android:id="@+id/resourcesScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.resources.ResourcesListFragment"
+        android:label="@string/Home_BottomNav_Resources"
+        tools:layout="@layout/fragment_resources_list" />
 </navigation>

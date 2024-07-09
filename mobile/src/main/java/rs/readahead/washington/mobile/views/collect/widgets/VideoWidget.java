@@ -29,12 +29,10 @@ import java.util.List;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordRepository;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.CameraActivity;
-import rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity;
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
@@ -102,6 +100,8 @@ public class VideoWidget extends MediaFileBinaryWidget {
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setOnClickListener(v -> clearAnswer());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
+
 
         attachmentPreview = view.findViewById(R.id.attachedMedia);
 

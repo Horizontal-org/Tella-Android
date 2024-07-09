@@ -5,13 +5,8 @@
 
     <include app:graph="@navigation/home"/>
 
-    <include app:graph="@navigation/form"/>
-
     <include app:graph="@navigation/camera"/>
 
-    <include app:graph="@navigation/mic"/>
+    <include app:graph="@navigation/micro"/>
 
-    <include app:graph="@navigation/reports"/>
-
-    <include app:graph="@navigation/uwazi"/>
 </navigation>

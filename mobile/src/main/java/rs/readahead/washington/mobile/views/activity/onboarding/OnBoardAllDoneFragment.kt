@@ -23,22 +23,21 @@ class OnBoardAllDoneFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).setCurrentIndicator(4)
+        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(4)
 
         startBtn = view.findViewById(R.id.startBtn)
         startBtn.setOnClickListener {
             TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
-            activity.finish()
+            baseActivity.finish()
         }
 
         advancedBtn = view.findViewById(R.id.sheet_two_btn)
         advancedBtn.setOnClickListener {
-            activity.addFragment(
+            baseActivity.addFragment(
                 this,
                 OnBoardShareDataFragment(),
                 R.id.rootOnboard

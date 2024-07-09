@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.base_ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -11,19 +12,25 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.setupForAccessibility
 
+@AndroidEntryPoint
 abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setThemeStyle()
+        supportFragmentManager.setupForAccessibility(this)
 
         // start with preventing showing screen in tasks?
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
@@ -47,6 +54,7 @@ abstract class BaseActivity : AppCompatActivity() {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initLoading() {
         container = findViewById<View>(android.R.id.content) as ViewGroup
         loading =
@@ -79,7 +87,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun maybeRestoreExitTimeOut() {
+    private fun maybeRestoreExitTimeOut() {
         if (Preferences.isExitTimeout()) {
             MyApplication.getMainKeyHolder().timeout = Preferences.getLockTimeout()
             Preferences.setTempTimeout(false)
@@ -173,5 +181,9 @@ abstract class BaseActivity : AppCompatActivity() {
             },
             onCancelClick = null
         )
+    }
+
+    open fun setThemeStyle() {
+        this.theme.applyStyle(ThemeStyleManager.getThemeStyle(this), true)
     }
 }

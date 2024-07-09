@@ -21,12 +21,12 @@ import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
 import java.util.*
 
-class CustomBottomSheetFragment : BottomSheetDialogFragment() {
+open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
     @LayoutRes
-    private var layoutRes: Int = 0
+    protected var layoutRes: Int = 0
 
-    private lateinit var manager: FragmentManager
+    protected lateinit var manager: FragmentManager
     private val clickers = ArrayList<Pair<Int, () -> Unit>>()
     private var backClickListener: (() -> Unit)? = null
 
@@ -36,13 +36,13 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     private var statusBarColor: Int? = null
 
     @StyleRes
-    private var animationStyle: Int? = null
+    protected var animationStyle: Int? = null
 
     private var binder: Binder<PageHolder>? = null
     private var pageHolder: PageHolder? = null
     private var isCancellable = false
-    private var isTransparent: Boolean = false
-    private var isFullscreen: Boolean = false
+    protected var isTransparent: Boolean = false
+    protected var isFullscreen: Boolean = false
 
     /**
      * Called to init LayoutRes with ID layout.
@@ -51,7 +51,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
      * @param layoutRes ID layout to setContentView on CustomBottomSheetFragment Activity
      * @return Instantiated CustomBottomSheetFragment object
      */
-    fun page(@LayoutRes layoutRes: Int): CustomBottomSheetFragment {
+    open fun page(@LayoutRes layoutRes: Int): CustomBottomSheetFragment {
         this.layoutRes = layoutRes
         return this
     }
@@ -88,7 +88,7 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     /**
      * Called to init PageHolder with a View extends PageHolder Object
      *
-     * @param pageHolder CustomView for ButterKnife.bind on Message Activity
+     * @param pageHolder CustomView for bind on Message Activity
      * @param binder Interface for bind CustomView extends PageHolder
      * @param <T> CustomView Object
      * @return Instantiated CustomView
@@ -219,13 +219,14 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         configBackPressCallback()
         if (statusBarColor != null) applyStatusBarColor(statusBarColor!!)
 
-        KeyboardUtil(activity, view)
+        KeyboardUtil(view)
     }
 
     private fun configBackPressCallback() {
         dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 backClickListener?.invoke()
+                dismiss() // Dismiss the bottom sheet when back is pressed
                 return@OnKeyListener true
             }
             false
@@ -234,11 +235,9 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun applyStatusBarColor(@ColorRes colorInt: Int) {
         val window = dialog!!.window
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (window != null) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
-            }
+        if (window != null) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
         }
     }
 
@@ -259,13 +258,6 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         return dialog
     }
 
-    interface Binder<T : PageHolder> {
-        fun onBind(holder: T)
-    }
-
-    abstract class PageHolder {
-        abstract fun bindView(view: View)
-    }
 
     companion object {
         /**
@@ -283,8 +275,4 @@ class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     }
 }
 
-fun DialogFragment.showOnce(manager: FragmentManager, tag: String) {
-    if (manager.findFragmentByTag(tag) == null) {
-        show(manager, tag)
-    }
-}
+

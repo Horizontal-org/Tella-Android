@@ -29,7 +29,6 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
     private CompositeDisposable disposable;
     private final KeyDataSource keyDataSource;
 
-
     public HomeScreenPresenter(IHomeScreenPresenterContract.IView view) {
         this.view = view;
         appContext = view.getContext().getApplicationContext();
@@ -52,7 +51,7 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                     } else {
 
                         if (Preferences.isEraseForms()) {
-                            dataSource.deleteForms();
+                            dataSource.deleteFormsAndRelatedTables();
                         }
 
                     }

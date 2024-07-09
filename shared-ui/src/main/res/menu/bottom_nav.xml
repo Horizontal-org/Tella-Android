@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_home"
-        android:contentDescription="Home"
-        android:title="@string/Home_BottomNav_Home" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:checkableBehavior="single">
 
     <item
-        android:id="@+id/form"
-        android:icon="@drawable/ic_list_numbered_24"
-        android:contentDescription="Forms"
-        android:title="@string/Home_BottomNav_Forms"
-        android:visible="false"
-        />
+        android:id="@+id/home"
+        android:contentDescription="@string/Home_BottomNav_Home"
+        android:icon="@drawable/home"
+        android:title="@string/Home_BottomNav_Home"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/camera"
-        android:icon="@drawable/ic_camera"
-        android:contentDescription="Camera"
-        android:title="@string/Home_BottomNav_Camera" />
+        android:contentDescription="@string/Home_BottomNav_Camera"
+        android:icon="@drawable/ic_camera_alt_24px"
+        android:title="@string/Home_BottomNav_Camera"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/mic"
-        android:icon="@drawable/ic_mic"
-        android:contentDescription="Mic"
-        android:title="@string/Home_BottomNav_Rec" />
+        android:contentDescription="@string/Home_BottomNav_Rec"
+        android:icon="@drawable/baseline_mic_none_24"
+        android:title="@string/Home_BottomNav_Rec"
+        app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/uwazi"
-        android:icon="@drawable/ic_uwazi"
-        android:contentDescription="uwazi"
-        android:title="@string/Home_BottomNav_Uwazi"
-        android:visible="false"
-        />
 </menu>

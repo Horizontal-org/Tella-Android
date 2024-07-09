@@ -21,16 +21,25 @@ class OnBoardConnectedFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
+    override fun onResume() {
+        super.onResume()
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = true, isTabLayoutVisible = true
+        )
+        (baseActivity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = true, isBackButtonVisible = true
+        )
+    }
+
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).setCurrentIndicator(0)
+        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(0)
 
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
+            baseActivity.addFragment(
                 this,
                 OnBoardHideOptionFragment(),
                 R.id.rootOnboard

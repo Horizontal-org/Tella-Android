@@ -2,26 +2,24 @@ package rs.readahead.washington.mobile.data.database;
 
 import android.content.Context;
 
-import com.hzontal.tella_locking_ui.common.CredentialsCallback;
-
 import org.hzontal.tella.keys.key.LifecycleMainKey;
-
-import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.AsyncSubject;
 import rs.readahead.washington.mobile.MyApplication;
 
-public class KeyDataSource  {
+public class KeyDataSource {
     private final AsyncSubject<DataSource> asyncSubject;
     private final AsyncSubject<UwaziDataSource> asyncUwaziSubject;
-    private Context context;
+    private final AsyncSubject<ResourceDataSource> asyncResourceSubject;
+    private final Context context;
 
 
     public KeyDataSource(Context context) {
         this.context = context.getApplicationContext();
         asyncSubject = AsyncSubject.create();
         asyncUwaziSubject = AsyncSubject.create();
+        asyncResourceSubject = AsyncSubject.create();
     }
 
     public void initKeyDataSource() {
@@ -31,6 +29,9 @@ public class KeyDataSource  {
 
             asyncUwaziSubject.onNext(UwaziDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
             asyncUwaziSubject.onComplete();
+
+            asyncResourceSubject.onNext(ResourceDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncResourceSubject.onComplete();
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             e.printStackTrace();
         }
@@ -46,4 +47,7 @@ public class KeyDataSource  {
     }
 
 
+    public Observable<ResourceDataSource> getResourceDataSource() {
+        return asyncResourceSubject;
+    }
 }

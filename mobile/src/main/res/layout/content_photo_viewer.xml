@@ -10,17 +10,18 @@
     tools:showIn="@layout/activity_photo_viewer">
 
     <ImageView
+        android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/photoImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:contentDescription="@null"/>
+        android:contentDescription="@null"
+        android:scaleType="centerInside" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:indeterminate="true" />
 
 </FrameLayout>

@@ -3,10 +3,18 @@
     <dimen name="dropdown_offset_y_fix_value">4.5dp</dimen>
     <dimen name="dropdown_start_padding_increase">12dp</dimen> <!-- 24dp (arrow size) -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_horizontal_larger_margin">32dp</dimen>
 
     <dimen name="tooltip_icon_margin_start">4dp</dimen>
     <dimen name="tooltip_icon_size">16dp</dimen>
     <dimen name="tooltip_icon_margin_top">8dp</dimen>
-
     <dimen name="main_navigation_bar_height">50dp</dimen>
+    <dimen name="calc_text_size">30sp</dimen>
+    <dimen name="default_text_size">32sp</dimen>
+    <dimen name="default_button_size">54dp</dimen>
+    <dimen name="default_delete_button_size">16dp</dimen>
+    <dimen name="default_horizontal_spacing">30dp</dimen>
+    <dimen name="default_vertical_spacing">0dp</dimen>
+    <dimen name="dimen_25">25dp</dimen>
+
 </resources>

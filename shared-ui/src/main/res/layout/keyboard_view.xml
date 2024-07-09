@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal">
+
+
+    <TextView
+        android:id="@+id/oneBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="1"
+        app:layout_constraintBottom_toTopOf="@+id/fourBtn"
+        app:layout_constraintEnd_toStartOf="@+id/twoBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+
+    <TextView
+        android:id="@+id/twoBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="2"
+        app:layout_constraintBottom_toTopOf="@+id/fiveBtn"
+        app:layout_constraintEnd_toStartOf="@+id/threeBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/oneBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+
+    <TextView
+        android:id="@+id/threeBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="3"
+        app:layout_constraintBottom_toTopOf="@+id/sixBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/twoBtn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/fourBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="4"
+        app:layout_constraintBottom_toTopOf="@+id/sevenBtn"
+        app:layout_constraintEnd_toStartOf="@+id/fiveBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/oneBtn" />
+
+    <TextView
+        android:id="@+id/fiveBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="5"
+        app:layout_constraintBottom_toTopOf="@+id/eightBtn"
+        app:layout_constraintEnd_toStartOf="@+id/sixBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fourBtn"
+        app:layout_constraintTop_toBottomOf="@+id/twoBtn" />
+
+    <TextView
+        android:id="@+id/sixBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="6"
+        app:layout_constraintBottom_toTopOf="@+id/nineBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/fiveBtn"
+        app:layout_constraintTop_toBottomOf="@+id/threeBtn" />
+
+    <TextView
+        android:id="@+id/sevenBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="7"
+        app:layout_constraintBottom_toTopOf="@+id/deleteBtn"
+        app:layout_constraintEnd_toStartOf="@+id/eightBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fourBtn" />
+
+
+    <TextView
+        android:id="@+id/eightBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="8"
+        app:layout_constraintBottom_toTopOf="@+id/zeroBtn"
+        app:layout_constraintEnd_toStartOf="@+id/nineBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/sevenBtn"
+        app:layout_constraintTop_toBottomOf="@+id/fiveBtn" />
+
+    <TextView
+        android:id="@+id/nineBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="9"
+        app:layout_constraintBottom_toTopOf="@+id/okBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/eightBtn"
+        app:layout_constraintTop_toBottomOf="@+id/sixBtn" />
+
+    <ImageView
+        android:id="@+id/deleteBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/delete_bg"
+        android:contentDescription="@string/action_delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/zeroBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sevenBtn" />
+
+    <TextView
+        android:id="@+id/zeroBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:layout_marginEnd="7dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/okBtn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/deleteBtn"
+        app:layout_constraintTop_toBottomOf="@+id/eightBtn" />
+
+    <TextView
+        android:id="@+id/okBtn"
+        style="@style/Unlock_White_Text_Pin"
+        android:text="OK"
+        android:textColor="@color/wa_white_40"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/zeroBtn"
+        app:layout_constraintTop_toBottomOf="@+id/nineBtn" />
+
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/btnsGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="oneBtn,twoBtn,threeBtn,fourBtn,fiveBtn,sixBtn,sevenBtn,eightBtn,nineBtn,zeroBtn,okBtn" />
+</androidx.constraintlayout.widget.ConstraintLayout>

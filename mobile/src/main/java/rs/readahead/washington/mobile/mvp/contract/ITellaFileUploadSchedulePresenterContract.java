@@ -16,7 +16,8 @@ public class ITellaFileUploadSchedulePresenterContract {
     }
 
     public interface IPresenter extends IBasePresenter {
-        void scheduleUploadMediaFiles(List<VaultFile> files);
-        void scheduleUploadMediaFilesWithPriority(List<VaultFile> files, long uploadServerId, boolean metadata);
+     /*   void scheduleUploadMediaFiles(List<VaultFile> files);
+        void scheduleUploadMediaFilesWithPriority(List<VaultFile> files, long uploadServerId, boolean metadata);*/
+        void scheduleUploadReportFiles(VaultFile vaultFile, long uploadServerId);
     }
 }

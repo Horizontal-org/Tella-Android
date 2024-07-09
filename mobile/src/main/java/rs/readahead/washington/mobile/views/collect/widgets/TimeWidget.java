@@ -66,6 +66,7 @@ public class TimeWidget extends QuestionWidget {
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
         clearButton.setVisibility(GONE);
         clearButton.setOnClickListener(v -> clearAnswer());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
 
         addTimeView(linearLayout);
 

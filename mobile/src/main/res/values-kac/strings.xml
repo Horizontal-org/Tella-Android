@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Tang shawn ngut sai</string>
   <string name="home_expl_cancel.quick.delete">Lamang dawm na matu shara ra kaw ahtawk hkra dat u</string>
   <string name="recorder_app.bar">Nsen rim jak</string>
-  <string name="collect_app.bar">Mahkawng da u</string>
   <string name="settings.docu_field_username">Kompyuta hta lang ai mying</string>
   <string name="collect.draft_meta_date.updated">Prat madang bung hkra galaw da ngut sai: %1$s</string>
   <string name="settings.about_app.version">Kasi</string>
@@ -126,13 +125,10 @@
   <string name="settings.docu_verification_action">Jep shagrin ai lai ladat</string>
   <string name="settings.docu_verification_action.expl">Na a jak rai hte nga shara hte seng ai shiga lamai lamang ni hpe mahkawng ai let, na a shiga lamang nhtan ni hpe masat shagrin la lu ai.</string>
   <string name="collect_no.form_heading">Loi ai shiga lamang mahkawng ai lam</string>
-  <string name="collect_expl_not.connected.to.server"><![CDATA[Hkrang laika ni hpe hkap la lu nna shiga lamang ni hpe tang shawn lu na matu, nang gaw shawng nnan htap htuk ai madung kompyuta jak langai ngai hte matut mahkai da ra ai. Madung kompyuta jak shiga lami lamang ni a matu, na a wuhpung wuhpawng hpe san yu nna, <a href=\"tella_scheme://open.collect.manage.Daw jau jak (server)s.activity\">ndai kaw madung kompyuta jak hpe lajang shanjin u</a>.]]></string>
-  <string name="collect.draft_expl_no.forms">Madun na matu nhprang hkrang laika ni n nga ai.</string>
+  <string name="collect_expl_not.connected.to.server">Hkrang laika ni hpe hkap la lu nna shiga lamang ni hpe tang shawn lu na matu, nang gaw shawng nnan htap htuk ai madung kompyuta jak langai ngai hte matut mahkai da ra ai. Madung kompyuta jak shiga lami lamang ni a matu, na a wuhpung wuhpawng hpe san yu nna, <a href="tella_scheme://open.collect.manage.Daw jau jak (server)s.activity">ndai kaw madung kompyuta jak hpe lajang shanjin u</a>.</string>
   <string name="collect.sent_expl_no.forms">Madun na matu tang shawn da ai hkrang laika ni n nga ai.</string>
   <string name="collect.blank_expl_no.forms">Madun na matu hkrang laika ni n nga ai. Nang matut mahkai da ai madung kompyuta ni hta hkrang laika ni lu la mai ai rai yang, jep yu na matu n-gun ban ai lam (Refresh) hkalap hpe ahtawk hkra dat u.</string>
   <string name="settings.camo_heading">Kaga mying hte masat kumla langai ngai hpe lata san u</string>
-  <string name="collect.help_app.bar">Mahkawng ai lam hte Karum ningtum</string>
-  <string name="collect.help_expl_intro">Mahkawng ai(Collect) gaw, na a jak rai hta hkrang laika ni hte yu jep maram ai lam ni (survery) ni hpe dan tawk ka jahpring ai hku nna shiga lamang ni hpe mahkawng na matu, hkingrai langai rai nga ai</string>
   <string name="collect.blank_toast_not.connected">Intanet matut mahkra ai lam n nga ai. Intanet hte matut mahkai lu shaloi nang kalang bai chyam yu u.</string>
   <string name="settings.gen_crash.reports_action">Hten za mat ai shiga lami laman ni hpe garan u</string>
   <string name="settings.gen_crash.reports_action.expl">Hten za mat ai shiga lami laman htawn ai lam ni gaw, Tella hpe grau kaja wa hkra karum ya nga ai. Dai ni hpe shi hte shi shagun sa ya nna, jak rai a kasi kamang hte Android hkrang kasi zawn re ai shiga lamang ni mung lawm nga ai.</string>
@@ -215,8 +211,8 @@
   <string name="collect_toast_fail.connection.too.weak">Hkrang laika (form) hpe sa na matu, na a intanet matut mahkai ai lam n-gun grai yawm nga ai. Chye ju hte kalang bai chyam yu u</string>
   <string name="gallery_toast_file.encrypted">Ning-ip ga makoi hte la da ai lamang nhtan(file)</string>
   <string name="settings.docu_toast_disconnect.servers.delete">Hkrang laika (form) ni hte madung kompyuta jak (server) ni yawng hpe shaprai kau ngut sai</string>
-  <string name="collect.help_expl_not.connected.to.server"><![CDATA[Hkrang laika ni hpe hkap la na hte, shiga lamang ni hpe tang shawn na matu, shawng nnan, nang hku nna madung kompyuta jak langai hte matut mahkai da ra ai. Madung kompyuta jak shiga lami lamang ni hpe na a wuhpung wuhpawng hpe san la nna, madung kompyuta jak hpe lajang shajin u.]]></string>
-  <string name="collect.help_expl_odk"><![CDATA[Nang hku nna na a dinghkrai hkrang laika hpe galaw shalat la mayu ai rai yang, <a href=\"https://hzontal.org/contact/\">anhte hpe matut mahkai u</a> shing n rai, jai lang u<a href=\"https://opendatakit.org/help/help-for-hire/\">Yawng mai lang ai shiga lamang hkinghku rai (Open Data Kit -ODK) hta mahta nna galaw lajang ya ai (service) langai ngai</a>]]></string>
+  <string name="collect.help_expl_not.connected.to.server">Hkrang laika ni hpe hkap la na hte, shiga lamang ni hpe tang shawn na matu, shawng nnan, nang hku nna madung kompyuta jak langai hte matut mahkai da ra ai. Madung kompyuta jak shiga lami lamang ni hpe na a wuhpung wuhpawng hpe san la nna, madung kompyuta jak hpe lajang shajin u.</string>
+  <string name="collect.help_expl_odk">Nang hku nna na a dinghkrai hkrang laika hpe galaw shalat la mayu ai rai yang, <a href="https://hzontal.org/contact/">anhte hpe matut mahkai u</a> shing n rai, jai lang u<a href="https://opendatakit.org/help/help-for-hire/">Yawng mai lang ai shiga lamang hkinghku rai (Open Data Kit -ODK) hta mahta nna galaw lajang ya ai (service) langai ngai</a></string>
   <string name="collect.help_expl_no.internet">Lama wa, nang intanet hte n matut da ai rai yang, hkrang laika ni hpe nang hku nna naw mai ka jahpring mai nga ai. Nang online lang dat ai hte rau, dai shiga lamang ni hpe tang shawn mat na re.</string>
   <string name="collect_toast_fail.data.too.large">Shakap da ai lamang nhtan ni grai kaba ai majaw, na a hkrang laika tang shawn ai lam hpe n mai galaw ai. Chye ju hte, grau kaji ai lamang nhtan ni hpe shakap u</string>
   <string name="collect.end_heading_submitting">Tang shawn ai lam</string>
@@ -287,10 +283,10 @@
   <string name="action_upload">Lamang shagun jaw u</string>
   <string name="collect.blank_action.desc_more.options">Kaga lata la na lam ni</string>
   <string name="action_next">Hpang na langai</string>
-  <string name="Verification_Label_meter">Shadawn jitna mita mi %f</string>
-  <string name="Verification_Label_MeterPerSecond">Hkying sekkan mi hta Shadawn jitna mita mi %f</string>
+  <string name="meter">Shadawn jitna mita mi %f</string>
+  <string name="meter_per_second">Hkying sekkan mi hta Shadawn jitna mita mi %f</string>
   <string name="tella">Tella</string>
-  <string name="intro_document_protect"><![CDATA[Matsing ningting ai lam hte Makawp maga ai lam galaw u]]></string>
+  <string name="intro_document_protect">Matsing ningting ai lam hte Makawp maga ai lam galaw u</string>
   <string name="onboard_setup_lock">Nang hku nna Tella hpe gara hku sumsaw la da mayu ai rai?</string>
   <string name="onboard_password">Ga makoi</string>
   <string name="onboard_password_description">Shim dik htum lata la ai lam</string>
@@ -332,7 +328,6 @@
   <string name="settings.sec_lock_timeout_30min">Minit sumshi (Nari chyen mi)</string>
   <string name="settings.sec_lock_timeout_1hour">hkying hkum mi (Nari hkum mi)</string>
   <string name="settings.sec_lock_timeout_desc">Talla hpe sumsaw la na matu aten kade daram na ai lam hpe myit dawdan u. Aten grau nna kadun ai rai yang, Tella hpe sumsaw hpaw da ai ten hta, na a jak hpe marai langai ngai sawk tam ai hte seng ai myit tsang lam hpe shayawm ya lu ai majaw, grau nna shim nga ai.</string>
-  <string name="settings.prot_select_delete.vault">Gawk (Vault) hpe shaprai kau u</string>
   <string name="settings.sec_delete.vault_tooltip">Tella kata bang da ai lamang nhtan ni yawng hpe shaprai kau u.</string>
   <string name="settings.sec_delete.forms_tooltip">Laika nhprang hte tang shawn da ai hkrang laika ni yawng hpe shaprai kau u.</string>
   <string name="settings.sec_delete.servers_tooltip">Madung kompyuta ni hte na a matut mahkai ai lam ni hte, shanhte hte seng ai hkrang laika ni yawng hpe shaprai kau u.</string>
@@ -350,9 +345,9 @@
   <string name="settings.servers_setup_hide_behind_camouflage_title">Bungli lamang (app) ajet langai a hpang e makoi da u</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">Shim dik htum lata la ai lam: Tatut akyu jashawn nga ai bungli lamang a hpang e, Tella hpe ning-ip makoi magap da u</string>
   <string name="settings.servers_setup_change_name_icon_title">MYING HTE LAMANG MASAT KUMLA HPE GALAI KAU U</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><![CDATA[<b>Shim lam yawm ai</b> Tella gaw kaga bungli lamang(app) mying hte lamang masat kumla(icon) hku nna pat man ntsa pru wa na re.]]></string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Shim lam yawm ai</b> Tella gaw kaga bungli lamang(app) mying hte lamang masat kumla(icon) hku nna pat man ntsa pru wa na re.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">Sawn sang jak (Calculator) bungli lamang (app)</string>
-  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>Grau shim hkra:</b> Tatut ahkyu jashawn ngai ai sawn sang jak bungli lamang langai a hpang e, Tella hpe ning-ip makoi da ai. Sumsaw hpaw nna Tella hpe hpaw na matu, sawn sang jak hta na a dinghkrai masat htihkum (PIN) hpe jat bang u.]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Grau shim hkra:</b> Tatut ahkyu jashawn ngai ai sawn sang jak bungli lamang langai a hpang e, Tella hpe ning-ip makoi da ai. Sumsaw hpaw nna Tella hpe hpaw na matu, sawn sang jak hta na a dinghkrai masat htihkum (PIN) hpe jat bang u.</string>
   <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[Dinghkrai masat htihkum(PIN) sumsaw hpe nang lang ai rai yang chyu sha, sawn sang jak makoi magap ai lam hpe galaw ya lu nga ai. <font color=\"#D6933B\"><b>Sumsaw hpe ndai kaw galai u</font></b>]]></string>
   <string name="settings.sec_change_lock_type_warning">Na a sumsaw ladat hpe nang galai kau ai rai yang, makoi magap ai lam n mai galaw sai</string>
   <string name="action_continue">Dingngam galaw u</string>
@@ -368,7 +363,6 @@
   <string name="settings.camo_gamestation">Ginsuphpan Dabang</string>
   <string name="settings.camo_playnow">Ya Ginsup u</string>
   <string name="settings.camo_jeweldash">Ja Dumbri</string>
-  <string name="settings.camo_clock">Na ri</string>
   <string name="settings.camo_time">Aten</string>
   <string name="settings.camo_stopwatch">Jahkring masat Nari</string>
   <string name="fragment_mic">Nsen rim jak</string>
@@ -377,7 +371,6 @@
   <string name="recorder_toast_recording.saved">Nsen rim ai lam hpe na a Tella lamang nhtan hta e matsing bang da sai</string>
   <string name="onboard.intro_title">Tella kaw na hkap tau la ga ai</string>
   <string name="onboard.intro_get_started">Galaw hpang u</string>
-  <string name="onboard.intro_organization_code">Organization kaw na code nambat lang na</string>
   <string name="onboard.title_camera">Sumla dem jak (Kemra)</string>
   <string name="onboard.expl_camera">Dat sumla ni hte sumla hkrung ni hpe Tella kaw dan tawk dem u. Ndai lamang nhtan ni hpe Tella hta shi hte shi ning-ip ga makoi hte la da nna, matsing bang da nhtawm, na a phone kata rawng ai ayan lamang madun gawk (gallery) kaw na mu lu na n rai sai.</string>
   <string name="onboard.title_recorder">Nsen rim jak</string>
@@ -418,7 +411,7 @@
   <string name="Home_BottomNav_Camera">Sumla dem jak (Kemra)</string>
   <string name="Home_BottomNav_Forms">Hkrang laika ni</string>
   <string name="Home_BottomNav_Reports">Munghtawn laika ni</string>
-  <string name="Vault_Move_AppBar">\"%s\" Htawt sit u\"</string>
+  <string name="Vault_Move_AppBar">"%s\" Htawt sit u"</string>
   <string name="Vault_CreateFolder_SheetAction">Shalat shapraw u</string>
   <string name="ServerSettings_ServerName_ToolTip">Hpang de, madung kompyuta (server) ni bai jat bang ai rai yang, dai hpe matsing lu na matu, na a madung kompyuta hpe amying langai jaw da u. Dai gaw, wuhpung langai a mying, bungli masing hte seng ai mying zawn re ai ni mai byin nga ai.</string>
   <plurals name="Vault_Importing_SheetProgress">
@@ -433,7 +426,7 @@
   <string name="Rec_Exit_SheetTitle">Na a nsen rim da ai lamang nhtan hpe matsing bang da na kun?</string>
   <string name="Rec_Exit_SheetText">Na a nsen rim ai lam hpe n matsing bang da ai. Rai n pru yang, dai hpe nang matsing bang da mayu ai kun?</string>
   <string name="Vault_AudioRecordings_AppBar">Nsen rim da ai lamang nhtan ni</string>
-  <string name="Vault_Encryting_SheetText" formatted="false">%d% jahkum shatsup ngut sai</string>
+  <string name="Vault_Encryting_SheetText">%d% jahkum shatsup ngut sai</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Ning-ip ga makoi hte la da ai ladat(encryption) hpe dawm kau nna, lamang nhtan (file) hpe shaprai kau na kun?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">Nang dawm kau ai rai yang, na a lamang nhtan (file) hpe shamat kau na re</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">NING-IP GA MAKOI HTE LA DA AI LADAT(ENCRYPTION) HPE BAI HPANG U</string>
@@ -444,46 +437,19 @@
   <string name="SettingsCamo_EnterLock_Password">Na a makoi magap ai ladat hpe galai na matu, na a ga makoi hpe dip bang u</string>
   <string name="settings.gen_select_about">Tella a lam hte Karum ningtum</string>
   <string name="settings.gen_select_language">Tsun Shaga Ga</string>
-  <string name="gallery_list.items_show.only.videos">Sumla hkrung ni</string>
-  <string name="gallery_list.items_show.only.audio">Nsen rim da ai lamang nhtan ni</string>
   <string name="home_action.desc_quick.exit">Pru u</string>
-  <string name="onboard.camo_heading">Makoi magap ai lam</string>
   <string name="settings.camo_camera4">Sumla dem jak (Kemra)</string>
   <string name="settings.camo_weather1">Lamu marang masa</string>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Lamang nhtan (file) ni hpe lata san u</string>
-
-  <string name="action_yes">yes</string>
-  <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.\n• Your data is aggregated weekly on your device before it is sent to us.\n• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week\n💾  32 files stored in Tella\n📖  Spanish language selected\n⚡  1 server connected\n😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
-  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
-  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
-  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
-  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
-  <string name="Uwazi_Templates_TabTitle">Templates</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
-  <string name="action_no">no</string>
-  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
-  <string name="Timeout_Warning_Title">Warnings</string>
-  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="settings_sec_security_screen">Screen security</string>
-  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

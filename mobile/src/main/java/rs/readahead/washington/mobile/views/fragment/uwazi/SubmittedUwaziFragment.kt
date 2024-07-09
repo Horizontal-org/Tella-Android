@@ -16,7 +16,8 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.adapters.UwaziSubmitt
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.SEND_ENTITY
 
 class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding>(
-    FragmentSubmittedUwaziBinding::inflate) {
+    FragmentSubmittedUwaziBinding::inflate
+) {
 
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val adapterSubmitted: UwaziSubmittedAdapter by lazy { UwaziSubmittedAdapter() }
@@ -34,33 +35,33 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
     private fun initObservers() {
         with(viewModel) {
 
-            submittedInstances.observe(viewLifecycleOwner, {
+            submittedInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
                     binding?.textViewEmptyOutbox?.isVisible = true
                     binding?.submittedRecyclerView?.isVisible = false
                 } else {
-                    (it as ArrayList).add(0,getString(R.string.Uwazi_Submitted_Header_Text))
+                    (it as ArrayList).add(0, getString(R.string.Uwazi_Submitted_Header_Text))
                     binding?.textViewEmptyOutbox?.isVisible = false
                     adapterSubmitted.setEntities(it)
                 }
 
-            })
+            }
 
-            showInstanceSheetMore.observe(viewLifecycleOwner, {
+            showInstanceSheetMore.observe(viewLifecycleOwner) {
                 showDraftsMenu(it)
-            })
+            }
 
-            onInstanceSuccess.observe(viewLifecycleOwner,{
+            onInstanceSuccess.observe(viewLifecycleOwner) {
                 openEntityInstance(it)
-            })
+            }
 
-            openEntityInstance.observe(viewLifecycleOwner,{
+            openEntityInstance.observe(viewLifecycleOwner) {
                 openEntityInstance(it)
-            })
+            }
 
-            instanceDeleteD.observe(viewLifecycleOwner,{
+            instanceDeleteD.observe(viewLifecycleOwner) {
                 listSubmitted()
-            })
+            }
         }
     }
 
@@ -68,7 +69,7 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
         BottomSheetUtils.showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             instance.title,
-            getString(R.string.Uwazi_Action_ViewEntity),
+            getString(R.string.View_Report),
             getString(R.string.Uwazi_Action_DeleteEntity),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
@@ -82,8 +83,9 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
-            requireContext().getString(R.string.action_cancel)
+            requireContext().getString(R.string.action_delete),
+            requireContext().getString(R.string.action_cancel),
+            iconView = R.drawable.ic_eye_white
         )
     }
 
@@ -94,7 +96,7 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
 
     private fun initView() {
         binding?.submittedRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
             adapter = adapterSubmitted
         }
     }

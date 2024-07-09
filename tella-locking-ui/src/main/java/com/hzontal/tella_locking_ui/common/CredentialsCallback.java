@@ -10,4 +10,8 @@ public interface CredentialsCallback {
     void onLockConfirmed(Context context);
 
     void onUpdateUnlocking();
+
+    void onFailedAttempts(long num);
+
+    void saveRemainingAttempts(long num);
 }

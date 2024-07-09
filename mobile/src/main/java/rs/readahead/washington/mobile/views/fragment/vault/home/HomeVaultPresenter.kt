@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
-import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -43,12 +42,11 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
         disposable.dispose()
         view = null
     }
-
     override fun executePanicMode() {
         keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
-                if (SharedPrefs.getInstance().isEraseGalleryActive) {
+                if (Preferences.isDeleteGalleryEnabled()) {
                     rxVault?.destroy()?.blockingAwait()
                     MediaFileHandler.destroyGallery(appContext!!)
                 }
@@ -56,7 +54,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                     dataSource.deleteDatabase()
                 } else {
                     if (Preferences.isEraseForms()) {
-                        dataSource.deleteForms()
+                        dataSource.deleteFormsAndRelatedTables()
                     }
                 }
                 clearSharedPreferences()
@@ -71,22 +69,49 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
     }
 
     override fun countTUServers() {
+        disposable.add(keyDataSource.dataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: DataSource -> obj.listTellaUploadServers() }
+            .subscribe(
+                { servers ->
+                    view?.onCountTUServersEnded(servers)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountUwaziServersFailed(throwable)
+            }
+        )
     }
 
     override fun countCollectServers() {
         disposable.add(keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: DataSource -> obj.countCollectServers() }
+            .flatMapSingle { obj: DataSource -> obj.listCollectServers() }
             .subscribe(
-                { num: Long? ->
-                    view?.onCountCollectServersEnded(
-                        num
-                    )
+                { servers ->
+                    view?.onCountCollectServersEnded(servers)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 view?.onCountCollectServersFailed(throwable)
+            }
+        )
+    }
+
+    override fun countUwaziServers() {
+        disposable.add(keyDataSource.uwaziDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: UwaziDataSource -> obj.listUwaziServers() }
+            .subscribe(
+                { servers ->
+                    view?.onCountUwaziServersEnded(servers)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountUwaziServersFailed(throwable)
             }
         )
     }

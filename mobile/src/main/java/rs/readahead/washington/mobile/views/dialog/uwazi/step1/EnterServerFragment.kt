@@ -19,13 +19,12 @@ import rs.readahead.washington.mobile.databinding.FragmentEnterServerBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
+import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.TITLE_KEY
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowViewModel
 import rs.readahead.washington.mobile.views.dialog.uwazi.step2.LoginTypeFragment
 import rs.readahead.washington.mobile.views.dialog.uwazi.step3.LoginFragment
-
-const val IS_UPDATE_SERVER = "is_update_server"
 
 class EnterServerFragment : BaseFragment() {
     private var validated = true
@@ -36,7 +35,8 @@ class EnterServerFragment : BaseFragment() {
     private var serverUwazi: UWaziUploadServer? = null
 
     companion object {
-        val TAG = EnterServerFragment::class.java.simpleName
+        val TAG: String = EnterServerFragment::class.java.simpleName
+
         @JvmStatic
         fun newInstance(server: UWaziUploadServer, isUpdate: Boolean): EnterServerFragment {
             val frag = EnterServerFragment()
@@ -44,7 +44,7 @@ class EnterServerFragment : BaseFragment() {
             args.putInt(TITLE_KEY, R.string.settings_docu_dialog_title_server_settings)
             args.putSerializable(ID_KEY, server.id)
             args.putString(OBJECT_KEY, Gson().toJson(server))
-            args.putBoolean(rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER, isUpdate)
+            args.putBoolean(IS_UPDATE_SERVER, isUpdate)
             frag.arguments = args
             return frag
         }
@@ -65,14 +65,13 @@ class EnterServerFragment : BaseFragment() {
     }
 
     override fun initView(view: View) {
-        arguments?.getBoolean(rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER)?.let {
+        arguments?.getBoolean(IS_UPDATE_SERVER)?.let {
             isUpdate = it
         }
-
         arguments?.getString(OBJECT_KEY)?.let {
             serverUwazi = Gson().fromJson(it, UWaziUploadServer::class.java)
         }
-        if (serverUwazi != null){
+        if (serverUwazi != null) {
             binding.url.setText(serverUwazi!!.url)
         }
     }
@@ -80,12 +79,12 @@ class EnterServerFragment : BaseFragment() {
     private fun initListeners() {
         with(binding) {
             backBtn.setOnClickListener {
-                activity.finish()
+                baseActivity.finish()
             }
             nextBtn.setOnClickListener {
-                if (!MyApplication.isConnectedToInternet(activity)) {
+                if (!MyApplication.isConnectedToInternet(baseActivity)) {
                     DialogUtils.showBottomMessage(
-                        activity,
+                        baseActivity,
                         getString(R.string.settings_docu_error_no_internet),
                         true
                     )
@@ -114,7 +113,7 @@ class EnterServerFragment : BaseFragment() {
                 validated = false
             }
             server.url = url
-            if (serverUwazi!=null){
+            if (serverUwazi != null) {
                 serverUwazi?.url = url
             }
         }
@@ -122,24 +121,30 @@ class EnterServerFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            isPublic.observe(viewLifecycleOwner, { isPublicInstance ->
+            isPublic.observe(viewLifecycleOwner) { isPublicInstance ->
                 if (isPublicInstance) {
-                    activity.addFragment(
-                        LoginTypeFragment.newInstance(if (serverUwazi == null) server else serverUwazi!!, isUpdate),
+                    baseActivity.addFragment(
+                        LoginTypeFragment.newInstance(
+                            if (serverUwazi == null) server else serverUwazi!!,
+                            isUpdate
+                        ),
                         R.id.container
                     )
                 } else {
-                    activity.addFragment(
-                        LoginFragment.newInstance(if (serverUwazi == null) server else serverUwazi!!, isUpdate),
+                    baseActivity.addFragment(
+                        LoginFragment.newInstance(
+                            if (serverUwazi == null) server else serverUwazi!!,
+                            isUpdate
+                        ),
                         R.id.container
                     )
                 }
-                KeyboardUtil.hideKeyboard(activity)
-            })
+                KeyboardUtil.hideKeyboard(baseActivity,binding.root)
+            }
 
-            progress.observe(viewLifecycleOwner,{
+            progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
-            })
+            }
         }
     }
 

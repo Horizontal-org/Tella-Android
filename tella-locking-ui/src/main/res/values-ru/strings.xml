@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="LockSelect_Action_Cancel">Отменить</string>
-  <string name="LockSelect_Action_Back">Back</string>
-  <string name="LockSelect_Action_Confirm">Продолжить</string>
-  <string name="LockPatternConfirm_Action_Confirm">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
-  <string name="LockSelect_Action_Continue">Продолжить</string>
-  <string name="LockPatternSet_Draw_Pattern">Нарисуйте шаблон разблокировки</string>
-  <string name="LockPatternSet_Pattern_Recorded">Шаблон записан</string>
-  <string name="UnlockPattern_PatternTooShort">Соедините хотя бы %d точек, пожалуйста перерисуйте</string>
-  <string name="LockPatternSet_RecordingPattern">Отпустите палец, когда закончите</string>
-  <string name="LockPatternSet_Action_Redraw">Перерисовать</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Неправильный шаблон, попробуйте еще раз</string>
-  <string name="LockPatternSet_Message_PatternStarted">Шаблон начался</string>
-  <string name="LockPatternSet_Message_PatternCleared">Шаблон очищен</string>
-  <string name="LockPatternSet_Message_CellAdded">Ячейка добавлена</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Ячейка <xliff:g id="cell_index" example="3"> %1$d </xliff:g> добавлена</string>
-  <string name="LockPatternSet_Message_PatternDetected">Шаблон завершен</string>
-  <string name="UnLockPattern_PatternArea">Область шаблона</string>
-  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to 
+    <string name="LockSelect_Action_Cancel">Отменить</string>
+    <string name="LockSelect_Action_Back">Back</string>
+    <string name="LockSelect_Action_Confirm">Продолжить</string>
+    <string name="LockPatternConfirm_Action_Confirm">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
+    <string name="LockSelect_Action_Continue">Продолжить</string>
+    <string name="LockPatternSet_Draw_Pattern">Нарисуйте шаблон разблокировки</string>
+    <string name="LockPatternSet_Pattern_Recorded">Шаблон записан</string>
+    <string name="UnlockPattern_PatternTooShort">Соедините хотя бы %d точек, пожалуйста перерисуйте</string>
+    <string name="LockPatternSet_RecordingPattern">Отпустите палец, когда закончите</string>
+    <string name="LockPatternSet_Action_Redraw">Перерисовать</string>
+    <string name="LockPatternConfirm_Message_WrongPattern">Неправильный шаблон, попробуйте еще раз</string>
+    <string name="LockPatternSet_Message_PatternStarted">Шаблон начался</string>
+    <string name="LockPatternSet_Message_PatternCleared">Шаблон очищен</string>
+    <string name="LockPatternSet_Message_CellAdded">Ячейка добавлена</string>
+    <string name="LockPatternSet_Message_CellAddedVerbose">Ячейка <xliff:g example="3" id="cell_index"> %1$d </xliff:g> добавлена</string>
+    <string name="LockPatternSet_Message_PatternDetected">Шаблон завершен</string>
+    <string name="UnLockPattern_PatternArea">Область шаблона</string>
+    <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
 unlock Tella</string>
-  <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
-  <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
-  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
+    <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
+    <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
+    <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
 Tella</string>
-  <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
-  <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
-  <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,
+    <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
+    <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
+    <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,
  please try again</string>
-  <string name="UnlockPassword_Message_EnterYourPassword">Enter your password</string>
-  <string name="LockPasswordSet_Message_Hint">Use at least 6 characters and avoid
+    <string name="UnlockPassword_Message_EnterYourPassword">Enter your password</string>
+    <string name="LockPasswordSet_Message_Hint">Use at least 6 characters and avoid
  using passwords that can be guessed
  easily, such as “password.” The longer
  your password, the more secure it is.</string>
-  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
-  <string name="LockSuccess_Message_AllDone">You\'re all
+    <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
+    <string name="LockSuccess_Message_AllDone">You\'re all
 done!</string>
-  <string name="LockSuccess_Message_Hint">You can always change your lock option
+    <string name="LockSuccess_Message_Hint">You can always change your lock option
  and further customize Tella in Settings.</string>
-  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
+    <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
-  <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
+    <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>
-  <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current
+    <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current
  password to change your
  lock</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPattern">Draw your current
+    <string name="LockPatternSet_Settings_DrawCurrentPattern">Draw your current
  pattern to change your
  lock</string>
-  <string name="LockPinSet_Settings_EnterCurrentPin">Enter your current PIN to
+    <string name="LockPinSet_Settings_EnterCurrentPin">Enter your current PIN to
  change your lock   </string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current
+    <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current
  password to change your
  camouflage</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current
+    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current
  pattern to change your
  camouflage</string>
-  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to
+    <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to
  change your camouflage   </string>
-  <string name="Settings_Action_SetLock">Lock</string>
-  <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
+    <string name="Settings_Action_SetLock">Lock</string>
+    <string name="Settings_Message_LockChanged">Your lock has been changed!</string>
+    <string name="incorrect_pattern">Incorrect Pattern.\n\n</string>
+    <string name="incorrect_pin">Incorrect Pin. \n\n</string>
+    <string name="incorrect_password">Incorrect Password. \n\n</string>
+    <string name="attempts_remaining_singular">You have 1 attempt remaining until\n everything in your Tella is deleted.</string>
+    <string name="attempts_remaining_plural">You have %1$d attempts remaining until\n everything in your Tella is deleted.</string>
+    <string name="exceeded_max_attempts">You have exceeded the maximum number of\n incorrect login attempts. All your Tella data\n has been deleted.</string>
 </resources>

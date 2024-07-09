@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
+    android:id="@+id/rootView"
     android:background="@color/space_cadet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,6 +22,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:arrowBackIconContentDescription="@string/action_go_back"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
         <org.hzontal.shared_ui.breadcrumb.BreadcrumbsView
@@ -47,27 +48,37 @@
             android:paddingHorizontal="@dimen/tella_main_vertical"
             android:paddingBottom="10dp">
 
-            <TextView
-                android:id="@+id/filterNameTv"
-                style="@style/Tella_Main_White_Text.Small"
-                android:textSize="13sp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Vault_Filter_Name"
+                android:id="@+id/filterGroup"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginHorizontal="10dp"
-                android:src="@drawable/ic_arrow_up_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/filterNameTv"
                 app:layout_constraintTop_toTopOf="parent"
+                android:layout_gravity="bottom"
+                android:clickable="true"
+                android:focusable="true"
+               >
 
-                />
+                <TextView
+                    android:id="@+id/filterNameTv"
+                    style="@style/Tella_Main_White_Text.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:text="@string/Vault_Filter_Name"
+                    android:textSize="13sp" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/filterNameImg"
+                    android:layout_toEndOf="@id/filterNameTv"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_arrow_up_white"
+                    android:layout_alignBaseline="@id/filterNameTv" />
+            </LinearLayout>
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/checkBoxList"
@@ -77,6 +88,7 @@
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
                 android:padding="5dp"
                 android:src="@drawable/ic_check"
+                android:contentDescription="@string/action_select"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -89,6 +101,7 @@
                 android:src="@drawable/ic_list_check"
                 android:visibility="gone"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_list"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -99,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/grid"
                 android:padding="6dp"
+                android:contentDescription="@string/action_display_gridView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -124,10 +138,12 @@
         app:fabCustomSize="50dp"
         app:layout_anchorGravity="center"
         app:maxImageSize="30dp"
+        android:contentDescription="@string/action_add"
         app:srcCompat="@drawable/ic_plus"
         app:useCompatPadding="true"
         tools:ignore="VectorDrawableCompat"
         style="@style/Main_Floating_Action_Button_Style" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_move_button"
@@ -140,7 +156,9 @@
         android:layout_marginEnd="28dp"
         tools:ignore="VectorDrawableCompat"
         android:visibility="gone"
+        android:contentDescription="@string/action_create_new_folder"
         style="@style/Move_Floating_Action_Button_Style" />
+
 
     <LinearLayout
         android:id="@+id/emptyViewMsgContainer"

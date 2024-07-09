@@ -20,7 +20,8 @@
         android:src="@drawable/ic_close_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/action_cancel"
+         />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"

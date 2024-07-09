@@ -13,7 +13,7 @@
         style="@style/Tella_Main_White_Text.Meduim"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/Vault_RecentFiles"
+        android:text="@string/Connection_Title"
         android:textColor="@color/wa_white_90"
         android:letterSpacing="0.05"
         />
@@ -26,7 +26,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="horizontal"
         android:layout_marginTop="17dp"
-        tools:listitem="@layout/item_vault_attachmenets"
+        tools:listitem="@layout/item_home_vault_server"
         >
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

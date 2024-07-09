@@ -17,9 +17,11 @@ import java.io.ByteArrayOutputStream;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+import org.hzontal.shared_ui.utils.DialogUtils;
+
 import rs.readahead.washington.mobile.R;
+import rs.readahead.washington.mobile.databinding.ActivitySignatureBinding;
 import rs.readahead.washington.mobile.mvp.contract.ISignaturePresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.SignaturePresenter;
 import rs.readahead.washington.mobile.util.DialogsUtil;
@@ -31,13 +33,13 @@ public class SignatureActivity extends BaseLockActivity implements
 
     public static final String MEDIA_FILE_KEY = "mfk";
 
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.ink)
     InkView ink;
 
     private ProgressDialog progressDialog;
     private SignaturePresenter presenter;
+
+    private ActivitySignatureBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,9 @@ public class SignatureActivity extends BaseLockActivity implements
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_signature);
-        ButterKnife.bind(this);
+        binding = ActivitySignatureBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
 
         presenter = new SignaturePresenter(this);
 
@@ -119,7 +122,11 @@ public class SignatureActivity extends BaseLockActivity implements
     @Override
     public void onAddingEnd() {
         hideProgressDialog();
-        showToast(R.string.gallery_toast_file_encrypted);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.gallery_toast_file_encrypted),
+                false
+        );
     }
 
     @Override
@@ -130,7 +137,11 @@ public class SignatureActivity extends BaseLockActivity implements
 
     @Override
     public void onAddError(Throwable error) {
-        showToast(R.string.collect_form_signature_toast_fail_saving);
+        DialogUtils.showBottomMessage(
+                this,
+                getString(R.string.collect_form_signature_toast_fail_saving),
+                true
+        );
     }
 
     @Override
@@ -156,5 +167,10 @@ public class SignatureActivity extends BaseLockActivity implements
             progressDialog.dismiss();
             progressDialog = null;
         }
+    }
+
+    private void initView() {
+        toolbar = binding.toolbar;
+        ink = binding.content.ink;
     }
 }

@@ -27,15 +27,12 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_name_and_logo, container, false)
-
         initView(view)
-
         return view
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).hideProgress()
-
+        (baseActivity as OnBoardActivityInterface).hideProgress()
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
         adapter = CamouflageRecycleViewAdapter()
@@ -47,7 +44,7 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
         adapter.setIcons(cm.options, cm.selectedAliasPosition)
 
         view.findViewById<View>(R.id.back).setOnClickListener {
-            activity.onBackPressed()
+            baseActivity.onBackPressed()
         }
 
         view.findViewById<View>(R.id.next).setOnClickListener {
@@ -57,14 +54,17 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
 
     private fun confirmCamouflage(position: Int) {
         BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-            activity.supportFragmentManager,
+            baseActivity.supportFragmentManager,
             getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
             getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
-            getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
+            getString(
+                R.string.settings_sec_confirm_camouflage_desc,
+                getString(cm.options[position].stringResId)
+            ),
             getString(R.string.settings_sec_confirm_exit_tella),
             getString(R.string.action_cancel),
-            ContextCompat.getDrawable(activity,cm.options[position].drawableResId),
+            ContextCompat.getDrawable(baseActivity, cm.options[position].drawableResId),
             consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     camouflage(position)
@@ -84,7 +84,7 @@ class OnBoardHideNameLogoFragment : BaseFragment() {
             }
         } catch (ignored: IndexOutOfBoundsException) {
         } finally {
-            activity.addFragment(
+            baseActivity.addFragment(
                 this,
                 OnBoardHideTellaSet(),
                 R.id.rootOnboard

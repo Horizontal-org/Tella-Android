@@ -1,8 +1,16 @@
 package rs.readahead.washington.mobile.data.sharedpref;
 
+
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_FRESH_INSTALL;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_MIGRATED_MAIN_DB;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.hzontal.shared_ui.utils.CalculatorTheme;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -11,11 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Preferences {
-    private static SharedPrefs sharedPrefs = SharedPrefs.getInstance();
+    private static final SharedPrefs sharedPrefs = SharedPrefs.getInstance();
 
     // cache
-    private static Map<String, Boolean> bCache = new ConcurrentHashMap<>();
-
+    private static final Map<String, Boolean> bCache = new ConcurrentHashMap<>();
 
     public static boolean isSecretModeActive() {
         return getBoolean(SharedPrefs.SECRET_MODE_ENABLED, false);
@@ -81,10 +88,20 @@ public class Preferences {
         setBoolean(SharedPrefs.COLLECT_OPTION, value);
     }
 
-    public static boolean isShutterMute() { return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false); }
+    public static boolean isShutterMute() {
+        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, true);
+    }
 
     public static void setShutterMute(boolean value) {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
+    }
+
+    public static boolean isKeepExif() {
+        return getBoolean(SharedPrefs.KEEP_EXIF, false);
+    }
+
+    public static void setKeepExif(boolean value) {
+        setBoolean(SharedPrefs.KEEP_EXIF, value);
     }
 
     public static boolean isDeleteServerSettingsActive() {
@@ -118,6 +135,14 @@ public class Preferences {
 
     public static void setAppAlias(@NonNull String value) {
         setString(SharedPrefs.APP_ALIAS_NAME, value);
+    }
+
+    public static String getCalculatorTheme() {
+        return getString(SharedPrefs.CALCULATOR_THEME, CalculatorTheme.GREEN_SKIN.name());
+    }
+
+    public static void setCalculatorTheme(@NonNull String value) {
+        setString(SharedPrefs.CALCULATOR_THEME, value);
     }
 
     @Nullable
@@ -167,6 +192,22 @@ public class Preferences {
 
     public static void setShowRecentFiles(boolean value) {
         setBoolean(SharedPrefs.SHOW_RECENT_FILES, value);
+    }
+
+    public static boolean isTextJustification() {
+        return getBoolean(SharedPrefs.TEXT_JUSTIFICATION, false);
+    }
+
+    public static void setTextJustification(boolean value) {
+        setBoolean(SharedPrefs.TEXT_JUSTIFICATION, value);
+    }
+
+    public static boolean isTextSpacing() {
+        return getBoolean(SharedPrefs.TEXT_SPACING, false);
+    }
+
+    public static void setTextSpacing(boolean value) {
+        setBoolean(SharedPrefs.TEXT_SPACING, value);
     }
 
     public static boolean isUpgradeTella2() {
@@ -258,6 +299,30 @@ public class Preferences {
         setLong(SharedPrefs.LOCK_TIMEOUT, value);
     }
 
+    public static Long getFailedUnlockOption() {
+        return getLong(FAILED_UNLOCK_OPTION, 0);
+    }
+
+    public static void setFailedUnlockOption(Long option) {
+        setLong(FAILED_UNLOCK_OPTION, option);
+    }
+
+    public static boolean isShowUnlockRemainingAttempts() {
+        return getBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, true);
+    }
+
+    public static void setShowUnlockRemainingAttempts(boolean option) {
+        setBoolean(SHOW_REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
+    public static long getUnlockRemainingAttempts() {
+        return getLong(REMAINING_UNLOCK_ATTEMPTS, 0);
+    }
+
+    public static void setUnlockRemainingAttempts(long option) {
+        setLong(REMAINING_UNLOCK_ATTEMPTS, option);
+    }
+
     public static boolean isTempTimeout() {
         return getBoolean(SharedPrefs.TEMP_TIMEOUT, false);
     }
@@ -272,6 +337,14 @@ public class Preferences {
 
     public static void setExitTimeout(boolean value) {
         setBoolean(SharedPrefs.EXIT_TIMEOUT, value);
+    }
+
+    public static boolean isJavarosa3Upgraded() {
+        return getBoolean(SharedPrefs.JAVAROSA_3_UPGRADE, false);
+    }
+
+    public static void setJavarosa3Upgraded(boolean value) {
+        setBoolean(SharedPrefs.JAVAROSA_3_UPGRADE, value);
     }
 
     public static void setAutoUpload(boolean value) {
@@ -348,6 +421,21 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
     }
 
+    public static boolean isShowUpdateMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowUpdateMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
+    }
+    public static boolean isShowFailedMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowFailedMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, value);
+    }
+
     public static boolean hasAcceptedImprovements() {
         return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
     }
@@ -357,17 +445,42 @@ public class Preferences {
         setTimeAcceptedImprovements(new Date().getTime());
     }
 
-    private static void setTimeAcceptedImprovements(Long value) { setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value); }
     public static Long getTimeAcceptedImprovements() {
         return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
     }
-    public static boolean isTimeToShowReminderImprovements() {
-        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false ;
-        Date currentDate = new Date();
-        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
-        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime() ;
+
+    private static void setTimeAcceptedImprovements(Long value) {
+        setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
     }
 
-    private Preferences() {
+    public static boolean isTimeToShowReminderImprovements() {
+        if (getTimeAcceptedImprovements() == 0L || !hasAcceptedImprovements()) return false;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedImprovements())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
+    }
+
+    public static boolean isFeedbackSharingEnabled() {
+        return getBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, false);
+    }
+
+    public static void setFeedbackSharingEnabled(boolean value) {
+        setBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, value);
+    }
+
+    public static boolean isAlreadyMigratedMainDB() {
+        return getBoolean(IS_MIGRATED_MAIN_DB, false);
+    }
+
+    public static void setAlreadyMigratedMainDB(boolean value) {
+        setBoolean(IS_MIGRATED_MAIN_DB, value);
+    }
+
+    public static boolean isFreshInstall() {
+        return getBoolean(IS_FRESH_INSTALL, false);
+    }
+
+    public static void setFreshInstall(boolean value) {
+        setBoolean(IS_FRESH_INSTALL, value);
     }
 }

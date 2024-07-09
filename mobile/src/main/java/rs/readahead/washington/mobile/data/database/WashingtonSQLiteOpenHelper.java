@@ -1,104 +1,46 @@
 package rs.readahead.washington.mobile.data.database;
 
+import static rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
+
 import android.content.Context;
 
-import net.sqlcipher.database.SQLiteDatabase;
-
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
 
-
-    WashingtonSQLiteOpenHelper(Context context) {
-        super(context, D.DATABASE_NAME, null, D.DATABASE_VERSION);
-    }
-
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
+
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        // we have started from version 1
-
-        // DBv1
-        db.execSQL(createTableCollectServer());
-        db.execSQL(createTableMediaFile());
-        db.execSQL(createTableCollectBlankForm());
-        db.execSQL(createTableCollectFormInstance());
-        db.execSQL(createTableCollectFormInstanceMediaFile());
-        db.execSQL(createTableSettings());
-
-        // DBv2
-        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-        db.execSQL(alterTableCollectServerAddChecked());
-
-        // DBv3
-        db.execSQL(alterTableCollectBlankFormAddUpdated());
-
-        // DBv4
-        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-
-        // DBv5
-        db.execSQL(alterTableMediaFileAddHash());
-
-        // DBv6
-        db.execSQL(createTableTellaUploadServer());
-
-        // DBv7
-        db.execSQL(createTableMediaFileUploads());
-
-        //DBv8
-        db.execSQL(alterTableMediaFileUploadsAddMetadata());
-        db.execSQL(alterTableMediaFileUploadsAddManual());
-        db.execSQL(alterTableMediaFileUploadsAddServer());
-
-        //DBV9
-        db.execSQL(createTableUwaziServer());
-        db.execSQL(createTableCollectEntityUwazi());
-        db.execSQL(createTableCollectBlankTemplateUwazi());
-        db.execSQL(createTableCollectFormInstanceVaultFile());
-        db.execSQL(createTableUwaziEntityInstanceVaultFile());
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-                db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-                db.execSQL(alterTableCollectServerAddChecked());
-
-            case 2:
-                db.execSQL(alterTableCollectBlankFormAddUpdated());
-
-            case 3:
-                db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-
-            case 4:
-                db.execSQL(alterTableMediaFileAddHash());
-
-            case 5:
-                db.execSQL(createTableTellaUploadServer());
-
-            case 6:
-                db.execSQL(createTableMediaFileUploads());
-
-            case 7:
-                db.execSQL(alterTableMediaFileUploadsAddServer());
-                db.execSQL(alterTableMediaFileUploadsAddManual());
-                db.execSQL(alterTableMediaFileUploadsAddMetadata());
-
-            case 8:
-                db.execSQL(createTableCollectFormInstanceVaultFile());
-            case 9:
-                db.execSQL(createTableUwaziServer());
-                db.execSQL(createTableCollectBlankTemplateUwazi());
+    WashingtonSQLiteOpenHelper(Context context, byte[] password) {
+        super(context, password);
+        if (!isAlreadyMigratedMainDB()){
+            migrateSqlCipher3To4IfNeeded(context, password);
         }
     }
+
+    private static String objQuote(String str) {
+        return OBJ_QUOTE + str + OBJ_QUOTE;
+    }
+
+    private static String sq(String unQuotedText) {
+        return " " + objQuote(unQuotedText) + " ";
+    }
+
+    private static String cddl(String columnName, String columnType) {
+        return objQuote(columnName) + " " + columnType;
+    }
+
+    private static String cddl(String columnName, String columnType, boolean notNull) {
+        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
+    }
+
 
     private String createTableCollectServer() {
         return "CREATE TABLE " + sq(D.T_COLLECT_SERVER) + " (" +
@@ -222,6 +164,37 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
+    private String createTableReportFileUploads() {
+        return "CREATE TABLE " + sq(D.T_REPORT_FILES_UPLOAD) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, false) + " UNIQUE, " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " , " +
+                cddl(D.C_CREATED, D.INTEGER, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " , " +
+                cddl(D.C_SIZE, D.INTEGER) + " , " +
+                cddl(D.C_UPLOADED, D.INTEGER) + " DEFAULT 0, " +
+                cddl(D.C_RETRY_COUNT, D.INTEGER) + " DEFAULT 0, " +
+                cddl(D.C_SET, D.INTEGER) + " , " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE SET NULL" +
+                ");";
+    }
+
+    private String createTableResources() {
+        return "CREATE TABLE " + sq(D.T_RESOURCES) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_SERVER_ID, D.INTEGER) + " , " +
+                cddl(D.C_RESOURCES_ID, D.TEXT, false) + " UNIQUE, " +
+                cddl(D.C_RESOURCES_TITLE, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_FILE_NAME, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_RESOURCES_SIZE, D.INTEGER) + " , " +
+                cddl(D.C_RESOURCES_CREATED, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_SAVED, D.INTEGER, false) + " , " +
+                cddl(D.C_RESOURCES_PROJECT, D.TEXT, false) + " , " +
+                cddl(D.C_RESOURCES_FILE_ID, D.TEXT, false) +
+                ");";
+    }
+
     private String alterTableMediaFileUploadsAddManual() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_MANUAL_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
@@ -230,6 +203,46 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String alterTableMediaFileUploadsAddServer() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_SERVER_ID, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAccessToken() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_ACCESS_TOKEN, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectName() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_NAME, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectID() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_ID, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddProjectSlug() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_PROJECT_SLUG, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddMetatData() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_ACTIVATED_METADATA, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddBackgourndUpload() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_BACKGROUND_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAutoDelete() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_DELETE, D.INTEGER, true) + " DEFAULT 0";
+    }
+
+    private String alterTableTellaUploadServerAddAutoUpload() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_AUTO_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String alterTableMediaFileUploadsAddMetadata() {
@@ -262,6 +275,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_HASH, D.INTEGER, false);
     }
 
+    private String alterTableReportFormInstanceAddCurrentUpload() {
+        return "ALTER TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " ADD COLUMN " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
+    }
+
     private String createTableTellaUploadServer() {
         return "CREATE TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
@@ -273,7 +291,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-    private String createTableCollectBlankTemplateUwazi(){
+    private String createTableCollectBlankTemplateUwazi() {
         return "CREATE TABLE " + sq(D.T_UWAZI_BLANK_TEMPLATES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
@@ -288,7 +306,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-    private String createTableCollectEntityUwazi(){
+    private String createTableCollectEntityUwazi() {
         return "CREATE TABLE " + sq(D.T_UWAZI_ENTITY_INSTANCES) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_UWAZI_SERVER_ID, D.INTEGER, true) + " , " +
@@ -318,19 +336,163 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
-    private static String objQuote(String str) {
-        return OBJ_QUOTE + str + OBJ_QUOTE;
+    private String createTableReportFormInstance() {
+        return "CREATE TABLE " + sq(D.T_REPORT_FORM_INSTANCE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, false) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_TELLA_UPLOAD_SERVER) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE" +
+                ");";
     }
 
-    private static String sq(String unQuotedText) {
-        return " " + objQuote(unQuotedText) + " ";
+    private String createTableReportInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_REPORT_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPLOADED_SIZE, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_REPORT_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
+                ");";
     }
 
-    private static String cddl(String columnName, String columnType) {
-        return objQuote(columnName) + " " + columnType;
+    private String createTableFeedback() {
+        return "CREATE TABLE " + sq(D.T_FEEDBACK) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0  " +
+                ");";
     }
 
-    private static String cddl(String columnName, String columnType, boolean notNull) {
-        return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
+    @Override
+    public void onCreate(net.zetetic.database.sqlcipher.SQLiteDatabase db) {
+        // we have started from version 1
+
+        // DBv1
+        db.execSQL(createTableCollectServer());
+        db.execSQL(createTableMediaFile());
+        db.execSQL(createTableCollectBlankForm());
+        db.execSQL(createTableCollectFormInstance());
+        db.execSQL(createTableCollectFormInstanceMediaFile());
+        db.execSQL(createTableSettings());
+
+        // DBv2
+        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
+        db.execSQL(alterTableCollectServerAddChecked());
+
+        // DBv3
+        db.execSQL(alterTableCollectBlankFormAddUpdated());
+
+        // DBv4
+        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+
+        // DBv5
+        db.execSQL(alterTableMediaFileAddHash());
+
+        // DBv6
+        db.execSQL(createTableTellaUploadServer());
+
+        // DBv7
+        db.execSQL(createTableMediaFileUploads());
+
+        //DBv8
+        db.execSQL(alterTableMediaFileUploadsAddMetadata());
+        db.execSQL(alterTableMediaFileUploadsAddManual());
+        db.execSQL(alterTableMediaFileUploadsAddServer());
+        db.execSQL(createTableUwaziServer());
+        db.execSQL(createTableCollectEntityUwazi());
+        db.execSQL(createTableCollectBlankTemplateUwazi());
+        db.execSQL(createTableCollectFormInstanceVaultFile());
+        db.execSQL(createTableUwaziEntityInstanceVaultFile());
+
+        //DBV9
+        db.execSQL(alterTableTellaUploadServerAddAccessToken());
+        db.execSQL(alterTableTellaUploadServerAddMetatData());
+        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+        db.execSQL(alterTableTellaUploadServerAddProjectName());
+        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+        db.execSQL(alterTableTellaUploadServerAddProjectID());
+        db.execSQL(createTableReportFormInstance());
+        db.execSQL(createTableReportInstanceVaultFile());
+        db.execSQL(createTableReportFileUploads());
+
+        //DBV11
+        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+        db.execSQL(createTableFeedback());
+
+        //DBV12
+        db.execSQL(createTableResources());
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (oldVersion) {
+            case 1:
+                db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
+                db.execSQL(alterTableCollectServerAddChecked());
+               // break;
+            case 2:
+                db.execSQL(alterTableCollectBlankFormAddUpdated());
+               // break;
+            case 3:
+                db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
+               // break;
+            case 4:
+                db.execSQL(alterTableMediaFileAddHash());
+              //  break;
+            case 5:
+                db.execSQL(createTableTellaUploadServer());
+               // break;
+            case 6:
+                db.execSQL(createTableMediaFileUploads());
+                //break;
+            case 7:
+                db.execSQL(alterTableMediaFileUploadsAddServer());
+                db.execSQL(alterTableMediaFileUploadsAddManual());
+                db.execSQL(alterTableMediaFileUploadsAddMetadata());
+               // break;
+            case 8:
+                db.execSQL(createTableUwaziServer());
+                db.execSQL(createTableCollectEntityUwazi());
+                db.execSQL(createTableCollectBlankTemplateUwazi());
+                db.execSQL(createTableCollectFormInstanceVaultFile());
+                db.execSQL(createTableUwaziEntityInstanceVaultFile());
+                //break;
+            case 9:
+                db.execSQL(alterTableTellaUploadServerAddAccessToken());
+                db.execSQL(alterTableTellaUploadServerAddMetatData());
+                db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
+                db.execSQL(alterTableTellaUploadServerAddProjectName());
+                db.execSQL(alterTableTellaUploadServerAddProjectSlug());
+                db.execSQL(alterTableTellaUploadServerAddProjectID());
+                db.execSQL(createTableReportFormInstance());
+                db.execSQL(createTableReportInstanceVaultFile());
+                db.execSQL(createTableReportFileUploads());
+               // break;
+            case 10:
+                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
+                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
+                db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
+              //  break;
+            case 11:
+                db.execSQL(createTableFeedback());
+               // break;
+            case 12:
+                db.execSQL(createTableResources());
+               // break;
+        }
+    }
+
 }

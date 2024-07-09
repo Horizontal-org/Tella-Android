@@ -40,11 +40,11 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
-import rs.readahead.washington.mobile.views.activity.CameraActivity;
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity;
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
 import rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -65,7 +65,6 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     public UwaziMultiFileWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt, boolean isPdf) {
         super(context, formEntryPrompt);
-
         this.context = context;
         this.isPdf = isPdf;
         LinearLayout linearLayout = new LinearLayout(getContext());
@@ -111,6 +110,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!formEntryPrompt.isReadOnly());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
         infoFilePanel = view.findViewById(R.id.infoFilePanel);

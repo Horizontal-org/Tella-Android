@@ -28,7 +28,6 @@ import rs.readahead.washington.mobile.bus.event.GPSProviderRequiredEvent;
 import rs.readahead.washington.mobile.bus.event.LocationPermissionRequiredEvent;
 import rs.readahead.washington.mobile.mvp.contract.ILocationGettingPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.LocationGettingPresenter;
-import rs.readahead.washington.mobile.odk.FormController;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziGeoData;
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.C;
@@ -179,6 +178,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         selectButton = addButton(R.drawable.gps_fixed_icon_white);
         selectButton.setId(QuestionWidget.newUniqueId());
         selectButton.setEnabled(!isReadonly());
+        selectButton.setContentDescription(getContext().getString(R.string.action_show_location));
         selectButton.setOnClickListener(v -> {
             if (APPEARANCE_MAP.equalsIgnoreCase(appearance)) {
                 showLocationMapActivity(true);
@@ -196,6 +196,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         clearButton = addButton(R.drawable.ic_cancel_rounded);
         clearButton.setId(QuestionWidget.newUniqueId());
         clearButton.setEnabled(!isReadonly());
+        clearButton.setContentDescription(getContext().getString(R.string.action_cancel));
         clearButton.setOnClickListener(v -> clearAnswer());
 
         progressBar = view.findViewById(R.id.progressBar);

@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Enviado</string>
   <string name="home_expl_cancel.quick.delete">Pulsa en cualquier lugar para cancelar</string>
   <string name="recorder_app.bar">Grabadora</string>
-  <string name="collect_app.bar">Recopilar</string>
   <string name="settings.docu_field_username">Nombre de usuaria(o)</string>
   <string name="collect.draft_meta_date.updated">Actualizado: %1$s</string>
   <string name="settings.about_app.version">Versión</string>
@@ -89,6 +88,7 @@
     <item quantity="other">%1&amp;d archivos guardados en el dispositivo</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">¿Borrar archivo?</string>
+  <string name="gallery_delete.files_dialog.expl">El archivo seleccionado será borrado permanentemente de tu galería.</string>
   <string name="gallery_save.to.device_dialog.title">¿Guardar en la galería del dispositivo?</string>
   <string name="gallery_save.to.device_dialog.expl">Esto hará que tu archivo sea accesible desde fuera de Tella, en la galería de tu dispositivo y por otras aplicaciones.</string>
   <string name="gallery_dialog.expl_encrypting">Cifrando archivo...</string>
@@ -122,13 +122,11 @@
   <string name="settings.docu_verification_action">Modo de verificación</string>
   <string name="settings.docu_verification_action.expl">Hace tus archivos verificables al recopilar información sobre tu dispositivo y su ubicación.</string>
   <string name="collect_no.form_heading">Recopilación de datos fácil</string>
-  <string name="collect_expl_not.connected.to.server"><![CDATA[Para recibir formularios y enviar datos, primero debes conectarte a un servidor compatible. Solicita a tu organización la información del servidor y <a href=\"tella_scheme://open.collect.manage.servers.activity\">configúralo aquí</a>.]]></string>
-  <string name="collect.draft_expl_no.forms">No hay borradores de formularios para mostrar.</string>
+  <string name="collect_expl_not.connected.to.server">Para recibir formularios y enviar datos, primero debes conectarte a un servidor compatible. Solicita a tu organización la información del servidor y <a href="tella_scheme://open.collect.manage.servers.activity">configúralo aquí</a>.</string>
   <string name="collect.sent_expl_no.forms">No hay formularios enviados para mostrar.</string>
   <string name="collect.blank_expl_no.forms">No hay formularios para mostrar. Pulsa el botón de actualización para comprobar si hay formularios disponibles en los servidores a los que estás conectada(o).</string>
   <string name="settings.camo_heading">Selecciona un nombre y un logo diferentes</string>
-  <string name="collect.help_app.bar">Ayuda de Collect</string>
-  <string name="collect.help_expl_intro">Collect es una herramienta para recopilar datos al completar formularios y encuestas directamente en tu dispositivo</string>
+  <string name="gallery_expl_empty">No hay archivos para mostrar. Toca el botón + para importar los archivos. </string>
   <string name="collect.blank_toast_not.connected">No hay conexión a Internet. Inténtalo de nuevo cuando estés conectada(o) a Internet.</string>
   <string name="settings.gen_crash.reports_action">Compartir informes de fallos</string>
   <string name="settings.gen_crash.reports_action.expl">Los informes de fallos nos ayudan a mejorar Tella. Se envían automáticamente e incluyen datos tales como el modelo del dispositivo y la versión de Android.</string>
@@ -207,8 +205,8 @@
   <string name="collect_toast_fail.connection.too.weak">Tu conexión a Internet es demasiado débil para enviar el formulario. Por favor inténtalo de nuevo</string>
   <string name="gallery_toast_file.encrypted">Archivo cifrado</string>
   <string name="settings.docu_toast_disconnect.servers.delete">Se han eliminado todos los formularios y servidores</string>
-  <string name="collect.help_expl_not.connected.to.server"><![CDATA[Para recibir formularios y enviar datos, primero debes conectarte a un servidor. Pídele a tu organización la información del servidor y configura el servidor.]]></string>
-  <string name="collect.help_expl_odk"><![CDATA[Si deseas crear tus propios formularios, <a href=\"https://hzontal.org/contact/\">contáctanos</a> o usa <a href=\"https://opendatakit.org/help/help-for-hire/\">cualquier servicio basado en el Kit de Datos Abiertos (ODK)</a>]]></string>
+  <string name="collect.help_expl_not.connected.to.server">Para recibir formularios y enviar datos, primero debes conectarte a un servidor. Pídele a tu organización la información del servidor y configura el servidor.</string>
+  <string name="collect.help_expl_odk">Si deseas crear tus propios formularios, <a href="https://hzontal.org/contact/">contáctanos</a> o usa <a href="https://opendatakit.org/help/help-for-hire/">cualquier servicio basado en el Kit de Datos Abiertos (ODK)</a></string>
   <string name="collect.help_expl_no.internet">Si no estás conectada(o) a Internet, puedes igualmente completar formularios. Los datos se enviarán tan pronto como estés en línea.</string>
   <string name="collect_toast_fail.data.too.large">Tu formulario no puede ser enviado porque los adjuntos son demasiado grandes. Por favor adjunta archivos más pequeños</string>
   <string name="collect.end_heading_submitting">Enviando</string>
@@ -279,10 +277,10 @@
   <string name="action_upload">Subir</string>
   <string name="collect.blank_action.desc_more.options">Más opciones</string>
   <string name="action_next">Siguiente</string>
-  <string name="Verification_Label_meter">%f m</string>
-  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="meter">%f m</string>
+  <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
-  <string name="intro_document_protect"><![CDATA[Documentar y Proteger]]></string>
+  <string name="intro_document_protect">Documentar y Proteger</string>
   <string name="onboard_setup_lock">¿Cómo te gustaría bloquear Tella?</string>
   <string name="onboard_password">Contraseña</string>
   <string name="onboard_password_description">La opción más segura</string>
@@ -324,7 +322,7 @@
   <string name="settings.sec_lock_timeout_30min">30 minutos</string>
   <string name="settings.sec_lock_timeout_1hour">1 hora</string>
   <string name="settings.sec_lock_timeout_desc">Decide cuánto tiempo tarda Tella en bloquearse. Un tiempo más corto es más seguro porque reduce el riesgo de que alguien busque en tu dispositivo mientras Tella está desbloqueada.</string>
-  <string name="settings.prot_select_delete.vault">Borrar la Bóveda</string>
+  <string name="settings.prot_select_delete.vault">Borrar archivos</string>
   <string name="settings.sec_delete.vault_tooltip">Eliminar todos los archivos almacenados en Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Eliminar todos los borradores y formularios enviados.</string>
   <string name="settings.sec_delete.servers_tooltip">Borra tus conexiones a servidores y todos los formularios asociados a ellos.</string>
@@ -337,16 +335,17 @@
   <string name="settings.servers_hide_tella_title">Ocultar Tella</string>
   <string name="settings.servers_hide_tella_desc">Selecciona tu método preferido para ocultar Tella</string>
   <string name="settings.servers_setup_camouflage_title">Configurar Camuflaje</string>
+  <string name="settings.servers_setup_camouflage_description">Hay dos opciones de camuflaje disponibles. La primera es más rápida pero menos segura; la segunda es menos conveniente pero más segura.</string>
   <string name="settings.servers_setup_change_camouflage_title">CAMBIAR NOMBRE E ÍCONO</string>
   <string name="settings.servers_setup_change_camouflage_subtitle">Tella aparecerá en la pantalla de inicio con un nombre de aplicación e ícono diferentes.</string>
   <string name="settings.servers_setup_hide_behind_camouflage_title">esconderse detrás de una aplicación real</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">La opción más segura: Camuflar Tella detrás de una aplicación funcional</string>
   <string name="settings.servers_setup_change_name_icon_title">CAMBIAR NOMBRE E ÍCONO</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><![CDATA[<b>Menos segura:</b> Tella aparecerá en la pantalla de inicio con un nombre de aplicación y un ícono diferentes.]]></string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Menos segura:</b> Tella aparecerá en la pantalla de inicio con un nombre de aplicación y un ícono diferentes.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">Aplicación de Calculadora</string>
-  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><![CDATA[<b>Más segura:</b> Tella será ocultada detrás de una aplicación funcional de calculadora. Ingresa tu PIN en la calculadora para desbloquear y abrir Tella.]]></string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[El camuflaje de Calculadora sólo es posible si 
- utilizas un bloqueo por PIN.<font color=\"#D6933B\"><b> Cambia el bloqueo aquí</b></font>]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Más segura:</b> Tella será ocultada detrás de una aplicación funcional de calculadora. Ingresa tu PIN en la calculadora para desbloquear y abrir Tella.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">El camuflaje de Calculadora sólo es posible si 
+ utilizas un bloqueo por PIN.<font color="#D6933B"><b> Cambia el bloqueo aquí</b></font></string>
   <string name="settings.sec_change_lock_type_warning">Si cambias el método de bloqueo, el Camuflaje se desactivará</string>
   <string name="action_continue">Continuar</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -361,7 +360,6 @@
   <string name="settings.camo_gamestation">GameStation</string>
   <string name="settings.camo_playnow">JuegaAhora</string>
   <string name="settings.camo_jeweldash">Joya Brillante</string>
-  <string name="settings.camo_clock">Reloj</string>
   <string name="settings.camo_time">Hora</string>
   <string name="settings.camo_stopwatch">Cronómetro</string>
   <string name="fragment_mic">Grabadora</string>
@@ -370,7 +368,6 @@
   <string name="recorder_toast_recording.saved">La grabación de audio se guardó en tus archivos de Tella</string>
   <string name="onboard.intro_title">Bienvenida(o) a Tella</string>
   <string name="onboard.intro_get_started">Empezar</string>
-  <string name="onboard.intro_organization_code">Tengo un código de mi organización</string>
   <string name="onboard.title_camera">Cámara</string>
   <string name="onboard.expl_camera">Toma fotos y videos directamente en Tella. Estos archivos se cifran automáticamente y se guardan en Tella, y no serán visibles desde la galería habitual de tu teléfono.</string>
   <string name="onboard.title_recorder">Grabadora</string>
@@ -398,7 +395,7 @@ conectarse a un servidor</string>
   <string name="onboard.expl_hide_tella_set">Tella será ocultada detrás de una aplicación funcional de Calculadora. Desbloquea Tella ingresando tu PIN en la calculadora seguido por =</string>
   <string name="onboard.hide_behind_calculator_not_possible">El camuflaje de Calculadora solo es posible si utilizas un bloqueo por PIN.</string>
   <string name="onboard.calculator_button">Seleccionar calculadora</string>
-  <string name="onboard.calculator_expl">Tella será ocultada detrás de una aplicación funcional de calculadora. Ingresa tu PIN en la calculadora para desbloquear y abrir Tella</string>
+  <string name="onboard.calculator_expl">Tella será ocultada detrás de una aplicación funcional de calculadora. Desbloquea Tella al ingresar tu PIN en la calculadora seguido de =</string>
   <string name="settings.general_recent_files_switch_title">Archivos recientes</string>
   <string name="settings.general_recent_files_switch_expl">Te da acceso rápido a tus archivos recientes en la pantalla de inicio de Tella.</string>
   <string name="settings.general_favorite_forms_switch_title">Formularios favoritos</string>
@@ -413,7 +410,7 @@ conectarse a un servidor</string>
   <string name="Home_BottomNav_Forms">Formularios</string>
   <string name="Home_BottomNav_Reports">Informes</string>
   <string name="Vault_Move_AppBar">Mover \"%s\"</string>
-  <string name="Vault_CreateFolder_SheetAction">Crear una nueva carpeta</string>
+  <string name="Vault_CreateFolder_SheetAction">Crear</string>
   <string name="ServerSettings_ServerName_ToolTip">Dale un nombre a tu servidor para reconocerlo si agregas más servidores más adelante. Podría ser el nombre de la organización, el nombre del proyecto, etc.</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="one">%s archivo importado</item>
@@ -423,7 +420,7 @@ conectarse a un servidor</string>
   <string name="Rec_Exit_SheetTitle">¿Guardar grabación?</string>
   <string name="Rec_Exit_SheetText">Tu grabación no se guardó. ¿Quieres guardarla antes de salir?</string>
   <string name="Vault_AudioRecordings_AppBar">Grabaciones de audio</string>
-  <string name="Vault_Encryting_SheetText" formatted="false">%d% completado</string>
+  <string name="Vault_Encryting_SheetText">%d% completado</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">¿Cancelar el cifrado y borrar el archivo?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">Si cancelas, tu archivo se perderá</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">REANUDAR CIFRADO</string>
@@ -433,26 +430,28 @@ conectarse a un servidor</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">REMOVER CAMUFLAJE</string>
   <string name="SettingsCamo_EnterLock_Password">Ingresa tu contraseña para cambiar tu método de camuflaje</string>
   <string name="settings.gen_select_about">Acerca de y Ayuda</string>
-  <string name="upload_toast_fail.finding.metadata.to.upload">Hubo un error al ubicar la información de verificación del archivo. Inténtalo de nuevo</string>
-  <string name="upload_toast.fail.finding.file.to.upload">Hubo un error al localizar el archivo a subir. Por favor, inténtalo de nuevo</string>
   <string name="settings.gen_select_language">Idioma</string>
-  <string name="gallery_list.items_show.only.videos">Videos</string>
-  <string name="gallery_list.items_show.only.audio">Grabaciones de audio</string>
   <string name="home_action.desc_quick.exit">Salir</string>
-  <string name="onboard.camo_heading">Camuflaje</string>
   <string name="settings.camo_camera4">Cámara</string>
+  <string name="settings.camo_camera3">CameraPro</string>
+  <string name="settings.camo_camera2">SuperCam</string>
+  <string name="settings.camo_camera1">EasyCam</string>
+  <string name="settings.camo_weather3">Tiempo ahora</string>
+  <string name="settings.camo_weather2">Tiempo local</string>
   <string name="settings.camo_weather1">Clima</string>
   <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
   <string name="collect.outbox_tab.title">Bandeja de salida</string>
+  <string name="Collect_RemoveForm_SheetTitle">¿Eliminar formulario?</string>
   <string name="fragment_uwazi">Uwazi</string>
   <string name="Uwazi_Dowload_Temapltes_Header_Title">Descargar plantillas</string>
+  <string name="Uwazi_RemoveTemplate_SheetTitle">Eliminar de dispositivo</string>
   <string name="Uwazi_Action_FillEntity">Crear una entidad</string>
   <string name="Uwazi_Action_RemoveTemplate">Borrar plantilla</string>
-  <string name="Uwazi_Subtitle_RemoveTemplate">¿Está seguro de que desea eliminar esta plantilla de su dispositivo? </string>
-  <string name="UWAZI_Language_Header_Title">Selección de idioma</string>
-  <string name="Uwazi_Language_Screen_Description">Esta colección Uwazi está disponible en varios idiomas. Seleccione el idioma en el que desea descargar las plantillas.</string>
-  <string name="Uwazi_General_Favorite_Template_Switch_Expl">Muestra accesos directos a tus plantillas favoritas en la pantalla de inicio de Tella</string>
+  <string name="Uwazi_Subtitle_RemoveTemplate">¿Está segura(o) de que desea eliminar esta plantilla?</string>
+  <string name="UWAZI_Language_Header_Title">Idioma Uwazi</string>
+  <string name="Uwazi_Language_Screen_Description">Esta colección Uwazi está disponible en varios idiomas. Por favor selecciona el idioma en el que desea descargar las plantillas.</string>
+  <string name="Uwazi_General_Favorite_Template_Switch_Expl">Muestra accesos directos a tus plantillas favoritas en la pantalla de inicio de Tella.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Plantillas favoritas</string>
   <string name="Uwazi_Templates_Empty_Description">No tiene plantillas guardadas en su dispositivo. Toque el botón \"+\" para descargar plantillas.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">No tiene entidades enviadas.</string>
@@ -490,30 +489,41 @@ conectarse a un servidor</string>
   <string name="Uwazi_WidgetImage_Select_Text">Seleccionar archivo de imagen</string>
   <string name="Uwazi_WidgetImage_Select_Description_Text">Adjuntar un archivo de imagen</string>
   <string name="Uwazi_WidgetMedia_Take_Video">Tomar video desde la cámara</string>
-  <string name="Uwazi_WidgetMedia_Take_Photo">Tomar la foto desde la cámara</string>
+  <string name="Uwazi_WidgetMedia_Take_Photo">Tomar foto con cámara</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">Seleccione entre los archivos de Tella</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">Seleccione desde su dispositivo</string>
   <string name="Uwazi_Widget_Sheet_Description">Elige cómo desea agregar archivos</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">Este campo es obligatorio.</string>
   <string name="Uwazi_Server_Title">Servidor : </string>
   <string name="Uwazi_Template_Title">Plantilla : </string>
+  <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
+    <item quantity="one">%1$d archivo adjunto</item>
+    <item quantity="other">%1$d archivos adjuntos</item>
+  </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Seleccionar archivos</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Seleccionar archivos PDF</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Documentos primarios</string>
   <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Adjunte tantos archivos PDF como desee</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">Elige cómo quieres añadir los archivos PDF</string>
   <string name="Uwazi_MiltiFileWidget_SupportingFiles">Archivos de apoyo</string>
-  <string name="Uwazi_Drafts_Header_Text">Estos son sus borradores de entidades. Pulse sobre una entidad para seguir trabajando en ella.</string>
-  <string name="Uwazi_Submitted_Header_Text">Estas son entidades que ha enviado con éxito.</string>
+  <string name="Uwazi_Drafts_Header_Text">Estos son entidades que no has enviado. 
+
+Pulsa sobre una entidad para seguir trabajando en ella.</string>
+  <string name="Uwazi_Outbox_Header_Text">Estas son entidades listas para enviar o enviadas parcialmente.</string>
+  <string name="Uwazi_Submitted_Header_Text">Estas son entidades que has enviado con éxito.</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Elige cómo desea agregar archivos</string>
   <string-array name="Uwazi_Language_Array">
     <item>Inglés</item>
+    <item>عربي</item>
+    <item>Francés</item>
   </string-array>
   <string-array name="Uwazi_Language_Array_Translated">
     <item>Inglés</item>
     <item>Árabe</item>
     <item>Francés</item>
   </string-array>
+  <string name="Collect_Action_FillForm">Completar formulario</string>
+  <string name="Collect_Subtitle_RemoveForm">¿Tienes seguridad de querer borrar \"%1$s\"?</string>
   <string name="Util_ellapsedTime_Year">Hace más de un año</string>
   <plurals name="Util_ellapsedTime_Months">
     <item quantity="one">Hace un mes</item>
@@ -550,37 +560,147 @@ conectarse a un servidor</string>
   <string name="Connected_Successfuly_Text">Te conectaste con éxito al servidor y podrás compartir tus datos.</string>
   <string name="Login_To_Access_Text">Identificarse para acceder al servidor</string>
   <string name="action_yes">Sí</string>
-  <string name="action_yes_in">ACEPTO</string>
+  <string name="Collect_WidgetVideo_Select_Text">Seleccionar archivo de video</string>
+  <string name="Collect_WidgetAudio_Select_Text">Seleccionar archivo de audio</string>
+  <string name="Collect_MediaWidget_Attach_Photo">Adjuntar foto</string>
+  <string name="Collect_MediaWidget_Attach_Video">Adjuntar video</string>
+  <string name="Collect_MediaWidget_AttachAudioRecording">Adjuntar grabación de audio</string>
   <string name="Uwazi_Templates_TabTitle">Plantillas</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.\n• Your data is aggregated weekly on your device before it is sent to us.\n• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week\n💾  32 files stored in Tella\n📖  Spanish language selected\n⚡  1 server connected\n😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.\n\nWould you like to contribute?</string>
-  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="Collect_WidgetVideo_Select_Text">Select video file</string>
-  <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
-  <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
-  <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
-  <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="action_no">no</string>
-  <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your\n organization.</string>
-  <string name="Timeout_Warning_Title">Warnings</string>
-  <string name="Timeout_Warning_Description">To perform this action, Tella will remain unlocked for 3 minutes.</string>
-  <string name="settings_sec_security_screen">Screen security</string>
-  <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
+  <string name="Vault_Items">Ítems</string>
+  <string name="Vault_DeleteFile_SheetTitle">¿Eliminar archivo?</string>
+  <string name="Vault_deleteFile_SheetDesc">El archivo seleccionado será borrado permanentemente de Tella.</string>
+  <string name="Uwazi_Info_UrlLabelEmpty">La etiqueta de la URL está vacía.</string>
+  <string name="Collect_EndSubtitleExpl_UncheckedItems">Deselecciona adjuntos para enviarlos más tarde. Puedes completar el envío desde tu Bandeja de Entrada.</string>
+  <string name="Collect_DialogExpl_ExitingStopSubmission">Salir detendrá el envío de tu formulario. Podrás retomar el envío más tarde en tu Bandeja de Entrada.</string>
+  <string name="Collect_DialogTitle_StopExit">¿Detener y salir?</string>
+  <string name="Collect_DialogAction_KeepSubmitting">Continuar enviando</string>
+  <string name="Collect_DialogAction_StopAndExit">Detener y salir</string>
+  <string name="Collect_DialogInfo_FormSubmissionStopped">El envío de tu formulario ha sido detenido. Puedes retomarlo en la Bandeja de Entrada.</string>
+  <string name="action_view">Ver</string>
+  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella está cerrando ....</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Por favor espera. Volverás a la pantalla de inicio de tu dispositivo en unos pocos segundos.</string>
+  <string name="SettingsCamo_Dialog_RemovingCamouflage">Quitando camuflaje ...</string>
+  <string name="Collect_DeleteForm_SheetTitle">¿Eliminar este formulario?</string>
+  <string name="Collect_DeleteDraftForm_SheetTitle">¿Eliminar este borrador?</string>
+  <string name="Collect_DeleteDraftForm_SheetExpl">¿Estás segura(o) de querer eliminar este borrador?</string>
+  <string name="Collect_DeleteForm_SheetExpl">¿Estas segura(o) de querer eliminar este formulario?</string>
+  <string name="Uwazi_Dialog_Draft_Title">¿Entidad de salida?</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="settings_sec_security_screen">Seguridad de pantalla</string>
+  <string name="settings_sec_security_screen_expl">Bloquea capturas de pantalla y grabación de pantalla dentro de Tella y previsualización de pantalla en la lista de apps recientes</string>
+  <string name="settings.serv_add.server.selection_dialog.description">Si no tienes seguridad, por favor consulta a tu organización.</string>
+  <string name="Timeout_Warning_Title">Advertencia</string>
+  <string name="Timeout_Warning_Description">Para realizar esta acción, Tella permanecerá desbloqueada por 3 minutos.</string>
+  <string name="Home_BottomNav_Uwazi">Uwazi</string>
+  <string name="onboard_setup_text">¿Cómo te gustaría instalar Tella?</string>
+  <string name="onboard_full_setup">CONFIGURACIÓN COMPLETA</string>
+  <string name="onboard_quick_setup">CONFIGURACIÓN RÁPIDA</string>
+  <string name="onboard_setup_explore_custom">Explora y personaliza por completo la app</string>
+  <string name="onboard_setup_start">Establece el bloqueo y comienza inmediatamente</string>
+  <string name="onboard_setup_customization">¿Tienes un código/archivo de personalización?</string>
+  <string name="settings.camo_clock">Reloj</string>
+  <string name="onboard.intro_organization_code">Tengo un código de mi organización</string>
+  <string name="onboard.customization_title">Personalización</string>
+  <string name="onboard.customization_subtitle">Ingresa tu código de personalización</string>
+  <string name="onboard.customization_expl">Tu organización puede proveer un código para instalar Tella de acuerdo a sus configuraciones. </string>
+  <string name="upload_toast_fail.finding.metadata.to.upload">Hubo un error localizando la información de verificación del archivo. Por favor inténtalo de nuevo</string>
+  <string name="upload_toast.fail.finding.file.to.upload">Hubo un error localizando el archivo para cargar. Por favor inténtalo nuevamente.</string>
+  <string name="gallery_app.bar">Galería</string>
+  <string name="home_gallery.button">Galería</string>
+  <string name="onboarding_action_create.pattern">Crear patrón</string>
+  <string name="permission_dialog.expl_mic">Para grabar en audio, Tella necesita permiso para acceder a tu micrófono.</string>
+  <string name="home_action.expl_camera">Toca en cualquier lugar para abrir la cámara</string>
+  <string name="gallery_toast_file.imported.from.device">El archivos fue agregado a tu galería</string>
+  <string name="permission_dialog.expl_camera.mic">Para tomar archivos en foto, video y audio, Tella necesita acceder a tu cámara y micrófono.</string>
+  <string name="permission_dialog.expl_camera">Para tomar fotos o videos, Tella necesita permiso para acceder a tu cámara.</string>
+  <string name="gallery_subheading_show">Mostrar</string>
+  <string name="gallery_list.item_show.all.files">Todos</string>
+  <string name="gallery_list.items_show.only.photos">Fotos</string>
+  <string name="gallery_list.items_show.only.videos">Videos</string>
+  <string name="gallery_list.items_show.only.audio">Grabaciones de audio</string>
+  <string name="onboard.camo_heading">Camuflaje</string>
+  <string name="settings.camo_calculator1">Matemática fácil</string>
+  <string name="settings.docu_dialog.action_hide">Ocultar</string>
+  <string name="settings.docu_auto.upload.server.selection_select">Servidor</string>
+  <string name="upload_dialog.title_select.server">Selección de servidor</string>
+  <string name="settings.docu_connect.to.servers_enable_action">Conectar a servidores</string>
+  <string name="settings.docu_connect.to.servers_enable_action.expl">Administrar tu conexión a los servidores para enviar datos.</string>
+  <string name="settings.docu_disable.servers_dialog.title">Desconectar servidores</string>
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">¿Te gustaría borrar todas las conexiones de tu servidor, o simplemente ocultarlas? Al ocultarlas mantendrás la información del servidor en memoria así podrás volver a conectar y enviar fácilmente los datos a los servidores.</string>
+  <string name="settings.docu_delete.auto.server_dialog.expl">Si borras este servidor, tus archivos no continuarán siendo cargados automáticamente.</string>
+  <string name="settings.docu_auto.upload_action">Carga automática</string>
+  <string name="settings.docu_auto.delete_action.expl">Tella borrará automáticamente los archivos de tu dispositivo en cuanto se hayan cargado al servidor.</string>
+  <string name="settings.docu_delete.upload.server_dialog.expl">Ya no podrás subir archivos a este servidor.</string>
+  <plurals name="upload.main_meta_number.of.files">
+    <item quantity="one">Un archivo</item>
+    <item quantity="other">archivos</item>
+  </plurals>
+  <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB cargados</string>
+  <plurals name="upload.main_meta_number.of.files.uploaded">
+    <item quantity="one">carga de archivo</item>
+    <item quantity="other">carga de archivos</item>
+  </plurals>
+  <plurals name="upload.main_meta_minutes.left">
+    <item quantity="one">minuto restante</item>
+    <item quantity="other">minutos restantes</item>
+  </plurals>
+  <string name="settings.select_customization">Personalización</string>
+  <string name="Uwazi_Send_Header_Title">Fin de la entidad</string>
+  <string name="Uwazi_Send_Entity_Title">Fin de la entidad</string>
+  <string name="Javarosa_Upgrade_Warning_Description">Actualizamos algunas de las bibliotecas de Tella y necesitaríamos volver a descargar todos los formularios.</string>
+  <string name="Javarosa_Upgrade_Toast">Por favor espera mientras actualizamos Forms.</string>
+  <string name="Settings_Reports_Choose_Credentials">¿Tienes un nombre de usuaria(o) y clave?</string>
+  <string name="Server_Connect_Icon">imagen de conexión al servidor</string>
+  <string name="Login_To_Access_Project_Text">Iniciar sesión para acceder al proyecto</string>
+  <string name="Settings_Reports_Connected_To_Project">Conectado al proyecto</string>
+  <string name="Settings_Reports_Advanced_Success_Title">Configuraciones avanzadas completadas</string>
+  <string name="Settings_Reports_Advanced_Success_Description">Siempre puedes cambiar las preferencias de tus Reportes en las Configuraciones de Tella.</string>
+  <string name="Settings_Reports_Go_To_Reports">IR A REPORTES</string>
+  <string name="Settings_reports_Go_To_Advanced_Settings">Configuraciones avanzadas</string>
+  <string name="Setting_Reports_Share_Information_Title">Comparte información de verificación</string>
+  <string name="Setting_Reports_Share_Information_Description">Incluye información sobre tu dispositivo y locación cuando envíes reportes, para asegurar que los archivos sean verificables.</string>
+  <string name="Setting_Reports_Background_Upload">Carga de fondo</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continúa cargando reportes mientras realizas otras tareas o si sales de Tella. ADVERTENCIA: Si está habilitada, Tella permanecerá desbloqueada hasta que todos los reportes hayan sido cargados por completo.</string>
+  <string name="Setting_Reports_Settings_Completed">Configuraciones avanzadas completadas</string>
+  <string name="Setting_Reports_Settings_Completed_Description">Siempre puedes cambiar las preferencias de tus Reportes en las Configuraciones de Tella.</string>
+  <string name="Drafts_Reports_Empty_Message">Tus Borradores están actualmente vacíos. Los reportes que no hayas enviado aparecerán aquí.</string>
+  <string name="Outbox_Reports_Empty_Message">Tu Bandeja de salida está actualmente vacía. Los reportes que estén listos para enviar aparecerán aquí.</string>
+  <string name="Submitted_Reports_Empty_Message">No tienes reportes enviados</string>
+  <string name="New_Reports_Text">NUEVO REPORTE</string>
+  <string name="Reports_Title_Screen">REPORTE</string>
+  <string name="Reports_Send_To_Text">Enviar reporte a:</string>
+  <string name="Reports_Select_Your_Project">Selecciona tu proyecto</string>
+  <string name="Reports_Select_Title">Título</string>
+  <string name="Reports_Select_Description">Descripción</string>
+  <string name="Reports_Attach_files_Here">Adjuntar archivos aquí</string>
+  <string name="Connection_Title">Conexiones</string>
+  <string name="Reports_Saved_Draft">El reporte fue guardado como borrador</string>
+  <string name="Reports_Pause">Pausar</string>
+  <string name="Reports_Resume">Reanudar</string>
+  <string name="File_Uploaded_on">Cargado en</string>
+  <string name="File_Uploaded">cargado</string>
+  <string name="Delete_Report_Confirmation">¿Tienes seguridad de querer borrar este reporte?</string>
+  <string name="Delete_Submitted_Report_Confirmation">¿Tienes seguridad de querer borrar este reporte enviado de tus registros?</string>
+  <string name="View_Report">Visto</string>
+  <string name="Delete_Report">Borrado</string>
+  <string name="Paused_Report">Pausado</string>
+  <string name="Report_Waiting_For_Connection">Esperando por la conexión</string>
+  <string name="Project_Url_Screen_Title">Ingresar URL del proyecto</string>
+  <string name="Report_Dialog_Draft_Title">¿Salir del reporte?</string>
+  <string name="Report_Server_Already_Exist_Error">Ya estás conectada(o) a este proyecto. Por favor ingresa otra URL.</string>
+  <string name="Report_Deleted_Confirmation">%s ha sido eliminado.</string>
+  <string name="Report_Save_Outbox_Confirmation">El reporte fue guardado en tu Bandeja de salida</string>
+  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
+  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
+  <string name="save_draft">Save draft?</string>
+  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
+  <string name="feedback">Feedback</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="feedback_title">Feedback</string>
+  <string name="feedback_sent_msg">Your feedback has been sent</string>
+  <string name="share_feedback_action">share feedback</string>
 </resources>

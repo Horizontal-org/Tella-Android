@@ -1,53 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="LockSelect_Action_Cancel">Annuler</string>
-  <string name="LockSelect_Action_Back">Retour</string>
-  <string name="LockSelect_Action_Confirm">Poursuivre</string>
-  <string name="LockPatternConfirm_Action_Confirm">Redessiner le schéma pour confirmer</string>
-  <string name="LockSelect_Action_Continue">Poursuivre</string>
-  <string name="LockPatternSet_Draw_Pattern">Dessiner un schéma de déverrouillage</string>
-  <string name="UnlockPattern_DrawToUnlock">Dessinez votre motif pour déverrouiller Tella</string>
-  <string name="LockPatternSet_Pattern_Recorded">Le schéma a été enregistré</string>
-  <string name="UnlockPattern_PatternTooShort">Connectez au moins 6 points, veuillez redessiner</string>
-  <string name="LockPatternSet_RecordingPattern">Relâcher le doigt une fois terminé</string>
-  <string name="LockPatternSet_Action_Redraw">Redessiner</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Le schéma est erroné, veuillez réessayer</string>
-  <string name="LockPatternSet_Message_PatternStarted">Le schéma est commencé</string>
-  <string name="LockPatternSet_Message_PatternCleared">Le schéma a été effacé</string>
-  <string name="LockPatternSet_Message_CellAdded">La cellule a été ajoutée</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">La cellule <xliff:g id="cell_index" example="3">%1$d</xliff:g> a été ajoutée</string>
-  <string name="LockPatternSet_Message_PatternDetected">Le schéma est terminé</string>
-  <string name="UnLockPattern_PatternArea">Zone du schéma</string>
-  <string name="UnLockPattern_Message_DrawPattern">Dessinez votre schéma pour déverrouiller Tella</string>
-  <string name="UnLockPattern_Message_IncorrectPattern">Veuillez réessayer. Vos schémas ne correspondent pas.</string>
-  <string name="LockPinSet_Message_EnterPin">Entrez votre code PIN</string>
-  <string name="UnlockPin_Message_EnterPin">Entrez votre code PIN pour déverrouiller Tella</string>
-  <string name="LockPinSet_Message_Hint">Utilisez au moins 6 chiffres
+    <string name="LockSelect_Action_Cancel">Annuler</string>
+    <string name="LockSelect_Action_Back">Retour</string>
+    <string name="LockSelect_Action_Confirm">Poursuivre</string>
+    <string name="LockPatternConfirm_Action_Confirm">Redessiner le schéma pour confirmer</string>
+    <string name="LockSelect_Action_Continue">Poursuivre</string>
+    <string name="LockPatternSet_Draw_Pattern">Dessiner un schéma de déverrouillage</string>
+    <string name="UnlockPattern_DrawToUnlock">Dessinez votre motif pour déverrouiller Tella</string>
+    <string name="LockPatternSet_Pattern_Recorded">Le schéma a été enregistré</string>
+    <string name="UnlockPattern_PatternTooShort">Connectez au moins 6 points, veuillez redessiner</string>
+    <string name="LockPatternSet_RecordingPattern">Relâcher le doigt une fois terminé</string>
+    <string name="LockPatternSet_Action_Redraw">Redessiner</string>
+    <string name="LockPatternConfirm_Message_WrongPattern">Le schéma est erroné, veuillez réessayer</string>
+    <string name="LockPatternSet_Message_PatternStarted">Le schéma est commencé</string>
+    <string name="LockPatternSet_Message_PatternCleared">Le schéma a été effacé</string>
+    <string name="LockPatternSet_Message_CellAdded">La cellule a été ajoutée</string>
+    <string name="LockPatternSet_Message_CellAddedVerbose">La cellule <xliff:g example="3" id="cell_index">%1$d</xliff:g> a été ajoutée</string>
+    <string name="LockPatternSet_Message_PatternDetected">Le schéma est terminé</string>
+    <string name="UnLockPattern_PatternArea">Zone du schéma</string>
+    <string name="UnLockPattern_Message_DrawPattern">Dessinez votre schéma pour déverrouiller Tella</string>
+    <string name="UnLockPattern_Message_IncorrectPattern">Veuillez réessayer. Vos schémas ne correspondent pas.</string>
+    <string name="LockPinSet_Message_EnterPin">Entrez votre code PIN</string>
+    <string name="UnlockPin_Message_EnterPin">Entrez votre code PIN pour déverrouiller Tella</string>
+    <string name="LockPinSet_Message_Hint">Utilisez au moins 6 chiffres
  Évitez d\'utiliser des chiffres faciles à deviner, comme votre date de naissance.</string>
-  <string name="LockPinSet_Message_Confirm">Confirmez votre code PIN</string>
-  <string name="LockPinConfirm_Message_Confirm">Veuillez entrer votre code PIN une fois de plus, juste pour être sûr.</string>
-  <string name="LockPinConfirm_Message_Error_TryAgain">Veuillez réessayer. Vos codes PIN ne correspondent pas.</string>
-  <string name="LockPinConfirm_Message_Error_IncorrectPin">Le code PIN est incorrect, veuillez réessayer</string>
-  <string name="UnlockPassword_Message_EnterYourPassword">Entrez votre mot de passe</string>
-  <string name="LockPasswordSet_Message_Hint">Utilisez au moins 6 caractères et évitez
+    <string name="LockPinSet_Message_Confirm">Confirmez votre code PIN</string>
+    <string name="LockPinConfirm_Message_Confirm">Veuillez entrer votre code PIN une fois de plus, juste pour être sûr.</string>
+    <string name="LockPinConfirm_Message_Error_TryAgain">Veuillez réessayer. Vos codes PIN ne correspondent pas.</string>
+    <string name="LockPinConfirm_Message_Error_IncorrectPin">Le code PIN est incorrect, veuillez réessayer</string>
+    <string name="UnlockPassword_Message_EnterYourPassword">Entrez votre mot de passe</string>
+    <string name="LockPasswordSet_Message_Hint">Utilisez au moins 6 caractères et évitez
  d\'utiliser des mots de passe qui peuvent être
  facilement, comme \"mot de passe\". Plus votre mot de
  votre mot de passe est plus long, plus il est sécurisé.</string>
-  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Veuillez réessayer. Vos mots de passe ne correspondent pas.</string>
-  <string name="LockSuccess_Message_AllDone">Vous avez terminé !</string>
-  <string name="LockSuccess_Message_Hint">Vous pouvez toujours changer votre option de verrouillage
+    <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Veuillez réessayer. Vos mots de passe ne correspondent pas.</string>
+    <string name="LockSuccess_Message_AllDone">Vous avez terminé !</string>
+    <string name="LockSuccess_Message_Hint">Vous pouvez toujours changer votre option de verrouillage
  et personnaliser davantage Tella dans Paramètres.</string>
-  <string name="LockSuccess_Action_GoToTella">Aller à Tella</string>
-  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mot de passe incorrect, veuillez réessayer</string>
-  <string name="UnlockPassword_Message_EnterPassword">Entrez votre mot de passe pour déverrouiller Tella</string>
-  <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirmer votre mot de passe</string>
-  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Veuillez entrer votre mot de passe une fois de plus temps, juste pour être sûr.</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Entrez votre mot de passe actuel actuel pour changer votre verrou</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPattern">Dessinez votre schéma actuel pour changer votre verrou</string>
-  <string name="LockPinSet_Settings_EnterCurrentPin">Entrez votre code PIN actuel pour change votre verrou</string>
-  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Entrez votre mot de passe actuel pour changer votre camouflage</string>
-  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Dessinez votre schéma actuel pour changer votre camouflage</string>
-  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Entrez votre code PIN actuel pour changer votre camouflage</string>
-  <string name="Settings_Action_SetLock">Verrou</string>
-  <string name="Settings_Message_LockChanged">Votre verrou a été changée !</string>
+    <string name="LockSuccess_Action_GoToTella">Aller à Tella</string>
+    <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mot de passe incorrect, veuillez réessayer</string>
+    <string name="UnlockPassword_Message_EnterPassword">Entrez votre mot de passe pour déverrouiller Tella</string>
+    <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirmer votre mot de passe</string>
+    <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Veuillez entrer votre mot de passe une fois de plus temps, juste pour être sûr.</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPassword">Entrez votre mot de passe actuel actuel pour changer votre verrou</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPattern">Dessinez votre schéma actuel pour changer votre verrou</string>
+    <string name="LockPinSet_Settings_EnterCurrentPin">Entrez votre code PIN actuel pour change votre verrou</string>
+    <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Entrez votre mot de passe actuel pour changer votre camouflage</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Dessinez votre schéma actuel pour changer votre camouflage</string>
+    <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Entrez votre code PIN actuel pour changer votre camouflage</string>
+    <string name="Settings_Action_SetLock">Verrou</string>
+    <string name="Settings_Message_LockChanged">Votre verrou a été changée !</string>
+    <string name="incorrect_pattern">Incorrect Pattern.\n\n</string>
+    <string name="incorrect_pin">Incorrect Pin. \n\n</string>
+    <string name="incorrect_password">Incorrect Password. \n\n</string>
+    <string name="attempts_remaining_singular">You have 1 attempt remaining until\n everything in your Tella is deleted.</string>
+    <string name="attempts_remaining_plural">You have %1$d attempts remaining until\n everything in your Tella is deleted.</string>
+    <string name="exceeded_max_attempts">You have exceeded the maximum number of\n incorrect login attempts. All your Tella data\n has been deleted.</string>
 </resources>

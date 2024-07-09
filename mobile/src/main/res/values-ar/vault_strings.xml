@@ -25,7 +25,6 @@
   <string name="Vault_FileCreated">تاريخ الإنشاء ووقته</string>
   <string name="Vault_FileResolution">الدقة</string>
   <string name="Vault_FileLength">الطول</string>
-  <string name="Vault_FilePath">المسار</string>
   <string name="Vault_RenameFile_SheetTitle">إعادة تسمية الملف</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="zero">هل ترغب في حذف الملف؟</item>

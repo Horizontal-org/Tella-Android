@@ -38,7 +38,7 @@ public class CameraPreviewAnonymousButton extends AppCompatImageButton {
     }
 
     private void displayEnable() {
-        setImageResource(R.drawable.ic_location_searching_white);
+        setImageResource(R.drawable.ic_location_searching_black);
     }
 
     private void displayDisable() {

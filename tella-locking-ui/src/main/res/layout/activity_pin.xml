@@ -7,7 +7,7 @@
     android:background="@color/space_cadet">
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,9 @@
         android:paddingTop="40dp"
         android:paddingEnd="15dp"
         android:src="@drawable/icon_left"
+        android:background="@color/space_cadet"
         android:visibility="gone"
+        android:contentDescription="@string/action_go_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,6 +37,8 @@
         android:id="@+id/pin_enterTV"
         style="@style/Unlock_White_Text_Bold"
         android:text="@string/LockPinSet_Message_EnterPin"
+        android:importantForAccessibility="yes"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@+id/pin_msgTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -56,12 +60,13 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:elevation="5dp"
+        android:contentDescription="@string/action_show_pin"
         app:layout_constraintBottom_toBottomOf="@id/pin_eye"
         app:layout_constraintEnd_toEndOf="@id/pin_eye"
         app:layout_constraintStart_toStartOf="@id/pin_eye"
         app:layout_constraintTop_toTopOf="@id/pin_eye" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/pin_eye"
         android:layout_width="22dp"
         android:layout_height="15dp"
@@ -71,6 +76,7 @@
         android:elevation="2dp"
         android:focusable="true"
         android:padding="3dp"
+        android:contentDescription="@string/action_show_pin"
         app:layout_constraintBottom_toBottomOf="@id/pin_editText"
         app:layout_constraintEnd_toEndOf="@id/pin_editText"
         app:layout_constraintTop_toTopOf="@id/pin_editText" />
@@ -81,13 +87,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:textColorHint="@color/dark_purple"
         app:layout_constraintBottom_toTopOf="@+id/pin_lock_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin_msgTV"
         tools:text="bjbewjfqw bjfjwq" />
 
 
-    <com.hzontal.tella_locking_ui.ui.pin.pinview.PinLockView
+    <org.hzontal.shared_ui.pinview.PinLockView
         android:id="@+id/pin_lock_view"
         android:layout_width="0dp"
         android:layout_height="0dp"

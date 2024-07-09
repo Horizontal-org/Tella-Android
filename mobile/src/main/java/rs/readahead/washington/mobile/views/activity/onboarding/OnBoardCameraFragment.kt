@@ -13,36 +13,34 @@ class OnBoardCameraFragment : BaseFragment() {
     private lateinit var backBtn: TextView
     private lateinit var nextBtn: TextView
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.onboard_camera_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
-    override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).showProgress()
-        (activity as OnBoardActivityInterface).initProgress(5)
-        (activity as OnBoardActivityInterface).setCurrentIndicator(0)
+    override fun onResume() {
+        super.onResume()
+        (baseActivity as OnBoardActivityInterface).enableSwipe(
+            isSwipeable = true, isTabLayoutVisible = true
+        )
+        (baseActivity as OnBoardActivityInterface).showButtons(
+            isNextButtonVisible = true, isBackButtonVisible = true
+        )
+    }
 
+    override fun initView(view: View) {
         backBtn = view.findViewById(R.id.back_btn)
         backBtn.setOnClickListener {
-            activity.onBackPressed()
+            baseActivity.onBackPressed()
         }
-
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
-            activity.addFragment(
-                    this,
-                    OnBoardRecorderFragment(),
-                    R.id.rootOnboard
-            )
+            (baseActivity as OnBoardingActivity).onNextPressed()
         }
     }
 }

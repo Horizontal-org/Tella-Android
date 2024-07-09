@@ -18,7 +18,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(FragmentDraftsUwaziBinding::inflate) {
     private val viewModel: SharedUwaziViewModel by viewModels()
     private val uwaziDraftsAdapter: UwaziDraftsAdapter by lazy { UwaziDraftsAdapter() }
-    private val bundle by lazy { Bundle() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,34 +31,34 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
 
     private fun initObservers() {
         with(viewModel) {
-            draftInstances.observe(viewLifecycleOwner, {
+            draftInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
                     binding?.textViewEmpty?.isVisible = true
                     binding?.draftsRecyclerView?.isVisible = false
                     uwaziDraftsAdapter.setEntityDrafts(emptyList())
                 } else {
-                    (it as ArrayList).add(0,getString(R.string.Uwazi_Drafts_Header_Text))
+                    (it as ArrayList).add(0, getString(R.string.Uwazi_Drafts_Header_Text))
                     binding?.textViewEmpty?.isVisible = false
                     binding?.draftsRecyclerView?.isVisible = true
                     uwaziDraftsAdapter.setEntityDrafts(it)
                 }
-            })
+            }
 
-            showInstanceSheetMore.observe(viewLifecycleOwner, {
+            showInstanceSheetMore.observe(viewLifecycleOwner) {
                 showDraftsMenu(it)
-            })
+            }
 
-            openEntityInstance.observe(viewLifecycleOwner,{
+            openEntityInstance.observe(viewLifecycleOwner) {
                 openDraft(it)
-            })
+            }
 
-            onInstanceSuccess.observe(viewLifecycleOwner,{
+            onInstanceSuccess.observe(viewLifecycleOwner) {
                 editDraft(it)
-            })
+            }
 
-            instanceDeleteD.observe(viewLifecycleOwner,{
+            instanceDeleteD.observe(viewLifecycleOwner) {
                 listDrafts()
-            })
+            }
         }
     }
 
@@ -68,7 +67,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
             requireActivity().supportFragmentManager,
             instance.title,
             getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Uwazi_Action_RemoveDraft),
+            getString(R.string.action_delete),
             object : BottomSheetUtils.ActionSeleceted {
                 override fun accept(action: BottomSheetUtils.Action) {
                     if (action === BottomSheetUtils.Action.EDIT) {
@@ -81,7 +80,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
             requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
-            requireContext().getString(R.string.action_remove),
+            requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }
@@ -93,7 +92,7 @@ class DraftsUwaziFragment : BaseBindingFragment<FragmentDraftsUwaziBinding>(Frag
 
     private fun initView() {
         binding?.draftsRecyclerView?.apply {
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziDraftsAdapter
         }
     }

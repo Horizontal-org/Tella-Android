@@ -27,11 +27,6 @@ import rs.readahead.washington.mobile.mvp.contract.ICheckUwaziServerContract
 import rs.readahead.washington.mobile.mvp.presenter.CheckUwaziServerPresenter
 import timber.log.Timber
 
-internal const val TITLE_KEY = "tk"
-internal const val ID_KEY = "ik"
-internal const val OBJECT_KEY = "ok"
-
-
 class UwaziServerDialogFragment  : AppCompatDialogFragment(), ICheckUwaziServerContract.IView {
     private var validated = true
     private  var presenter: CheckUwaziServerPresenter? = null

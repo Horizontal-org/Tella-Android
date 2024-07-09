@@ -36,7 +36,7 @@
             android:layout_alignParentStart="true"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+        <org.hzontal.shared_ui.buttons.PanelToggleButton
             android:id="@+id/toggle_button"
             style="@style/Tella_Main_White_Text.MeduimbBold"
             android:layout_width="wrap_content"

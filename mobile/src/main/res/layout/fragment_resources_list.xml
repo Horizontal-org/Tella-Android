@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:textStyle="bold"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:rightIcon="@drawable/refresh_spin"
+            app:rightIconContentDescription="@string/action_refresh"
+            app:toolbarTitle="@string/Home_BottomNav_Resources" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
+
+        <TextView
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_yellow"
+            android:padding="16dp"
+            android:text="@string/collect.blank_banner_forms.updated"
+            android:textAlignment="center"
+            android:textColor="@color/wa_gray"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <RelativeLayout
+                android:id="@+id/resources"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:background="@color/space_cadet"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="@dimen/fab_clear_padding">
+
+                <TextView
+                    android:id="@+id/downloaded_resources_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_DownloadedTitle"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_92"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/downloadedResources"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/downloaded_resources_title"
+                    android:animateLayoutChanges="true"
+                    android:background="@color/space_cadet"
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:scrollbars="vertical"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                <TextView
+                    android:id="@+id/downloaded_resources_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/downloadedResources"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_DownloadedEmptyMessage"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_92"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/available_resources_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/downloaded_resources_empty"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_AvailableTitle"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_92"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/available_resources_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/available_resources_title"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_AvailableEmptyMessage"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_92"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/available_resources_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/available_resources_title"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/Resources_AvailableInfoMessage"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/wa_white_92"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/available_resources_info"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/blankResources"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:background="@color/space_cadet"
+                        android:clipToPadding="false"
+                        android:orientation="vertical"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:scrollbars="vertical"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        style="@style/Tella_Progress_Circular" />
+                </FrameLayout>
+
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">Batal</string>
+  <string name="LockSelect_Action_Back">Batal</string>
+  <string name="LockSelect_Action_Confirm">Selanjutnya</string>
+  <string name="LockPatternConfirm_Action_Confirm">Draw the pattern again to confirm</string>
+  <string name="LockSelect_Action_Continue">Selanjutnya</string>
+  <string name="LockPatternSet_Draw_Pattern">Draw an unlock pattern</string>
+  <string name="LockPatternSet_Pattern_Recorded">Pattern recorded</string>
+  <string name="UnlockPattern_PatternTooShort">Connect at least %d dots, please redraw</string>
+  <string name="LockPatternSet_RecordingPattern">Release finger when done</string>
+  <string name="LockPatternSet_Action_Redraw">Redraw</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Wrong pattern, please try again</string>
+  <string name="LockPatternSet_Message_PatternStarted">Pattern started</string>
+  <string name="LockPatternSet_Message_PatternCleared">Pattern cleared</string>
+  <string name="LockPatternSet_Message_CellAdded">Cell added</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
+  <string name="LockPatternSet_Message_PatternDetected">Pattern completed</string>
+  <string name="UnLockPattern_PatternArea">Pattern area</string>
+  <string name="Settings_Action_SetLock">Lock</string>
+</resources>

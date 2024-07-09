@@ -4,9 +4,9 @@ package rs.readahead.washington.mobile.data.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -14,8 +14,9 @@ import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
+import net.zetetic.database.DatabaseUtils;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.DeserializationException;
@@ -43,11 +44,11 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.data.entity.MetadataEntity;
 import rs.readahead.washington.mobile.data.entity.mapper.EntityMapper;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.FileUploadBundle;
 import rs.readahead.washington.mobile.domain.entity.FileUploadInstance;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.OldMediaFile;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstanceStatus;
@@ -57,6 +58,11 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.ListFormResult;
 import rs.readahead.washington.mobile.domain.entity.collect.OdkForm;
+import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackInstance;
+import rs.readahead.washington.mobile.domain.entity.feedback.FeedbackStatus;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.ICollectFormsRepository;
 import rs.readahead.washington.mobile.domain.repository.ICollectServersRepository;
@@ -64,15 +70,19 @@ import rs.readahead.washington.mobile.domain.repository.IMediaFileRecordReposito
 import rs.readahead.washington.mobile.domain.repository.IServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository;
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadsRepository;
+import rs.readahead.washington.mobile.domain.repository.feedback.ITellaFeedBackRepository;
+import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import rs.readahead.washington.mobile.util.C;
+import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.util.FileUtil;
 import rs.readahead.washington.mobile.util.Util;
 import timber.log.Timber;
 
-public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ICollectServersRepository, ICollectFormsRepository,
-        IMediaFileRecordRepository{
+public class DataSource implements IServersRepository, ITellaUploadServersRepository, ITellaUploadsRepository, ITellaReportsRepository, ICollectServersRepository, ICollectFormsRepository,
+        IMediaFileRecordRepository, ITellaFeedBackRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
+
 
     final private SingleTransformer schedulersTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -87,18 +97,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     .observeOn(AndroidSchedulers.mainThread());
 
 
+    private DataSource(Context context, byte[] key) {
+        System.loadLibrary("sqlcipher");
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        database = sqLiteOpenHelper.getWritableDatabase();
+    }
+
     public static synchronized DataSource getInstance(Context context, byte[] key) {
         if (dataSource == null) {
-            dataSource = new DataSource(context.getApplicationContext(), key);
+            try {
+                dataSource = new DataSource(context.getApplicationContext(), key);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return dataSource;
-    }
-
-    private DataSource(Context context, byte[] key) {
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-        database = sqLiteOpenHelper.getWritableDatabase(key);
     }
 
     private <T> SingleTransformer<T, T> applySchedulers() {
@@ -122,7 +136,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<List<TellaUploadServer>> listTellaUploadServers() {
+    public Single<List<TellaReportServer>> listTellaUploadServers() {
         return Single.fromCallable(() -> dataSource.getTUServers())
                 .compose(applySchedulers());
     }
@@ -134,13 +148,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<TellaUploadServer> createTellaUploadServer(final TellaUploadServer server) {
+    public Single<TellaReportServer> createTellaUploadServer(final TellaReportServer server) {
         return Single.fromCallable(() -> dataSource.createTUServer(server))
                 .compose(applySchedulers());
     }
 
+
     @Override
-    public Single<TellaUploadServer> updateTellaUploadServer(TellaUploadServer server) {
+    public Single<TellaReportServer> updateTellaUploadServer(TellaReportServer server) {
         return Single.fromCallable(() -> dataSource.updateTUServer(server))
                 .compose(applySchedulers());
     }
@@ -158,7 +173,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
-    public Single<TellaUploadServer> getTellaUploadServer(final long id) {
+    public Single<TellaReportServer> getTellaUploadServer(final long id) {
         return Single.fromCallable(() -> getTUServer(id))
                 .compose(applySchedulers());
     }
@@ -171,10 +186,17 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
+    public Completable removeCachedForms() {
+        return Completable.fromCallable(() -> {
+            dataSource.removeCachedFormInstances();
+            return true;
+        });
+    }
+
     @Override
-    public Completable removeTUServer(final long id) {
+    public Completable removeTellaServerAndResources(final long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataSource.removeTUServerDB(id);
+            dataSource.deleteTellaServerAndResourcesDB(id);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -232,6 +254,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable scheduleUploadReport(FormMediaFile mediaFile, Long serverId) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            scheduledReportUploadDB(mediaFile, serverId);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    @Override
     public Single<List<CollectForm>> listBlankForms() {
         return Single.fromCallable(() -> dataSource.getBlankCollectForms())
                 .compose(applySchedulers());
@@ -242,7 +272,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return Single.fromCallable(() -> dataSource.getFavoriteCollectForms())
                 .compose(applySchedulers());
     }
-
 
     public Single<CollectForm> getBlankCollectFormById(final String formID) {
         return Single.fromCallable(() -> dataSource.getBlankCollectForm(formID))
@@ -344,6 +373,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @Override
+    public Completable scheduleUploadReportInstances(List<ReportInstance> reportInstances) {
+        return null;
+    }
+
+    @Override
     public Completable logUploadedFile(final VaultFile vaultFile) {
         return Completable.fromCallable((Callable<Void>) () -> {
             logUploadedFileDb(vaultFile);
@@ -359,6 +393,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
+    @Override
+    public Completable setUploadReportStatus(String reportId, String vaultFileId, UploadStatus status, long uploadedSize, boolean retry) {
+        return null;
+    }
 
     public Single<List<VaultFile>> listMediaFiles(final Filter filter, final Sort sort) {
         return Single.fromCallable(() -> getMediaFiles(filter, sort))
@@ -380,9 +418,78 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 .compose(applySchedulers());
     }
 
-    public Single<List<FileUploadBundle>> getFileUploadBundles(final UploadStatus status) {
-        return Single.fromCallable(() -> getFileUploadBundlesDB(status))
+    public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
+        return Single.fromCallable(() -> getReportMediaFilesDB(instance))
                 .compose(applySchedulers());
+    }
+
+    public Single<List<FormMediaFile>> getReportMediaFiles() {
+        return Single.fromCallable(this::getReportMediaFilesDB)
+                .compose(applySchedulers());
+    }
+
+    private List<FormMediaFile> getReportMediaFilesDB() {
+        Cursor cursor = null;
+        List<FormMediaFile> files = new ArrayList<>();
+
+        try {
+            cursor = database.query(
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS, D.C_UPLOADED_SIZE},
+                    null,
+                    null,
+                    null, null,
+                    D.C_VAULT_FILE_ID + " ASC",
+                    null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FormMediaFile formMediaFile = cursorToFormMediaFile(cursor);
+                files.add(formMediaFile);
+            }
+
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return files;
+    }
+
+    private List<FormMediaFile> getReportMediaFilesDB(final ReportInstance instance) {
+        Cursor cursor = null;
+        List<FormMediaFile> files = new ArrayList<>();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS, D.C_UPLOADED_SIZE},
+                    D.C_REPORT_INSTANCE_ID + "= ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(instance.getId())});
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FormMediaFile formMediaFile = cursorToFormMediaFile(cursor);
+                files.add(formMediaFile);
+            }
+
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return files;
+    }
+
+    public Single<List<ReportInstance>> getFileUploadReportBundles(final UploadStatus status) {
+        return null;
     }
 
     @Override
@@ -435,21 +542,35 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private long countDBCollectServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
+        return DatabaseUtils.queryNumEntries(database, D.T_COLLECT_SERVER);
     }
 
     private long countDBTUServers() {
-        return net.sqlcipher.DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
+        return DatabaseUtils.queryNumEntries(database, D.T_TELLA_UPLOAD_SERVER);
     }
 
-    private List<TellaUploadServer> getTUServers() {
+    private List<TellaReportServer> getTUServers() {
         Cursor cursor = null;
-        List<TellaUploadServer> servers = new ArrayList<>();
+        List<TellaReportServer> servers = new ArrayList<>();
 
         try {
             cursor = database.query(
                     D.T_TELLA_UPLOAD_SERVER,
-                    new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
+                    new String[]{D.C_ID,
+                            D.C_NAME,
+                            D.C_URL,
+                            D.C_USERNAME,
+                            D.C_PASSWORD,
+                            D.C_CHECKED,
+                            D.C_ACCESS_TOKEN,
+                            D.C_AUTO_UPLOAD,
+                            D.C_AUTO_DELETE,
+                            D.C_ACTIVATED_METADATA,
+                            D.C_BACKGROUND_UPLOAD,
+                            D.C_PROJECT_SLUG,
+                            D.C_PROJECT_NAME,
+                            D.C_PROJECT_ID
+                    },
                     null,
                     null,
                     null, null,
@@ -457,11 +578,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                TellaUploadServer tuServer = cursorToTellaUploadServer(cursor);
+                TellaReportServer tuServer = cursorToTellaUploadServer(cursor);
                 servers.add(tuServer);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -490,7 +611,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 servers.add(collectServer);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -513,31 +634,46 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToCollectServer(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return CollectServer.NONE;
     }
 
     @Nullable
-    private TellaUploadServer getTUServer(long id) {
-        try (Cursor cursor = database.query(
-                D.T_TELLA_UPLOAD_SERVER,
-                new String[]{D.C_ID, D.C_NAME, D.C_URL, D.C_USERNAME, D.C_PASSWORD, D.C_CHECKED},
-                D.C_ID + "= ?",
-                new String[]{Long.toString(id)},
-                null, null, null, null)) {
+    private TellaReportServer getTUServer(long id) {
+
+        try (
+                Cursor cursor = database.query(
+                        D.T_TELLA_UPLOAD_SERVER,
+                        new String[]{
+                                D.C_ID,
+                                D.C_NAME,
+                                D.C_URL,
+                                D.C_USERNAME,
+                                D.C_PASSWORD,
+                                D.C_CHECKED,
+                                D.C_ACCESS_TOKEN,
+                                D.C_AUTO_UPLOAD,
+                                D.C_AUTO_DELETE,
+                                D.C_ACTIVATED_METADATA,
+                                D.C_BACKGROUND_UPLOAD,
+                                D.C_PROJECT_SLUG,
+                                D.C_PROJECT_NAME,
+                                D.C_PROJECT_ID},
+                        D.C_ID + "= ?",
+                        new String[]{Long.toString(id)},
+                        null, null, null, null)) {
 
             if (cursor.moveToFirst()) {
                 return cursorToTellaUploadServer(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
-        return TellaUploadServer.NONE;
+        return TellaReportServer.NONE;
     }
-
 
     @Nullable
     private CollectForm getBlankCollectForm(String formID) {
@@ -589,7 +725,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return collectForm;
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -599,7 +735,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return null;
     }
 
-    private List<CollectForm> getBlankCollectForms() {
+    public List<CollectForm> getBlankCollectForms() {
         Cursor cursor = null;
         List<CollectForm> forms = new ArrayList<>();
 
@@ -651,7 +787,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 forms.add(collectForm);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -661,7 +797,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return forms;
     }
 
-    private List<CollectForm> getFavoriteCollectForms(){
+    private List<CollectForm> getFavoriteCollectForms() {
         Cursor cursor = null;
         List<CollectForm> forms = new ArrayList<>();
 
@@ -683,7 +819,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_DOWNLOAD_URL,
                             cn(D.T_COLLECT_SERVER, D.C_NAME, D.A_SERVER_NAME),
                             cn(D.T_COLLECT_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_FAVORITE +" =1 " , null, null,
+                    D.C_FAVORITE + " =1 ", null, null,
                     cn(D.T_COLLECT_BLANK_FORM, D.C_FAVORITE) + " DESC, " + cn(D.T_COLLECT_BLANK_FORM, D.C_ID) + " DESC",
                     null
             );
@@ -713,7 +849,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 forms.add(collectForm);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -723,7 +859,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return forms;
     }
 
-    public List<CollectInstanceVaultFile> getCollectInstanceVaultFilesDB(){
+    public List<CollectInstanceVaultFile> getCollectInstanceVaultFilesDB() {
         List<CollectInstanceVaultFile> files = new ArrayList<>();
         Cursor cursor = null;
 
@@ -749,10 +885,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
                 int status = cursor.getInt(cursor.getColumnIndexOrThrow(D.A_FORM_MEDIA_FILE_STATUS));
 
-                files.add(new CollectInstanceVaultFile(id, instanceId,vaultFileId,status));
+                files.add(new CollectInstanceVaultFile(id, instanceId, vaultFileId, status));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -778,7 +914,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -798,13 +934,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private TellaUploadServer createTUServer(final TellaUploadServer server) {
+    private TellaReportServer createTUServer(final TellaReportServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_NAME, server.getName());
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PROJECT_ID, server.getProjectId());
+        values.put(D.C_PROJECT_NAME, server.getProjectName());
+        values.put(D.C_PROJECT_SLUG, server.getProjectSlug());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+        values.put(D.C_ACCESS_TOKEN, "Bearer " + server.getAccessToken());
+        values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -887,6 +1031,26 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return form;
     }
 
+   /* @Nullable
+    private FormDef getCollectFormDef(String formId, String versionId) {
+
+        try (Cursor cursor = database.query(
+                D.T_COLLECT_BLANK_FORM,
+                new String[]{D.C_FORM_DEF},
+                D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
+                new String[]{formId, versionId},
+                null, null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        }
+
+        return null;
+    }*/
+
     @Nullable
     private FormDef getCollectFormDef(CollectForm form) {
         Cursor cursor = null;
@@ -904,7 +1068,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -913,26 +1077,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         return null; // let rx crash for this..
     }
-
-   /* @Nullable
-    private FormDef getCollectFormDef(String formId, String versionId) {
-
-        try (Cursor cursor = database.query(
-                D.T_COLLECT_BLANK_FORM,
-                new String[]{D.C_FORM_DEF},
-                D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
-                new String[]{formId, versionId},
-                null, null, null, null)) {
-
-            if (cursor.moveToFirst()) {
-                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
-            }
-        } catch (Exception e) {
-            Timber.d(e, getClass().getName());
-        }
-
-        return null;
-    }*/
 
     @Nullable
     private void removeCollectFormDef(Long formId) throws NotFountException {
@@ -946,7 +1090,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             database.setTransactionSuccessful();
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -991,7 +1135,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 mediaFiles.add(cursorToMediaFile(cursor));
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1027,7 +1171,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToMediaFile(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1064,7 +1208,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return cursorToMediaFile(cursor);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1113,7 +1257,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     SQLiteDatabase.CONFLICT_IGNORE);
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -1132,7 +1276,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata ? 1 : 0);
                 values.put(D.C_MANUAL_UPLOAD, manualUpload);
-                values.put(D.C_SERVER_ID, uploadServerId );
+                values.put(D.C_SERVER_ID, uploadServerId);
                 values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
                 values.put(D.C_RETRY_COUNT, retries);
@@ -1144,8 +1288,96 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                         SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
+    }
+
+
+    private void scheduledReportUploadDB(FormMediaFile mediaFile, Long serverId) {
+        Cursor cursor = null;
+        ReportInstance reportInstance = null;
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE +
+                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_CURRENT_UPLOAD,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE,
+                            D.C_REPORT_API_ID,
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_CURRENT_UPLOAD + " = 1",
+                    null, null,
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+
+            if (cursor == null || cursor.getColumnCount() == 0) {
+                ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                updateTellaReportsFormInstance(newReportInstance);
+            } else {
+                getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
+            }
+
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+    }
+
+    private ReportInstance getLastScheduledReportFromCursor(Cursor cursor, FormMediaFile mediaFile, Long serverId) {
+        List<ReportInstance> instances = new ArrayList<>();
+        ReportInstance reportInstance;
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            ReportInstance instance = cursorToReportFormInstance(cursor);
+            instances.add(instance);
+        }
+
+        if (!instances.isEmpty()) {
+            ReportInstance currentInstance = instances.get(0);
+
+            if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
+                currentInstance.setCurrent(0);
+                currentInstance.setStatus(EntityStatus.SUBMITTED);
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));
+                updateTellaReportsFormInstance(currentInstance);
+                ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                reportInstance = updateTellaReportsFormInstance(newReportInstance);
+            } else {
+                currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, mediaFile));
+                currentInstance.setStatus(EntityStatus.SCHEDULED);
+                reportInstance = updateTellaReportsFormInstance(currentInstance);
+            }
+        } else {
+            ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+            newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance, mediaFile));
+            reportInstance = updateTellaReportsFormInstance(newReportInstance);
+        }
+        return reportInstance;
+    }
+
+    private List<FormMediaFile> getReportFiles(ReportInstance instance, @Nullable FormMediaFile mediaFile) {
+        List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
+        if (mediaFile != null) {
+            mediaFiles.add(mediaFile);
+        }
+
+        return mediaFiles;
     }
 
     private void scheduleUploadMediaFilesDb(List<VaultFile> vaultFiles) {
@@ -1153,7 +1385,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             long set = calculateCurrentFileUploadSet();
 
-            int metadata = Preferences.isMetadataAutoUpload()? 1 : 0;
+            int metadata = Preferences.isMetadataAutoUpload() ? 1 : 0;
             long uploadServerId = Preferences.getAutoUploadServerId();
 
             for (VaultFile vaultFile : vaultFiles) {
@@ -1163,8 +1395,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 values.put(D.C_CREATED, Util.currentTimestamp());
                 values.put(D.C_STATUS, UploadStatus.SCHEDULED.ordinal());
                 values.put(D.C_INCLUDE_METADATA, metadata);
-                values.put(D.C_MANUAL_UPLOAD, 0 );
-                values.put(D.C_SERVER_ID, uploadServerId );
+                values.put(D.C_MANUAL_UPLOAD, 0);
+                values.put(D.C_SERVER_ID, uploadServerId);
                 values.put(D.C_SIZE, vaultFile.size);
                 values.put(D.C_SET, set);
 
@@ -1175,7 +1407,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                         SQLiteDatabase.CONFLICT_REPLACE);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
     }
 
@@ -1213,7 +1445,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             return newSet;
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1245,7 +1477,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             return maxRetries + 1;
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1310,7 +1542,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 CollectFormInstance instance = cursorToCollectFormInstance(cursor);
 
                 instance.setFormDef(deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF))));
-               // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
+                // instance.setFormDef(getCollectFormDef(instance.getFormID(),instance.getVersion()));
 
                 HashMap<String, Integer> vaultFileIds = getFormInstanceMediaFilesIdsFromDb(instance.getId());
                 instance.setWidgetMediaFilesIds(vaultFileIds);
@@ -1318,7 +1550,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 return instance;
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1338,22 +1570,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesInStatusDB(UploadStatus status){
+    private void deleteFileUploadInstancesInStatusDB(UploadStatus status) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " = ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesNotInStatusDB(UploadStatus status){
+    private void deleteFileUploadInstancesNotInStatusDB(UploadStatus status) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_STATUS + " <> ?", new String[]{Integer.toString(status.ordinal())});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstancesBySetDB(long set){
+    private void deleteFileUploadInstancesBySetDB(long set) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_SET + " = ?", new String[]{Long.toString(set)});
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteFileUploadInstanceByIdDB(long id){
+    private void deleteFileUploadInstanceByIdDB(long id) {
         int count = database.delete(D.T_MEDIA_FILE_UPLOAD, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
@@ -1387,12 +1619,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     VaultFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
                     instance.setMediaFile(mediaFile);
                 } catch (NotFountException e) {
-                    Timber.d(e, getClass().getName());
+                    Timber.e(e, getClass().getName());
                 }
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1424,7 +1656,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     null, null, D.C_SET + " DESC", null
             );
 
-            cursor = database.rawQuery(query,  new String[]{Long.toString(set)});
+            cursor = database.rawQuery(query, new String[]{Long.toString(set)});
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 FileUploadInstance instance = cursorToFileUploadInstance(cursor);
@@ -1432,12 +1664,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     VaultFile mediaFile = getMediaFileFromDb(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_MEDIA_FILE_ID)));
                     instance.setMediaFile(mediaFile);
                 } catch (NotFountException e) {
-                    Timber.d(e, getClass().getName());
+                    Timber.e(e, getClass().getName());
                 }
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1471,7 +1703,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 ids.put(vaultFileId, fileStatus);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1504,7 +1736,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 }
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1529,13 +1761,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (cursor.moveToFirst()) {
                 VaultFile vaultFile = new VaultFile();
-                    vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
+                vaultFile.thumb = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_THUMBNAIL));
                 if (vaultFile.thumb != null) {
                     return vaultFile;
                 }
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return null;
@@ -1554,7 +1786,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     D.C_ID + "= ?",
                     new String[]{vaultFile.id});
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return vaultFile;
@@ -1589,13 +1821,13 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             cursor = database.rawQuery(query, null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                 VaultFile vaultFile = cursorToMediaFile(cursor);
+                VaultFile vaultFile = cursorToMediaFile(cursor);
               /*  if (mediaFileFilter(vaultFile, filter)) {
                     mediaFiles.add(vaultFile);
                 }*/
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1606,48 +1838,48 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<OldMediaFile> getAllOldMediaFiles() {
-            Cursor cursor = null;
-            List<OldMediaFile> mediaFiles = new ArrayList<>();
+        Cursor cursor = null;
+        List<OldMediaFile> mediaFiles = new ArrayList<>();
 
-            String order = "DESC";
+        String order = "DESC";
 
-            try {
-                final String query = SQLiteQueryBuilder.buildQueryString(
-                        false,
-                        D.T_MEDIA_FILE,
-                        new String[]{
-                                cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
-                                D.C_PATH,
-                                D.C_UID,
-                                D.C_FILE_NAME,
-                                D.C_METADATA,
-                                D.C_CREATED,
-                                D.C_DURATION,
-                                D.C_ANONYMOUS,
-                                D.C_SIZE,
-                                D.C_HASH,
-                                D.C_THUMBNAIL},
-                        null, null, null,
-                        D.C_CREATED + " " + order,
-                        null
-                );
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_MEDIA_FILE,
+                    new String[]{
+                            cn(D.T_MEDIA_FILE, D.C_ID, D.A_MEDIA_FILE_ID),
+                            D.C_PATH,
+                            D.C_UID,
+                            D.C_FILE_NAME,
+                            D.C_METADATA,
+                            D.C_CREATED,
+                            D.C_DURATION,
+                            D.C_ANONYMOUS,
+                            D.C_SIZE,
+                            D.C_HASH,
+                            D.C_THUMBNAIL},
+                    null, null, null,
+                    D.C_CREATED + " " + order,
+                    null
+            );
 
-                cursor = database.rawQuery(query, null);
+            cursor = database.rawQuery(query, null);
 
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    OldMediaFile mediaFile = cursorToOldMediaFile(cursor);
-                    mediaFiles.add(mediaFile);
-                }
-            } catch (Exception e) {
-                Timber.d(e, getClass().getName());
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                OldMediaFile mediaFile = cursorToOldMediaFile(cursor);
+                mediaFiles.add(mediaFile);
             }
-
-            return mediaFiles;
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
+
+        return mediaFiles;
+    }
 
     private List<VaultFile> getUploadMediaFilesDB(final UploadStatus status) {
         Cursor cursor = null;
@@ -1682,7 +1914,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1728,7 +1960,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
 
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1751,10 +1983,27 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             form.setDownloaded(true);
             form.setUpdated(false);
         } catch (IOException e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         }
 
         return formDef;
+    }
+
+    private void updateCollectFormDefinition(CollectForm form, FormDef formDef) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(D.C_FORM_DEF, serializeFormDef(formDef));
+            values.put(D.C_UPDATED, 0);
+            values.put(D.C_DOWNLOADED, 1);
+
+            database.update(D.T_COLLECT_BLANK_FORM, values,
+                    D.C_FORM_ID + "= ? AND " + D.C_VERSION + " = ?",
+                    new String[]{form.getForm().getFormID(), form.getForm().getVersion()});
+            form.setDownloaded(true);
+            form.setUpdated(false);
+        } catch (IOException e) {
+            Timber.e(e, getClass().getName());
+        }
     }
 
     private List<CollectFormInstance> getDraftCollectFormInstances() {
@@ -1769,8 +2018,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 //CollectFormInstanceStatus.FINALIZED,
                 CollectFormInstanceStatus.SUBMITTED//,
                 //CollectFormInstanceStatus.SUBMISSION_ERROR,
-               // CollectFormInstanceStatus.SUBMISSION_PENDING,
-               //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
+                // CollectFormInstanceStatus.SUBMISSION_PENDING,
+                //CollectFormInstanceStatus.SUBMISSION_PARTIAL_PARTS
         });
     }
 
@@ -1833,7 +2082,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 instances.add(instance);
             }
         } catch (Exception e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -1900,7 +2149,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.setTransactionSuccessful();
         } catch (IOException e) {
-            Timber.d(e, getClass().getName());
+            Timber.e(e, getClass().getName());
         } finally {
             database.endTransaction();
         }
@@ -1943,23 +2192,27 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return server;
     }
 
-    private TellaUploadServer updateTUServer(final TellaUploadServer server) {
+    private TellaReportServer updateTUServer(final TellaReportServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_NAME, server.getName());
         values.put(D.C_URL, server.getUrl());
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_PASSWORD, server.getPassword());
         values.put(D.C_CHECKED, server.isChecked() ? 1 : 0);
+        values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
+        values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
+        values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
+        values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
 
         database.update(D.T_TELLA_UPLOAD_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
 
         return server;
     }
 
-
-    private void removeTUServerDB(long id) {
+    private void deleteTellaServerAndResourcesDB(long id) {
         database.delete(D.T_TELLA_UPLOAD_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
-        deleteTable(D.T_MEDIA_FILE_UPLOAD);
+        database.delete(D.T_RESOURCES, D.C_SERVER_ID + " = ?", new String[]{Long.toString(id)});
+        //deleteTable(D.T_REPORT_FILES_UPLOAD);
     }
 
     private void removeServer(long id) {
@@ -1968,6 +2221,21 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             database.delete(D.T_COLLECT_FORM_INSTANCE, D.C_COLLECT_SERVER_ID + " = ?", new String[]{Long.toString(id)});
             database.delete(D.T_COLLECT_SERVER, D.C_ID + " = ?", new String[]{Long.toString(id)});
+
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+        }
+    }
+
+    public void removeCachedFormInstances() {
+        try {
+            database.beginTransaction();
+
+            deleteTable(D.T_COLLECT_BLANK_FORM);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE);
+            deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+            //Preferences.setJavarosa3Upgraded(true);
 
             database.setTransactionSuccessful();
         } finally {
@@ -1991,14 +2259,29 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
         deleteTable(D.T_UWAZI_SERVER);
+        deleteTable(D.T_REPORT_FORM_INSTANCE);
+        deleteTable(D.T_REPORT_FILES_UPLOAD);
+        deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
+        deleteTable(D.T_RESOURCES);
     }
 
-    public void deleteForms() {
+    public void deleteFormsAndRelatedTables() {
         //deleteTable(D.T_COLLECT_BLANK_FORM); // only draft and sent forms are to be deleted
+        // Delete ODK form instances
         deleteTable(D.T_COLLECT_FORM_INSTANCE);
         deleteTable(D.T_COLLECT_FORM_INSTANCE_MEDIA_FILE);
+
+        // Delete tables related to Uwazi entity instances
         deleteTable(D.T_UWAZI_ENTITY_INSTANCES);
         deleteTable(D.T_UWAZI_ENTITY_INSTANCE_VAULT_FILE);
+
+        // Delete tables related to Tella Report instances
+        deleteTable(D.T_REPORT_FORM_INSTANCE);
+        deleteTable(D.T_REPORT_FILES_UPLOAD);
+        deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
+
+        // Delete resources table
+        deleteTable(D.T_RESOURCES);
     }
 
     private void deleteAllServersDB() {
@@ -2008,6 +2291,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_COLLECT_SERVER);
         deleteTable(D.T_UWAZI_SERVER);
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
+        deleteTable(D.T_RESOURCES);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
     }
 
@@ -2027,14 +2311,22 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return collectServer;
     }
 
-    private TellaUploadServer cursorToTellaUploadServer(Cursor cursor) {
-        TellaUploadServer server = new TellaUploadServer();
+    private TellaReportServer cursorToTellaUploadServer(Cursor cursor) {
+        TellaReportServer server = new TellaReportServer();
         server.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
         server.setName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_NAME)));
         server.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL)));
         server.setUsername(cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME)));
         server.setPassword(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PASSWORD)));
         server.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_CHECKED)) > 0);
+        server.setAccessToken(cursor.getString(cursor.getColumnIndexOrThrow(D.C_ACCESS_TOKEN)));
+        server.setActivatedBackgroundUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_BACKGROUND_UPLOAD)) > 0);
+        server.setAutoUpload(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_UPLOAD)) > 0);
+        server.setAutoDelete(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_AUTO_DELETE)) > 0);
+        server.setActivatedMetadata(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_ACTIVATED_METADATA)) > 0);
+        server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
+        server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));
+        server.setProjectName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_NAME)));
 
         return server;
     }
@@ -2088,23 +2380,27 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private FormMediaFile cursorToFormMediaFile(Cursor cursor) {
-        FormMediaFile formMediaFile = FormMediaFile.fromMediaFile(cursorToMediaFile(cursor));
+        FormMediaFile formMediaFile = new FormMediaFile();
 
-        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.A_FORM_MEDIA_FILE_STATUS));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        String id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+        long uploadedSize = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED_SIZE));
         formMediaFile.status = FormMediaFileStatus.values()[statusOrdinal];
+        formMediaFile.id = id;
+        formMediaFile.uploadedSize = uploadedSize;
 
         return formMediaFile;
     }
 
     private VaultFile cursorToMediaFile(Cursor cursor) {
-        String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
+        //  String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
         String uid = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
         String fileName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_FILE_NAME));
         MetadataEntity metadataEntity = new Gson().fromJson(cursor.getString(cursor.getColumnIndexOrThrow(D.C_METADATA)), MetadataEntity.class);
 
         VaultFile vaultFile = new VaultFile();
         vaultFile.id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_UID));
-        vaultFile.path = path;
+        //  vaultFile.path = path;
         vaultFile.name = fileName;
         vaultFile.metadata = new EntityMapper().transform(metadataEntity);
         vaultFile.created = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CREATED));
@@ -2157,18 +2453,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return instance;
     }
 
-    private static String createSQLInsert(final String tableName, final String[] columnNames) {
-        if (tableName == null || columnNames == null || columnNames.length == 0) {
-            throw new IllegalArgumentException();
-        }
-
-        return "INSERT INTO " + tableName + " (" +
-                TextUtils.join(", ", columnNames) +
-                ") VALUES( " +
-                TextUtils.join(", ", Collections.nCopies(columnNames.length, "?")) +
-                ")";
-    }
-
     private String cn(String table, String column) {
         return table + "." + column;
     }
@@ -2194,8 +2478,486 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return setting;
     }
 
+    public Single<List<FileUploadBundle>> getFileUploadBundles(final UploadStatus status) {
+        return Single.fromCallable(() -> getFileUploadBundlesDB(status))
+                .compose(applySchedulers());
+    }
+
+    @NonNull
+    @Override
+    public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
+        return Single.fromCallable(() -> updateTellaReportsFormInstance(instance))
+                .compose(applySchedulers());
+    }
+
+    @NonNull
+    public Single<FeedbackInstance> saveFeedbackInstance(@NonNull FeedbackInstance instance) {
+        return Single.fromCallable(() -> updateTellaFeedbackInstance(instance)).compose(applySchedulers());
+    }
+
+    private FeedbackInstance updateTellaFeedbackInstance(FeedbackInstance instance) {
+        try {
+            int statusOrdinal;
+            ContentValues values = new ContentValues();
+
+            if (instance.getId() > 0) {
+                values.put(D.C_ID, instance.getId());
+            }
+            values.put(D.C_DESCRIPTION_TEXT, instance.getText());
+            values.put(D.C_UPDATED, Util.currentTimestamp());
+            statusOrdinal = instance.getStatus().ordinal();
+            values.put(D.C_STATUS, statusOrdinal);
+            database.beginTransaction();
+
+            // insert/update feedback instance
+            long id = database.insertWithOnConflict(
+                    D.T_FEEDBACK,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
+            instance.setId(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            database.endTransaction();
+        }
+        return instance;
+    }
+
+    @NonNull
+    @Override
+    public Completable deleteReportInstance(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            deleteReportFormInstance(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
+        try {
+            int statusOrdinal;
+            ContentValues values = new ContentValues();
+
+            if (instance.getId() > 0) {
+                values.put(D.C_ID, instance.getId());
+            }
+
+            values.put(D.C_REPORT_SERVER_ID, instance.getServerId());
+            values.put(D.C_TITLE, instance.getTitle());
+            values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
+            values.put(D.C_UPDATED, Util.currentTimestamp());
+            values.put(D.C_CURRENT_UPLOAD, instance.getCurrent());
+            values.put(D.C_REPORT_API_ID, instance.getReportApiId());
+
+            //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
+            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
+
+            if (instance.getStatus() == EntityStatus.UNKNOWN) {
+                statusOrdinal = EntityStatus.DRAFT.ordinal();
+            } else {
+                statusOrdinal = instance.getStatus().ordinal();
+            }
+            values.put(D.C_STATUS, statusOrdinal);
 
 
+            database.beginTransaction();
+
+            // insert/update form instance
+            long id = database.insertWithOnConflict(
+                    D.T_REPORT_FORM_INSTANCE,
+                    null,
+                    values,
+                    SQLiteDatabase.CONFLICT_REPLACE);
+            instance.setId(id);
+
+            // clear FormMediaFiles
+            database.delete(
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    D.C_REPORT_INSTANCE_ID + " = ?",
+                    new String[]{Long.toString(id)});
+
+            // insert FormMediaFiles
+            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
+            for (FormMediaFile mediaFile : mediaFiles) {
+                values = new ContentValues();
+                values.put(D.C_REPORT_INSTANCE_ID, id);
+                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
+                values.put(D.C_STATUS, mediaFile.status.ordinal());
+                values.put(D.C_UPLOADED_SIZE, mediaFile.uploadedSize);
+                database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
+            }
+
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            database.endTransaction();
+        }
+
+        return instance;
+    }
+
+    private List<ReportInstance> getReportFormInstances(EntityStatus[] statuses) {
+        Cursor cursor = null;
+        List<ReportInstance> instances = new ArrayList<>();
+
+        List<String> s = new ArrayList<>(statuses.length);
+        for (EntityStatus status : statuses) {
+            s.add(Integer.toString(status.ordinal()));
+        }
+        String selection = "(" + TextUtils.join(", ", s) + ")";
+
+        try {
+
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE +
+                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_CURRENT_UPLOAD,
+                            //   D.C_METADATA,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE,
+                            D.C_REPORT_API_ID,
+                            //  D.C_FORM_PART_STATUS,
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_STATUS + " IN " + selection,
+                    null, null,
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                ReportInstance instance = cursorToReportFormInstance(cursor);
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
+        Cursor cursor = null;
+        List<ReportInstance> instances = new ArrayList<>();
+
+        try {
+
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE +
+                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_STATUS,
+                            D.C_CURRENT_UPLOAD,
+                            D.C_UPDATED,
+                            D.C_METADATA,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE,
+                            //  D.C_FORM_PART_STATUS,
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
+                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
+                    D.C_CURRENT_UPLOAD + " = " + current,
+                    null, null,
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
+                    null
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                ReportInstance instance = cursorToReportFormInstance(cursor);
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    private ReportInstance cursorToReportFormInstance(Cursor cursor) {
+        ReportInstance instance = new ReportInstance();
+        instance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.A_TELLA_UPLOAD_INSTANCE_ID)));
+        instance.setServerId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_REPORT_SERVER_ID)));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        instance.setStatus(EntityStatus.values()[statusOrdinal]);
+        instance.setUpdated(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPDATED)));
+        instance.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TITLE)));
+        instance.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
+        instance.setReportApiId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_REPORT_API_ID)));
+        instance.setCurrent(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_CURRENT_UPLOAD)));
+        return instance;
+    }
+
+    private List<ReportInstance> getDraftReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.UNKNOWN,
+                EntityStatus.DRAFT
+        });
+    }
+
+    @NonNull
+    @Override
+    public Single<FeedbackInstance> getFeedbackDraft() {
+        return Single.fromCallable(() -> getFeedBackInstance(FeedbackStatus.DRAFT))
+                .compose(applySchedulers());
+    }
+
+    @NonNull
+    public FeedbackInstance getFeedBackInstance(FeedbackStatus status) {
+
+        Cursor cursor = null;
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_FEEDBACK,
+                    new String[]{D.C_ID, D.C_DESCRIPTION_TEXT, D.C_STATUS, D.C_UPDATED},
+                    D.C_STATUS + " = ?",
+                    null, null, null, null
+            );
+            cursor = database.rawQuery(query, new String[]{String.valueOf(status.ordinal())});
+            if (cursor.moveToFirst()) {
+                return cursorToFeedbackInstance(cursor);
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    private FeedbackInstance cursorToFeedbackInstance(Cursor cursor) {
+        FeedbackInstance feedbackInstance = new FeedbackInstance();
+        feedbackInstance.setId(cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID)));
+        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
+        feedbackInstance.setStatus(FeedbackStatus.values()[statusOrdinal]);
+        feedbackInstance.setText(cursor.getString(cursor.getColumnIndexOrThrow(D.C_DESCRIPTION_TEXT)));
+        return feedbackInstance;
+    }
+
+    private List<ReportInstance> getOutboxReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_ERROR,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS,
+                EntityStatus.SUBMISSION_IN_PROGRESS,
+                EntityStatus.SCHEDULED,
+                EntityStatus.PAUSED
+        });
+    }
+
+    private List<ReportInstance> getSubmittedReportInstances() {
+        return getReportFormInstances(new EntityStatus[]{
+                EntityStatus.SUBMITTED
+        });
+    }
+
+    @NonNull
+    @Override
+    public Completable deleteFeedbackInstance(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            deleteFeedbackFormInstance(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    private void deleteFeedbackFormInstance(long id) throws NotFountException {
+        int count = database.delete(D.T_FEEDBACK, D.C_ID + " = ?", new String[]{Long.toString(id)});
+        if (count != 1) {
+            throw new NotFountException();
+        }
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listDraftReportInstances() {
+        return Single.fromCallable(this::getDraftReportInstances)
+                .compose(applySchedulers());
+    }
+
+    @Nullable
+    @Override
+    public Single<List<FeedbackInstance>> listFeedBackInstances() {
+        return Single.fromCallable(this::getFeedBackInstances)
+                .compose(applySchedulers());
+    }
+
+    private List<FeedbackInstance> getFeedBackInstances() {
+        return getFeedbackInstances(new FeedbackStatus[]{
+                FeedbackStatus.SUBMISSION_PENDING,
+                FeedbackStatus.SUBMISSION_ERROR
+        });
+    }
+
+    private List<FeedbackInstance> getFeedbackInstances(FeedbackStatus[] statuses) {
+        Cursor cursor = null;
+        List<FeedbackInstance> instances = new ArrayList<>();
+
+        List<String> statusOrdinalList = new ArrayList<>(statuses.length);
+        for (FeedbackStatus status : statuses) {
+            statusOrdinalList.add(Integer.toString(status.ordinal()));
+        }
+        String selection = "(" + TextUtils.join(", ", statusOrdinalList) + ")";
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_FEEDBACK,
+                    new String[]{D.C_ID, D.C_DESCRIPTION_TEXT, D.C_STATUS, D.C_UPDATED},
+                    D.C_STATUS + " IN " + selection,
+                    null, null, cn(D.T_FEEDBACK, D.C_ID) + " DESC", null
+
+            );
+            cursor = database.rawQuery(query, null);
+
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                FeedbackInstance instance = cursorToFeedbackInstance(cursor);
+                instances.add(instance);
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return instances;
+    }
+
+    @Nullable
+    @Override
+    public Single<List<ReportInstance>> listOutboxReportInstances() {
+        return Single.fromCallable(this::getOutboxReportInstances)
+                .compose(applySchedulers());
+    }
+
+    @Nullable
+    @Override
+    public Single<List<ReportInstance>> listSubmittedReportInstances() {
+        return Single.fromCallable(this::getSubmittedReportInstances)
+                .compose(applySchedulers());
+    }
+
+    @Nullable
+    @Override
+    public Single<ReportInstanceBundle> getReportBundle(long id) {
+        return Single.fromCallable(() -> getReportInstanceBundle(id))
+                .compose(applySchedulers());
+    }
+
+    private ReportInstanceBundle getReportInstanceBundle(long id) {
+        Cursor cursor = null;
+        ReportInstanceBundle bundle = new ReportInstanceBundle();
+
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_FORM_INSTANCE,
+                    new String[]{
+                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                            D.C_REPORT_SERVER_ID,
+                            D.C_REPORT_API_ID,
+                            D.C_CURRENT_UPLOAD,
+                            D.C_STATUS,
+                            D.C_UPDATED,
+                            D.C_METADATA,
+                            D.C_DESCRIPTION_TEXT,
+                            D.C_TITLE},
+                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + "= ?",
+                    null, null, null, null
+            );
+
+            cursor = database.rawQuery(query, new String[]{Long.toString(id)});
+
+            if (cursor.moveToFirst()) {
+                ReportInstance instance = cursorToReportFormInstance(cursor);
+                bundle.setInstance(instance);
+
+                List<String> vaultFileIds = getReportInstanceFileIds(instance.getId());
+                String[] iDs = new String[vaultFileIds.size()];
+                vaultFileIds.toArray(iDs);
+                bundle.setFileIds(iDs);
+
+                return bundle;
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+            throw e;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return new ReportInstanceBundle();
+    }
+
+    private List<String> getReportInstanceFileIds(long instanceId) {
+        List<String> ids = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            final String query = SQLiteQueryBuilder.buildQueryString(
+                    false,
+                    D.T_REPORT_INSTANCE_VAULT_FILE,
+                    new String[]{
+                            D.C_VAULT_FILE_ID},
+                    D.C_REPORT_INSTANCE_ID + "= ?",
+                    null, null, D.C_VAULT_FILE_ID + " DESC", null
+            );
+            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
+                ids.add(vaultFileId);
+            }
+        } catch (Exception e) {
+            Timber.e(e, getClass().getName());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return ids;
+    }
+
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private void deleteReportFormInstance(long id) throws NotFountException {
+        int count = database.delete(D.T_REPORT_FORM_INSTANCE, D.C_ID + " = ?", new String[]{Long.toString(id)});
+
+        if (count != 1) {
+            throw new NotFountException();
+        }
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listAllReportInstances() {
+        return null;
+    }
 
     private static class Setting {
         Integer intValue;

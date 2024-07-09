@@ -5,8 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,28 +18,24 @@ import com.hzontal.utils.MediaFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
 import rs.readahead.washington.mobile.presentation.entity.MediaFilesData;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
 import rs.readahead.washington.mobile.presentation.entity.ViewType;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.views.interfaces.IAttachmentsMediaHandler;
+import rs.readahead.washington.mobile.databinding.CardAttachmentMediaFileBinding;
 
 
 public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<AttachmentsRecycleViewAdapter.ViewHolder> {
     private List<VaultFile> attachments = new ArrayList<>();
-    private VaultFileUrlLoader glideLoader;
-    private IAttachmentsMediaHandler attachmentsMediaHandler;
+    private final IAttachmentsMediaHandler attachmentsMediaHandler;
     protected ViewType type;
+    private CardAttachmentMediaFileBinding itemBinding;
 
 
     public AttachmentsRecycleViewAdapter(Context context, IAttachmentsMediaHandler attachmentsMediaHandler,
                                          MediaFileHandler mediaFileHandler, ViewType type) {
-        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
         this.attachmentsMediaHandler = attachmentsMediaHandler;
         this.type = type;
     }
@@ -49,8 +43,8 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_attachment_media_file, parent, false);
-        return new ViewHolder(v, type);
+        itemBinding = CardAttachmentMediaFileBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(itemBinding, type);
     }
 
     @Override
@@ -63,30 +57,28 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             holder.showImageInfo();
-            Glide.with(holder.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(itemBinding.mediaView.getContext())
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.mediaView);
+                    .into(itemBinding.mediaView);
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             holder.showAudioInfo(vaultFile);
             Drawable drawable = VectorDrawableCompat.create(holder.itemView.getContext().getResources(),
                     R.drawable.ic_mic_gray, null);
-            holder.mediaView.setImageDrawable(drawable);
+            itemBinding.mediaView.setImageDrawable(drawable);
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             holder.showVideoInfo(vaultFile);
-            Glide.with(holder.mediaView.getContext())
-                    .using(glideLoader)
-                    .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
+            Glide.with(itemBinding.mediaView.getContext())
+                    .load(vaultFile.thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(holder.mediaView);
+                    .into(itemBinding.mediaView);
         }
 
-        holder.mediaView.setOnClickListener(v -> attachmentsMediaHandler.playMedia(vaultFile));
+        itemBinding.mediaView.setOnClickListener(v -> attachmentsMediaHandler.playMedia(vaultFile));
 
-        holder.removeFile.setOnClickListener(view -> {
+        itemBinding.removeFile.setOnClickListener(view -> {
             removeAttachment(vaultFile);
             attachmentsMediaHandler.onRemoveAttachment(vaultFile);
         });
@@ -141,58 +133,45 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.mediaView)
-        ImageView mediaView;
-        @BindView(R.id.videoInfo)
-        ViewGroup videoInfo;
-        @BindView(R.id.videoDuration)
-        TextView videoDuration;
-        @BindView(R.id.audioInfo)
-        ViewGroup audioInfo;
-        @BindView(R.id.audioDuration)
-        TextView audioDuration;
-        @BindView(R.id.remove_file)
-        ImageView removeFile;
-        @BindView(R.id.metadata_icon)
-        ImageView metadataIcon;
+        CardAttachmentMediaFileBinding itemBinding;
 
-        private ViewType type;
+        private final ViewType type;
 
-        public ViewHolder(View itemView, ViewType type) {
-            super(itemView);
+        public ViewHolder(CardAttachmentMediaFileBinding itemBinding, ViewType type) {
+            super(itemBinding.getRoot());
             this.type = type;
-            ButterKnife.bind(this, itemView);
+            this.itemBinding = itemBinding;
         }
 
         void showVideoInfo(VaultFile vaultFile) {
-            audioInfo.setVisibility(View.GONE);
-            videoInfo.setVisibility(View.VISIBLE);
+            itemBinding.audioInfo.setVisibility(View.GONE);
+            itemBinding.videoInfo.setVisibility(View.VISIBLE);
             if (vaultFile.duration > 0) {
-                videoDuration.setText(getDuration(vaultFile));
-                videoDuration.setVisibility(View.VISIBLE);
+                itemBinding.videoDuration.setText(getDuration(vaultFile));
+                itemBinding.videoDuration.setVisibility(View.VISIBLE);
             } else {
-                videoDuration.setVisibility(View.INVISIBLE);
+                itemBinding.videoDuration.setVisibility(View.INVISIBLE);
             }
         }
 
         void showAudioInfo(VaultFile vaultFile) {
-            videoInfo.setVisibility(View.GONE);
-            audioInfo.setVisibility(View.VISIBLE);
+            itemBinding.videoInfo.setVisibility(View.GONE);
+            itemBinding.audioInfo.setVisibility(View.VISIBLE);
             if (vaultFile.duration > 0) {
-                audioDuration.setText(getDuration(vaultFile));
-                audioDuration.setVisibility(View.VISIBLE);
+                itemBinding.audioDuration.setText(getDuration(vaultFile));
+                itemBinding.audioDuration.setVisibility(View.VISIBLE);
             } else {
-                audioDuration.setVisibility(View.INVISIBLE);
+                itemBinding.audioDuration.setVisibility(View.INVISIBLE);
             }
         }
 
         void showImageInfo() {
-            videoInfo.setVisibility(View.GONE);
-            audioInfo.setVisibility(View.GONE);
+            itemBinding.videoInfo.setVisibility(View.GONE);
+            itemBinding.audioInfo.setVisibility(View.GONE);
         }
 
         void setRemoveButton() {
-            removeFile.setVisibility(type == ViewType.PREVIEW ? View.GONE : View.VISIBLE);
+            itemBinding.removeFile.setVisibility(type == ViewType.PREVIEW ? View.GONE : View.VISIBLE);
         }
 
         private String getDuration(VaultFile vaultFile) {
@@ -201,9 +180,9 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
         void setMetadataIcon(VaultFile vaultFile) {
             if (vaultFile.metadata != null) {
-                metadataIcon.setVisibility(View.VISIBLE);
+                itemBinding.metadataIcon.setVisibility(View.VISIBLE);
             } else {
-                metadataIcon.setVisibility(View.GONE);
+                itemBinding.metadataIcon.setVisibility(View.GONE);
             }
         }
     }

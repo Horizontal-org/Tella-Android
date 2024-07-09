@@ -36,15 +36,15 @@ class SubmittedPreviewFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner, { deleted ->
+            instanceDeleteD.observe(viewLifecycleOwner) { deleted ->
                 if (deleted) nav().popBackStack()
-            })
+            }
         }
     }
 
     private fun showDeleteBottomSheet(entityInstance: UwaziEntityInstance) {
         BottomSheetUtils.showConfirmDelete(
-            activity.supportFragmentManager,
+            baseActivity.supportFragmentManager,
             entityInstance.title,
             getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
         ) { viewModel.confirmDelete(entityInstance) }
@@ -64,7 +64,7 @@ class SubmittedPreviewFragment : BaseFragment() {
         arguments?.get(SEND_ENTITY)?.let { entity ->
             submittedInstance = Gson().fromJson(entity as String, UwaziEntityInstance::class.java)
             submittedInstance?.let {
-                endView = UwaziFormEndView(activity, getFormattedFormTitle(submittedInstance!!))
+                endView = UwaziFormEndView(baseActivity, getFormattedFormTitle(submittedInstance!!))
 
                 endView.setInstance(it, true, true)
                 binding?.endViewContainer?.removeAllViews()
@@ -77,7 +77,9 @@ class SubmittedPreviewFragment : BaseFragment() {
         binding?.toolbar?.backClickListener = { nav().popBackStack() }
     }
 
-    private fun getFormattedFormTitle(entityInstance : UwaziEntityInstance) : String {
-        return getString(R.string.Uwazi_Server_Title) +" "+ entityInstance.collectTemplate?.serverName + "\n"+getString(R.string.Uwazi_Template_Title) +" "+ entityInstance.collectTemplate?.entityRow?.translatedName
+    private fun getFormattedFormTitle(entityInstance: UwaziEntityInstance): String {
+        return getString(R.string.Uwazi_Server_Title) + " " + entityInstance.collectTemplate?.serverName + "\n" + getString(
+            R.string.Uwazi_Template_Title
+        ) + " " + entityInstance.collectTemplate?.entityRow?.translatedName
     }
 }

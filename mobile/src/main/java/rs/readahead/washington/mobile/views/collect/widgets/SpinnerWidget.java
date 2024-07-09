@@ -55,10 +55,10 @@ public class SpinnerWidget extends QuestionWidget {
         items.add(0, new SelectChoice("", ""));
 
         LinearLayout linearLayout = new LinearLayout(context);
-
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.collect_widget_spinner, linearLayout, true);
         view.setId(QuestionWidget.newUniqueId());
+        view.setBackgroundColor(getResources().getColor(R.color.wa_white_90));
 
         spinner = view.findViewById(R.id.spinner);
 

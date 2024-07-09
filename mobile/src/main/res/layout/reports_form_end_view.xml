@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/wa_purple"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:textDirection="locale">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Tella_Main_White_Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="14sp"
+            tools:text="Police violence" />
+
+        <TextView
+            android:id="@+id/form_status"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            tools:text="76% uploaded" />
+
+
+        <TextView
+            android:id="@+id/formSize"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:textColor="@color/wa_white"
+            tools:text="15MB" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/totalProgress"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+            android:max="100"
+            app:trackColor="@color/wa_white"
+            app:indicatorColor="@color/wa_green"
+            android:minHeight="3dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/form_description"
+            style="@style/Tella_Main_White_Text.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:gravity="start"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Police violence" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/wa_white_20" />
+
+
+        <LinearLayout
+            android:id="@+id/formPartsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+</LinearLayout>

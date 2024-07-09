@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="calculator_skin_array">
+        <item>@drawable/green_skin_calculator</item>
+        <item>@drawable/orange_skin_calculator</item>
+        <item>@drawable/blue_skin_calculator</item>
+        <item>@drawable/yellow_skin_calculator</item>
+    </array>
+
+    <array name="calculator_skin_strings">
+        <item>@string/green_theme</item>
+        <item>@string/orange_theme</item>
+        <item>@string/blue_theme</item>
+        <item>@string/yellow_theme</item>
+    </array>
+
+</resources>

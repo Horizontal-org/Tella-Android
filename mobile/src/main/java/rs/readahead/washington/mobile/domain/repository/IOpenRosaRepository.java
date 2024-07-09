@@ -24,7 +24,6 @@ public interface IOpenRosaRepository {
     Single<NegotiatedCollectServer> submitFormNegotiate(CollectServer server);
     Single<OpenRosaResponse> submitForm(Context applicationContext, NegotiatedCollectServer server, CollectFormInstance instance);
     Single<OpenRosaPartResponse> submitFormGranular(
-            @NonNull Context context,
             @NonNull NegotiatedCollectServer server,
             @NonNull CollectFormInstance instance,
             @Nullable FormMediaFile attachment,

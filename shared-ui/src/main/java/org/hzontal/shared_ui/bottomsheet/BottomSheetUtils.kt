@@ -6,18 +6,27 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.buttons.RoundButton
+import org.hzontal.shared_ui.extensions.setProgressPercent
 import org.hzontal.shared_ui.utils.DialogUtils
 import java.util.concurrent.atomic.AtomicInteger
 
-object
-BottomSheetUtils {
+object BottomSheetUtils {
+
+    const val LONG_TIMEOUT: Long = 3000
+    const val SHORT_TIMEOUT: Long = 1500
 
     @JvmStatic
     fun showStandardSheet(
@@ -30,44 +39,44 @@ BottomSheetUtils {
         onCancelClick: (() -> Unit)? = null
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.standar_sheet_layout)
-            .cancellable(true)
-        customSheetFragment.holder(GenericSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
-            override fun onBind(holder: GenericSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
 
-                    actionButton.setOnClickListener {
-                        onConfirmClick?.invoke()
-                        customSheetFragment.dismiss()
+                        actionButton.setOnClickListener {
+                            onConfirmClick?.invoke()
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            onCancelClick?.invoke()
+                            customSheetFragment.dismiss()
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    cancelButton.setOnClickListener {
-                        onCancelClick?.invoke()
-                        customSheetFragment.dismiss()
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class GenericSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class GenericSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -88,67 +97,68 @@ BottomSheetUtils {
     fun showRadioListSheet(
         fragmentManager: FragmentManager,
         context: Context,
-        currentTimeout: Long,
+        currentValue: Long,
         radioList: LinkedHashMap<Long, Int>,
         titleText: String?,
         descriptionText: String?,
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
-        consumer: LockOptionConsumer
+        consumer: Any
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.radio_list_sheet_layout)
-            .cancellable(true)
-        customSheetFragment.holder(RadioListSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
-            override fun onBind(holder: RadioListSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
-
-                    actionButton.setOnClickListener {
-                        val radioButton: AppCompatRadioButton =
-                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
-                        val option = radioButton.tag as Long
-                        consumer.accept(option)
-                        customSheetFragment.dismiss()
-                    }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-
-                    for (option in radioList) {
-                        val inflater = LayoutInflater.from(context)
-                        val button =
-                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
-                        button.tag = option.key
-                        button.setText(option.value)
-                        radioGroup.addView(button)
-                        if (option.key == currentTimeout) {
-                            button.isChecked = true
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(RadioListSheetHolder(),
+            object : Binder<RadioListSheetHolder> {
+                override fun onBind(holder: RadioListSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
                         }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            val radioButton: AppCompatRadioButton =
+                                radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                            val option = radioButton.tag as Long
+                            (consumer as LockOptionConsumer).accept(option)
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+
+                        for (option in radioList) {
+                            val inflater = LayoutInflater.from(context)
+                            val button = inflater.inflate(
+                                R.layout.radio_list_item_layout, null
+                            ) as RadioButton
+                            button.tag = option.key
+                            button.setText(option.value)
+                            radioGroup.addView(button)
+                            if (option.key == currentValue) {
+                                button.isChecked = true
+                            }
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class RadioListSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class RadioListSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -180,57 +190,57 @@ BottomSheetUtils {
         consumer: RadioOptionConsumer
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.radio_list_sheet_layout)
-            .cancellable(true)
-            .screenTag("RadioListOptionsSheet")
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
+                .cancellable(true).screenTag("RadioListOptionsSheet")
 
-        customSheetFragment.holder(RadioListSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
-            override fun onBind(holder: RadioListSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
+        customSheetFragment.holder(RadioListSheetHolder(),
+            object : Binder<RadioListSheetHolder> {
+                override fun onBind(holder: RadioListSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            val radioButton: AppCompatRadioButton =
+                                radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                            val option = radioButton.tag as Int
+                            consumer.accept(option)
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+
+                        for (option in radioList) {
+                            val inflater = LayoutInflater.from(context)
+                            val button = inflater.inflate(
+                                R.layout.radio_list_item_layout, null
+                            ) as RadioButton
+                            button.tag = option.key
+                            button.setText(option.value)
+                            radioGroup.addView(button)
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
-
-                    actionButton.setOnClickListener {
-                        val radioButton: AppCompatRadioButton =
-                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
-                        val option = radioButton.tag as Int
-                        consumer.accept(option)
-                        customSheetFragment.dismiss()
-                    }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-
-                    for (option in radioList) {
-                        val inflater = LayoutInflater.from(context)
-                        val button =
-                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
-                        button.tag = option.key
-                        button.setText(option.value)
-                        radioGroup.addView(button)
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class DualChoiceSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class DualChoiceSheetHolder : PageHolder() {
         lateinit var cancelButton: ImageView
         lateinit var buttonOne: RoundButton
         lateinit var buttonTwo: RoundButton
@@ -279,76 +289,76 @@ BottomSheetUtils {
         consumer: IServerChoiceActions
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.dual_choose_layout)
-            .cancellable(true)
-            .fullScreen()
-            .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(DualChoiceSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<DualChoiceSheetHolder> {
-            override fun onBind(holder: DualChoiceSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    backButton.text = backText
-                    nextButton.text = nextText
-                    descriptionContent.text = descriptionContentText
-                    buttonOne.setText(buttonOneLabel)
-                    buttonTwo.setText(buttonTwoLabel)
-                    buttonThree.setText(buttonThreeLabel)
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.dual_choose_layout)
+                .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DualChoiceSheetHolder(),
+            object : Binder<DualChoiceSheetHolder> {
+                override fun onBind(holder: DualChoiceSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        backButton.text = backText
+                        nextButton.text = nextText
+                        descriptionContent.text = descriptionContentText
+                        buttonOne.setText(buttonOneLabel)
+                        buttonTwo.setText(buttonTwoLabel)
+                        buttonThree.setText(buttonThreeLabel)
 
-                    buttonOne.setOnClickListener {
-                        buttonOne.isChecked = true
-                        buttonTwo.isChecked = false
-                        buttonThree.isChecked = false
+                        buttonOne.setOnClickListener {
+                            buttonOne.isChecked = true
+                            buttonTwo.isChecked = false
+                            buttonThree.isChecked = false
 
-                    }
+                        }
 
-                    buttonTwo.setOnClickListener {
-                        buttonOne.isChecked = false
-                        buttonTwo.isChecked = true
-                        buttonThree.isChecked = false
-                    }
+                        buttonTwo.setOnClickListener {
+                            buttonOne.isChecked = false
+                            buttonTwo.isChecked = true
+                            buttonThree.isChecked = false
+                        }
 
-                    buttonThree.setOnClickListener {
-                        buttonOne.isChecked = false
-                        buttonTwo.isChecked = false
-                        buttonThree.isChecked = true
-                    }
+                        buttonThree.setOnClickListener {
+                            buttonOne.isChecked = false
+                            buttonTwo.isChecked = false
+                            buttonThree.isChecked = true
+                        }
 
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-                    backButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-                    nextButton.setOnClickListener {
-                        when {
-                            buttonOne.isChecked -> {
-                                consumer.addODKServer()
-                                customSheetFragment.dismiss()
-                            }
-                            buttonTwo.isChecked -> {
-                                consumer.addTellaWebServer()
-                                customSheetFragment.dismiss()
-                            }
-                            else -> {
-                                consumer.addUwaziServer()
-                                customSheetFragment.dismiss()
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+                        backButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+                        nextButton.setOnClickListener {
+                            when {
+                                buttonOne.isChecked -> {
+                                    consumer.addODKServer()
+                                    customSheetFragment.dismiss()
+                                }
+
+                                buttonTwo.isChecked -> {
+                                    consumer.addTellaWebServer()
+                                    customSheetFragment.dismiss()
+                                }
+
+                                else -> {
+                                    consumer.addUwaziServer()
+                                    customSheetFragment.dismiss()
+                                }
                             }
                         }
+
                     }
 
                 }
-
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class CamouflageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class CamouflageSheetHolder : PageHolder() {
         lateinit var sheetTitle: TextView
         lateinit var sheetsubTitle: TextView
         lateinit var cancelButton: ImageView
@@ -388,39 +398,37 @@ BottomSheetUtils {
         consumer: BinaryConsumer? = null
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.change_camouflage_layout)
-            .cancellable(true)
-            .fullScreen()
-            .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(CamouflageSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<CamouflageSheetHolder> {
-            override fun onBind(holder: CamouflageSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    buttonOneTitle.text = titleOne
-                    buttonOneSubtitle.text = subtitleOne
-                    sheetTitle.text = dialogTitle
-                    sheetsubTitle.text = dialogSubtitle
-                    buttonTwoTitle.text = titleTwo
-                    buttonTwoSubtitle.text = subtitleTwo
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.change_camouflage_layout)
+                .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(CamouflageSheetHolder(),
+            object : Binder<CamouflageSheetHolder> {
+                override fun onBind(holder: CamouflageSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        buttonOneTitle.text = titleOne
+                        buttonOneSubtitle.text = subtitleOne
+                        sheetTitle.text = dialogTitle
+                        sheetsubTitle.text = dialogSubtitle
+                        buttonTwoTitle.text = titleTwo
+                        buttonTwoSubtitle.text = subtitleTwo
 
-                    buttonOne.setOnClickListener {
-                        consumer?.accept(true)
-                        customSheetFragment.dismiss()
-                    }
+                        buttonOne.setOnClickListener {
+                            consumer?.accept(true)
+                            customSheetFragment.dismiss()
+                        }
 
-                    buttonTwo.setOnClickListener {
-                        consumer?.accept(false)
-                        customSheetFragment.dismiss()
-                    }
+                        buttonTwo.setOnClickListener {
+                            consumer?.accept(false)
+                            customSheetFragment.dismiss()
+                        }
 
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
                     }
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
@@ -440,44 +448,135 @@ BottomSheetUtils {
         consumer: ActionConfirmed
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.standar_sheet_layout)
-            .cancellable(true)
-            .screenTag("ConfirmSheet")
-        customSheetFragment.holder(GenericSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
-            override fun onBind(holder: GenericSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true).screenTag("ConfirmSheet")
+        customSheetFragment.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
 
-                    actionButton.setOnClickListener {
-                        consumer.accept(isConfirmed = true)
-                        customSheetFragment.dismiss()
+                        actionButton.setOnClickListener {
+                            consumer.accept(isConfirmed = true)
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            consumer.accept(isConfirmed = false)
+                            customSheetFragment.dismiss()
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class ConfirmImageSheetHolder : CustomBottomSheetFragment.PageHolder() {
+
+    @JvmStatic
+    fun showChooseImportSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        importButtonLabel: String? = null,
+        importAndDeleteButtonLabel: String? = null,
+        importConsumer: ActionConfirmed,
+        importAndDeleteConsumer: ActionConfirmed
+
+    ) {
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true).screenTag("ConfirmSheet")
+        customSheetFragment.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        importButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        importAndDeleteButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            importAndDeleteConsumer.accept(isConfirmed = true)
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            importConsumer.accept(isConfirmed = true)
+                            customSheetFragment.dismiss()
+                        }
+
+
+                    }
+                }
+            })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    fun showProgressImportSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        totalProgress: Int,
+        progressNumberText: String,
+        progressStatus: MutableLiveData<Int>,
+        cancelText: String,
+        lifecycleOwner: LifecycleOwner,
+        onCancelImport: (() -> Unit)
+
+    ) {
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
+                .cancellable(true).statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DownloadStatustHolder(),
+            object : Binder<DownloadStatustHolder> {
+                override fun onBind(holder: DownloadStatustHolder) {
+                    with(holder) {
+                        progressStatus.observe(lifecycleOwner) { status ->
+                            subtitle.text = "$status/$totalProgress $progressNumberText"
+                            val statusPercent = status * 100 / totalProgress
+                            circularProgress.setProgressPercent(statusPercent, true)
+                            linearProgress.setProgressPercent(statusPercent, true)
+                            if ((status == totalProgress) && (customSheetFragment.isAdded)) {
+                                customSheetFragment.dismiss()
+                            }
+                        }
+                        title.text = titleText
+                        cancelTextView.text = cancelText
+                        cancelTextView.setOnClickListener {
+                            onCancelImport.invoke()
+                            customSheetFragment.dismiss()
+                        }
+
+                    }
+                }
+            })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+
+    class ConfirmImageSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
         lateinit var title: TextView
@@ -507,67 +606,64 @@ BottomSheetUtils {
     ) {
 
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.confirm_image_sheet_layout)
-            .cancellable(false)
-        customSheetFragment2.holder(ConfirmImageSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
-            override fun onBind(holder: ConfirmImageSheetHolder) {
-                with(holder) {
-                    title.text = timeoutTitleText
-                    description.text = timeoutTitleDesc
-                    confirmDrawable?.let {
-                        imageView.setImageDrawable(it)
+            .page(R.layout.confirm_image_sheet_layout).cancellable(false)
+        customSheetFragment2.holder(ConfirmImageSheetHolder(),
+            object : Binder<ConfirmImageSheetHolder> {
+                override fun onBind(holder: ConfirmImageSheetHolder) {
+                    with(holder) {
+                        title.text = timeoutTitleText
+                        description.text = timeoutTitleDesc
+                        confirmDrawable?.let {
+                            imageView.setImageDrawable(it)
+                        }
+                        actionButton.visibility = View.GONE
+                        cancelButton.visibility = View.GONE
+
+                        Handler().postDelayed({
+                            consumer.accept(isConfirmed = true)
+                            //customSheetFragment2.dismiss()
+                        }, LONG_TIMEOUT)
+
                     }
-                    actionButton.visibility = View.GONE
-                    cancelButton.visibility = View.GONE
-
-                    Handler().postDelayed({
-                        consumer.accept(isConfirmed = true)
-                        //customSheetFragment2.dismiss()
-                    }, 3000)
-
                 }
-            }
-        })
+            })
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.confirm_image_sheet_layout)
-            .cancellable(true)
+            .page(R.layout.confirm_image_sheet_layout).cancellable(true)
             .screenTag("ConfirmImageSheet")
-        customSheetFragment.holder(ConfirmImageSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
-            override fun onBind(holder: ConfirmImageSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
+            object : Binder<ConfirmImageSheetHolder> {
+                override fun onBind(holder: ConfirmImageSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
 
-                    actionButton.setOnClickListener {
-                        fragmentManager.beginTransaction()
-                            .add(customSheetFragment2, customSheetFragment2.tag)
-                            .commit()
-                        customSheetFragment.dismiss()
+                        actionButton.setOnClickListener {
+                            fragmentManager.beginTransaction()
+                                .add(customSheetFragment2, customSheetFragment2.tag).commit()
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+
+                        confirmDrawable?.let {
+                            imageView.setImageDrawable(it)
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-
-                    confirmDrawable?.let {
-                        imageView.setImageDrawable(it)
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
@@ -583,37 +679,37 @@ BottomSheetUtils {
         timeoutTitleText: String?,
         timeoutTitleDesc: String?,
         confirmDrawable: Drawable? = null,
-        consumer: ActionConfirmed
+        consumer: ActionConfirmed,
+        timeout: Long
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.confirm_image_sheet_layout)
-            .cancellable(false)
-        customSheetFragment.holder(ConfirmImageSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<ConfirmImageSheetHolder> {
-            override fun onBind(holder: ConfirmImageSheetHolder) {
-                with(holder) {
-                    title.text = timeoutTitleText
-                    description.text = timeoutTitleDesc
-                    confirmDrawable?.let {
-                        imageView.setImageDrawable(it)
+            .page(R.layout.confirm_image_sheet_layout).cancellable(false)
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
+            object : Binder<ConfirmImageSheetHolder> {
+                override fun onBind(holder: ConfirmImageSheetHolder) {
+                    with(holder) {
+                        title.text = timeoutTitleText
+                        description.text = timeoutTitleDesc
+                        confirmDrawable?.let {
+                            imageView.setImageDrawable(it)
+                        }
+                        actionButton.visibility = View.GONE
+                        cancelButton.visibility = View.GONE
+
+                        Handler().postDelayed({
+                            consumer.accept(isConfirmed = true)
+                            customSheetFragment.dismiss()
+                        }, timeout)
+
                     }
-                    actionButton.visibility = View.GONE
-                    cancelButton.visibility = View.GONE
-
-                    Handler().postDelayed({
-                        consumer.accept(isConfirmed = true)
-                    }, 3000)
-
                 }
-            }
-        })
+            })
 
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
-
 
     @JvmStatic
     fun showChooseAutoUploadServerSheet(
@@ -628,52 +724,53 @@ BottomSheetUtils {
         consumer: UploadServerConsumer
     ) {
 
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.radio_list_sheet_layout)
-            .cancellable(true)
-        customSheetFragment.holder(RadioListSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<RadioListSheetHolder> {
-            override fun onBind(holder: RadioListSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
-
-                    actionButton.setOnClickListener {
-                        val radioButton: AppCompatRadioButton =
-                            radioGroup.findViewById(radioGroup.checkedRadioButtonId)
-                        val option = radioButton.tag as Long
-                        consumer.accept(option)
-                        customSheetFragment.dismiss()
-                    }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
-
-                    for (option in radioList) {
-                        val inflater = LayoutInflater.from(context)
-                        val button =
-                            inflater.inflate(R.layout.radio_list_item_layout, null) as RadioButton
-                        button.tag = option.key
-                        button.setText(option.value)
-                        radioGroup.addView(button)
-                        if (option.key == currentServerId) {
-                            button.isChecked = true
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.radio_list_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(RadioListSheetHolder(),
+            object : Binder<RadioListSheetHolder> {
+                override fun onBind(holder: RadioListSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
                         }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            val radioButton: AppCompatRadioButton =
+                                radioGroup.findViewById(radioGroup.checkedRadioButtonId)
+                            val option = radioButton.tag as Long
+                            consumer.accept(option)
+                            customSheetFragment.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment.dismiss()
+                        }
+
+                        for (option in radioList) {
+                            val inflater = LayoutInflater.from(context)
+                            val button = inflater.inflate(
+                                R.layout.radio_list_item_layout, null
+                            ) as RadioButton
+                            button.tag = option.key
+                            button.text = option.value
+                            radioGroup.addView(button)
+                            if (option.key == currentServerId) {
+                                button.isChecked = true
+                            }
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
@@ -683,7 +780,7 @@ BottomSheetUtils {
         EDIT, DELETE, SHARE, VIEW
     }
 
-    class ServerMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ServerMenuSheetHolder : PageHolder() {
         lateinit var actionEdit: TextView
         lateinit var actionDelete: TextView
         lateinit var title: TextView
@@ -695,7 +792,7 @@ BottomSheetUtils {
         }
     }
 
-    class ThreeOptionsMenuSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ThreeOptionsMenuSheetHolder : PageHolder() {
         lateinit var actionView: TextView
         lateinit var actionShare: TextView
         lateinit var actionDelete: TextView
@@ -723,77 +820,81 @@ BottomSheetUtils {
         titleText2: String?,
         descriptionText: String?,
         actionButtonLabel: String? = null,
-        cancelButtonLabel: String? = null
+        cancelButtonLabel: String? = null,
+        iconView: Int = -1
     ) {
 
-        val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.standar_sheet_layout)
-            .cancellable(true)
-        customSheetFragment2.holder(GenericSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
-            override fun onBind(holder: GenericSheetHolder) {
-                with(holder) {
-                    title.text = titleText2
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
+        val customSheetFragment2 =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText2
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
 
-                    actionButton.setOnClickListener {
-                        consumer.accept(action = Action.DELETE)
-                        customSheetFragment2.dismiss()
-                    }
+                        actionButton.setOnClickListener {
+                            consumer.accept(action = Action.DELETE)
+                            customSheetFragment2.dismiss()
+                        }
 
-                    cancelButton.setOnClickListener {
-                        customSheetFragment2.dismiss()
-                    }
+                        cancelButton.setOnClickListener {
+                            customSheetFragment2.dismiss()
+                        }
 
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
-                }
-            }
-        })
-
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.server_menu_sheet_layout)
-            .cancellable(true)
-        customSheetFragment.holder(ServerMenuSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<ServerMenuSheetHolder> {
-            override fun onBind(holder: ServerMenuSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    actionEditLabel?.let {
-                        actionEdit.text = it
-                    }
-                    actionDeleteLabel?.let {
-                        actionDelete.text = it
-                    }
-
-                    actionEdit.setOnClickListener {
-                        consumer.accept(action = Action.EDIT)
-                        customSheetFragment.dismiss()
-                    }
-
-                    actionDelete.setOnClickListener {
-                        //consumer.accept(action = Action.DELETE)
-                        fragmentManager.beginTransaction()
-                            .add(customSheetFragment2, customSheetFragment2.tag)
-                            .commit()
-                        customSheetFragment.dismiss()
                     }
                 }
-            }
-        })
+            })
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.server_menu_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(ServerMenuSheetHolder(),
+            object : Binder<ServerMenuSheetHolder> {
+                override fun onBind(holder: ServerMenuSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+
+                        if (iconView != -1) {
+                            actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView, 0, 0, 0)
+                        }
+                        actionEditLabel?.let {
+                            actionEdit.text = it
+                        }
+                        actionDeleteLabel?.let {
+                            actionDelete.text = it
+                        }
+
+                        actionEdit.setOnClickListener {
+                            consumer.accept(action = Action.EDIT)
+                            customSheetFragment.dismiss()
+                        }
+
+                        actionDelete.setOnClickListener {
+                            //consumer.accept(action = Action.DELETE)
+                            fragmentManager.beginTransaction()
+                                .add(customSheetFragment2, customSheetFragment2.tag).commit()
+                            customSheetFragment.dismiss()
+                        }
+                    }
+                }
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class RenameFileSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class RenameFileSheetHolder : PageHolder() {
         lateinit var actionCancel: TextView
         lateinit var actionRename: TextView
         lateinit var title: TextView
@@ -817,43 +918,40 @@ BottomSheetUtils {
         fileName: String?,
         onConfirmClick: ((String) -> Unit)? = null
     ) {
-        val renameFileSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.sheet_rename)
-            .screenTag("FileRenameSheet")
-            .cancellable(true)
-        renameFileSheet.holder(RenameFileSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<RenameFileSheetHolder> {
-            override fun onBind(holder: RenameFileSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    renameEditText.setText(fileName)
-                    //Cancel action
-                    actionCancel.text = cancelLabel
-                    actionCancel.setOnClickListener { renameFileSheet.dismiss() }
+        val renameFileSheet =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_rename)
+                .screenTag("FileRenameSheet").cancellable(true)
+        renameFileSheet.holder(RenameFileSheetHolder(),
+            object : Binder<RenameFileSheetHolder> {
+                override fun onBind(holder: RenameFileSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        renameEditText.setText(fileName)
+                        //Cancel action
+                        actionCancel.text = cancelLabel
+                        actionCancel.setOnClickListener { renameFileSheet.dismiss() }
 
-                    //Rename action
-                    actionRename.text = confirmLabel
-                    actionRename.setOnClickListener {
-                        if (!renameEditText.text.isNullOrEmpty()) {
-                            renameFileSheet.dismiss()
-                            onConfirmClick?.invoke(renameEditText.text.toString())
-                        } else {
-                            DialogUtils.showBottomMessage(
-                                context,
-                                "Please fill in the new name",
-                                true
-                            )
+                        //Rename action
+                        actionRename.text = confirmLabel
+                        actionRename.setOnClickListener {
+                            if (!renameEditText.text.isNullOrEmpty()) {
+                                renameFileSheet.dismiss()
+                                onConfirmClick?.invoke(renameEditText.text.toString())
+                            } else {
+                                DialogUtils.showBottomMessage(
+                                    context, "Please fill in the new name", true
+                                )
+                            }
+
                         }
-
                     }
                 }
-            }
-        })
+            })
         renameFileSheet.transparentBackground()
         renameFileSheet.launch()
     }
 
-    class EnterCodeSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class EnterCodeSheetHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var description: TextView
@@ -883,30 +981,28 @@ BottomSheetUtils {
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.enter_string_bottomsheet_layout)
-            .cancellable(true)
-            .fullScreen()
+            .page(R.layout.enter_string_bottomsheet_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(EnterCodeSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<EnterCodeSheetHolder> {
-            override fun onBind(holder: EnterCodeSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    subtitle.text = subTitle
-                    description.text = descriptionText
-                    buttonNext.text = nextButton
-                    buttonNext.setOnClickListener {
-                        if (enterText.text.isNotEmpty()) {
-                            consumer?.accept(enterText.text.toString())
+        customSheetFragment.holder(EnterCodeSheetHolder(),
+            object : Binder<EnterCodeSheetHolder> {
+                override fun onBind(holder: EnterCodeSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        subtitle.text = subTitle
+                        description.text = descriptionText
+                        buttonNext.text = nextButton
+                        buttonNext.setOnClickListener {
+                            if (enterText.text.isNotEmpty()) {
+                                consumer?.accept(enterText.text.toString())
+                                customSheetFragment.dismiss()
+                            }
+                        }
+                        cancelButton.setOnClickListener {
                             customSheetFragment.dismiss()
                         }
                     }
-                    cancelButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
@@ -925,36 +1021,34 @@ BottomSheetUtils {
         cancelText: String,
         onCancelClick: (() -> Unit)?
     ) {
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.layout_progess_sheet)
-            .cancellable(true)
-            .fullScreen()
-            .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(DownloadStatustHolder(), object :
-            CustomBottomSheetFragment.Binder<DownloadStatustHolder> {
-            override fun onBind(holder: DownloadStatustHolder) {
-                with(holder) {
-                    title.text = titleText
-                    subtitle.text = "$progressStatus% $completeText"
-                    cancelTextView.text = cancelText
-                    circularProgress.progress = progressStatus.get()
-                    linearProgress.progress = progressStatus.get()
-                    if (progressStatus.get() == 100) {
-                        customSheetFragment.dismiss()
-                    }
-                    cancelTextView.setOnClickListener {
-                        onCancelClick?.invoke()
-                        customSheetFragment.dismiss()
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
+                .cancellable(true).fullScreen().statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(DownloadStatustHolder(),
+            object : Binder<DownloadStatustHolder> {
+                override fun onBind(holder: DownloadStatustHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        subtitle.text = "$progressStatus% $completeText"
+                        cancelTextView.text = cancelText
+                        circularProgress.progress = progressStatus.get()
+                        linearProgress.progress = progressStatus.get()
+                        if (progressStatus.get() == 100) {
+                            customSheetFragment.dismiss()
+                        }
+                        cancelTextView.setOnClickListener {
+                            onCancelClick?.invoke()
+                            customSheetFragment.dismiss()
+                        }
                     }
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class DownloadStatustHolder : CustomBottomSheetFragment.PageHolder() {
+    class DownloadStatustHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var subtitle: TextView
         lateinit var cancelTextView: TextView
@@ -978,30 +1072,29 @@ BottomSheetUtils {
         confirm: String,
         onConfirmClick: (() -> Unit)?
     ) {
-        val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.sheet_confirm_delete)
-            .cancellable(true)
-            .statusBarColor(R.color.space_cadet)
-        customSheetFragment.holder(ConfirmDeletetHolder(), object :
-            CustomBottomSheetFragment.Binder<ConfirmDeletetHolder> {
-            override fun onBind(holder: ConfirmDeletetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    confirmTextView.text = confirm
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_confirm_delete)
+                .cancellable(true).statusBarColor(R.color.space_cadet)
+        customSheetFragment.holder(ConfirmDeletetHolder(),
+            object : Binder<ConfirmDeletetHolder> {
+                override fun onBind(holder: ConfirmDeletetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        confirmTextView.text = confirm
 
-                    confirmTextView.setOnClickListener {
-                        onConfirmClick?.invoke()
-                        customSheetFragment.dismiss()
+                        confirmTextView.setOnClickListener {
+                            onConfirmClick?.invoke()
+                            customSheetFragment.dismiss()
+                        }
                     }
                 }
-            }
-        })
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 
-    class ConfirmDeletetHolder : CustomBottomSheetFragment.PageHolder() {
+    class ConfirmDeletetHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var confirmTextView: TextView
 
@@ -1026,82 +1119,166 @@ BottomSheetUtils {
         cancelButtonLabel: String? = null
     ) {
 
-        val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.standar_sheet_layout)
-            .cancellable(true)
-        customSheetFragment2.holder(GenericSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<GenericSheetHolder> {
-            override fun onBind(holder: GenericSheetHolder) {
-                with(holder) {
-                    title.text = titleText2
-                    description.text = descriptionText
-                    actionButtonLabel?.let {
-                        actionButton.text = it
-                    }
-                    cancelButtonLabel?.let {
-                        cancelButton.text = it
-                    }
+        val customSheetFragment2 =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText2
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
 
-                    actionButton.setOnClickListener {
-                        consumer.accept(action = Action.DELETE)
-                        customSheetFragment2.dismiss()
+                        actionButton.setOnClickListener {
+                            consumer.accept(action = Action.DELETE)
+                            customSheetFragment2.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment2.dismiss()
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
                     }
-
-                    cancelButton.setOnClickListener {
-                        customSheetFragment2.dismiss()
-                    }
-
-                    actionButton.visibility =
-                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
-
                 }
-            }
-        })
+            })
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.three_options_sheet_layout)
-            .cancellable(true)
-        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<ThreeOptionsMenuSheetHolder> {
-            override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
-                with(holder) {
-                    title.text = titleText
-                    actionViewLabel?.let {
-                        actionView.text = it
-                    }
+            .page(R.layout.three_options_sheet_layout).cancellable(true)
+        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(),
+            object : Binder<ThreeOptionsMenuSheetHolder> {
+                override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+                        actionViewLabel?.let {
+                            actionView.text = it
+                        }
 
-                    if (actionShareLabel == null) {
-                        actionShare.visibility = View.GONE
-                    } else {
-                        actionShare.text = actionShareLabel
-                    }
+                        if (actionShareLabel == null) {
+                            actionShare.visibility = View.GONE
+                        } else {
+                            actionShare.text = actionShareLabel
+                        }
 
-                    actionDeleteLabel?.let {
-                        actionDelete.text = it
-                    }
+                        actionDeleteLabel?.let {
+                            actionDelete.text = it
+                        }
 
-                    actionView.setOnClickListener {
-                        consumer.accept(action = Action.VIEW)
-                        customSheetFragment.dismiss()
-                    }
+                        actionView.setOnClickListener {
+                            consumer.accept(action = Action.VIEW)
+                            customSheetFragment.dismiss()
+                        }
 
-                    actionShare.setOnClickListener {
-                        consumer.accept(action = Action.SHARE)
-                        customSheetFragment.dismiss()
-                    }
+                        actionShare.setOnClickListener {
+                            consumer.accept(action = Action.SHARE)
+                            customSheetFragment.dismiss()
+                        }
 
-                    actionDelete.setOnClickListener {
-                        //consumer.accept(action = Action.DELETE)
-                        fragmentManager.beginTransaction()
-                            .add(customSheetFragment2, customSheetFragment2.tag)
-                            .commit()
-                        customSheetFragment.dismiss()
+                        actionDelete.setOnClickListener {
+                            //consumer.accept(action = Action.DELETE)
+                            fragmentManager.beginTransaction()
+                                .add(customSheetFragment2, customSheetFragment2.tag).commit()
+                            customSheetFragment.dismiss()
+                        }
                     }
                 }
-            }
-        })
+            })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    @JvmStatic
+    fun showViewDeleteMenuSheet(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        actionEditLabel: String? = null,
+        actionDeleteLabel: String? = null,
+        consumer: ActionSeleceted,
+        titleText2: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        iconView: Int = -1
+    ) {
+
+        val customSheetFragment2 =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .cancellable(true)
+        customSheetFragment2.holder(GenericSheetHolder(),
+            object : Binder<GenericSheetHolder> {
+                override fun onBind(holder: GenericSheetHolder) {
+                    with(holder) {
+                        title.text = titleText2
+                        description.text = descriptionText
+                        actionButtonLabel?.let {
+                            actionButton.text = it
+                        }
+                        cancelButtonLabel?.let {
+                            cancelButton.text = it
+                        }
+
+                        actionButton.setOnClickListener {
+                            consumer.accept(action = Action.DELETE)
+                            customSheetFragment2.dismiss()
+                        }
+
+                        cancelButton.setOnClickListener {
+                            customSheetFragment2.dismiss()
+                        }
+
+                        actionButton.visibility =
+                            if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                    }
+                }
+            })
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.view_delete_menu_sheet_layout)
+                .cancellable(true)
+        customSheetFragment.holder(ServerMenuSheetHolder(),
+            object : Binder<ServerMenuSheetHolder> {
+                override fun onBind(holder: ServerMenuSheetHolder) {
+                    with(holder) {
+                        title.text = titleText
+
+                        if (iconView != -1) {
+                            actionEdit.setCompoundDrawablesWithIntrinsicBounds(iconView, 0, 0, 0)
+                        }
+                        actionEditLabel?.let {
+                            actionEdit.text = it
+                        }
+                        actionDeleteLabel?.let {
+                            actionDelete.text = it
+                        }
+
+                        actionEdit.setOnClickListener {
+                            consumer.accept(action = Action.VIEW)
+                            customSheetFragment.dismiss()
+                        }
+
+                        actionDelete.setOnClickListener {
+                            //consumer.accept(action = Action.DELETE)
+                            fragmentManager.beginTransaction()
+                                .add(customSheetFragment2, customSheetFragment2.tag).commit()
+                            customSheetFragment.dismiss()
+                        }
+                    }
+                }
+            })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
 }
+
+

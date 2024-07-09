@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
+import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
-import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityStatus
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.BUNDLE_IS_FROM_UWAZI_ENTRY
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
@@ -22,13 +23,13 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 const val SEND_ENTITY = "send_entity"
 
 class UwaziSendFragment : BaseFragment(), OnNavBckListener {
-    private val viewModel: SharedUwaziSubmissionViewModel by lazy {
-        ViewModelProvider(activity).get(SharedUwaziSubmissionViewModel::class.java)
-    }
+    private val viewModel by viewModels<SharedUwaziSubmissionViewModel>()
+
     private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
     private lateinit var endView: UwaziFormEndView
+    private var isFromEntryScreen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,11 +57,11 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
             cancelBtn.setOnClickListener {
                 entityInstance?.let { entity ->
-                    if (entity.status != UwaziEntityStatus.SUBMISSION_PENDING) {
-                        entity.status = UwaziEntityStatus.SUBMISSION_PENDING
+                    if (entity.status != EntityStatus.SUBMISSION_PENDING) {
+                        entity.status = EntityStatus.SUBMISSION_PENDING
                         viewModel.saveEntityInstance(entity)
                     } else {
-                        nav().popBackStack()
+                        handleBackButton()
                     }
                 }
             }
@@ -69,38 +70,53 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
 
     private fun initObservers() {
         with(viewModel) {
-            server.observe(viewLifecycleOwner, {
+            server.observe(viewLifecycleOwner) {
                 uwaziServer = it
-            })
+            }
 
-            progressCallBack.observe(viewLifecycleOwner,{
-                onShowProgress(it.first,it.second)
-            })
+            progressCallBack.observe(viewLifecycleOwner) {
+                onShowProgress(it.first, it.second)
+            }
 
-            progress.observe(viewLifecycleOwner,{ status ->
-             when(status){
-                 UwaziEntityStatus.SUBMITTED -> {
-                     nav().popBackStack()
-                 }
-                 UwaziEntityStatus.SUBMISSION_ERROR -> {
-                     DialogUtils.showBottomMessage(activity,getString(R.string.collect_toast_fail_sending_form),true)
-                     entityInstance?.status = UwaziEntityStatus.SUBMISSION_ERROR
-                     entityInstance?.let { viewModel.saveEntityInstance(it) }
-                     nav().popBackStack()
-                     SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
-                 }
-                 UwaziEntityStatus.SUBMISSION_PENDING -> {
-                     nav().popBackStack()
-                 }
-             }
-            })
+            progress.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    EntityStatus.SUBMITTED -> {
+                        handleBackButton()
+                    }
+                    EntityStatus.SUBMISSION_ERROR -> {
+                        DialogUtils.showBottomMessage(
+                            baseActivity,
+                            getString(R.string.collect_toast_fail_sending_form),
+                            true
+                        )
+                        entityInstance?.status = EntityStatus.SUBMISSION_ERROR
+                        entityInstance?.let { viewModel.saveEntityInstance(it) }
+                        handleBackButton()
+                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                    }
+                    EntityStatus.SUBMISSION_PENDING -> {
+                        handleBackButton()
+                    }
+                    else -> {}
+                }
+            }
         }
     }
 
     private fun initView() {
-        arguments?.let {
-            entityInstance = Gson().fromJson(it.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
+        arguments?.let { bundle ->
+            entityInstance =
+                Gson().fromJson(bundle.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
+            isFromEntryScreen = bundle.getBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY)
             showFormEndView()
+        }
+    }
+
+    private fun handleBackButton(): Boolean {
+        return if (isFromEntryScreen) {
+            nav().popBackStack(R.id.uwaziEntryScreen, true)
+        } else {
+            nav().popBackStack()
         }
     }
 
@@ -119,24 +135,26 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
         }
     }
 
-    private fun onShowProgress(partName : String,total : Float){
+    private fun onShowProgress(partName: String, total: Float) {
         endView.showUploadProgress(partName)
-        endView.setUploadProgress(partName,total)
+        endView.setUploadProgress(partName, total)
     }
 
     private fun showFormEndView() {
-        if (entityInstance == null){
+        if (entityInstance == null) {
             return
         }
 
-        endView = UwaziFormEndView(activity, getFormattedFormTitle(entityInstance!!))
+        endView = UwaziFormEndView(baseActivity, getFormattedFormTitle(entityInstance!!))
         endView.setInstance(entityInstance!!, false, false)
         binding.endViewContainer.removeAllViews()
         binding.endViewContainer.addView(endView)
-      //  updateFormSubmitButton(false)
+        //  updateFormSubmitButton(false)
     }
 
-    private fun getFormattedFormTitle(entityInstance : UwaziEntityInstance) : String {
-        return getString(R.string.Uwazi_Server_Title) +" "+ entityInstance.collectTemplate?.serverName + "\n"+getString(R.string.Uwazi_Template_Title) +" "+ entityInstance.collectTemplate?.entityRow?.translatedName
+    private fun getFormattedFormTitle(entityInstance: UwaziEntityInstance): String {
+        return getString(R.string.Uwazi_Server_Title) + " " + entityInstance.collectTemplate?.serverName + "\n" + getString(
+            R.string.Uwazi_Template_Title
+        ) + " " + entityInstance.collectTemplate?.entityRow?.translatedName
     }
 }

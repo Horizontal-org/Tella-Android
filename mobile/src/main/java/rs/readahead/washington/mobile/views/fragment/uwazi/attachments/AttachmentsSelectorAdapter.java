@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewbinding.ViewBinding;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.utils.MediaFile;
 
@@ -21,37 +23,30 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.media.MediaFileHandler;
-import rs.readahead.washington.mobile.media.VaultFileUrlLoader;
-import rs.readahead.washington.mobile.presentation.entity.VaultFileLoaderModel;
+import rs.readahead.washington.mobile.databinding.ItemVaultAttachmentGridBinding;
+import rs.readahead.washington.mobile.databinding.ItemVaultAttachmentHorBinding;
 import rs.readahead.washington.mobile.util.DateUtil;
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.ViewType;
-import timber.log.Timber;
 
 
 public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<AttachmentsSelectorAdapter.ViewHolder> {
     private List<VaultFile> files = new ArrayList<>();
-    private final VaultFileUrlLoader glideLoader;
     private final ISelectorVaultHandler selectorVaultHandler;
     private final Set<VaultFile> selected;
     private boolean selectable;
     private final boolean singleSelection;
     private GridLayoutManager layoutManager;
-
+    private ViewBinding binding;
 
     public AttachmentsSelectorAdapter(Context context, ISelectorVaultHandler selectorVaultHandler,
-                                         MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager) {
-        this(context, selectorVaultHandler, mediaFileHandler, layoutManager, false, false);
+                                      GridLayoutManager layoutManager) {
+        this(context, selectorVaultHandler, layoutManager, false, false);
     }
 
-    public AttachmentsSelectorAdapter(Context context, ISelectorVaultHandler selectorVaultHandler,
-                                         MediaFileHandler mediaFileHandler, GridLayoutManager layoutManager,
-                                         boolean selectable,
-                                         boolean singleSelection) {
-        this.glideLoader = new VaultFileUrlLoader(context.getApplicationContext(), mediaFileHandler);
+    public AttachmentsSelectorAdapter(Context context, ISelectorVaultHandler selectorVaultHandler, GridLayoutManager layoutManager,
+                                      boolean selectable,
+                                      boolean singleSelection) {
         this.selectorVaultHandler = selectorVaultHandler;
         this.selected = new LinkedHashSet<>();
         this.selectable = selectable;
@@ -63,13 +58,12 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     @Override
     public AttachmentsSelectorAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == ViewType.SMALL.ordinal()) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_grid, parent, false);
-            return new AttachmentsSelectorAdapter.GridViewHolder(v, this.selectable);
+            binding = ItemVaultAttachmentGridBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new AttachmentsSelectorAdapter.GridViewHolder((ItemVaultAttachmentGridBinding) binding, this.selectable);
         } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_attachment_hor, parent, false);
-            return new AttachmentsSelectorAdapter.ListViewHolder(v, this.selectable);
+            binding = ItemVaultAttachmentHorBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+            return new AttachmentsSelectorAdapter.ListViewHolder((ItemVaultAttachmentHorBinding) binding, this.selectable);
         }
-
     }
 
     @Override
@@ -85,8 +79,8 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     public void onBindViewHolder(@NonNull final AttachmentsSelectorAdapter.ViewHolder holder, final int position) {
         final VaultFile vaultFile = files.get(position);
         holder.showFileInfo(vaultFile);
-        holder.maybeEnableCheckBox(selectable,vaultFile.type);
-        if (vaultFile.type != VaultFile.Type.DIRECTORY){
+        holder.maybeEnableCheckBox(selectable, vaultFile.type);
+        if (vaultFile.type != VaultFile.Type.DIRECTORY) {
             checkItemState(holder, vaultFile);
         }
 
@@ -94,18 +88,22 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
                 holder.mediaView.setVisibility(View.VISIBLE);
                 Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                        .signature(messageDigest -> { })
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .signature(messageDigest -> {
+                        })
                         .into(holder.mediaView);
             } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
                 holder.showAudioInfo();
             } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
                 holder.showVideoInfo();
                 Glide.with(holder.mediaView.getContext())
-                        .using(glideLoader)
-                        .load(new VaultFileLoaderModel(vaultFile, VaultFileLoaderModel.LoadType.THUMBNAIL))
-                        .signature(messageDigest -> { })
+                        .load(vaultFile.thumb)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .signature(messageDigest -> {
+                        })
                         .into(holder.mediaView);
 
             } else {
@@ -120,7 +118,7 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         if (holder instanceof AttachmentsSelectorAdapter.ListViewHolder) {
             ((AttachmentsSelectorAdapter.ListViewHolder) holder).setFileDateTextView(vaultFile);
         }
-        handleClickMode(holder,vaultFile);
+        handleClickMode(holder, vaultFile);
     }
 
     @Override
@@ -181,7 +179,9 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
             selectorVaultHandler.onMediaSelected(vaultFile);
         }
 
-        if (vaultFile.type != VaultFile.Type.DIRECTORY) {checkItemState(holder, vaultFile);}
+        if (vaultFile.type != VaultFile.Type.DIRECTORY) {
+            checkItemState(holder, vaultFile);
+        }
         selectorVaultHandler.onSelectionNumChange(selected.size());
     }
 
@@ -191,14 +191,14 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     }
 
 
-    public void handleClickMode(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile){
-            if (selectable) {
-                if (vaultFile.type == VaultFile.Type.DIRECTORY){
-                    holder.itemView.setOnClickListener(v -> selectorVaultHandler.openFolder(vaultFile));
-                }else {
-                    holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
-                }
+    public void handleClickMode(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {
+        if (selectable) {
+            if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+                holder.itemView.setOnClickListener(v -> selectorVaultHandler.openFolder(vaultFile));
+            } else {
+                holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
             }
+        }
     }
 
     private void removeAllSelections() {
@@ -208,7 +208,7 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         }
     }
 
-    public void selectAll(){
+    public void selectAll() {
         for (VaultFile selection : files) {
             selectMediaFile(selection);
             selectorVaultHandler.onMediaSelected(selection);
@@ -218,34 +218,43 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     private void checkItemState(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {
         boolean checked = checkSelection(vaultFile);
         // holder.selectionDimmer.setVisibility(checked ? View.VISIBLE : View.GONE);
-        holder.itemView.setBackgroundColor(checked ? ContextCompat.getColor(holder.itemView.getContext(),R.color.wa_white_16) :
-                ContextCompat.getColor(holder.itemView.getContext(),R.color.space_cadet)
+        holder.itemView.setBackgroundColor(checked ? ContextCompat.getColor(holder.itemView.getContext(), R.color.wa_white_16) :
+                ContextCompat.getColor(holder.itemView.getContext(), R.color.space_cadet)
         );
-        holder.checkBox.setImageResource(checked  ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
+        holder.checkBox.setImageResource(checked ? R.drawable.ic_check_box_on : R.drawable.ic_check_box_off);
     }
 
-    private Boolean checkSelection(VaultFile vaultFile){
-            for (VaultFile selectVault : selected){
-                if (vaultFile.id.equals(selectVault.id)){
-                    return true;
-                }
+    private Boolean checkSelection(VaultFile vaultFile) {
+        for (VaultFile selectVault : selected) {
+            if (vaultFile.id.equals(selectVault.id)) {
+                return true;
+            }
         }
         return false;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.attachmentImg)
         ImageView mediaView;
-        @BindView(R.id.checkbox_type_single)
-        ImageView checkBox;
-        @BindView(R.id.fileNameTextView)
         TextView fileName;
-        @BindView(R.id.icAttachmentImg)
+        ImageView more;
         ImageView icAttachmentImg;
+        ImageView checkBox;
 
-        public ViewHolder(View itemView, boolean selectable) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public ViewHolder(ViewBinding binding, boolean selectable) {
+            super(binding.getRoot());
+            if (binding instanceof ItemVaultAttachmentGridBinding) {
+                icAttachmentImg = ((ItemVaultAttachmentGridBinding) binding).icAttachmentImg;
+                more = ((ItemVaultAttachmentGridBinding) binding).more;
+                fileName = ((ItemVaultAttachmentGridBinding) binding).fileNameTextView;
+                mediaView = ((ItemVaultAttachmentGridBinding) binding).attachmentImg;
+                checkBox = ((ItemVaultAttachmentGridBinding) binding).checkboxTypeSingle;
+            } else {
+                icAttachmentImg = ((ItemVaultAttachmentHorBinding) binding).icAttachmentImg;
+                more = ((ItemVaultAttachmentHorBinding) binding).more;
+                fileName = ((ItemVaultAttachmentHorBinding) binding).fileNameTextView;
+                mediaView = ((ItemVaultAttachmentHorBinding) binding).attachmentImg;
+                checkBox = ((ItemVaultAttachmentHorBinding) binding).checkboxTypeSingle;
+            }
         }
 
         void showVideoInfo() {
@@ -273,10 +282,10 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         }
 
         void maybeEnableCheckBox(boolean selectable, VaultFile.Type type) {
-            if (type != VaultFile.Type.DIRECTORY){
+            if (type != VaultFile.Type.DIRECTORY) {
                 checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
                 checkBox.setEnabled(selectable);
-            }else {
+            } else {
                 checkBox.setVisibility(View.GONE);
             }
 
@@ -284,24 +293,25 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     }
 
     static class GridViewHolder extends AttachmentsSelectorAdapter.ViewHolder {
+        ItemVaultAttachmentGridBinding binding;
 
-        public GridViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+        public GridViewHolder(ItemVaultAttachmentGridBinding gridBinding, boolean selectable) {
+            super(gridBinding, selectable);
+            this.binding = gridBinding;
         }
     }
 
     static class ListViewHolder extends AttachmentsSelectorAdapter.ViewHolder {
-        @BindView(R.id.fileDateTextView)
-        TextView fileDateTextView;
+        ItemVaultAttachmentHorBinding horBinding;
 
-        public ListViewHolder(View itemView, boolean selectable) {
-            super(itemView, selectable);
+        public ListViewHolder(ItemVaultAttachmentHorBinding horBinding, boolean selectable) {
+            super(horBinding, selectable);
+            this.horBinding = horBinding;
         }
 
         public void setFileDateTextView(VaultFile vaultFile) {
-            fileDateTextView.setText(DateUtil.getDate(vaultFile.created));
+            horBinding.fileDateTextView.setText(DateUtil.getDate(vaultFile.created));
         }
     }
-
 }
 

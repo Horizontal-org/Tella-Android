@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet">
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/checked_circle"
+        android:contentDescription="@string/Server_Connect_Icon"
+        app:layout_constraintBottom_toTopOf="@+id/titleTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:layout_editor_absoluteX="175dp" />
+
+    <TextView
+        android:id="@+id/titleTv"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="@string/Settings_Reports_Connected_To_Project"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <TextView
+        android:id="@+id/descriptionTv"
+        style="@style/Unlock_White_Text_Medium"
+        android:layout_marginTop="16dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_large_margin"
+        android:text="@string/Connected_Successfuly_Text"
+        app:layout_constraintBottom_toTopOf="@+id/go_to_reports_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTv" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/go_to_reports_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_round_orange_btn"
+        app:text_color="@color/btn_dark_letter"
+        app:text="@string/Settings_Reports_Go_To_Reports"
+        app:check_state="false"
+        app:layout_constraintBottom_toTopOf="@+id/go_to_advanced_settings_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTv" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/go_to_advanced_settings_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        app:check_state="false"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        app:text="@string/Settings_reports_Go_To_Advanced_Settings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_reports_btn" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

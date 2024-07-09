@@ -19,7 +19,6 @@ class FavoriteFormsViewHolder  (val view : View) : BaseViewHolder<List<CollectFo
         favoriteFormsRecyclerView.apply {
             adapter = FavoriteFormsAdapter(item, vaultClickListener)
         }
-
     }
 
     companion object {

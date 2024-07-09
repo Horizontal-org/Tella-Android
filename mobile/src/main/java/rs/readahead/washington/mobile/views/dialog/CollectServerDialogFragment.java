@@ -32,16 +32,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.http.HttpStatus;
+import rs.readahead.washington.mobile.databinding.DialogCollectServerBinding;
 import rs.readahead.washington.mobile.domain.entity.IErrorBundle;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
 import rs.readahead.washington.mobile.mvp.contract.ICheckOdkServerContract;
 import rs.readahead.washington.mobile.mvp.presenter.CheckOdkServerPresenter;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import timber.log.Timber;
 
 
@@ -53,40 +51,27 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
     private static final String ID_KEY = "ik";
     private static final String OBJECT_KEY = "ok";
 
-    @BindView(R.id.name_layout)
     TextInputLayout nameLayout;
-    @BindView(R.id.name)
     EditText name;
-    @BindView(R.id.url_layout)
     TextInputLayout urlLayout;
-    @BindView(R.id.url)
     EditText url;
-    @BindView(R.id.username_layout)
     TextInputLayout usernameLayout;
-    @BindView(R.id.username)
     EditText username;
-    @BindView(R.id.password_layout)
     TextInputLayout passwordLayout;
-    @BindView(R.id.password)
     EditText password;
-    @BindView(R.id.progressBar)
     ProgressBar progressBar;
-    @BindView(R.id.server_input)
     View serverInput;
-    @BindView(R.id.cancel)
     TextView cancel;
-    @BindView(R.id.next)
     TextView next;
-    @BindView(R.id.back)
     ImageView back;
-    @BindView(R.id.toggle_button)
     PanelToggleButton advancedToggle;
-    @BindView(R.id.advanced_panel)
     ViewGroup advancedPanel;
+    Context context;
 
-    private Unbinder unbinder;
     private boolean validated = true;
     private CheckOdkServerPresenter presenter;
+
+    private DialogCollectServerBinding binding;
 
     private boolean securityProviderUpgradeAttempted = false;
 
@@ -95,7 +80,6 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         void onCollectServerDialogUpdate(CollectServer server);
         void onDialogDismiss();
     }
-
 
     public static CollectServerDialogFragment newInstance(@Nullable CollectServer server) {
         CollectServerDialogFragment frag = new CollectServerDialogFragment();
@@ -121,10 +105,10 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
         final long serverId = getArguments().getLong(ID_KEY, 0);
         Object obj = getArguments().getSerializable(OBJECT_KEY);
 
+        binding = DialogCollectServerBinding.inflate(LayoutInflater.from(context), container, false);
         final View dialogView;
-            dialogView = inflater.inflate(R.layout.dialog_collect_server, container, false);
-
-        unbinder = ButterKnife.bind(this, dialogView);
+            dialogView = binding.getRoot();
+        initView();
 
         presenter = new CheckOdkServerPresenter(this);
 
@@ -180,7 +164,7 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
            return super.onCreateDialog(savedInstanceState);
        }
 
-       Context context = getContext();
+       context = getContext();
 
        if (context == null) {
            return super.onCreateDialog(savedInstanceState);
@@ -200,7 +184,6 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
     @Override
     public void onDismiss(@NotNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        unbinder.unbind();
         if (presenter != null) {
             presenter.destroy();
             presenter = null;
@@ -380,5 +363,23 @@ public class CollectServerDialogFragment extends AppCompatDialogFragment impleme
 
     private void maybeShowAdvancedPanel() {
         advancedPanel.setVisibility(advancedToggle.isOpen() ? View.VISIBLE : View.GONE);
+    }
+
+    private void initView() {
+        nameLayout = binding.nameLayout;
+        name = binding.name;
+        urlLayout = binding.urlLayout;
+        url = binding.url;
+        usernameLayout = binding.usernameLayout;
+        username = binding.username;
+        passwordLayout = binding.passwordLayout;
+        password = binding.password;
+        progressBar = binding.progressBar;
+        serverInput = binding.serverInput;
+        cancel = binding.cancel;
+        next = binding.next;
+        back = binding.back;
+        advancedToggle = binding.toggleButton;
+        advancedPanel = binding.advancedPanel;
     }
 }

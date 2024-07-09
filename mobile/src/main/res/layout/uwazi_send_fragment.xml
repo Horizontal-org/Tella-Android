@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical">
@@ -55,13 +55,14 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/next_btn"
+        app:layout_constraintTop_toBottomOf="@+id/endViewContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
         android:layout_marginStart="@dimen/activity_horizontal_large_margin"
         />
 
     <androidx.appcompat.widget.AppCompatButton
-        style="@style/Unlock_White_Text"
+        style="@style/Submit_Text_Button"
         android:layout_marginBottom="18dp"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -76,6 +77,7 @@
         app:layout_constraintStart_toEndOf="@id/cancel_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endViewContainer"
         android:background="@drawable/action_button_background"
         app:layout_constraintHorizontal_chainStyle="packed"
         />

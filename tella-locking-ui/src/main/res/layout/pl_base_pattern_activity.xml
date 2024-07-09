@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/icon_left"
+        android:contentDescription="@string/action_go_back"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:paddingTop="40dp"
@@ -57,7 +58,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pl_message_text"
         app:pl_aspect="square"
-        app:pl_errorColor="@color/wa_red_error"
+        app:pl_errorColor="@color/light_red"
         app:pl_regularColor="@color/wa_white"
         app:pl_successColor="@color/tigers_eye" />
 

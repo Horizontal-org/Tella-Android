@@ -10,8 +10,10 @@ public class D {
     //static final String DATE = " DATE ";
 
     /* DATABASE */
-    static final String DATABASE_NAME = "tella-vault.db";
+    public static final String CIPHER3_DATABASE_NAME    = "tella-vault.db";
+    public static final String  DATABASE_NAME            = "tella-vault-v4.db";
     static final int DATABASE_VERSION = 1;
+    static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
     static final String T_VAULT_FILE = "t_vault_file";

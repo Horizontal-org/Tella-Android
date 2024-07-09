@@ -4,14 +4,14 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 
 
 public interface ITellaUploadServersRepository {
-    Single<List<TellaUploadServer>> listTellaUploadServers();
-    Single<TellaUploadServer> createTellaUploadServer(TellaUploadServer server);
-    Single<TellaUploadServer> updateTellaUploadServer(TellaUploadServer server);
-    Single<TellaUploadServer> getTellaUploadServer(long id);
-    Completable removeTUServer(long id);
+    Single<List<TellaReportServer>> listTellaUploadServers();
+    Single<TellaReportServer> createTellaUploadServer(TellaReportServer server);
+    Single<TellaReportServer> updateTellaUploadServer(TellaReportServer server);
+    Single<TellaReportServer> getTellaUploadServer(long id);
+    Completable removeTellaServerAndResources(long id);
     Single<Long> countTUServers();
 }

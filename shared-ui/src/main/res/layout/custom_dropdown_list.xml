@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <org.hzontal.shared_ui.buttons.PanelToggleButton
+        android:id="@+id/dropdown_panel"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_dropdown_closed"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:textAlignment="viewStart"
+        app:layout_constraintTop_toTopOf="parent"
+         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dropdown_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dropdownlist"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dropdown_panel"
+        tools:itemCount="10"
+        tools:listitem="@layout/layout_item_dropdown" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,28 +1,24 @@
 package rs.readahead.washington.mobile.views.activity;
 
-import static rs.readahead.washington.mobile.views.dialog.UwaziServerDialogFragmentKt.OBJECT_KEY;
-import static rs.readahead.washington.mobile.views.dialog.uwazi.step1.EnterServerFragmentKt.IS_UPDATE_SERVER;
+import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
+import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.INSTANCE;
+import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.Observer;
 
 import com.google.gson.Gson;
 
-import org.hzontal.shared_ui.appbar.ToolbarComponent;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -30,21 +26,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.EventCompositeDisposable;
-import rs.readahead.washington.mobile.bus.EventObserver;
-import rs.readahead.washington.mobile.bus.event.CreateUwaziServerEvent;
-import rs.readahead.washington.mobile.bus.event.UpdateUwaziServerEvent;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
+import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsBinding;
 import rs.readahead.washington.mobile.domain.entity.Server;
-import rs.readahead.washington.mobile.domain.entity.TellaUploadServer;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
@@ -57,40 +48,20 @@ import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.TellaUploadServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.uwazi.SharedLiveData;
+import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
-
+@AndroidEntryPoint
 public class ServersSettingsActivity extends BaseLockActivity implements
         IServersPresenterContract.IView,
         ICollectServersPresenterContract.IView,
         ITellaUploadServersPresenterContract.IView,
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
-        TellaUploadServerDialogFragment.TellaUploadServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
-        IUWAZIServersPresenterContract.IView{
-
-    @BindView(R.id.collect_servers_list)
-    LinearLayout listView;
-    @BindView(R.id.upload_layout)
-    View autoUploadSettingsView;
-    @BindView(R.id.server_name)
-    TextView autoUploadServerName;
-    @BindView(R.id.auto_upload_switch)
-    SwitchCompat autoUploadSwitch;
-    @BindView(R.id.auto_upload_switch_view)
-    View autoUploadSwitchView;
-    @BindView(R.id.auto_delete_switch)
-    SwitchCompat autoDeleteSwitch;
-    @BindView(R.id.selected_upload_server_layout)
-    View serverSelectLayout;
-    @BindView(R.id.activity_content_layout)
-    View contentLayout;
-
+        IUWAZIServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
@@ -98,31 +69,26 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private List<Server> servers;
-    private List<TellaUploadServer> tuServers;
+    private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
-    private EventCompositeDisposable disposables;
+    private ActivityDocumentationSettingsBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_documentation_settings);
-        ButterKnife.bind(this);
+        binding = ActivityDocumentationSettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ToolbarComponent toolbar = findViewById(R.id.toolbar);
-        toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings));
-        setSupportActionBar(toolbar);
+        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings));
+        setSupportActionBar(binding.toolbar);
 
-        toolbar.setBackClickListener(() -> {
+        binding.toolbar.setBackClickListener(() -> {
             onBackPressed();
             return null;
         });
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById(R.id.appbar).setOutlineProvider(null);
-        } else {
-            findViewById(R.id.appbar).bringToFront();
-        }
+        binding.appbar.setOutlineProvider(null);
 
         setupAutoDeleteAndMetadataUploadCheck();
 
@@ -134,22 +100,46 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         collectServersPresenter.getCollectServers();
         tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
         tellaUploadServersPresenter.getTUServers();
+
         uwaziServersPresenter = new UwaziServersPresenter(this);
         uwaziServersPresenter.getUwaziServers();
+
         createRefreshPresenter();
         initUwaziEvents();
+        initReportsEvents();
+        initListeners();
     }
 
-    private void initUwaziEvents(){
-        SharedLiveData.INSTANCE.getCreateServer().observe(this, server -> {
-            if (server != null){
+    private void initUwaziEvents() {
+        INSTANCE.getCreateServer().observe(this, server -> {
+            if (server != null) {
                 uwaziServersPresenter.create(server);
             }
         });
 
-        SharedLiveData.INSTANCE.getUpdateServer().observe(this, server -> {
-            if (server != null){
+        INSTANCE.getUpdateServer().observe(this, server -> {
+            if (server != null) {
                 uwaziServersPresenter.update(server);
+            }
+        });
+    }
+
+    private void initReportsEvents() {
+        INSTANCE.getCreateReportsServer().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.create(server);
+            }
+        });
+
+        INSTANCE.getCreateReportsServerAndCloseActivity().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.create(server);
+            }
+        });
+
+        INSTANCE.getUpdateReportsServer().observe(this, server -> {
+            if (server != null) {
+                tellaUploadServersPresenter.update(server);
             }
         });
     }
@@ -157,19 +147,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         stopPresenting();
         stopRefreshPresenter();
     }
 
-    @OnClick(R.id.add_server)
-    public void manage(View view) {
-        showChooseServerTypeDialog();
-    }
-
-    @OnClick(R.id.selected_upload_server_layout)
-    public void chooseAutoUploadServer(View view) {
-        showChooseAutoUploadServerDialog(tuServers);
+    private void initListeners() {
+        binding.addServer.setOnClickListener((view) -> showChooseServerTypeDialog());
+        binding.selectedUploadServerLayout.setOnClickListener((view) -> showChooseAutoUploadServerDialog(tuServers));
     }
 
     @Override
@@ -182,7 +166,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUwaziServersLoaded(List<UWaziUploadServer> uzServers) {
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
         this.servers.addAll(uzServers);
         createServerViews(servers);
 
@@ -190,19 +174,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onTUServersLoaded(List<TellaUploadServer> tellaUploadServers) {
-        listView.removeAllViews();
-        this.servers.addAll(tellaUploadServers);
+    public void onTUServersLoaded(List<TellaReportServer> tellaReportServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(tellaReportServers);
         createServerViews(servers);
+        tuServers = tellaReportServers;
 
-        tuServers = tellaUploadServers;
-        if (tuServers.size() > 0) {
-            autoUploadSwitchView.setVisibility(View.VISIBLE);
+       /* if (tuServers.size() > 0) {
+             binding.autoUploadSwitchView.setVisibility(View.VISIBLE);
             setupAutoUploadSwitch();
             setupAutoUploadView();
         } else {
-            autoUploadSwitchView.setVisibility(View.GONE);
-        }
+            binding.autoUploadSwitchView.setVisibility(View.GONE);
+        }*/
     }
 
     @Override
@@ -211,32 +195,24 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onCreatedTUServer(TellaUploadServer server) {
+    public void onCreatedTUServer(TellaReportServer server) {
         servers.add(server);
-        listView.addView(getServerItem(server), servers.indexOf(server));
-
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         tuServers.add(server);
-        if (tuServers.size() == 1) {
-            autoUploadSwitchView.setVisibility(View.VISIBLE);
-            setupAutoUploadSwitch();
-        }
-
-        if (tuServers.size() > 1) {
-            serverSelectLayout.setVisibility(View.VISIBLE);
-        }
-
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+        saveAutoUploadServer(server);
+        Preferences.setAutoUpload(isAutoUploadEnabled(servers));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
     @Override
     public void onCreateTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_create_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
     @Override
     public void onCreatedUwaziServer(UWaziUploadServer server) {
         servers.add(server);
-        listView.addView(getServerItem(server), servers.indexOf(server));
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         uwaziServers.add(server);
     }
 
@@ -248,9 +224,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onRemovedUwaziServer(UWaziUploadServer server) {
         servers.remove(server);
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
         createServerViews(servers);
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
 
     }
 
@@ -264,8 +240,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         int i = servers.indexOf(server);
         if (i != -1) {
             servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
+            binding.collectServersList.removeViewAt(i);
+            binding.collectServersList.addView(getServerItem(server), i);
         }
     }
 
@@ -275,63 +251,85 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onRemovedTUServer(TellaUploadServer server) {
+    public void onRemovedTUServer(TellaReportServer server) {
         servers.remove(server);
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
 
         tuServers.remove(server);
-        if (tuServers.size() == 0) {
-            autoUploadSwitchView.setVisibility(View.GONE);
-            autoUploadSettingsView.setVisibility(View.GONE);
+       /* if (tuServers.size() == 0) {
+            binding.autoUploadSwitchView.setVisibility(View.GONE);
+            binding.uploadLayout.setVisibility(View.GONE);
         }
 
         if (tuServers.size() == 1) {
-            serverSelectLayout.setVisibility(View.GONE);
-        }
+            binding.selectedUploadServerLayout.setVisibility(View.GONE);
+        }*/
 
         createServerViews(servers);
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+        if (tuServers.size() == 0) {
+            Preferences.setAutoUpload(false);
+            Preferences.setAutoDelete(false);
+        }
+
     }
 
     @Override
     public void onRemoveTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_delete_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
     @Override
-    public void onUpdatedTUServer(TellaUploadServer server) {
+    public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
+        saveAutoUploadServer(server);
+        Preferences.setAutoDelete(server.isAutoDelete());
+        if (server.isAutoUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
+        }
         if (i != -1) {
             servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
-            showToast(R.string.settings_docu_toast_server_updated);
+            Preferences.setAutoUpload(isAutoUploadEnabled(servers));
+            binding.collectServersList.removeViewAt(i);
+            binding.collectServersList.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(
+                    this,
+                    getString(R.string.settings_docu_toast_server_updated),
+                    false
+            );
         }
+    }
+
+    private boolean isAutoUploadEnabled(List<Server> servers) {
+        return servers.stream()
+                .filter(server -> server instanceof TellaReportServer)
+                .map(server -> (TellaReportServer) server)
+                .anyMatch(TellaReportServer::isAutoUpload);
     }
 
     @Override
     public void onUpdateTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_update_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_update_server), true);
     }
 
     @Override
     public void onServersLoaded(List<CollectServer> collectServers) {
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
         this.servers.addAll(collectServers);
         createServerViews(servers);
     }
 
     @Override
     public void onLoadServersError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_load_list_connected_servers), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_load_list_connected_servers), true);
     }
 
     @Override
     public void onCreatedServer(CollectServer server) {
         servers.add(server);
-        listView.addView(getServerItem(server), servers.indexOf(server));
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
 
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
 
         if (MyApplication.isConnectedToInternet(this)) {
             refreshPresenter.refreshBlankForms();
@@ -340,7 +338,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreateCollectServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_create_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
     @Override
@@ -349,25 +347,25 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (i != -1) {
             servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
-            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+            binding.collectServersList.removeViewAt(i);
+            binding.collectServersList.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
         }
     }
 
     @Override
     public void onUpdateServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_update_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_update_server), true);
     }
 
     @Override
     public void onServersDeleted() {
         //Preferences.setCollectServersLayout(false);
         servers.clear();
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
         turnOffAutoUpload();
-       //setupCollectSettingsView();
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_disconnect_servers_delete), false);
+        //setupCollectSettingsView();
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_disconnect_servers_delete), false);
     }
 
     @Override
@@ -377,14 +375,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onRemovedServer(CollectServer server) {
         servers.remove(server);
-        listView.removeAllViews();
+        binding.collectServersList.removeAllViews();
         createServerViews(servers);
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_deleted), false);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
     @Override
     public void onRemoveServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_fail_delete_server), true);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
     @Override
@@ -426,10 +424,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         );
     }
 
-    private void showChooseAutoUploadServerDialog(List<TellaUploadServer>  tellaUploadServers) {
+    private void showChooseAutoUploadServerDialog(List<TellaReportServer> tellaReportServers) {
 
-        LinkedHashMap options = new LinkedHashMap<Long,String>();
-        for (Server server : tellaUploadServers) {
+        LinkedHashMap options = new LinkedHashMap<Long, String>();
+        for (Server server : tellaReportServers) {
             options.put(server.getId(), server.getName());
         }
 
@@ -441,9 +439,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 options,
                 Preferences.getAutoUploadServerId(),
                 this,
-                serverId -> {
-                    setAutoUploadServer(serverId, (String) options.get(serverId));
-                });
+                serverId -> setAutoUploadServer(serverId, (String) options.get(serverId)));
     }
 
     /*private void setAutoUploadServer(TellaUploadServer server) {
@@ -453,35 +449,25 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void setAutoUploadServer(Long id, String name) {
         serversPresenter.setAutoUploadServerId(id);
-        autoUploadServerName.setText(name);
+        binding.serverName.setText(name);
     }
 
     private void editCollectServer(CollectServer server) {
         showCollectServerDialog(server);
     }
 
-    private void editTUServer(TellaUploadServer server) {
+    private void editTUServer(TellaReportServer server) {
         showTellaUploadServerDialog(server);
     }
 
-    private void editUwaziServer(UWaziUploadServer uWaziUploadServer){
+    private void editUwaziServer(UWaziUploadServer uWaziUploadServer) {
         showUwaziServerDialog(uWaziUploadServer);
     }
 
-    private void removeCollectServer(final CollectServer server) {
-        BottomSheetUtils.showConfirmSheet(
-                this.getSupportFragmentManager(),
-                String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
-                getString(R.string.settings_docu_delete_server_dialog_expl),
-                getString(R.string.action_delete),
-                getString(R.string.action_cancel),
-                isConfirmed -> collectServersPresenter.remove(server));
-    }
-
     private void turnOffAutoUpload() {
-        autoUploadSwitch.setChecked(false);
+        binding.autoUploadSwitch.setChecked(false);
         serversPresenter.removeAutoUploadServersSettings();
-        autoUploadSettingsView.setVisibility(View.GONE);
+        binding.uploadLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -504,22 +490,28 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 .show(getSupportFragmentManager(), CollectServerDialogFragment.TAG);
     }
 
-    private void showTellaUploadServerDialog(@Nullable TellaUploadServer server) {
-        TellaUploadServerDialogFragment.newInstance(server)
-                .show(getSupportFragmentManager(), TellaUploadServerDialogFragment.TAG);
+    private void showTellaUploadServerDialog(@Nullable TellaReportServer server) {
+        if (server == null) {
+            startActivity(new Intent(this, ReportsConnectFlowActivity.class));
+        } else {
+            Intent intent = new Intent(this, ReportsConnectFlowActivity.class);
+            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
+            intent.putExtra(IS_UPDATE_SERVER, true);
+            startActivity(intent);
+        }
     }
 
     private void showUwaziServerDialog(@Nullable UWaziUploadServer server) {
-        if (server == null){
+        if (server == null) {
             startActivity(new Intent(this, UwaziConnectFlowActivity.class));
         } else {
             Intent intent = new Intent(this, UwaziConnectFlowActivity.class);
             intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
-            intent.putExtra(IS_UPDATE_SERVER,true);
+            intent.putExtra(IS_UPDATE_SERVER, true);
             startActivity(intent);
         }
-
     }
+
     private void stopPresenting() {
         if (collectServersPresenter != null) {
             collectServersPresenter.destroy();
@@ -538,8 +530,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void setupAutoDeleteAndMetadataUploadCheck() {
-        autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
-        autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        binding.autoDeleteSwitch.setChecked(Preferences.isAutoDeleteEnabled());
+        binding.autoDeleteSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Preferences.setAutoDelete(true);
             } else {
@@ -557,26 +549,26 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private Unit disableAutoDelete() {
-        autoDeleteSwitch.setChecked(false);
+        binding.autoDeleteSwitch.setChecked(false);
         Preferences.setAutoDelete(false);
         return Unit.INSTANCE;
     }
 
     private Unit turnOnAutoDeleteSwitch() {
-        autoDeleteSwitch.setChecked(true);
+        binding.autoDeleteSwitch.setChecked(true);
         return Unit.INSTANCE;
     }
 
     private void setupCollectSettingsView() {
         if (!Preferences.isCollectServersLayout()) {
-            autoUploadSwitchView.setVisibility(View.GONE);
+            binding.autoUploadSwitchView.setVisibility(View.GONE);
         }
     }
 
     private void createServerViews(List<Server> servers) {
         for (Server server : servers) {
             View view = getServerItem(server);
-            listView.addView(view, servers.indexOf(server));
+            binding.collectServersList.addView(view, servers.indexOf(server));
         }
     }
 
@@ -587,36 +579,33 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         ViewGroup row = item.findViewById(R.id.server_row);
         TextView name = item.findViewById(R.id.server_title);
-        ImageView options = item.findViewById(R.id.options);
 
         if (server != null) {
             name.setText(server.getName());
-            row.setOnClickListener(view -> {
-                BottomSheetUtils.showEditDeleteMenuSheet(
-                        this.getSupportFragmentManager(),
-                        server.getName(),
-                        getString(R.string.action_edit),
-                        getString(R.string.action_delete),
-                        action -> {
-                            if (action == BottomSheetUtils.Action.EDIT) {
-                                editServer(server);
-                            }
-                            if (action == BottomSheetUtils.Action.DELETE) {
-                                removeServer(server);
-                            }
-                        },
-                        String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
-                        getString(R.string.settings_docu_delete_server_dialog_expl),
-                        getString(R.string.action_delete),
-                        getString(R.string.action_cancel)
-                );
-            });
+            row.setOnClickListener(view -> BottomSheetUtils.showEditDeleteMenuSheet(
+                    this.getSupportFragmentManager(),
+                    server.getName(),
+                    getString(R.string.action_edit),
+                    getString(R.string.action_delete),
+                    action -> {
+                        if (action == BottomSheetUtils.Action.EDIT) {
+                            editServer(server);
+                        }
+                        if (action == BottomSheetUtils.Action.DELETE) {
+                            removeServer(server);
+                        }
+                    },
+                    String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
+                    getString(R.string.settings_docu_delete_server_dialog_expl),
+                    getString(R.string.action_delete),
+                    getString(R.string.action_cancel), -1
+            ));
         }
         item.setTag(servers.indexOf(server));
         return item;
     }
 
-    private void editServer(Server server){
+    private void editServer(Server server) {
         switch (server.getServerType()) {
             case ODK_COLLECT:
                 editCollectServer((CollectServer) server);
@@ -625,12 +614,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 editUwaziServer((UWaziUploadServer) server);
                 break;
             default:
-                editTUServer((TellaUploadServer) server);
+                editTUServer((TellaReportServer) server);
                 break;
         }
     }
 
-    private void removeServer(Server server){
+    private void removeServer(Server server) {
         switch (server.getServerType()) {
             case ODK_COLLECT:
                 collectServersPresenter.remove((CollectServer) server);
@@ -639,14 +628,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 uwaziServersPresenter.remove((UWaziUploadServer) server);
                 break;
             default:
-                tellaUploadServersPresenter.remove((TellaUploadServer) server);
+                tellaUploadServersPresenter.remove((TellaReportServer) server);
                 break;
         }
     }
 
     private void setupAutoUploadSwitch() {
-        autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
-        autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        binding.autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
+        binding.autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 BottomSheetUtils.showStandardSheet(
                         this.getSupportFragmentManager(),
@@ -668,28 +657,28 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private Unit enableAutoUpload() {
-        autoUploadSwitch.setChecked(true);
+        binding.autoUploadSwitch.setChecked(true);
         Preferences.setAutoUpload(true);
         setupAutoUploadView();
         return Unit.INSTANCE;
     }
 
     private Unit turnOffAutoUploadSwitch() {
-        autoUploadSwitch.setChecked(false);
-        autoUploadSettingsView.setVisibility(View.GONE);
+        binding.autoUploadSwitch.setChecked(false);
+        binding.uploadLayout.setVisibility(View.GONE);
         return Unit.INSTANCE;
     }
 
     private Unit turnOnAutoUploadSwitch() {
-        autoUploadSwitch.setChecked(true);
-        autoUploadSettingsView.setVisibility(View.VISIBLE);
+        binding.autoUploadSwitch.setChecked(true);
+        binding.uploadLayout.setVisibility(View.VISIBLE);
         return Unit.INSTANCE;
     }
 
     private Unit disableAutoUpload() {
-        autoUploadSwitch.setChecked(false);
+        binding.autoUploadSwitch.setChecked(false);
         Preferences.setAutoUpload(false);
-        autoUploadSettingsView.setVisibility(View.GONE);
+        binding.uploadLayout.setVisibility(View.GONE);
         return Unit.INSTANCE;
     }
 
@@ -698,7 +687,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             return;
         }
 
-        autoUploadSettingsView.setVisibility(View.VISIBLE);
+        binding.uploadLayout.setVisibility(View.VISIBLE);
 
         if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
             if (tuServers.size() == 1) {
@@ -715,11 +704,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             }
         }
 
-        if (tuServers.size() > 1) {
-            serverSelectLayout.setVisibility(View.VISIBLE);
+      /*  if (tuServers.size() > 1) {
+            binding.selectedUploadServerLayout.setVisibility(View.VISIBLE);
         } else {
-            serverSelectLayout.setVisibility(View.GONE);
-        }
+            binding.selectedUploadServerLayout.setVisibility(View.GONE);
+        }*/
     }
 
     private void stopRefreshPresenter() {
@@ -735,15 +724,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    @Override
-    public void onTellaUploadServerDialogCreate(TellaUploadServer server) {
-        tellaUploadServersPresenter.create(server);
-    }
-
-    @Override
-    public void onTellaUploadServerDialogUpdate(TellaUploadServer server) {
-        tellaUploadServersPresenter.update(server);
-    }
 
   /*  @Override
     public void onUwaziServerDialogCreate(@Nullable UWaziUploadServer server) {
@@ -765,8 +745,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onUwaziServerLanguageDialog(@NonNull UWaziUploadServer server) {
         servers.add(server);
-        listView.addView(getServerItem(server), servers.indexOf(server));
-        DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_created), false);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
     @Override
@@ -774,9 +754,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         int i = servers.indexOf(server);
         if (i != -1) {
             servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
-            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+            binding.collectServersList.removeViewAt(i);
+            binding.collectServersList.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
         }
     }
 
@@ -786,9 +766,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         if (i != -1) {
             servers.set(i, server);
-            listView.removeViewAt(i);
-            listView.addView(getServerItem(server), i);
-            DialogUtils.showBottomMessage(this,getString(R.string.settings_docu_toast_server_updated), false);
+            binding.collectServersList.removeViewAt(i);
+            binding.collectServersList.addView(getServerItem(server), i);
+            DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
+        }
+    }
+
+    private void saveAutoUploadServer(TellaReportServer server) {
+        if (server.isActivatedBackgroundUpload()) {
+            Preferences.setAutoUploadServerId(server.getId());
         }
     }
 }

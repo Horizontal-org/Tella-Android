@@ -23,22 +23,21 @@ class OnBoardLockSetFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView(view)
     }
 
     override fun initView(view: View) {
-        (activity as OnBoardActivityInterface).setCurrentIndicator(3)
-
+        (baseActivity as OnBoardActivityInterface).setCurrentIndicator(3)
+        (baseActivity as OnBoardingActivity).hideViewpager()
+        (baseActivity as OnBoardingActivity).showProgress()
         with(binding) {
             nextBtn.setOnClickListener {
-                activity.addFragment(
+                baseActivity.addFragment(
                     this@OnBoardLockSetFragment,
                     OnBoardAllDoneFragment(),
                     R.id.rootOnboard
                 )
             }
-
             backBtn.hide()
         }
     }

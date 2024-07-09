@@ -1,6 +1,8 @@
 package org.hzontal.shared_ui.buttons
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +21,11 @@ class RoundButton @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr), Checkable {
 
     @StringRes
-    private var text : Int = -1
-    private val binding : LayoutRoundButtonBinding = LayoutRoundButtonBinding.inflate(LayoutInflater.from(context),this,true)
+    private var text: Int = -1
+    private var tintColor : Int = -1
+    private var textColor : Int = -1
+    private val binding: LayoutRoundButtonBinding =
+        LayoutRoundButtonBinding.inflate(LayoutInflater.from(context), this, true)
     private var mChecked = false
     var clickListener: (() -> Unit)? = null
 
@@ -31,7 +36,7 @@ class RoundButton @JvmOverloads constructor(
     }
 
     private fun initView() {
-        background = ContextCompat.getDrawable(context, R.drawable.bg_information_button)
+        binding.sheetTextView.background = ContextCompat.getDrawable(context, R.drawable.bg_information_button)
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
@@ -47,6 +52,8 @@ class RoundButton @JvmOverloads constructor(
             try {
                 text = typedArray.getResourceId(R.styleable.RoundButton_text, -1)
                 mChecked = typedArray.getBoolean(R.styleable.RoundButton_check_state, false)
+                tintColor = typedArray.getColor(R.styleable.RoundButton_tint_color, -1)
+                textColor = typedArray.getColor(R.styleable.RoundButton_text_color, -1)
                 isChecked = mChecked
 
             } finally {
@@ -67,19 +74,34 @@ class RoundButton @JvmOverloads constructor(
     }
 
     private fun bindView() {
-        setTextAndVisibility(text,binding.sheetTextView)
+        setTextAndVisibility(text, binding.sheetTextView)
+        setBackgroundTintColor(tintColor)
     }
 
-    private fun setTextAndVisibility(text : Int,textView: TextView){
+    private fun setTextAndVisibility(text: Int, textView: TextView) {
         if (text != -1) {
             textView.visibility = View.VISIBLE
             textView.text = context.getString(text)
         }
     }
 
-    fun setText(text : String?){
+    private fun setBackgroundTintColor(tintColor : Int){
+        if (tintColor != -1){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                binding.sheetTextView.backgroundTintList  = ColorStateList.valueOf(tintColor)
+            }
+        }
+        if (textColor != -1){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                binding.sheetTextView.setTextColor(textColor)
+            }
+        }
+    }
+
+    fun setText(text: String?) {
         binding.sheetTextView.text = text
     }
+
     override fun isChecked(): Boolean {
         return mChecked
     }
@@ -97,10 +119,11 @@ class RoundButton @JvmOverloads constructor(
 
     private fun refreshLayoutState() {
         super.refreshDrawableState()
-        background = if (mChecked)
+        binding.sheetTextView.background = if (mChecked)
             ContextCompat.getDrawable(context, R.drawable.bg_information_button_selected)
         else
             ContextCompat.getDrawable(context, R.drawable.bg_information_button)
     }
+
 
 }

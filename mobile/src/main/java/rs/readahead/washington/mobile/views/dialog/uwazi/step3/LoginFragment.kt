@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -19,7 +17,6 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginUwaziScreenBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
-import rs.readahead.washington.mobile.util.isKeyboardOpened
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.dialog.ID_KEY
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
@@ -69,9 +66,9 @@ class LoginFragment : BaseFragment() {
 
     private fun initListeners() {
         binding.loginButton.setOnClickListener {
-            if (!MyApplication.isConnectedToInternet(activity)) {
+            if (!MyApplication.isConnectedToInternet(baseActivity)) {
                 DialogUtils.showBottomMessage(
-                    activity,
+                    baseActivity,
                     getString(R.string.settings_docu_error_no_internet),
                     true
                 )
@@ -86,39 +83,39 @@ class LoginFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            twoFactorAuthentication.observe(viewLifecycleOwner, {
-                KeyboardUtil.hideKeyboard(activity)
-                activity.addFragment(
+            twoFactorAuthentication.observe(viewLifecycleOwner) {
+                KeyboardUtil.hideKeyboard(baseActivity, binding.root)
+                baseActivity.addFragment(
                     TwoFactorAuthenticationFragment.newInstance(
                         serverUwazi,
                         isUpdate
                     ), R.id.container
                 )
-            })
+            }
 
-            authenticationError.observe(viewLifecycleOwner, { error ->
+            authenticationError.observe(viewLifecycleOwner) { error ->
                 if (error) {
                     binding.passwordLayout.error =
                         getString(R.string.settings_docu_error_wrong_credentials)
                 }
-            })
+            }
 
-            authenticationSuccess.observe(viewLifecycleOwner, { isSuccess ->
+            authenticationSuccess.observe(viewLifecycleOwner) { isSuccess ->
                 if (isSuccess) {
-                    KeyboardUtil.hideKeyboard(activity)
-                    activity.addFragment(
+                    KeyboardUtil.hideKeyboard(baseActivity, binding.root)
+                    baseActivity.addFragment(
                         LanguageFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
                 }
-            })
+            }
 
-            progress.observe(viewLifecycleOwner,{
+            progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
-            })
+            }
         }
         binding.backBtn.setOnClickListener {
-            activity.supportFragmentManager.popBackStack()
+            baseActivity.supportFragmentManager.popBackStack()
         }
     }
 

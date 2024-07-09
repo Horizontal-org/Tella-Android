@@ -37,8 +37,8 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
-        (activity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
+        (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_lang_app_bar)
+        (baseActivity as OnFragmentSelected?)?.setToolbarHomeIcon(R.drawable.ic_close_white_24dp)
 
         LanguageList = view.findViewById(R.id.language_list)
 
@@ -74,10 +74,10 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
             langInfo.setText(R.string.settings_lang_select_expl_default)
         } else {
             val locale = Locale(language)
-            langName.setText(StringUtils.capitalize(locale.displayName, locale))
-            langInfo.setText(StringUtils.capitalize(locale.getDisplayName(locale), locale))
+            langName.text = StringUtils.capitalize(locale.displayName, locale)
+            langInfo.text = StringUtils.capitalize(locale.getDisplayName(locale), locale)
         }
-        imageView.setVisibility(if (selected) View.VISIBLE else View.GONE)
+        imageView.visibility = if (selected) View.VISIBLE else View.GONE
         item.setBackgroundColor(
             if (selected) ContextCompat.getColor(
                 requireContext(),

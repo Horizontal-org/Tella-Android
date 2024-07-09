@@ -21,7 +21,7 @@ import java.util.List;
 public class ConfirmPatternActivity extends BasePatternActivity
         implements PatternView.OnPatternListener {
 
-    private static final String KEY_NUM_FAILED_ATTEMPTS = "num_failed_attempts";
+    public static final String KEY_NUM_FAILED_ATTEMPTS = "num_failed_attempts";
 
     public static final int RESULT_FORGOT_PASSWORD = RESULT_FIRST_USER;
 

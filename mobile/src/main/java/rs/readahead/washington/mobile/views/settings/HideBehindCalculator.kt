@@ -4,70 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import rs.readahead.washington.mobile.MyApplication
+import androidx.core.os.bundleOf
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.bus.event.CamouflageAliasChangedEvent
-import rs.readahead.washington.mobile.util.CamouflageManager
+import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class HideBehindCalculator : BaseFragment() {
 
-    private val cm = CamouflageManager.getInstance()
+    private lateinit var binding: OnboardCalculatorFragmentBinding
+
+    companion object {
+        private const val VIEWPAGER_POSITION = "VIEWPAGER_POSITION"
+        fun getInstance(position: Int) = HideBehindCalculator().apply {
+            arguments = bundleOf(VIEWPAGER_POSITION to position)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.onboard_calculator_fragment, container, false)
+    ): View {
+        binding = OnboardCalculatorFragmentBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView(view)
-
-        return view
     }
 
     override fun initView(view: View) {
-        (activity as OnFragmentSelected?)?.hideAppbar()
+        val position = requireArguments().getInt(VIEWPAGER_POSITION)
+        val skinArray = resources.obtainTypedArray(R.array.calculator_skin_array)
+        val skinStrings = resources.getStringArray(R.array.calculator_skin_strings)
 
-        view.findViewById<View>(R.id.back_btn).setOnClickListener {
-            activity.onBackPressed()
+        with(binding.calculatorImg) {
+            setImageDrawable(skinArray.getDrawable(position))
+            contentDescription = skinStrings[position]
         }
 
-        view.findViewById<View>(R.id.calculatorView).setOnClickListener {
-        }
-
-        view.findViewById<View>(R.id.calculatorImg).setOnClickListener {
-        }
-
-        view.findViewById<View>(R.id.calculatorBtn).setOnClickListener {
-            confirmHideBehindCalculator()
-        }
+        skinArray.recycle()
     }
 
-    private fun confirmHideBehindCalculator() {
-        BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-            activity.supportFragmentManager,
-            getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
-            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
-            getString(R.string.settings_sec_confirm_camouflage_title),
-            getString(R.string.settings_sec_confirm_calc_camouflage_desc),
-            getString(R.string.settings_sec_confirm_exit_tella),
-            getString(R.string.action_cancel),
-            ContextCompat.getDrawable(activity, cm.calculatorOption.drawableResId),
-            consumer = object : BottomSheetUtils.ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    hideTellaBehindCalculator()
-                }
-            }
-        )
-    }
 
-    private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias(requireContext(), CALCULATOR_ALIAS)) {
-            MyApplication.bus()
-                .post(CamouflageAliasChangedEvent())
-        }
-    }
 }

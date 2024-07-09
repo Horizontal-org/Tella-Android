@@ -34,7 +34,7 @@
             android:clickable="true"
             android:focusable="true"
             android:scaleType="fitXY"
-            tools:ignore="ContentDescription" />
+            android:contentDescription="@string/action_show_photo" />
 
         <TextView
             android:id="@+id/fileSize"

@@ -42,7 +42,7 @@ import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue;
 import rs.readahead.washington.mobile.util.Util;
 import rs.readahead.washington.mobile.util.StringUtils;
 import rs.readahead.washington.mobile.views.collect.widgets.QuestionWidget;
-import rs.readahead.washington.mobile.views.custom.PanelToggleButton;
+import org.hzontal.shared_ui.buttons.PanelToggleButton;
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 
@@ -163,6 +163,7 @@ public class UwaziSelectOneWidget extends UwaziQuestionWidget implements
 
     private void addDeleteButton() {
         deleteButton = addButton(R.drawable.ic_cancel_rounded);
+        deleteButton.setContentDescription(getContext().getString(R.string.action_cancel));
         deleteButton.setOnClickListener(v -> clearAnswer());
         deleteButton.setVisibility(GONE);
     }

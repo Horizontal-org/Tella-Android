@@ -1,13 +1,10 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
-import android.view.Gravity
 import android.view.View
 import android.widget.*
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import com.tooltip.Tooltip
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.utils.DialogUtils
 
@@ -20,49 +17,42 @@ object VaultSheetUtils {
         fun save()
         fun info()
         fun delete()
+        fun edit()
     }
 
     @JvmStatic
-    fun showVaultActionsSheet(
-        fragmentManager: FragmentManager,
-        titleText: String?,
-        uploadLabel: String,
-        shareLabel: String,
-        moveLabel: String,
-        renameLabel: String,
-        saveLabel: String,
-        infoLabel: String,
-        deleteLabel: String,
-        isDirectory: Boolean = false,
-        isMultipleFiles: Boolean = false,
-        isUploadVisible: Boolean = false,
-        isMoveVisible: Boolean = false,
-        action: IVaultActions
-    ) {
-        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.vault_actions_sheet_layout)
-            .cancellable(true)
-            .screenTag("vaultActionSheet")
-        vaultActionSheet.holder(VaultActionsSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultActionsSheetHolder> {
+    fun showVaultActionsSheet(fragmentManager: FragmentManager, titleText: String?, uploadLabel: String, shareLabel: String, moveLabel: String, renameLabel: String, saveLabel: String, infoLabel: String, deleteLabel: String, editLabel: String, isDirectory: Boolean = false, isMultipleFiles: Boolean = false, isUploadVisible: Boolean = false, isMoveVisible: Boolean = false, isEditVisible: Boolean = false, action: IVaultActions) {
+        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.vault_actions_sheet_layout).cancellable(true).screenTag("vaultActionSheet")
+        vaultActionSheet.holder(VaultActionsSheetHolder(), object : Binder<VaultActionsSheetHolder> {
             override fun onBind(holder: VaultActionsSheetHolder) {
                 with(holder) {
                     title.text = titleText
                     //Actions visibility
+                    if (!isEditVisible) {
+                        actionEdit.visibility = View.GONE
+                    }
                     if (isDirectory) {
                         seperator.visibility = View.GONE
                         actionShare.visibility = View.GONE
                         actionUpload.visibility = View.GONE
+                        actionEdit.visibility = View.GONE
                     }
                     if (isMultipleFiles) {
                         actionRename.visibility = View.GONE
                         actionInfo.visibility = View.GONE
+                        actionEdit.visibility = View.GONE
                     }
                     //Rename action
                     actionRename.text = renameLabel
                     actionRename.setOnClickListener {
                         vaultActionSheet.dismiss()
                         action.rename()
+                    }
+                    //Edit action
+                    actionEdit.text = editLabel
+                    actionEdit.setOnClickListener {
+                        vaultActionSheet.dismiss()
+                        action.edit()
                     }
                     //Delete action
                     actionDelete.text = deleteLabel
@@ -111,8 +101,9 @@ object VaultSheetUtils {
         vaultActionSheet.launch()
     }
 
-    class VaultActionsSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class VaultActionsSheetHolder : PageHolder() {
         lateinit var actionRename: TextView
+        lateinit var actionEdit: TextView
         lateinit var actionDelete: TextView
         lateinit var actionUpload: TextView
         lateinit var actionShare: TextView
@@ -124,6 +115,7 @@ object VaultSheetUtils {
 
         override fun bindView(view: View) {
             actionRename = view.findViewById(R.id.renameActionTV)
+            actionEdit = view.findViewById(R.id.editActionTV)
             actionDelete = view.findViewById(R.id.deleteActionTV)
             actionUpload = view.findViewById(R.id.uploadActionTV)
             actionShare = view.findViewById(R.id.shareActionTV)
@@ -136,25 +128,14 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
-    fun showVaultBlueRenameSheet(
-        fragmentManager: FragmentManager,
-        titleText: String?,
-        cancelLabel: String,
-        confirmLabel: String,
-        context: Activity,
-        fileName: String?,
-        onConfirmClick: ((String) -> Unit)? = null
-    ) {
-        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.blue_sheet_rename)
-            .screenTag("VaultRenameSheet")
-            .cancellable(true)
-        vaultActionSheet.holder(VaultRenameSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultRenameSheetHolder> {
+    fun showVaultBlueRenameSheet(fragmentManager: FragmentManager, titleText: String?, cancelLabel: String, confirmLabel: String, context: Activity, fileName: String?, onConfirmClick: ((String) -> Unit)? = null) {
+        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.blue_sheet_rename).screenTag("VaultRenameSheet").cancellable(true)
+        vaultActionSheet.holder(VaultRenameSheetHolder(), object : Binder<VaultRenameSheetHolder> {
             override fun onBind(holder: VaultRenameSheetHolder) {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
+
                     //Cancel action
                     actionCancel.text = cancelLabel
                     actionCancel.setOnClickListener { vaultActionSheet.dismiss() }
@@ -166,11 +147,7 @@ object VaultSheetUtils {
                             vaultActionSheet.dismiss()
                             onConfirmClick?.invoke(renameEditText.text.toString())
                         } else {
-                            DialogUtils.showBottomMessage(
-                                context,
-                                "Please fill in the new name",
-                                true
-                            )
+                            DialogUtils.showBottomMessage(context, "Please fill in the new name", true)
                         }
 
                     }
@@ -182,25 +159,14 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
-    fun showVaultRenameSheet(
-        fragmentManager: FragmentManager,
-        titleText: String?,
-        cancelLabel: String,
-        confirmLabel: String,
-        context: Activity,
-        fileName: String?,
-        onConfirmClick: ((String) -> Unit)? = null
-    ) {
-        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.sheet_rename)
-            .screenTag("VaultRenameSheet")
-            .cancellable(true)
-        vaultActionSheet.holder(VaultRenameSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultRenameSheetHolder> {
+    fun showVaultRenameSheet(fragmentManager: FragmentManager, titleText: String?, cancelLabel: String, confirmLabel: String, context: Activity, fileName: String?, onConfirmClick: ((String) -> Unit)? = null) {
+        val vaultActionSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.sheet_rename).screenTag("VaultRenameSheet").cancellable(true)
+        vaultActionSheet.holder(VaultRenameSheetHolder(), object : Binder<VaultRenameSheetHolder> {
             override fun onBind(holder: VaultRenameSheetHolder) {
                 with(holder) {
                     title.text = titleText
                     renameEditText.setText(fileName)
+
                     renameEditText.requestFocus()
                     //Cancel action
                     actionCancel.text = cancelLabel
@@ -213,11 +179,7 @@ object VaultSheetUtils {
                             vaultActionSheet.dismiss()
                             onConfirmClick?.invoke(renameEditText.text.toString())
                         } else {
-                            DialogUtils.showBottomMessage(
-                                context,
-                                "Please fill in the new name",
-                                true
-                            )
+                            DialogUtils.showBottomMessage(context, "Please fill in the new name", true)
                         }
 
                     }
@@ -228,7 +190,7 @@ object VaultSheetUtils {
         vaultActionSheet.launch()
     }
 
-    class VaultRenameSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class VaultRenameSheetHolder : PageHolder() {
         lateinit var actionCancel: TextView
         lateinit var actionRename: TextView
         lateinit var title: TextView
@@ -251,21 +213,9 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
-    fun showVaultSortSheet(
-        fragmentManager: FragmentManager,
-        titleText: String?,
-        filterNameAZ: String?,
-        filterNameZA: String,
-        filterASC: String,
-        filterDESC: String,
-        sort: IVaultSortActions
-    ) {
-        val vaultSortSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.layout_sort_vault)
-            .screenTag("vaultSortSheet")
-            .cancellable(true)
-        vaultSortSheet.holder(VaultSortSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultSortSheetHolder> {
+    fun showVaultSortSheet(fragmentManager: FragmentManager, titleText: String?, filterNameAZ: String?, filterNameZA: String, filterASC: String, filterDESC: String, sort: IVaultSortActions) {
+        val vaultSortSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_sort_vault).screenTag("vaultSortSheet").cancellable(true)
+        vaultSortSheet.holder(VaultSortSheetHolder(), object : Binder<VaultSortSheetHolder> {
             override fun onBind(holder: VaultSortSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -305,7 +255,7 @@ object VaultSheetUtils {
         vaultSortSheet.launch()
     }
 
-    class VaultSortSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class VaultSortSheetHolder : PageHolder() {
         lateinit var title: TextView
         lateinit var radioBtnNameAZ: RadioButton
         lateinit var radioBtnNameZA: RadioButton
@@ -326,31 +276,14 @@ object VaultSheetUtils {
     interface IVaultManageFiles {
         fun goToCamera()
         fun goToRecorder()
-        fun import()
-        fun importAndDelete()
+        fun chooseImportAndDelete()
         fun createFolder()
     }
 
     @JvmStatic
-    fun showVaultManageFilesSheet(
-        fragmentManager: FragmentManager,
-        cameraLabel: String?,
-        recordLabel: String?,
-        importLabel: String,
-        importDeleteLabel: String,
-        createFolderLabel: String,
-        titleText: String,
-        toolTipText: String,
-        isImportVisible: Boolean,
-        isCreateFolderVisible: Boolean,
-        action: IVaultManageFiles
-    ) {
-        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.manage_files_layout)
-            .screenTag("vaultManageFilesSheet")
-            .cancellable(true)
-        vaultManageFilesSheet.holder(VaultManageFilesSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultManageFilesSheetHolder> {
+    fun showVaultManageFilesSheet(fragmentManager: FragmentManager, cameraLabel: String?, recordLabel: String?, importLabel: String, createFolderLabel: String, titleText: String, isImportVisible: Boolean, isCreateFolderVisible: Boolean, action: IVaultManageFiles) {
+        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.manage_files_layout).screenTag("vaultManageFilesSheet").cancellable(true)
+        vaultManageFilesSheet.holder(VaultManageFilesSheetHolder(), object : Binder<VaultManageFilesSheetHolder> {
             override fun onBind(holder: VaultManageFilesSheetHolder) {
                 with(holder) {
                     title.text = titleText
@@ -374,15 +307,7 @@ object VaultSheetUtils {
                     importActionTV.text = importLabel
                     importActionTV.setOnClickListener {
                         vaultManageFilesSheet.dismiss()
-                        action.import()
-                    }
-                    //Share action
-                    createDeleteActionTV.visibility = View.GONE
-                    deleteVaultTooltip.visibility = View.GONE
-                    createDeleteActionTV.text = importDeleteLabel
-                    createDeleteActionTV.setOnClickListener {
-                        vaultManageFilesSheet.dismiss()
-                        action.importAndDelete()
+                        action.chooseImportAndDelete()
                     }
                     //Move action
                     createFolderActionTV.isVisible = isCreateFolderVisible
@@ -395,23 +320,6 @@ object VaultSheetUtils {
                         }
                     }
                     //delete action
-                    deleteVaultTooltip.setOnClickListener {
-                        Tooltip.Builder(deleteVaultTooltip)
-                            .setText(toolTipText)
-                            .setTextColor(getColor(deleteVaultTooltip.context, R.color.wa_black))
-                            .setBackgroundColor(
-                                getColor(
-                                    deleteVaultTooltip.context,
-                                    R.color.wa_white
-                                )
-                            )
-                            .setGravity(Gravity.TOP)
-                            .setCornerRadius(12f)
-                            .setPadding(24)
-                            .setDismissOnClick(true)
-                            .setCancelable(true)
-                            .show<Tooltip>()
-                    }
 
                 }
             }
@@ -420,7 +328,7 @@ object VaultSheetUtils {
         vaultManageFilesSheet.launch()
     }
 
-    class VaultManageFilesSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class VaultManageFilesSheetHolder : PageHolder() {
         lateinit var cameraActionTV: TextView
         lateinit var recordAudioActionTV: TextView
         lateinit var importActionTV: TextView
@@ -433,9 +341,7 @@ object VaultSheetUtils {
             cameraActionTV = view.findViewById(R.id.cameraActionTV)
             recordAudioActionTV = view.findViewById(R.id.recordAudioActionTV)
             importActionTV = view.findViewById(R.id.importActionTV)
-            createDeleteActionTV = view.findViewById(R.id.createDeleteActionTV)
             createFolderActionTV = view.findViewById(R.id.createFolderActionTV)
-            deleteVaultTooltip = view.findViewById(R.id.delete_vault_tooltip)
             title = view.findViewById(R.id.sheetTitleTv)
         }
     }
@@ -448,26 +354,18 @@ object VaultSheetUtils {
     }
 
     @JvmStatic
-    fun showVaultSelectFilesSheet(
-        fragmentManager: FragmentManager,
-        cameraLabel: String?,
-        recordLabel: String?,
-        importLabel: String,
-        importVaultLabel: String,
-        descriptionText: String,
-        titleText: String,
-        action: IVaultFilesSelector
-    ) {
-        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.vault_sheet_actions_selector)
-            .screenTag("vaultManageFilesSheet")
-            .cancellable(true)
-        vaultManageFilesSheet.holder(VaultSelectFilesSheetHolder(), object :
-            CustomBottomSheetFragment.Binder<VaultSelectFilesSheetHolder> {
+    fun showVaultSelectFilesSheet(fragmentManager: FragmentManager, cameraLabel: String?, recordLabel: String?, importLabel: String, importVaultLabel: String, descriptionText: String?, titleText: String, action: IVaultFilesSelector) {
+        val vaultManageFilesSheet = CustomBottomSheetFragment.with(fragmentManager).page(R.layout.vault_sheet_actions_selector).screenTag("vaultManageFilesSheet").cancellable(true)
+        vaultManageFilesSheet.holder(VaultSelectFilesSheetHolder(), object : Binder<VaultSelectFilesSheetHolder> {
             override fun onBind(holder: VaultSelectFilesSheetHolder) {
                 with(holder) {
                     title.text = titleText
-                    descriptionTV.text = descriptionText
+                    if (descriptionText != null) {
+                        descriptionTV.text = descriptionText
+                    } else {
+                        descriptionTV.isVisible = false
+                    }
+
                     //Go to camera action
                     if (cameraLabel != null) {
                         cameraActionTV.text = cameraLabel
@@ -510,7 +408,7 @@ object VaultSheetUtils {
         vaultManageFilesSheet.launch()
     }
 
-    class VaultSelectFilesSheetHolder : CustomBottomSheetFragment.PageHolder() {
+    class VaultSelectFilesSheetHolder : PageHolder() {
         lateinit var cameraActionTV: TextView
         lateinit var recordAudioActionTV: TextView
         lateinit var importActionTV: TextView

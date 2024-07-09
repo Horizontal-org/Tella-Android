@@ -23,6 +23,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_metadata_viewer" />
+    <include
+        android:id="@+id/content"
+        layout="@layout/content_metadata_viewer" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -46,7 +46,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="2dp"
                     android:src="@drawable/ic_close_white_24dp"
-                    tools:ignore="ContentDescription" />
+                    android:contentDescription="@string/action_cancel"
+                     />
 
                 <TextView
                     android:id="@+id/title"
@@ -91,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/wa_white"
+                app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name_layout">
@@ -107,10 +109,11 @@
                     android:text="@string/ra_server_prefix"
                     android:textColor="@color/wa_white"
                     android:textDirection="ltr"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     app:backgroundTint="@color/wa_white" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <rs.readahead.washington.mobile.views.custom.PanelToggleButton
+            <org.hzontal.shared_ui.buttons.PanelToggleButton
                 android:id="@+id/toggle_button"
                 style="?android:attr/borderlessButtonStyle"
 
@@ -138,6 +141,7 @@
                     style="@style/DialogDataCollectionTextEntryLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     android:textColorHint="@color/wa_white">
 
                     <EditText
@@ -150,6 +154,7 @@
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
                         app:backgroundTint="@color/wa_white"
+                        app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                         android:autofillHints="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/wa_white"
                     app:passwordToggleEnabled="true"
+                    app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                     app:passwordToggleTint="@color/dark_orange">
 
                     <EditText
@@ -172,6 +178,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColor="@color/wa_white"
+                        app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
                         app:backgroundTint="@color/wa_white" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -225,7 +232,7 @@
                     android:text="@string/action_save"
                     android:textAlignment="center"
                     android:textAllCaps="true"
-                    android:textColor="@color/wa_white"
+                    android:textColor="@color/btn_dark_letter"
                     android:textSize="17sp" />
 
             </LinearLayout>

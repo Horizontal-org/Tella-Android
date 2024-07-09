@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.util;
 import static com.hzontal.tella_vault.database.VaultDataSource.ROOT_UID;
 
 import android.content.Context;
+
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.utils.MediaFile;
@@ -57,5 +58,4 @@ public class TellaUpgrader {
 
         return vaultFile;
     }
-
 }

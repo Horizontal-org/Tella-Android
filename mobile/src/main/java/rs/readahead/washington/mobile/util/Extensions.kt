@@ -1,15 +1,24 @@
 package rs.readahead.washington.mobile.util
 
-import android.app.Activity
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Rect
 import android.os.Build
+import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.accessibility.AccessibilityManager
+import android.widget.ImageView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import com.google.gson.Gson
+import com.google.gson.JsonParseException
+import com.google.gson.reflect.TypeToken
 import org.cleaninsights.sdk.Campaign
 import org.cleaninsights.sdk.CleanInsights
 import org.cleaninsights.sdk.CleanInsightsConfiguration
@@ -17,11 +26,36 @@ import timber.log.Timber
 import java.net.URL
 
 
+/**
+ * function that converts data from json to object
+ * @param classMapper the class of T.
+ * @param <T> the type of the desired object.
+ * @return an object of type T from the string.
+ */
+fun <T> String.fromJsonToObject(classMapper: Class<T>): T? {
+    return try {
+        Gson().fromJson(this, classMapper)
+    } catch (e: JsonParseException) {
+        Timber.e(e)
+        null
+    }
+}
+
+fun <T> String.fromJsonToObjectList(clazz: Class<T>?): List<T>? {
+    return try {
+        val typeOfT = TypeToken.getParameterized(MutableList::class.java, clazz).type
+        return Gson().fromJson(this, typeOfT)
+    } catch (e: JsonParseException) {
+        Timber.e(e)
+        null
+    }
+}
+
 fun View.setMargins(
-    leftMarginDp: Int? = null,
-    topMarginDp: Int? = null,
-    rightMarginDp: Int? = null,
-    bottomMarginDp: Int? = null
+        leftMarginDp: Int? = null,
+        topMarginDp: Int? = null,
+        rightMarginDp: Int? = null,
+        bottomMarginDp: Int? = null
 ) {
     if (layoutParams is ViewGroup.MarginLayoutParams) {
         val params = layoutParams as ViewGroup.MarginLayoutParams
@@ -50,9 +84,9 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
     return try {
         val endDate = startDate + (7 * 86400)
         val cleanInsightsConfiguration = CleanInsightsConfiguration(
-            URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
-            3,
-            mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
+                URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
+                3,
+                mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
         )
         CleanInsights(cleanInsightsConfiguration, context.filesDir)
     } catch (e: Exception) {
@@ -62,26 +96,15 @@ fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsight
     }
 }
 
-fun Activity.isKeyboardOpened(): Boolean {
-    val r = Rect()
 
-    val activityRoot = getActivityRoot()
-    val visibleThreshold = dip(100)
-
-    activityRoot.getWindowVisibleDisplayFrame(r)
-
-    val heightDiff = activityRoot.rootView.height - r.height()
-
-    return heightDiff > visibleThreshold;
+fun View.setTint(@ColorRes colorRes: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        background.setTintList(
+                ContextCompat.getColorStateList(context, colorRes)
+        );
+    }
 }
 
-fun Activity.getActivityRoot(): View {
-    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0);
-}
-
-fun dip(value: Int): Int {
-    return (value * Resources.getSystem().displayMetrics.density).toInt()
-}
 
 fun View.hide() {
     visibility = View.GONE
@@ -90,3 +113,50 @@ fun View.hide() {
 fun View.show() {
     visibility = View.VISIBLE
 }
+
+fun View.invisible() {
+    visibility = View.INVISIBLE
+}
+
+fun View.configureAppBar() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        outlineProvider = null
+    } else {
+        bringToFront()
+    }
+}
+
+fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)
+    setImageDrawable(drawable)
+}
+
+fun FragmentManager.setupForAccessibility(context: Context) {
+    if (context.isScreenReaderOn())
+    addOnBackStackChangedListener {
+        val lastFragmentWithView = fragments.last { it.view != null }
+        for (fragment in fragments) {
+            if (fragment == lastFragmentWithView) {
+                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            } else {
+                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+            }
+        }
+    }
+}
+
+fun Context.isScreenReaderOn(): Boolean {
+    val accessibilityManager = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    if (accessibilityManager != null && accessibilityManager.isEnabled) {
+        val serviceInfoList =
+                accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN)
+        if (serviceInfoList.isNotEmpty())
+            return true
+    }
+    return false
+}
+
+fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
+    navigate(destinationId, bundle)
+}
+

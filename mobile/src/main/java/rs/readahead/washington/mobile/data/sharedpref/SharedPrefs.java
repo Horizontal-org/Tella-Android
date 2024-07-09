@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.sharedpref;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.Callable;
@@ -14,7 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SharedPrefs {
     public static final String NONE = "";
-
+    public static final String FEEDBACK_SHARING_ENBALED = "feedback_sharing_enabled";
     private static final String SHARED_PREFS_NAME = "washington_shared_prefs";
 
     static final String SECRET_PASSWORD = "secret_password";
@@ -25,6 +26,11 @@ public class SharedPrefs {
     static final String PANIC_GEOLOCATION = "panic_geolocation";
     static final String DELETE_SERVER_SETTINGS = "erase_everything";
     static final String ERASE_GALLERY = "erase_gallery";
+    static final String FAILED_UNLOCK_OPTION = "failed_unlock_option";
+
+    static final String SHOW_REMAINING_UNLOCK_ATTEMPTS = "show_remaining_unlock_attempts";
+
+    static final String REMAINING_UNLOCK_ATTEMPTS = "remaining_unlock_attempts";
     static final String ERASE_FORMS = "erase_forms";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
@@ -34,6 +40,7 @@ public class SharedPrefs {
     static final String UNINSTALL_ON_PANIC = "uninstall_on_panic";
     static final String APP_FIRST_START = "app_first_start";
     static final String APP_ALIAS_NAME = "app_alias_name";
+    static final String CALCULATOR_THEME = "app_calculator_theme";
     static final String SUBMIT_CRASH_REPORTS = "submit_crash_reports";
     static final String ENABLE_CAMERA_PREVIEW = "enable_camera_preview";
     static final String LOCATION_ACCURACY_THRESHOLD = "location_threshold";
@@ -50,6 +57,7 @@ public class SharedPrefs {
     static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
     static final String LOCK_TIMEOUT = "lock_timeout";
     static final String MUTE_CAMERA_SHUTTER = "mute_camera_shutter";
+    static final String KEEP_EXIF = "keep_exif";
     static final String SET_SECURITY_SCREEN = "set_security_screen";
     static final String SHOW_FAVORITE_FORMS = "show_favorite_forms";
     static final String SHOW_FAVORITE_TEMPLATES = "show_favorite_Templates";
@@ -60,6 +68,13 @@ public class SharedPrefs {
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
     static final String TEMP_TIMEOUT = "temp_timeout";
     static final String EXIT_TIMEOUT = "exit_timeout";
+    static final String JAVAROSA_3_UPGRADE = "javarosa_3_upgrade";
+    static final String TEXT_JUSTIFICATION = "text_justification";
+    static final String TEXT_SPACING = "text_spacing";
+    static final String SHOW_UPDATE_MIGRATION_BOTTOM_SHEET = "SHOW_UPDATE_MIGRATION_BOTTOM_SHEET";
+    static final String SHOW_MIGRATION_FAILED_BOTTOM_SHEET = "show_migration_failed_bottom_sheet";
+    static final String IS_MIGRATED_MAIN_DB = "is_migrated_main_db";
+    static final String IS_FRESH_INSTALL = "is_fresh_install";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;
@@ -114,7 +129,7 @@ public class SharedPrefs {
     }*/
 
     public boolean isEraseGalleryActive() {
-        return pref.getBoolean(ERASE_GALLERY, true);
+        return pref.getBoolean(ERASE_GALLERY, false);
     }
 
     public void setEraseGalleryActive(boolean activated) {
