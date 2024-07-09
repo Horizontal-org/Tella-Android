@@ -36,6 +36,7 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
@@ -50,6 +51,7 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
@@ -426,7 +428,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
                     @Override
                     public void addNextCloudServer() {
-
+                        showNexCloudDialog(null);
                     }
 
                 }
@@ -520,6 +522,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             startActivity(intent);
         }
     }
+
+    private void showNexCloudDialog(@Nullable NextCloudServer server) {
+        if (server == null) {
+            startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
+        } else {
+            Intent intent = new Intent(this, NextCloudLoginFlowActivity.class);
+            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
+            intent.putExtra(IS_UPDATE_SERVER, true);
+            startActivity(intent);
+        }
+    }
+
 
     private void stopPresenting() {
         if (collectServersPresenter != null) {
