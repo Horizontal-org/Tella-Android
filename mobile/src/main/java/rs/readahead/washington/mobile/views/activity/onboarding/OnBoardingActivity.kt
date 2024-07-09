@@ -193,9 +193,14 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             getString(R.string.settings_docu_add_server_dialog_select_odk),
             getString(R.string.settings_docu_add_server_dialog_select_tella_web),
             getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
+            getString(R.string.settings_docu_add_server_dialog_select_next_cloud),
             object : IServerChoiceActions {
                 override fun addUwaziServer() {
                     showUwaziServerDialog()
+                }
+
+                override fun addNextCloudServer() {
+                    TODO("Not yet implemented")
                 }
 
                 override fun addTellaWebServer() {

@@ -406,7 +406,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
+                getString(R.string.settings_docu_add_server_dialog_select_next_cloud),
                 new BottomSheetUtils.IServerChoiceActions() {
+
                     @Override
                     public void addUwaziServer() {
                         showUwaziServerDialog(null);
@@ -421,6 +423,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     public void addODKServer() {
                         showCollectServerDialog(null);
                     }
+
+                    @Override
+                    public void addNextCloudServer() {
+
+                    }
+
                 }
         );
     }

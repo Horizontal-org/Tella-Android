@@ -441,6 +441,7 @@ connecting to a server</string>
   <string name="settings.camo_weather1">Weather</string>
   <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
+  <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="collect.outbox_tab.title">Outbox</string>
   <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
   <string name="fragment_uwazi">Uwazi</string>

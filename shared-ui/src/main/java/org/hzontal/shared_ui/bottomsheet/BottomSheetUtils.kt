@@ -245,6 +245,7 @@ object BottomSheetUtils {
         lateinit var buttonOne: RoundButton
         lateinit var buttonTwo: RoundButton
         lateinit var buttonThree: RoundButton
+        lateinit var buttonFour: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -257,6 +258,7 @@ object BottomSheetUtils {
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
             buttonThree = view.findViewById(R.id.sheet_three_btn)
+            buttonFour = view.findViewById(R.id.sheet_four_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
@@ -273,6 +275,7 @@ object BottomSheetUtils {
         fun addODKServer()
         fun addTellaWebServer()
         fun addUwaziServer()
+        fun addNextCloudServer()
     }
 
     @JvmStatic
@@ -286,6 +289,7 @@ object BottomSheetUtils {
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
+        buttonFourLabel: String? = null,
         consumer: IServerChoiceActions
     ) {
 
@@ -304,24 +308,41 @@ object BottomSheetUtils {
                         buttonOne.setText(buttonOneLabel)
                         buttonTwo.setText(buttonTwoLabel)
                         buttonThree.setText(buttonThreeLabel)
+                        buttonFour.setText(buttonFourLabel)
 
                         buttonOne.setOnClickListener {
                             buttonOne.isChecked = true
                             buttonTwo.isChecked = false
                             buttonThree.isChecked = false
-
+                            buttonFour.isChecked = false
                         }
 
                         buttonTwo.setOnClickListener {
                             buttonOne.isChecked = false
                             buttonTwo.isChecked = true
                             buttonThree.isChecked = false
+                            buttonFour.isChecked = false
                         }
 
                         buttonThree.setOnClickListener {
                             buttonOne.isChecked = false
                             buttonTwo.isChecked = false
                             buttonThree.isChecked = true
+                            buttonFour.isChecked = false
+                        }
+
+                        buttonThree.setOnClickListener {
+                            buttonOne.isChecked = false
+                            buttonTwo.isChecked = false
+                            buttonThree.isChecked = true
+                            buttonFour.isChecked = false
+                        }
+
+                        buttonFour.setOnClickListener {
+                            buttonOne.isChecked = false
+                            buttonTwo.isChecked = false
+                            buttonThree.isChecked = false
+                            buttonFour.isChecked = true
                         }
 
                         cancelButton.setOnClickListener {
