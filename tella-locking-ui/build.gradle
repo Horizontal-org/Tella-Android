@@ -12,6 +12,19 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            universalApk true
+        }
     }
 
     buildTypes {
@@ -52,7 +65,10 @@ dependencies {
     api "androidx.lifecycle:lifecycle-process:$versions.lifecycleProcess"
     api "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycleCommonJava8"
 
-    api "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar"
+    //sqlite dependency
+    api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
+    api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
+
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
     implementation "org.divviup.android:divviup-android:$versions.divviup"

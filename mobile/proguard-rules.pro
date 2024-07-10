@@ -20,6 +20,7 @@
 # tella
 -keep class rs.readahead.washington.mobile.data.entity.** { *; }
 
+
 # evernote android-job
 -dontwarn com.evernote.android.job.gcm.**
 -dontwarn com.evernote.android.job.util.GcmAvailableHelper
@@ -196,13 +197,10 @@
     public static <fields>;
 }
 
--keep class net.sqlcipher.** {
-    *;
-}
+-keep class net.zetetic.database.** { *; }
+-keep class net.zetetic.database.sqlcipher.** { *; }
 
--keep class net.sqlcipher.database.** {
-    *;
-}
+-dontwarn net.sqlcipher.**
 
 # odk collect
 -dontwarn com.google.**

@@ -72,6 +72,9 @@ public class SharedPrefs {
     static final String TEXT_JUSTIFICATION = "text_justification";
     static final String TEXT_SPACING = "text_spacing";
     static final String SHOW_UPDATE_MIGRATION_BOTTOM_SHEET = "SHOW_UPDATE_MIGRATION_BOTTOM_SHEET";
+    static final String SHOW_MIGRATION_FAILED_BOTTOM_SHEET = "show_migration_failed_bottom_sheet";
+    static final String IS_MIGRATED_MAIN_DB = "is_migrated_main_db";
+    static final String IS_FRESH_INSTALL = "is_fresh_install";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

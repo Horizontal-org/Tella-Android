@@ -134,7 +134,7 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     fun deleteVaultFile(vaultFile: VaultFile) {
-        disposables.add(MyApplication.rxVault.delete(vaultFile).subscribeOn(Schedulers.io())
+        disposables.add(rxVault.delete(vaultFile).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _deletedFile.postValue(vaultFile) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
