@@ -16,8 +16,8 @@ import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import net.zetetic.database.sqlcipher.SQLiteQueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class VaultDataSource implements IVaultDatabase {
 
     private static VaultDataSource dataSource;
     private static Gson gson;
-    private final SQLiteDatabase database;
+    private SQLiteDatabase database = null;
 
     /**
      * Constructs a new VaultDataSource instance.
@@ -42,11 +42,13 @@ public class VaultDataSource implements IVaultDatabase {
      * @param key     The encryption key for the database.
      */
     public VaultDataSource(Context context, byte[] key) {
-        VaultSQLiteOpenHelper sqLiteOpenHelper = new VaultSQLiteOpenHelper(context);
-        SQLiteDatabase.loadLibs(context);
-
-        database = sqLiteOpenHelper.getWritableDatabase(key);
+        System.loadLibrary("sqlcipher");
+        VaultSQLiteOpenHelper dbHelper = VaultSQLiteOpenHelper.getInstance(context, key);
+        if (database == null) {
+            database = dbHelper.getWritableDatabase();
+        }
     }
+
 
     /**
      * Returns a singleton instance of VaultDataSource.
@@ -77,8 +79,8 @@ public class VaultDataSource implements IVaultDatabase {
     /**
      * Creates a new vault file.
      *
-     * @param parentId   The ID of the parent vault file.
-     * @param vaultFile  The VaultFile object to create.
+     * @param parentId  The ID of the parent vault file.
+     * @param vaultFile The VaultFile object to create.
      * @return The created VaultFile object.
      */
     @SuppressLint("TimberArgCount")
@@ -239,6 +241,7 @@ public class VaultDataSource implements IVaultDatabase {
      */
     @Override
     public VaultFile get(String id) {
+
         try (Cursor cursor = database.query(
                 D.T_VAULT_FILE,
                 new String[]{
@@ -290,8 +293,8 @@ public class VaultDataSource implements IVaultDatabase {
     /**
      * Moves a vault file to a new parent.
      *
-     * @param vaultFile  The VaultFile object to move.
-     * @param newParent  The ID of the new parent.
+     * @param vaultFile The VaultFile object to move.
+     * @param newParent The ID of the new parent.
      * @return True if the move operation is successful, false otherwise.
      */
     @Override
@@ -316,8 +319,8 @@ public class VaultDataSource implements IVaultDatabase {
         List<VaultFile> files = new ArrayList<>();
 
         try {
-            for (String id : ids){
-               files.add(get(id));
+            for (String id : ids) {
+                files.add(get(id));
             }
             return files;
         } catch (Exception e) {
@@ -451,6 +454,6 @@ public class VaultDataSource implements IVaultDatabase {
      * @param table The table name.
      */
     private void deleteTable(String table) {
-        database.delete(table,D.C_ID + " != '" + ROOT_UID + "'",null);
+        database.delete(table, D.C_ID + " != '" + ROOT_UID + "'", null);
     }
 }

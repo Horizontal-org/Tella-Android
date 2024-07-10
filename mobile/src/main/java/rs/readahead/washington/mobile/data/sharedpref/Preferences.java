@@ -2,6 +2,8 @@ package rs.readahead.washington.mobile.data.sharedpref;
 
 
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_FRESH_INSTALL;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_MIGRATED_MAIN_DB;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
 
@@ -419,6 +421,21 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
     }
 
+    public static boolean isShowUpdateMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowUpdateMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
+    }
+    public static boolean isShowFailedMigrationSheet() {
+        return getBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, true);
+    }
+
+    public static void setShowFailedMigrationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, value);
+    }
+
     public static boolean hasAcceptedImprovements() {
         return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
     }
@@ -449,5 +466,21 @@ public class Preferences {
 
     public static void setFeedbackSharingEnabled(boolean value) {
         setBoolean(SharedPrefs.FEEDBACK_SHARING_ENBALED, value);
+    }
+
+    public static boolean isAlreadyMigratedMainDB() {
+        return getBoolean(IS_MIGRATED_MAIN_DB, false);
+    }
+
+    public static void setAlreadyMigratedMainDB(boolean value) {
+        setBoolean(IS_MIGRATED_MAIN_DB, value);
+    }
+
+    public static boolean isFreshInstall() {
+        return getBoolean(IS_FRESH_INSTALL, false);
+    }
+
+    public static void setFreshInstall(boolean value) {
+        setBoolean(IS_FRESH_INSTALL, value);
     }
 }

@@ -91,6 +91,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
     private AlertDialog locationAlertDialog;
     private Relay<MetadataHolder> metadataCancelRelay;
     private CompositeDisposable disposables;
+    private boolean inProgress = false;
 
     private static void acceptBetterLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
@@ -460,6 +461,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> showMetadataProgressBarDialog())
                 .takeUntil(metadataCancelRelay) // this observable emits when user press skip in dialog.
+                .doOnNext(data -> setInProgress(true))
                 .doFinally(this::hideMetadataProgressBarDialog)
                 .subscribeWith(new DisposableObserver<MetadataHolder>() {
                     @Override
@@ -490,6 +492,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements
                     @Override
                     public void onComplete() {
                         metadataAttacher.attachMetadata(vaultFile, metadata);
+                        setInProgress(false);
                     }
                 })
         );
@@ -500,6 +503,14 @@ public abstract class MetadataActivity extends BaseLockActivity implements
         metadataAlertDialog = DialogsUtil.showMetadataProgressBarDialog(this, (dialog, which) -> {
             metadataCancelRelay.accept(MetadataHolder.createEmpty()); // :)
         });
+    }
+
+    protected void setInProgress(boolean inProgress) {
+        this.inProgress = inProgress;
+    }
+
+    protected boolean isInProgress() {
+        return inProgress;
     }
 
     @SuppressWarnings("MethodOnlyUsedFromInnerClass")

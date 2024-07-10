@@ -17,33 +17,37 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
+import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.media.MediaFileHandler
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class AttachmentsViewModel @Inject constructor(
-    application: Application,
+    private val application: Application,
     private val keyDataSource: KeyDataSource,
     private val rxVault: RxVault
-    ) : AndroidViewModel(
+) : AndroidViewModel(
     application
 ) {
     private val disposables = CompositeDisposable()
     private val _filesData = MutableLiveData<List<VaultFile?>>()
     val filesData: LiveData<List<VaultFile?>> = _filesData
-    private val _error = MutableLiveData<Throwable>()
-    val error: LiveData<Throwable> = _error
+    private val _error = MutableLiveData<Throwable?>()
+    val error: LiveData<Throwable?> = _error
     private val _filesSize = MutableLiveData<Int>()
     val filesSize: LiveData<Int> = _filesSize
-    private val _moveFilesError = MutableLiveData<Throwable>()
-    val moveFilesError: LiveData<Throwable> = _moveFilesError
+    private val _moveFilesError = MutableLiveData<Throwable?>()
+    val moveFilesError: LiveData<Throwable?> = _moveFilesError
     private val _deletedFiles = MutableLiveData<Int>()
     val deletedFiles: LiveData<Int> = _deletedFiles
-    private val _deletedFileError = MutableLiveData<Throwable>()
-    val deletedFileError: LiveData<Throwable> = _deletedFileError
+    private val _deletedFileError = MutableLiveData<Throwable?>()
+    val deletedFileError: LiveData<Throwable?> = _deletedFileError
     private val _deletedFile = MutableLiveData<VaultFile>()
     val deletedFile: LiveData<VaultFile> = _deletedFile
     private val _folderCreated = MutableLiveData<VaultFile>()
@@ -69,24 +73,18 @@ class AttachmentsViewModel @Inject constructor(
     val onConfirmDeleteFiles: LiveData<Pair<List<VaultFile?>, Boolean>> = _onConfirmDeleteFiles
 
     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
-       rxVault.get(parent)
-            .subscribe(
-                { vaultFile: VaultFile? ->
-                    disposables.add(rxVault.list(vaultFile, filterType, sort, null)
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe { }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally { }
-                        .subscribe(
-                            { vaultFiles: List<VaultFile?> ->
-                                _filesData.postValue(vaultFiles)
-                            }
-                        ) { throwable: Throwable? ->
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                            _error.postValue(throwable)
-                        })
-                }
-            ) { throwable: Throwable? ->
+        rxVault.get(parent).subscribe({ vaultFile: VaultFile? ->
+                disposables.add(rxVault.list(vaultFile, filterType, sort, null)
+                    .subscribeOn(Schedulers.io()).doOnSubscribe { }
+                    .observeOn(AndroidSchedulers.mainThread()).doFinally {
+
+                    }.subscribe({ vaultFiles: List<VaultFile?> ->
+                        _filesData.postValue(vaultFiles)
+                    }) { throwable: Throwable? ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                        _error.postValue(throwable)
+                    })
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
             }.dispose()
@@ -101,17 +99,16 @@ class AttachmentsViewModel @Inject constructor(
             vaultFile?.let { moveFile(parentId, it) }?.let { completable.add(it) }
         }
 
-        disposables.add(
-            Single.zip(
-                completable
-            ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ _filesSize.postValue(it) }) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                    _moveFilesError.postValue(throwable)
-                })
+        disposables.add(Single.zip(
+            completable
+        ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ _filesSize.postValue(it) }) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                _moveFilesError.postValue(throwable)
+            })
     }
 
-     private fun moveFile(parentId: String, vaultFile: VaultFile): Single<Boolean> {
+    private fun moveFile(parentId: String, vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.rxVault.move(vaultFile, parentId).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -137,7 +134,7 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     fun deleteVaultFile(vaultFile: VaultFile) {
-        disposables.add(MyApplication.rxVault.delete(vaultFile).subscribeOn(Schedulers.io())
+        disposables.add(rxVault.delete(vaultFile).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _deletedFile.postValue(vaultFile) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
@@ -170,21 +167,33 @@ class AttachmentsViewModel @Inject constructor(
 
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        counterData.value = 0
-        var counter = 1
+        // counterData.value = 0
+        //  var counter = 1
         var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
-            currentUri = uri
-            MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
-        }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {
-                if (counter == 1) {
-                    _progressPercent.postValue(Pair(counter.toDouble(), uris.size))
-                    counterData.postValue(counter++)
-                } else counterData.postValue(counter++)
-            }.subscribe({ vaultFile ->
+                MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
+                    .doOnSubscribe {
+                        currentUri = uri
+                        val file = MediaFileHandler.getUriInfo(application, uri)
+                        val backgroundVideoFile = BackgroundActivityModel(
+                            id = file.name,
+                            name = file.name,
+                            mimeType = file.mimeType,
+                            status = BackgroundActivityStatus.IN_PROGRESS,
+                            thumb = null
+                        )
+
+                        // Emitting the initial status to the event bus
+                        MyApplication.bus().post(
+                            RecentBackgroundActivitiesEvent(
+                                mutableListOf(backgroundVideoFile)
+                            )
+                        )
+                    }
+            }.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({ vaultFile ->
+                handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
+
                 if (deleteOriginal) {
                     currentUri?.let { uri -> _mediaImportedWithDelete.postValue(uri) }
                 } else {
@@ -195,7 +204,19 @@ class AttachmentsViewModel @Inject constructor(
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
             })
+    }
 
+    private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
+
+        val completedActivity = BackgroundActivityModel(
+            id = vaultFile.id,
+            name = vaultFile.name,
+            mimeType = vaultFile.mimeType,
+            status = status,
+            thumb = vaultFile.thumb
+        )
+        Timber.d("send BackgroundActivityModel inside attachments viewModel handleAddSuccess")
+        MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(completedActivity)))
     }
 
     fun renameVaultFile(id: String, name: String) {
@@ -227,7 +248,7 @@ class AttachmentsViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread()).doFinally { _exportState.postValue(false) }
             .subscribe({ num: Int? ->
                 if (num != null) {
-                    _mediaExported.postValue(num)
+                    _mediaExported.postValue(num!!)
                 }
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
@@ -238,23 +259,19 @@ class AttachmentsViewModel @Inject constructor(
     fun deleteFilesAfterConfirmation(
         vaultFiles: List<VaultFile?>
     ) {
-        disposables.add(keyDataSource.dataSource
-            .flatMapSingle { dataSource: DataSource ->
+        disposables.add(keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
                 dataSource.reportMediaFiles
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { files: List<FormMediaFile> ->
-                    val doesFileExist =
-                        files.any { file -> vaultFiles.any { vaultFile -> vaultFile?.id == file.id } }
-                    _onConfirmDeleteFiles.postValue(Pair(vaultFiles, doesFileExist))
+            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ files: List<FormMediaFile> ->
+                val doesFileExist =
+                    files.any { file -> vaultFiles.any { vaultFile -> vaultFile?.id == file.id } }
+                _onConfirmDeleteFiles.postValue(Pair(vaultFiles, doesFileExist))
+            }) { throwable: Throwable? ->
+                if (throwable != null) {
+                    FirebaseCrashlytics.getInstance().recordException(throwable)
                 }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun cancelImportVaultFiles() {
@@ -262,7 +279,7 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        disposables.dispose()
+        // disposables.dispose()
         super.onCleared()
     }
 }

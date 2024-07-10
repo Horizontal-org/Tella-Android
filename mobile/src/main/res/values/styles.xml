@@ -511,6 +511,16 @@
         <item name="fontFamily">@font/open_sans</item>
     </style>
 
+
+    <style name="TopSheet_DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_out_from_top</item>
+        <item name="android:windowExitAnimation">@anim/slide_back_to_top</item>
+    </style>
+
+
+
+
+
     <style name="Submit_Text_Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

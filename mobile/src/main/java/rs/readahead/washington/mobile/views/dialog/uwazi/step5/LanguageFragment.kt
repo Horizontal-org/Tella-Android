@@ -62,27 +62,27 @@ class LanguageFragment : BaseFragment() {
 
     private fun initObservers() {
         with(viewModel) {
-            settings.observe(viewLifecycleOwner, { result ->
+            settings.observe(viewLifecycleOwner) { result ->
                 languageSelectorAdapter.setLanguages(result.second)
                 serverUwazi.name = result.first
-            })
+            }
 
-            languageClicked.observe(viewLifecycleOwner, {
-                language = it
-                serverUwazi.localeCookie = it.key
-            })
+            languageClicked.observe(viewLifecycleOwner) { languages->
+                language = languages
+                serverUwazi.localeCookie = languages.key
+            }
 
-            languageUpdated.observe(viewLifecycleOwner, { updated ->
+            languageUpdated.observe(viewLifecycleOwner) { updated ->
                 if (updated) {
                     baseActivity.addFragment(
                         SuccessConnectFragment.newInstance(serverUwazi, isUpdate),
                         R.id.container
                     )
                 }
-            })
-            progress.observe(viewLifecycleOwner, {
+            }
+            progress.observe(viewLifecycleOwner) {
                 binding.progressCircular.isVisible = it
-            })
+            }
         }
     }
 
