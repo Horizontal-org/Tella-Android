@@ -5,14 +5,21 @@ import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import java.io.Serializable
 
-class NextCloudServer  @JvmOverloads constructor(
+class NextCloudServer @JvmOverloads constructor(
     id: Long = 0,
-    folderName : String = ""
+    folderName: String = "",
+    userId: String = ""
 ) : Server(), Serializable {
 
 
     override fun hashCode(): Int {
         return javaClass.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+        return true
     }
 
     companion object {

@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/enterNextCloudUrlScreen"
-    android:id="@+id/nextcloud_settings">
+    android:id="@+id/nextcloud_settings"
+    app:startDestination="@id/enterNextCloudUrlScreen">
 
     <fragment
         android:id="@+id/enterNextCloudUrlScreen"
@@ -16,8 +16,7 @@
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
-            app:popExitAnim="@anim/slide_out_start"
-            />
+            app:popExitAnim="@anim/slide_out_start" />
 
     </fragment>
 
@@ -25,22 +24,34 @@
         android:id="@+id/loginNextCloudScreen"
         android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step2.LoginNextCloudFragment"
         tools:layout="@layout/fragment_login_screen">
+
         <action
-            android:id="@+id/action_loginToReportsScreen_to_editTellaServerFragment"
-            app:destination="@id/editTellaServerFragment"
+            android:id="@+id/action_loginNextCloudScreen_to_nextCloudNewFolderScreen"
+            app:destination="@id/nextCloudNewFolderScreen"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/slide_in_end"
             app:popExitAnim="@anim/slide_out_start" />
     </fragment>
 
+    <fragment
+        android:id="@+id/nextCloudNewFolderScreen"
+        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step3.NewFolderFragment"
+        tools:layout="@layout/new_folder_fragment">
 
-
+        <action
+            android:id="@+id/action_nextCloudNewFolderScreen_to_successfulSetServerFragment"
+            app:destination="@id/successfulSetServerFragment"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/slide_in_end"
+            app:popExitAnim="@anim/slide_out_start" />
+    </fragment>
 
     <fragment
         android:id="@+id/successfulSetServerFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment"
-        tools:layout="@layout/fragment_successful_set_server"
-        android:label="SuccessfulSetServerFragment" />
+        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step4.SuccessfulSetServerFragment"
+        android:label="SuccessfulSetServerFragment"
+        tools:layout="@layout/fragment_successful_set_server" />
 
 </navigation>

@@ -883,5 +883,9 @@ they are uploaded to this project as a report.</string>
   <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. \n\n If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.\n\n Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
   <!-- Next cloud string -->
-  <string name="nextcloud">Nextcloud</string>
+  <string name="NextCloud">Nextcloud</string>
+  <string name="NextCloud_Create_New_Folder">Create new folder</string>
+  <string name="NextCloud_Create_New_Folder_Description">Your reports will be uploaded to a new\n folder on your Nextcloud. Choose a name\n for this folder here.</string>
+  <string name="NextCloud_Folder_Name">Folder name</string>
+  <string name="Error_Connecting_To_Server_Msg">Error connecting to server. Please try again.</string>
 </resources>

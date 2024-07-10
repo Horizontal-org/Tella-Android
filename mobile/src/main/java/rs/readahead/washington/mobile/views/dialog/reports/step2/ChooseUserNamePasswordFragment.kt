@@ -21,16 +21,16 @@ class ChooseUserNamePasswordFragment :
     }
 
     private fun initListeners() {
-        binding?.yesBtn?.setOnClickListener {
-            binding?.yesBtn?.isChecked = true
-            binding?.noBtn?.isChecked = false
+        binding.yesBtn.setOnClickListener {
+            binding.yesBtn.isChecked = true
+            binding.noBtn.isChecked = false
         }
-        binding?.noBtn?.setOnClickListener {
-            binding?.yesBtn?.isChecked = false
-            binding?.noBtn?.isChecked = true
+        binding.noBtn.setOnClickListener {
+            binding.yesBtn.isChecked = false
+            binding.noBtn.isChecked = true
         }
-        binding?.backBtn?.setOnClickListener(this)
-        binding?.nextBtn?.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
+        binding.nextBtn.setOnClickListener(this)
     }
 
     private fun initView() {

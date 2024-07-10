@@ -1,13 +1,20 @@
 package rs.readahead.washington.mobile.views.dialog.nextcloud.step1
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.utils.DialogUtils
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentEnterServerBinding
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
+import java.net.MalformedURLException
+import java.net.URL
 
 @AndroidEntryPoint
 class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBinding>(
@@ -21,6 +28,7 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initObservers()
     }
 
     fun initView() {
@@ -29,7 +37,46 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
                 baseActivity.finish()
             }
             nextBtn.setOnClickListener {
+                if (isValidUrl(url.text.toString())) {
+                    serverNextCloud.url = url.text.toString()
+                    viewModel.validateServerUrl(url.text.toString())
+                } else {
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(R.string.Error_Connecting_To_Server_Msg),
+                        false
+                    )
+                }
+            }
+        }
+    }
 
+    private fun isValidUrl(urlString: String): Boolean {
+        // First, use Patterns to check if it matches a web URL pattern
+        if (!Patterns.WEB_URL.matcher(urlString).matches()) {
+            return false
+        }
+
+        // Then, try to create a URL object to check if it's a well-formed URL
+        return try {
+            URL(urlString)
+            true
+        } catch (e: MalformedURLException) {
+            false
+        }
+    }
+
+    private fun initObservers() {
+        viewModel.isValidServer.observe(viewLifecycleOwner) { isValid ->
+            if (isValid) {
+                bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+                navManager().navigateTo(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+            } else {
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    getString(R.string.Error_Connecting_To_Server_Msg),
+                    false
+                )
             }
         }
     }
