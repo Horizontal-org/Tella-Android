@@ -7,7 +7,7 @@
   <string name="LockSelect_Action_Continue">التالي</string>
   <string name="LockPatternSet_Draw_Pattern">ارسم نمط فتح القفل</string>
   <string name="UnlockPattern_DrawToUnlock">ارسم النمط لفتح قفل Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">نمط فتح القفل الجديد الخاص بك</string>
   <string name="LockPatternSet_Pattern_Recorded">تم تسجيل النمط</string>
   <string name="UnlockPattern_PatternTooShort">ارسم النمط الخاص بك
  من خلال توصيل ست نقاط على الأقل</string>

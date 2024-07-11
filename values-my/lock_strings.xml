@@ -23,8 +23,7 @@
   <string name="UnLockPattern_Message_IncorrectPattern">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင့်ပုံစံများသည်  ကိုက်ညီမှု မရှိပါ။</string>
   <string name="LockPinSet_Message_EnterPin">သင့် PIN နံပါတ်ကို ရိုက်ထည့်ပါ</string>
   <string name="UnlockPin_Message_EnterPin">Tella ကို လော့ခ်ဖွင့်ရန် သင့်စကားဝှက်ကို ရိုက်ထည့်ပါ</string>
-  <string name="LockPinSet_Message_Hint">အနည်းဆုံး ဂဏန်း ၆ လုံးကို သုံးပါ
-သင့်မွေးနေ့ကဲ့သို့သော အလွယ်တကူ ခန့်မှန်းနိုင်သည့် နံပါတ်များကို အသုံးပြုခြင်းကို ရှောင်ပါ။</string>
+  <string name="LockPinSet_Message_Hint">အနည်းဆုံး ဂဏန်း ၆ လုံး သုံးပါ။ သင့်မွေးနေ့ကဲ့သို့သော အလွယ်တကူ ခန့်မှန်းနိုင်သည့် နံပါတ်များ အသုံးပြုခြင်းကို ရှောင်ပါ။</string>
   <string name="LockPinSet_Message_Confirm">သင်၏ PIN ကို အတည်ပြုပါ</string>
   <string name="LockPinConfirm_Message_Confirm">သေချာစေရန်အတွက် သင်၏ PIN ကို နောက်တစ်ကြိမ် ထပ်မံရိုက်ထည့်ပါ။</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင်၏ PIN များသည် ကိုက်ညီမှု မရှိပါ။</string>

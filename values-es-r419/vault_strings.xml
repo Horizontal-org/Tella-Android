@@ -62,10 +62,10 @@
   <string name="Vault_Confirm_delete_Description">Algunos de los archivos son actualmente utilizados en tu conexión. Borrarlos puede impactar en formas y reportes que no han sido enviados aún.</string>
   <string name="Vault_Warning_Title" translatable="false">Warning</string>
   <string name="Vault_Delete_anyway">Borrar de todos modos</string>
-  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
-  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
-  <string name="Vault_deleteFileImported_SheetDesc"> After importing the file into Tella, do you want to keep the original file on your device or delete it?
- 
- If you delete it, the file imported into Tella will be the only copy left. </string>
-  <string name="Vault_FileEdit_SheetAction">Edit</string>
+  <string name="Vault_Keep_Original">MANTENER ORIGINAL</string>
+  <string name="Vault_Delete_Original">BORRAR ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Después de importar el archivo a Tella, ¿quieres mantener el archivo original en tu dispositivo o eliminarlo?
+
+Si lo eliminas, el archivo importado en Tella será la única copia que quede.</string>
+  <string name="Vault_FileEdit_SheetAction">Editar</string>
 </resources>
