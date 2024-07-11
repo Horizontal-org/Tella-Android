@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class AnalyticsContributeFragment : BaseFragment() {
 
-    private lateinit var onNext: (CleanInsightsActions) -> Unit
+    private lateinit var onNext: (AnalyticsActions) -> Unit
     private lateinit var onPrevious: () -> Unit
 
     companion object {
@@ -25,7 +25,7 @@ class AnalyticsContributeFragment : BaseFragment() {
 
         @JvmStatic
         fun newInstance(
-            onNext: (CleanInsightsActions) -> Unit,
+            onNext: (AnalyticsActions) -> Unit,
             onPrevious: () -> Unit
         ) =
             AnalyticsContributeFragment().apply {
@@ -49,8 +49,8 @@ class AnalyticsContributeFragment : BaseFragment() {
 
     override fun initView(view: View) {
         view.findViewById<TextView>(R.id.back_btn).setOnClickListener { onPrevious() }
-        view.findViewById<TextView>(R.id.btn_yes).setOnClickListener { onNext(CleanInsightsActions.YES) }
-        view.findViewById<TextView>(R.id.btn_no).setOnClickListener { onNext(CleanInsightsActions.NO) }
+        view.findViewById<TextView>(R.id.btn_yes).setOnClickListener { onNext(AnalyticsActions.YES) }
+        view.findViewById<TextView>(R.id.btn_no).setOnClickListener { onNext(AnalyticsActions.NO) }
         setMoreInfoText(view.findViewById(R.id.tv_more_info))
     }
 

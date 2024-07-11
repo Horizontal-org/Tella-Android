@@ -23,9 +23,10 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import timber.log.Timber
 import java.util.Locale
 
 
@@ -48,7 +49,13 @@ class GeneralSettings :
                 .navigate(R.id.action_general_settings_to_language_settings)
         }
 
-        binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) { Util.startBrowserIntent(context, getString(R.string.config_analytics_learn_url)) }
+        binding.shareDataSwitch.setTextAndAction(R.string.action_learn_more) {
+            Util.startBrowserIntent(
+                context,
+                getString(R.string.config_analytics_learn_url)
+            )
+        }
+        binding.shareDataSwitch.mSwitch.isChecked = CommonPreferences.hasAcceptedAnalytics()
 
         setLanguageSetting()
 
@@ -56,8 +63,11 @@ class GeneralSettings :
             binding.shareDataSwitch,
             CommonPreferences::setIsAcceptedAnalytics
         ) { isChecked ->
-           // CleanInsightUtils.grantCampaign(isChecked)
-           // if (isChecked) showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
+            if (isChecked) {
+                DialogUtils.showBottomMessage(
+                    requireActivity(), getString(R.string.clean_insights_signed_for_days), false
+                )
+            }
         }
 
         initSwitch(
@@ -158,15 +168,15 @@ class GeneralSettings :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
-            val cleanInsightsActions =
-                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
-            showMessageForCleanInsightsApprove(cleanInsightsActions)
+            val analyticsActions =
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as AnalyticsActions
+            showMessageForCleanInsightsApprove(analyticsActions)
         }
     }
 
-    private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
-        when (cleanInsightsActions) {
-            CleanInsightsActions.YES -> {
+    private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
+        when (analyticsActions) {
+            AnalyticsActions.YES -> {
                 CommonPreferences.setIsAcceptedAnalytics(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
@@ -174,7 +184,7 @@ class GeneralSettings :
                 )
             }
 
-            CleanInsightsActions.NO -> {
+            AnalyticsActions.NO -> {
                 CommonPreferences.setIsAcceptedAnalytics(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
             }

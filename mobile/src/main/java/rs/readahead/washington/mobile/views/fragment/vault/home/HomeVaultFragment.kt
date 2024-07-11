@@ -44,7 +44,7 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.clean_insights.CleanInsightsActions
+import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
@@ -105,14 +105,14 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
             removeImprovementSection()
-            val cleanInsightsActions =
-                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as CleanInsightsActions
-            showMessageForCleanInsightsApprove(cleanInsightsActions)
+            val analyticsActions =
+                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as AnalyticsActions
+            showMessageForCleanInsightsApprove(analyticsActions)
         }
     }
 
-    private fun showMessageForCleanInsightsApprove(cleanInsightsActions: CleanInsightsActions) {
-        if (cleanInsightsActions == CleanInsightsActions.YES) {
+    private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
+        if (analyticsActions == AnalyticsActions.YES) {
             CommonPreferences.setIsAcceptedAnalytics(true)
             DialogUtils.showBottomMessage(
                 requireActivity(),
@@ -366,7 +366,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             ImproveClickOptions.CLOSE -> removeImprovementSection()
             ImproveClickOptions.YES -> {
                 removeImprovementSection()
-                showMessageForCleanInsightsApprove(CleanInsightsActions.YES)
+                showMessageForCleanInsightsApprove(AnalyticsActions.YES)
             }
 
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()

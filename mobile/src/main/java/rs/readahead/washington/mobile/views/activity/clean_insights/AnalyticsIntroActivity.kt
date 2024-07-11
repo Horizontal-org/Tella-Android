@@ -38,14 +38,14 @@ class AnalyticsIntroActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         overridePendingTransition(com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out)
         setContentView(R.layout.activity_clean_insghts)
-        findViewById<ImageView>(R.id.img_close).setOnClickListener { returnToActivityWithResult(CleanInsightsActions.CLOSE) }
+        findViewById<ImageView>(R.id.img_close).setOnClickListener { returnToActivityWithResult(AnalyticsActions.CLOSE) }
         indicatorsContainer = findViewById(R.id.indicatorsContainer)
         viewPager = findViewById(R.id.viewpager_clean_insights)
         setupIndicators()
         initViewPager()
     }
 
-    private fun onNextPage(optedIn: CleanInsightsActions = CleanInsightsActions.CLOSE) {
+    private fun onNextPage(optedIn: AnalyticsActions = AnalyticsActions.CLOSE) {
         when (viewPagerPosition) {
             4 -> returnToActivityWithResult(optedIn)
             else -> viewPager.currentItem = viewPagerPosition.inc()
@@ -101,7 +101,7 @@ class AnalyticsIntroActivity : BaseActivity() {
         }
     }
 
-    private fun returnToActivityWithResult(action: CleanInsightsActions) {
+    private fun returnToActivityWithResult(action: AnalyticsActions) {
         Intent().apply {
             putExtra(RESULT_FOR_ACTIVITY, action)
         }.also {
