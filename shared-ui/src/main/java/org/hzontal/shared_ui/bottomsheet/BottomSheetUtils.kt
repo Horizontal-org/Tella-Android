@@ -363,8 +363,13 @@ object BottomSheetUtils {
                                     customSheetFragment.dismiss()
                                 }
 
-                                else -> {
+                                buttonThree.isChecked  -> {
                                     consumer.addUwaziServer()
+                                    customSheetFragment.dismiss()
+                                }
+
+                                buttonFour.isChecked ->{
+                                    consumer.addNextCloudServer()
                                     customSheetFragment.dismiss()
                                 }
                             }

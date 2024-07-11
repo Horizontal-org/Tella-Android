@@ -34,9 +34,8 @@ android {
     }
 
     configurations.all {
-        // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"
-        // resolutionStrategy.force "com.android.support:animated-vector-drawble:${supportLibVersion}"
-        // resolutionStrategy.force "com.android.support:support-v13:${supportLibVersion}"
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+        exclude group: "log4j", module: "log4j"
     }
 
     buildTypes {
@@ -128,6 +127,8 @@ dependencies {
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+
     // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
     //sqlite dependency
@@ -184,10 +185,10 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
 
     implementation("com.vanniktech:android-image-cropper:4.3.3")
+
     //Next cloud
-    implementation ("com.github.nextcloud:android-library:$versions.nextcloud") {
-        exclude group: 'org.ogce', module: 'xpp3'
-    }
+    implementation ('com.github.nextcloud:android-library:2.9.0')
+
 }
 
 kapt {

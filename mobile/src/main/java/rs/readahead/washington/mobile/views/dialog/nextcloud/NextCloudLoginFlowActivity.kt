@@ -12,7 +12,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_uwazi_connect_flow)
+        setContentView(R.layout.activity_nextcloud_connect_flow)
 
         if (!intent.getBooleanExtra(IS_UPDATE_SERVER, false)) {
             val navHostFragment =

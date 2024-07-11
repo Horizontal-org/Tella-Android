@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.dialog.nextcloud.step2
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -11,13 +12,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentEnterServerBinding
 import rs.readahead.washington.mobile.databinding.FragmentLoginScreenBinding
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
@@ -32,6 +32,7 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         super.onViewCreated(view, savedInstanceState)
         initView()
         initListeners()
+        initObservers()
     }
 
     fun initView() {
@@ -51,7 +52,11 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
             } else {
                 validate()
                 if (validated) {
-                    viewModel.checkServer(copyFields(TellaReportServer(0)), projectSlug)
+                    viewModel.checkUserCredentials(
+                        serverNextCloud.url,
+                        binding.username.text.toString(),
+                        binding.password.text.toString()
+                    )
                 }
             }
         }
@@ -70,6 +75,13 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         if (TextUtils.isEmpty(field!!.text.toString())) {
             layout?.error = getString(R.string.settings_text_empty_field)
             validated = false
+        }
+    }
+
+    @SuppressLint("TimberArgCount")
+    private fun initObservers() {
+        viewModel.userInfoResult.observe(viewLifecycleOwner) { userInfoResult ->
+            Timber.i("userInfoResult", userInfoResult.resultData?.id)
         }
     }
 }
