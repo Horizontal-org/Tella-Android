@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.activity
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -37,6 +36,7 @@ import rs.readahead.washington.mobile.mvp.contract.IMediaImportPresenterContract
 import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContract
 import rs.readahead.washington.mobile.mvp.presenter.HomeScreenPresenter
 import rs.readahead.washington.mobile.mvp.presenter.MediaImportPresenter
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment
@@ -46,19 +46,19 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragm
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment
+import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
 import timber.log.Timber
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
-    IMainNavigationInterface, VerificationWorkStatusCallback {
-
+    IMainNavigationInterface, VerificationWorkStatusCallback, OnSelectEntitiesClickListener {
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
     }
@@ -423,5 +423,21 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     fun selectHome() {
         btmNavMain.menu.findItem(R.id.home).isChecked = true
         navController.navigate(R.id.home)
+    }
+
+    override fun onSelectEntitiesClicked(
+        formEntryPrompt: UwaziEntryPrompt,
+        entitiesNames: MutableList<UwaziRelationShipEntity>
+    ) {
+        val fragment =
+            supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.firstOrNull()
+        if (fragment is UwaziEntryFragment) {
+            (fragment as? UwaziEntryFragment)?.onSelectEntitiesClickedInEntryFragment(
+                formEntryPrompt,
+                entitiesNames
+            )
+                ?: Timber.tag(getString(R.string.on_select_entities_clicked_tag))
+                    .e(getString(R.string.could_not_find_uwazientryfragment))
+        }
     }
 }

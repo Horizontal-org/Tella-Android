@@ -349,7 +349,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             }
 
             ServerType.UWAZI -> {
-                nav().navigate(R.id.action_homeScreen_to_uwazi_screen)
+                navManager().navigateFromHomeScreenToUwaziScreen()
             }
 
             ServerType.TELLA_RESORCES -> {

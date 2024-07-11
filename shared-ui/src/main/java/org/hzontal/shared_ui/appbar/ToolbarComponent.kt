@@ -183,6 +183,10 @@ class ToolbarComponent @JvmOverloads constructor(
         }
     }
 
+    fun setRightIconVisibility(isVisible: Boolean){
+            rightImg.isVisible = isVisible
+    }
+
     private fun bindView() {
         if (arrowBackIcon != -1) {
             btnBack.setBackgroundResource(arrowBackIcon)

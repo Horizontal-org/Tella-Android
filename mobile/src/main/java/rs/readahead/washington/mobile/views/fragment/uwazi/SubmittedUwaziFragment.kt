@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -95,17 +94,16 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
     }
 
     private fun initView() {
-        binding?.submittedRecyclerView?.apply {
+        binding.submittedRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = adapterSubmitted
         }
     }
 
     private fun openEntityInstance(entityInstance: UwaziEntityInstance) {
-        val bundle = Bundle()
+        this.hasInitializedRootView = false
         bundle.putString(SEND_ENTITY, Gson().toJson(entityInstance))
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_uwaziScreen_to_uwaziSubmittedPreview, bundle)
+        navManager().navigateFromUwaziScreenToUwaziSubmitedPreview()
     }
 
 }

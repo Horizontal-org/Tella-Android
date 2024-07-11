@@ -146,7 +146,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 }
             }
             else -> {
-
             }
         }
     }
@@ -194,6 +193,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
                 binding.attachmentsRecyclerView.setMargins(leftMarginDp = 13, rightMarginDp = 13)
             }
+
             R.id.listCheck -> {
                 binding.gridCheck.toggleVisibility(true)
                 binding.listCheck.toggleVisibility(false)
