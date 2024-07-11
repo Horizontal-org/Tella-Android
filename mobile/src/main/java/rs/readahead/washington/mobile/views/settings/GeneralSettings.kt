@@ -26,7 +26,6 @@ import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
 import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import timber.log.Timber
 import java.util.Locale
 
 
@@ -65,7 +64,11 @@ class GeneralSettings :
         ) { isChecked ->
             if (isChecked) {
                 DialogUtils.showBottomMessage(
-                    requireActivity(), getString(R.string.clean_insights_signed_for_days), false
+                    requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
+                )
+            } else {
+                DialogUtils.showBottomMessage(
+                    requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false
                 )
             }
         }
@@ -180,13 +183,16 @@ class GeneralSettings :
                 CommonPreferences.setIsAcceptedAnalytics(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
-                    requireActivity(), getString(R.string.clean_insights_signed_for_days), false
+                    requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
                 )
             }
 
             AnalyticsActions.NO -> {
                 CommonPreferences.setIsAcceptedAnalytics(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
+                DialogUtils.showBottomMessage(
+                    requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false
+                )
             }
 
             else -> {}

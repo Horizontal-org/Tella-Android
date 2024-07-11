@@ -888,4 +888,6 @@ they are uploaded to this project as a report.</string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
   <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. \n\n If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.\n\n Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
+  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
+  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
 </resources>

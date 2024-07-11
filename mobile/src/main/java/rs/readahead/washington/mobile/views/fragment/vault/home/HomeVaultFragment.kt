@@ -116,7 +116,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             CommonPreferences.setIsAcceptedAnalytics(true)
             DialogUtils.showBottomMessage(
                 requireActivity(),
-                getString(R.string.clean_insights_signed_for_days),
+                getString(R.string.Settings_Analytics_turn_on_dialog),
                 false
             )
         }
