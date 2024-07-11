@@ -12,6 +12,7 @@ class OnBoardHideOptionFragment: BaseFragment() {
 
     private lateinit var hideBtn: TextView
     private lateinit var defaultBtn: View
+    private lateinit var backBtn: View
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,6 +46,11 @@ class OnBoardHideOptionFragment: BaseFragment() {
                 OnBoardAdvancedComplete(),
                 R.id.rootOnboard
             )
+        }
+
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            baseActivity.onBackPressed()
         }
     }
 }
