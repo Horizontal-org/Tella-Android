@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.joda.time.DateTime;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,6 +63,14 @@ public class CommonPreferences {
 
     public static void setShowVaultAnalyticsSection(boolean value) {
         setBoolean(CommonPrefs.SHOW_IMPROVEMENT_SECTION, value);
+    }
+
+    public static boolean isInstallMetricSent() {
+        return getBoolean(CommonPrefs.INSTALL_METRIC_SENT, false);
+    }
+
+    public static void setInstallMetricSent(boolean value) {
+        setBoolean(CommonPrefs.INSTALL_METRIC_SENT, value);
     }
 
     public static boolean hasAcceptedAnalytics() {

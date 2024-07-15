@@ -22,7 +22,9 @@ open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     protected val returnActivity by lazy { intent.getIntExtra(RETURN_ACTIVITY, 0) }
     private var isConfirmSettingsUpdate: Boolean = false
-    protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
+    protected val config: UnlockConfig by lazy {
+        TellaKeysUI.getUnlockRegistry().getActiveConfig(this)
+    }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
 
 
@@ -64,16 +66,19 @@ open class BaseActivity : AppCompatActivity() {
                 intent.putExtra(IS_FROM_SETTINGS, true)
                 startActivity(intent)
             }
+
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 val intent = Intent(this, Class.forName(ReturnActivity.CAMOUFLAGE.activityName))
                 intent.putExtra(IS_CAMOUFLAGE, true)
                 startActivity(intent)
             }
+
             else -> {
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
             }
         }
         sendUnlockMeasure(context = baseContext)
+        maybeSendInstallMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -101,7 +106,11 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun maybeEnableSecurityScreen() {
-        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(SET_SECURITY_SCREEN,false)) {
+        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+                SET_SECURITY_SCREEN,
+                false
+            )
+        ) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE
@@ -115,5 +124,9 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun sendUnlockMeasure(context: Context) {
         DivviupUtils.runUnlockEvent(context)
+    }
+
+    private fun maybeSendInstallMeasure(context: Context) {
+        DivviupUtils.runInstallEvent(context)
     }
 }

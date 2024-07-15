@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -95,7 +96,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
-    private val bundle by lazy { Bundle() }
 
 
     override fun onCreateView(
@@ -138,6 +138,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         if (analyticsActions == AnalyticsActions.YES) {
             CommonPreferences.setIsAcceptedAnalytics(true)
+            DivviupUtils.runInstallEvent(requireContext())
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.Settings_Analytics_turn_on_dialog),
@@ -294,6 +295,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             -1
         }
+        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
         view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
     }
 
@@ -703,11 +705,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun fixAppBarShadow(view: View) {
         val appBar = view.findViewById<View>(R.id.appbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appBar.outlineProvider = null
-        } else {
-            appBar.bringToFront()
-        }
+        appBar.outlineProvider = null
     }
 
     private fun showUpdateMigrationBottomSheet() {
