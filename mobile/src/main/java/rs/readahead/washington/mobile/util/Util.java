@@ -59,6 +59,14 @@ public class Util {
         }
     }
 
+    public static void startSendMailIntent(Context context, String url) {
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(url));
+                context.startActivity(browserIntent);
+        } catch (ActivityNotFoundException ignore) {
+        }
+    }
+
     public static long currentTimestamp() {
         return System.currentTimeMillis();
     }
