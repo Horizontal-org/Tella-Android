@@ -22,6 +22,7 @@ public class CommonPrefs {
     static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
     static final String INSTALL_METRIC_SENT = "install_metric_sent";
+    static final String UNLOCK_TIME = "unlock_time";
 
 
     private static CommonPrefs instance;
@@ -50,7 +51,6 @@ public class CommonPrefs {
     }
 
     boolean getBoolean(final String name, final boolean def) {
-        Timber.d("++++ name, def %s %s", name, def);
         return Single.fromCallable(() -> commonPref.getBoolean(name, def))
                 .subscribeOn(Schedulers.io()).blockingGet();
     }

@@ -1,5 +1,7 @@
 package org.hzontal.tella.keys.key;
 
+import android.content.Context;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -8,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
+
+import org.hzontal.tella.keys.util.Preferences;
+
 import timber.log.Timber;
 
 /**
@@ -20,11 +25,13 @@ public class LifecycleMainKey implements LifecycleObserver {
     private MainKey mainKey;
     private CurrentState state;
     private long timeout;
+    private Context context;
 
     private final ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
 
-    public LifecycleMainKey(Lifecycle lifecycle, long timeout) {
+    public LifecycleMainKey(Context context, Lifecycle lifecycle, long timeout) {
+        this.context = context;
         this.timeout = timeout;
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.state = new CurrentState(State.UNKNOWN);
@@ -56,6 +63,7 @@ public class LifecycleMainKey implements LifecycleObserver {
 
     public synchronized boolean clear() {
         Timber.d("*** LifecycleMainKey.clear");
+        Preferences.store(context, Preferences.CLEAR_KEY_MS, System.currentTimeMillis() );
 
         if (mainKey == null) {
             return false;

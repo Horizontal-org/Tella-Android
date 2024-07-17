@@ -33,8 +33,6 @@ import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.data.CommonPrefs;
 
-import net.zetetic.database.sqlcipher.SQLiteDatabase;
-
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -210,7 +208,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         initializeLockConfigRegistry();
         mainKeyStore = new MainKeyStore(getApplicationContext());
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
-        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+        mainKeyHolder = new LifecycleMainKey(getApplicationContext(), ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
     }

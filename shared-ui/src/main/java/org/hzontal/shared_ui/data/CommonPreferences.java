@@ -57,6 +57,14 @@ public class CommonPreferences {
         sharedPrefs.setLong(name, value);
     }
 
+    public static Long getUnlockTime() {
+        return getLong(CommonPrefs.UNLOCK_TIME, 0L);
+    }
+
+    public static void setUnlockTime(Long value) {
+        setLong(CommonPrefs.UNLOCK_TIME, value);
+    }
+
     public static boolean isShowVaultAnalyticsSection() {
         return getBoolean(CommonPrefs.SHOW_IMPROVEMENT_SECTION, true);
     }
