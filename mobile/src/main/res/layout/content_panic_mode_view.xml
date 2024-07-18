@@ -5,15 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/space_cadet"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:visibility="gone">
 
     <rs.readahead.washington.mobile.views.custom.CountdownTextView
         android:id="@+id/countdown_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         style="@style/Tella_Main_White_Text"
+        android:layout_centerInParent="true"
         tools:text="5"
         android:textSize="120sp"
         android:gravity="center"

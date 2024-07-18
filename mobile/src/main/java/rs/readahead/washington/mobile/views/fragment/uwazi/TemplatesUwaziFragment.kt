@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -95,8 +94,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
     private fun openEntity(template: CollectTemplate) {
         val gsonTemplate = Gson().toJson(template)
         bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
-        NavHostFragment.findNavController(this@TemplatesUwaziFragment)
-            .navigate(R.id.action_uwaziScreen_to_uwaziEntryScreen, bundle)
+        navManager().navigateFromUwaziScreenToUwaziEntryScreen()
     }
 
 }

@@ -24,9 +24,9 @@
         android:paddingEnd="0dp"
         android:src="@drawable/ic_camouflage"
         android:textColor="@color/wa_white"
+        app:layout_constraintBottom_toTopOf="@id/onboard_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/onboard_title"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -42,9 +42,9 @@
         android:textColor="@color/wa_white"
         android:textSize="18sp"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/standard_sheet_content" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/standard_sheet_content"
@@ -60,9 +60,9 @@
         android:textColor="@color/wa_white"
         android:textSize="14sp"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineCenter"
         tools:ignore="RtlCompat" />
 
     <TextView
@@ -90,15 +90,15 @@
         android:id="@+id/sheet_two_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="74dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/round_button_selector"
-        android:orientation="vertical"
         android:gravity="center"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:minHeight="74dp"
+        android:orientation="vertical"
         android:paddingStart="16dp"
+        android:paddingTop="4dp"
         android:paddingEnd="16dp"
+        android:paddingBottom="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startBtn">
@@ -107,8 +107,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans"
-            android:padding="4dp"
             android:gravity="center"
+            android:padding="4dp"
             android:text="@string/onboard.default_btn_title_hide_tella"
             android:textAllCaps="true"
             android:textColor="@color/wa_white"
@@ -126,5 +126,14 @@
             android:textColor="@color/wa_white"
             android:textSize="12sp"
             app:layout_constraintHorizontal_chainStyle="packed" />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/back_btn"
+        style="@style/Unlock_White_Text_Back"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

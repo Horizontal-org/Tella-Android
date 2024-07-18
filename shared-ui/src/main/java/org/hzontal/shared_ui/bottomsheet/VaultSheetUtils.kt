@@ -9,6 +9,8 @@ import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.utils.DialogUtils
 
 object VaultSheetUtils {
+    private var lastCheckedId: Int = 0
+
     interface IVaultActions {
         fun upload()
         fun share()
@@ -227,8 +229,10 @@ object VaultSheetUtils {
                     radioBtnASC.text = filterASC
                     //Sort DATE DESC
                     radioBtnDESC.text = filterDESC
+                    radioGroup.check(lastCheckedId)
 
                     radioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
+                        lastCheckedId = checkedId
                         when (radioGroup.checkedRadioButtonId) {
                             R.id.radioBtnNameAZ -> {
                                 vaultSortSheet.dismiss()

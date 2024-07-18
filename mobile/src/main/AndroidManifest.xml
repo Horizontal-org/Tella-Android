@@ -622,7 +622,7 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".views.activity.clean_insights.CleanInsightsActivity"
+            android:name=".views.activity.clean_insights.AnalyticsIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

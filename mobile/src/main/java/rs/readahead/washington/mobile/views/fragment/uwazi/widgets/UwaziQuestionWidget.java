@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.widgets;
 
 
+import static org.hzontal.shared_ui.pinview.ResourceUtils.getDrawable;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -49,9 +51,9 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
     protected UwaziEntryPrompt formEntryPrompt;
 
-    private LinearLayout questionHeader;
-    private TextView helpTextView;
-    private TextView constraintValidationView;
+    private final LinearLayout questionHeader;
+    private final TextView helpTextView;
+    private final TextView constraintValidationView;
     public Boolean waitingForAData = false;
 
     public UwaziQuestionWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
@@ -73,24 +75,16 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
 
         TextView questionTitleView = findViewById(R.id.questionTitle);
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        builder.append(formEntryPrompt.getLongText()); //?
+        builder.append(formEntryPrompt.getLongText());
         int start = builder.length();
         if (formEntryPrompt.isRequired()) {
             builder.append(" *");
             int end = builder.length();
-            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         questionTitleView.setText(builder);
-
         helpTextView = findViewById(R.id.questionHelpText);
         helpTextView.setVisibility(GONE);
-        /*if (!TextUtils.isEmpty(formEntryPrompt.getHelpText())) {
-            helpTextView.setText(formEntryPrompt.getHelpText());
-        } else {
-            helpTextView.setVisibility(GONE);
-        }*/
-
         constraintValidationView = findViewById(R.id.constraintValidationView);
     }
 
@@ -118,7 +112,7 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
     }
 
     public boolean checkValidationConstraint() {
-        return constraintValidationView.getText().toString().length() > 0;
+        return !constraintValidationView.getText().toString().isEmpty();
     }
 
     public UwaziEntryPrompt getPrompt() {
@@ -233,22 +227,21 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
             try {
                 FormIndex startFormIndex = formController.getQuestionPrompt().getIndex();
                 formController.stepToNextScreenEvent();
-                while (formController.currentCaptionPromptIsQuestion()
-                        && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
+                while (formController.currentCaptionPromptIsQuestion() && formController.getQuestionPrompt().getFormElement().getAdditionalAttribute(null, "query") != null) {
                     formController.saveAnswer(formController.getQuestionPrompt().getIndex(), null);
                     formController.stepToNextScreenEvent();
                 }
                 formController.jumpToIndex(startFormIndex);
             } catch (JavaRosaException e) {
-                Timber.e(e, null);
+                Timber.e(e);
             }
         }
     }
 
     protected ImageButton addButton(int drawableResource) {
         ImageButton button = new ImageButton(getContext());
-        button.setBackground(getResources().getDrawable(R.drawable.collect_widget_menu_background));
-        button.setImageDrawable(getResources().getDrawable(drawableResource));
+        button.setBackground(getDrawable(getContext(), R.drawable.collect_widget_menu_background));
+        button.setImageDrawable(getDrawable(getContext(), drawableResource));
 
         int padding = getResources().getDimensionPixelSize(R.dimen.collect_widget_icon_padding);
         button.setPadding(padding, 0, padding, 0);

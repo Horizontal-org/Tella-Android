@@ -501,6 +501,10 @@ button to add a new template.</string>
     <item quantity="one">%1$d file attached</item>
     <item quantity="other">%1$d files attached</item>
   </plurals>
+  <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
+  </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Select files</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Select PDF files</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Primary documents</string>
@@ -510,6 +514,7 @@ button to add a new template.</string>
   <string name="Uwazi_Drafts_Header_Text">These are entities you have not submitted.
 
  Tap on an entity to continue working on it.</string>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
   <string name="Uwazi_Outbox_Header_Text">These are entities ready to send or partially sent.</string>
   <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted.</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
@@ -652,32 +657,30 @@ button to add a new template.</string>
   <string name="Uwazi_Send_Header_Title">End of entity</string>
   <string name="Uwazi_Send_Entity_Title">End of entity</string>
   <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.
-• Your data is aggregated weekly on your device before it is sent to us.
+  <string name="Analytics_contribute_reminder_title">You are sharing analytics</string>
+  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
+  <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
+  <string name="Analytics_contribute_more_info2"> visit this page</string>
+  <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
+  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
+  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+  <string name="Analytics_how_works_title">How it works</string>
+  <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
+• We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week
+  <string name="Analytics_questions_title">Data we collect</string>
+  <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
+  <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
 💾  32 files stored in Tella
 📖  Spanish language selected
-⚡  1 server connected
-😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
-
-Would you like to contribute?</string>
+⚡  1 server connected</string>
+  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
+  <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
+  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
+  <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
+• Even if we wanted to, we would not able to link the analytics data to you.</string>
+  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
+  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. \n\nWould you like to share analytics with the Tella team?</string>
   <string name="Settings_show_unlock_attempts_remaining" translatable="false">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions" translatable="false">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
@@ -692,10 +695,9 @@ Would you like to contribute?</string>
   <string name="Settings_remaining_attempts_before_deletion">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_failed_unlock_message_template" translatable="false">Your Tella data will be deleted after %1$d failed unlock attempts</string>
   <string name="Settings_feature_not_available_camouflage">This feature is not available with the calculator camouflage. Change your camouflage to enable this feature.</string>
-
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
+  <string name="Settings_Analytics_switch_title">Share analytics to improve Tella</string>
+  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="Javarosa_Upgrade_Warning_Description">We upgraded some of Tella libraries and we\'d need to re-download all forms.</string>
   <string name="Javarosa_Upgrade_Toast">Please wait while we update Forms.</string>
   <string name="Settings_Reports_Choose_Credentials">Do you have a username and password?</string>
@@ -859,6 +861,7 @@ they are uploaded to this project as a report.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
   <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
+    <string name="select_entities">Select entities</string>
   <string name="Home_BottomNav_Resources">Resources</string>
   <string name="Resources_DownloadedTitle">Downloaded</string>
   <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
@@ -873,6 +876,10 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
   <string name="Resources_Exit">EXIT</string>
   <string name="Error_DownloadFailed">Error: Download failed</string>
+    <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
+    <string name="add_more_entities">Add more entities</string>
+    <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
   <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
   <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
   <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
@@ -881,4 +888,6 @@ they are uploaded to this project as a report.</string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
   <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. \n\n If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.\n\n Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
+  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
+  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
 </resources>

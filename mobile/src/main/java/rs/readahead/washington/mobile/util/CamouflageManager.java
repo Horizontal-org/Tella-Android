@@ -72,8 +72,6 @@ public class CamouflageManager {
         options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.DICTIONARY_ALIAS), R.mipmap.ic_dictionary_round, R.string.settings_camo_dictionary));
         options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.PLANT_CARE_ALIAS), R.mipmap.ic_plant_care_round, R.string.settings_camo_plant_care));
         options.add(new CamouflageOption(getOptionAlias(CamouflageConstant.ASTROLOGY_ALIAS), R.mipmap.ic_astrology_round, R.string.settings_camo_astrology));
-
-
     }
 
     public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme) {

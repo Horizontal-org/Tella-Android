@@ -12,6 +12,8 @@ class OnBoardShareDataFragment : BaseFragment() {
 
     private lateinit var connectBtn: TextView
     private lateinit var continueBtn: TextView
+    private lateinit var backBtn: TextView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +36,10 @@ class OnBoardShareDataFragment : BaseFragment() {
         connectBtn.setOnClickListener {
             (baseActivity as OnBoardActivityInterface).showChooseServerTypeDialog()
         }
-
+        backBtn = view.findViewById(R.id.back_btn)
+        backBtn.setOnClickListener {
+            baseActivity.onBackPressed()
+        }
         continueBtn = view.findViewById(R.id.sheet_two_btn)
         continueBtn.setOnClickListener {
             baseActivity.addFragment(
