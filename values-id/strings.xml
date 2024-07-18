@@ -835,13 +835,13 @@ Would you like to contribute?</string>
   <string name="Settings_General_BottomSheetRefreshWarningText">Anda akan kembali ke layar sebelumnya dalam beberapa detik.</string>
   <string name="settings.feedback_enable_sharing">Aktifkan berbagi umpan balik</string>
   <string name="settings.feedback_warning">PERINGATAN: menggunakan fitur ini dapat menyingkap kepada seseorang yang mengamati jaringan bahwa Anda menggunakan Tella. Gunakan hanya jika Anda merasa nyaman dengan risiko ini.</string>
-  <string name="feedback_msg">Beri tahu kami jika Anda mengalami bug, memiliki permintaan untuk fitur baru, atau memiliki umpan balik lainnya. 
+  <string name="feedback_msg">Beri tahu kami jika Anda mengalami bug, memiliki permintaan untuk fitur baru, atau memiliki umpan balik lainnya.
  Umpan balik ini bersifat anonim, jadi pastikan untuk menyertakan informasi kontak jika Anda menginginkan tanggapan dari kami.</string>
   <string name="thanks_for_your_feedback">Terima kasih untuk umpan balik Anda!</string>
   <string name="save_draft">Simpan draf?</string>
   <string name="description_submit_feedback">Anda bisa kembali lagi kapan saja untuk mengirimkan umpan balik.</string>
   <string name="feedback">Umpan Balik</string>
-  <string name="not_internet_msg">Anda tidak terhubung ke internet. Umpan balik 
+  <string name="not_internet_msg">Anda tidak terhubung ke internet. Umpan balik
 Anda akan dikirim secara otomatis saat Anda terhubung.</string>
   <string name="feedback_title">Umpan Balik</string>
   <string name="feedback_sent_msg">Umpan balik Anda telah dikirmkan</string>
@@ -879,7 +879,7 @@ Anda akan dikirim secara otomatis saat Anda terhubung.</string>
   <string name="back">BACK</string>
   <string name="encrypting">Encrypting </string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. 
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
 
  If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
 

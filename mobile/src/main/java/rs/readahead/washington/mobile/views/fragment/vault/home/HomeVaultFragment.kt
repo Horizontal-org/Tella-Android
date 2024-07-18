@@ -5,14 +5,19 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -51,6 +56,8 @@ import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -63,8 +70,13 @@ const val VAULT_FILTER = "vf"
 
 //TODO REFACTOR THIS TO MVVM
 @AndroidEntryPoint
-class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaultBinding::inflate),
-    VaultClickListener, IHomeVaultPresenter.IView {
+class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
+    private lateinit var toolbar: ToolbarComponent
+    private lateinit var vaultRecyclerView: RecyclerView
+    private lateinit var panicModeView: RelativeLayout
+    private lateinit var countDownTextView: CountdownTextView
+    private lateinit var seekBar: SeekBar
+    private lateinit var seekBarContainer: View
     private var timerDuration = 0
     private var panicActivated = false
     private val vaultAdapter by lazy { VaultAdapter(this) }
@@ -83,22 +95,34 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
+    private val bundle by lazy { Bundle() }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_vault, container, false)
     }
 
-    fun initView() {
+    override fun initView(view: View) {
+        toolbar = view.findViewById(R.id.toolbar)
+        vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
+        panicModeView = view.findViewById(R.id.panic_mode_view)
+        countDownTextView = view.findViewById(R.id.countdown_timer)
+        seekBar = view.findViewById(R.id.panic_seek)
+        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
         disposables = MyApplication.bus().createCompositeDisposable()
 
         setUpToolbar()
         initData()
         initListeners()
         initPermissions()
-        fixAppBarShadow()
+        fixAppBarShadow(view)
         showUpdateMigrationBottomSheet()
     }
+
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -124,7 +148,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
 
     private fun initData() {
         homeVaultPresenter = HomeVaultPresenter(this)
-        binding.vaultRecyclerView.apply {
+        vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -194,7 +218,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun initListeners() {
-        binding.panicSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
 
             }
@@ -203,18 +227,18 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                if (binding.panicSeek.progress == 100) {
-                    binding.panicSeek.progress = 0
+                if (seekBar.progress == 100) {
+                    seekBar.progress = 0
                     showPanicScreens()
                 } else {
-                    binding.panicSeek.progress = 0
+                    seekBar.progress = 0
                     hidePanicScreens()
                 }
             }
         })
-        binding.panicSeekContainer.setOnClickListener { onPanicClicked() }
-        binding.toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
-        binding.toolbar.onRightClickListener = {
+        panicModeView.setOnClickListener { onPanicClicked() }
+        toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
+        toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
             MyApplication.exit(baseActivity)
@@ -229,7 +253,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
 
     private fun setUpToolbar() {
         val baseActivity = activity as MainActivity
-        baseActivity.setSupportActionBar(binding.toolbar)
+        baseActivity.setSupportActionBar(toolbar)
         maybeShowRecentBackgroundActivities()
     }
 
@@ -274,7 +298,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun setupToolbarClickListener() {
-        binding.toolbar.onRightOfLeftClickListener = {
+        toolbar.onRightOfLeftClickListener = {
             val description = if (backgroundActivitiesAdapter.itemCount == 0) {
                 getString(R.string.no_background_activity)
             } else {
@@ -414,8 +438,8 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun stopPanicking() {
-        binding.content.countdownTimer.cancel()
-        binding.content.countdownTimer.setCountdownNumber(timerDuration)
+        countDownTextView.cancel()
+        countDownTextView.setCountdownNumber(timerDuration)
         panicActivated = false
         // showMainControls()
     }
@@ -461,7 +485,7 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     }
 
     private fun maybeClosePanic(): Boolean {
-        if (binding.content.panicModeView.visibility == View.VISIBLE) {
+        if (panicModeView.visibility == View.VISIBLE) {
             stopPanicking()
             hidePanicScreens()
         }
@@ -471,17 +495,17 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
     private fun hidePanicScreens() {
         (baseActivity as MainActivity).showBottomNavigation()
         setupPanicView()
-        binding.content.panicModeView.visibility = View.GONE
-        binding.toolbar.visibility = View.VISIBLE
+        panicModeView.visibility = View.GONE
+        toolbar.visibility = View.VISIBLE
     }
 
     private fun showPanicScreens() {
         // really show panic screen
         (baseActivity as MainActivity).hideBottomNavigation()
-        binding.toolbar.visibility = View.GONE
-        binding.content.panicModeView.visibility = View.VISIBLE
-        binding.content.panicModeView.alpha = 1f
-        binding.content.countdownTimer.start(
+        toolbar.visibility = View.GONE
+        panicModeView.visibility = View.VISIBLE
+        panicModeView.alpha = 1f
+        countDownTextView.start(
             timerDuration
         ) {
             executePanicMode()
@@ -490,11 +514,11 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
 
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
-            binding.panicSeekContainer.visibility = View.VISIBLE
-            binding.vaultRecyclerView.setMargins(null, null, null, 110)
+            seekBarContainer.visibility = View.VISIBLE
+            vaultRecyclerView.setMargins(null, null, null, 110)
         } else {
-            binding.panicSeekContainer.visibility = View.GONE
-            binding.vaultRecyclerView.setMargins(null, null, null, 55)
+            seekBarContainer.visibility = View.GONE
+            vaultRecyclerView.setMargins(null, null, null, 55)
         }
     }
 
@@ -677,8 +701,13 @@ class HomeVaultFragment : BaseBindingFragment<FragmentVaultBinding>(FragmentVaul
         }
     }
 
-    private fun fixAppBarShadow() {
-        binding.appbar.outlineProvider = null
+    private fun fixAppBarShadow(view: View) {
+        val appBar = view.findViewById<View>(R.id.appbar)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            appBar.outlineProvider = null
+        } else {
+            appBar.bringToFront()
+        }
     }
 
     private fun showUpdateMigrationBottomSheet() {
