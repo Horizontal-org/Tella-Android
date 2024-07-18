@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity.clean_insights
+package rs.readahead.washington.mobile.views.activity.analytics
 
 import android.os.Bundle
 import android.text.SpannableString
@@ -39,7 +39,7 @@ class AnalyticsContributeFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_clean_insights_contribute, container, false)
+        return inflater.inflate(R.layout.fragment_analytics_contribute, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,10 +58,12 @@ class AnalyticsContributeFragment : BaseFragment() {
         with(textView) {
             text =""
             val firstPart = SpannableString(getString(R.string.Analytics_contribute_more_info))
+            val space = SpannableString(" ")
             val link = SpannableString(getString(R.string.Analytics_contribute_more_info2))
             link.setSpan(getClickableSpan(), 0, link.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             movementMethod = LinkMovementMethod.getInstance()
             append(firstPart)
+            append(space)
             append(link)
         }
     }

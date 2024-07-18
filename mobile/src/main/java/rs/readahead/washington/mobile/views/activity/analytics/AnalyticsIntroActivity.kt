@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity.clean_insights
+package rs.readahead.washington.mobile.views.activity.analytics
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,10 +22,10 @@ class AnalyticsIntroActivity : BaseActivity() {
     private val fragmentAdapter by lazy {
         ViewPagerFragmentAdapter(
             this, arrayListOf(
-                CleanInsightShareDataFragment.newInstance { onNextPage() },
-                CleanInsightHowWorksFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                CleanInsightWeWillNotFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                CleanInsightQuestionsFragment.newInstance({ onNextPage() }, { onBackPressed() }),
+                AnalyticsShareDataFragment.newInstance { onNextPage() },
+                AnalyticsHowWorksFragment.newInstance({ onNextPage() }, { onBackPressed() }),
+                AnalyticsWeWillNotFragment.newInstance({ onNextPage() }, { onBackPressed() }),
+                AnalyticsQuestionsFragment.newInstance({ onNextPage() }, { onBackPressed() }),
                 AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBackPressed() })
             )
         )
