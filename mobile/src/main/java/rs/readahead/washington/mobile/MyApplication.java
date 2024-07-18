@@ -33,6 +33,8 @@ import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.data.CommonPrefs;
 
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;

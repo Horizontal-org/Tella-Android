@@ -31,9 +31,7 @@ object DivviupUtils {
                     URI.create(context.getString(R.string.divviup_leader))
                 val helperEndpoint: URI =
                     URI.create(context.getString(R.string.divviup_helper))
-                val timePrecisionSeconds: Long =
-                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
-                        .toLong()
+                val timePrecisionSeconds: Long = context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds).toLong()
                 val client = Client.createPrio3Count(
                     context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
                 )
