@@ -23,10 +23,10 @@ class AnalyticsIntroActivity : BaseActivity() {
         ViewPagerFragmentAdapter(
             this, arrayListOf(
                 AnalyticsShareDataFragment.newInstance { onNextPage() },
-                AnalyticsHowWorksFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                AnalyticsWeWillNotFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                AnalyticsQuestionsFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBackPressed() })
+                AnalyticsHowWorksFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsWeWillNotFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsQuestionsFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBack() })
             )
         )
     }
@@ -52,8 +52,7 @@ class AnalyticsIntroActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    private fun onBack() {
         viewPager.currentItem = viewPagerPosition.dec()
     }
 
