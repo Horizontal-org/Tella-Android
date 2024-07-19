@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 182
-        versionName "2.10.0"
+        versionCode 183
+        versionName "2.9.0"
         multiDexEnabled true
 
         ndk {
@@ -82,7 +82,6 @@ dependencies {
     implementation "androidx.multidex:multidex:$versions.multidex"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':tella-vault')
-//    implementation project(':clean-insights')
     implementation project(':pdfviewer')
 
     api project(':tella-locking-ui')

@@ -138,7 +138,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         if (analyticsActions == AnalyticsActions.YES) {
             CommonPreferences.setIsAcceptedAnalytics(true)
-            DivviupUtils.runInstallEvent(requireContext())
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.Settings_Analytics_turn_on_dialog),

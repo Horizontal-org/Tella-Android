@@ -21,8 +21,6 @@ public class CommonPrefs {
     static final String SHOW_IMPROVEMENT_SECTION = "show_improvement_section";
     static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
-    static final String INSTALL_METRIC_SENT = "install_metric_sent";
-
 
     private static CommonPrefs instance;
     private SharedPreferences commonPref;

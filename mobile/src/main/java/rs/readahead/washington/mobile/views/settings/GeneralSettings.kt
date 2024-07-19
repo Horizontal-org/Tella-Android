@@ -67,7 +67,6 @@ class GeneralSettings :
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
                 )
-                DivviupUtils.runInstallEvent(requireContext())
             } else {
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false

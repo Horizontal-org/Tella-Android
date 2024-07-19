@@ -78,7 +78,6 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
         sendUnlockMeasure(context = baseContext)
-        maybeSendInstallMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -124,9 +123,5 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun sendUnlockMeasure(context: Context) {
         DivviupUtils.runUnlockEvent(context)
-    }
-
-    private fun maybeSendInstallMeasure(context: Context) {
-        DivviupUtils.runInstallEvent(context)
     }
 }
