@@ -48,7 +48,6 @@ public class CommonPrefs {
     }
 
     boolean getBoolean(final String name, final boolean def) {
-        Timber.d("++++ name, def %s %s", name, def);
         return Single.fromCallable(() -> commonPref.getBoolean(name, def))
                 .subscribeOn(Schedulers.io()).blockingGet();
     }
