@@ -60,7 +60,7 @@
     <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Some of the selected files are currently used in your connections. Deleting may impact forms and reports that haven’t been sent yet.</string>
-  <string name="Vault_Warning_Title" translatable="false">Warning</string>
+  <string name="Vault_Warning_Title">Warning</string>
   <string name="Vault_Delete_anyway">Delete anyway</string>
   <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
   <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
