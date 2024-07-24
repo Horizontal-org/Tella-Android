@@ -24,7 +24,9 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 
 const val SEND_ENTITY = "send_entity"
 
-class UwaziSendFragment : BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSendFragmentBinding::inflate), OnNavBckListener {
+class UwaziSendFragment :
+    BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSendFragmentBinding::inflate),
+    OnNavBckListener {
     private val viewModel by viewModels<SharedUwaziSubmissionViewModel>()
 
     private var entityInstance: UwaziEntityInstance? = null
@@ -41,7 +43,7 @@ class UwaziSendFragment : BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSen
 
     private fun initView() {
         with(binding) {
-            toolbar.backClickListener = { handleBackButton() }
+            toolbar.backClickListener = { nav().popBackStack() }
 
             nextBtn.setOnClickListener {
                 entityInstance?.let {
@@ -83,6 +85,7 @@ class UwaziSendFragment : BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSen
                     EntityStatus.SUBMITTED -> {
                         handleBackButton()
                     }
+
                     EntityStatus.SUBMISSION_ERROR -> {
                         DialogUtils.showBottomMessage(
                             baseActivity,
@@ -94,9 +97,11 @@ class UwaziSendFragment : BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSen
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
+
                     EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
+
                     else -> {}
                 }
             }
@@ -112,7 +117,7 @@ class UwaziSendFragment : BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSen
     }
 
     override fun onBackPressed(): Boolean {
-        return handleBackButton()
+        return nav().popBackStack()
     }
 
     private fun submitEntity() {
