@@ -7,7 +7,6 @@
   <string name="LockSelect_Action_Continue">Hpang na langai</string>
   <string name="LockPatternSet_Draw_Pattern">Sumsaw hpaw maka langai hpe soi u</string>
   <string name="UnlockPattern_DrawToUnlock">Tella hpe hpaw na matu maka soi u</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
   <string name="LockPatternSet_Pattern_Recorded">Matsing bang da ngut sai maka</string>
   <string name="UnlockPattern_PatternTooShort">N law htum kateng masat 6 du hkr, matut nna maka hpe soi u</string>
   <string name="LockPatternSet_RecordingPattern">Galaw ngut yang layung hpe dat kau u</string>
@@ -33,7 +32,6 @@
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Chyeju hte kalang bai chyam yu u. Na a ga makoi ni n htuk nga ai.</string>
   <string name="LockSuccess_Message_AllDone">Nang yawng galaw ngut sai!</string>
   <string name="LockSuccess_Message_Hint">Na a sumsaw lata la ai lam hpe galoi mung mai galai nhtawm, dai hta grau nna masat ai lam ni hta Tella hpe nang myit ra ai hku gram lajang la mai ai.</string>
-  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Ga makoi shut ai, chyeju hte kalang bai chyam yu u</string>
   <string name="UnlockPassword_Message_EnterPassword">Tella hpe hpaw na matu na a ga makoi ka bang u</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Na a ga makoi hpe shagrin u</string>

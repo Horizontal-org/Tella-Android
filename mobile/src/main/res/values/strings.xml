@@ -676,7 +676,6 @@ button to add a new template.</string>
   <string name="Analytics_banner_title">Share analytics to improve Tella</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. \n\nWould you like to share analytics with the Tella team?</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decide how many failed unlock attempts are allowed before everything inside Tella is deleted.</string>
   <string name="Settings_Off_Do_Not_Delete">Off (do not delete data)</string>
@@ -816,27 +815,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_show_pin">show pin</string>
   <string name="action_hide_pin">hide pin</string>
   <string name="action_go_back">go back</string>
-  <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
-  <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
-  <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decide how many failed unlock attempts are allowed before everything inside Tella is deleted.</string>
-  <string name="Settings_Off_Do_Not_Delete">Off (do not delete data)</string>
-  <string name="Settings_Five_Attempts">5 attempts</string>
-  <string name="Settings_Ten_Attempts">10 attempts</string>
-  <string name="Settings_Twenty_Attempts">20 attempts</string>
-  <string name="Settings_Off">Off</string>
-  <string name="Settings_On">On</string>
-  <string name="Settings_Disabled">Disabled</string>
-  <string name="Settings_remaining_attempts_before_deletion">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
-  <string name="Settings_failed_unlock_message_template">Your Tella data will be deleted after %1$d failed unlock attempts</string>
-  <string name="Settings_feature_not_available_camouflage">This feature is not available with the calculator camouflage. Change your camouflage to enable this feature.</string>
-  <string name="Auto_Upload_Report">The file(s) you imported have been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Media_Report">The photo(s)/video you took has been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Recording_Report">The recording you made has been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Imported_Report_And_Deleted">The file(s) you imported have been uploaded as a report and automatically deleted.</string>
-  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"The photo/video you took has been uploaded as a report and automatically deleted."</string>
-  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"The recording you made has been uploaded as a report and automatically deleted."</string>
-  <string name="Report_Available_in_Outbox">Your report is available in the Outbox</string>
   <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
   <string name="action_rotate">Rotate</string>
   <string name="Snackbar_file_was_deleted">The file was deleted.</string>
@@ -908,9 +887,9 @@ they are uploaded to this project as a report.</string>
   <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
   <string name="Resources_Exit">EXIT</string>
   <string name="Error_DownloadFailed">Error: Download failed</string>
-    <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-    <string name="add_more_entities">Add more entities</string>
-    <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
+  <string name="add_more_entities">Add more entities</string>
+  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
   <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
   <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
   <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
@@ -925,44 +904,6 @@ they are uploaded to this project as a report.</string>
  Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
   <string name="Home_BottomNav_Settings">Settings</string>
-  <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="one">%1$d entity selected</item>
-    <item quantity="other">%1$d entities selected</item>
-  </plurals>
-  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing analytics</string>
-  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
-  <string name="Analytics_contribute_more_info2"> visit this page</string>
-  <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
-  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
-  <string name="Analytics_how_works_title">How it works</string>
-  <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
-• We collect as little data as possible.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Data we collect</string>
-  <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected</string>
-  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
-  <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
-  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
-• Even if we wanted to, we would not able to link the analytics data to you.</string>
-  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
-  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
-
-Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share analytics to improve Tella</string>
-  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
-  <string name="select_entities">Select entities</string>
-  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-  <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title">Migration Failed\"</string>
