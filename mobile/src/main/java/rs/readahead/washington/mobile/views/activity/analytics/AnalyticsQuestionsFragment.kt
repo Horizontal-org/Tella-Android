@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity.clean_insights
+package rs.readahead.washington.mobile.views.activity.analytics
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
-class CleanInsightHowWorksFragment : BaseFragment() {
+class AnalyticsQuestionsFragment : BaseFragment() {
 
     private lateinit var onNext: () -> Unit
     private lateinit var onPrevious: () -> Unit
@@ -16,7 +16,7 @@ class CleanInsightHowWorksFragment : BaseFragment() {
     companion object {
         @JvmStatic
         fun newInstance(onNext: () -> Unit, onPrevious: () -> Unit) =
-            CleanInsightHowWorksFragment().apply {
+            AnalyticsQuestionsFragment().apply {
                 this.onNext = onNext
                 this.onPrevious = onPrevious
             }
@@ -27,7 +27,7 @@ class CleanInsightHowWorksFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_clean_insights_how_works, container, false)
+        return inflater.inflate(R.layout.fragment_analytics_questions, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

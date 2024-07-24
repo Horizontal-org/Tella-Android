@@ -1,14 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="Vault_AllFiles_Title">Semua berkas</string>
+  <string name="Vault_Images_Title">Gambar</string>
+  <string name="Vault_Files_Title">Berkas tella</string>
+  <string name="Vault_Documents_Title">Dokumen</string>
   <string name="Vault_Audios_Title">io</string>
   <string name="Vault_Videos_Title">Videos</string>
+  <string name="Vault_Others_Title">Lainnya</string>
+  <string name="Vault_Select_Title">Pilih berkas</string>
   <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_PhotosAndVideos_Title">Foto dan Video</string>
   <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Empty_Msg">Anda belum memiliki berkas di Tella Anda. Klik tombol \"+\" di bawah untuk mengimpor berkas pertama Anda, atau buka Kamera atau Mikrofon untuk membuatnya. Anda juga bisa membuat folder untuk membuat berkas Anda teratur.</string>
+  <string name="Vault_Move_SheetDesc">Pindahkan ke folder lain</string>
+  <string name="Vault_Rename_SheetAction">Ubah nama</string>
   <string name="Vault_Save_SheetAction">Simpan</string>
   <string name="Vault_Delete_SheetAction">Hapus</string>
   <string name="Vault_Share_SheetAction">Share </string>
   <string name="Vault_Upload_SheetAction">Upload</string>
+  <string name="Vault_File_SheetAction">Informasi Berkas</string>
+  <string name="Vault_FileInfo">Informasi Berkas</string>
+  <string name="Vault_FileSize">Ukuran</string>
+  <string name="Vault_FileFormat">Format</string>
+  <string name="Vault_FileCreated">Dibuat</string>
+  <string name="Vault_FileResolution">Resolusi</string>
+  <string name="Vault_FileLength">Panjang</string>
+  <string name="Vault_FilePath">Jalur berkas</string>
+  <string name="Vault_RenameFile_SheetTitle">Ubah nama berkas</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="other">Kosong</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="other">Kosong</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Nama A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Nama Z &gt; A</string>
   <string name="Vault_SortDateAsc_SheetAction">Baru ke lama</string>
   <string name="Vault_SortDateDesc_SheetAction">Lama ke baru</string>
+  <string name="Vault_ManageFiles_SheetTitle">Kelola berkas</string>
+  <string name="Vault_DeleteFile_SheetDesc">Setelah mengimpor berkas ke Tella, berkas aslinya akan dihapus dari perangkat Anda. Salinan yang tersisa hanya yang berada di Tella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Ambil foto/video</string>
+  <string name="Vault_RecordAudio_SheetAction">Rekam audio</string>
+  <string name="Vault_Import_SheetAction">Impor dari perangkat</string>
+  <string name="Vault_ImportDelete_SheetAction">Impor dan hapus berkas asli</string>
+  <string name="Vault_CreateFolder_SheetTitle">Buat folder baru</string>
+  <string name="Vault_MoveHere">pindahkan ke sini</string>
+  <string name="Vault_ViewerOther_SheetDesc">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
   <string name="Vault_Export_SheetAction">Save to device</string>
+  <plurals name="Vault_Items">
+    <item quantity="other">Kosong</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Anda tidak memiliki berkas apapun di dalam Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Templat favorit</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="other">Berkas berhasil dipindah</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Beberapa dari berkas sedang digunakan di koneksi Anda. Menghapusnya bisa berdampak pada formulir dan laporan yang belum dikirim.</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">Hapus</string>
+  <string name="Vault_Keep_Original">SIMPAN YANG ASLI</string>
+  <string name="Vault_Delete_Original">HAPUS YANG ASLI</string>
+  <string name="Vault_deleteFileImported_SheetDesc"> Setelah mengimpor berkas ke Tella, apakah Anda ingin menyimpan berkas aslinya di perangkat Anda atau menghapusnya?
+ Jika Anda menghapusnya, berkas yang diimpor ke Tella akan menjadi satu-satunya salinan.</string>
+  <string name="Vault_FileEdit_SheetAction">Sunting</string>
 </resources>

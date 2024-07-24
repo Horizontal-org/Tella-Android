@@ -60,10 +60,12 @@
     <item quantity="other">فایل با موفقیت حذف شد.</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">برخی از فایل‌های انتخاب‌شده هم‌اکنون در اتصال‌های شما به کار گرفته شده‌اند. حذف کردن آن‌ها ممکن است بر فرم‌ها و گزارش‌های ارسال‌نشده تاثیر بگذارد.</string>
+  <string name="Vault_Warning_Title">هشدار</string>
   <string name="Vault_Delete_anyway">به هر حال حذف شود</string>
   <string name="Vault_Keep_Original">حفظ نسخه اصلی</string>
   <string name="Vault_Delete_Original">حذف نسخه اصلی</string>
   <string name="Vault_deleteFileImported_SheetDesc">پس از وارد کردن فایل در Tella، آیا فایل اصلی در دستگاه شما حفظ شود یا حذف شود؟
  
  اگر آن را حذف کنید، فایل واردشده در Tella یگانه نسخه باقی‌مانده خواهد بود.</string>
+  <string name="Vault_FileEdit_SheetAction">Edit</string>
 </resources>

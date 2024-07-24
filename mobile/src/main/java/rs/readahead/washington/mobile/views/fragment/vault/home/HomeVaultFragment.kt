@@ -49,8 +49,8 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsActions
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
@@ -95,7 +95,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
-    private val bundle by lazy { Bundle() }
 
 
     override fun onCreateView(

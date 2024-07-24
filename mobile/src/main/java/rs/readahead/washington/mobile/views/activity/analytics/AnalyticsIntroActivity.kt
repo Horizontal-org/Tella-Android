@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity.clean_insights
+package rs.readahead.washington.mobile.views.activity.analytics
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,11 +22,11 @@ class AnalyticsIntroActivity : BaseActivity() {
     private val fragmentAdapter by lazy {
         ViewPagerFragmentAdapter(
             this, arrayListOf(
-                CleanInsightShareDataFragment.newInstance { onNextPage() },
-                CleanInsightHowWorksFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                CleanInsightWeWillNotFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                CleanInsightQuestionsFragment.newInstance({ onNextPage() }, { onBackPressed() }),
-                AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBackPressed() })
+                AnalyticsShareDataFragment.newInstance { onNextPage() },
+                AnalyticsHowWorksFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsWeWillNotFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsQuestionsFragment.newInstance({ onNextPage() }, { onBack() }),
+                AnalyticsContributeFragment.newInstance({ optedIn -> onNextPage(optedIn) }, { onBack() })
             )
         )
     }
@@ -52,8 +52,7 @@ class AnalyticsIntroActivity : BaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    private fun onBack() {
         viewPager.currentItem = viewPagerPosition.dec()
     }
 

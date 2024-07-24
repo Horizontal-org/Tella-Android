@@ -23,6 +23,7 @@
         <item>pt</item>
         <item>ru</item>
         <item>ta</item>
+        <item>vi</item>
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>

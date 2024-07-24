@@ -16,8 +16,8 @@ object DivviupUtils {
         Executors.newSingleThreadExecutor().execute {
             try {
                 val taskId = TaskId.parse(context.getString(R.string.divviup_count_unlocks_id))
-                val leaderEndpoint: URI = URI.create(context.getString(R.string.divviup_count_unlocks_leader))
-                val helperEndpoint: URI = URI.create(context.getString(R.string.divviup_count_unlocks_helper))
+                val leaderEndpoint: URI = URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI = URI.create(context.getString(R.string.divviup_helper))
                 val timePrecisionSeconds: Long = context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds).toLong()
                 val client = Client.createPrio3Count(
                     context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
