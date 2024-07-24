@@ -29,6 +29,7 @@
     <color name="colorAccent">@color/wa_white_80</color>
     <color name="colorPrimaryInverse">@color/wa_white</color>
     <color name="grayCFCFCF">#cfcfcf</color>
+    <color name="surfaceColor">#FFFFFF</color> <!-- Replace #FFFFFF with your desired color -->
 
     <!-- Collect -->
     <color name="primaryTextColor">#000000</color>

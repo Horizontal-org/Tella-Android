@@ -240,3 +240,4 @@
 
 # Android-Image-Cropper
 -keep class androidx.appcompat.widget.** { *; }
+-keep class org.apache.commons.** { *; }

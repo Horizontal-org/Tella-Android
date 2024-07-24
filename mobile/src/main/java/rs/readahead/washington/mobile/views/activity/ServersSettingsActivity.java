@@ -7,19 +7,16 @@ import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageVie
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.gson.Gson;
-
+import com.owncloud.android.lib.common.utils.Log_OC;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -48,10 +45,15 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
+import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils;
+import rs.readahead.washington.mobile.util.operations.DisplayUtils;
+import rs.readahead.washington.mobile.util.operations.GetServerInfoOperation;
+import rs.readahead.washington.mobile.util.operations.OperationsService;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.SslUntrustedCertDialog;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
@@ -64,7 +66,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
-        IUWAZIServersPresenterContract.IView {
+        IUWAZIServersPresenterContract.IView
+{
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
@@ -75,6 +78,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
     private ActivityDocumentationSettingsBinding binding;
+    /// Identifier of operation in progress which result shouldn't be lost
+    private static final String TAG = ServersSettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

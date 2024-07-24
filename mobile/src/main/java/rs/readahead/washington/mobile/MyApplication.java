@@ -1,12 +1,17 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.StrictMode;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,11 +35,13 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
+import com.owncloud.android.lib.common.utils.Log_OC;
 
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import org.cleaninsights.sdk.CleanInsights;
+import org.conscrypt.Conscrypt;
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -48,8 +55,13 @@ import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
+import java.security.Security;
+import java.util.Arrays;
 
 import javax.inject.Inject;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 
 import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
@@ -86,6 +98,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Inject
     public HiltWorkerFactory workerFactory;
     Vault.Config vaultConfig;
+    private static final String TAG = MyApplication.class.getSimpleName();
+    public static final String DOT = ".";
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -163,7 +177,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public void onCreate() {
         super.onCreate();
-
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
@@ -188,6 +201,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         //initialize WorkManager
         //  WorkManager.initialize(this, myConfig);
+
+        System.setProperty("javax.net.debug", "ssl,handshake");
+
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -222,6 +238,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         //initCleanInsights();
+        insertConscrypt();
+        //enableStrictMode();
     }
 
     private void configureCrashlytics() {
@@ -365,4 +383,42 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public Configuration getWorkManagerConfiguration() {
         return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
     }
+
+    private void insertConscrypt() {
+        Security.insertProviderAt(Conscrypt.newProvider(), 1);
+
+        try {
+            Conscrypt.Version version = Conscrypt.version();
+            Log_OC.i(TAG, "Using Conscrypt/"
+                    + version.major()
+                    + DOT
+                    + version.minor()
+                    + DOT + version.patch()
+                    + " for TLS");
+            SSLEngine engine = SSLContext.getDefault().createSSLEngine();
+            Log_OC.i(TAG, "Enabled protocols: " + Arrays.toString(engine.getEnabledProtocols()) + " }");
+            Log_OC.i(TAG, "Enabled ciphers: " + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+        } catch (NoSuchAlgorithmException e) {
+            Log_OC.e(TAG, e.getMessage());
+        }
+    }
+
+
+    private void enableStrictMode() {
+        if (BuildConfig.DEBUG) {
+            Log_OC.d(TAG, "Enabling StrictMode");
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .build());
+        }
+    }
+
 }

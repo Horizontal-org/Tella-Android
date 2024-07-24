@@ -68,4 +68,8 @@ class NavigationManager(
         navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
+    fun navigateToEnterNextCloudLoginScreen(){
+        navigateToWithBundle(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+    }
+
 }

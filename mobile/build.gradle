@@ -187,7 +187,11 @@ dependencies {
     implementation("com.vanniktech:android-image-cropper:4.3.3")
 
     //Next cloud
-    implementation ('com.github.nextcloud:android-library:2.9.0')
+    implementation ("com.github.nextcloud:android-library:$versions.nextcloud") {
+        exclude group: 'org.ogce', module: 'xpp3'
+    }
+    implementation "commons-httpclient:commons-httpclient:3.1@jar" // remove after entire switch to lib v2
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
 }
 

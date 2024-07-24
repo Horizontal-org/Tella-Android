@@ -2,6 +2,9 @@ package rs.readahead.washington.mobile.data.nextcloud
 
 import android.content.Context
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
@@ -9,84 +12,88 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.status.GetCapabilitiesRemoteOperation
 import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
+
 
 class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository {
 
+
     override fun validateServerUrl(serverUrl: String): Single<Boolean> {
-        return Single.fromCallable {
+        return Single.create { emitter ->
             try {
                 val uri = Uri.parse(serverUrl)
-
-                // Create a trust manager that does not validate certificate chains
-                val trustAllCertificates = object : X509TrustManager {
-                    override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
-                    override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {}
-                    override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> = arrayOf()
-                }
-
-                // Install the all-trusting trust manager
-                val sslContext: SSLContext = SSLContext.getInstance("SSL")
-                sslContext.init(null, arrayOf<TrustManager>(trustAllCertificates), java.security.SecureRandom())
-
-                // Create an ssl socket factory with our all-trusting manager
-                val sslSocketFactory = sslContext.socketFactory
-
-                val client = OwnCloudClientFactory.createOwnCloudClient(uri, context, true)
-                val okHttpClient = OkHttpClient.Builder()
-                    .sslSocketFactory(sslSocketFactory, trustAllCertificates)
-                    .hostnameVerifier { _, _ -> true }
-                    .build()
-
-                //client.setCustomOkHttpClient(okHttpClient)
+                val client = OwnCloudClientFactory.createOwnCloudClient(uri, context, false)
 
                 val getCapabilitiesOperation = GetCapabilitiesRemoteOperation()
-                val result = getCapabilitiesOperation.execute(client)
-                result.isSuccess
+                getCapabilitiesOperation.execute(client,
+                    { _, result ->
+
+
+                        result?.let {
+                            if (it.isSuccess) {
+                                val credentials = OwnCloudCredentialsFactory.newBasicCredentials("dhekra@wearehorizontal.org", "GSumS9uL7X8SoW")
+                                client.credentials = credentials
+
+
+                                // get display name
+
+
+                                emitter.onSuccess(true)
+                            } else {
+                                emitter.onError(result.exception)
+                            }
+                        } ?:  emitter.onSuccess(false)
+                    }, Handler(Looper.getMainLooper())
+                )
+
             } catch (e: Exception) {
-                false
+                Log.e("ValidateServerUrl", "Exception occurred: ${e.localizedMessage}", e)
+                emitter.onError(e)
             }
         }.subscribeOn(Schedulers.io())
     }
 
 
     override fun checkUserCredentials(serverUrl: String, username: String, password: String): Single<RemoteOperationResult<UserInfo?>> {
-        return Single.fromCallable {
-            var result: RemoteOperationResult<UserInfo?>
-            try {
+        return Single.create<RemoteOperationResult<UserInfo?>> { emitter ->
+
                 // Client
-                val uri = Uri.parse(serverUrl)
+                val baseUri = Uri.parse(serverUrl)
+                Log.d("CheckUserCredentials", "Base URI: $baseUri")
+
                 val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
+                Log.d("CheckUserCredentials", "Credentials: $credentials")
 
+                val cloudClient = OwnCloudClientFactory.createOwnCloudClient(baseUri, context, true)
+                cloudClient.credentials = credentials
+                Log.d("CheckUserCredentials", "Client: $cloudClient")
 
+                // Ensure client and credentials are valid
+                if (cloudClient == null || credentials == null) {
+                    emitter.onError(Exception("Client or credentials are null"))
+                    return@create
+                }
+
+                // Create Nextcloud Client and perform the operation
                 val nextcloudClient = OwnCloudClientFactory.createNextcloudClient(
-                    uri,
+                    baseUri,
                     credentials.username,
                     credentials.toOkHttpCredentials(),
                     context,
                     true
                 )
 
-                // Operation - get display name
-                val userInfoResult = GetUserInfoRemoteOperation().execute(nextcloudClient)
+            val getCapabilitiesOperation = GetUserInfoRemoteOperation().execute(nextcloudClient)
 
-                result = if (userInfoResult.isSuccess) {
-                    RemoteOperationResult<UserInfo?>(RemoteOperationResult.ResultCode.OK)
-                } else {
-                    RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR)
-                }
-                result.setResultData(userInfoResult.resultData)
-            } catch (e: Exception) {
-                result = RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR)
-            }
 
-            result
-        }
+            Log.d("CheckUserCredentials", "Client: ${getCapabilitiesOperation.isSuccess}")
+
+
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
+
+
 
 }
