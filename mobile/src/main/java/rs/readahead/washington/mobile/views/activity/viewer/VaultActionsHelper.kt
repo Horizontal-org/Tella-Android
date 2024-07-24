@@ -107,10 +107,9 @@ object VaultActionsHelper {
                     getString(R.string.action_cancel),
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
-                            if (isConfirmed)
+                            if (isConfirmed) {
                                 exportMediaFile()
-                            else
-                                return
+                            }
                         }
                     }
                 )
@@ -155,10 +154,9 @@ object VaultActionsHelper {
                     getString(R.string.action_cancel),
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
-                            if (isConfirmed)
+                            if (isConfirmed) {
                                 vaultFile.let { sharedViewModel.confirmDeleteMediaFile(it) }
-                            else
-                                return
+                            }
                         }
                     }
                 )
