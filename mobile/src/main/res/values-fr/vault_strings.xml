@@ -54,4 +54,18 @@
     <item quantity="other">éléments</item>
   </plurals>
   <string name="Vault_No_Files_Title">Vous n\'avez pas encore de fichiers dans Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Modèles favoris</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">Fichier déplacé avec succès</item>
+    <item quantity="other">Fichiers déplacés avec succès</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Certains des fichiers sélectionnés sont actuellement utilisés dans vos connexions. La suppression peut avoir un impact sur les formulaires et les rapports qui n\'ont pas encore été envoyés.</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">Supprimer quand même</string>
+  <string name="Vault_Keep_Original">GARDER L\'ORIGINAL</string>
+  <string name="Vault_Delete_Original">SUPPRIMER L’ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc"> Après avoir importé le fichier dans Tella, souhaitez-vous conserver le fichier original sur votre appareil ou le supprimer ?
+ 
+ Si vous le supprimez, le fichier importé dans Tella sera la seule copie restante. </string>
+  <string name="Vault_FileEdit_SheetAction">Éditer</string>
 </resources>
