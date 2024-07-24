@@ -8,10 +8,12 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.BUNDLE_IS_FROM_UWAZI_ENTRY
@@ -22,22 +24,16 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 
 const val SEND_ENTITY = "send_entity"
 
-class UwaziSendFragment : BaseFragment(), OnNavBckListener {
+class UwaziSendFragment :
+    BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSendFragmentBinding::inflate),
+    OnNavBckListener {
     private val viewModel by viewModels<SharedUwaziSubmissionViewModel>()
 
-    private lateinit var binding: UwaziSendFragmentBinding
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
     private lateinit var endView: UwaziFormEndView
     private var isFromEntryScreen = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = UwaziSendFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,7 +41,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
         initView()
     }
 
-    override fun initView(view: View) {
+    private fun initView() {
         with(binding) {
             toolbar.backClickListener = { nav().popBackStack() }
 
@@ -66,6 +62,12 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                 }
             }
         }
+        arguments?.let { bundle ->
+            entityInstance =
+                Gson().fromJson(bundle.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
+            isFromEntryScreen = bundle.getBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY)
+            showFormEndView()
+        }
     }
 
     private fun initObservers() {
@@ -83,6 +85,7 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                     EntityStatus.SUBMITTED -> {
                         handleBackButton()
                     }
+
                     EntityStatus.SUBMISSION_ERROR -> {
                         DialogUtils.showBottomMessage(
                             baseActivity,
@@ -94,21 +97,14 @@ class UwaziSendFragment : BaseFragment(), OnNavBckListener {
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                     }
+
                     EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
+
                     else -> {}
                 }
             }
-        }
-    }
-
-    private fun initView() {
-        arguments?.let { bundle ->
-            entityInstance =
-                Gson().fromJson(bundle.getString(SEND_ENTITY), UwaziEntityInstance::class.java)
-            isFromEntryScreen = bundle.getBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY)
-            showFormEndView()
         }
     }
 

@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -293,6 +294,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             -1
         }
+        view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
         view?.findViewById<ToolbarComponent>(R.id.toolbar)?.setRightOfLeftIcon(iconRes)
     }
 
@@ -702,11 +704,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun fixAppBarShadow(view: View) {
         val appBar = view.findViewById<View>(R.id.appbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            appBar.outlineProvider = null
-        } else {
-            appBar.bringToFront()
-        }
+        appBar.outlineProvider = null
     }
 
     private fun showUpdateMigrationBottomSheet() {
