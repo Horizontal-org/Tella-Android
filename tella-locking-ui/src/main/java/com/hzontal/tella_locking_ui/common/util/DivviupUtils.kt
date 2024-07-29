@@ -13,12 +13,18 @@ object DivviupUtils {
 
     fun runUnlockEvent(context: Context) {
         if (!CommonPreferences.hasAcceptedAnalytics()) return
+        if (context.getString(R.string.divviup_count_unlocks_id).isEmpty() || context.getString(
+                R.string.divviup_leader
+            ).isEmpty() || context.getString(R.string.divviup_helper).isEmpty()
+        ) return
         Executors.newSingleThreadExecutor().execute {
             try {
                 val taskId = TaskId.parse(context.getString(R.string.divviup_count_unlocks_id))
                 val leaderEndpoint: URI = URI.create(context.getString(R.string.divviup_leader))
                 val helperEndpoint: URI = URI.create(context.getString(R.string.divviup_helper))
-                val timePrecisionSeconds: Long = context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds).toLong()
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
                 val client = Client.createPrio3Count(
                     context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
                 )
