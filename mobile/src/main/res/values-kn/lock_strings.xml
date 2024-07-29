@@ -25,7 +25,8 @@ unlock Tella</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
   <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
 Tella</string>
-  <string name="LockPinSet_Message_Hint">Use at least 6 digits. Avoid using numbers that can be guessed easily, such as your birthday.</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
   <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,
  just to be sure.</string>
