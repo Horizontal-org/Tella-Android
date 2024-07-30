@@ -106,7 +106,11 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun maybeEnableSecurityScreen() {
-        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(SET_SECURITY_SCREEN,false)) {
+        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+                SET_SECURITY_SCREEN,
+                false
+            )
+        ) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE

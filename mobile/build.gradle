@@ -14,7 +14,7 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 183
+        versionCode 184
         versionName "2.10.0"
         multiDexEnabled true
 

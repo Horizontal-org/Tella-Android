@@ -229,8 +229,9 @@ object VaultSheetUtils {
                     radioBtnASC.text = filterASC
                     //Sort DATE DESC
                     radioBtnDESC.text = filterDESC
+                    // check the default radio button (first one)
+                    if (lastCheckedId == 0) lastCheckedId = radioBtnNameAZ.id
                     radioGroup.check(lastCheckedId)
-
                     radioGroup.setOnCheckedChangeListener { radioGroup, checkedId ->
                         lastCheckedId = checkedId
                         when (radioGroup.checkedRadioButtonId) {
@@ -238,14 +239,17 @@ object VaultSheetUtils {
                                 vaultSortSheet.dismiss()
                                 sort.onSortNameASC()
                             }
+
                             R.id.radioBtnNameZA -> {
                                 vaultSortSheet.dismiss()
                                 sort.onSortNameDESC()
                             }
+
                             R.id.radioBtnDESC -> {
                                 vaultSortSheet.dismiss()
                                 sort.onSortDateDESC()
                             }
+
                             R.id.radioBtnASC -> {
                                 vaultSortSheet.dismiss()
                                 sort.onSortDateASC()

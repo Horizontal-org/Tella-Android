@@ -50,8 +50,8 @@ import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import rs.readahead.washington.mobile.util.setMargins
 import rs.readahead.washington.mobile.views.activity.MainActivity
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsActions
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity

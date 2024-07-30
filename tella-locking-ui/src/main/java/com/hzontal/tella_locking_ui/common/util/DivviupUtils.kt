@@ -14,6 +14,10 @@ object DivviupUtils {
 
     fun runUnlockEvent(context: Context) {
         if (!CommonPreferences.hasAcceptedAnalytics()) return
+        if (context.getString(R.string.divviup_count_unlocks_id).isEmpty() || context.getString(
+                R.string.divviup_leader
+            ).isEmpty() || context.getString(R.string.divviup_helper).isEmpty()
+        ) return
         val lastTimeSpent = Preferences.loadLong(
             context,
             Preferences.CLEAR_KEY_MS,

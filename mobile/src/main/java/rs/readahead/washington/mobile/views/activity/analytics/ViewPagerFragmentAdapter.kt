@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.activity.clean_insights
+package rs.readahead.washington.mobile.views.activity.analytics
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

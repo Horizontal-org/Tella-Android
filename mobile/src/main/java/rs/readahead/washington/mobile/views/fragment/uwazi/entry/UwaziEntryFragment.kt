@@ -66,10 +66,7 @@ class UwaziEntryFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.refreshEntitiesList()
         initObservers()
-        if (!hasInitializedRootView) {
-            hasInitializedRootView = true
-            initView()
-        }
+        initView()
         setupFragmentResultListener()
     }
 

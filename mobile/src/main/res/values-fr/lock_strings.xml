@@ -7,6 +7,7 @@
   <string name="LockSelect_Action_Continue">Poursuivre</string>
   <string name="LockPatternSet_Draw_Pattern">Dessiner un schéma de déverrouillage</string>
   <string name="UnlockPattern_DrawToUnlock">Dessinez votre motif pour déverrouiller Tella</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Votre nouveau schéma de déverrouillage</string>
   <string name="LockPatternSet_Pattern_Recorded">Le schéma a été enregistré</string>
   <string name="UnlockPattern_PatternTooShort">Connectez au moins 6 points, veuillez redessiner</string>
   <string name="LockPatternSet_RecordingPattern">Relâcher le doigt une fois terminé</string>

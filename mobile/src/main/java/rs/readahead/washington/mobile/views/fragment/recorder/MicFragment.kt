@@ -119,7 +119,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
         if (isCollect || isReport) {
             mPlay.visibility = View.GONE
-            val activity = context as IMainNavigationInterface
+            val activity = activity as IMainNavigationInterface
             activity.hideBottomNavigation()
         }
 

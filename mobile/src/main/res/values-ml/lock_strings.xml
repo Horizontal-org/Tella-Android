@@ -6,6 +6,8 @@
   <string name="LockPatternConfirm_Action_Confirm">സ്ഥിരീകരിക്കുന്നതിനായി പാറ്റേൺ/മാതൃക ഒന്നുകൂടി വരക്കുക</string>
   <string name="LockSelect_Action_Continue">തുടരുക</string>
   <string name="LockPatternSet_Draw_Pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
+  <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
   <string name="LockPatternSet_Pattern_Recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
   <string name="UnlockPattern_PatternTooShort">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
   <string name="LockPatternSet_RecordingPattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>
@@ -23,6 +25,8 @@ unlock Tella</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
   <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
 Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
   <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,
  just to be sure.</string>
@@ -39,11 +43,14 @@ Tella</string>
 done!</string>
   <string name="LockSuccess_Message_Hint">You can always change your lock option
  and further customize Tella in Settings.</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
 unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more
+ time, just to be sure.</string>
   <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current
  password to change your
  lock</string>

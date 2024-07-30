@@ -50,14 +50,15 @@
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/open_sans"
         android:gravity="start"
+        android:lineSpacingExtra="2dp"
         android:text="@string/Analytics_how_works_description"
         android:textColor="@color/wa_white"
         android:textSize="14sp"
-        android:lineSpacingExtra="2dp"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd95"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/guidelineStart05"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 

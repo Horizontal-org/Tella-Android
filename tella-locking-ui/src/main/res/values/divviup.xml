@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="divviup_count_unlocks_type" translatable="false">count</string>
+    <string name="divviup_count_installs_id" translatable="false"></string>
+    <string name="divviup_count_unlocks_id" translatable="false"></string>
+    <string name="divviup_time_spent_id" translatable="false"></string>
+    <string name="divviup_leader" translatable="false"></string>
+    <string name="divviup_helper" translatable="false"></string>
+    <integer name="divviup_count_unlocks_timePrecisionSeconds">300</integer>
+</resources>

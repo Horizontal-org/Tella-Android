@@ -24,8 +24,8 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.util.ThemeStyleManager
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsActions
-import rs.readahead.washington.mobile.views.activity.clean_insights.AnalyticsIntroActivity
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsActions
+import rs.readahead.washington.mobile.views.activity.analytics.AnalyticsIntroActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import java.util.Locale
 

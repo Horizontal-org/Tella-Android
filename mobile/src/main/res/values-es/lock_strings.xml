@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="LockSelect_Action_Cancel">Cancelar</string>
-  <string name="LockSelect_Action_Back">Volver</string>
+  <string name="LockSelect_Action_Back">Atrás</string>
   <string name="LockSelect_Action_Confirm">Siguiente</string>
   <string name="LockPatternConfirm_Action_Confirm">Confirma tu patrón</string>
   <string name="LockSelect_Action_Continue">Siguiente</string>

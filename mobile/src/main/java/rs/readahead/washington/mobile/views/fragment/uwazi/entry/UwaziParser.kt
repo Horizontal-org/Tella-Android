@@ -123,7 +123,7 @@ class UwaziParser(private val context: Context?) {
         formView.setBinaryData(UWAZI_TITLE, entityInstance.title)
         for (answer in entityInstance.metadata) {
 
-            val stringVal = if ((entityInstance.metadata[answer.key] as ArrayList).size == 1) {
+            val stringVal = if (((entityInstance.metadata[answer.key] as ArrayList).size == 1) && ((entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>).size == 1)){
                 (entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>)["value"]
             } else {
                 (entityInstance.metadata[answer.key])
