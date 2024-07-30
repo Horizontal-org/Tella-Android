@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">ဆှၢထီၣ်ဝံၤလံ</string>
   <string name="home_expl_cancel.quick.delete">စံၣ်လီၤဖဲတၢ်လီၢ်တတီၤတီၤအလိၤ လၢတၢ်ဆိကတီၢ်ကွံာ်တၢ်အဂီၢ်</string>
   <string name="recorder_app.bar">စဲးဖီၣ်တၢ်ကလုၢ်</string>
-  <string name="collect_app.bar">တၢ်ထၢဖှိၣ်တၢ်</string>
   <string name="settings.docu_field_username">ပှၤစူးကါတၢ်အမံၤ</string>
   <string name="collect.draft_meta_date.updated">တၢ်မၤဂ့ၤထီၣ်တၢ်: %1$s</string>
   <string name="settings.about_app.version">အကတြူၢ်</string>
@@ -128,13 +127,10 @@
   <string name="settings.docu_verification_action.expl">ပာ်ဂၢၢ်ပာ်ကျၢၤမၤလီၤတံၢ်ဘၣ်နတၢ်ကစီၣ်လံာ်တြံာ်တဖၣ်အံၤ ခီဖျိတၢ်ထၢဖှိၣ်ဝဲ နစဲးဖီကဟၣ်ပီးလီအတၢ်ဂ့ၢ်တၢ်ကျိၤဒီးအတၢ်လီၢ်တၢ်ကျဲအတၢ်ဂ့ၢ်တၢ်ကျိၤန့ၣ်တက့ၢ်.</string>
   <string name="collect_no.form_heading">တၢ်ထၢဖှိၣ်တၢ်ဂ့ၢ်တၢ်ကျိၤလၢအညီတဖၣ်</string>
   <string name="collect_expl_not.connected.to.server">လၢတၢ်ကဒိးန့ၢ်ဘၣ်ဝဲလံာ်ကွီၣ်ဒိဒီးတၢ်ကဆှၢထီၣ်ဝဲတၢ်ဂ့ၢ်တၢ်ကျိၤအဂီၢ်, အဆိကတၢၢ်နကဘၣ်ဘျးစဲဒီး အ့ထၢၣ်နဲးသန့လၢအဘၣ်လိာ်ဖိးဒ့တခါန့ၣ်လီၤ. သံကွၢ်နတၢ်ကရၢကရိဘၣ်ဃးအ့ထၢၣ်နဲးသန့အဂ့ၢ်အကျိၤဒီး <a href="tella_scheme://open.collect.manage.servers.activity">ကျဲၤလီၤပာ်လီၤ အ့ထၢၣ်နဲးသန့အကျိၤဖဲ </a> အံၤန့ၣ်တက့ၢ်.</string>
-  <string name="collect.draft_expl_no.forms">လံာ်ကွီၣ်ဒိအပတြီာ်တအိၣ်နီတခါ လၢတၢ်ဒုးနဲၣ်ဖျါထီၣ်အီၤအဂီၢ်န့ၣ်ဘၣ်.</string>
   <string name="collect.sent_expl_no.forms">လံာ်ကွီၣ်ဒိလၢတၢ်ဆှၢထီၣ်ဃာ်ဝဲတဖၣ် တအိၣ်နီတခါလၢ တၢ်ကဒုးနဲၣ်ဖျါထီၣ်အဂီၢ်န့ၣ်ဘၣ်.</string>
   <string name="collect.blank_expl_no.forms">လံာ်ကွီၣ်ဒိတအိၣ်နီတခါလၢတၢ်ဒုးနဲၣ်ဖျါထီၣ်အီၤအဂီၢ်န့ၣ်ဘၣ်. စံၣ်လီၤဖဲ တၢ်မၤရှဲထီၣ်က့ၤတၢ် (refresh) လံာ်ဖျၢၣ်အလိၤ  လၢတၢ်ကသမံသမိးကွၢ်ဝဲ မ့ၢ်လံာ်ကွီၣ်ဒိတဖၣ်အိၣ်ဒံးဝဲလၢ အ့ထၢၣ်နဲးသန့လၢယဘျးစဲဃာ်အီၤအံၤအပူၤန့ၣ်ဧါအဂီၢ်န့ၣ်လီၤ. </string>
   <string name="settings.camo_heading">ဃုထၢဘၣ် အမံၤဒီးအတၢ်ပနီၣ်လၢအလီၤဆီလိာ်သး</string>
   <string name="gallery_expl_empty">လံာ်တြံာ်တအိၣ်နီတခါ လၢတၢ်ကပာ်ဖျါထီၣ်အဂီၢ်န့ၣ်ဘၣ်။ ဒ်သိးနကထၢနုာ်လီၤ လံာ်တြံာ်တဖၣ်အဂီၢ် စံၣ်လီၤ + အဖျၢၣ်ဖိအံၤန့ၣ်တက့ၢ်.</string>
-  <string name="collect.help_app.bar">တၢ်ထၢဖှိၣ်ထီၣ်တၢ်မၤစၢၤ</string>
-  <string name="collect.help_expl_intro">တၢ်ထၢဖှိၣ်တၢ်(Collect) အံၤ မ့ၢ်ဝဲစုကဝဲၤတၢ်ပီးတၢ်လီတခါလၢ တၢ်သူဝဲလၢတၢ်ကထၢဖှိၣ်တၢ်ဂ့ၢ်တၢ်ကျိၤအဂီၢ် ခီဖျိတၢ်ထၢနုာ်မၤပှဲၤ လံာ်ကွီၣ်ဒိဒီးတၢ်သံကွၢ်စံးဆၢသ့ၣ်တဖၣ်ဖဲနစဲးဖီကဟၣ်ပီးလီအပူၤန့ၣ်လီၤ. </string>
   <string name="collect.blank_toast_not.connected">တၢ်တဘျးစဲဝဲဒီးအ့ထၢၣ်နဲးဒံးဘၣ်. မၤကွၢ်ကဒီးအသီတဘျီဖဲ နဘျးစဲဒီးအ့ထၢၣ်နဲးန့ၢ်ဝဲအခါန့ၣ်တက့ၢ်.</string>
   <string name="settings.gen_crash.reports_action">ဟ့ၣ်နီၤလီၤ တၢ်ဟးဂီၤအတၢ်ပာ်ဖျါတဖၣ်</string>
   <string name="settings.gen_crash.reports_action.expl">တၢ်ပာ်ဖျါထီၣ်တၢ်ဟးဂီၤအဂ့ၢ်အံၤ အမၤစၢၤပှၤလၢ ပကမၤဂ့ၤထီၣ် Tella အဂီၢ်န့ၣ်လီၤ. တၢ်သ့ၣ်တဖၣ်အံၤ အဘၣ်တၢ်ဆှၢထီၣ်အီၤတဘျီဃီ ဃုာ်ဒီးတၢ်ဂ့ၢ်တၢ်ကျိၤဒ်အမ့ၢ်ပီးလီအက့ၢ်ဂီၤအကလုာ်ဒီး Android အကလုာ်သ့ၣ်တဖၣ်န့ၣ်လီၤ.</string>
@@ -227,8 +223,6 @@
   <string name="collect_toast_form.saved.for.later.submission">တၢ်ပာ်ကီၤဃာ်လံာ်ကွီၣ်ဒိအံၤ လၢတၢ်ကဆှၢထီၣ်လၢခံလၢလာ်အဂီၢ်</string>
   <string name="collect.blank_action_unpin">ဘ့ၣ်လီၤကွံာ်အီၤလၢ တၢ်ဖီခိၣ်ကတၢၢ်အလီၢ်</string>
   <string name="collect.blank_action_pin">ဆဲးတံၢ်ပာ်ဃာ်ဆူအဖီခိၣ်ကတၢၢ်</string>
-  <string name="collect.blank_subheading_forms.on.servers">လံာ်ကွီၣ်ဒိတဖၣ် နဟံးန့ၢ်အီၤသ့ဖဲ အ့ၣ်ထၢၣ်နဲးအပှာ်ယဲၤသန့အကျိၤပူၤန့ၣ်လီၤ</string>
-  <string name="collect.blank_subheading_downloaded.forms">လံာ်ကွီၣ်ဒိတဖၣ်တၢ်ဟံးန့ၢ်ပာ်ဃာ်အီၤဝံၤဝဲလံ</string>
   <string name="verification.prompt_dialog.expl">တၢ်ပာ်ဂၢၢ်ပာ်ကျၢၤအကျိၤကျဲအံၤအအိးထီၣ်ဃာ်အသး ဘၣ်ဆၣ် GPS အံၤအပံးတံာ်ဃာ်အသးန့ၣ်လီၤ. အိးထီၣ်ဘၣ် GPS လၢ တၢ်ကမၤနီၣ်မၤဃါဝဲဒၣ် နတၢ်အုၣ်သးအိၣ်အလီၢ်အဂီၢ်န့ၣ်တက့ၢ်.</string>
   <string name="verification.prompt_action_ignore">တကနၣ်ဃုာ်</string>
   <string name="verification.prompt_action_enable.GPS">အိးထီၣ် GPS</string>
@@ -446,14 +440,6 @@
   <string name="SettingsCamo_EnterLock_Password">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်လၢ တၢ်ကဆီၣ်တလဲကွံာ် တၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အကျိၤအကျဲ အဂီၢ်န့ၣ်တက့ၢ်.</string>
   <string name="settings.gen_select_about">တၢ်အဂ့ၢ်အကျိၤဒီးတၢ်မၤစၢၤ</string>
   <string name="settings.gen_select_language">ကျိာ်</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="zero">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-    <item quantity="one">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-    <item quantity="two">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-    <item quantity="few">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-    <item quantity="many">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-    <item quantity="other">%1$d လံာ်တြံာ်အံၤအဘၣ်တၢ်ထူးသံကွံာ်အီၤလံ</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">ဟးထီၣ်</string>
   <string name="settings.camo_camera4">ခဲမရၢ်</string>
   <string name="settings.camo_camera3">ပရိၣ်ခဲမရၢ်</string>
@@ -706,35 +692,7 @@
   <string name="Uwazi_Send_Header_Title">Entity အကတၢၢ်</string>
   <string name="Uwazi_Send_Entity_Title">Entity အကတၢၢ်</string>
   <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.
-• Your data is aggregated weekly on your device before it is sent to us.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected
-😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
-
-Would you like to contribute?</string>
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="Javarosa_Upgrade_Warning_Description">ပမၤဂ့ၤမၤထီထီၣ်Tellaအလံာ်ရိဒၢးအံၤဝံၤဝဲလံန့ၣ်လီၤ. ပကဘၣ်ဟံးန့ၢ်ပာ်ဖှိၣ်ကဒါက့ၤ လံာ်ကွီၣ်ဒိတဖၣ်န့ၣ်လီၤ.</string>
   <string name="Javarosa_Upgrade_Toast">ဝံၤသးစူၤအိၣ်ခိးဘၣ်တစိာ်ဖိ ဖဲလၢပမၤဂ့ၤထီၣ်လံာ်ကွီၣ်ဒိ အဖၢမုၢ်န့ၣ်တက့ၢ်</string>
   <string name="Settings_Reports_Choose_Credentials">မ့ၢ်နအိၣ်ဒီး ပှၤစူးကါတၢ်ဖိအမံၤအသၣ် ဒီး နီၢ်ကစၢ်လံာ်ဖျၢၣ်ခူသူၣ် လံဧါ?</string>
@@ -890,7 +848,7 @@ Would you like to contribute?</string>
   <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
   <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
-  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. 
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
  This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>
@@ -934,7 +892,7 @@ Would you like to contribute?</string>
   <string name="back">BACK</string>
   <string name="encrypting">Encrypting </string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. 
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
 
  If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
 
@@ -946,33 +904,34 @@ Would you like to contribute?</string>
     <item quantity="other">%1$d entities selected</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing analytics</string>
+  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
   <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
-  <string name="Analytics_contribute_more_info2"> visit this page</string>
-  <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
+  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
+  <string name="Analytics_contribute_more_info2"> visit this page.</string>
+  <string name="Analytics_contribute_title">Would you like to contribute?</string>
   <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
   <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
   <string name="Analytics_how_works_title">How it works</string>
-  <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
+  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
 • We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Data we collect</string>
-  <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
+  <string name="Analytics_questions_title">Specific questions</string>
+  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
+  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
 💾  32 files stored in Tella
 📖  Spanish language selected
-⚡  1 server connected</string>
-  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
-  <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
+⚡  1 server connected
+😎 Calculator camouflage enabled</string>
+  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
   <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
-• Even if we wanted to, we would not able to link the analytics data to you.</string>
+  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
+• We will <b>never</b> share your data or sell it to anyone.</string>
   <string name="Analytics_banner_title">Share analytics to improve Tella</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. 
 
 Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share analytics to improve Tella</string>
+  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>

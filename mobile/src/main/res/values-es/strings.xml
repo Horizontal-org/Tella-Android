@@ -43,7 +43,6 @@
   <string name="collect.sent_tab.title">Enviado</string>
   <string name="home_expl_cancel.quick.delete">Pulsa en cualquier lugar para cancelar</string>
   <string name="recorder_app.bar">Grabadora</string>
-  <string name="collect_app.bar">Recopilar</string>
   <string name="settings.docu_field_username">Nombre de usuaria(o)</string>
   <string name="collect.draft_meta_date.updated">Actualizado: %1$s</string>
   <string name="settings.about_app.version">Versión</string>
@@ -124,13 +123,10 @@
   <string name="settings.docu_verification_action.expl">Hace tus archivos verificables al recopilar información sobre tu dispositivo y su ubicación.</string>
   <string name="collect_no.form_heading">Recopilación de datos fácil</string>
   <string name="collect_expl_not.connected.to.server">Para recibir formularios y enviar datos, primero debes conectarte a un servidor compatible. Solicita a tu organización la información del servidor y <a href="tella_scheme://open.collect.manage.servers.activity">configúralo aquí</a>.</string>
-  <string name="collect.draft_expl_no.forms">No hay borradores de formularios para mostrar.</string>
   <string name="collect.sent_expl_no.forms">No hay formularios enviados para mostrar.</string>
   <string name="collect.blank_expl_no.forms">No hay formularios para mostrar. Pulsa el botón de actualización para comprobar si hay formularios disponibles en los servidores a los que estás conectada(o).</string>
   <string name="settings.camo_heading">Selecciona un nombre y un logo diferentes</string>
   <string name="gallery_expl_empty">No hay archivos para mostrar. Toca el botón + para importar los archivos. </string>
-  <string name="collect.help_app.bar">Ayuda de Collect</string>
-  <string name="collect.help_expl_intro">Collect es una herramienta para recopilar datos al completar formularios y encuestas directamente en tu dispositivo</string>
   <string name="collect.blank_toast_not.connected">No estás conectada(o) a Internet. Vuelve a intentarlo cuando estés conectada(o)</string>
   <string name="settings.gen_crash.reports_action">Compartir informes de fallos</string>
   <string name="settings.gen_crash.reports_action.expl">Los informes de fallos nos ayudan a mejorar Tella. Se envían automáticamente e incluyen datos tales como el modelo del dispositivo y la versión de Android.</string>
@@ -219,8 +215,6 @@
   <string name="collect_toast_form.saved.for.later.submission">Formulario guardado para su posterior envío</string>
   <string name="collect.blank_action_unpin">Desanclar de la parte superior</string>
   <string name="collect.blank_action_pin">Anclar en la parte superior</string>
-  <string name="collect.blank_subheading_forms.on.servers">Formularios disponibles en el servidor</string>
-  <string name="collect.blank_subheading_downloaded.forms">Formularios descargados</string>
   <string name="verification.prompt_dialog.expl">El modo de verificación está ACTIVO pero el GPS está INACTIVO. Pon ACTIVO el GPS para registrar la posición de tu evidencia.</string>
   <string name="verification.prompt_action_ignore">Ignorar</string>
   <string name="verification.prompt_action_enable.GPS">Activar el GPS</string>
@@ -435,10 +429,6 @@ conectarse a un servidor</string>
   <string name="SettingsCamo_EnterLock_Password">Ingresa tu contraseña para cambiar tu método de camuflaje</string>
   <string name="settings.gen_select_about">Acerca de y Ayuda</string>
   <string name="settings.gen_select_language">Idioma</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">Archivo borrado</item>
-    <item quantity="other">%1$d archivos borrados</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">Salir</string>
   <string name="settings.camo_camera4">Cámara</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -658,35 +648,7 @@ Pulsa sobre una entidad para seguir trabajando en ella.</string>
   <string name="Uwazi_Send_Header_Title">Fin de la entidad</string>
   <string name="Uwazi_Send_Entity_Title">Fin de la entidad</string>
   <string name="action_yes_in">SI, CUENTEN CONMIGO!</string>
-  <string name="clean_insights.reminder_title">Estás compartiendo datos.</string>
-  <string name="clean_insights.reminder_description">Recordatorio: Actualmente estás compartiendo tus datos para mejorar Tella. Deja de compartir en cualquier momento yendo a Configuración.</string>
-  <string name="clean_insights.contribute_more_info1">Para más información sobre cómo recopilamos datos, </string>
-  <string name="clean_insights.contribute_more_info2">visita esta página.</string>
-  <string name="clean_insights.contribute_title">¿Te gustaría contribuir?</string>
-  <string name="clean_insights.contribute_description">Puedes darte de baja en cualquier momento yendo a Configuración.</string>
-  <string name="clean_insights.how_works_title">Cómo funciona</string>
-  <string name="clean_insights.how_works_description">- Recopilamos la menor cantidad de datos posible.
-- Tus datos se agregan semanalmente en tu dispositivo antes de enviárnoslos.
-- Todos los datos son anónimos y nunca pueden vincularse a ti.</string>
-  <string name="clean_insights.questions_title">Preguntas específicas</string>
-  <string name="clean_insights.questions_description">Cada estudio recopila datos sobre preguntas específicas. Aquí tienes un ejemplo:</string>
-  <string name="clean_insights.questions_examples">🔓  Abrió Tella 4 veces a la semana  
-💾  32 archivos almacenados en Tella  
-📖  Idioma español seleccionado  
-⚡  1 servidor conectado  
-😎  Camuflaje de calculadora habilitado</string>
-  <string name="clean_insights.share_data_title">Comparte tus datos para mejorar Tella</string>
-  <string name="clean_insights.share_data_description">Al unirte a este estudio, nos ayudarías a entender qué características son importantes para ti y cómo usas la aplicación.</string>
-  <string name="clean_insights.will_not_title">No lo haremos</string>
-  <string name="clean_insights.will_not_description">- No accederemos a ninguno de los archivos que almacenes en Tella o que compartas con tu organización.
-- Nunca compartiremos tus datos ni los venderemos a nadie.</string>
-  <string name="clean_insights.improve_title">Ayúdanos a mejorar Tella</string>
-  <string name="clean_insights.improve_description">Estamos realizando un estudio para entender cómo usas Tella. Puedes darte de baja en cualquier momento yendo a Configuración.
-
-¿Te gustaría contribuir?</string>
   <string name="clean_insights.signed_for_days">Te inscribiste para compartir tus datos.</string>
-  <string name="settings.gen_share_data_action">Compartir datos para mejorar Tella.</string>
-  <string name="settings.gen_share_data_action.expl">Ayúdanos a entender cómo usas Tella. Tus datos nunca serán compartidos con nadie fuera del equipo de Tella.</string>
   <string name="Javarosa_Upgrade_Warning_Description">Actualizamos algunas de las bibliotecas de Tella y necesitaríamos volver a descargar todos los formularios.</string>
   <string name="Javarosa_Upgrade_Toast">Por favor espera mientras actualizamos Forms.</string>
   <string name="Settings_Reports_Choose_Credentials">¿Tienes un nombre de usuaria(o) y clave?</string>
@@ -914,20 +876,20 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="Analytics_contribute_description">Puedes darte de baja en cualquier momento yendo a Configuración.</string>
   <string name="Analytics_contribute_info_link">Para más información sobre cómo recopilamos datos, visita esta página.</string>
   <string name="Analytics_how_works_title">Cómo funciona</string>
-  <string name="Analytics_how_works_description">- Utilizamos DivvyUp, un sistema de análisis que respeta la privacidad.
-- Recopilamos la menor cantidad de datos posible.
-- Todos los datos son anónimos y nunca pueden ser vinculados a ti.</string>
+  <string name="Analytics_how_works_description">- Utilizamos DivvyUp, un sistema de análisis que respeta la privacidad. \n
+- Recopilamos la menor cantidad de datos posible. \n
+- Todos los datos son anónimos y nunca pueden ser vinculados a ti. \n</string>
   <string name="Analytics_questions_title">Datos que recopilamos</string>
   <string name="Analytics_questions_description">Recopilamos datos para responder preguntas específicas. Aquí tienes un ejemplo:</string>
-  <string name="Analytics_questions_examples">🔓  Abrió Tella 4 veces a la semana  
-💾  32 archivos almacenados en Tella  
-📖  Idioma español seleccionado  
-⚡  1 servidor conectado</string>
+  <string name="Analytics_questions_examples">🔓  Abrió Tella 4 veces a la semana  \n
+💾  32 archivos almacenados en Tella  \n
+📖  Idioma español seleccionado  \n
+⚡  1 servidor conectado \n</string>
   <string name="Analytics_share_data_title">Comparte analíticas de uso para mejorar Tella</string>
   <string name="Analytics_share_data_description">Al compartir análíticas de uso de tu aplicación, nos ayudarás a entender qué características son importantes para ti y cómo usas la aplicación.</string>
   <string name="Analytics_respect_privacy_title">Respetamos tu privacidad</string>
-  <string name="Analytics_respect_privacy_description">- Incluso si quisiéramos, no podríamos acceder a ninguno de los archivos que almacenas en Tella o que compartes con tu organización.
-- Incluso si quisiéramos, no podríamos vincular los datos de análisis contigo.</string>
+  <string name="Analytics_respect_privacy_description">- Incluso si quisiéramos, no podríamos acceder a ninguno de los archivos que almacenas en Tella o que compartes con tu organización. \n
+- Incluso si quisiéramos, no podríamos vincular los datos de análisis contigo. \n</string>
   <string name="Analytics_banner_title">Comparte analíticas de uso para mejorar Tella</string>
   <string name="Analytics_banner_improve_description">Ayúdanos a entender cómo usas Tella. Todos los datos son anónimos y nunca podrán ser vinculados a ti.
 

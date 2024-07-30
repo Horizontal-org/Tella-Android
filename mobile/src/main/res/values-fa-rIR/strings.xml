@@ -44,7 +44,6 @@
   <string name="collect.sent_tab.title">ارسال شد</string>
   <string name="home_expl_cancel.quick.delete">برای لغو کردن، روی هر نقطه ای از صفحه ضربه بزنید</string>
   <string name="recorder_app.bar">ضبط کننده</string>
-  <string name="collect_app.bar">جمع‌آوری</string>
   <string name="settings.docu_field_username">نام کاربری</string>
   <string name="collect.draft_meta_date.updated">به‌روزر رسانی شد: %1$s</string>
   <string name="settings.about_app.version">نسخه</string>
@@ -125,13 +124,10 @@
   <string name="settings.docu_verification_action.expl">با جمع‌آوری اطلاعات مربوط به دستگاه و مکان شما، فایل‌های رسانه ای شما را قابل تأیید می‌کند.</string>
   <string name="collect_no.form_heading">جمع‌آوری آسان داده</string>
   <string name="collect_expl_not.connected.to.server">برای دریافت فرم‌ها و ارسال داده‌ها، باید ابتدا به سرور سازگار متصل شوید. اطلاعات سرور را از سازمان خود بخواهید و <a href="tella_scheme://open.collect.manage.servers.activity">اینجا یک سرور راه‌اندازی کنید</a>.</string>
-  <string name="collect.draft_expl_no.forms">هیچ پیش‌نویس فرمی برای نمایش وجود ندارد.</string>
   <string name="collect.sent_expl_no.forms">هیچ فرم ارسال‌شده ای برای نمایش وجود ندارد.</string>
   <string name="collect.blank_expl_no.forms">فرمی برای نمایش وجود ندارد. برای این که بررسی کنید آیا فرم‌ها در سروری که به آن متصل شده‌اید در دسترس هستند یا خیر، دکمه «تازه سازی» (Refresh) را بزنید.</string>
   <string name="settings.camo_heading">نام و نماد دیگری انتخاب کنید</string>
   <string name="gallery_expl_empty">فایلی برای نمایش وجود ندارد. برای وارد کردن فایل، دکمه + را بزنید.</string>
-  <string name="collect.help_app.bar">راهنمای Collect</string>
-  <string name="collect.help_expl_intro">Collect ابزاری برای جمع‌آوری داده از طریق ارسال مستقیم فایل و پرسش‌نامه بر روی دستگاه شماست</string>
   <string name="collect.blank_toast_not.connected">شما به اینترنت متصل نیستید. پس از ایجاد برقراری اتصال، دوباره امتحان کنید</string>
   <string name="settings.gen_crash.reports_action">به اشتراک‌گذاری گزارش‌های خرابی</string>
   <string name="settings.gen_crash.reports_action.expl">گزارش‌های خرابی به بهبود عملکرد Tella کمک می‌کنند. این گزارش‌ها به‌طور خودکار ارسال می‌شوند و شامل داده‌هایی مانند مدل دستگاه و نسخه اندروید است.</string>
@@ -220,8 +216,6 @@
   <string name="collect_toast_form.saved.for.later.submission">فرم برای ارسال در آینده ذخیره شد</string>
   <string name="collect.blank_action_unpin">جدا کردن از قسمت بالا</string>
   <string name="collect.blank_action_pin">سنجاق کردن به قسمت بالا</string>
-  <string name="collect.blank_subheading_forms.on.servers">فرم‌های موجود در سرور</string>
-  <string name="collect.blank_subheading_downloaded.forms">فرم‌های دانلودشده</string>
   <string name="verification.prompt_dialog.expl">حالت راستی‌آزمایی «فعال» ولی GPS «غیرفعال» است. برای ثبت کردن موقعیت دستگاه خود، GPS را فعال کنید.</string>
   <string name="verification.prompt_action_ignore">نادیده بگیر</string>
   <string name="verification.prompt_action_enable.GPS">GPS را فعال کنید</string>
@@ -435,10 +429,6 @@
   <string name="SettingsCamo_EnterLock_Password">برای تغییر دادن روش استتار، گذرواژه را وارد کنید</string>
   <string name="settings.gen_select_about">درباره و راهنما</string>
   <string name="settings.gen_select_language">زبان</string>
-  <plurals name="gallery_toast_files.deleted">
-    <item quantity="one">فایل حذف شد</item>
-    <item quantity="other">%1$d  فایل ها حذف شدند</item>
-  </plurals>
   <string name="home_action.desc_quick.exit">خروج</string>
   <string name="settings.camo_camera4">دوربین</string>
   <string name="settings.camo_camera3">CameraPro</string>
@@ -659,35 +649,7 @@
   <string name="Uwazi_Send_Header_Title">پایان مدخل</string>
   <string name="Uwazi_Send_Entity_Title">پایان مدخل</string>
   <string name="action_yes_in">YES, I’M IN!</string>
-  <string name="clean_insights.reminder_title">You are sharing data</string>
-  <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.
-• Your data is aggregated weekly on your device before it is sent to us.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected
-😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will never share your data or sell it to anyone</string>
-  <string name="clean_insights.improve_title">Help us improve Tella</string>
-  <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
-
-Would you like to contribute?</string>
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="settings.gen_share_data_action">Share data to improve Tella</string>
-  <string name="settings.gen_share_data_action.expl">Help us understand how you use Tella. Your data will never be shared with anyone outside of the Tella team.</string>
   <string name="Javarosa_Upgrade_Warning_Description">ما برخی از کتابخانه‌های Tella را ارتقا داده‌ایم و لازم است همه فرم‌ها را دوباره دانلود کنیم.</string>
   <string name="Javarosa_Upgrade_Toast">لطفا صبر کنید تا فرم‌ها را به‌روزرسانی کنیم.</string>
   <string name="Settings_Reports_Choose_Credentials">آیا نام کاربری و گذرواژه دارید؟</string>
@@ -854,7 +816,7 @@ Would you like to contribute?</string>
   <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
   <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
-  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. 
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
  This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>
@@ -898,7 +860,7 @@ Would you like to contribute?</string>
   <string name="back">BACK</string>
   <string name="encrypting">Encrypting </string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. 
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
 
  If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
 
@@ -910,33 +872,34 @@ Would you like to contribute?</string>
     <item quantity="other">%1$d entities selected</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing analytics</string>
+  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
   <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
-  <string name="Analytics_contribute_more_info2"> visit this page</string>
-  <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
+  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
+  <string name="Analytics_contribute_more_info2"> visit this page.</string>
+  <string name="Analytics_contribute_title">Would you like to contribute?</string>
   <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
   <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
   <string name="Analytics_how_works_title">How it works</string>
-  <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
+  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
 • We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Data we collect</string>
-  <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
+  <string name="Analytics_questions_title">Specific questions</string>
+  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
+  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
 💾  32 files stored in Tella
 📖  Spanish language selected
-⚡  1 server connected</string>
-  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
-  <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
+⚡  1 server connected
+😎 Calculator camouflage enabled</string>
+  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
   <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
-• Even if we wanted to, we would not able to link the analytics data to you.</string>
+  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
+• We will <b>never</b> share your data or sell it to anyone.</string>
   <string name="Analytics_banner_title">Share analytics to improve Tella</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. 
 
 Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share analytics to improve Tella</string>
+  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
