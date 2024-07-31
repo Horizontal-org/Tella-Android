@@ -13,11 +13,7 @@ import java.util.concurrent.Executors
 object DivviupUtils {
 
     fun runUnlockEvent(context: Context) {
-        if (!CommonPreferences.hasAcceptedAnalytics()) return
-        if (context.getString(R.string.divviup_count_unlocks_id).isEmpty() || context.getString(
-                R.string.divviup_leader
-            ).isEmpty() || context.getString(R.string.divviup_helper).isEmpty()
-        ) return
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
         val lastTimeSpent = Preferences.loadLong(
             context,
             Preferences.CLEAR_KEY_MS,
@@ -35,7 +31,9 @@ object DivviupUtils {
                     URI.create(context.getString(R.string.divviup_leader))
                 val helperEndpoint: URI =
                     URI.create(context.getString(R.string.divviup_helper))
-                val timePrecisionSeconds: Long = context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds).toLong()
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
                 val client = Client.createPrio3Count(
                     context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
                 )
@@ -53,7 +51,7 @@ object DivviupUtils {
      **/
     fun runInstallEvent(context: Context) {
         // If sending analytics is not accepted or install metric is sent, just return
-        if (!CommonPreferences.hasAcceptedAnalytics() || CommonPreferences.isInstallMetricSent()) return
+        if (!CommonPreferences.hasAcceptedAnalytics() || CommonPreferences.isInstallMetricSent() || isDebugBuild(context)) return
         Executors.newSingleThreadExecutor().execute {
             try {
                 val taskId = TaskId.parse(context.getString(R.string.divviup_count_installs_id))
@@ -100,6 +98,117 @@ object DivviupUtils {
                 Timber.e(e, "Divviup sending runTimeSpentEvent failed")
             }
         }
+    }
+
+    /**
+     * This task is called when photo is taken
+     * using Camera
+     **/
+    fun runPhotoTakenEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_photos_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runPhotoTakenEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runPhotoTakenEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when video is taken
+     * using Camera
+     **/
+    fun runVideoTakenEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_videos_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runVideoTakenEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runVideoTakenEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when audio is taken
+     * using Audio Recorder
+     **/
+    fun runAudioTakenEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_audios_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runAudioTakenEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runAudioTakenEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when file is imported
+     **/
+    fun runFileImportEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_imports_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runFileImportEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runFileImportEvent failed")
+            }
+        }
+    }
+
+    fun isDebugBuild(context: Context): Boolean {
+        return context.getString(R.string.divviup_leader).isEmpty() || context.getString(R.string.divviup_helper).isEmpty()
     }
 
 }
