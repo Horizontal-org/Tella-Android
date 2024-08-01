@@ -207,6 +207,136 @@ object DivviupUtils {
         }
     }
 
+    /**
+     * This task is called when quick delete is triggered
+     **/
+    fun runQuickDeleteEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_quick_delete_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runQuickDeleteEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runQuickDeleteEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when camouflage is enabled
+     **/
+    fun runCamouflageEnabledEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_camouflage_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runCamouflageEnabledEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runCamouflageEnabledEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when ODK form is sent
+     **/
+    fun runODKSentEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_odk_sent_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runODKSentEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runODKSentEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when Tella Report is sent
+     **/
+    fun runReportSentEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_report_sent_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runReportSentEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runReportSentEvent failed")
+            }
+        }
+    }
+
+    /**
+     * This task is called when Uwazi form is sent
+     **/
+    fun runUwaziSentEvent(context: Context) {
+        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val taskId = TaskId.parse(context.getString(R.string.divviup_count_uwazi_sent_id))
+                val leaderEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_leader))
+                val helperEndpoint: URI =
+                    URI.create(context.getString(R.string.divviup_helper))
+                val timePrecisionSeconds: Long =
+                    context.resources.getInteger(R.integer.divviup_count_unlocks_timePrecisionSeconds)
+                        .toLong()
+                val client = Client.createPrio3Count(
+                    context, leaderEndpoint, helperEndpoint, taskId, timePrecisionSeconds
+                )
+                client.sendMeasurement(true)
+                Timber.d("Divviup runUwaziSentEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runUwaziSentEvent failed")
+            }
+        }
+    }
+
     fun isDebugBuild(context: Context): Boolean {
         return context.getString(R.string.divviup_leader).isEmpty() || context.getString(R.string.divviup_helper).isEmpty()
     }

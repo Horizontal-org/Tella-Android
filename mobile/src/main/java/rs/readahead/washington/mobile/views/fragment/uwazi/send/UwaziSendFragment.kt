@@ -1,20 +1,17 @@
 package rs.readahead.washington.mobile.views.fragment.uwazi.send
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.UwaziEntryFragmentBinding
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.BUNDLE_IS_FROM_UWAZI_ENTRY
 import rs.readahead.washington.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
@@ -83,6 +80,7 @@ class UwaziSendFragment :
             progress.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMITTED -> {
+                        context?.let { DivviupUtils.runUwaziSentEvent(it) }
                         handleBackButton()
                     }
 

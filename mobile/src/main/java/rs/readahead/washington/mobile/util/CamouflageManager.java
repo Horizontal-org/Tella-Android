@@ -16,6 +16,8 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +113,7 @@ public class CamouflageManager {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
+        DivviupUtils.INSTANCE.runCamouflageEnabledEvent(context);
         return true;
     }
 

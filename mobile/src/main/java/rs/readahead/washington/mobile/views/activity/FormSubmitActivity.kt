@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import rs.readahead.washington.mobile.R
@@ -150,6 +151,7 @@ class FormSubmitActivity : BaseLockActivity() {
             }
 
             formPartResubmitSuccess.observe(this@FormSubmitActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                DivviupUtils.runODKSentEvent(getContext())
                 second?.let { formPartResubmitSuccess(first, second) }
             }
 

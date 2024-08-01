@@ -12,7 +12,6 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -526,6 +525,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun executePanicMode() {
         try {
+            context?.let { DivviupUtils.runQuickDeleteEvent(it) }
             homeVaultPresenter.executePanicMode()
         } catch (ignored: Throwable) {
             panicActivated = true
