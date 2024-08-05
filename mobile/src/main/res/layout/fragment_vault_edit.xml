@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/topbar" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -71,8 +71,30 @@
                 android:contentDescription="@string/action_rotate"
                 android:focusable="true"
                 android:src="@drawable/rotate_image"
+                android:layout_alignParentStart="true"
                 android:visibility="visible" />
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/flip_vertically"
+                style="@style/CameraTopImageStyle"
+                android:clickable="true"
+                android:contentDescription="@string/action_rotate"
+                android:focusable="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/flip_vertically_24"
+                android:gravity="center_horizontal"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/flip_horizontally"
+                style="@style/CameraTopImageStyle"
+                android:layout_alignParentEnd="true"
+                android:clickable="true"
+                android:contentDescription="@string/action_rotate"
+                android:focusable="true"
+                android:src="@drawable/flip_horizontally"
+                android:visibility="visible" />
+        </RelativeLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
