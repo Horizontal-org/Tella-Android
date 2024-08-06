@@ -101,7 +101,6 @@ class VaultEditFragment :
         binding.cropImageView.setOnSetCropOverlayReleasedListener {
             showAcceptButton()
         }
-        binding.cropImageView.isAutoZoomEnabled = true
         binding.cropImageView.maxZoom = 2
     }
 
@@ -204,7 +203,6 @@ class VaultEditFragment :
         if (isNavigationCall) {
             back()
         } else {
-            @Suppress("DEPRECATION")
             activity?.onBackPressed()
         }
     }

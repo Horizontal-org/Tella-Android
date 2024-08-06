@@ -75,24 +75,24 @@
                 android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/flip_vertically"
+                android:id="@+id/flip_horizontally"
                 style="@style/CameraTopImageStyle"
                 android:clickable="true"
                 android:contentDescription="@string/action_rotate"
                 android:focusable="true"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/flip_vertically_24"
+                android:src="@drawable/flip_horizontally"
                 android:gravity="center_horizontal"
                 android:visibility="visible" />
 
             <ImageView
-                android:id="@+id/flip_horizontally"
+                android:id="@+id/flip_vertically"
                 style="@style/CameraTopImageStyle"
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
                 android:contentDescription="@string/action_rotate"
                 android:focusable="true"
-                android:src="@drawable/flip_horizontally"
+                android:src="@drawable/flip_vertically"
                 android:visibility="visible" />
         </RelativeLayout>
 
