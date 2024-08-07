@@ -664,7 +664,7 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
 📖  Spanish language selected
 ⚡  1 server connected
 😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
+  <string name="clean_insights.share_data_title">Share analytics to improve Tella</string>
   <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
   <string name="clean_insights.will_not_title">We will not</string>
   <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.

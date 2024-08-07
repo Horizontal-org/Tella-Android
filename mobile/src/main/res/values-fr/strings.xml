@@ -887,7 +887,7 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
 📖  Spanish language selected
 ⚡  1 server connected
 😎 Calculator camouflage enabled</string>
-  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
   <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
   <string name="Analytics_respect_privacy_title">We respect your privacy</string>
   <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.

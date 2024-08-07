@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.utils.MediaFile
@@ -384,6 +385,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
+            DivviupUtils.runPhotoTakenEvent(context)
         } else {
             gridButton.visibility = if (videoRecording) View.VISIBLE else View.GONE
             switchButton.visibility = if (videoRecording) View.VISIBLE else View.GONE
@@ -395,6 +397,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     gridButton.visibility = View.VISIBLE
                     switchButton.visibility = View.VISIBLE
                     resolutionButton.visibility = View.VISIBLE
+                    DivviupUtils.runVideoTakenEvent(context)
                 }
             } else {
                 setVideoQuality()

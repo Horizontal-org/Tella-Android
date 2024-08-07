@@ -15,6 +15,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
@@ -204,6 +205,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             }
 
             formPartSubmitSuccess.observe(this@CollectFormEntryActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                DivviupUtils.runODKSentEvent(context)
                 second?.let { formPartSubmitSuccess(first, second) }
             }
 

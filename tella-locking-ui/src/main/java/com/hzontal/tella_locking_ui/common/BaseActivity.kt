@@ -22,7 +22,9 @@ open class BaseActivity : AppCompatActivity() {
     protected val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
     protected val returnActivity by lazy { intent.getIntExtra(RETURN_ACTIVITY, 0) }
     private var isConfirmSettingsUpdate: Boolean = false
-    protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
+    protected val config: UnlockConfig by lazy {
+        TellaKeysUI.getUnlockRegistry().getActiveConfig(this)
+    }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
 
 
@@ -76,6 +78,7 @@ open class BaseActivity : AppCompatActivity() {
             }
         }
         sendUnlockMeasure(context = baseContext)
+        maybeSendInstallMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -121,5 +124,9 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun sendUnlockMeasure(context: Context) {
         DivviupUtils.runUnlockEvent(context)
+    }
+
+    private fun maybeSendInstallMeasure(context: Context) {
+        DivviupUtils.runInstallEvent(context)
     }
 }

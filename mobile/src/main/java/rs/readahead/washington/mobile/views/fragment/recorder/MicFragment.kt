@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
@@ -285,6 +286,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun onAddSuccess(vaultFile: VaultFile) {
+        context?.let { DivviupUtils.runAudioTakenEvent(it) }
         if (!isCollect) {
             DialogUtils.showBottomMessage(
                 metadataActivity,
