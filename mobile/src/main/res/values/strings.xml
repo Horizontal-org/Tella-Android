@@ -896,7 +896,7 @@ they are uploaded to this project as a report.</string>
 📖  Spanish language selected
 ⚡  1 server connected
 😎 Calculator camouflage enabled</string>
-  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+  <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
   <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
   <string name="Analytics_respect_privacy_title">We respect your privacy</string>
   <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
@@ -905,7 +905,7 @@ they are uploaded to this project as a report.</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. 
 
 Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
+  <string name="Settings_Analytics_switch_title">Share analytics to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
