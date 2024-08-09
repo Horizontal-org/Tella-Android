@@ -83,6 +83,9 @@ class TwoFactorAuthenticationFragment : BaseFragment() {
                 }
             }
         }
+        binding.backBtn.setOnClickListener {
+            baseActivity.onBackPressed()
+        }
     }
 
     private fun initObservers() {

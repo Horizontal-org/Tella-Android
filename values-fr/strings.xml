@@ -659,26 +659,26 @@
   <string name="action_yes_in">YES, I’M IN!</string>
   <string name="clean_insights.reminder_title">You are sharing data</string>
   <string name="clean_insights.reminder_description">Reminder: You are currently sharing your data to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="clean_insights.contribute_more_info1">For more information on how we collect data,</string>
-  <string name="clean_insights.contribute_more_info2">visit this page.</string>
-  <string name="clean_insights.contribute_title">Would you like to contribute?</string>
-  <string name="clean_insights.contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="clean_insights.how_works_title">How it works</string>
-  <string name="clean_insights.how_works_description">• We collect as little data as possible.
-• Your data is aggregated weekly on your device before it is sent to us.
+    <string name="Analytics_contribute_more_info">For more information on how we collect data, </string>
+    <string name="Analytics_contribute_more_info2">visit this page</string>
+    <string name="Analytics_contribute_title">Would you like to share analytics with the Tella team?</string>
+    <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
+    <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+    <string name="Analytics_how_works_title">How it works</string>
+    <string name="Analytics_how_works_description">• We use DivvyUp, a privacy-respecting system for analytics.
+• We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
-  <string name="clean_insights.questions_title">Specific questions</string>
-  <string name="clean_insights.questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="clean_insights.questions_examples">🔓  Opened Tella 4 times a week
+    <string name="Analytics_questions_title">Data we collect</string>
+    <string name="Analytics_questions_description">We collect data to answer specific questions. Here’s a sample:</string>
+    <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week
 💾  32 files stored in Tella
 📖  Spanish language selected
-⚡  1 server connected
-😎  Calculator camouflage enabled</string>
-  <string name="clean_insights.share_data_title">Share your data to improve Tella</string>
-  <string name="clean_insights.share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="clean_insights.will_not_title">We will not</string>
-  <string name="clean_insights.will_not_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will never share your data or sell it to anyone</string>
+⚡  1 server connected</string>
+    <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
+    <string name="Analytics_share_data_description">By sharing your app’s analytics, you will help us understand which features are important to you and how you use the app.</string>
+    <string name="Analytics_respect_privacy_title">We respect your privacy</string>
+    <string name="Analytics_respect_privacy_description">• Even if we wanted to, we would not able to access any of the files that you store in Tella or share with your organization.
+• Even if we wanted to, we would not able to link the analytics data to you.</string>
   <string name="clean_insights.improve_title">Help us improve Tella</string>
   <string name="clean_insights.improve_description">We’re doing a study to understand how you use Tella. You can opt-out anytime by going to Settings.
 
@@ -843,27 +843,63 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
   <string name="exceeded_max_attempts">Vous avez dépassé le nombre maximum de
  tentatives de connexion incorrectes. Toutes vos données Tella
  ont été supprimées.</string>
-  <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
-  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
-  <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
-  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
-  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
-  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
-  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
-  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. 
- This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
-  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
-  <string name="save_draft">Save draft?</string>
-  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
-  <string name="feedback">Feedback</string>
-  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
-</string>
-  <string name="feedback_title">Feedback</string>
-  <string name="feedback_sent_msg">Your feedback has been sent</string>
-  <string name="share_feedback_action">share feedback</string>
-  <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
-  <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
-  <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
+  <string name="Settings_General_TextJustificationTitle">Justification du texte</string>
+  <string name="Settings_General_TextJustificationExpl">Alignez les sections de texte plus longues sur les marges gauche et droite pour un aspect plus soigné. Si cette option est désactivée, le texte sera aligné à gauche ou à droite pour augmenter l’accessibilité.</string>
+  <string name="Settings_General_TextSpacingTitle">Augmenter l\'espacement du texte</string>
+  <string name="Settings_General_TextSpacingExpl">Augmenter l’interligne à 150 % et l’espacement des paragraphes à 225 %.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella va maintenant s’actualiser</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">Vous reviendrez à l’écran précédent dans quelques secondes.</string>
+  <string name="settings.feedback_enable_sharing">Activer le partage du retour d\'information</string>
+  <string name="settings.feedback_warning">AVERTISSEMENT : l\'utilisation de cette fonctionnalité peut révéler à quelqu\'un qui observe le réseau que vous utilisez Tella. Ne l\'utilisez que si vous ne craignez pas ce risque.</string>
+  <string name="feedback_msg">Dites-nous si vous rencontrez un bogue, si vous désirez avoir une nouvelle fonctionnalité ou si vous avez d\'autres commentaires à formuler. 
+ Ces commentaires sont anonymes. Merci donc d\'indiquer vos coordonnées si vous souhaitez obtenir une réponse de notre part.</string>
+  <string name="thanks_for_your_feedback">Merci pour votre retour!</string>
+  <string name="save_draft">Enregistrer le brouillon?</string>
+  <string name="description_submit_feedback">Vous pouvez revenir à tout moment pour soumettre vos commentaires.</string>
+  <string name="feedback">Retour d\'information</string>
+  <string name="not_internet_msg">Vous n\'êtes pas connecté à l\'internet. Vos commentaires seront envoyés automatiquement lorsque vous serez connecté.</string>
+  <string name="feedback_title">Retour d\'information</string>
+  <string name="feedback_sent_msg">Votre commentaire a été envoyé</string>
+  <string name="share_feedback_action">partager des commentaires</string>
+  <string name="Forms_NoOutboxForms">Votre boîte d\'envoi est actuellement vide. Les formulaires
+ qui sont prêtes à être envoyées apparaîtront ici.</string>
+  <string name="Forms_NoDraftForms">Vous n\'avez aucun brouillon de formulaire.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Formulaires disponibles sur le serveur</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">Il s\'agit de formulaires vides que vous pouvez remplir.</string>
+  <string name="background_activities">Background activities</string>
+  <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
+  <string name="file_encryption_in_progress">File encryption in progress</string>
+  <string name="no_background_activity">There are currently no ongoing activities in the background.</string>
+  <string name="encryption_in_progress">File encryption in progress</string>
+  <string name="encryption_exit_prompt">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
+  <string name="exit_discard_files">Exit and discard files</string>
+  <string name="exit_and_discard_files">Exit and discard files</string>
+  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
+  <string name="Home_BottomNav_Resources">Resources</string>
+  <string name="Resources_DownloadedTitle">Downloaded</string>
+  <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
+  <string name="Resources_AvailableTitle">Available for download</string>
+  <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
+  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
+  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
+  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
+  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
+  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
+  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
+  <string name="Resources_Exit">EXIT</string>
+  <string name="Error_DownloadFailed">Error: Download failed</string>
+  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
+  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
+  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
+  <string name="back">BACK</string>
+  <string name="encrypting">Encrypting </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version. 
+
+ If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
+
+ Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
+  <string name="Learn_More">LEARN MORE</string>
+  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
 </resources>

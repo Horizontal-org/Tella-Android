@@ -107,7 +107,9 @@ object VaultActionsHelper {
                     getString(R.string.action_cancel),
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
-                            exportMediaFile()
+                            if (isConfirmed) {
+                                exportMediaFile()
+                            }
                         }
                     }
                 )
@@ -152,7 +154,9 @@ object VaultActionsHelper {
                     getString(R.string.action_cancel),
                     object : BottomSheetUtils.ActionConfirmed {
                         override fun accept(isConfirmed: Boolean) {
-                            vaultFile.let { sharedViewModel.confirmDeleteMediaFile(it) }
+                            if (isConfirmed) {
+                                vaultFile.let { sharedViewModel.confirmDeleteMediaFile(it) }
+                            }
                         }
                     }
                 )
@@ -262,7 +266,7 @@ object VaultActionsHelper {
     }
 
     // File search logic here
-     fun BaseActivity.performFileSearch(
+    fun BaseActivity.performFileSearch(
         vaultFile: VaultFile?,
         withMetadata: Boolean,
         viewModel: SharedMediaFileViewModel,
@@ -293,8 +297,6 @@ object VaultActionsHelper {
             requestStoragePermissions(requestPermissionLauncher)
         }
     }
-
-
 
 
 }

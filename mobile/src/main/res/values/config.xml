@@ -6,6 +6,7 @@
     <string name="config_contact_url" translatable="false">mailto:contact@tella-app.org</string>
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy</string>
     <string name="config_feedback_url" translatable="false">https://tella-app.org/features#feedback</string>
+    <string name="config_analytics_learn_url" translatable="false">https://tella-app.org/security-and-privacy#analytics?</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
         <item>be</item>
@@ -22,6 +23,7 @@
         <item>pt</item>
         <item>ru</item>
         <item>ta</item>
+        <item>vi</item>
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>

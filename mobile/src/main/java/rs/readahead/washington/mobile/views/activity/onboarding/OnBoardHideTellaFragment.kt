@@ -19,7 +19,6 @@ import rs.readahead.washington.mobile.views.settings.SettingsCalculatorActivity
 class OnBoardHideTellaFragment : BaseFragment() {
 
     private lateinit var backBtn: View
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

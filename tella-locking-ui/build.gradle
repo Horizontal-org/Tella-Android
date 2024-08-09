@@ -71,5 +71,6 @@ dependencies {
 
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
+    implementation "org.divviup.android:divviup-android:$versions.divviup"
 
 }

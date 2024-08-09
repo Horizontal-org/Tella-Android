@@ -11,12 +11,17 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.tooltip.Tooltip
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.util.NavigationManager
 import rs.readahead.washington.mobile.util.setupForAccessibility
+import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 import timber.log.Timber
 
 abstract class BaseFragment : Fragment() {
 
     protected lateinit var baseActivity: BaseActivity
+    private val navigationManager by lazy { NavigationManager(navController,bundle) }
+    protected val bundle by lazy { Bundle() }
+    private val navController by lazy { NavControllerProvider(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +43,7 @@ abstract class BaseFragment : Fragment() {
     ): View? {
         Timber.d("***** ${this.javaClass.name} onCreateView")
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
-        } else {
-            view?.findViewById<View>(R.id.appbar)?.bringToFront()
-        }
+        view?.findViewById<View>(R.id.appbar)?.outlineProvider = null
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -80,6 +81,10 @@ abstract class BaseFragment : Fragment() {
 
     open fun back() {
         nav().navigateUp()
+    }
+
+    protected open fun navManager(): NavigationManager {
+        return NavigationManager(navController, bundle)
     }
 
     abstract fun initView(view: View)

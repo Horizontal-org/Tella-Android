@@ -73,6 +73,7 @@ buildscript {
     versions.googlePlayServices = "17.0.0"
     versions.pdf_viewer = "2.8.2"
     versions.nextcloud = "2.19.0"
+    versions.divviup = "0.2.0"
 
     repositories {
         mavenCentral()

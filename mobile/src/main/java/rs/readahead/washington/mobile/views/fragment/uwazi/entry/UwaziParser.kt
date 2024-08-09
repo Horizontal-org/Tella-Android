@@ -6,12 +6,16 @@ import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.VaultFile
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.uwazi.UwaziConstants
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
+import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
+import java.util.Objects
+import java.util.stream.Collectors
 
 class UwaziParser(private val context: Context?) {
 
@@ -64,10 +68,18 @@ class UwaziParser(private val context: Context?) {
         return template
     }
 
+    fun setTemplate(collectTemplate: CollectTemplate) {
+        template = collectTemplate
+    }
+
     fun parseInstance(instance: String): UwaziFormView {
         entityInstance = Gson().fromJson(instance, UwaziEntityInstance::class.java)
         template = entityInstance.collectTemplate
         return prepareFormView()
+    }
+
+    fun parseTemplateForRelationShipEntities(templateString: String) {
+        template = Gson().fromJson(templateString, CollectTemplate::class.java)
     }
 
     fun parseTemplate(templateString: String): UwaziFormView {
@@ -111,8 +123,8 @@ class UwaziParser(private val context: Context?) {
         formView.setBinaryData(UWAZI_TITLE, entityInstance.title)
         for (answer in entityInstance.metadata) {
 
-            val stringVal = if ((entityInstance.metadata[answer.key] as ArrayList).size == 1) {
-                (entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<String, Any>)["value"]
+            val stringVal = if (((entityInstance.metadata[answer.key] as ArrayList).size == 1) && ((entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>).size == 1)){
+                (entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>)["value"]
             } else {
                 (entityInstance.metadata[answer.key])
             }
@@ -177,8 +189,9 @@ class UwaziParser(private val context: Context?) {
                 } else {
                     when (answer.value) {
                         is List<*> -> {
-                            hashmap[answer.key] = (answer.value) as List<UwaziValue>
+                            hashmap[answer.key] = listOf((answer.value) as List<*>)
                         }
+
                         is UwaziValueAttachment -> {
                             hashmap[answer.key] = arrayListOf(
                                 UwaziValueAttachment(
@@ -202,6 +215,23 @@ class UwaziParser(private val context: Context?) {
                 widgetMediaFiles.add(answer)
             }
         }
+        template?.entityRow?.properties?.filter { property -> property.type == UWAZI_DATATYPE_RELATIONSHIP }
+            ?.forEach { property ->
+                val selectedEntities: ArrayList<Any> = ArrayList()
+                uwaziFormView.entities.forEach { selectedEntity ->
+                    property.entities?.filter { it.id == selectedEntity.value }?.forEach {
+                        selectedEntities.add(UwaziRelationShipEntity(it.id, it.label))
+                    }
+                }
+                property.selectedEntities = selectedEntities as List<UwaziRelationShipEntity>
+                answers.filter { answer -> answer.key == property.name }.forEach { answer ->
+                    hashmap[answer.key] = selectedEntities as List<UwaziRelationShipEntity>
+                }
+            }
+        val entities = ArrayList<UwaziRelationShipEntity>()
+        uwaziFormView.entities.filterNotNull().let {
+            entities.addAll(it)
+        }
         entityInstance.metadata = hashmap
         entityInstance.widgetMediaFiles = widgetMediaFiles
         entityInstance.collectTemplate = template
@@ -209,13 +239,12 @@ class UwaziParser(private val context: Context?) {
         return true
     }
 
-    fun prepareFormView(): UwaziFormView {
+    private fun prepareFormView(): UwaziFormView {
         entryPrompts.clear()
 
         //TODO Handle this special common props smarter
         entryPrompts.add(uwaziPdfsPrompt)
         entryPrompts.add(uwaziFilesPrompt)
-
         if (template?.entityRow?.commonProperties?.get(0)?.translatedLabel?.length!! > 0) {
             uwaziTitlePrompt.question =
                 template!!.entityRow.commonProperties.get(0).translatedLabel
@@ -225,7 +254,8 @@ class UwaziParser(private val context: Context?) {
         for (property in template!!.entityRow.properties) {
             val entryPrompt = UwaziEntryPrompt(
                 property.name,
-                property.id,
+                property.selectedEntities,
+                property._id,
                 property.type,
                 property.translatedLabel,
                 property.required,
@@ -244,12 +274,13 @@ class UwaziParser(private val context: Context?) {
 
         return UwaziFormView(context, arr)
     }
-
     fun getGsonTemplate(): String {
         return Gson().toJson(entityInstance)
     }
-
-    fun setInstanceStatus(entityStatus: EntityStatus){
+    fun getToGsonTemplate(): String {
+        return Gson().toJson(template)
+    }
+    fun setInstanceStatus(entityStatus: EntityStatus) {
         entityInstance.status = entityStatus
     }
 }

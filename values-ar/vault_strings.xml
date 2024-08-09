@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">تاريخ الإنشاء ووقته</string>
   <string name="Vault_FileResolution">الدقة</string>
   <string name="Vault_FileLength">الطول</string>
-  <string name="Vault_FilePath">File path</string>
+  <string name="Vault_FilePath">مسار الملف</string>
   <string name="Vault_RenameFile_SheetTitle">إعادة تسمية الملف</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="zero">هل ترغب في حذف الملف؟</item>
@@ -66,14 +66,18 @@
     <item quantity="other">من العناصر</item>
   </plurals>
   <string name="Vault_No_Files_Title">ليس لديك أي ملفات بعد في Tella.</string>
-  <string name="Vault_FavoriteTemplates_Title">Favorite templates</string>
+  <string name="Vault_FavoriteTemplates_Title">القوالب المفضلة</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">File successfully moved</item>
-    <item quantity="other">Files successfully moved</item>
+    <item quantity="zero">تم نقل صفر ملف بنجاح</item>
+    <item quantity="one">تم نقل ملف بنجاح</item>
+    <item quantity="two">تم نقل ملفين بنجاح</item>
+    <item quantity="few">تم نقل 3 ملفات بنجاح</item>
+    <item quantity="many">تم نقل 20 ملف بنجاح</item>
+    <item quantity="other">تم نقل الملفات بنجاح</item>
   </plurals>
-  <string name="Vault_Confirm_delete_Description">Some of the selected files are currently used in your connections. Deleting may impact forms and reports that haven’t been sent yet.</string>
+  <string name="Vault_Confirm_delete_Description">بعض الملفات المختارة مستخدمة حالياً في اتصالاتك. قد يؤثر حذفها على النماذج والتقارير التي لم يتم إرسالها بعد.</string>
   <string name="Vault_Warning_Title" translatable="false">Warning</string>
-  <string name="Vault_Delete_anyway">Delete anyway</string>
+  <string name="Vault_Delete_anyway">الحذف على أي حال</string>
   <string name="Vault_Keep_Original">احتفظ بالأصلي</string>
   <string name="Vault_Delete_Original">احذف الأصلي</string>
   <string name="Vault_deleteFileImported_SheetDesc">بعد استيراد الملف إلى Tella، هل تريد الاحتفاظ بالملف الأصلي على جهازك أم حذفه؟

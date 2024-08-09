@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.hzontal.tella_locking_ui.*
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
@@ -23,6 +24,7 @@ open class BaseActivity : AppCompatActivity() {
     private var isConfirmSettingsUpdate: Boolean = false
     protected val config: UnlockConfig by lazy { TellaKeysUI.getUnlockRegistry().getActiveConfig(this) }
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
@@ -62,15 +64,18 @@ open class BaseActivity : AppCompatActivity() {
                 intent.putExtra(IS_FROM_SETTINGS, true)
                 startActivity(intent)
             }
+
             ReturnActivity.CAMOUFLAGE.getActivityOrder() -> {
                 val intent = Intent(this, Class.forName(ReturnActivity.CAMOUFLAGE.activityName))
                 intent.putExtra(IS_CAMOUFLAGE, true)
                 startActivity(intent)
             }
+
             else -> {
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
             }
         }
+        sendUnlockMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -98,7 +103,11 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun maybeEnableSecurityScreen() {
-        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(SET_SECURITY_SCREEN,false)) {
+        if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
+                SET_SECURITY_SCREEN,
+                false
+            )
+        ) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE
@@ -108,5 +117,9 @@ open class BaseActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE
             )
         }
+    }
+
+    private fun sendUnlockMeasure(context: Context) {
+        DivviupUtils.runUnlockEvent(context)
     }
 }

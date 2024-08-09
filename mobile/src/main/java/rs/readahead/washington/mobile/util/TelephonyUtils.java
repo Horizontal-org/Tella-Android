@@ -1,9 +1,7 @@
 package rs.readahead.washington.mobile.util;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
@@ -33,28 +31,12 @@ public class TelephonyUtils {
         }
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                if (!PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    return list;
-                }
+            if (!PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                return list;
+            }
 
-                for (CellInfo cellInfo : tm.getAllCellInfo()) {
-                    addNew(list, cellInfoToString18(cellInfo));
-                }
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (!PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    return list;
-                }
-
-                for (CellInfo cellInfo : tm.getAllCellInfo()) {
-                    addNew(list, cellInfoToString17(cellInfo));
-                }
-            } else {
-                //noinspection deprecation
-                //TODO check getNeighboringCellInfo
-              //  for (NeighboringCellInfo cellInfo : tm.getNeighboringCellInfo()) {
-                //    addNew(list, neighboringCellInfoToString(cellInfo));
-             //   }
+            for (CellInfo cellInfo : tm.getAllCellInfo()) {
+                addNew(list, cellInfoToString18(cellInfo));
             }
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
@@ -63,7 +45,6 @@ public class TelephonyUtils {
         return list;
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private static String cellInfoToString18(CellInfo cellInfo) {
         if (cellInfo instanceof CellInfoWcdma) {
             CellInfoWcdma w = (CellInfoWcdma) cellInfo;
@@ -77,7 +58,6 @@ public class TelephonyUtils {
         return cellInfoToString17(cellInfo);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private static String cellInfoToString17(CellInfo cellInfo) {
         if (cellInfo instanceof CellInfoLte) {
             CellInfoLte l = (CellInfoLte) cellInfo;
