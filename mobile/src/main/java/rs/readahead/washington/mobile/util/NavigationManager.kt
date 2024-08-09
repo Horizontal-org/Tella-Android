@@ -89,4 +89,8 @@ class NavigationManager(
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
+
+    fun navigateToEnterNextCloudLoginScreen() {
+        navigateTo(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+    }
 }

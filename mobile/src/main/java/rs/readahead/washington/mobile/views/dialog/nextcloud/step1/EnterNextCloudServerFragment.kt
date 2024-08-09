@@ -6,7 +6,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.owncloud.android.lib.common.network.CertificateCombinedException
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
@@ -75,7 +74,7 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
         viewModel.isValidServer.observe(viewLifecycleOwner) { isValid ->
             if (isValid) {
                 bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
-                navManager().navigateToEnterNextCloudLoginScreen()
+               navManager().navigateToEnterNextCloudLoginScreen()
             } else {
                DialogUtils.showBottomMessage(
                     baseActivity,
