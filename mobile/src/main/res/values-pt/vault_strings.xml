@@ -47,7 +47,7 @@
   <string name="Vault_ImportDelete_SheetAction">Importar e excluir o arquivo original</string>
   <string name="Vault_CreateFolder_SheetTitle">Criar uma nova pasta</string>
   <string name="Vault_MoveHere">Relocalizar aqui</string>
-  <string name="Vault_ViewerOther_SheetDesc">Não pode abrir este formato de arquivo dentro do Tella. Deseja exportar o arquivo para o seu aparelho para abri-lo por meio de um aplicativo diferente? Isso pode expor o conteúdo do arquivo.</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Não pode abrir este formato de arquivo dentro do Tella. Deseja exportar o arquivo para o seu aparelho para abri-lo por meio de um aplicativo diferente? Isso pode expor o conteúdo do arquivo.</string>
   <string name="Vault_Export_SheetAction">Salvar no aparelho celular</string>
   <plurals name="Vault_Items">
     <item quantity="one">itens</item>

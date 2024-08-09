@@ -417,7 +417,7 @@
   <string name="Rec_Exit_SheetTitle">အသံသွင်းထားသောဖိုင်ကို သိမ်းမလား။</string>
   <string name="Rec_Exit_SheetText">သင်၏ အသံသွင်းထားမှုကို မသိမ်းဆည်းပါ။ မထွက်ခင် သိမ်းထားလိုပါသလား။</string>
   <string name="Vault_AudioRecordings_AppBar">အသံသွင်းထားသော ဖိုင်များ</string>
-  <string name="Vault_Encryting_SheetText" formatted="false">%d % ပြီးပြည့်စုံပါပြီ</string>
+  <string name="Vault_Encryting_SheetText">%d % ပြီးပြည့်စုံပါပြီ</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">လျှို့ဝှက်စာဝှက်ကို ပယ်ဖျက်ပြီး ဖိုင်ကိုဖျက်လိုပါသလား။</string>
   <string name="Vault_Encrypting_Cancel_SheetText">သင်ပယ်ဖျက်ပါက သင့်ဖိုင် ပျောက်ဆုံးသွားပါမည်</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">လျှို့ဝှက်စာဝှက်ကို ပြန်စတင်ပါ</string>

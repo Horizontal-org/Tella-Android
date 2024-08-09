@@ -783,7 +783,7 @@
   <string name="attempts_remaining_plural">သင်၏ Tella အကောင့်ရှိ ဒေတာအားလုံးကို မဖျက်မီ အကောင့်ဝင်ရောက်ရန် ကြိုးပမ်းခွင့် %1$d ကြိမ် ကျန်ပါသေးသည်။</string>
   <string name="exceeded_max_attempts">မမှန်မကန် အကောင့်ဝင်ရန် ကြိုးပမ်းမှု သတ်မှတ်အကြိမ်ရေကို ကျော်လွန်သွားပါပြီ။ သင်၏ Tella ဒေတာအားလုံးကို ဖျက်လိုက်ပါပြီ။</string>
   <string name="Settings_General_TextJustificationTitle">စာသား ချိန်ညှိခြင်း</string>
-  <string name="Settings_General_TextJustificationExpl">ပိုမိုသပ်ရပ်စေရန် စာသား၏ ရှည်လျားသောအပိုင်းများကို ဘယ်နှင့်ညာ အနားသတ်မျဉ်းများနှင့် ချိန်ညှိပါ။ ပိတ်ထားပါက သုံးစွဲရ ပိုမိုလွယ်ကူစေရန် စာသားကို ဘယ် သို့မဟုတ် ညာသို့ ညှိပါမည်။</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">ပိုမိုသပ်ရပ်စေရန် စာသား၏ ရှည်လျားသောအပိုင်းများကို ဘယ်နှင့်ညာ အနားသတ်မျဉ်းများနှင့် ချိန်ညှိပါ။ ပိတ်ထားပါက သုံးစွဲရ ပိုမိုလွယ်ကူစေရန် စာသားကို ဘယ် သို့မဟုတ် ညာသို့ ညှိပါမည်။</string>
   <string name="Settings_General_TextSpacingTitle">စာသားအကွာအဝေးကို တိုးပါ</string>
   <string name="Settings_General_TextSpacingExpl">စာကြောင်းများကြား အကွာအဝေးကို 150% နှင့် စာပိုဒ်များကြား အကွာအဝေးကို 225% သို့ တိုးပါ။</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella ကို ယခု ရီဖရက်ရှ်လုပ်ပါမည်</string>

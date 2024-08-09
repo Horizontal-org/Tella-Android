@@ -791,7 +791,7 @@ connecting to a server</string>
  upaya login yang salah. Semua data Tella Anda
  telah dihapus.</string>
   <string name="Settings_General_TextJustificationTitle">Pembenaran teks</string>
-  <string name="Settings_General_TextJustificationExpl">Ratakan bagian teks yang lebih panjang ke margin kiri dan kanan untuk tampilan yang lebih rapi. Jika dinonaktifkan, teks akan diratakan rata kiri atau kanan untuk meningkatkan aksesibilitas.</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">Ratakan bagian teks yang lebih panjang ke margin kiri dan kanan untuk tampilan yang lebih rapi. Jika dinonaktifkan, teks akan diratakan rata kiri atau kanan untuk meningkatkan aksesibilitas.</string>
   <string name="Settings_General_TextSpacingTitle">Tingkatkan spasi teks</string>
   <string name="Settings_General_TextSpacingExpl">Tingkatkan spasi baris menjadi 150% dan spasi paragraf menjadi 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella akan disegarkan sekarang</string>

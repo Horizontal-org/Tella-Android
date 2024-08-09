@@ -805,8 +805,8 @@
   <string name="exceeded_max_attempts">You have exceeded the maximum number of
  incorrect login attempts. All your Tella data
  has been deleted.</string>
-  <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextJustificationTitle" formatted="false">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
   <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
   <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>

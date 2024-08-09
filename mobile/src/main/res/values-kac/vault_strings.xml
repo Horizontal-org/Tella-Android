@@ -55,7 +55,7 @@
   <string name="Vault_ImportDelete_SheetAction">Madung lamang nhtan hpe htawt la nna, shaprai kau u</string>
   <string name="Vault_CreateFolder_SheetTitle">Laika nhtan (folder) ningnan langai hpe shalat shapraw u</string>
   <string name="Vault_MoveHere">Ndai kaw htawt sit u</string>
-  <string name="Vault_ViewerOther_SheetDesc">Ndai lamang nhtan (file) hkrang hpe Tella hta n mai hpaw ai. Kaga bungli lamang (app) langai hte dai hpe hpaw na matu, lamang nhtan hpe na a jak kata hta matsing bang da mayu ai kun? Ndai gaw lamang nhtan hte seng ai malawm ni hpe shabrawng kau ya mai nga ai.</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Ndai lamang nhtan (file) hkrang hpe Tella hta n mai hpaw ai. Kaga bungli lamang (app) langai hte dai hpe hpaw na matu, lamang nhtan hpe na a jak kata hta matsing bang da mayu ai kun? Ndai gaw lamang nhtan hte seng ai malawm ni hpe shabrawng kau ya mai nga ai.</string>
   <string name="Vault_Export_SheetAction">Jak rai kata hta e matsing bang da u</string>
   <plurals name="Vault_Items">
     <item quantity="zero">Mahkyen lamang</item>

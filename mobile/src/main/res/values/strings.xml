@@ -357,11 +357,11 @@ mode activation</string>
   <string name="settings.camo_weather">Weather</string>
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
-  <string name="settings.camo_gamestation">GameStation</string>
-  <string name="settings.camo_playnow">PlayNow</string>
-  <string name="settings.camo_jeweldash">Jewel Dash</string>
-  <string name="settings.camo_time">Time</string>
-  <string name="settings.camo_stopwatch">StopWatch</string>
+  <string name="settings.camo_gamestation" translatable="false">GameStation</string>
+  <string name="settings.camo_playnow" translatable="false">PlayNow</string>
+  <string name="settings.camo_jeweldash" translatable="false">Jewel Dash</string>
+  <string name="settings.camo_time" translatable="false">Time</string>
+  <string name="settings.camo_stopwatch" translatable="false">StopWatch</string>
   <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
@@ -814,12 +814,12 @@ they are uploaded to this project as a report.</string>
   <string name="exceeded_max_attempts">You have exceeded the maximum number of
  incorrect login attempts. All your Tella data
  has been deleted.</string>
-  <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
-  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
-  <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
-  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
-  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
+  <string name="Settings_General_TextJustificationTitle" translatable="false">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false" translatable="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextSpacingTitle" translatable="false">Increase text spacing</string>
+  <string name="Settings_General_TextSpacingExpl" translatable="false">Increase line spacing to 150% and paragraph spacing to 225%.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle" translatable="false">Tella will now refresh</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText" translatable="false">You will return to the previous screen in a few seconds.</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
   <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
   <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.

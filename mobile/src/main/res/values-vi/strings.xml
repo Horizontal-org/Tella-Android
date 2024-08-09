@@ -792,7 +792,7 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="attempts_remaining_plural">Bạn còn %1$d  lần thử trước khi tất cả dữ liệu trong Tella của bạn bị xóa.</string>
   <string name="exceeded_max_attempts">Bạn đã vượt quá số lần đăng nhập sai tối đa. Tất cả dữ liệu của bạn trên Tella đã bị xóa.</string>
   <string name="Settings_General_TextJustificationTitle">Căn chỉnh văn bản</string>
-  <string name="Settings_General_TextJustificationExpl">Căn chỉnh các đoạn văn bản dài theo lề trái và phải để có giao diện gọn gàng hơn. Nếu bị vô hiệu hóa, văn bản sẽ được căn trái hoặc phải để tăng tính dễ đọc.</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">Căn chỉnh các đoạn văn bản dài theo lề trái và phải để có giao diện gọn gàng hơn. Nếu bị vô hiệu hóa, văn bản sẽ được căn trái hoặc phải để tăng tính dễ đọc.</string>
   <string name="Settings_General_TextSpacingTitle">Tăng khoảng cách văn bản</string>
   <string name="Settings_General_TextSpacingExpl">Tăng khoảng cách dòng lên 150% và khoảng cách đoạn văn lên 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella sẽ làm mới ngay bây giờ</string>

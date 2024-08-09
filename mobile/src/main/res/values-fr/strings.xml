@@ -806,7 +806,7 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
  tentatives de connexion incorrectes. Toutes vos données Tella
  ont été supprimées.</string>
   <string name="Settings_General_TextJustificationTitle">Justification du texte</string>
-  <string name="Settings_General_TextJustificationExpl">Alignez les sections de texte plus longues sur les marges gauche et droite pour un aspect plus soigné. Si cette option est désactivée, le texte sera aligné à gauche ou à droite pour augmenter l’accessibilité.</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">Alignez les sections de texte plus longues sur les marges gauche et droite pour un aspect plus soigné. Si cette option est désactivée, le texte sera aligné à gauche ou à droite pour augmenter l’accessibilité.</string>
   <string name="Settings_General_TextSpacingTitle">Augmenter l\'espacement du texte</string>
   <string name="Settings_General_TextSpacingExpl">Augmenter l’interligne à 150 % et l’espacement des paragraphes à 225 %.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella va maintenant s’actualiser</string>

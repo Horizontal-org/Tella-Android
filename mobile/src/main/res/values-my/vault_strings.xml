@@ -45,7 +45,7 @@
   <string name="Vault_ImportDelete_SheetAction">မူရင်းဖိုင်ကို ထည့်သွင်းပြီး ဖျက်မည်</string>
   <string name="Vault_CreateFolder_SheetTitle">ဖိုင်တွဲအသစ်တစ်ခု ဖန်တီးမည်</string>
   <string name="Vault_MoveHere">ဤနေရာသို့ ရွှေ့မည်</string>
-  <string name="Vault_ViewerOther_SheetDesc">ဤဖိုင်ပုံစံကို Tella တွင် ဖွင့်၍မရပါ။ အခြားအက်ပ်တစ်ခုဖြင့် ဖွင့်ရန် ဖိုင်ကို သင့်စက်ထဲ၌ သိမ်းမလား။ ၎င်းသည် ဖိုင်ပါ အကြောင်းအရာကို ဖော်ထုတ်နိုင်သည်။</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">ဤဖိုင်ပုံစံကို Tella တွင် ဖွင့်၍မရပါ။ အခြားအက်ပ်တစ်ခုဖြင့် ဖွင့်ရန် ဖိုင်ကို သင့်စက်ထဲ၌ သိမ်းမလား။ ၎င်းသည် ဖိုင်ပါ အကြောင်းအရာကို ဖော်ထုတ်နိုင်သည်။</string>
   <string name="Vault_Export_SheetAction">စက်ထဲ၌ သိမ်းမည်</string>
   <plurals name="Vault_Items">
     <item quantity="other">ခု</item>

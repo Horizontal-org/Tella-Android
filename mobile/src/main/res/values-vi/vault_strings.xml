@@ -45,7 +45,7 @@
   <string name="Vault_ImportDelete_SheetAction">Nhập và xóa tệp tin gốc</string>
   <string name="Vault_CreateFolder_SheetTitle">Tạo thư mục mới</string>
   <string name="Vault_MoveHere">Di chuyển đến đây</string>
-  <string name="Vault_ViewerOther_SheetDesc">không thể mở tệp tin ở định dạng này bên trong Tella. Bạn có muốn xuất tệp sang thiết bị của mình để mở tệp đó thông qua một ứng dụng khác không? Điều này có thể làm lộ nội dung của tệp tin. </string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">không thể mở tệp tin ở định dạng này bên trong Tella. Bạn có muốn xuất tệp sang thiết bị của mình để mở tệp đó thông qua một ứng dụng khác không? Điều này có thể làm lộ nội dung của tệp tin. </string>
   <string name="Vault_Export_SheetAction">Xuất</string>
   <plurals name="Vault_Items">
     <item quantity="other">Trống</item>

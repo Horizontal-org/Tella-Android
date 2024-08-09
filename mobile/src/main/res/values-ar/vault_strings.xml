@@ -55,7 +55,7 @@
   <string name="Vault_ImportDelete_SheetAction">استيراد الملف الأصلي وحذفه</string>
   <string name="Vault_CreateFolder_SheetTitle">إنشاء مجلد جديد</string>
   <string name="Vault_MoveHere">النقل هنا</string>
-  <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
   <string name="Vault_Export_SheetAction">تصدير</string>
   <plurals name="Vault_Items">
     <item quantity="zero">عنصر</item>

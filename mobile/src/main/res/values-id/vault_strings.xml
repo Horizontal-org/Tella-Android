@@ -45,7 +45,7 @@
   <string name="Vault_ImportDelete_SheetAction">Impor dan hapus berkas asli</string>
   <string name="Vault_CreateFolder_SheetTitle">Buat folder baru</string>
   <string name="Vault_MoveHere">pindahkan ke sini</string>
-  <string name="Vault_ViewerOther_SheetDesc">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
   <string name="Vault_Export_SheetAction">Save to device</string>
   <plurals name="Vault_Items">
     <item quantity="other">Kosong</item>

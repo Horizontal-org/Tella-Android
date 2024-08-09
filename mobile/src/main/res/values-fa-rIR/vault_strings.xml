@@ -47,7 +47,7 @@
   <string name="Vault_ImportDelete_SheetAction">وارد کردن و حذف فایل اصلی</string>
   <string name="Vault_CreateFolder_SheetTitle">ایجاد پوشه جدید</string>
   <string name="Vault_MoveHere">به اینجا منتقل کن</string>
-  <string name="Vault_ViewerOther_SheetDesc">این قالب فایل را نمی‌توان در Tella باز کرد. آیا می‌خواهید فایل را به دستگاه خود منتقل کنید و آنجا با برنامه دیگری باز کنید؟ این کار ممکن است باعث افشای محتوای فایل شود.</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">این قالب فایل را نمی‌توان در Tella باز کرد. آیا می‌خواهید فایل را به دستگاه خود منتقل کنید و آنجا با برنامه دیگری باز کنید؟ این کار ممکن است باعث افشای محتوای فایل شود.</string>
   <string name="Vault_Export_SheetAction">انتقال</string>
   <plurals name="Vault_Items">
     <item quantity="one">آیتم‌ها</item>
