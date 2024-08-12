@@ -78,7 +78,7 @@
                 android:id="@+id/flip_horizontally"
                 style="@style/CameraTopImageStyle"
                 android:clickable="true"
-                android:contentDescription="@string/action_rotate"
+                android:contentDescription="@string/action_flip_horizontally"
                 android:focusable="true"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/flip_horizontally"
@@ -90,7 +90,7 @@
                 style="@style/CameraTopImageStyle"
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
-                android:contentDescription="@string/action_rotate"
+                android:contentDescription="@string/action_flip_vertically"
                 android:focusable="true"
                 android:src="@drawable/flip_vertically"
                 android:visibility="visible" />
