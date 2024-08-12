@@ -83,7 +83,7 @@ class ReportsSendFragment :
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.SUBMITTED -> {
-                        context?.let { DivviupUtils.runReportSentEvent(it) }
+                        DivviupUtils.runReportSentEvent(baseActivity)
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
