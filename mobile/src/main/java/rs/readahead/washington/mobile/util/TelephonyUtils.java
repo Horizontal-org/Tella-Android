@@ -35,8 +35,23 @@ public class TelephonyUtils {
                 return list;
             }
 
-            for (CellInfo cellInfo : tm.getAllCellInfo()) {
-                addNew(list, cellInfoToString18(cellInfo));
+                for (CellInfo cellInfo : tm.getAllCellInfo()) {
+                    addNew(list, cellInfoToString18(cellInfo));
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (!PermissionUtil.checkPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    return list;
+                }
+
+                for (CellInfo cellInfo : tm.getAllCellInfo()) {
+                    addNew(list, cellInfoToString17(cellInfo));
+                }
+            } else {
+                //noinspection deprecation
+                //TODO check getNeighboringCellInfo
+              //  for (NeighboringCellInfo cellInfo : tm.getNeighboringCellInfo()) {
+                //    addNew(list, neighboringCellInfoToString(cellInfo));
+             //   }
             }
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);

@@ -206,8 +206,8 @@ mode activation</string>
   <string name="collect_toast_fail.connection.too.weak">படிவத்தை அனுப்ப உங்கள் இணைய இணைப்பு மிகவும் பலவீனமாக உள்ளது. தயவு செய்து மீண்டும் முயற்சிக்கவும்.</string>
   <string name="gallery_toast_file.encrypted">கோப்பு குறியாக்கப்பட்டது</string>
   <string name="settings.docu_toast_disconnect.servers.delete">எல்லா படிவங்களும் சேவையகங்களும் நீக்கப்பட்டன</string>
-  <string name="collect.help_expl_not.connected.to.server">படிவங்களைப் பெற மற்றும் தரவைச் சமர்ப்பிக்க, நீங்கள் முதலில் ஒரு சேவையகத்துடன் இணைக்க வேண்டும். சேவையகத்தை அமைக்க, சேவையக தகவலைப் பற்றி உங்கள் நிறுவனத்திடம் கேளுங்கள்.</string>
-  <string name="collect.help_expl_odk">உங்கள் சொந்த படிவங்களை உருவாக்க விரும்பினால், எங்களை தொடர்பு கொள்ளவும் அல்லது ஓபன் டேட்டா கிட் (ODK) அடிப்படையில் எந்த சேவையையும் பயன்படுத்தவும்</string>
+  <string name="collect.help_expl_not.connected.to.server"><![CDATA[படிவங்களைப் பெற மற்றும் தரவைச் சமர்ப்பிக்க, நீங்கள் முதலில் ஒரு சேவையகத்துடன் இணைக்க வேண்டும். சேவையகத்தை அமைக்க, சேவையக தகவலைப் பற்றி உங்கள் நிறுவனத்திடம் கேளுங்கள்.]]></string>
+  <string name="collect.help_expl_odk"><![CDATA[உங்கள் சொந்த படிவங்களை உருவாக்க விரும்பினால், எங்களை தொடர்பு கொள்ளவும் அல்லது ஓபன் டேட்டா கிட் (ODK) அடிப்படையில் எந்த சேவையையும் பயன்படுத்தவும்]]></string>
   <string name="collect.help_expl_no.internet">நீங்கள் இணையத்துடன் இணைக்கப்படாவிட்டாலும், நீங்கள் இன்னும் படிவங்களை நிரப்பலாம். நீங்கள் ஆன்லைனில் வந்தவுடன் தரவு சமர்ப்பிக்கப்படும்.</string>
   <string name="collect_toast_fail.data.too.large">இணைப்புகள் மிகப் பெரியதாக இருப்பதால் உங்கள் படிவத்தை சமர்ப்பிக்க முடியாது. சிறிய கோப்புகளை இணைக்கவும்</string>
   <string name="collect.end_heading_submitting">சமர்ப்பிக்கிறது</string>
