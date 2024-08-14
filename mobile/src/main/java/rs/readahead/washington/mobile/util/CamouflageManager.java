@@ -88,20 +88,6 @@ public class CamouflageManager {
         }
     }
 
-    public CamouflageOption getCalculatorOptionByTheme(String calculatorTheme) {
-        if (calculatorTheme == null) return calculatorOption;
-        switch (calculatorTheme) {
-            case CALCULATOR_BLUE_SKIN:
-                return new CamouflageOption(getOptionAlias(CALC_ALIAS_BLUE_SKIN), R.drawable.calc_blue_skin_foreground, R.string.settings_camo_calculator2);
-            case CALCULATOR_YELLOW_SKIN:
-                return new CamouflageOption(getOptionAlias(CALC_ALIAS_YELLOW_SKIN), R.drawable.calc_yellow_skin_foreground, R.string.settings_camo_calculator2);
-            case CALCULATOR_ORANGE_SKIN:
-                return new CamouflageOption(getOptionAlias(CALC_ALIAS_ORANGE_SKIN), R.drawable.calc_orange_skin_foreground, R.string.settings_camo_calculator2);
-            default:
-                return calculatorOption;
-        }
-    }
-
     public boolean setLauncherActivityAlias(@NonNull Context context, @NonNull String activityAlias) {
         String currentAlias = Preferences.getAppAlias();
         Preferences.setAppAlias(activityAlias);
