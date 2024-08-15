@@ -221,7 +221,8 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                 ?: return uwaziEntityInstance.widgetMediaFiles
         val newAttachments = arrayListOf<VaultFile>()
         newAttachments.addAll(uwaziEntityInstance.widgetMediaFiles)
-        ((primaryDocumentsNode[0] as LinkedTreeMap<*, *>)["value"] as ArrayList<String>).forEach { fileName ->
+        (((primaryDocumentsNode[0] as ArrayList<*>)[0] as LinkedTreeMap<*, *>)["value"] as ArrayList<*>).forEach {
+            fileName ->
             uwaziEntityInstance.widgetMediaFiles.forEach { vaultFile ->
                 if (vaultFile.id?.equals(fileName) == true) {
                     newAttachments.remove(vaultFile)
