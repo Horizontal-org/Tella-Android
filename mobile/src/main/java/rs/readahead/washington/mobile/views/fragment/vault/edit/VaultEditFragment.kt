@@ -131,7 +131,6 @@ class VaultEditFragment :
         showAcceptButton()
     }
 
-
     /**
      * We take the cropped part of the image as a bitmap and save it as a jpeg
      */

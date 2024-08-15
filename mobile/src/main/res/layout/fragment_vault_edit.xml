@@ -11,7 +11,7 @@
         android:background="@color/wa_black"
         android:orientation="vertical"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="32dp">
 
         <RelativeLayout
             android:id="@+id/topbar"
@@ -58,8 +58,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/wa_black"
             android:gravity="center"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="64dp"
+            android:paddingEnd="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
