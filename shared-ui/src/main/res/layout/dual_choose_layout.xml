@@ -115,6 +115,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn" />
 
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/sheet_four_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        app:check_state="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn" />
+
     <TextView
         android:id="@+id/back_btn"
         style="@style/Tella_Main_White_Text"

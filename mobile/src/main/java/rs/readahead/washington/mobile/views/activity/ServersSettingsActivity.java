@@ -50,6 +50,7 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
@@ -408,6 +409,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
+                    public void addGoogleDriveServer() {
+                        showGoogleDriveServerDialog();
+                    }
+
+                    @Override
                     public void addUwaziServer() {
                         showUwaziServerDialog(null);
                     }
@@ -511,6 +517,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             intent.putExtra(IS_UPDATE_SERVER, true);
             startActivity(intent);
         }
+    }
+
+    private void showGoogleDriveServerDialog() {
+            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+//        } else {
+//            Intent intent = new Intent(this, UwaziConnectFlowActivity.class);
+//            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
+//            intent.putExtra(IS_UPDATE_SERVER, true);
+//            startActivity(intent);
+//        }
     }
 
     private void stopPresenting() {

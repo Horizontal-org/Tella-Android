@@ -198,6 +198,9 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                     showUwaziServerDialog()
                 }
 
+                override fun addGoogleDriveServer() {
+                }
+
                 override fun addTellaWebServer() {
                     //   showTellaUploadServerDialog()
                 }
