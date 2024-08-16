@@ -192,6 +192,10 @@ dependencies {
     implementation "commons-httpclient:commons-httpclient:3.1@jar" // remove after entire switch to lib v2
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
+
+    implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
+    implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
 }
 
 kapt {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.gson.Gson;
-import com.owncloud.android.lib.common.utils.Log_OC;
+
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -45,15 +45,11 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
-import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils;
-import rs.readahead.washington.mobile.util.operations.DisplayUtils;
-import rs.readahead.washington.mobile.util.operations.GetServerInfoOperation;
-import rs.readahead.washington.mobile.util.operations.OperationsService;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
-import rs.readahead.washington.mobile.views.dialog.nextcloud.SslUntrustedCertDialog;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.authentication.AuthenticatorActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
@@ -530,9 +526,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void showNexCloudDialog(@Nullable NextCloudServer server) {
         if (server == null) {
-            startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
+            startActivity(new Intent(this, AuthenticatorActivity.class));
         } else {
-            Intent intent = new Intent(this, NextCloudLoginFlowActivity.class);
+            Intent intent = new Intent(this, AuthenticatorActivity.class);
             intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
             intent.putExtra(IS_UPDATE_SERVER, true);
             startActivity(intent);

@@ -17,8 +17,8 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
 
 
-class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository {
 
+class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository {
 
     override fun validateServerUrl(serverUrl: String): Single<Boolean> {
         return Single.create { emitter ->
@@ -27,24 +27,17 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 val client = OwnCloudClientFactory.createOwnCloudClient(uri, context, false)
 
                 val getCapabilitiesOperation = GetCapabilitiesRemoteOperation()
-                getCapabilitiesOperation.execute(client,
+                getCapabilitiesOperation.execute(
+                    client,
                     { _, result ->
-
 
                         result?.let {
                             if (it.isSuccess) {
-                                val credentials = OwnCloudCredentialsFactory.newBasicCredentials("dhekra@wearehorizontal.org", "GSumS9uL7X8SoW")
-                                client.credentials = credentials
-
-
-                                // get display name
-
-
                                 emitter.onSuccess(true)
                             } else {
                                 emitter.onError(result.exception)
                             }
-                        } ?:  emitter.onSuccess(false)
+                        } ?: emitter.onSuccess(false)
                     }, Handler(Looper.getMainLooper())
                 )
 
@@ -55,28 +48,22 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         }.subscribeOn(Schedulers.io())
     }
 
+    override fun checkUserCredentials(
+        serverUrl: String,
+        username: String,
+        password: String
+    ): Single<RemoteOperationResult<UserInfo?>> {
 
-    override fun checkUserCredentials(serverUrl: String, username: String, password: String): Single<RemoteOperationResult<UserInfo?>> {
         return Single.create<RemoteOperationResult<UserInfo?>> { emitter ->
-
-                // Client
+            try {
                 val baseUri = Uri.parse(serverUrl)
-                Log.d("CheckUserCredentials", "Base URI: $baseUri")
-
                 val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
-                Log.d("CheckUserCredentials", "Credentials: $credentials")
 
-                val cloudClient = OwnCloudClientFactory.createOwnCloudClient(baseUri, context, true)
-                cloudClient.credentials = credentials
-                Log.d("CheckUserCredentials", "Client: $cloudClient")
-
-                // Ensure client and credentials are valid
-                if (cloudClient == null || credentials == null) {
+                if (credentials == null) {
                     emitter.onError(Exception("Client or credentials are null"))
                     return@create
                 }
 
-                // Create Nextcloud Client and perform the operation
                 val nextcloudClient = OwnCloudClientFactory.createNextcloudClient(
                     baseUri,
                     credentials.username,
@@ -85,15 +72,20 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     true
                 )
 
-            val getCapabilitiesOperation = GetUserInfoRemoteOperation().execute(nextcloudClient)
-
-
-            Log.d("CheckUserCredentials", "Client: ${getCapabilitiesOperation.isSuccess}")
-
-
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                // Use a valid method to execute the operation
+                val result = GetUserInfoRemoteOperation().execute(nextcloudClient)
+                if (result.isSuccess) {
+                    emitter.onSuccess(result)
+                } else {
+                    emitter.onError(result.exception ?: Exception("Unknown error"))
+                }
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
-
 
 
 }

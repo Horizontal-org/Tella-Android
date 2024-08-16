@@ -1,28 +1,19 @@
 package rs.readahead.washington.mobile.views.dialog.nextcloud
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
+import android.widget.Toast
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.snackbar.Snackbar
-import com.owncloud.android.lib.common.OwnCloudClientFactory
+import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.common.utils.Log_OC
-import com.owncloud.android.lib.resources.status.GetCapabilitiesRemoteOperation
-import com.owncloud.android.lib.resources.status.OCCapability
 import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils.showBottomMessage
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.normalizeScheme
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.normalizeUrlSuffix
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.stripIndexPhpOrAppsFiles
@@ -35,11 +26,12 @@ import rs.readahead.washington.mobile.util.operations.OperationsService.Operatio
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
 import rs.readahead.washington.mobile.views.dialog.nextcloud.SslUntrustedCertDialog.OnSslUntrustedCertListener
+import rs.readahead.washington.mobile.views.dialog.nextcloud.step2.AuthenticatorAsyncTask.OnAuthenticatorTaskListener
 import java.net.URLDecoder
 
 @AndroidEntryPoint
 class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListener,
-    OnRemoteOperationListener {
+    OnRemoteOperationListener, OnAuthenticatorTaskListener {
     private val TAG: String = NextCloudLoginFlowActivity::class.java.simpleName
     private var mServerInfo = ServerInfo()
     private var mOperationsServiceBinder: OperationsServiceBinder? = null
@@ -180,6 +172,13 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
         } else if (operation is GetUserInfoRemoteOperation) {
             // onGetUserNameFinish(result)
         }
+    }
+
+    override fun onAuthenticatorTaskCallback(result: RemoteOperationResult<UserInfo?>?) {
+
+        Toast.makeText(this, "Test " + result?.isSuccess, Toast.LENGTH_LONG).show()
+
+        //  Toast.makeText(this, result?.message, Toast.LENGTH_LONG).show()
     }
 
 

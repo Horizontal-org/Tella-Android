@@ -5,12 +5,11 @@
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH
  * SPDX-License-Identifier: AGPL-3.0-or-later OR GPL-2.0-only
  */
-package rs.readahead.washington.mobile.util.operations
+package rs.readahead.washington.mobile.views.dialog.nextcloud.authentication
 
 import android.accounts.Account
 import android.os.Parcelable
 import com.owncloud.android.lib.common.OwnCloudAccount
-import rs.readahead.washington.mobile.views.dialog.nextcloud.authentication.Server
 
 interface User : Parcelable, com.nextcloud.common.User {
     override val accountName: String

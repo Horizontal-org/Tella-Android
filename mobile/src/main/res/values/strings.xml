@@ -953,4 +953,15 @@ Would you like to share analytics with the Tella team?</string>
   <string name="ssl_validator_no_info_about_error">- No information about the error</string>
   <string name="ssl_validator_header">The identity of the server could not be verified</string>
   <string name="login_data_own_scheme" translatable="false">nc</string>
+  <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
+  <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
+  <string name="authenticator_activity_please_complete_login_process">Please complete login process in your browser</string>
+  <string name="authenticator_activity_cancel_login">Cancel Login</string>
+  <string name="account_type">nextcloud</string>     <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
+  <string name="webview_version_check_alert_dialog_title">Update Android System WebView</string>
+  <string name="webview_version_check_alert_dialog_message">Please update the Android System WebView app for a login</string>
+  <string name="webview_version_check_alert_dialog_positive_button_title">Update</string>
+  <string name="nextcloud_user_agent">Mozilla/5.0 (Android) Nextcloud-android/%1$s%2$s</string>
+  <string name="provider_registration_server">https://www.nextcloud.com/register</string>
+
 </resources>

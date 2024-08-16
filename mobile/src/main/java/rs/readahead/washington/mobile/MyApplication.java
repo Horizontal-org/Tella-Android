@@ -36,6 +36,7 @@ import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.hzontal.tella_vault.rx.RxVault;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import org.hzontal.shared_ui.data.CommonPrefs;
 
@@ -55,6 +56,7 @@ import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.Arrays;
@@ -64,6 +66,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 
 import dagger.hilt.android.HiltAndroidApp;
+import de.cotech.hw.SecurityKeyManager;
+import de.cotech.hw.SecurityKeyManagerConfig;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
@@ -80,6 +84,7 @@ import rs.readahead.washington.mobile.util.TellaUpgrader;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
 import timber.log.Timber;
 
 @HiltAndroidApp
@@ -98,6 +103,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     Vault.Config vaultConfig;
     private static final String TAG = MyApplication.class.getSimpleName();
     public static final String DOT = ".";
+    public static final OwnCloudVersion MINIMUM_SUPPORTED_SERVER_VERSION = OwnCloudVersion.nextcloud_17;
+    private static WeakReference<Context> appContext;
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -163,6 +170,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        initGlobalContext(this);
         CommonPrefs.getInstance().init(newBase);
         SharedPrefs.getInstance().init(newBase);
         super.attachBaseContext(LocaleManager.getInstance().getLocalizedContext(newBase));
@@ -230,7 +238,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         insertConscrypt();
-        //enableStrictMode();
+        enableStrictMode();
     }
 
     private void configureCrashlytics() {
@@ -383,5 +391,55 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
                     .build());
         }
     }
+
+    public static String getAccountType(Context context) {
+        return context.getResources().getString(R.string.anonymous_account_type);
+    }
+
+    private void initSecurityKeyManager() {
+        SecurityKeyManager securityKeyManager = SecurityKeyManager.getInstance();
+        final SecurityKeyManagerConfig.Builder configBuilder = new SecurityKeyManagerConfig.Builder()
+                .setEnableDebugLogging(BuildConfig.DEBUG);
+
+        try {
+            // exclude all activities except AuthenticatorActivity
+            final PackageManager pm = this.getPackageManager();
+            final PackageInfo info = pm.getPackageInfo(this.getPackageName(), PackageManager.GET_ACTIVITIES);
+            final ActivityInfo[] activities = info.activities;
+            for (ActivityInfo activityInfo : activities) {
+                try {
+                    final Class<? extends Activity> aClass = (Class<? extends Activity>) Class.forName(activityInfo.name);
+                    if (aClass != NextCloudLoginFlowActivity.class) {
+                        configBuilder.addExcludedActivityClass(aClass);
+                    }
+                } catch (ClassNotFoundException | ClassCastException e) {
+                    Log_OC.e(TAG, "Couldn't disable activity for security key listener", e);
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log_OC.e(TAG, "Couldn't disable activities for security key listener", e);
+        }
+
+
+        securityKeyManager.init(this, configBuilder.build());
+    }
+
+    public static String getUserAgent(Context context) {
+        // Mozilla/5.0 (Android) Nextcloud-android/2.1.0
+        return context.getString(R.string.nextcloud_user_agent);
+    }
+
+
+    /**
+     * Temporary hack
+     */
+    private static void initGlobalContext(Context context) {
+        appContext = new WeakReference<>(context);
+    }
+
+    public static Context getAppContext() {
+        return MyApplication.getAppContext();
+    }
+
 
 }
