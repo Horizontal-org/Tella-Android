@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 
 import rs.readahead.washington.mobile.presentation.entity.PublicMetadata;
 import rs.readahead.washington.mobile.util.StringUtils;
+import timber.log.Timber;
 
 
 public class PublicMetadataMapper {
@@ -61,8 +62,17 @@ public class PublicMetadataMapper {
         metadata.put("File path", rc(publicMetadata.filePath));
         metadata.put("File name", rc(publicMetadata.fileName));
 
-        metadata.put("Cells", rc(StringUtils.join(" ", publicMetadata.cells)));
-        metadata.put("WiFis", rc(StringUtils.join(" ", publicMetadata.wifis)));
+        try {
+            if (publicMetadata.cells != null) {
+                metadata.put("Cells", rc(StringUtils.join(" ", publicMetadata.cells)));
+            }
+            if (publicMetadata.cells != null) {
+                metadata.put("WiFis", rc(StringUtils.join(" ", publicMetadata.wifis)));
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
         metadata.put("Timestamp", rc(publicMetadata.timestamp));
         metadata.put("Ambient temperature", rc(publicMetadata.ambientTemperature));
         metadata.put("Light", rc(publicMetadata.light));

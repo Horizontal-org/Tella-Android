@@ -42,7 +42,7 @@ class AboutAndHelpSettings : BaseFragment() {
         }
 
         binding?.contactUs?.setOnClickListener {
-            Util.startBrowserIntent(context, getString(R.string.config_contact_url))
+            Util.startSendMailIntent(context, getString(R.string.config_contact_url))
         }
 
         binding?.privacyPolicy?.setOnClickListener {

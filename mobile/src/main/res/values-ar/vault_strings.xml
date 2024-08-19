@@ -4,13 +4,13 @@
   <string name="Vault_Images_Title">الصور</string>
   <string name="Vault_Files_Title">ملفات Tella</string>
   <string name="Vault_Documents_Title">المستندات</string>
-  <string name="Vault_Audios_Title">ملفات الصوت</string>
+  <string name="Vault_Audios_Title">ملفات صوتية</string>
   <string name="Vault_Videos_Title">ملفات الفيديو</string>
   <string name="Vault_Others_Title">أخرى</string>
   <string name="Vault_Select_Title">حدد الملفات</string>
   <string name="Vault_RecentFiles">أحدث الملفات</string>
   <string name="Vault_PhotosAndVideos_Title">ملفات الصور والفيديو</string>
-  <string name="Vault_FavoriteForms_Title">النماذج المفضلة</string>
+  <string name="Vault_FavoriteForms_Title">الاستمارات المفضلة</string>
   <string name="Vault_Empty_Msg">لا يوجد أي ملفات على Tella حتى الآن. يُرجى الضغط على زر \"+\" أدناه لاستيراد أول ملفاتك، أو الذهاب إلى الكاميرا أو مكبر الصوت لإنشاء ملف. يمكنك أيضًا إنشاء مجلدات لتنظيم ملفاتك.</string>
   <string name="Vault_Move_SheetDesc">النقل إلى مجلد آخر</string>
   <string name="Vault_Rename_SheetAction">إعادة تسمية</string>
@@ -25,6 +25,7 @@
   <string name="Vault_FileCreated">تاريخ الإنشاء ووقته</string>
   <string name="Vault_FileResolution">الدقة</string>
   <string name="Vault_FileLength">الطول</string>
+  <string name="Vault_FilePath">مسار الملف</string>
   <string name="Vault_RenameFile_SheetTitle">إعادة تسمية الملف</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="zero">هل ترغب في حذف الملف؟</item>
@@ -49,12 +50,12 @@
   <string name="Vault_ManageFiles_SheetTitle">إدارة الملفات</string>
   <string name="Vault_DeleteFile_SheetDesc">بعد استيراد الملف على Tella، سوف يُحذَف الملف الأصلي من الجهاز، ولن يتبقى نسخة منه عدا النسخة الموجودة على Tella.</string>
   <string name="Vault_TakePhotoVideo_SheetAction">التقاط صورة/تسجيل فيديو</string>
-  <string name="Vault_RecordAudio_SheetAction">تسجيل صوت</string>
+  <string name="Vault_RecordAudio_SheetAction">تسجيل مقطع صوتي</string>
   <string name="Vault_Import_SheetAction">استيراد من الجهاز</string>
   <string name="Vault_ImportDelete_SheetAction">استيراد الملف الأصلي وحذفه</string>
   <string name="Vault_CreateFolder_SheetTitle">إنشاء مجلد جديد</string>
   <string name="Vault_MoveHere">النقل هنا</string>
-  <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
   <string name="Vault_Export_SheetAction">تصدير</string>
   <plurals name="Vault_Items">
     <item quantity="zero">عنصر</item>
@@ -65,4 +66,22 @@
     <item quantity="other">من العناصر</item>
   </plurals>
   <string name="Vault_No_Files_Title">ليس لديك أي ملفات بعد في Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">القوالب المفضلة</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="zero">تم نقل صفر ملف بنجاح</item>
+    <item quantity="one">تم نقل ملف بنجاح</item>
+    <item quantity="two">تم نقل ملفين بنجاح</item>
+    <item quantity="few">تم نقل 3 ملفات بنجاح</item>
+    <item quantity="many">تم نقل 20 ملف بنجاح</item>
+    <item quantity="other">تم نقل الملفات بنجاح</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">بعض الملفات المختارة مستخدمة حالياً في اتصالاتك. قد يؤثر حذفها على النماذج والتقارير التي لم يتم إرسالها بعد.</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">الحذف على أي حال</string>
+  <string name="Vault_Keep_Original">احتفظ بالأصلي</string>
+  <string name="Vault_Delete_Original">احذف الأصلي</string>
+  <string name="Vault_deleteFileImported_SheetDesc">بعد استيراد الملف إلى Tella، هل تريد الاحتفاظ بالملف الأصلي على جهازك أم حذفه؟
+ 
+  إذا قمت بحذفه، فسيكون الملف المستورد إلى Tella هو النسخة الوحيدة المتبقية.</string>
+  <string name="Vault_FileEdit_SheetAction">تعديل</string>
 </resources>

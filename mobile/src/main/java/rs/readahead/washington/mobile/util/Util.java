@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+import timber.log.Timber;
 import androidx.annotation.Nullable;
 
 import rs.readahead.washington.mobile.R;
@@ -56,6 +56,22 @@ public class Util {
                 context.startActivity(browserIntent);
             }
         } catch (ActivityNotFoundException ignore) {
+        }
+    }
+
+    public static void startSendMailIntent(Context context, String emailUri) {
+        if (context == null) {
+            return;
+        }
+        // Check if the emailUri is properly formatted
+        if (emailUri == null || !emailUri.startsWith("mailto:")) {
+            return;
+        }
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(emailUri));
+                context.startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            Timber.d(e, context.getClass().getName());
         }
     }
 

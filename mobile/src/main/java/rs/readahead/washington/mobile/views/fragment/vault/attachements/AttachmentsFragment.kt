@@ -631,7 +631,10 @@ class AttachmentsFragment :
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
                                 this@AttachmentsFragment.vaultFile = vaultFile
-                                exportVaultFilesWithMetadataCheck(vaultFile)
+                                if (isConfirmed)
+                                    exportVaultFilesWithMetadataCheck(vaultFile)
+                                else
+                                    return
                             }
                         })
                 }

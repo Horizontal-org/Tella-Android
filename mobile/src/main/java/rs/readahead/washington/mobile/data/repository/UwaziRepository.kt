@@ -11,11 +11,19 @@ import rs.readahead.washington.mobile.data.entity.uwazi.LoginEntity
 import rs.readahead.washington.mobile.data.entity.uwazi.LoginResult
 import rs.readahead.washington.mobile.data.entity.uwazi.UwaziEntityRow
 import rs.readahead.washington.mobile.data.entity.uwazi.mapper.mapToDomainModel
+import rs.readahead.washington.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_TEMPLATE
 import rs.readahead.washington.mobile.data.uwazi.UwaziService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
-import rs.readahead.washington.mobile.domain.entity.uwazi.*
+import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
+import rs.readahead.washington.mobile.domain.entity.uwazi.ListTemplateResult
+import rs.readahead.washington.mobile.domain.entity.uwazi.RelationShipRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.RowDictionary
+import rs.readahead.washington.mobile.domain.entity.uwazi.Settings
+import rs.readahead.washington.mobile.domain.entity.uwazi.TranslationRow
+import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziRow
 import rs.readahead.washington.mobile.domain.repository.uwazi.IUwaziUserRepository
 import rs.readahead.washington.mobile.util.StringUtils
+import timber.log.Timber
 
 class UwaziRepository : IUwaziUserRepository {
     private val uwaziApi by lazy { UwaziService.newInstance().services }
@@ -42,14 +50,16 @@ class UwaziRepository : IUwaziUserRepository {
     }
 
     override fun getTemplatesResult(server: UWaziUploadServer): Single<ListTemplateResult> {
-        return Single.zip(getTemplates(server),
+        return Single.zip(
+            getTemplates(server),
+            getRelationShipEntities(server),
             getDictionary(server),
             getTranslation(server),
             getFullSettings(server)
-        ) { templates, dictionary, translations, settings ->
+        ) { templates, relationShipEntities, dictionary, translations, settings ->
 
-            templates.forEach {
-                it.properties.forEach { property ->
+            templates.forEach { template ->
+                template.properties.forEach { property ->
                     dictionary.forEach { dictionaryItem ->
                         if (dictionaryItem._id == property.content) {
                             property.values = dictionaryItem.values
@@ -72,7 +82,6 @@ class UwaziRepository : IUwaziUserRepository {
             } else {
                 resultTemplates = templates.toMutableList()
             }
-
 
             resultTemplates.forEach { template ->
                 translations.filter { row -> row.locale == server.localeCookie }[0]
@@ -112,10 +121,17 @@ class UwaziRepository : IUwaziUserRepository {
             }
 
             val listTemplates = mutableListOf<CollectTemplate>()
-            resultTemplates.forEach { entity ->
+            resultTemplates.forEach { template ->
+                val relationShipEntity: List<RelationShipRow> =
+                    relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE }
+                template.properties.forEach { property ->
+                    val listRelationShipEntities =
+                        relationShipEntity.find { (property.content == it.id) }
+                    listRelationShipEntities.also { property.entities = it?.values }
+                }
                 val collectTemplate = CollectTemplate(
                     serverId = server.id,
-                    entityRow = entity,
+                    entityRow = template,
                     serverName = server.name
                 )
                 listTemplates.add(collectTemplate)
@@ -134,20 +150,35 @@ class UwaziRepository : IUwaziUserRepository {
         }
     }
 
+    override fun getRelationShipEntities(server: UWaziUploadServer): Single<List<RelationShipRow>> {
+        val cookies = server.connectCookie + ";locale=" + server.localeCookie
+        return uwaziApi.getRelationShipEntities(
+            url = StringUtils.append(
+                '/',
+                server.url,
+                ParamsNetwork.URL_THESAURIS
+            ), cookies = cookies
+        )
+            .subscribeOn(Schedulers.io())
+            .map { result ->
+                result.mapToDomainModel()
+            }
+            .onErrorReturn { error ->
+                Timber.e(error, "getRelationShipEntities failed")
+                emptyList()
+            }
+    }
+
     override fun getTemplates(server: UWaziUploadServer): Single<List<UwaziRow>> {
         val listCookies = ArrayList<String>()
         listCookies.add(server.connectCookie)
         listCookies.add(server.localeCookie)
+        val url = StringUtils.append('/', server.url, ParamsNetwork.URL_TEMPLATES)
         return uwaziApi.getTemplates(
-            url = StringUtils.append(
-                '/',
-                server.url,
-                ParamsNetwork.URL_TEMPLATES
-            ), cookies = listCookies
+            url, cookies = listCookies
         )
             .subscribeOn(Schedulers.io())
             .map { result -> result.mapToDomainModel() }
-
     }
 
     override fun getTemplates(url: String): Single<List<UwaziRow>> {

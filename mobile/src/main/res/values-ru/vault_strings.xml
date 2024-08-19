@@ -1,16 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+  <string name="Vault_AllFiles_Title">Все файлы</string>
+  <string name="Vault_Images_Title">Изображений</string>
+  <string name="Vault_Files_Title">Файлы Tella</string>
+  <string name="Vault_Documents_Title">Документы</string>
   <string name="Vault_Audios_Title">Аудио</string>
   <string name="Vault_Videos_Title">Видео</string>
+  <string name="Vault_Others_Title">Другие</string>
+  <string name="Vault_Select_Title">Выбрать файлы</string>
   <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_PhotosAndVideos_Title">Фото и видео</string>
   <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Empty_Msg">У вас пока нет файлов на вашем Tella. Нажмите кнопку «+» ниже, чтобы импортировать свой первый файл, или перейдите к камере или микрофону, чтобы создать его. Вы также можете создавать папки, чтобы ваши файлы были организованы.</string>
+  <string name="Vault_Move_SheetDesc">Переместить в другую папку</string>
+  <string name="Vault_Rename_SheetAction">Переименовать</string>
   <string name="Vault_Save_SheetAction">Сохранить</string>
   <string name="Vault_Delete_SheetAction">Удалить</string>
   <string name="Vault_Share_SheetAction">Поделиться</string>
   <string name="Vault_Upload_SheetAction">Загрузить</string>
+  <string name="Vault_File_SheetAction">Информация о файле</string>
+  <string name="Vault_FileInfo">Информация о файле</string>
+  <string name="Vault_FileSize">Размер</string>
+  <string name="Vault_FileFormat">Формат</string>
+  <string name="Vault_FileCreated">Создан</string>
+  <string name="Vault_FileResolution">Разрешение</string>
+  <string name="Vault_FileLength">Длина</string>
+  <string name="Vault_FilePath">Путь к файлу</string>
+  <string name="Vault_RenameFile_SheetTitle">Переименовать файл</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Имя А &gt; Я</string>
+  <string name="Vault_SortNameDesc_SheetAction">Имя Я &gt; А</string>
   <string name="Vault_SortDateAsc_SheetAction">От новейшего к старейшему</string>
   <string name="Vault_SortDateDesc_SheetAction">От старейшего к новейшему</string>
+  <string name="Vault_ManageFiles_SheetTitle">Управление файлами</string>
+  <string name="Vault_DeleteFile_SheetDesc">После импорта файла в Tella оригинальный файл будет удален с вашего устройства. Останется только копия в Tella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Сделать фото/видео</string>
+  <string name="Vault_RecordAudio_SheetAction">Запись аудио</string>
+  <string name="Vault_Import_SheetAction">Импорт с устройства</string>
+  <string name="Vault_ImportDelete_SheetAction">Импортировать и удалить исходный файл</string>
+  <string name="Vault_CreateFolder_SheetTitle">Создать новую папку</string>
+  <string name="Vault_MoveHere">Перенести сюда</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Этот формат файла не может быть открыт внутри Tella. Вы хотите экспортировать файл на свое устройство, чтобы открыть его через другое приложение? Это может привести к раскрытию содержимого файла. </string>
   <string name="Vault_Export_SheetAction">Сохранить на устройстве</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_No_Files_Title">У вас еще нет файлов в Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Избранные шаблоны</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Некоторые из выбранных файлов в настоящее время используются в ваших соединениях. Удаление может повлиять на формы и отчеты, которые еще не были отправлены.</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">Удалить в любом случае</string>
   <string name="Vault_Keep_Original">СОХРАНИТЬ ОРИГИНАЛ
 </string>
   <string name="Vault_Delete_Original">УДАЛИТЬ ОРИГИНАЛ
@@ -18,4 +69,5 @@
   <string name="Vault_deleteFileImported_SheetDesc"> После импорта файла в Tella, хотите ли вы сохранить исходный файл на вашем устройстве или удалить его?
  Если вы удалите его, файл, импортированный в Tella, будет единственной оставшейся копией. 
 </string>
+  <string name="Vault_FileEdit_SheetAction">Править</string>
 </resources>

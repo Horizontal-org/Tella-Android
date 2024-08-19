@@ -6,6 +6,8 @@
   <string name="LockPatternConfirm_Action_Confirm">உறுதிப்படுத்த மீண்டும் வடிவத்தை வரையவும்</string>
   <string name="LockSelect_Action_Continue">தொடர்</string>
   <string name="LockPatternSet_Draw_Pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
+  <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
   <string name="LockPatternSet_Pattern_Recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
   <string name="UnlockPattern_PatternTooShort">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
   <string name="LockPatternSet_RecordingPattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>
@@ -23,7 +25,11 @@ unlock Tella</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
   <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
 Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Confirm your PIN</string>
+  <string name="LockPinConfirm_Message_Confirm">Please enter your PIN one more time,
+ just to be sure.</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">Please try again. Your PINs do not match.</string>
   <string name="LockPinConfirm_Message_Error_IncorrectPin">Incorrect PIN,
  please try again</string>
@@ -37,11 +43,14 @@ Tella</string>
 done!</string>
   <string name="LockSuccess_Message_Hint">You can always change your lock option
  and further customize Tella in Settings.</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
 unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more
+ time, just to be sure.</string>
   <string name="LockPasswordSet_Settings_EnterCurrentPassword">Enter your current
  password to change your
  lock</string>

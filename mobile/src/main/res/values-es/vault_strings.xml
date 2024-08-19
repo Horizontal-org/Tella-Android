@@ -15,7 +15,7 @@
   <string name="Vault_Move_SheetDesc">Mover a otra carpeta</string>
   <string name="Vault_Rename_SheetAction">Renombrar</string>
   <string name="Vault_Save_SheetAction">Guardar</string>
-  <string name="Vault_Delete_SheetAction">Borrar</string>
+  <string name="Vault_Delete_SheetAction">Borrado</string>
   <string name="Vault_Share_SheetAction">Compartir</string>
   <string name="Vault_Upload_SheetAction">Subir</string>
   <string name="Vault_File_SheetAction">Información de archivo</string>
@@ -46,8 +46,8 @@
   <string name="Vault_Import_SheetAction">Importar desde el dispositivo</string>
   <string name="Vault_ImportDelete_SheetAction">Importar y borrar el archivo original</string>
   <string name="Vault_CreateFolder_SheetTitle">Crear una nueva carpeta</string>
-  <string name="Vault_MoveHere">Mover aquí</string>
-  <string name="Vault_ViewerOther_SheetDesc">Este formato de archivo no puede ser abierto en Tella. ¿Quieres guardar el archivo en tu dispositivo para abrirlo a través de una aplicación diferente? Esto podría exponer el contenido del archivo.</string>
+  <string name="Vault_MoveHere">mover aquí</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Este formato de archivo no puede ser abierto en Tella. ¿Quieres guardar el archivo en tu dispositivo para abrirlo a través de una aplicación diferente? Esto podría exponer el contenido del archivo.</string>
   <string name="Vault_Export_SheetAction">Guardar en el dispositivo</string>
   <plurals name="Vault_Items">
     <item quantity="one">ítem</item>
@@ -60,5 +60,12 @@
     <item quantity="other">Archivos desplazados exitosamente</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Algunos de los archivos son actualmente utilizados en tu conexión. Borrarlos puede impactar en formas y reportes que no han sido enviados aún.</string>
+  <string name="Vault_Warning_Title">Advertencia</string>
   <string name="Vault_Delete_anyway">Borrar de todos modos</string>
+  <string name="Vault_Keep_Original">MANTENER ORIGINAL</string>
+  <string name="Vault_Delete_Original">BORRAR ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Después de importar el archivo a Tella, ¿quieres mantener el archivo original en tu dispositivo o eliminarlo?
+
+Si lo eliminas, el archivo importado en Tella será la única copia que quede.</string>
+  <string name="Vault_FileEdit_SheetAction">Editar</string>
 </resources>

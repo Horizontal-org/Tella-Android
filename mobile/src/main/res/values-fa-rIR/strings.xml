@@ -43,7 +43,7 @@
   <string name="settings.docu_field_server.url">URL سرور</string>
   <string name="collect.sent_tab.title">ارسال شد</string>
   <string name="home_expl_cancel.quick.delete">برای لغو کردن، روی هر نقطه ای از صفحه ضربه بزنید</string>
-  <string name="recorder_app.bar">ضبط کننده</string>[
+  <string name="recorder_app.bar">ضبط کننده</string>
   <string name="settings.docu_field_username">نام کاربری</string>
   <string name="collect.draft_meta_date.updated">به‌روزر رسانی شد: %1$s</string>
   <string name="settings.about_app.version">نسخه</string>
@@ -216,8 +216,6 @@
   <string name="collect_toast_form.saved.for.later.submission">فرم برای ارسال در آینده ذخیره شد</string>
   <string name="collect.blank_action_unpin">جدا کردن از قسمت بالا</string>
   <string name="collect.blank_action_pin">سنجاق کردن به قسمت بالا</string>
-  <string name="collect.blank_subheading_forms.on.servers">فرم‌های موجود در سرور</string>
-  <string name="collect.blank_subheading_downloaded.forms">فرم‌های دانلودشده</string>
   <string name="verification.prompt_dialog.expl">حالت راستی‌آزمایی «فعال» ولی GPS «غیرفعال» است. برای ثبت کردن موقعیت دستگاه خود، GPS را فعال کنید.</string>
   <string name="verification.prompt_action_ignore">نادیده بگیر</string>
   <string name="verification.prompt_action_enable.GPS">GPS را فعال کنید</string>
@@ -650,6 +648,8 @@
   <string name="settings.select_customization">سفارشی‌سازی</string>
   <string name="Uwazi_Send_Header_Title">پایان مدخل</string>
   <string name="Uwazi_Send_Entity_Title">پایان مدخل</string>
+  <string name="action_yes_in">YES, I’M IN!</string>
+  <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
   <string name="Javarosa_Upgrade_Warning_Description">ما برخی از کتابخانه‌های Tella را ارتقا داده‌ایم و لازم است همه فرم‌ها را دوباره دانلود کنیم.</string>
   <string name="Javarosa_Upgrade_Toast">لطفا صبر کنید تا فرم‌ها را به‌روزرسانی کنیم.</string>
   <string name="Settings_Reports_Choose_Credentials">آیا نام کاربری و گذرواژه دارید؟</string>
@@ -763,15 +763,152 @@
   <string name="action_show_pin">نمایش پین</string>
   <string name="action_hide_pin">پنهان کردن پین</string>
   <string name="action_go_back">بازگشت</string>
+  <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
+  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
+  <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decide how many failed unlock attempts are allowed before everything inside Tella is deleted.</string>
+  <string name="Settings_Off_Do_Not_Delete">Off (do not delete data)</string>
+  <string name="Settings_Five_Attempts">5 attempts</string>
+  <string name="Settings_Ten_Attempts">10 attempts</string>
+  <string name="Settings_Twenty_Attempts">20 attempts</string>
+  <string name="Settings_Off">Off</string>
+  <string name="Settings_On">On</string>
+  <string name="Settings_Disabled">Disabled</string>
+  <string name="Settings_remaining_attempts_before_deletion">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_failed_unlock_message_template">Your Tella data will be deleted after %1$d failed unlock attempts</string>
+  <string name="Settings_feature_not_available_camouflage">This feature is not available with the calculator camouflage. Change your camouflage to enable this feature.</string>
+  <string name="Auto_Upload_Report">The file(s) you imported have been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Media_Report">The photo(s)/video you took has been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Recording_Report">The recording you made has been automatically uploaded as a report.</string>
+  <string name="Auto_Upload_Imported_Report_And_Deleted">The file(s) you imported have been uploaded as a report and automatically deleted.</string>
+  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"The photo/video you took has been uploaded as a report and automatically deleted."</string>
+  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"The recording you made has been uploaded as a report and automatically deleted."</string>
+  <string name="Report_Available_in_Outbox">Your report is available in the Outbox</string>
+  <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
+  <string name="action_rotate">Rotate</string>
+  <string name="Snackbar_file_was_deleted">The file was deleted.</string>
+  <string name="Snackbar_files_were_deleted">The files were deleted.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved.</string>
+  <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
+  <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
+  <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
+  <string name="incorrect_pattern">Incorrect Pattern.
+
+</string>
+  <string name="incorrect_pin">Incorrect Pin. 
+
+</string>
+  <string name="incorrect_password">Incorrect Password. 
+
+</string>
+  <string name="attempts_remaining_singular">You have 1 attempt remaining until
+ everything in your Tella is deleted.</string>
+  <string name="attempts_remaining_plural">You have %1$d attempts remaining until
+ everything in your Tella is deleted.</string>
+  <string name="exceeded_max_attempts">You have exceeded the maximum number of
+ incorrect login attempts. All your Tella data
+ has been deleted.</string>
+  <string name="Settings_General_TextJustificationTitle">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl" formatted="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
+  <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
   <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
   <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
-  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback. \n This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
+ This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
   <string name="save_draft">Save draft?</string>
   <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
   <string name="feedback">Feedback</string>
-  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.\n</string>
+  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
+</string>
   <string name="feedback_title">Feedback</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
+  <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
+  <string name="Forms_NoDraftForms">You have no draft forms.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
+  <string name="background_activities">Background activities</string>
+  <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
+  <string name="file_encryption_in_progress">File encryption in progress</string>
+  <string name="no_background_activity">There are currently no ongoing activities in the background.</string>
+  <string name="encryption_in_progress">File encryption in progress</string>
+  <string name="encryption_exit_prompt">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
+  <string name="exit_discard_files">Exit and discard files</string>
+  <string name="exit_and_discard_files">Exit and discard files</string>
+  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
+  <string name="Home_BottomNav_Resources">Resources</string>
+  <string name="Resources_DownloadedTitle">Downloaded</string>
+  <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
+  <string name="Resources_AvailableTitle">Available for download</string>
+  <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
+  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
+  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
+  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
+  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
+  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
+  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
+  <string name="Resources_Exit">EXIT</string>
+  <string name="Error_DownloadFailed">Error: Download failed</string>
+  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
+  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
+  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
+  <string name="back">BACK</string>
+  <string name="encrypting">Encrypting </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
+  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
+
+ If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
+
+ Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
+  <string name="Learn_More">LEARN MORE</string>
+  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
+  <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
+  </plurals>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
+  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
+  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
+  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
+  <string name="Analytics_contribute_more_info2"> visit this page.</string>
+  <string name="Analytics_contribute_title">Would you like to contribute?</string>
+  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
+  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+  <string name="Analytics_how_works_title">How it works</string>
+  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
+• We collect as little data as possible.
+• All data is anonymous and can never be linked to you.</string>
+  <string name="Analytics_questions_title">Specific questions</string>
+  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
+  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
+💾  32 files stored in Tella
+📖  Spanish language selected
+⚡  1 server connected
+😎 Calculator camouflage enabled</string>
+  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
+  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
+  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
+• We will <b>never</b> share your data or sell it to anyone.</string>
+  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
+  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. 
+
+Would you like to share analytics with the Tella team?</string>
+  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
+  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
+  <string name="select_entities">Select entities</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
+  <string name="add_more_entities">Add more entities</string>
+  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
+  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
+  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
+  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
+  <string name="unlock">Unlock</string>
 </resources>

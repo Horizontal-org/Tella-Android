@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Tất cả tệp tin</string>
+  <string name="Vault_Images_Title">Hình ảnh</string>
+  <string name="Vault_Files_Title">Tệp tin Tella</string>
+  <string name="Vault_Documents_Title">Tài liệu</string>
+  <string name="Vault_Audios_Title">Âm thanh</string>
+  <string name="Vault_Videos_Title">Video</string>
+  <string name="Vault_Others_Title">Khác</string>
+  <string name="Vault_Select_Title">Chọn tệp tin</string>
+  <string name="Vault_RecentFiles">Các tệp tin gần đây</string>
+  <string name="Vault_PhotosAndVideos_Title">Hình ảnh và Video</string>
+  <string name="Vault_FavoriteForms_Title">Biểu mẫu ưa thích</string>
+  <string name="Vault_Empty_Msg">Bạn chưa có tệp tin trong Tella. Nhấn vào nút “+” bên dưới để nhập tệp tin đầu tiên của bạn hoặc đi tới Máy ảnh hoặc Micrô để tạo tệp tin. Bạn cũng có thể tạo các thư mục để sắp xếp các tệp tin của mình.</string>
+  <string name="Vault_Move_SheetDesc">Di chuyển đến thư mục khác</string>
+  <string name="Vault_Rename_SheetAction">Đổi tên</string>
+  <string name="Vault_Save_SheetAction">Lưu</string>
+  <string name="Vault_Delete_SheetAction">Xóa</string>
+  <string name="Vault_Share_SheetAction">Chia sẻ</string>
+  <string name="Vault_Upload_SheetAction">Tải lên</string>
+  <string name="Vault_File_SheetAction">Thông tin tệp tin</string>
+  <string name="Vault_FileInfo">Thông tin tệp tin</string>
+  <string name="Vault_FileSize">Kích thước</string>
+  <string name="Vault_FileFormat">Định dạng</string>
+  <string name="Vault_FileCreated">Tạo</string>
+  <string name="Vault_FileResolution">Độ phân giải</string>
+  <string name="Vault_FileLength">Độ dài</string>
+  <string name="Vault_FilePath">Đường dẫn tệp tin</string>
+  <string name="Vault_RenameFile_SheetTitle">Đổi tên tệp tin</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="other">Trống</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="other">Trống</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Tên A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Tên Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Mới nhất đến cũ nhất</string>
+  <string name="Vault_SortDateDesc_SheetAction">Từ cũ nhất đến mới nhất</string>
+  <string name="Vault_ManageFiles_SheetTitle">Quản lý tệp tin</string>
+  <string name="Vault_DeleteFile_SheetDesc">Sau khi nhập tệp tin vào Tella, tệp tin gốc sẽ bị xóa khỏi thiết bị của bạn. Bản sao duy nhất còn lại sẽ được lưu giữ bên trong Tella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Chụp ảnh/quay phim</string>
+  <string name="Vault_RecordAudio_SheetAction">Ghi âm</string>
+  <string name="Vault_Import_SheetAction">Nhập từ thiết bị</string>
+  <string name="Vault_ImportDelete_SheetAction">Nhập và xóa tệp tin gốc</string>
+  <string name="Vault_CreateFolder_SheetTitle">Tạo thư mục mới</string>
+  <string name="Vault_MoveHere">Di chuyển đến đây</string>
+  <string name="Vault_ViewerOther_SheetDesc" formatted="false">không thể mở tệp tin ở định dạng này bên trong Tella. Bạn có muốn xuất tệp sang thiết bị của mình để mở tệp đó thông qua một ứng dụng khác không? Điều này có thể làm lộ nội dung của tệp tin. </string>
+  <string name="Vault_Export_SheetAction">Xuất</string>
+  <plurals name="Vault_Items">
+    <item quantity="other">Trống</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Bạn chưa có bất kỳ tệp tin nào trong Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Biểu mẫu ưa thích</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="other">Tệp đã được di chuyển thành công.</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Một số tệp đã chọn hiện đang được sử dụng trong các kết nối của bạn. Việc xóa có thể ảnh hưởng đến các biểu mẫu và báo cáo chưa được gửi.</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">Vẫn xóa</string>
+  <string name="Vault_Keep_Original">GIỮ TỆP GỐC</string>
+  <string name="Vault_Delete_Original">XÓA TỆP GỐC</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Sau khi nhập tệp vào Tella, bạn có muốn giữ lại tệp gốc trên thiết bị của mình hay xóa nó đi?
+
+Nếu bạn xóa nó đi, tệp nhập vào Tella sẽ là bản sao duy nhất còn lại.</string>
+  <string name="Vault_FileEdit_SheetAction">Chỉnh sửa</string>
+</resources>

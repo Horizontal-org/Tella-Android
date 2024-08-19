@@ -566,6 +566,8 @@ public class MediaFileHandler {
 
         try {
             OutputStream os = getMetadataOutputStream(mmf);
+
+
             createMetadataFile(os, vaultFile);
         } catch (Exception e) {
             Timber.d(e);
