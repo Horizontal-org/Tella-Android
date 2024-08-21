@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.util
 
 import android.os.Bundle
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.util.navigateSafe
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 
 class NavigationManager(
@@ -60,10 +59,6 @@ class NavigationManager(
     private fun navigateWithBundleAndClearBackStack(destinationId: Int) {
         navigateToWithBundle(destinationId)
         navControllerProvider.navController.clearBackStack(destinationId)
-    }
-
-    fun navigateToEnterUrlScreen() {
-        navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
     fun navigateFromUwaziEntryToSelectEntities() {

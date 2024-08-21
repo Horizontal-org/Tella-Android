@@ -120,4 +120,8 @@
         <attr name="settingsInfoText" format="reference|string" />
         <attr name="isBottomLineVisible" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ViewPagerComponent">
+        <attr name="tabTitles" format="reference" />
+    </declare-styleable>
 </resources>

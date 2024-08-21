@@ -33,13 +33,13 @@ class DraftsUwaziFragment :
         with(viewModel) {
             draftInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
-                    binding?.textViewEmpty?.isVisible = true
-                    binding?.draftsRecyclerView?.isVisible = false
+                    binding.textViewEmpty.isVisible = true
+                    binding.draftsRecyclerView.isVisible = false
                     uwaziDraftsAdapter.setEntityDrafts(emptyList())
                 } else {
                     (it as ArrayList).add(0, getString(R.string.Uwazi_Drafts_Header_Text))
-                    binding?.textViewEmpty?.isVisible = false
-                    binding?.draftsRecyclerView?.isVisible = true
+                    binding.textViewEmpty.isVisible = false
+                    binding.draftsRecyclerView.isVisible = true
                     uwaziDraftsAdapter.setEntityDrafts(it)
                 }
             }
@@ -91,7 +91,7 @@ class DraftsUwaziFragment :
     }
 
     private fun initView() {
-        binding?.draftsRecyclerView?.apply {
+        binding.draftsRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziDraftsAdapter
         }
