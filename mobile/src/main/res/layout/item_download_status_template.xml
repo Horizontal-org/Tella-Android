@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
+    android:background="@color/wa_black"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -14,20 +15,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/ic_check_circle"
         app:tint="@color/green"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        />
+        android:layout_marginStart="@dimen/activity_horizontal_margin" />
 
     <TextView
         android:id="@+id/tv_template_name"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/img_updated"
+        app:layout_constraintEnd_toStartOf="@id/img_download"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="14dp"
-        tools:text="Test 123"
-        />
+        android:layout_marginEnd="14dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Test 123Test 123Test 123Test 123Test 123Test 123Test 123Test 123Test 123Test 123Test 123Test 123" />
 
     <ImageView
         android:id="@+id/img_more"
@@ -39,9 +42,7 @@
         android:src="@drawable/ic_more"
         android:visibility="gone"
         android:contentDescription="@string/action_open_bottom_sheet"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-
-        />
+        android:layout_marginEnd="@dimen/activity_horizontal_margin" />
 
     <ImageView
         android:id="@+id/img_download"
@@ -53,14 +54,12 @@
         tools:ignore="MissingConstraints"
         android:src="@drawable/ic_save_alt_24px"
         android:contentDescription="@string/action_download"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        />
+        android:layout_marginEnd="@dimen/activity_horizontal_margin" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/wa_white_8"
-        />
+        android:background="@color/wa_white_8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
