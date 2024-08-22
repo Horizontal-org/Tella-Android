@@ -7,7 +7,6 @@ import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_YELLOW_SKIN
 import com.hzontal.tella_locking_ui.common.util.DivviupUtils
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils.runTimeSpentEvent
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -19,6 +18,7 @@ import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.MyApplication.isConnectedToInternet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
@@ -32,15 +32,13 @@ abstract class BaseLockActivity : BaseActivity() {
 
     fun restrictActivity() {
         if (!MyApplication.getMainKeyStore().isStored) {
-            Timber.d("+++++ startKeySetup()")
             startKeySetup()
         } else {
             isLocked = !MyApplication.getMainKeyHolder().exists()
             if (isLocked) {
-                Timber.d("+++++  startUnlockingMainKey")
+                sendTimeSpentAnalytics()
                 startUnlockingMainKey()
-            }
-            else {
+            } else {
                 Timber.d("+++++ unlocked")
             }
         }
@@ -51,6 +49,10 @@ abstract class BaseLockActivity : BaseActivity() {
         Timber.d("+++++ onPause()")
         val lastTimeSpent = CommonPreferences.getTimeSpent()
         CommonPreferences.setTimeSpent(lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime()))
+        Timber.d(
+            "+++++ time spent %s",
+            lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime())
+        )
     }
 
     private fun startKeySetup() {
@@ -71,16 +73,20 @@ abstract class BaseLockActivity : BaseActivity() {
                         CALCULATOR_THEME,
                         Preferences.getCalculatorTheme()
                     )
+
                     else -> Intent(this, PinUnlockActivity::class.java)
                 }
 
             }
+
             UnlockRegistry.Method.TELLA_PATTERN -> {
                 Intent(this, PatternUnlockActivity::class.java)
             }
+
             UnlockRegistry.Method.TELLA_PASSWORD -> {
                 Intent(this, PasswordUnlockActivity::class.java)
             }
+
             else -> {
                 Intent(this, PatternUnlockActivity::class.java)
             }
@@ -120,5 +126,12 @@ abstract class BaseLockActivity : BaseActivity() {
     override fun onDestroy() {
         maybeRestoreTimeout()
         super.onDestroy()
+    }
+
+    private fun sendTimeSpentAnalytics() {
+        if (isConnectedToInternet(baseContext)) {
+            DivviupUtils.runTimeSpentEvent(baseContext, CommonPreferences.getTimeSpent())
+            CommonPreferences.setTimeSpent(0L)
+        }
     }
 }
