@@ -6,12 +6,15 @@ import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_YELLOW_SKIN
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils
+import com.hzontal.tella_locking_ui.common.util.DivviupUtils.runTimeSpentEvent
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.calculator.CalculatorActivity
 import info.guardianproject.cacheword.SecretsManager
+import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.CALCULATOR_THEME
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder
 import org.hzontal.tella.keys.config.UnlockRegistry
@@ -19,6 +22,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
+import timber.log.Timber
 
 abstract class BaseLockActivity : BaseActivity() {
 
@@ -28,13 +32,25 @@ abstract class BaseLockActivity : BaseActivity() {
 
     fun restrictActivity() {
         if (!MyApplication.getMainKeyStore().isStored) {
+            Timber.d("+++++ startKeySetup()")
             startKeySetup()
         } else {
             isLocked = !MyApplication.getMainKeyHolder().exists()
             if (isLocked) {
+                Timber.d("+++++  startUnlockingMainKey")
                 startUnlockingMainKey()
             }
+            else {
+                Timber.d("+++++ unlocked")
+            }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.d("+++++ onPause()")
+        val lastTimeSpent = CommonPreferences.getTimeSpent()
+        CommonPreferences.setTimeSpent(lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime()))
     }
 
     private fun startKeySetup() {
@@ -75,6 +91,7 @@ abstract class BaseLockActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        CommonPreferences.setUnlockTime(System.currentTimeMillis())
         restrictActivity()
         maybeEnableSecurityScreen()
         super.onResume()

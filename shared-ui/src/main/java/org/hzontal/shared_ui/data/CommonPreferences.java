@@ -65,6 +65,15 @@ public class CommonPreferences {
         setLong(CommonPrefs.UNLOCK_TIME, value);
     }
 
+
+    public static Long getTimeSpent() {
+        return getLong(CommonPrefs.TIME_SPENT, 0L);
+    }
+
+    public static void setTimeSpent(Long value) {
+        setLong(CommonPrefs.TIME_SPENT, value);
+    }
+
     public static boolean isShowVaultAnalyticsSection() {
         return getBoolean(CommonPrefs.SHOW_IMPROVEMENT_SECTION, true);
     }

@@ -23,6 +23,7 @@ public class CommonPrefs {
     static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
     static final String INSTALL_METRIC_SENT = "install_metric_sent";
     static final String UNLOCK_TIME = "unlock_time";
+    static final String TIME_SPENT = "time_spent";
 
 
     private static CommonPrefs instance;

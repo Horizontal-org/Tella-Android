@@ -5,7 +5,6 @@ import com.hzontal.tella_locking_ui.R
 import org.divviup.android.Client
 import org.divviup.android.TaskId
 import org.hzontal.shared_ui.data.CommonPreferences
-import org.hzontal.tella.keys.util.Preferences
 import timber.log.Timber
 import java.net.URI
 import java.util.concurrent.Executors
@@ -14,16 +13,6 @@ object DivviupUtils {
 
     fun runUnlockEvent(context: Context) {
         if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild(context)) return
-        val lastTimeSpent = Preferences.loadLong(
-            context,
-            Preferences.CLEAR_KEY_MS,
-            0L
-        ) - CommonPreferences.getUnlockTime()
-        if (lastTimeSpent > 0) {
-            runTimeSpentEvent(context, lastTimeSpent)
-        }
-        CommonPreferences.setUnlockTime(System.currentTimeMillis())
-
         Executors.newSingleThreadExecutor().execute {
             try {
                 val taskId = TaskId.parse(context.getString(R.string.divviup_count_unlocks_id))

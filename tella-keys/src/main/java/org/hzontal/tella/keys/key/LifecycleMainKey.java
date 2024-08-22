@@ -25,13 +25,11 @@ public class LifecycleMainKey implements LifecycleObserver {
     private MainKey mainKey;
     private CurrentState state;
     private long timeout;
-    private Context context;
 
     private final ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
 
-    public LifecycleMainKey(Context context, Lifecycle lifecycle, long timeout) {
-        this.context = context;
+    public LifecycleMainKey(Lifecycle lifecycle, long timeout) {
         this.timeout = timeout;
         this.executor = Executors.newSingleThreadScheduledExecutor();
         this.state = new CurrentState(State.UNKNOWN);
@@ -63,7 +61,6 @@ public class LifecycleMainKey implements LifecycleObserver {
 
     public synchronized boolean clear() {
         Timber.d("*** LifecycleMainKey.clear");
-        Preferences.store(context, Preferences.CLEAR_KEY_MS, System.currentTimeMillis() );
 
         if (mainKey == null) {
             return false;

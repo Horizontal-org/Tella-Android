@@ -8,7 +8,6 @@ import android.util.Base64;
 
 public class Preferences {
     public static final String PREFERENCES = "org.hzontal.tella.keys";
-    public static final String CLEAR_KEY_MS = "clear_key_ms";
 
     public static final String WRAPPED_MAIN_KEY = "WRAPPED_MAIN_KEY";
 

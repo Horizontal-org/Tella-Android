@@ -210,7 +210,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         initializeLockConfigRegistry();
         mainKeyStore = new MainKeyStore(getApplicationContext());
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
-        mainKeyHolder = new LifecycleMainKey(getApplicationContext(), ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         keyDataSource = new KeyDataSource(getApplicationContext());
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
     }
