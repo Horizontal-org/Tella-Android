@@ -113,7 +113,7 @@ public class CamouflageManager {
                             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP);
         }
-        DivviupUtils.INSTANCE.runCamouflageEnabledEvent(context);
+        DivviupUtils.Companion.runCamouflageEnabledEvent(context);
         return true;
     }
 

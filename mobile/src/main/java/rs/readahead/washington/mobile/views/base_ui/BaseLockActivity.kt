@@ -38,21 +38,14 @@ abstract class BaseLockActivity : BaseActivity() {
             if (isLocked) {
                 sendTimeSpentAnalytics()
                 startUnlockingMainKey()
-            } else {
-                Timber.d("+++++ unlocked")
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        Timber.d("+++++ onPause()")
         val lastTimeSpent = CommonPreferences.getTimeSpent()
         CommonPreferences.setTimeSpent(lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime()))
-        Timber.d(
-            "+++++ time spent %s",
-            lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime())
-        )
     }
 
     private fun startKeySetup() {
