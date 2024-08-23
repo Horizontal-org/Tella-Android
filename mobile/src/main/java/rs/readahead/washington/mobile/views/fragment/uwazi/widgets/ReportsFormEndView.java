@@ -97,12 +97,12 @@ public class ReportsFormEndView extends FrameLayout {
         if (instance.getStatus() == EntityStatus.SUBMITTED) {
             title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.PAUSED) {
-            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
+            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
         } else if (instance.getStatus() == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
-            title = getStatusLabel(instance.getStatus()) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+            title = getStatusLabel(instance.getStatus()) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         } else {
             //TODO CHECK THE PERCENT  (getPercentUploadedSize(instance)*100) + "% " +
-            title = (percent) + "% " + getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + "," + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+            title = (percent) + "% " + getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ",  " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
         }
 
         formSizeView.setText(title);
