@@ -88,14 +88,11 @@ public class ReportsFormEndView extends FrameLayout {
 
     void setFormSizeLabel(@NonNull ReportInstance instance, int percent) {
         String title;
-
-        // Handle the case where there are no media files
         if (instance.getWidgetMediaFiles().isEmpty()) {
             title = getStatusLabel(instance.getStatus());
             formSizeView.setText(title);
             return;
         }
-
         switch (instance.getStatus()) {
             case SUBMITTED:
                 title = getStatusLabel(instance.getStatus()) + "\n" +
