@@ -396,6 +396,8 @@ connecting to a server</string>
   <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
   <string name="onboard.calculator_button">Select calculator</string>
   <string name="onboard.calculator_expl">Tella will be hidden behind a functional Calculator app. Unlock Tella by entering your PIN on the calculator followed by =</string>
+ <string name="Onboard_Collect_Data">Collect data</string>
+ <string name="Onboard_Collect_Data_Exp">If you work with an organization, send\n forms, reports, and files directly from Tella\n to your organization.</string>
   <string name="settings.general_recent_files_switch_title">Recent files</string>
   <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
   <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
