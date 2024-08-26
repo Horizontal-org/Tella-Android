@@ -88,25 +88,48 @@ public class ReportsFormEndView extends FrameLayout {
 
     void setFormSizeLabel(@NonNull ReportInstance instance, int percent) {
         String title;
-        if (instance.getWidgetMediaFiles().size() == 0) {
+
+        // Handle the case where there are no media files
+        if (instance.getWidgetMediaFiles().isEmpty()) {
             title = getStatusLabel(instance.getStatus());
             formSizeView.setText(title);
             return;
         }
 
-        if (instance.getStatus() == EntityStatus.SUBMITTED) {
-            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + FileUtil.getFileSizeString(formSize);
-        } else if (instance.getStatus() == EntityStatus.PAUSED) {
-            title = getStatusLabel(instance.getStatus()) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
-        } else if (instance.getStatus() == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
-            title = getStatusLabel(instance.getStatus()) + "\n" + " " + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
-        } else {
-            //TODO CHECK THE PERCENT  (getPercentUploadedSize(instance)*100) + "% " +
-            title = (percent) + "% " + getResources().getString(R.string.File_Uploaded) + "\n" + getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ",  " + getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " + getResources().getString(R.string.File_Uploaded);
+        switch (instance.getStatus()) {
+            case SUBMITTED:
+                title = getStatusLabel(instance.getStatus()) + "\n" +
+                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
+                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
+                        FileUtil.getFileSizeString(formSize);
+                break;
+            case PAUSED:
+                title = getStatusLabel(instance.getStatus()) + "\n" +
+                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
+                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
+                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
+                break;
+            case FINALIZED:
+            case SUBMISSION_PENDING:
+            case SUBMISSION_ERROR:
+                title = getStatusLabel(instance.getStatus()) + "\n" +
+                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
+                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
+                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " +
+                        getResources().getString(R.string.File_Uploaded);
+                break;
+            default:
+                title = percent + "% " + getResources().getString(R.string.File_Uploaded) + "\n" +
+                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
+                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ",  " +
+                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " +
+                        getResources().getString(R.string.File_Uploaded);
+                break;
         }
 
         formSizeView.setText(title);
     }
+
 
     String getStatusLabel(EntityStatus status) {
         String title = "";

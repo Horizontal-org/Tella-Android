@@ -25,7 +25,7 @@ class UwaziSelectEntitiesFragment :
     private var items: MutableList<SearchableItem> = ArrayList()
     private var resultList: MutableList<UwaziRelationShipEntity> = ArrayList()
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
-    private lateinit var promptTitle: String
+    private var promptTitle: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(
@@ -76,8 +76,8 @@ class UwaziSelectEntitiesFragment :
                     e.printStackTrace()
                 }
             }
-        if (arguments?.getString(UWAZI_ENTRY_PROMPT_TITLE) != null) {
-            promptTitle = arguments?.getString(UWAZI_ENTRY_PROMPT_TITLE)!!
+        arguments?.getString(UWAZI_ENTRY_PROMPT_TITLE)?.let {
+            promptTitle = it
         }
     }
 
@@ -110,7 +110,7 @@ class UwaziSelectEntitiesFragment :
         binding.toolbar.apply {
             setRightIcon(R.drawable.ic_check_white)
             setRightIconVisibility(false)
-            setStartTextTitle(promptTitle)
+            promptTitle?.let { setStartTextTitle(it) }
             onRightClickListener = {
                 val resultList = items.filter { it.isSelected }
                     .map { UwaziRelationShipEntity(it.value, it.text) }
