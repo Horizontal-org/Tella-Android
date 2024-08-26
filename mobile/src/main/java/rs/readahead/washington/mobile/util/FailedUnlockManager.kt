@@ -26,22 +26,15 @@ class FailedUnlockManager {
     }
 
     fun getFailedUnlockOptionText(): Int {
-        val selectedOption = Preferences.getFailedUnlockOption()
-        return when (selectedOption) {
-            20L -> {
-                R.string.Settings_Twenty_Attempts
-            }
-            5L -> {
-                R.string.Settings_Five_Attempts
-            }
-            10L -> {
-                R.string.Settings_Ten_Attempts
-            }
-            else -> {
-                R.string.Settings_Off
-            }
-        }
+        val optionMap = mapOf(
+            20L to R.string.Settings_Twenty_Attempts,
+            5L  to R.string.Settings_Five_Attempts,
+            10L to R.string.Settings_Ten_Attempts
+        )
+
+        return optionMap[Preferences.getFailedUnlockOption()] ?: R.string.Settings_Off
     }
+
 
 
     fun setFailedUnlockOption(option: Long) {
