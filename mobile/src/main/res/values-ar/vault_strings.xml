@@ -5,7 +5,7 @@
   <string name="Vault_Files_Title">ملفات Tella</string>
   <string name="Vault_Documents_Title">المستندات</string>
   <string name="Vault_Audios_Title">ملفات صوتية</string>
-  <string name="Vault_Videos_Title">ملفات الفيديو</string>
+  <string name="Vault_Videos_Title">الفيديوهات</string>
   <string name="Vault_Others_Title">أخرى</string>
   <string name="Vault_Select_Title">حدد الملفات</string>
   <string name="Vault_RecentFiles">أحدث الملفات</string>
@@ -16,8 +16,8 @@
   <string name="Vault_Rename_SheetAction">إعادة تسمية</string>
   <string name="Vault_Save_SheetAction">حفظ</string>
   <string name="Vault_Delete_SheetAction">حذف</string>
-  <string name="Vault_Share_SheetAction">مشاركة</string>
-  <string name="Vault_Upload_SheetAction">تحميل</string>
+  <string name="Vault_Share_SheetAction">المشاركة</string>
+  <string name="Vault_Upload_SheetAction">رفع</string>
   <string name="Vault_File_SheetAction">معلومات الملف</string>
   <string name="Vault_FileInfo">معلومات الملف</string>
   <string name="Vault_FileSize">الحجم</string>
@@ -76,7 +76,7 @@
     <item quantity="other">تم نقل الملفات بنجاح</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">بعض الملفات المختارة مستخدمة حالياً في اتصالاتك. قد يؤثر حذفها على النماذج والتقارير التي لم يتم إرسالها بعد.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">تحذير</string>
   <string name="Vault_Delete_anyway">الحذف على أي حال</string>
   <string name="Vault_Keep_Original">احتفظ بالأصلي</string>
   <string name="Vault_Delete_Original">احذف الأصلي</string>
