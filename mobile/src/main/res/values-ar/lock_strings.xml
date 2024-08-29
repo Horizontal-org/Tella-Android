@@ -5,19 +5,19 @@
   <string name="LockSelect_Action_Confirm">التالي</string>
   <string name="LockPatternConfirm_Action_Confirm">تأكيد النمط</string>
   <string name="LockSelect_Action_Continue">التالي</string>
-  <string name="LockPatternSet_Draw_Pattern">ارسم نمط فتح القفل</string>
+  <string name="LockPatternSet_Draw_Pattern">يُرجى رسم نمط إلغاء التأمين</string>
   <string name="UnlockPattern_DrawToUnlock">ارسم النمط لفتح قفل Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">نمط فتح القفل الجديد الخاص بك</string>
-  <string name="LockPatternSet_Pattern_Recorded">تم تسجيل النمط</string>
+  <string name="LockPatternSet_Pattern_Recorded">لقد تم تسجيل النمط</string>
   <string name="UnlockPattern_PatternTooShort">ارسم النمط الخاص بك
  من خلال توصيل ست نقاط على الأقل</string>
   <string name="LockPatternSet_RecordingPattern">حرر إصبعك عند الانتهاء</string>
-  <string name="LockPatternSet_Action_Redraw">مسح</string>
+  <string name="LockPatternSet_Action_Redraw">Clear</string>
   <string name="LockPatternConfirm_Message_WrongPattern">نمط غير صحيح،
  يُرجى المحاولة مرة أخرى</string>
   <string name="LockPatternSet_Message_PatternStarted">تم بدء استخدام النمط</string>
-  <string name="LockPatternSet_Message_PatternCleared">تم مسح النمط</string>
-  <string name="LockPatternSet_Message_CellAdded">تم إضافة خلية</string>
+  <string name="LockPatternSet_Message_PatternCleared">تم محو النمط</string>
+  <string name="LockPatternSet_Message_CellAdded">لقد أضيفت الخلية</string>
   <string name="LockPatternSet_Message_CellAddedVerbose">تم إضافة <xliff:g id="cell_index" example="3">%1$d</xliff:g> خلايا</string>
   <string name="LockPatternSet_Message_PatternDetected">تم إكمال النمط</string>
   <string name="UnLockPattern_PatternArea">منطقة رسم النمط.</string>
@@ -68,6 +68,6 @@ Tella</string>
 طريقة التمويه</string>
   <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">أدخل رقم التعريف الشخصي
  لتغيير طريقة التمويه</string>
-  <string name="Settings_Action_SetLock">القفل</string>
+  <string name="Settings_Action_SetLock">قفل</string>
   <string name="Settings_Message_LockChanged">تم تغيير القفل الخاص بك!</string>
 </resources>

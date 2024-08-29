@@ -826,7 +826,7 @@
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">فۆرمەکان لەسەر سێرڤەر بەردەستن</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
@@ -908,4 +908,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

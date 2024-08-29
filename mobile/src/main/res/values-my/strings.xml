@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">မြှင့်တင်မည်</string>
-  <string name="settings.about_app.bar">အကြောင်းနှင့် အကူအညီ</string>
+  <string name="settings.about_app.bar">အကြောင်းအရာနှင့် အကူအညီ</string>
   <string name="collect.form_exit.unsaved_dialog.title">ဖောင်မှ ထွက်မလား။</string>
   <string name="verification_prompt_dialog_title">GPS ဖွင့်လိုပါသလား။</string>
   <string name="collect_tab.title_blank">ဗလာ</string>
@@ -28,7 +28,7 @@
   <string name="recorder_toast_fail.recording">အသံဖမ်းရာတွင် အမှားအယွင်း ရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
   <string name="recorder_content.desc_blinking.red.dot">အသံဖမ်းခြင်း</string>
   <string name="action_remove">ဖယ်ရှားပါ</string>
-  <string name="settings_app.bar">ဆက်တင်များ</string>
+  <string name="settings_app.bar">ချိန်ညှိ့သည့်နေရာ</string>
   <string name="action_save">သိမ်းမည်</string>
   <string name="lock_dialog.expl_save.pattern">သင်၏သော့ခတ်ပုံစံကို သိမ်းဆည်းခြင်း</string>
   <string name="lock_dialog.expl_unlock.app">Tella ကို သော့ဖွင့်ခြင်း</string>
@@ -40,7 +40,7 @@
   <string name="settings.docu_dialog.title_server.settings">ဆာဗာ ဆက်တင်များ</string>
   <string name="settings.docu_field_server.name">ဆာဗာအမည်</string>
   <string name="settings.docu_field_server.url">ဆာဗာ URL</string>
-  <string name="collect.sent_tab.title">ပေးပို့ပြီးပြီ</string>
+  <string name="collect.sent_tab.title">ပေးပို့သည်</string>
   <string name="home_expl_cancel.quick.delete">ပယ်ဖျက်ရန် မည်သည့်နေရာကိုမဆို နှိပ်ပါ</string>
   <string name="recorder_app.bar">အသံဖမ်းစက်</string>
   <string name="settings.docu_field_username">အသုံးပြုသူအမည်</string>
@@ -52,7 +52,7 @@
   <string name="collect.form_toast_validation.generic.error">အဖြေအချို့တွင် အတည်ပြုချက်အမှားများ ရှိခဲ့သည်</string>
   <string name="permission_dialog.expl_GPS">သင့်ဖိုင်များကို အတည်ပြုနိုင်စေရန်အတွက် Tella သည် သင့်တည်နေရာကို မှတ်တမ်းတင်ရန် လိုအပ်ပြီး သင့် GPS ကို အသုံးပြုခွင့်ရရှိရန် လိုအပ်ပါသည်။</string>
   <string name="collect.form_action_select.time">အချိန်ရွေးပါ</string>
-  <string name="collect.form_action_select.date">ရက်စွဲကို ရွေးပါ</string>
+  <string name="collect.form_action_select.date">နေ့ရက်ရွေးချယ်ပါ။</string>
   <string name="collect_dialog.expl_downloading.blank.forms">ပုံစံများကို ဒေါင်းလုဒ်လုပ်နေသည်</string>
   <string name="collect.blank_toast_fail.updating.form.list">ပုံစံများစာရင်းကို အပ်ဒိတ်လုပ်ရာတွင် အမှားအယွင်းရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
   <string name="collect_toast_fail.parsing.form">ဤဖောင်ကို ပြသရာတွင် အမှားအယွင်း ရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
@@ -72,11 +72,11 @@
   <string name="settings.lang_select.expl_default">Tella ကို ကျွန်ုပ်၏စက်ပစ္စည်းနှင့် တူသော ဘာသာစကားအတိုင်း ထားမည်</string>
   <string name="settings.lang_select_default">ပုံသေ</string>
   <string name="settings.lang_app.bar">ဘာသာစကား</string>
-  <string name="action_share">မျှဝေပါ</string>
+  <string name="action_share">မျှဝေမည်</string>
   <string name="collect_toast_fail.submission.unauthorized">ဤဖောင်ကို တင်ပြရန် သင့်တွင် ခွင့်ပြုချက် မရှိပါ။ ၎င်းသည် မှားယွင်းသည်ဟု ယူဆပါက သင့်အဖွဲ့အစည်းကို ဆက်သွယ်ပါ</string>
   <string name="gallery_toast_fail.importing.file">ဖိုင်ကို ထည့်သွင်းရာတွင် အမှားအယွင်းရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
   <string name="collect.end_heading">ပုံစံ၏အဆုံး</string>
-  <string name="collect.end_toast_notification.form.not.sent.no.connection">သင်သည် အင်တာနက်နှင့် ချိတ်ဆက်မထားပါ။ ချိတ်ဆက်ပြီးသည့်အခါ ထပ်စမ်းကြည့်ပါ</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">အင်တာနက် ချိတ်ဆက်မှုမရှိပါ။ ချိတ်ဆက်ပြီးနောက် ထပ်စမ်းကြည့်ပါ</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">အစိတ်အပိုင်းများ သို့မဟုတ် ဖောင်အားလုံးကို မပို့ခဲ့ပါ။ ၎င်းကို စွန့်ပစ်လိုသည်မှာ သေချာပါသလား။</string>
   <string name="action_discard">စွန့်လွှတ်ပယ်ဖျက်မည်</string>
   <string name="collect.end_action_submit">ပို့မည်</string>
@@ -104,12 +104,12 @@
   <string name="collect.form_exit_dialog.action_save.exit">သိမ်းဆည်း၍ ထွက်မည်</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">မည်သို့ပင်ဖြစ်စေ ထွက်မည်</string>
   <string name="settings.docu_error_not.valid.URL">၎င်းသည် မှန်ကန်သော URL မဟုတ်ပါ။</string>
-  <string name="home_action.label_quick.delete">ဖျက်မည်</string>
+  <string name="home_action.label_quick.delete">ဖျက်ရန်</string>
   <string name="gallery_subheading_sort.by">အစဉ်အတိုင်း</string>
   <string name="gallery_list.item_newest.to.oldest">အသစ်ဆုံးမှ အဟောင်းဆုံးသို့</string>
   <string name="gallery_list.item_oldest.to.newest">အဟောင်းဆုံးမှ အသစ်ဆုံးသို့</string>
   <string name="action_exit">ထွက်မည်</string>
-  <string name="settings.prot_select_camouflage">ပုံဖျက်သည်</string>
+  <string name="settings.prot_select_camouflage">အခြားအက်ပ် အသွင်ယူခြင်း</string>
   <string name="settings.docu_error_wrong.credentials">အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက်သည် မမှန်ပါ။</string>
   <string name="settings.docu_error_domain.doesnt.exit">ဆာဗာ URL သည် မမှန်ကန်ပါ။</string>
   <string name="settings.docu_error_unknown.connection.error">ဆာဗာသို့ ချိတ်ဆက်ရန် ကြိုးစားရာတွင် အမှားအယွင်းတစ်ခု ရှိခဲ့သည်။</string>
@@ -196,7 +196,7 @@
   <string name="collect.sent_action_edit.to.resend">ပြန်လည်ပေးပို့ရန် တည်းဖြတ်ပါ</string>
   <string name="collect_toast_form.submitted">ဖောင်တင်ပြီးပါပြီ</string>
   <string name="collect.end_heading_confirmation.form.submitted">ဖောင်တင်ပြီးပါပြီ</string>
-  <string name="settings.docu_add.server_field_password">စကားဝှက်</string>
+  <string name="settings.docu_add.server_field_password">လျှို့၀ှက်စကား၀ှက်</string>
   <string name="settings.camo_error_fail.retrieve.app.name">အက်ပ်</string>
   <string name="collect.end_item_form.data">တုံ့ပြန်မှုပုံစံ</string>
   <string name="collect_toast_fail.loading.form.instance">ဖောင်ကို တင်ရာတွင် အမှားအယွင်းရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
@@ -265,7 +265,7 @@
   <string name="camera_video.resolution_select_720p">အလယ် (၇၂၀p)</string>
   <string name="camera_video.resolution_select_480p">အနိမ့် (၄၈၀p)</string>
   <string name="settings.docu_auto.upload_action.expl">Tella သည် သင်၏ဓာတ်ပုံများ၊ ဗီဒီယိုများ သို့မဟုတ် အသံဖမ်းယူမှုများကို မှတ်တမ်းတင်ပြီး သို့မဟုတ် Tella ထဲသို့ ထည့်သွင်းပြီးသည်နှင့် ဆာဗာသို့ အပ်လုဒ်လုပ်ပါမည်။</string>
-  <string name="settings.docu_auto.delete_action">အလိုအလျောက် ဖျက်ခြင်း</string>
+  <string name="settings.docu_auto.delete_action">အလိုအလျောက်ဖျက်မည်</string>
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">ဖိုင်များကို မည်သည့်ဆာဗာသို့ အပ်လုဒ်တင်လိုပါသလဲ။</string>
   <string name="settings.docu_error_must.select.auto.upload.server">ဆာဗာတစ်ခုကို သင်ရွေးချယ်ရမည်။</string>
   <string name="camera_tab.title_video">ဗီဒီယို</string>
@@ -273,12 +273,12 @@
   <string name="action_upload">တင်မည်</string>
   <string name="collect.blank_action.desc_more.options">နောက်ထပ် ရွေးချယ်စရာများ</string>
   <string name="action_next">နောက်တစ်ခု</string>
-  <string name="meter">%f m</string>
-  <string name="meter_per_second">%f m/s</string>
+  <string name="meter">%f မီတာ</string>
+  <string name="meter_per_second">%f မီတာ/စက္ကန့်</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect">စာရွက်စာတမ်းနဲ့ ကာကွယ်မှု</string>
   <string name="onboard_setup_lock">Tella ကို ဘယ်လို လော့ခ်ချချင်လဲ။</string>
-  <string name="onboard_password">စကားဝှက်</string>
+  <string name="onboard_password">လျှို့၀ှက်စကား၀ှက်</string>
   <string name="onboard_password_description">အလုံခြုံဆုံးရွေးချယ်မှု</string>
   <string name="onboard_pin">ပင်နံပါတ်</string>
   <string name="onboard_pin_description">အတန်အသင့် လုံခြုံသည်</string>
@@ -309,7 +309,7 @@
   <string name="action_enable">ဖွင့်ပါ</string>
   <string name="action_disable">ပိတ်ပါ</string>
   <string name="settings.servers_delete.server_dialog.title">\"%1$s\"  ဆာဗာကို ဖျက်လိုပါသလား။</string>
-  <string name="action_edit">တည်းဖြတ်ပါ</string>
+  <string name="action_edit">ပြင်ဆင်မည်</string>
   <string name="settings.server_add.server_dialog_advanced">အဆင့်မြင့်</string>
   <string name="settings.docu_error_auth.required">စစ်မှန်ကြောင်း အထောက်အထား လိုအပ်သည်</string>
   <string name="settings.sec_lock_timeout_immediately">ချက်ချင်း</string>
@@ -349,7 +349,7 @@
   <string name="settings.camo_calculate">တွက်ချက်ပါ</string>
   <string name="settings.camo_calculator_plus">Calculator Plus</string>
   <string name="settings.camo_icalculator">iCalculator</string>
-  <string name="settings.camo_weather">ရာသီဥတု</string>
+  <string name="settings.camo_weather">မိုးလေဝသ</string>
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
   <string name="settings.camo_gamestation">GameStation</string>
@@ -374,7 +374,7 @@
   <string name="onboard.title_all_done">အားလုံးပြီးစီးသွားပါပြီ။</string>
   <string name="onboard.expl_all_done">သင် Tella သို့ ယခု သွားနိုင်သည် သို့မဟုတ် အဆင့်မြင့်ဆက်တင်များကို သတ်မှတ်ရန် Tella ကို ဆက်လက် စိတ်ကြိုက်ပြင်ဆင်နိုင်သည်။</string>
   <string name="onboard.go_btn_all_done">Tella သို့ သွားမည်</string>
-  <string name="onboard.advanced_btn_all_done">အဆင့်မြင့် ဆက်တင်များ</string>
+  <string name="onboard.advanced_btn_all_done">အဆင့်မြင့် ဆက်တင်များ</string>
   <string name="onboard.title_share_data">သင်စုဆောင်းထားသော ဒေတာကို မျှဝေပါ</string>
   <string name="onboard.expl_share_data">အဖွဲ့အစည်းတစ်ခုနှင့် အလုပ်လုပ်ပါက ၎င်းတို့ထံ ဖိုင်များနှင့် ဒေတာများ ပေးပို့ရန် ထိုအဖွဲ့အစည်း၏ ဆာဗာနှင့် ချိတ်ဆက်ပါ။ သင့်အဖွဲ့အစည်းက သင့်အား ဆာဗာအသေးစိတ်အချက်အလက်များကို ပေးပါလိမ့်မည်။</string>
   <string name="onboard.connect_btn_share_data">ဆာဗာသို့ ချိတ်ဆက်မည်</string>
@@ -392,7 +392,7 @@
   <string name="onboard.calculator_expl">အမှန်တကယ်အသုံးပြုနိုင်သော ဂဏန်းတွက်စက် အက်ပ်တစ်ခုနောက်တွင် Tella ကို ဝှက်ထားပါမည်။ ဂဏန်းတွက်စက်တွင် သင့်ပင်နံပါတ်ကို ရိုက်ထည့်ပြီးနောက် = ထည့်၍ Tella ကို လော့ခ်ဖွင့်ပါ။</string>
   <string name="settings.general_recent_files_switch_title">မကြာမီက ဖိုင်များ</string>
   <string name="settings.general_recent_files_switch_expl">Tella ၏ ပင်မစခရင်တွင် သင်၏မကြာသေးမီက ဖိုင်များကို အစမ်းကြည့်ရှုရန်နှင့် အမြန်ဝင်ရောက်နိုင်ရန် ပြသထားသည်။</string>
-  <string name="settings.general_favorite_forms_switch_title">အနှစ်သက်ဆုံး ပုံစံများ</string>
+  <string name="settings.general_favorite_forms_switch_title">အနှစ်သက်ဆုံး ဖောင်ပုံစံများ</string>
   <string name="settings.general_favorite_forms_switch_expl">Tella ၏ ပင်မစခရင်တွင် သင်အနှစ်သက်ဆုံး ဖောင်ပုံစံများသို့ သွားရန် ရှော့ကတ်များ ပြသထားသည်။</string>
   <string name="settings.sec_confirm_camouflage_title">ဖုံးကွယ်မှုကို ဖွင့်ရန် Tella မှ ထွက်လိုပါသလား။</string>
   <string name="settings.sec_confirm_camouflage_desc">Tella ကို ပြန်ဖွင့်ရန် သင့်အက်ပ်များကြားရှိ %s အက်ပ်သင်္ကေတကို ရှာပါ။</string>
@@ -412,7 +412,7 @@
   <string name="Vault_Importing_SheetTitle">ထည့်သွင်းခြင်းနှင့် ကုဒ်ဝှက်ခြင်း</string>
   <string name="Rec_Exit_SheetTitle">အသံသွင်းထားသောဖိုင်ကို သိမ်းမလား။</string>
   <string name="Rec_Exit_SheetText">သင်၏ အသံသွင်းထားမှုကို မသိမ်းထားပါ။ မထွက်ခင် သိမ်းလိုပါသလား။</string>
-  <string name="Vault_AudioRecordings_AppBar">အသံသွင်းထားသော ဖိုင်များ</string>
+  <string name="Vault_AudioRecordings_AppBar">အသံမှတ်တမ်းများ</string>
   <string name="Vault_Encryting_SheetText">%d % ပြီးပြည့်စုံပါပြီ</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">ကုဒ်ဝှက်ခြင်းကို ပယ်ဖျက်ပြီး ဖိုင်ကို ဖျက်လိုပါသလား။</string>
   <string name="Vault_Encrypting_Cancel_SheetText">သင်ပယ်ဖျက်ပါက သင့်ဖိုင် ပျောက်ဆုံးသွားပါမည်</string>
@@ -502,14 +502,14 @@
 ဆက်လက်လုပ်ဆောင်ရန် Entity ပေါ်တွင် နှိပ်ပါ။</string>
   <string name="Uwazi_Outbox_Header_Text">အောက်ပါတို့သည် ပေးပိုရန် အသင့်ဖြစ်သော သို့မဟုတ် တစ်စိတ်တစ်ပိုင်း ပို့ပြီးသော Entity များ ဖြစ်သည်။</string>
   <string name="Uwazi_Submitted_Header_Text">ဤအရာများသည် သင်တင်သွင်းထားသော Entity များ ဖြစ်သည်။</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">ဖိုင်များကို သင်ထည့်သွင်းလိုသည့် ပုံစံအတိုင်း ရွေးပါ</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">သင်ထည့်သွင်းလိုသည့် ပုံစံအတိုင်း ဖိုင်များကို ရွေးပါ</string>
   <string-array name="Uwazi_Language_Array">
     <item>English</item>
     <item>عربي</item>
     <item>Français</item>
   </string-array>
   <string-array name="Uwazi_Language_Array_Translated">
-    <item>အင်္ဂလိပ်ဘာသာစကား</item>
+    <item>English</item>
     <item>အာရဗီ ဘာသာစကား</item>
     <item>ပြင်သစ်ဘာသာစကား</item>
   </string-array>
@@ -670,7 +670,7 @@
   <string name="Delete_Report_Confirmation">ဤအစီရင်ခံချက်ကို ဖျက်လိုသည်မှာ သေချာပါသလား။</string>
   <string name="Delete_Submitted_Report_Confirmation">ဤပေးပို့ထားသော အစီရင်ခံချက်ကို သင်၏မှတ်တမ်းများမှ ဖျက်လိုသည်မှာ သေချာပါသလား။</string>
   <string name="View_Report">ကြည့်မည်</string>
-  <string name="Delete_Report">ဖျက်မည်</string>
+  <string name="Delete_Report">ဖျက်ရန်</string>
   <string name="Paused_Report">ခေတ္တရပ်ထားသည်</string>
   <string name="Report_Waiting_For_Connection">ချိတ်ဆက်မှုရရန် စောင့်ဆိုင်းနေသည်</string>
   <string name="Project_Url_Screen_Title">ပရောဂျက် URL ထည့်ပါ</string>
@@ -748,7 +748,7 @@
   <string name="action_hide_pin">ပင်ကို ဝှက်မည်</string>
   <string name="action_go_back">ပြန်သွားမည်</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_unlock_screen_instructions">Tella အကောင့်တွင်းရှိ ဒေတာအားလုံးကို မဖျက်မီ အကောင့်ဝင်ရောက်ရန် ကျန်ရှိသည့် ကြိုးပမ်းခွင့် အကြိမ်ရေကို လော့ခ်ဖွင့်ထားသည့် မျက်နှာပြင်တွင်  ပြသပါ</string>
   <string name="Settings_Delete_After_Failed_Unlock">လော့ခ်ဖွင့်ရန် မအောင်မြင်သည့်နောက် ဖျက်မည်</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Tella အတွင်းရှိ ဒေတာအားလုံးကို မဖျက်မီ မမှန်မကန် အကောင့်ဝင်ရောက်ရန် ကြိုးပမ်းခွင့် အကြိမ်ရေကို သတ်မှတ်ပါ။</string>
   <string name="Settings_Off_Do_Not_Delete">ပိတ်မည် (ဒေတာမဖျက်ပါ)</string>
@@ -884,4 +884,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

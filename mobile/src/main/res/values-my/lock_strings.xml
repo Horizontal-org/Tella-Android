@@ -11,7 +11,7 @@
   <string name="LockPatternSet_Pattern_Recorded">ပုံစံမှတ်တမ်းတင်ပြီးပါပြီ</string>
   <string name="UnlockPattern_PatternTooShort">အနည်းဆုံး အစက်ခြောက်စက်အထိ ချိတ်ဆက်ခြင်းဖြင့် သင်၏ပုံစံကိုဆွဲပါ</string>
   <string name="LockPatternSet_RecordingPattern">ပြီးလျှင် လက်ကို လွှတ်လိုက်ပါ</string>
-  <string name="LockPatternSet_Action_Redraw">ရှင်းလင်းမည်</string>
+  <string name="LockPatternSet_Action_Redraw">ရှင်းလင်းသည်</string>
   <string name="LockPatternConfirm_Message_WrongPattern">ပုံစံ မှားယွင်းနေပါသည်၊ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
   <string name="LockPatternSet_Message_PatternStarted">ပုံစံ စတင်ခဲ့သည်</string>
   <string name="LockPatternSet_Message_PatternCleared">ပုံစံ ရှင်းလင်းပြီးပြီ</string>

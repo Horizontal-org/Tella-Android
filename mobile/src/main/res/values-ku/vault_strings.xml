@@ -67,5 +67,5 @@
   <string name="Vault_deleteFileImported_SheetDesc">دوای هاوردەکردنی فایلەکە بۆ ناو Tella، دەتەوێت فایلە ئەسڵییەکە لەسەر ئامێرەکەت بهێڵیتەوە یان بیسڕیتەوە؟
 
 ئەگەر بیسڕیتەوە ئەوا ئەو فایلەی کە هاوردە کراوە بۆ ناو Tella تاکە کۆپیەک دەبێ کە دەمێنێتەوە.</string>
-  <string name="Vault_FileEdit_SheetAction">Edit</string>
+  <string name="Vault_FileEdit_SheetAction">ئیدیتکردن</string>
 </resources>

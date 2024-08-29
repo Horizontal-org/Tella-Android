@@ -763,7 +763,7 @@ Pulsa sobre una entidad para seguir trabajando en ella.</string>
   <string name="action_go_back">volver</string>
   <string name="Settings_show_unlock_attempts_remaining">Mostrar intentos de desbloqueo restantes</string>
   <string name="Settings_unlock_screen_instructions">En la pantalla de desbloqueo, muestra el número restante de intentos fallidos de desbloqueo antes de que todo lo que hay dentro de Tella sea eliminado.</string>
-  <string name="Settings_Delete_After_Failed_Unlock">Eliminar desbloqueos fallidos</string>
+  <string name="Settings_Delete_After_Failed_Unlock"> Eliminar después de Desbloqueo Fallido</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decide cuántos intentos fallidos de desbloqueo se permiten antes de que todo dentro de Tella sea borrado.</string>
   <string name="Settings_Off_Do_Not_Delete">Apagado (no borrar los datos)</string>
   <string name="Settings_Five_Attempts">5 intentos</string>
@@ -868,33 +868,33 @@ Seleccione \"Más información\" a continuación para obtener más información 
     <item quantity="other">%1$d entidades seleccionadas</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">Selecciona las entidades que deseas conectar a esta propiedad.</string>
-  <string name="Analytics_contribute_reminder_title">Estás compartiendo analíticas de uso.</string>
+  <string name="Analytics_contribute_reminder_title">Estás compartiendo datos.</string>
   <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
   <string name="Analytics_contribute_more_info">Para más información sobre cómo recopilamos datos, </string>
   <string name="Analytics_contribute_more_info2"> visita esta página</string>
-  <string name="Analytics_contribute_title">¿Te gustaría compartir los análisis con el equipo de Tella?</string>
+  <string name="Analytics_contribute_title">¿Te gustaría contribuir?</string>
   <string name="Analytics_contribute_description">Puedes darte de baja en cualquier momento yendo a Configuración.</string>
   <string name="Analytics_contribute_info_link">Para más información sobre cómo recopilamos datos, visita esta página.</string>
   <string name="Analytics_how_works_title">Cómo funciona</string>
   <string name="Analytics_how_works_description">- Utilizamos DivvyUp, un sistema de análisis que respeta la privacidad. \n
 - Recopilamos la menor cantidad de datos posible. \n
 - Todos los datos son anónimos y nunca pueden ser vinculados a ti. \n</string>
-  <string name="Analytics_questions_title">Datos que recopilamos</string>
-  <string name="Analytics_questions_description">Recopilamos datos para responder preguntas específicas. Aquí tienes un ejemplo:</string>
+  <string name="Analytics_questions_title">Preguntas específicas</string>
+  <string name="Analytics_questions_description">Cada estudio recopila datos sobre preguntas específicas. Aquí tienes un ejemplo:</string>
   <string name="Analytics_questions_examples">🔓  Abrió Tella 4 veces a la semana  \n
 💾  32 archivos almacenados en Tella  \n
 📖  Idioma español seleccionado  \n
 ⚡  1 servidor conectado \n</string>
-  <string name="Analytics_share_data_title">Comparte analíticas de uso para mejorar Tella</string>
-  <string name="Analytics_share_data_description">Al compartir análíticas de uso de tu aplicación, nos ayudarás a entender qué características son importantes para ti y cómo usas la aplicación.</string>
+  <string name="Analytics_share_data_title">Comparte tus datos para mejorar Tella</string>
+  <string name="Analytics_share_data_description">Al unirte a este estudio, nos ayudarías a entender qué características son importantes para ti y cómo usas la aplicación.</string>
   <string name="Analytics_respect_privacy_title">Respetamos tu privacidad</string>
   <string name="Analytics_respect_privacy_description">- Incluso si quisiéramos, no podríamos acceder a ninguno de los archivos que almacenas en Tella o que compartes con tu organización. \n
 - Incluso si quisiéramos, no podríamos vincular los datos de análisis contigo. \n</string>
   <string name="Analytics_banner_title">Comparte analíticas de uso para mejorar Tella</string>
   <string name="Analytics_banner_improve_description">Ayúdanos a entender cómo usas Tella. Todos los datos son anónimos y nunca podrán ser vinculados a ti.
 
-¿Te gustaría analíticas de uso con el equipo de Tella?</string>
-  <string name="Settings_Analytics_switch_title">Comparte analíticas de uso para mejorar Tella</string>
+¿Te gustaría compartir analíticas de uso con el equipo de Tella?</string>
+  <string name="Settings_Analytics_switch_title">Compartir datos para mejorar Tella.</string>
   <string name="Settings_Analytics_switch_expl">Ayúdanos a entender cómo usas Tella. Tus datos nunca podrán ser vinculados a ti.</string>
   <string name="select_entities">Selecciona entidades</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Busca o selecciona las entidades que deseas conectar a esta propiedad.</string>
@@ -906,4 +906,10 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Desbloquear</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>
