@@ -567,7 +567,6 @@ public class MediaFileHandler {
         try {
             OutputStream os = getMetadataOutputStream(mmf);
 
-            if (os == null) throw new NullPointerException();
 
             createMetadataFile(os, vaultFile);
         } catch (Exception e) {
