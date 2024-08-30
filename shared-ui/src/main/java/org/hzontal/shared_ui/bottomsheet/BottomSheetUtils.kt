@@ -289,6 +289,7 @@ object BottomSheetUtils {
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
+        buttonFourLabel: String? = null,
         consumer: IServerChoiceActions
     ) {
 
@@ -307,7 +308,7 @@ object BottomSheetUtils {
                         buttonOne.setText(buttonOneLabel)
                         buttonTwo.setText(buttonTwoLabel)
                         buttonThree.setText(buttonThreeLabel)
-                        buttonFour.setText(buttonThreeLabel)
+                        buttonFour.setText(buttonFourLabel)
 
                         buttonOne.setOnClickListener {
                             buttonOne.isChecked = true

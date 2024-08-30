@@ -2,209 +2,169 @@ package rs.readahead.washington.mobile.views.dialog.googledrive
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.identity.SignInCredential
-import com.google.android.gms.common.api.ApiException
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
+import com.google.api.services.drive.Drive
+import com.google.api.services.drive.DriveScopes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.performFileSearch
+import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showExportWithMetadataDialog
+import rs.readahead.washington.mobile.views.activity.viewer.chosenVaultFile
+import rs.readahead.washington.mobile.views.activity.viewer.filePicker
+import rs.readahead.washington.mobile.views.activity.viewer.requestPermission
+import rs.readahead.washington.mobile.views.activity.viewer.sharedViewModel
+import rs.readahead.washington.mobile.views.activity.viewer.withMetadata
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
+import timber.log.Timber
 
 
 class GoogleDriveConnectFlowActivity : BaseLockActivity() {
 
-    private val REQUEST_CODE_SIGN_IN = 1001
-
     private lateinit var credentialManager: CredentialManager
+    private lateinit var requestAuthorizationLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_drive)
-
         credentialManager = CredentialManager.create(this)
 
-        val signInWithGoogleOption: GetSignInWithGoogleOption = GetSignInWithGoogleOption.Builder("166289458819-43i302vr6n3r62unoboiinq91ccvur3o.apps.googleusercontent.com")
-            .build()
+        val signInWithGoogleOption: GetSignInWithGoogleOption =
+            GetSignInWithGoogleOption.Builder("166289458819-43i302vr6n3r62unoboiinq91ccvur3o.apps.googleusercontent.com")
+                .build()
         val request: GetCredentialRequest = GetCredentialRequest.Builder()
             .addCredentialOption(signInWithGoogleOption)
             .build()
 
-        findViewById<Button>(R.id.submit_button).setOnClickListener {
-
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val result = credentialManager.getCredential(
-                        request = request,
-                        context = this@GoogleDriveConnectFlowActivity
-                    )
-                    handleSignIn(result)  // Process the sign-in result
-                } catch (e: Exception) {
-                    // Handle the error, such as showing a message to the user
-                }
-            }
-
-//            val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-//                .setFilterByAuthorizedAccounts(false)
-//                .setAutoSelectEnabled(false)  // Ensure the user is prompted to sign in
-//                .setServerClientId("166289458819-43i302vr6n3r62unoboiinq91ccvur3o.apps.googleusercontent.com")
-//                .build()
-//
-//            val request: GetCredentialRequest = GetCredentialRequest.Builder()
-//                .addCredentialOption(googleIdOption)
-//                .build()
-//
-//            CoroutineScope(Dispatchers.Main).launch {
-//                try {
-//                    val result = credentialManager.getCredential(
-//                        request = request,
-//                        context = this@GoogleDriveConnectFlowActivity,
-//                    )
-//                    handleSignIn(result)  // Process the sign-in result
-//                } catch (e: Exception) {
-//                    if (e.message?.contains("No credentials found") == true) {
-//                        Toast.makeText(
-//                            this@GoogleDriveConnectFlowActivity,
-//                            "No credentials found. Please sign in with your Google account.",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//
-//                        if (e.message?.contains("No credentials found") == true) {
-//                            handleNoCredentialsFound()
-//                          val signInIntent = Identity.getSignInClient(this@GoogleDriveConnectFlowActivity)
-//                           startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN)
-//                        }
-//                    } else {
-//                        e.printStackTrace()  // For debugging purposes
-//                        Toast.makeText(
-//                            this@GoogleDriveConnectFlowActivity,
-//                            "Sign-in failed: ${e.message}",
-//                            Toast.LENGTH_LONG
-//                        ).show()
-//                    }
-//                }
-//            }
-        }
-    }
-    private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
-
-    private fun handleNoCredentialsFound() {
-        oneTapClient = Identity.getSignInClient(this)
-        signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId("166289458819-43i302vr6n3r62unoboiinq91ccvur3o.apps.googleusercontent.com")
-                    .setFilterByAuthorizedAccounts(false)
-// Set to false to allow sign-in with new accounts
-                    .build()
-            )
-            .setAutoSelectEnabled(false) // Set to true to auto-select the account if only one exists
-            .build()
-
-        oneTapClient.beginSignIn(signInRequest)
-            .addOnSuccessListener(this) { result ->
-                try {
-                    startIntentSenderForResult(
-                        result.pendingIntent.intentSender, REQUEST_CODE_SIGN_IN,
-                        null, 0, 0, 0, null
-                    )
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            }
-            .addOnFailureListener(this) { e ->
-                e.printStackTrace()
-                Toast.makeText(this, "Sign-in process failed: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_SIGN_IN) {
+        // findViewById<Button>(R.id.submit_button).setOnClickListener {
+        maybeChangeTemporaryTimeout {
+        CoroutineScope(Dispatchers.Main).launch {
             try {
-                val credential: SignInCredential = oneTapClient.getSignInCredentialFromIntent(data)
-                val idToken = credential.googleIdToken
-                // Handle the sign-in credential
-                    // handleSignIn(idToken)
-            } catch (e: ApiException) {
-                Toast.makeText(this, "Sign-in failed: ${e.message}", Toast.LENGTH_LONG).show()
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = this@GoogleDriveConnectFlowActivity
+                )
+                    handleSignIn(result)  // Process the sign-in result
+            } catch (e: Exception) {
+                // Handle the error, such as showing a message to the user
+            }
+        }
+
+        }
+        // }
+        requestAuthorizationLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    // Retry accessing Google Drive after authorization
+                    if (::driveService.isInitialized) {
+                      //  maybeChangeTemporaryTimeout {
+                            fetchSharedDrives(driveService)
+                     //   }
+                    } else {
+                        Timber.e("Drive service is not initialized")
+                    }
+                } else {
+                    // Handle the case where the user denies the authorization
+                    Timber.e("Authorization denied by user.")
+                }
+            }
+
+    }
+
+    private lateinit var driveService: Drive
+    private fun handleSignIn(result: GetCredentialResponse) {
+        when (val credential = result.credential) {
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        // Use googleIdTokenCredential and extract id to validate and authenticate on your server.
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(credential.data)
+                        Timber.d("Received an invalid Google ID token response")
+
+                        val idToken = googleIdTokenCredential.idToken
+                        Timber.d("Google ID Token: $idToken")
+
+                        // Extract email from the Google ID token
+                        val email = getEmailFromIdToken(idToken)
+
+                        // Initialize GoogleAccountCredential
+                        val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
+                            this, listOf(DriveScopes.DRIVE)
+                        ).apply {
+                            selectedAccountName = email
+                        }
+
+                        // Initialize the Drive service
+                        driveService = Drive.Builder(
+                            NetHttpTransport(),
+                            GsonFactory(),
+                            googleAccountCredential
+                        ).setApplicationName("Tella").build()
+
+                        // Attempt to fetch shared drives
+                        fetchSharedDrives(driveService)
+                    } catch (e: UserRecoverableAuthIOException) {
+                        // Handle the exception by starting the user consent activity
+                        requestAuthorizationLauncher.launch(e.intent)
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed to retrieve or process Google ID Token")
+                    }
+                } else {
+                    Timber.e("Credential type is not a Google ID Token Credential")
+                }
+            }
+
+            else -> {
+                Timber.e("Unexpected credential type or no credentials returned")
             }
         }
     }
 
-    private fun handleSignIn(result: GetCredentialResponse) {
-        if (result != null) {
-           // val idToken = result.data
-            //if (idToken != null) {
-                // ID Token retrieved, proceed to verify it with your backend
-                //verifyIdTokenWithServer(idToken)
-//            } else {
-//                // Handle the case where the ID token is null, sign-in failed
-//                Toast.makeText(this, "Sign-in failed: ID token is null", Toast.LENGTH_LONG).show()
-//            }
-//        } else {
-//            // Handle the case where result is null, sign-in failed
-//            Toast.makeText(this, "Sign-in failed: No result returned", Toast.LENGTH_LONG).show()
-//        }
+    private fun fetchSharedDrives(driveService: Drive) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val request = driveService.Files().list()
+                val result = request.execute()
+                val sharedDrives = result.files
+
+                if (sharedDrives != null && sharedDrives.isNotEmpty()) {
+                    val navHostFragment =
+                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    val navController = navHostFragment.navController
+                    navController.navigate(R.id.google_drive)
+                } else {
+                    Timber.d("No shared drives found.")
+                }
+            } catch (e: UserRecoverableAuthIOException) {
+                requestAuthorizationLauncher.launch(e.intent)
+                Timber.e(e, "Failed to fetch shared drives.")
+            }
+        }
     }
 
 
-    // Example method to verify the ID token with your server
-//    private fun verifyIdTokenWithServer(idToken: String) {
-//        // Make a network request to your backend server to verify the ID token
-//        // This usually involves sending the token to an API endpoint
-//        // Here's a simplified example using Retrofit (you can use any HTTP client):
-//
-//        // Assume you have a Retrofit API service defined
-//        val apiService = RetrofitInstance.apiService
-//        val call = apiService.verifyIdToken(idToken)
-//
-//        call.enqueue(object : Callback<VerifyIdTokenResponse> {
-//            override fun onResponse(call: Call<VerifyIdTokenResponse>, response: Response<VerifyIdTokenResponse>) {
-//                if (response.isSuccessful) {
-//                    // Token verified successfully, update UI or proceed to the next step
-//                    val user = response.body()?.user
-//                    // Save user info locally if needed
-//                    saveUserInfo(user)
-//                    // Update UI
-//                    Toast.makeText(this@GoogleDriveConnectFlowActivity, "Sign-in successful!", Toast.LENGTH_LONG).show()
-//                } else {
-//                    // Handle the case where token verification failed
-//                    Toast.makeText(this@GoogleDriveConnectFlowActivity, "Sign-in failed: ${response.errorBody()?.string()}", Toast.LENGTH_LONG).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<VerifyIdTokenResponse>, t: Throwable) {
-//                // Handle network or server errors
-//                Toast.makeText(this@GoogleDriveConnectFlowActivity, "Sign-in failed: ${t.message}", Toast.LENGTH_LONG).show()
-//            }
-//        })
-//    }
-
-//    // Example method to save user information locally
-//    private fun saveUserInfo(user: User?) {
-//        // Save user information in shared preferences, a local database, or another storage method
-//        // Example:
-//        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-//        sharedPreferences.edit()
-//            .putString("user_id", user?.id)
-//            .putString("user_name", user?.name)
-//            .putString("user_email", user?.email)
-//            .apply()
-//    }
-
+    private fun getEmailFromIdToken(idToken: String): String {
+        val parts = idToken.split(".")
+        val payload = String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE))
+        val json = org.json.JSONObject(payload)
+        return json.getString("email")
     }
+
 }
+
+
 

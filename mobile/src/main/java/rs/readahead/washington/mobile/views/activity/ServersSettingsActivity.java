@@ -7,7 +7,6 @@ import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageVie
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -407,6 +406,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
+                getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
                     public void addGoogleDriveServer() {
@@ -520,7 +521,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showGoogleDriveServerDialog() {
-            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+        startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
 //        } else {
 //            Intent intent = new Intent(this, UwaziConnectFlowActivity.class);
 //            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
