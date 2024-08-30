@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="LockSelect_Action_Cancel">Batal</string>
-  <string name="LockSelect_Action_Back">Batal</string>
-  <string name="LockSelect_Action_Confirm">Selanjutnya</string>
+  <string name="LockSelect_Action_Cancel">Batalkan</string>
+  <string name="LockSelect_Action_Back">Kembali</string>
+  <string name="LockSelect_Action_Confirm">Berikutnya</string>
   <string name="LockPatternConfirm_Action_Confirm">Draw the pattern again to confirm</string>
-  <string name="LockSelect_Action_Continue">Selanjutnya</string>
-  <string name="LockPatternSet_Draw_Pattern">Draw an unlock pattern</string>
+  <string name="LockSelect_Action_Continue">Berikutnya</string>
+  <string name="LockPatternSet_Draw_Pattern">Gambar suatu pola buka kunci</string>
   <string name="UnlockPattern_DrawToUnlock">Gambar pola untuk mebuka Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">Pola buka kunci baru Anda</string>
-  <string name="LockPatternSet_Pattern_Recorded">Pattern recorded</string>
+  <string name="LockPatternSet_Pattern_Recorded">Pola direkam</string>
   <string name="UnlockPattern_PatternTooShort">Connect at least %d dots, please redraw</string>
-  <string name="LockPatternSet_RecordingPattern">Release finger when done</string>
-  <string name="LockPatternSet_Action_Redraw">Redraw</string>
+  <string name="LockPatternSet_RecordingPattern">Angkat jari ketika selesai</string>
+  <string name="LockPatternSet_Action_Redraw">Bersihkan</string>
   <string name="LockPatternConfirm_Message_WrongPattern">Wrong pattern, please try again</string>
-  <string name="LockPatternSet_Message_PatternStarted">Pattern started</string>
-  <string name="LockPatternSet_Message_PatternCleared">Pattern cleared</string>
-  <string name="LockPatternSet_Message_CellAdded">Cell added</string>
+  <string name="LockPatternSet_Message_PatternStarted">Pola dimulai</string>
+  <string name="LockPatternSet_Message_PatternCleared">Pola dihapus</string>
+  <string name="LockPatternSet_Message_CellAdded">Sel ditambahkan</string>
   <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
-  <string name="LockPatternSet_Message_PatternDetected">Pattern completed</string>
+  <string name="LockPatternSet_Message_PatternDetected">Pola selesai</string>
   <string name="UnLockPattern_PatternArea">Pattern area</string>
   <string name="UnLockPattern_Message_DrawPattern">Gambar pola Anda untuk membuka kunci Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Silakan coba lagi. Pola Anda tidak cocok.</string>
