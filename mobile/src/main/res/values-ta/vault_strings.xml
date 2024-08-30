@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Created</string>
   <string name="Vault_FileResolution">Resolution</string>
   <string name="Vault_FileLength">Length</string>
-  <string name="Vault_FilePath">File path</string>
+  <string name="Vault_FilePath">கோப்பு பாதை</string>
   <string name="Vault_RenameFile_SheetTitle">Rename file</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">Delete file?</item>
