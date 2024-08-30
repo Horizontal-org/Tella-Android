@@ -654,10 +654,6 @@
                 tools:node="remove" />
         </provider>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDmFYWjpgKMin6lj5VsgdEmkWe1UqGfH5E" />
-
     </application>
 
 </manifest>
