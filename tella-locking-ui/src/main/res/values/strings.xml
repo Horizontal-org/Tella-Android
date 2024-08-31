@@ -64,7 +64,9 @@ unlock Tella</string>
     <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Enter your current
  password to change your
  camouflage</string>
-    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current pattern to change your camouflage</string>
+    <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Draw your current
+ pattern to change your
+ camouflage</string>
     <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Enter your current PIN to
  change your camouflage   </string>
     <string name="Settings_Action_SetLock">Lock</string>

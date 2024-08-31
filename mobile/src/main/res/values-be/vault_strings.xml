@@ -15,7 +15,7 @@
   <string name="Vault_Move_SheetDesc">Move to another folder</string>
   <string name="Vault_Rename_SheetAction">Rename</string>
   <string name="Vault_Save_SheetAction">Захаваць</string>
-  <string name="Vault_Delete_SheetAction">Выдаліць</string>
+  <string name="Vault_Delete_SheetAction">Удалить</string>
   <string name="Vault_Share_SheetAction">Падзяліцца</string>
   <string name="Vault_Upload_SheetAction">загрузка</string>
   <string name="Vault_File_SheetAction">File information</string>
@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Created</string>
   <string name="Vault_FileResolution">Resolution</string>
   <string name="Vault_FileLength">Length</string>
-  <string name="Vault_FilePath">File path</string>
+  <string name="Vault_FilePath">Шлях да файла</string>
   <string name="Vault_RenameFile_SheetTitle">Rename file</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">Delete file?</item>
@@ -47,8 +47,8 @@
   <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
   <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
   <string name="Vault_MoveHere">move here</string>
-  <string name="Vault_ViewerOther_SheetDesc" formatted="false">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
-  <string name="Vault_Export_SheetAction">Захаваць на прыладзе</string>
+  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
+  <string name="Vault_Export_SheetAction">Экспорт</string>
   <plurals name="Vault_Items">
     <item quantity="one">items</item>
     <item quantity="other"></item>

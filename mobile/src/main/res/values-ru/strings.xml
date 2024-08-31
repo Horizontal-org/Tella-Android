@@ -8,7 +8,7 @@
   <string name="collect_tab.title_blank">Пустая</string>
   <string name="action_cancel">Отменить</string>
   <string name="settings_menu.item_contact">Свяжитесь с нами</string>
-  <string name="collect_dialog.text_download.progress">Загрузка в процессе…</string>
+  <string name="collect_dialog.text_download.progress">Скачивание формы</string>
   <string name="collect_toast_download.completed">Загрузка завершена</string>
   <string name="action_delete">Удалить</string>
   <string name="collect.draft_tab.title">Черновик</string>
@@ -23,8 +23,7 @@
   <string name="action_ok">OK</string>
   <string name="collect.form_toast_validation.error">Извините, этот ввод данных недействителен!</string>
   <string name="collect.form_error_response.mandatory">Извините, здесь требуется ввести данные!</string>
-  <string name="homescreen_heading_quick.delete">Quick Delete
-mode activation</string>
+  <string name="homescreen_heading_quick.delete">Активизация режима Быстрого удаления</string>
   <string name="settings.about_list.item_privacy.policy">Политика конфиденциальности</string>
   <string name="recorder_toast_fail.recording">Аудио не было записано, пожалуйста, повторите попытку</string>
   <string name="recorder_content.desc_blinking.red.dot">ЗАПИСЬ АУДИО.</string>
@@ -75,7 +74,7 @@ mode activation</string>
   <string name="collect_toast_fail.submission.unauthorized">У вас нет разрешения на отправку этой формы. Если вы считаете, что это ошибка, пожалуйста, свяжитесь с вашей организацией</string>
   <string name="gallery_toast_fail.importing.file">Произошла ошибка при импорте мультимедиа файла</string>
   <string name="collect.end_heading">Вы достигли окончания формы</string>
-  <string name="collect.end_toast_notification.form.not.sent.no.connection">Вы не подключены к Интернету. Попробуйте еще раз при подключении</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">Вы не подключены к Интернету. Повторите попытку при подключении</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">Отложенная отправка формы будет отменена.</string>
   <string name="action_discard">Отменить</string>
   <string name="collect.end_action_submit">Отправить</string>
@@ -86,7 +85,7 @@ mode activation</string>
     <item quantity="one">%1$d file saved to the device</item>
     <item quantity="other">%1$d files saved to the device</item>
   </plurals>
-  <string name="gallery_delete.files_dialog.title">Удалить мультимедиа файлы?</string>
+  <string name="gallery_delete.files_dialog.title">Удалить файл?</string>
   <string name="gallery_delete.files_dialog.expl">Выбранный файл будет навсегда удален из вашей галереи.</string>
   <string name="gallery_save.to.device_dialog.title">Сохранить в хранилище устройства</string>
   <string name="gallery_save.to.device_dialog.expl">Сохранение этого файла в хранилище устройства сделает его доступным для просмотра вне Tella, другими приложениями и через галерею Вашего устройства.</string>
@@ -109,7 +108,7 @@ mode activation</string>
   <string name="gallery_list.item_newest.to.oldest">От новейшего к старейшему</string>
   <string name="gallery_list.item_oldest.to.newest">От старейшего к новейшему</string>
   <string name="action_exit">Выход</string>
-  <string name="settings.prot_select_camouflage">Маскировка</string>
+  <string name="settings.prot_select_camouflage">Камуфляж</string>
   <string name="settings.docu_error_wrong.credentials">Неправильные учетные данные, пожалуйста, проверьте имя пользователя и пароль</string>
   <string name="settings.docu_error_domain.doesnt.exit">URL-адрес сервера неверен.</string>
   <string name="settings.docu_error_unknown.connection.error">При попытке подключения к серверу произошла ошибка</string>
@@ -246,21 +245,21 @@ mode activation</string>
   <string name="verification.info_ipv6.expl">Более новый идентификатор подключения устройства к Интернету.</string>
   <string name="verification.info_location.expl">Точное местоположение устройства включает координаты широты и долготы, высоту над уровнем моря в метрах, точность измерения в метрах и время измерения.</string>
   <string name="verification.info_location.provider.expl">Как определяется местоположение. «Слитый» метод означает, что используется несколько методов, включая GPS и сетевые подключения.</string>
-  <string name="verification.info_location.speed.expl">Скорость, с которой устройство движется.</string>
+  <string name="verification.info_location.speed.expl">Скорость, с которой устройство движется в метрах в секунду.</string>
   <string name="verification.info_cell.towers.expl">Идентификационные номера всех вышек сотовой связи, к которым подключено устройство.</string>
   <string name="verification.info_wifi.expl">Название всех сетей Wi-Fi в непосредственной близости от устройства.</string>
   <string name="collect.blank_banner_forms.updated">Некоторые формы были обновлены. Нажмите кнопку обновления, чтобы получить последнюю версию.</string>
-  <string name="settings.docu_auto.upload.server.selection_dialog.expl">На какой сервер Вы хотите загрузить файлы?</string>
+  <string name="settings.docu_auto.upload.server.selection_dialog.expl">На какой сервер загрузить файлы?</string>
   <string name="settings.serv_add.server.selection_dialog.title">Какой тип сервера?</string>
-  <string name="settings.docu_add.server_dialog.select_odk">Набор открытых данных (НОД)</string>
+  <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Выберите тип сервера, к которому Вы хотите подключиться. Если Вы не уверены, обратитесь в организацию, координирующую документацию.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Прямая загрузка</string>
-  <string name="play.audio_action.expl_plus15s">+15s</string>
-  <string name="play.audio_action.expl_minus15s">-15s</string>
-  <string name="recorder_meta_space.available.days">%1$d дней %2$d часов (%3$s) оставшееся</string>
-  <string name="recorder_meta_space.available.hours">%1$d часов %2$d мин (%3$s) оставшееся</string>
-  <string name="camera_video.resolution_dialog.title">Качество видео</string>
-  <string name="camera_video.resolution_dialog.expl">Чем выше качество, тем больше будет размер видеофайла.</string>
+  <string name="play.audio_action.expl_plus15s">+15с</string>
+  <string name="play.audio_action.expl_minus15s">-15с</string>
+  <string name="recorder_meta_space.available.days">%1$d дней %2$d часов (%3$s) осталось</string>
+  <string name="recorder_meta_space.available.hours">%1$d часов %2$d минут (%3$s) осталось</string>
+  <string name="camera_video.resolution_dialog.title">Выберите разрешение видео</string>
+  <string name="camera_video.resolution_dialog.expl">Более высокое разрешение означает, что видео будет более высокого качества, но размер файла также будет больше.</string>
   <string name="camera_video.resolution_select_highest">Максимально возможный</string>
   <string name="camera_video.resolution_select_1080p">Высокое (1080p)</string>
   <string name="camera_video.resolution_select_720p">Среднее (720p)</string>
@@ -275,7 +274,7 @@ mode activation</string>
   <string name="collect.blank_action.desc_more.options">Больше вариантов</string>
   <string name="action_next">Продолжить</string>
   <string name="meter">%f m</string>
-  <string name="meter_per_second">%f м / с</string>
+  <string name="meter_per_second">%f м/с</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
@@ -310,7 +309,7 @@ mode activation</string>
   <string name="action_enable">Enable</string>
   <string name="action_disable">Disable</string>
   <string name="settings.servers_delete.server_dialog.title">Delete \"%1$s\" server?</string>
-  <string name="action_edit">Edit</string>
+  <string name="action_edit">Править</string>
   <string name="settings.server_add.server_dialog_advanced">Расширенный</string>
   <string name="settings.docu_error_auth.required">Authentication required</string>
   <string name="settings.sec_lock_timeout_immediately">Immediately</string>
@@ -360,7 +359,7 @@ mode activation</string>
   <string name="settings.camo_jeweldash">Jewel Dash</string>
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
-  <string name="fragment_mic">Recorder</string>
+  <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
@@ -377,7 +376,7 @@ mode activation</string>
   <string name="onboard.title_all_done">You’re all done!</string>
   <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
   <string name="onboard.go_btn_all_done">Go to Tella</string>
-  <string name="onboard.advanced_btn_all_done">Advanced settings</string>
+  <string name="onboard.advanced_btn_all_done">Дополнительные настройки</string>
   <string name="onboard.title_share_data">Share data you collect</string>
   <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
   <string name="onboard.connect_btn_share_data">Connect to server</string>
@@ -417,7 +416,7 @@ connecting to a server</string>
   <string name="Vault_Importing_SheetTitle">Импорт и шифрование</string>
   <string name="Rec_Exit_SheetTitle">Сохранить запись?</string>
   <string name="Rec_Exit_SheetText">Ваша запись не сохранена. Хотите сохранить ее перед выходом?</string>
-  <string name="Vault_AudioRecordings_AppBar">Аудио</string>
+  <string name="Vault_AudioRecordings_AppBar">Аудиозаписи</string>
   <string name="Vault_Encryting_SheetText">%d% завершено</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Отменить шифрование и удалить файл?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">Если вы откажетесь, ваш файл будет потерян</string>
@@ -499,7 +498,7 @@ connecting to a server</string>
     <item quantity="one">%1$d file attached</item>
     <item quantity="other">%1$d files attached</item>
   </plurals>
-  <string name="Uwazi_MiltiFileWidget_SelectFiles">Выберите файлы</string>
+  <string name="Uwazi_MiltiFileWidget_SelectFiles">Выбрать файлы</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Выберите файлы PDF</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Первичные документы</string>
   <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Прикрепите столько PDF-файлов, сколько пожелаете.</string>
@@ -510,7 +509,7 @@ connecting to a server</string>
  Нажмите на объект, чтобы продолжить работу над ним.</string>
   <string name="Uwazi_Outbox_Header_Text">Это обьекты, готовые к отправке или частично отправленные.</string>
   <string name="Uwazi_Submitted_Header_Text">Это обьекты, которые вы отправили.</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Выберите способ добавления файлов</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Выберите, как вы хотите добавлять файлы</string>
   <string-array name="Uwazi_Language_Array">
     <item>Английский язык</item>
     <item>عربي</item>
@@ -593,7 +592,7 @@ connecting to a server</string>
  организацию.</string>
   <string name="Timeout_Warning_Title">Внимание</string>
   <string name="Timeout_Warning_Description">Для выполнения этого действия Телла останется разблокированной в течение 3 минут.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
+  <string name="Home_BottomNav_Uwazi">Увази</string>
   <string name="onboard_setup_text">Как бы вы хотели установить Tella?</string>
   <string name="onboard_full_setup">ПОЛНАЯ НАСТРОЙКА</string>
   <string name="onboard_quick_setup">БЫСТРАЯ НАСТРОЙКА</string>
@@ -760,7 +759,7 @@ connecting to a server</string>
   <string name="yellow_theme">Желтая тема</string>
   <string name="settings.sec_keep.exif_switch">Сохранение метаданных при импорте</string>
   <string name="settings.sec_keep.exif_expl">Сохраняйте метаданные EXIF при импорте фотографий и видео в Tella. Они включают данные о времени создания изображения, настройках камеры, местоположении и вашем устройстве.</string>
-  <string name="Rename_name_Hint">Имя</string>
+  <string name="Rename_name_Hint">Название</string>
   <string name="action_go_to_homescreen">перейти на Главный экран</string>
   <string name="action_show_password">показать пароль</string>
   <string name="action_hide_password">скрыть пароль</string>
@@ -768,7 +767,7 @@ connecting to a server</string>
   <string name="action_hide_pin">hide PIN</string>
   <string name="action_go_back">Назад</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_unlock_screen_instructions">На экране разблокировки отображается оставшееся количество неудачных попыток разблокировки до удаления всего содержимого Tella</string>
   <string name="Settings_Delete_After_Failed_Unlock">Удаление после неудачной разблокировки</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Определите, сколько неудачных попыток разблокировки допускается перед удалением всего содержимого Tella.</string>
   <string name="Settings_Off_Do_Not_Delete">Выкл. (не удалять данные)</string>
@@ -824,7 +823,7 @@ connecting to a server</string>
  неправильных попыток входа в систему. Все ваши данные Tella
  были удалены.</string>
   <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl" formatted="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
   <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
   <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
@@ -844,7 +843,7 @@ connecting to a server</string>
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Формы доступны на сервере</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
@@ -926,4 +925,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

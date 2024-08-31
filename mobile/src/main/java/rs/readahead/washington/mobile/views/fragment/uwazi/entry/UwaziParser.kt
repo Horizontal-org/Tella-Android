@@ -98,21 +98,29 @@ class UwaziParser(private val context: Context?) {
         formView.setBinaryData(UWAZI_TITLE, entityInstance.title)
 
         for (answer in entityInstance.metadata) {
-            if ((answer.value as List<*>).size > 1) {
-                formView.setBinaryData(answer.key, answer.value)
-            } else {
-                val uwaziValue: UwaziValue = answer.value[0] as UwaziValue
-                val stringVal = uwaziValue.value
-                if (files.containsKey(stringVal)) {
-                    formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
+            val answerList = answer.value as List<*>
+            if (answerList.isNotEmpty()) {
+                if (answerList.size > 1) {
+                    formView.setBinaryData(answer.key, answerList)
                 } else {
-                    formView.setBinaryData(answer.key, stringVal)
+                    val uwaziValue: UwaziValue = answerList[0] as UwaziValue
+                    val stringVal = uwaziValue.value
+                    if (files.containsKey(stringVal)) {
+                        formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
+                    } else {
+                        formView.setBinaryData(answer.key, stringVal)
+                    }
                 }
+            } else {
+                // Handle the case where answer.value is an empty list
+                // You can set a default value, log a warning, or skip this entry
+                formView.setBinaryData(answer.key, "") // Example: setting an empty string
             }
         }
 
         hashCode = formView.answers.hashCode()
     }
+
 
     fun putAnswersToForm(formView: UwaziFormView) {
         val files = mutableMapOf<String, FormMediaFile>()

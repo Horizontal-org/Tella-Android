@@ -47,7 +47,7 @@
   <string name="Vault_ImportDelete_SheetAction">هاوردەکردن و سڕینەوەی فایلە ڕەسەنەکە</string>
   <string name="Vault_CreateFolder_SheetTitle">دروستکردنی فۆڵدەرێکی نوێ</string>
   <string name="Vault_MoveHere">جووڵان بۆ ئێرە</string>
-  <string name="Vault_ViewerOther_SheetDesc" formatted="false">فۆرماتی ئەم فایلە لەناو تێلادا ناکرێتەوە. دەتەوێت فایلەکە هەناردە بکەیتە سەر ئامێرەکەت بۆ ئەوەی لە ڕێگەی ئەپێکی جیاوازەوە بیکەیتەوە؟ ئەمە لەوانەیە ناوەڕۆکی فایلەکە ئاشکرا بکات.</string>
+  <string name="Vault_ViewerOther_SheetDesc">فۆرماتی ئەم فایلە لەناو تێلادا ناکرێتەوە. دەتەوێت فایلەکە هەناردە بکەیتە سەر ئامێرەکەت بۆ ئەوەی لە ڕێگەی ئەپێکی جیاوازەوە بیکەیتەوە؟ ئەمە لەوانەیە ناوەڕۆکی فایلەکە ئاشکرا بکات.</string>
   <string name="Vault_Export_SheetAction">هەناردن</string>
   <plurals name="Vault_Items">
     <item quantity="one">ئایتەمەکان</item>

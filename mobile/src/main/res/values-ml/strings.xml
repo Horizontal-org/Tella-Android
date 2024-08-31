@@ -23,8 +23,7 @@
   <string name="action_ok">ശരി</string>
   <string name="collect.form_toast_validation.error">ഈ മറുപടി അസാധുവാണ്</string>
   <string name="collect.form_error_response.mandatory">ഈ മറുപടി നിർബന്ധിതമാണ്.</string>
-  <string name="homescreen_heading_quick.delete">Quick Delete
-mode activation</string>
+  <string name="homescreen_heading_quick.delete">ദൃുതഗതിയില്‍ മായ്‌ചുകളയുന്ന രീതി സജീവമാക്കല്‍</string>
   <string name="settings.about_list.item_privacy.policy">സ്വകാര്യതാ നയം</string>
   <string name="recorder_toast_fail.recording">ശബ്ദം രേഖപ്പെടുത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
   <string name="recorder_content.desc_blinking.red.dot">ശബ്ദം രേഖപ്പെടുത്തുന്നു</string>
@@ -34,12 +33,12 @@ mode activation</string>
   <string name="lock_dialog.expl_save.pattern">നിങ്ങളുടെ പൂട്ടിന്റെ മാതൃക സംരക്ഷിക്കുന്നു</string>
   <string name="lock_dialog.expl_unlock.app">Tella (റ്റെല്ല)യു‍ടെ പൂട്ട് തുറക്കുന്നു</string>
   <string name="action_skip">വിട്ടുകളയുക</string>
-  <string name="settings.docu_delete.server_dialog.expl">If you delete this server, all draft and submitted forms will be deleted from your device. Delete anyway?</string>
+  <string name="settings.docu_delete.server_dialog.expl">നിങ്ങൾ ഈ സെർവർ ഇല്ലാതാക്കുകയാണെങ്കിൽ, എല്ലാ കരടുകളും സമർപ്പിച്ച ഫോമുകളും നിങ്ങളുടെ ഉപകരണത്തിൽ നിന്ന് ഇല്ലാതാക്കപ്പെടും. എന്തായാലും ഇല്ലാതാക്കണോ?</string>
   <string name="settings.docu_toast_server.deleted">സെർവർ ഇല്ലാതാക്കി</string>
   <string name="settings.docu_toast_server.created">സെർവർ സൃഷ്‌ടിച്ചു</string>
   <string name="settings.docu_toast_server.updated">സെർവർ പുതുക്കി</string>
   <string name="settings.docu_dialog.title_server.settings">സെർവർ ക്രമീകരണങ്ങൾ</string>
-  <string name="settings.docu_field_server.name">Server name</string>
+  <string name="settings.docu_field_server.name">സെർവറിന്റെ പേര്</string>
   <string name="settings.docu_field_server.url">സെർവർ URL(യൂആര്‍എല്‍)</string>
   <string name="collect.sent_tab.title">സമര്‍പ്പിച്ചവ</string>
   <string name="home_expl_cancel.quick.delete">റദ്ദാക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
@@ -89,10 +88,10 @@ mode activation</string>
     <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">ഫയൽ നീക്കം ചെയ്യണോ?</string>
-  <string name="gallery_delete.files_dialog.expl">The selected file will be permanently deleted from your gallery.</string>
+  <string name="gallery_delete.files_dialog.expl">തിരഞ്ഞെടുത്ത ഫയൽ നിങ്ങളുടെ ഗാലറിയിൽ നിന്ന് എന്നേക്കുമായി നീക്കം ചെയ്യപ്പെടും.</string>
   <string name="gallery_save.to.device_dialog.title">ഉപകരണത്തിന്റെ ഗാലറിയിലേക്ക് സൂക്ഷിക്കണോ?</string>
   <string name="gallery_save.to.device_dialog.expl">ഇത് Tella (റ്റെല്ല)യ്ക്ക് പുറത്ത് നിന്നും ഉപകരണത്തിന്റെ ഗാലറിയിലും മറ്റ് ആപ്പുകളിലും നിങ്ങളുടെ ഫയൽ എടുക്കാന്‍ സഹായിക്കും.</string>
-  <string name="gallery_dialog.expl_encrypting">Encrypting</string>
+  <string name="gallery_dialog.expl_encrypting">എൻക്രിപ്റ്റ് ചെയ്യുന്നു</string>
   <string name="gallery_save.to.device_dialog.progress.expl">ഡീക്രിപ്റ്റ് ചെയ്യുന്നു</string>
   <string name="gallery_toast_fail.import">ഫയലുകൾ ഇറക്കുമതി ചെയ്യുന്നതിന് ഗാലറി തുറക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
   <string name="gallery_toast_fail.saving.file">ഫയൽ സൂക്ഷിക്കുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
@@ -118,7 +117,7 @@ mode activation</string>
   <string name="settings.docu_error_no.internet">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
   <string name="settings.docu_dialog.action_try.again.connecting">വീണ്ടും ശ്രമിക്കുക</string>
   <string name="settings.about_select_tutorial">പരിശീലനപദ്ധതി</string>
-  <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
+  <string name="settings.camo_expl">നിങ്ങളുടെ ഉപകരണത്തിൽ Tella (റ്റെല്ല)യെ മികച്ച രീതിയിൽ മറയ്‌ക്കാൻ ഒരു ഇഷ്‌ടാനുസൃത ഐക്കണും പേരും തിരഞ്ഞെടുക്കുക. ശ്രദ്ധിക്കുക ആന്‍ഡ്രോയിഡ് ക്രമീകരണങ്ങളിൽ Tella (റ്റെല്ല) ഐക്കൺ ദൃശ്യമാകും .</string>
   <string name="gallery_action.desc_save.to.device">ഉപകരണത്തിലേക്ക് സൂക്ഷിക്കുക</string>
   <string name="settings.docu_verification_action">പരിശോധന രീതി</string>
   <string name="settings.docu_verification_action.expl">നിങ്ങളുടെ ഉപകരണത്തെയും സ്ഥലത്തെയും കുറിച്ചുള്ള വിവരങ്ങൾ ശേഖരിക്കുന്നതിലൂടെ നിങ്ങളുടെ മീഡിയ ഫയലുകൾ പരിശോധിച്ചുറപ്പിക്കാൻ കഴിയും.</string>
@@ -127,8 +126,8 @@ mode activation</string>
   <string name="collect.sent_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് സമർപ്പിച്ച ഫോമുകളൊന്നുമില്ല.</string>
   <string name="collect.blank_expl_no.forms">പ്രദർശിപ്പിക്കുന്നതിന് ഫോമുകളൊന്നുമില്ല. നിങ്ങൾ ബന്ധിപ്പിച്ചിരിക്കുന്ന സെർവറുകളിൽ ഫോമുകൾ ലഭ്യമാണോയെന്ന് പരിശോധിക്കാൻ പുതുക്കുക ബട്ടൺ ടാപ്പുചെയ്യുക.</string>
   <string name="settings.camo_heading">മറ്റൊരു പേരും ലോഗോയും തിരഞ്ഞെടുക്കുക</string>
-  <string name="gallery_expl_empty">There are no files to show. Tap the + button to import files.</string>
-  <string name="collect.blank_toast_not.connected">You’re not connected to the internet. Try again when connected</string>
+  <string name="gallery_expl_empty">കാണിക്കാൻ ഫയലുകളൊന്നുമില്ല. ഫയലുകൾ ഇമ്പോർട്ടു ചെയ്യാൻ + ബട്ടൺ അമർത്തുക.</string>
+  <string name="collect.blank_toast_not.connected">നിങ്ങൾ ഇന്റർനെറ്റിലേക്ക് കണക്റ്റുചെയ്‌തിട്ടില്ല. കണക്റ്റുചെയ്യുമ്പോൾ വീണ്ടും ശ്രമിക്കുക</string>
   <string name="settings.gen_crash.reports_action">തകരാറിനെപ്പറ്റിയുള്ള അറിയിപ്പ് പങ്കിടുക</string>
   <string name="settings.gen_crash.reports_action.expl">ക്രാഷ് (അപ്പ്ലിക്കേഷന്റെ പ്രവർത്തന പ്രശ്നങ്ങൾ) റിപ്പോർട്ടുകൾ റ്റെല്ലയെ മെച്ചപ്പെടുത്താൻ ഞങ്ങളെ സഹായിക്കുന്നു. അവ ഓട്ടോമാറ്റിക്കായി (യാന്ത്രികമായി) അയക്കുന്നു - അതിൽ ഉപകരണ മോഡൽ, ആൻഡ്രോയിഡ് പതിപ്പ് എന്നിവ പോലുള്ള ഡാറ്റ ഉൾപ്പെടുത്തുകയും ചെയ്യുന്നു.</string>
   <string name="collect.form_dialog.action_add.group">ചേര്‍ക്കുക</string>
@@ -193,7 +192,7 @@ mode activation</string>
   </plurals>
   <string name="action_learn.more">കൂടുതൽ അറിയാൻ </string>
   <string name="settings.servers_add.server_dialog.title">സെര്‍വര്‍ ചേർക്കുക</string>
-  <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
+  <string name="settings.prot_select_delete.forms">ഡ്രാഫ്റ്റും സമർപ്പിച്ച ഫോമുകളും ഇല്ലാതാക്കുക</string>
   <string name="settings.prot_select_delete.servers">സെർവർ ക്രമീകരണങ്ങൾ ഇല്ലാതാക്കുക</string>
   <string name="settings.prot_select_delete.app">Tella (റ്റെല്ല) ഇല്ലാതാക്കുക</string>
   <string name="collect.sent_action_edit.to.resend">വീണ്ടും അയയ്‌ക്കാൻ എഡിറ്റുചെയ്യുക</string>
@@ -253,7 +252,7 @@ mode activation</string>
   <string name="verification.info_wifi.expl">ഉപകരണത്തിന് സമീപമുള്ള എല്ലാ Wi-Fi (വൈ-ഫൈ) നെറ്റ്‌വർക്കുകളുടെയും പേര്.</string>
   <string name="collect.blank_banner_forms.updated">ചില ഫോമുകൾ അപ്ഡേറ്റുചെയ്തിട്ടുണ്ട്. ഏറ്റവും പുതിയ പതിപ്പ് ലഭിക്കുന്നതിന് ഫോമുകൾക്ക് അടുത്തുള്ള അപ്‌ഡേറ്റ് ബട്ടൺ സ്പര്‍ശിക്കുക.</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">ഏത് സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാനാണ് നിങ്ങൾ ആഗ്രഹിക്കുന്നു?</string>
-  <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">ഏത് തരം സെർവർ?</string>
   <string name="settings.docu_add.server_dialog.select_odk">ഓപ്പൺ ഡാറ്റ കിറ്റ് (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">നിങ്ങൾ കണക്റ്റുചെയ്യാൻ ആഗ്രഹിക്കുന്ന സെർവർ തരം തിരഞ്ഞെടുക്കുക. നിങ്ങൾക്ക് ഉറപ്പില്ലെങ്കിൽ, നിങ്ങളുടെ ഓർഗനൈസേഷനോട് ചോദിക്കുക.</string>
   <string name="settings.docu_add.server_dialog.select_tus">നേരിട്ടുള്ള അപ്‌ലോഡ്</string>
@@ -261,9 +260,9 @@ mode activation</string>
   <string name="play.audio_action.expl_minus15s">-15 സെ</string>
   <string name="recorder_meta_space.available.days">%1$d ദിവസം  %2$d മണിക്കൂർ (%3$s) അവശേഷിക്കുന്നു</string>
   <string name="recorder_meta_space.available.hours">%1$d മണിക്കൂർ  %2$d മിനിറ്റ് (%3$s) അവശേഷിക്കുന്നു</string>
-  <string name="camera_video.resolution_dialog.title">Select video resolution</string>
-  <string name="camera_video.resolution_dialog.expl">Higher resolution means that the video will be of higher quality but the file size will also be larger.</string>
-  <string name="camera_video.resolution_select_highest">Highest possible</string>
+  <string name="camera_video.resolution_dialog.title">വീഡിയോ റെസലൂഷന്‍/മിഴിവ് തിരഞ്ഞെടുക്കുക</string>
+  <string name="camera_video.resolution_dialog.expl">ഉയർന്ന റെസല്യൂഷൻ/മിഴിവ് അർത്ഥമാക്കുന്നത് വീഡിയോ ഉയർന്ന നിലവാരമുള്ളതാണെങ്കിലും ഫയൽ വലുപ്പവും വലുതായിരിക്കും.</string>
+  <string name="camera_video.resolution_select_highest">സാധ്യമായ ഏറ്റവും ഉയർന്നത്</string>
   <string name="camera_video.resolution_select_1080p">ഉയർന്നത് (1080p)</string>
   <string name="camera_video.resolution_select_720p">ഇടത്തരം (720p)</string>
   <string name="camera_video.resolution_select_480p">കുറഞ്ഞത് (480 പി)</string>
@@ -362,7 +361,7 @@ mode activation</string>
   <string name="settings.camo_jeweldash">Jewel Dash</string>
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
-  <string name="fragment_mic">Recorder</string>
+  <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">Recording</string>
   <string name="mic_rename_recording">Rename recording</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
@@ -569,7 +568,7 @@ button to add a new template.</string>
   <string name="Uwazi_Templates_TabTitle">Templates</string>
   <string name="action_no">no</string>
   <string name="Vault_Items">items</string>
-  <string name="Vault_DeleteFile_SheetTitle">Delete file?</string>
+  <string name="Vault_DeleteFile_SheetTitle">ഫയൽ നീക്കം ചെയ്യണോ?</string>
   <string name="Vault_deleteFile_SheetDesc">The selected file will be permanently deleted from Tella.</string>
   <string name="Uwazi_Info_UrlLabelEmpty">The URL label is empty.</string>
   <string name="Collect_EndSubtitleExpl_UncheckedItems">Uncheck attachments to send them later. You can complete the submission from your Outbox.</string>
@@ -587,8 +586,8 @@ button to add a new template.</string>
   <string name="Collect_DeleteDraftForm_SheetExpl">Are you sure you want to delete this draft?</string>
   <string name="Collect_DeleteForm_SheetExpl">Are you sure you want to delete this form?</string>
   <string name="Uwazi_Dialog_Draft_Title">Exit entity?</string>
-  <string name="Verification_Label_meter">%f m</string>
-  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="Verification_Label_meter">%f മീറ്റര്‍‌</string>
+  <string name="Verification_Label_MeterPerSecond">%f മീറ്റർ പ്രതി സെക്കൻറ്</string>
   <string name="settings_sec_security_screen">Screen security</string>
   <string name="settings_sec_security_screen_expl">Block screenshots and screen recordings inside Tella and screen preview in the list of recent apps</string>
   <string name="settings.serv_add.server.selection_dialog.description">If you are not sure, please ask your
@@ -607,34 +606,34 @@ button to add a new template.</string>
   <string name="onboard.customization_title">Customization</string>
   <string name="onboard.customization_subtitle">Enter your customization code</string>
   <string name="onboard.customization_expl">Your organization may provide a code for you to set up Tella according to their settings.</string>
-  <string name="upload_toast_fail.finding.metadata.to.upload">There was an error locating the file\'s verification information. Please try again</string>
-  <string name="upload_toast.fail.finding.file.to.upload">There was an error locating the file to upload. Please try again</string>
-  <string name="gallery_app.bar">Gallery</string>
-  <string name="home_gallery.button">Gallery</string>
-  <string name="onboarding_action_create.pattern">Create pattern</string>
+  <string name="upload_toast_fail.finding.metadata.to.upload">ഫയലിന്റെ സ്ഥിരീകരണ വിവരങ്ങൾ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="upload_toast.fail.finding.file.to.upload">അപ്‌ലോഡുചെയ്യുന്നതിന് ഫയൽ കണ്ടെത്തുന്നതിൽ ഒരു പിശക് ഉണ്ടായിരുന്നു. ദയവായി വീണ്ടും ശ്രമിക്കുക</string>
+  <string name="gallery_app.bar">ഗാലറി</string>
+  <string name="home_gallery.button">ഗാലറി</string>
+  <string name="onboarding_action_create.pattern">​​മാതൃക സൃഷ്ടിക്കുക</string>
   <string name="permission_dialog.expl_mic">In order to record audio, Tella needs permission to access your microphone.</string>
-  <string name="home_action.expl_camera">Tap anywhere to open the camera</string>
-  <string name="gallery_toast_file.imported.from.device">The file was added to your gallery</string>
+  <string name="home_action.expl_camera">ക്യാമറ തുറക്കാൻ എവിടെയും ടാപ്പുചെയ്യുക</string>
+  <string name="gallery_toast_file.imported.from.device">നിങ്ങളുടെ ഗാലറിയിലേക്ക് ഫയൽ ചേർത്തു</string>
   <string name="permission_dialog.expl_camera.mic">In order to capture photo, video, and audio files, Tella needs access to your camera and microphone.</string>
   <string name="permission_dialog.expl_camera">In order to take photos and videos, Tella needs permission to access your camera.</string>
-  <string name="gallery_subheading_show">Show</string>
-  <string name="gallery_list.item_show.all.files">All</string>
-  <string name="gallery_list.items_show.only.photos">Photos</string>
-  <string name="gallery_list.items_show.only.videos">Videos</string>
-  <string name="gallery_list.items_show.only.audio">Audio recordings</string>
-  <string name="onboard.camo_heading">Camouflage</string>
-  <string name="settings.camo_calculator1">Easy Math</string>
-  <string name="settings.docu_dialog.action_hide">Hide</string>
-  <string name="settings.docu_auto.upload.server.selection_select">Server</string>
-  <string name="upload_dialog.title_select.server">Server selection</string>
-  <string name="settings.docu_connect.to.servers_enable_action">Connect to servers</string>
-  <string name="settings.docu_connect.to.servers_enable_action.expl">Manage your connection to servers to send data.</string>
-  <string name="settings.docu_disable.servers_dialog.title">Disconnect servers</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">Would you like to delete your server connections altogether, or simply hide them? Hiding will keep server information in memory so that you can easily reconnect and submit data to the servers.</string>
-  <string name="settings.docu_delete.auto.server_dialog.expl">If you delete this server, your files will no longer be auto-uploaded.</string>
-  <string name="settings.docu_auto.upload_action">Auto-upload</string>
+  <string name="gallery_subheading_show">കാണിക്കുക</string>
+  <string name="gallery_list.item_show.all.files">എല്ലാം</string>
+  <string name="gallery_list.items_show.only.photos">ചിത്രങ്ങള്‍</string>
+  <string name="gallery_list.items_show.only.videos">വീഡിയോകള്‍</string>
+  <string name="gallery_list.items_show.only.audio">ശബ്ദ രേഖകള്‍</string>
+  <string name="onboard.camo_heading">പ്രച്ഛന്നവേഷം</string>
+  <string name="settings.camo_calculator1">Easy Math (എളുപ്പമുള്ള കണക്ക്)</string>
+  <string name="settings.docu_dialog.action_hide">മറയ്ക്കുക</string>
+  <string name="settings.docu_auto.upload.server.selection_select">സെര്‍വര്‍</string>
+  <string name="upload_dialog.title_select.server">സെര്‍വര്‍ തിരഞ്ഞെടുക്കൽ</string>
+  <string name="settings.docu_connect.to.servers_enable_action">സെർവറുകളിലേക്ക് കണക്റ്റുചെയ്യുക</string>
+  <string name="settings.docu_connect.to.servers_enable_action.expl">ഡാറ്റ അയയ്‌ക്കുന്നതിന് സെർവറുകളിലേക്കുള്ള നിങ്ങളുടെ കണക്ഷൻ മാനേജ് ചെയ്യുക.</string>
+  <string name="settings.docu_disable.servers_dialog.title">സെർവറുകൾ വിച്ഛേദിക്കുക</string>
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">നിങ്ങളുടെ സെർവർ കണക്ഷനുകൾ മൊത്തത്തിൽ ഇല്ലാതാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ, അല്ലെങ്കിൽ അവ മറയ്ക്കുകയാണോ? മറയ്‌ക്കുന്നത് സെർവർ വിവരങ്ങൾ മെമ്മറിയിൽ സൂക്ഷിക്കുന്നതിനാൽ നിങ്ങൾക്ക് എളുപ്പത്തിൽ വീണ്ടും കണക്റ്റുചെയ്യാനും ഡാറ്റ സെർവറുകളിൽ സമർപ്പിക്കാനും കഴിയും.</string>
+  <string name="settings.docu_delete.auto.server_dialog.expl">നിങ്ങൾ ഈ സെർവർ ഇല്ലാതാക്കുകയാണെങ്കിൽ, നിങ്ങളുടെ ഫയലുകൾ മേലിൽ സ്വപ്രേരിത അപ്‌ലോഡ് ചെയ്യില്ല.</string>
+  <string name="settings.docu_auto.upload_action">സ്വപ്രേരിത അപ്‌ലോഡ്</string>
   <string name="settings.docu_auto.delete_action.expl">Tella will automatically delete the files from your device as soon as they are uploaded to the server.</string>
-  <string name="settings.docu_delete.upload.server_dialog.expl">You will no longer be able to upload files to this server.</string>
+  <string name="settings.docu_delete.upload.server_dialog.expl">നിങ്ങൾക്ക് ഇനി ഈ സെർവറിലേക്ക് ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യാൻ കഴിയില്ല.</string>
   <plurals name="upload.main_meta_number.of.files">
     <item quantity="one">One file</item>
     <item quantity="other">%d files</item>
@@ -689,7 +688,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Delete_Report_Confirmation">Are you sure you want to delete this report? </string>
   <string name="Delete_Submitted_Report_Confirmation">Are you sure you want to delete this sent report from your records?</string>
   <string name="View_Report">View</string>
-  <string name="Delete_Report">Delete</string>
+  <string name="Delete_Report">നീക്കം ചെയ്യുക</string>
   <string name="Paused_Report">Paused</string>
   <string name="Report_Waiting_For_Connection">Waiting for connection</string>
   <string name="Project_Url_Screen_Title">Enter project URL</string>
@@ -716,7 +715,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Setting_Reports_Auto_Report_Description">Whenever you take a photo/video/audio
 recording in Tella, a report will automatically be
 created with the file and uploaded to this project.</string>
-  <string name="Setting_Reports_Auto_Delete">Auto-delete</string>
+  <string name="Setting_Reports_Auto_Delete">സ്വപ്രേരിതമായി ഇല്ലാതാക്കൽ</string>
   <string name="Setting_Reports_Auto_Delete_Description">Automatically delete files from your device once
 they are uploaded to this project as a report.</string>
   <string name="Send_Action_Label">SEND</string>
@@ -814,8 +813,8 @@ they are uploaded to this project as a report.</string>
   <string name="exceeded_max_attempts">You have exceeded the maximum number of
  incorrect login attempts. All your Tella data
  has been deleted.</string>
-  <string name="Settings_General_TextJustificationTitle" formatted="false">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl" formatted="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextJustificationTitle">Text justification</string>
+  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
   <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
   <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
@@ -835,7 +834,7 @@ they are uploaded to this project as a report.</string>
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">ഫോമുകൾ സെർവറിൽ ലഭ്യമാണ് (ഡൗൺലോഡു ചെയ്‌തിട്ടില്ല)</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
@@ -917,4 +916,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

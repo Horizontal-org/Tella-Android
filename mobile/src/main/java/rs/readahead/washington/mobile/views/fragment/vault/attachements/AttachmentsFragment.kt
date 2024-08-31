@@ -959,8 +959,8 @@ class AttachmentsFragment :
             getString(R.string.gallery_subheading_sort_by),
             getString(R.string.Vault_SortNameAsc_SheetAction),
             getString(R.string.Vault_SortNameDesc_SheetAction),
-            getString(R.string.Vault_SortDateAsc_SheetAction),
             getString(R.string.Vault_SortDateDesc_SheetAction),
+            getString(R.string.Vault_SortDateAsc_SheetAction),
             sort = createVaultSortActions()
         )
     }
@@ -969,8 +969,8 @@ class AttachmentsFragment :
         binding.filterNameTv.text = when (sortType) {
             Sort.Type.DATE -> {
                 when (sortDirection) {
-                    Sort.Direction.ASC -> getString(R.string.Vault_SortDateAsc_SheetAction)
-                    Sort.Direction.DESC -> getString(R.string.Vault_SortDateDesc_SheetAction)
+                    Sort.Direction.ASC -> getString(R.string.Vault_SortDateDesc_SheetAction)
+                    Sort.Direction.DESC -> getString(R.string.Vault_SortDateAsc_SheetAction)
                 }
             }
 

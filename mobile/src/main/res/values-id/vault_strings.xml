@@ -5,7 +5,7 @@
   <string name="Vault_Files_Title">Berkas tella</string>
   <string name="Vault_Documents_Title">Dokumen</string>
   <string name="Vault_Audios_Title">io</string>
-  <string name="Vault_Videos_Title">Videos</string>
+  <string name="Vault_Videos_Title">Video</string>
   <string name="Vault_Others_Title">Lainnya</string>
   <string name="Vault_Select_Title">Pilih berkas</string>
   <string name="Vault_RecentFiles">Recent files</string>
@@ -16,8 +16,8 @@
   <string name="Vault_Rename_SheetAction">Ubah nama</string>
   <string name="Vault_Save_SheetAction">Simpan</string>
   <string name="Vault_Delete_SheetAction">Hapus</string>
-  <string name="Vault_Share_SheetAction">Share </string>
-  <string name="Vault_Upload_SheetAction">Upload</string>
+  <string name="Vault_Share_SheetAction">Bagikan</string>
+  <string name="Vault_Upload_SheetAction">Unggah</string>
   <string name="Vault_File_SheetAction">Informasi Berkas</string>
   <string name="Vault_FileInfo">Informasi Berkas</string>
   <string name="Vault_FileSize">Ukuran</string>
@@ -45,8 +45,8 @@
   <string name="Vault_ImportDelete_SheetAction">Impor dan hapus berkas asli</string>
   <string name="Vault_CreateFolder_SheetTitle">Buat folder baru</string>
   <string name="Vault_MoveHere">pindahkan ke sini</string>
-  <string name="Vault_ViewerOther_SheetDesc" formatted="false">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
-  <string name="Vault_Export_SheetAction">Save to device</string>
+  <string name="Vault_ViewerOther_SheetDesc">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
+  <string name="Vault_Export_SheetAction">Mengekspor</string>
   <plurals name="Vault_Items">
     <item quantity="other">Kosong</item>
   </plurals>
@@ -56,7 +56,7 @@
     <item quantity="other">Berkas berhasil dipindah</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Beberapa dari berkas sedang digunakan di koneksi Anda. Menghapusnya bisa berdampak pada formulir dan laporan yang belum dikirim.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">Peringatan</string>
   <string name="Vault_Delete_anyway">Hapus</string>
   <string name="Vault_Keep_Original">SIMPAN YANG ASLI</string>
   <string name="Vault_Delete_Original">HAPUS YANG ASLI</string>

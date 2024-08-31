@@ -23,7 +23,7 @@
   <string name="action_ok">Valider</string>
   <string name="collect.form_toast_validation.error">Cette réponse est invalide</string>
   <string name="collect.form_error_response.mandatory">Cette réponse est requise.</string>
-  <string name="homescreen_heading_quick.delete">Suppression rapide activée</string>
+  <string name="homescreen_heading_quick.delete">Activation du mode Suppression Rapide</string>
   <string name="settings.about_list.item_privacy.policy">Politique de confidentialité</string>
   <string name="recorder_toast_fail.recording">Erreur d’enregistrement du son. Veuillez réessayer</string>
   <string name="recorder_content.desc_blinking.red.dot">Enregistrement du son</string>
@@ -87,7 +87,7 @@
     <item quantity="one">fichier enregistré sur votre appareil.</item>
     <item quantity="other">fichiers enregistrés sur votre appareil.</item>
   </plurals>
-  <string name="gallery_delete.files_dialog.title">Supprimer le fichier ?</string>
+  <string name="gallery_delete.files_dialog.title">Supprimer le fichier ?</string>
   <string name="gallery_delete.files_dialog.expl">Les fichiers sélectionnés seront irrémédiablement supprimés de votre galerie.</string>
   <string name="gallery_save.to.device_dialog.title">Enregistrer dans la galerie de l’appareil ?</string>
   <string name="gallery_save.to.device_dialog.expl">Votre fichier deviendra accessible en dehors de Tella, dans la galerie de votre appareil et par d’autres applis.</string>
@@ -117,7 +117,7 @@
   <string name="settings.docu_error_no.internet">Vous n’êtes pas connecté à Internet. Réessayez après connexion.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Réessayer</string>
   <string name="settings.about_select_tutorial">Tutoriel</string>
-  <string name="settings.camo_expl">L\'icône et le nom changeront sur l\'écran d\'accueil de votre appareil, mais l\'icône Tella restera visible dans le menu des paramètres d\'Android.</string>
+  <string name="settings.camo_expl">Sélectionner une icône et un nom personnalisés pour mieux dissimuler Tella sur votre appareil. Noter que l’icône de Tella restera visible dans le menu des paramètres d’Android.</string>
   <string name="gallery_action.desc_save.to.device">Sauvegarder sur le dispositif</string>
   <string name="settings.docu_verification_action">Mode de vérification</string>
   <string name="settings.docu_verification_action.expl">Rend vos fichiers multimédias vérifiables en recueillant des renseignements sur votre appareil et sur votre position géographique.</string>
@@ -127,7 +127,7 @@
   <string name="collect.blank_expl_no.forms">Il n’y a aucun formulaire à afficher. Toucher le bouton d’actualisation pour vérifier si des formulaires sont disponibles sur les serveurs auxquels vous êtes connecté.</string>
   <string name="settings.camo_heading">Sélectionner un nom et un logo différents</string>
   <string name="gallery_expl_empty">Il n\'y a pas de fichiers à afficher. Touchez le bouton + pour importer des fichiers.</string>
-  <string name="collect.blank_toast_not.connected">Pas de connexion Internet. Réessayez lorsque vous êtes connecté à Internet.</string>
+  <string name="collect.blank_toast_not.connected">Vous n’êtes pas connecté à Internet. Réessayez une fois connecté</string>
   <string name="settings.gen_crash.reports_action">Partager les rapports de plantage</string>
   <string name="settings.gen_crash.reports_action.expl">Les rapports de plantage nous aident à améliorer Tella. Ils sont envoyés automatiquement et comprennent des données telles que le modèle de votre appareil et la version d’Android.</string>
   <string name="collect.form_dialog.action_add.group">Ajouter</string>
@@ -192,7 +192,7 @@
   </plurals>
   <string name="action_learn.more">En savoir plus</string>
   <string name="settings.servers_add.server_dialog.title">Ajouter un serveur</string>
-  <string name="settings.prot_select_delete.forms">Supprimer les formulaires</string>
+  <string name="settings.prot_select_delete.forms">Supprimer brouillons et formulaires envoyés</string>
   <string name="settings.prot_select_delete.servers">Supprimer les paramètres des serveurs</string>
   <string name="settings.prot_select_delete.app">Supprimer Tella</string>
   <string name="collect.sent_action_edit.to.resend">Modifier pour renvoyer</string>
@@ -252,7 +252,7 @@
   <string name="verification.info_wifi.expl">Le nom de tous les réseaux Wi-Fi à proximité de l’appareil.</string>
   <string name="collect.blank_banner_forms.updated">Certains formulaires ont été mis à jour. Toucher le bouton de mise à jour à côté des formulaires pour obtenir la version la plus récente.</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Vers quel serveur voulez-vous téléverser les fichiers ?</string>
-  <string name="settings.serv_add.server.selection_dialog.title">À quel type de serveur souhaitez-vous vous connecter ?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">Quel type de serveur ?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Trousse de données ouvertes (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Sélectionnez le type de serveur auquel vous voulez vous connecter. Si vous n’êtes pas certain, demandez à votre organisation.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Téléversement direct</string>
@@ -272,7 +272,7 @@
   <string name="settings.docu_error_must.select.auto.upload.server">Vous devez sélectionner un serveur.</string>
   <string name="camera_tab.title_video">Vidéo</string>
   <string name="camera_tab.title_photo">Photo</string>
-  <string name="action_upload">Téléverser</string>
+  <string name="action_upload">Mettre en ligne</string>
   <string name="collect.blank_action.desc_more.options">Plus d’options</string>
   <string name="action_next">Poursuivre</string>
   <string name="meter">%f m</string>
@@ -290,9 +290,9 @@
   <string name="settings.select_security">Sécurité</string>
   <string name="settings.select_lock_timeout">Délai de verrouillage</string>
   <string name="settings.sec_camera.mute_switch">Mode silencieux de l’appareil photo</string>
-  <string name="settings.sec_camera.mute_expl">Désactive le son de l’obturateur de l’appareil photo pour attirer moins d’attention lors de la prise de photos et de vidéos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Suppression rapide</string>
-  <string name="settings.sec_quick.delete_expl">Affiche un bouton coulissant sur l’écran d’accueil de Tella pour supprimer rapidement les fichiers dans Tella en cas d’urgence.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
   <string name="settings.servers.title_server.settings">Serveurs</string>
   <string name="settings.servers.add_server.expl">Connectez-vous à des serveurs pour collecter et envoyer des données à votre organisation</string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -311,15 +311,15 @@
   <string name="action_enable">Activer</string>
   <string name="action_disable">Désactiver</string>
   <string name="settings.servers_delete.server_dialog.title">Supprimer le serveur \" %1$s \" ?</string>
-  <string name="action_edit">Modifier</string>
-  <string name="settings.server_add.server_dialog_advanced">Identifiants</string>
+  <string name="action_edit">Éditer</string>
+  <string name="settings.server_add.server_dialog_advanced">Advanced</string>
   <string name="settings.docu_error_auth.required">Authentification requise</string>
   <string name="settings.sec_lock_timeout_immediately">Immédiatement</string>
   <string name="settings.sec_lock_timeout_1min">1 minute</string>
   <string name="settings.sec_lock_timeout_5min">5 minutes</string>
   <string name="settings.sec_lock_timeout_30min">30 minutes</string>
   <string name="settings.sec_lock_timeout_1hour">1 heure</string>
-  <string name="settings.sec_lock_timeout_desc">Décidez combien de temps il faut à Tella pour se verrouiller. Un temps plus court est plus sûr car il réduit le risque que quelqu\'un fouille votre appareil pendant que Tella est déverrouillé.</string>
+  <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
   <string name="settings.prot_select_delete.vault">Supprimer les fichiers</string>
   <string name="settings.sec_delete.vault_tooltip">Supprimez tous les fichiers stockés dans Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Supprimer tous les formulaires brouillons et soumis.</string>
@@ -339,9 +339,9 @@
   <string name="settings.servers_setup_hide_behind_camouflage_title">cachez Tella derrière une vraie application</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">L\'option la plus sûre : camouflez Tella derrière une application fonctionnelle</string>
   <string name="settings.servers_setup_change_name_icon_title">CHANGER LE NOM ET L\'ICÔNE</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><b> Moins sécurisée : </b> Tella apparaîtra sur l\'écran d\'accueil avec un nom et une icône d\'application différents.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_title">Application calculatrice</string>
-  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b> Plus sécurisée : </b> Tella sera cachée derrière une application de calculatrice fonctionnelle. Entrez votre code PIN sur la calculatrice pour déverrouiller et ouvrir Tella.</string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_not_possible">Le camouflage Calculatrice n\'est possible que si vous
  utiliser un verrou PIN. <font color="#D6933B"> <b> Changer le verrou ici </b> </font></string>
   <string name="settings.sec_change_lock_type_warning">Si vous modifiez votre méthode de verrouillage, le camouflage sera désactivé</string>
@@ -360,7 +360,7 @@
   <string name="settings.camo_jeweldash">Jewel Dash</string>
   <string name="settings.camo_time">Time</string>
   <string name="settings.camo_stopwatch">StopWatch</string>
-  <string name="fragment_mic">Dictaphone</string>
+  <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">Enregistrement</string>
   <string name="mic_rename_recording">Renommer l\'enregistrement</string>
   <string name="recorder_toast_recording.saved">L\'enregistrement audio a été enregistré dans vos fichiers Tella</string>
@@ -369,34 +369,34 @@
   <string name="onboard.title_camera">Appareil photo</string>
   <string name="onboard.expl_camera">Prenez des photos et des vidéos directement dans Tella. Ces fichiers sont automatiquement chiffrés et enregistrés dans Tella, et ne seront pas visibles depuis la galerie habituelle de votre téléphone.</string>
   <string name="onboard.title_recorder">Dictaphone</string>
-  <string name="onboard.expl_recorder">Enregistrez des interviews ou du son directement dans Tella. Les fichiers audio sont automatiquement chiffrés et enregistrés dans Tella, et ne seront pas accessibles à partir du stockage habituel de votre téléphone.</string>
+  <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
   <string name="onboard.title_files">Fichiers et dossiers cryptés</string>
-  <string name="onboard.expl_files">Tous les fichiers et dossiers de Tella sont chiffrés. Tant que Tella est verrouillés, vos fichiers et dossiers sont cryptés et restent inaccessibles depuis l\'extérieur de Tella.</string>
+  <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
   <string name="onboard.title_lock_finish">Verrou</string>
   <string name="onboard.expl_lock_finish">Votre verrou est configuré ! Vous pouvez le modifier à tout moment dans les Paramètres.</string>
   <string name="onboard.title_all_done">Vous avez terminé !</string>
-  <string name="onboard.expl_all_done">Vous pouvez aller sur Tella ou continuer à personnaliser Tella avec des options avancées.</string>
+  <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
   <string name="onboard.go_btn_all_done">Aller à Tella</string>
   <string name="onboard.advanced_btn_all_done">Paramètres avancés</string>
   <string name="onboard.title_share_data">Partagez les données que vous collectez</string>
-  <string name="onboard.expl_share_data">Si vous travaillez avec une organisation, connectez-vous à son serveur pour envoyer des fichiers et des données. Votre organisation doit vous fournir les détails du serveur.</string>
+  <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
   <string name="onboard.connect_btn_share_data">Se connecter à un serveur</string>
   <string name="onboard.continue_btn_share_data">Continuer sans se connecter à un serveur</string>
-  <string name="onboard.expl_hide_tella">Pour rendre Tella plus difficile à trouver sur votre appareil, vous pouvez modifier son apparence sur votre écran d\'accueil.</string>
-  <string name="onboard.default_btn_title_hide_tella">Conserver l\'apparence par défaut de Tella</string>
-  <string name="onboard.default_btn_subtitle_hide_tella">Tella restera visible sur l\'écran d\'accueil de votre appareil.</string>
+  <string name="onboard.expl_hide_tella">To make it harder to find on your device, you can hide Tella by changing the way it looks on your homescreen.</string>
+  <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
+  <string name="onboard.default_btn_subtitle_hide_tella">Tella remains visible on the home screen</string>
   <string name="onboard.title_advanced_complete">Personnalisation avancée terminée !</string>
-  <string name="onboard.expl_advanced_complete">Vous pouvez toujours modifier vos préférences dans les paramètres Tella.</string>
+  <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
   <string name="onboard.title_connected_server">Connecté au serveur</string>
-  <string name="onboard.expl_connected_server">Vous vous êtes connecté avec succès au serveur et pourrez partager vos données.</string>
-  <string name="onboard.expl_hide_tella_set">Tella sera cachée derrière une application de Calculatrice fonctionnelle. Déverrouillez Tella en entrant votre code PIN sur la calculatrice suivi de =</string>
+  <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
+  <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
   <string name="onboard.hide_behind_calculator_not_possible">Le camouflage de la calculatrice n\'est possible que si vous utilisez un verrouillage par code PIN.</string>
   <string name="onboard.calculator_button">Sélectionnez la calculatrice</string>
-  <string name="onboard.calculator_expl">Tella sera cachée derrière une application de calculatrice fonctionnelle. Entrez votre code PIN sur la calculatrice pour déverrouiller et ouvrir Tella.</string>
+  <string name="onboard.calculator_expl">Tella sera cachée derrière une application de Calculatrice fonctionnelle. Déverrouillez Tella en entrant votre code PIN sur la calculatrice suivi de =</string>
   <string name="settings.general_recent_files_switch_title">Fichiers récents</string>
-  <string name="settings.general_recent_files_switch_expl">Vous donne un accès rapide à vos fichiers récents sur l\'écran d\'accueil de Tella.</string>
+  <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
   <string name="settings.general_favorite_forms_switch_title">Formulaires favoris</string>
-  <string name="settings.general_favorite_forms_switch_expl">Vous donne un accès rapide à vos formulaires préférés sur l\'écran d\'accueil de Tella.</string>
+  <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
   <string name="settings.sec_confirm_camouflage_title">Quitter Tella pour activer le camouflage ?</string>
   <string name="settings.sec_confirm_camouflage_desc">Pour rouvrir Tella, recherchez l\'icône de l\'application %s parmi vos applications.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Pour rouvrir Tella, recherchez l\'icône de l\'application Calculatrice parmi vos applications. Déverrouillez Tella en entrant votre code PIN dans la calculatrice suivi de \"=\".</string>
@@ -416,7 +416,7 @@
   <string name="Vault_Importing_SheetTitle">Importation et chiffrement</string>
   <string name="Rec_Exit_SheetTitle">Sauvegarder l\'enregistrement ?</string>
   <string name="Rec_Exit_SheetText">Votre enregistrement n\'est pas sauvegardé. Voulez-vous le sauvegarder avant de quitter ?</string>
-  <string name="Vault_AudioRecordings_AppBar">Enregistrements son</string>
+  <string name="Vault_AudioRecordings_AppBar">Enregistrements audio</string>
   <string name="Vault_Encryting_SheetText">%d% terminé</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Annuler le chiffrement et supprimer le fichier ?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">Si vous annulez, votre fichier sera perdu</string>
@@ -446,7 +446,7 @@
   <string name="Uwazi_Action_FillEntity">Créer une entité</string>
   <string name="Uwazi_Action_RemoveTemplate">Supprimer le modèle</string>
   <string name="Uwazi_Subtitle_RemoveTemplate">Êtes-vous sûr de vouloir supprimer ce modèle de votre appareil ? </string>
-  <string name="UWAZI_Language_Header_Title">Sélection de la langue</string>
+  <string name="UWAZI_Language_Header_Title">Langue Uwazi</string>
   <string name="Uwazi_Language_Screen_Description">Cette collection Uwazi est disponible en plusieurs langues. Veuillez sélectionner la langue dans laquelle vous souhaitez télécharger les modèles.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Afficher des raccourcis vers vos modèles préférés sur l\'écran d\'accueil de Tella</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Modèles favoris</string>
@@ -646,7 +646,7 @@
   <string name="settings.select_customization">Personnalisation</string>
   <string name="Uwazi_Send_Header_Title">Fin de l\'entité</string>
   <string name="Uwazi_Send_Entity_Title">Fin de l\'entité</string>
-  <string name="action_yes_in">YES, I’M IN!</string>
+  <string name="action_yes_in">J\'ACCEPTE</string>
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
   <string name="Javarosa_Upgrade_Warning_Description">Nous avons mis à jour certaines bibliothèques de Tella et nous devrions retélécharger tous les formulaires.</string>
   <string name="Javarosa_Upgrade_Toast">Veuillez patienter pendant que nous mettons à jour les formulaires.</string>
@@ -762,8 +762,8 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
   <string name="action_show_pin">afficher le pin</string>
   <string name="action_hide_pin">cacher le pin</string>
   <string name="action_go_back">Retour</string>
-  <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_show_unlock_attempts_remaining">Afficher les tentatives de déverrouillage restantes</string>
+  <string name="Settings_unlock_screen_instructions">Sur l’écran de déverrouillage, affichez le nombre restant de tentatives de déverrouillage infructueuses avant que tout ce qui se trouve à l’intérieur de Tella ne soit supprimé</string>
   <string name="Settings_Delete_After_Failed_Unlock">Suppression après échec du déverrouillage</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Décidez du nombre de tentatives de déverrouillage infructueuses autorisées avant que tout ce qui se trouve à l’intérieur de Tella ne soit supprimé.</string>
   <string name="Settings_Off_Do_Not_Delete">Éteindre (ne pas supprimer les données)</string>
@@ -806,7 +806,7 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
  tentatives de connexion incorrectes. Toutes vos données Tella
  ont été supprimées.</string>
   <string name="Settings_General_TextJustificationTitle">Justification du texte</string>
-  <string name="Settings_General_TextJustificationExpl" formatted="false">Alignez les sections de texte plus longues sur les marges gauche et droite pour un aspect plus soigné. Si cette option est désactivée, le texte sera aligné à gauche ou à droite pour augmenter l’accessibilité.</string>
+  <string name="Settings_General_TextJustificationExpl">Alignez les sections de texte plus longues sur les marges gauche et droite pour un aspect plus soigné. Si cette option est désactivée, le texte sera aligné à gauche ou à droite pour augmenter l’accessibilité.</string>
   <string name="Settings_General_TextSpacingTitle">Augmenter l\'espacement du texte</string>
   <string name="Settings_General_TextSpacingExpl">Augmenter l’interligne à 150 % et l’espacement des paragraphes à 225 %.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella va maintenant s’actualiser</string>
@@ -828,33 +828,33 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
   <string name="Forms_NoDraftForms">Vous n\'avez aucun brouillon de formulaire.</string>
   <string name="Forms_BlankSubheadingFormsOnServers">Formulaires disponibles sur le serveur</string>
   <string name="Forms_BlankSubheadingDownloadedForms">Il s\'agit de formulaires vides que vous pouvez remplir.</string>
-  <string name="background_activities">Background activities</string>
-  <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
-  <string name="file_encryption_in_progress">File encryption in progress</string>
+  <string name="background_activities">Activités en arrière-plan</string>
+  <string name="current_background_activities">Il y a des activités actuellement en cours en arrière-plan.</string>
+  <string name="file_encryption_in_progress">Chiffrement du fichier en cours</string>
   <string name="no_background_activity">There are currently no ongoing activities in the background.</string>
-  <string name="encryption_in_progress">File encryption in progress</string>
-  <string name="encryption_exit_prompt">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
-  <string name="exit_discard_files">Exit and discard files</string>
-  <string name="exit_and_discard_files">Exit and discard files</string>
-  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
-  <string name="Home_BottomNav_Resources">Resources</string>
-  <string name="Resources_DownloadedTitle">Downloaded</string>
-  <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
-  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
-  <string name="Resources_AvailableTitle">Available for download</string>
+  <string name="encryption_in_progress">Chiffrement du fichier en cours</string>
+  <string name="encryption_exit_prompt">Il y a des fichiers chiffrés en arrière-plan. Voulez-vous quitter et perdre les fichiers ?</string>
+  <string name="exit_discard_files">Quitter et abandonner les fichiers</string>
+  <string name="exit_and_discard_files">Quitter et abandonner les fichiers</string>
+  <string name="files_being_encrypted_message">Il y a des fichiers chiffrés en arrière-plan. Voulez-vous quitter et perdre les fichiers ?</string>
+  <string name="Home_BottomNav_Resources">Ressources</string>
+  <string name="Resources_DownloadedTitle">Téléchargés</string>
+  <string name="Resources_DownloadedEmptyMessage">Vous n\'avez téléchargé aucune ressource. Appuyez sur l\'icône « Télécharger » à côté de chaque ressource ci-dessous pour commencer.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">Vous n\'avez téléchargé aucune ressource.</string>
+  <string name="Resources_AvailableTitle">Disponible pour téléchargement</string>
   <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
-  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
-  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
+  <string name="Resources_AvailableEmptyMessage">Aucune ressource n\'est disponible au téléchargement à partir de vos projets Tella Web.</string>
+  <string name="Resources_RemoveFromDownloads">Supprimer des téléchargements</string>
   <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
-  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
-  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
-  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
-  <string name="Resources_Exit">EXIT</string>
+  <string name="Resources_DialogTitle_StopDownload">Arrêter le téléchargement et quitter ?</string>
+  <string name="Resources_DialogMsg_StopDownload">La progression de votre téléchargement sera perdue. Vous pouvez toujours revenir télécharger plus tard la ressource.</string>
+  <string name="Resources_KeepDownloading">CONTINUER DE TÉLÉCHARGER</string>
+  <string name="Resources_Exit">QUITTER</string>
   <string name="Error_DownloadFailed">Error: Download failed</string>
   <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
   <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
   <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
-  <string name="back">BACK</string>
+  <string name="back">RETOUR</string>
   <string name="encrypting">Encrypting </string>
   <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
   <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
@@ -868,7 +868,7 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
   </plurals>
-  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Sélectionnez les entités que vous souhaitez connecter à cette propriété.</string>
   <string name="Analytics_contribute_reminder_title">You are sharing data</string>
   <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
   <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
@@ -876,7 +876,7 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
   <string name="Analytics_contribute_title">Would you like to contribute?</string>
   <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
   <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
-  <string name="Analytics_how_works_title">How it works</string>
+  <string name="Analytics_how_works_title">Comment ça marche</string>
   <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
 • We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
@@ -898,9 +898,9 @@ AVERTISSEMENT : Si activé, Tella restera déverrouillé jusqu\'à ce que tous l
 Would you like to share analytics with the Tella team?</string>
   <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
-  <string name="select_entities">Select entities</string>
-  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-  <string name="add_more_entities">Add more entities</string>
+  <string name="select_entities">Choisir des entités</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Recherchez ou sélectionnez les entités que vous souhaitez connecter à cette propriété.</string>
+  <string name="add_more_entities">Ajouter plus d\'entités</string>
   <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
   <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
@@ -908,4 +908,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

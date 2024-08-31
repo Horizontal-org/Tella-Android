@@ -11,7 +11,7 @@
   <string name="LockPatternSet_Pattern_Recorded">Le schéma a été enregistré</string>
   <string name="UnlockPattern_PatternTooShort">Connectez au moins 6 points, veuillez redessiner</string>
   <string name="LockPatternSet_RecordingPattern">Relâcher le doigt une fois terminé</string>
-  <string name="LockPatternSet_Action_Redraw">Redessiner</string>
+  <string name="LockPatternSet_Action_Redraw">Effacer</string>
   <string name="LockPatternConfirm_Message_WrongPattern">Le schéma est erroné, veuillez réessayer</string>
   <string name="LockPatternSet_Message_PatternStarted">Le schéma est commencé</string>
   <string name="LockPatternSet_Message_PatternCleared">Le schéma a été effacé</string>

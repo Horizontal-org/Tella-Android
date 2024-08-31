@@ -77,7 +77,7 @@
   <string name="collect_toast_fail.submission.unauthorized">شما مجاز به ارسال این فرم نیستید. اگر فکر می‌کنید اشتباهی رخ داده است، با سازمان خود تماس بگیرید</string>
   <string name="gallery_toast_fail.importing.file">هنگام وارد کردن فایل خطایی رخ داد. لطفا دوباره امتحان کنید</string>
   <string name="collect.end_heading">پایان فرم</string>
-  <string name="collect.end_toast_notification.form.not.sent.no.connection">شما به اینترنت متصل نیستید. پس از برقراری اتصال، دوباره امتحان کنید</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">شما به اینترنت متصل نیستید. پس از ایجاد برقراری اتصال، دوباره امتحان کنید</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">فرم به‌صورت ناقص ارسال شد یا اصلاً ارسال نشد. آیا مطمئن هستید که می‌خواهید آن را کنار بگذارید؟</string>
   <string name="action_discard">کنار بگذار</string>
   <string name="collect.end_action_submit">ارسال</string>
@@ -352,7 +352,7 @@
   <string name="settings.camo_calculate">ماشین‌حساب</string>
   <string name="settings.camo_calculator_plus">ماشین‌حساب پیشرفته</string>
   <string name="settings.camo_icalculator">iCalculator</string>
-  <string name="settings.camo_weather">آب و هوا</string>
+  <string name="settings.camo_weather">وضعیت آب و هوا</string>
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
   <string name="settings.camo_gamestation">GameStation</string>
@@ -491,7 +491,7 @@
   <string name="Uwazi_WidgetMedia_Take_Photo">گرفتن عکس با دوربین</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">انتخاب از فایل‌های Tella</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">انتخاب از دستگاه</string>
-  <string name="Uwazi_Widget_Sheet_Description">روش افزودن فایل را انتخاب کنید</string>
+  <string name="Uwazi_Widget_Sheet_Description">روش افزودن فایل‌ها را انتخاب کنید</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">پر کردن این قسمت الزامی است.</string>
   <string name="Uwazi_Server_Title">سرور:</string>
   <string name="Uwazi_Template_Title">قالب:</string>
@@ -618,7 +618,7 @@
   <string name="gallery_list.item_show.all.files">همه</string>
   <string name="gallery_list.items_show.only.photos">عکس</string>
   <string name="gallery_list.items_show.only.videos">ویدئو</string>
-  <string name="gallery_list.items_show.only.audio">فایل صوتی</string>
+  <string name="gallery_list.items_show.only.audio">فایل‌های صوتی ضبط شده</string>
   <string name="onboard.camo_heading">استتار</string>
   <string name="settings.camo_calculator1">Easy Math</string>
   <string name="settings.docu_dialog.action_hide">پنهان کردن</string>
@@ -809,7 +809,7 @@
  incorrect login attempts. All your Tella data
  has been deleted.</string>
   <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl" formatted="false">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
+  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
   <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
   <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
@@ -829,7 +829,7 @@
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
   <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">فرم‌های موجود در سرور</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
@@ -911,4 +911,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

@@ -45,7 +45,6 @@ class OnBoardRecorderFragment : BaseFragment() {
         nextBtn = view.findViewById(R.id.next_btn)
         nextBtn.setOnClickListener {
             (baseActivity as OnBoardingActivity).onNextPressed()
-
         }
     }
 }

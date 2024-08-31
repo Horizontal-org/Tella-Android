@@ -15,7 +15,7 @@
   <string name="Vault_Move_SheetDesc">အခြားဖိုင်တွဲသို့ ရွှေ့မည်</string>
   <string name="Vault_Rename_SheetAction">အမည်ပြောင်းမည်</string>
   <string name="Vault_Save_SheetAction">သိမ်းမည်</string>
-  <string name="Vault_Delete_SheetAction">ဖျက်မည်</string>
+  <string name="Vault_Delete_SheetAction">ဖျက်ရန်</string>
   <string name="Vault_Share_SheetAction">မျှဝေမည်</string>
   <string name="Vault_Upload_SheetAction">တင်မည်</string>
   <string name="Vault_File_SheetAction">ဖိုင်အချက်အလက်</string>
@@ -45,7 +45,7 @@
   <string name="Vault_ImportDelete_SheetAction">မူရင်းဖိုင်ကို ထည့်သွင်းပြီး ဖျက်မည်</string>
   <string name="Vault_CreateFolder_SheetTitle">ဖိုင်တွဲအသစ်တစ်ခု ဖန်တီးမည်</string>
   <string name="Vault_MoveHere">ဤနေရာသို့ ရွှေ့မည်</string>
-  <string name="Vault_ViewerOther_SheetDesc" formatted="false">ဤဖိုင်ပုံစံကို Tella တွင် ဖွင့်၍မရပါ။ အခြားအက်ပ်တစ်ခုဖြင့် ဖွင့်ရန် ဖိုင်ကို သင့်စက်ထဲ၌ သိမ်းမလား။ ၎င်းသည် ဖိုင်ပါ အကြောင်းအရာကို ဖော်ထုတ်နိုင်သည်။</string>
+  <string name="Vault_ViewerOther_SheetDesc">ဤဖိုင်ပုံစံကို Tella တွင် ဖွင့်၍မရပါ။ အခြားအက်ပ်တစ်ခုဖြင့် ဖွင့်ရန် ဖိုင်ကို သင့်စက်ထဲ၌ သိမ်းမလား။ ၎င်းသည် ဖိုင်ပါ အကြောင်းအရာကို ဖော်ထုတ်နိုင်သည်။</string>
   <string name="Vault_Export_SheetAction">စက်ထဲ၌ သိမ်းမည်</string>
   <plurals name="Vault_Items">
     <item quantity="other">ခု</item>
@@ -56,7 +56,7 @@
     <item quantity="other">ဖိုင်များကို အောင်မြင်စွာ ရွှေ့လိုက်ပါပြီ</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">ရွေးချယ်ထားသော ဖိုင်များအနက် အချို့ကို သင်၏ ချိတ်ဆက်မှုများ၌ အသုံးပြုနေဆဲဖြစ်သည်။ ထိုဖိုင်များကို ဖျက်လိုက်ပါက မပေးပို့ရသေးသော ဖောင်ပုံစံများနှင့် အစီရင်ခံချက်များကို ထိခိုက်စေနိုင်ပါသည်။</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">သတိပေးချက်</string>
   <string name="Vault_Delete_anyway">ရရာနည်းဖြင့် ဖျက်မည်</string>
   <string name="Vault_Keep_Original">မူရင်းဖိုင်ကို ဆက်လက်သိမ်းထားမည်</string>
   <string name="Vault_Delete_Original">မူရင်းဖိုင်ကို ဖျက်မည်</string>
