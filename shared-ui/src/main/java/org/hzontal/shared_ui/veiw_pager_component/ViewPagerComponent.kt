@@ -4,13 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.veiw_pager_component.adapter.ViewPagerAdapter
+import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 
 class ViewPagerComponent @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
@@ -20,7 +20,7 @@ class ViewPagerComponent @JvmOverloads constructor(
     private val viewPager: ViewPager2
     private val viewPagerAdapter: ViewPagerAdapter
     private var tabTitles: List<String> = emptyList()
-
+    private var fragmentProvider: FragmentProvider? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pager_component_layout, this, true)
@@ -45,7 +45,9 @@ class ViewPagerComponent @JvmOverloads constructor(
         }.attach()
     }
 
-    fun setupTabs(fragments: List<Fragment>) {
+    fun setupTabs(fragmentProvider: FragmentProvider, tabCount: Int) {
+        this.fragmentProvider = fragmentProvider
+        val fragments = List(tabCount) { fragmentProvider.createFragment(it) }
         viewPagerAdapter.updateFragments(fragments)
         updateTabTitles()
     }

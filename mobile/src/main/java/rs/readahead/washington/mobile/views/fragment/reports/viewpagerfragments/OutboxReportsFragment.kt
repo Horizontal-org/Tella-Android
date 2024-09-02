@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -39,6 +40,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         }
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun initData() {
         with(viewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->

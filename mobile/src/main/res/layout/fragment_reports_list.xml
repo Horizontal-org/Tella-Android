@@ -32,6 +32,21 @@
         app:textMessage="@string/Uwazi_Draft_Entities_Empty_Description"
         />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        style="@style/Tella_Progress_Circular"
+        android:layout_marginTop="0dp"
+        android:indeterminate="false"
+        android:progressTint="@color/tigers_eye"
+        android:visibility="gone"
+        app:indicatorSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:trackThickness="3dp" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
