@@ -1,4 +1,4 @@
-<img src="https://github.com/Horizontal-org/Tella-Android/blob/master/Tella-02-feature-B.png" alt="Tella" width="350"/>
+<img src="docs/Tella2.0-feature.png" alt="Tella" width="350"/>
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
 
-| [![Camouflage](https://tella-app.org/features#camouflage)](https://tella-app.org/assets/images/camouflage-calc-b495abd3fdd64acc027a9bd3761fd336.gif)  | [![Encrypting](https://tella-app.org/features#encryption)](https://tella-app.org/assets/images/video-e7e3b606ca03691467bfbaaec124601e.gif) | [![Connection](https://tella-app.org/assets/images/uwazi-ea5effac810d42901053fe3269db5e61.gif)](https://tella-app.org/for-organizations) |
+| [![Camouflage](https://tella-app.org/assets/images/camouflage-calc-b495abd3fdd64acc027a9bd3761fd336.gif)](https://tella-app.org/features#camouflage)  | [![Encrypting](https://tella-app.org/assets/images/video-e7e3b606ca03691467bfbaaec124601e.gif)](https://tella-app.org/features#encryption) | [![Connection](https://tella-app.org/assets/images/uwazi-ea5effac810d42901053fe3269db5e61.gif)](https://tella-app.org/for-organizations) |
 |:---:|:---:|:---:|
 | Tella camouflaged as a calculator | Taking and encrypting a video | Sending data to a server |
 
