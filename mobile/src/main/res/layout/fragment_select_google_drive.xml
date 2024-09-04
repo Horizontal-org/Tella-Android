@@ -1,84 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:background="@color/space_cadet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/space_cadet"
-    android:padding="24dp"
-    app:behavior_hideable="true">
-
-
-    <ImageView
-        android:id="@+id/server_icon"
-        android:layout_width="120dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:contentDescription="@string/Server_Connect_Icon"
-        android:src="@drawable/ic_google_drive_logo"
-        android:textColor="@color/wa_white"
-        app:layout_constraintBottom_toTopOf="@+id/description_textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <TextView
-        android:id="@+id/description_textView"
-        android:layout_width="wrap_content"
+    >
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
-        android:text="@string/Settings_Reports_Choose_Credentials"
-        android:textColor="@color/wa_white"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toTopOf="@+id/yes_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/server_icon" />
+        android:theme="@style/AppTheme.AppBarOverlay">
 
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
 
-    <org.hzontal.shared_ui.buttons.RoundButton
-        android:id="@+id/yes_btn"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/action_yes"
-        app:check_state="false"
-        app:layout_constraintBottom_toTopOf="@+id/no_btn"
-        app:layout_constraintTop_toBottomOf="@+id/description_textView"
-        tools:layout_editor_absoluteX="24dp" />
+        android:layout_height="match_parent"
+        android:background="@color/space_cadet"
+        android:layout_marginTop="160dp"
+        android:padding="24dp"
+        app:behavior_hideable="true">
 
-    <org.hzontal.shared_ui.buttons.RoundButton
-        android:id="@+id/no_btn"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/action_no"
-        app:check_state="false"
-        app:layout_constraintBottom_toTopOf="@+id/back_btn"
-        app:layout_constraintTop_toBottomOf="@+id/yes_btn" />
+        <ImageView
+            android:id="@+id/server_icon"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@string/Server_Connect_Icon"
+            android:src="@drawable/ic_google_drive_logo"
+            android:textColor="@color/wa_white"
+            app:layout_constraintBottom_toTopOf="@+id/title_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/title_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans"
+            android:text="Select a Drive to connect to"
+            android:textColor="@color/wa_white"
+            android:textSize="18sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/server_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/description_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="You can either connect to an organizational Shared Drive or create a new folder in your personal Drive."
+            android:textColor="@color/wa_white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_textView" />
 
 
-    <TextView
-        android:id="@+id/back_btn"
-        style="@style/Tella_Main_White_Text"
-        android:layout_marginStart="10dp"
-        android:text="@string/LockSelect_Action_Back"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/shared_drive_btn"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="24dp"
+            android:text="Use shared drive"
+            app:check_state="false"
+            app:layout_constraintBottom_toTopOf="@+id/create_folder_btn"
+            app:layout_constraintTop_toBottomOf="@+id/description_textView" />
 
-    <TextView
-        android:id="@+id/next_btn"
-        style="@style/Tella_Main_White_Text"
-        android:layout_marginEnd="10dp"
-        android:text="@string/action_next"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/create_folder_btn"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginTop="12dp"
+            android:text="Create new folder"
+            app:layout_constraintTop_toBottomOf="@+id/shared_drive_btn" />
+
+
+        <TextView
+            android:id="@+id/back_btn"
+            style="@style/Tella_Main_White_Text"
+            android:layout_marginStart="10dp"
+            android:text="@string/LockSelect_Action_Back"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/next_btn"
+            style="@style/Tella_Main_White_Text"
+            android:layout_marginEnd="10dp"
+            android:text="@string/action_next"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/learn_more_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/open_sans"
+            android:gravity="center"
+            android:text="Learn more about the types of drives."
+            android:textColor="@color/wa_yellow"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/create_folder_btn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

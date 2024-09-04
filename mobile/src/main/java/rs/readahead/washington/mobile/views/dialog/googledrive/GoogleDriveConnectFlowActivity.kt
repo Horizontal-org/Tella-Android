@@ -21,21 +21,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.performFileSearch
-import rs.readahead.washington.mobile.views.activity.viewer.VaultActionsHelper.showExportWithMetadataDialog
-import rs.readahead.washington.mobile.views.activity.viewer.chosenVaultFile
-import rs.readahead.washington.mobile.views.activity.viewer.filePicker
-import rs.readahead.washington.mobile.views.activity.viewer.requestPermission
-import rs.readahead.washington.mobile.views.activity.viewer.sharedViewModel
-import rs.readahead.washington.mobile.views.activity.viewer.withMetadata
+import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import timber.log.Timber
 
 
-class GoogleDriveConnectFlowActivity : BaseLockActivity() {
+class GoogleDriveConnectFlowActivity : BaseActivity() {
 
     private lateinit var credentialManager: CredentialManager
-    private lateinit var requestAuthorizationLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,42 +42,22 @@ class GoogleDriveConnectFlowActivity : BaseLockActivity() {
             .addCredentialOption(signInWithGoogleOption)
             .build()
 
-        // findViewById<Button>(R.id.submit_button).setOnClickListener {
         maybeChangeTemporaryTimeout {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val result = credentialManager.getCredential(
-                    request = request,
-                    context = this@GoogleDriveConnectFlowActivity
-                )
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val result = credentialManager.getCredential(
+                        request = request,
+                        context = this@GoogleDriveConnectFlowActivity
+                    )
                     handleSignIn(result)  // Process the sign-in result
-            } catch (e: Exception) {
-                // Handle the error, such as showing a message to the user
-            }
-        }
-
-        }
-        // }
-        requestAuthorizationLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
-                    // Retry accessing Google Drive after authorization
-                    if (::driveService.isInitialized) {
-                      //  maybeChangeTemporaryTimeout {
-                            fetchSharedDrives(driveService)
-                     //   }
-                    } else {
-                        Timber.e("Drive service is not initialized")
-                    }
-                } else {
-                    // Handle the case where the user denies the authorization
-                    Timber.e("Authorization denied by user.")
+                } catch (e: Exception) {
+                    // Handle the error, such as showing a message to the user
                 }
             }
+        }
 
     }
 
-    private lateinit var driveService: Drive
     private fun handleSignIn(result: GetCredentialResponse) {
         when (val credential = result.credential) {
             is CustomCredential -> {
@@ -102,24 +75,12 @@ class GoogleDriveConnectFlowActivity : BaseLockActivity() {
                         val email = getEmailFromIdToken(idToken)
 
                         // Initialize GoogleAccountCredential
-                        val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
-                            this, listOf(DriveScopes.DRIVE)
-                        ).apply {
-                            selectedAccountName = email
-                        }
 
-                        // Initialize the Drive service
-                        driveService = Drive.Builder(
-                            NetHttpTransport(),
-                            GsonFactory(),
-                            googleAccountCredential
-                        ).setApplicationName("Tella").build()
+                        val navHostFragment =
+                            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                        val navController = navHostFragment.navController
+                        navController.navigate(R.id.google_drive)
 
-                        // Attempt to fetch shared drives
-                        fetchSharedDrives(driveService)
-                    } catch (e: UserRecoverableAuthIOException) {
-                        // Handle the exception by starting the user consent activity
-                        requestAuthorizationLauncher.launch(e.intent)
                     } catch (e: Exception) {
                         Timber.e(e, "Failed to retrieve or process Google ID Token")
                     }
@@ -134,27 +95,6 @@ class GoogleDriveConnectFlowActivity : BaseLockActivity() {
         }
     }
 
-    private fun fetchSharedDrives(driveService: Drive) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val request = driveService.Files().list()
-                val result = request.execute()
-                val sharedDrives = result.files
-
-                if (sharedDrives != null && sharedDrives.isNotEmpty()) {
-                    val navHostFragment =
-                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    val navController = navHostFragment.navController
-                    navController.navigate(R.id.google_drive)
-                } else {
-                    Timber.d("No shared drives found.")
-                }
-            } catch (e: UserRecoverableAuthIOException) {
-                requestAuthorizationLauncher.launch(e.intent)
-                Timber.e(e, "Failed to fetch shared drives.")
-            }
-        }
-    }
 
 
     private fun getEmailFromIdToken(idToken: String): String {
