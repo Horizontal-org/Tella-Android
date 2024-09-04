@@ -11,14 +11,14 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.ViewUtil
 
-class EntityAdapter(private val isOutbox: Boolean = false) :
+class EntityAdapter :
     RecyclerView.Adapter<EntityAdapter.EntityViewHolder>() {
 
-    private var submitted: List<Any> = ArrayList()
+    private var entities: List<Any> = ArrayList()
 
 
     fun setEntities(submitted: List<Any>) {
-        this.submitted = submitted
+        this.entities = submitted
         notifyDataSetChanged()
     }
 
@@ -33,7 +33,7 @@ class EntityAdapter(private val isOutbox: Boolean = false) :
     }
 
     override fun onBindViewHolder(holder: EntityAdapter.EntityViewHolder, position: Int) {
-        holder.bind(entityRow = submitted[position] as ViewEntityTemplateItem)
+        holder.bind(entityRow = entities[position] as ViewEntityTemplateItem)
     }
 
     inner class EntityViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -88,6 +88,6 @@ class EntityAdapter(private val isOutbox: Boolean = false) :
 
     }
 
-    override fun getItemCount() = submitted.size
+    override fun getItemCount() = entities.size
 
 }

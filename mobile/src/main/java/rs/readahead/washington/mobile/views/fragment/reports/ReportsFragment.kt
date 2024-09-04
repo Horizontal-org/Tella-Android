@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsBinding
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.reports.viewpager.DRAFT_LIST_PAGE_INDEX
@@ -73,7 +74,7 @@ class ReportsFragment :
         viewModel.listServers()
 
         viewModel.serversList.observe(viewLifecycleOwner) { servers ->
-            if (servers.any { server -> server.isActivatedBackgroundUpload }) {
+            if (servers.any { server -> (server as TellaReportServer).isActivatedBackgroundUpload }) {
                 scheduleWorker()
             }
         }

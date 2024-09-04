@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -18,6 +19,7 @@ class ViewPagerComponent @JvmOverloads constructor(
 
     private val tabLayout: TabLayout
     private val viewPager: ViewPager2
+    private val toolBarTextView: TextView
     private val viewPagerAdapter: ViewPagerAdapter
     private var tabTitles: List<String> = emptyList()
     private var fragmentProvider: FragmentProvider? = null
@@ -26,6 +28,7 @@ class ViewPagerComponent @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.view_pager_component_layout, this, true)
         tabLayout = findViewById(R.id.tab_layout)
         viewPager = findViewById(R.id.view_pager)
+        toolBarTextView = findViewById(R.id.toolbar_textView)
 
         viewPagerAdapter = ViewPagerAdapter((context as FragmentActivity), mutableListOf())
         viewPager.adapter = viewPagerAdapter
@@ -66,5 +69,9 @@ class ViewPagerComponent @JvmOverloads constructor(
 
     private fun getTabTitle(position: Int): String {
         return tabTitles.getOrNull(position) ?: "Tab $position"
+    }
+
+    fun setToolBarTitle(title: String) {
+        toolBarTextView.text = title
     }
 }

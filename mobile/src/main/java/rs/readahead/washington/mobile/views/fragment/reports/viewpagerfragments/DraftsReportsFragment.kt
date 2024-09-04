@@ -1,55 +1,51 @@
 package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.util.show
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
-    FragmentReportsListBinding::inflate
-) {
+class DraftsReportsFragment : BaseReportsFragment() {
 
-    private val viewModel by viewModels<ReportsViewModel>()
-    private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
+    private val viewModel: ReportsViewModel by viewModels()
+
+    override fun getViewModel(): BaseReportsViewModel {
+        return viewModel
+    }
+
+    override fun getEmptyMessage(): Int {
+        return R.string.Uwazi_Draft_Entities_Empty_Description
+    }
+
+    override fun getAdapter(): EntityAdapter {
+        return EntityAdapter()
+    }
+
+    override fun navigateToReportScreen(reportInstance: ReportInstance) {
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        this.navManager().navigateFromReportsScreenToNewReportScreen()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initData()
     }
 
-    private fun initView() {
-        binding.textViewEmpty.setText(getString(R.string.Drafts_Reports_Empty_Message))
-        binding.listReportsRecyclerView.apply {
-            adapter = entityAdapter
-            layoutManager = LinearLayoutManager(baseActivity)
-        }
-
-    }
-
+    @SuppressLint("StringFormatInvalid")
     private fun initData() {
         with(viewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
-                if (drafts.isEmpty()) {
-                    binding.listReportsRecyclerView.hide()
-                    binding.textViewEmpty.show()
-                } else {
-                    entityAdapter.setEntities(drafts)
-                    binding.listReportsRecyclerView.show()
-                    binding.textViewEmpty.hide()
-                }
+                handleReportList(drafts)
             }
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showDraftsMenu(instance)
@@ -91,20 +87,12 @@ class DraftsReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 }
             },
             getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Delete_Report_Confirmation),
+            baseActivity.resources.getString(R.string.Delete_Report_Confirmation),
             requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel)
         )
     }
 
-    private fun loadEntityInstance(reportInstance: ReportInstance) {
-        viewModel.getReportBundle(reportInstance)
-    }
-
-    private fun openEntityInstance(reportInstance: ReportInstance) {
-       bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        this.navManager().navigateFromReportsScreenToNewReportScreen()
-    }
 
     override fun onResume() {
         super.onResume()

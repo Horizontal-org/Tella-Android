@@ -24,7 +24,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
     FragmentReportsListBinding::inflate
 ) {
     private val viewModel by viewModels<ReportsViewModel>()
-    private val entityAdapter: EntityAdapter by lazy { EntityAdapter(isOutbox = true) }
+    private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

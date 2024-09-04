@@ -4,19 +4,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.util.hide
+import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 
-@AndroidEntryPoint
-abstract class BaseReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
+abstract class BaseReportsFragment :
+    BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
 
-    protected abstract val viewModel: ReportsViewModel // Child classes provide the specific ViewModel
+    protected abstract fun getViewModel(): BaseReportsViewModel // Child classes provide the specific ViewModel
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
     protected abstract fun getAdapter(): EntityAdapter // Child classes provide the specific adapter
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
@@ -28,36 +30,31 @@ abstract class BaseReportsFragment : BaseBindingFragment<FragmentReportsListBind
 
         // Initialize RecyclerView and Adapter
         adapter = getAdapter()
-        binding.listReportsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@BaseReportsFragment.adapter
-        }
+        binding.listReportsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.listReportsRecyclerView.adapter = getAdapter()
 
         observeViewModel()
     }
 
     // Observe ViewModel data changes (e.g., report lists, progress, errors)
     private fun observeViewModel() {
-        viewModel.draftListReportFormInstance.observe(viewLifecycleOwner) { reports ->
-            handleReportList(reports)
-        }
 
-        viewModel.progress.observe(viewLifecycleOwner) { isLoading ->
+        getViewModel().progress.observe(viewLifecycleOwner) { isLoading ->
             showProgress(isLoading)
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { throwable ->
+        getViewModel().error.observe(viewLifecycleOwner) { throwable ->
             showError(throwable)
         }
     }
 
-    private fun handleReportList(reports: List<ViewEntityTemplateItem>) {
+    protected fun handleReportList(reports: List<ViewEntityTemplateItem>) {
         if (reports.isEmpty()) {
             showEmptyMessage()
         } else {
             adapter.setEntities(reports)
-            binding.listReportsRecyclerView.visibility = View.VISIBLE
-            binding.textViewEmpty.visibility = View.GONE
+            binding.listReportsRecyclerView.show()
+            binding.textViewEmpty.hide()
         }
     }
 
@@ -80,14 +77,47 @@ abstract class BaseReportsFragment : BaseBindingFragment<FragmentReportsListBind
         binding.listReportsRecyclerView.visibility = View.GONE
     }
 
+    private fun showMenu(
+        instance: ReportInstance,
+        title: String,
+        viewText: String,
+        deleteText: String,
+        deleteConfirmation: String,
+        deleteActionText: String,
+        cancelActionText: String
+    ) {
+
+        BottomSheetUtils.showEditDeleteMenuSheet(
+            requireActivity().supportFragmentManager,
+            title,
+            viewText,
+            deleteText,
+            object : BottomSheetUtils.ActionSeleceted {
+                override fun accept(action: BottomSheetUtils.Action) {
+                    when (action) {
+                        BottomSheetUtils.Action.EDIT -> loadEntityInstance(instance)
+                        BottomSheetUtils.Action.DELETE -> getViewModel().deleteReport(instance)
+                        BottomSheetUtils.Action.SHARE -> {}
+                        BottomSheetUtils.Action.VIEW -> {}
+                    }
+                }
+            },
+            deleteActionText,
+            deleteConfirmation,
+            deleteActionText,
+            cancelActionText,
+            R.drawable.ic_eye_white
+        )
+    }
+
     // Method to be used by subclasses to define how the navigation is handled
     protected fun openEntityInstance(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         navigateToReportScreen(reportInstance)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.clearDisposable()
+    protected fun loadEntityInstance(reportInstance: ReportInstance) {
+        getViewModel().getReportBundle(reportInstance)
     }
+
 }

@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/wa_black"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
@@ -44,11 +45,12 @@
                     app:arrowBackIcon="@drawable/ic_back_white"/>
 
                 <TextView
+                    android:id="@+id/toolbar_textView"
                     style="@style/Tella_Main_White_Text.Bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="100dp"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                    android:text="Reports" />
+                     />
             </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
