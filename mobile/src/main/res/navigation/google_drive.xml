@@ -3,12 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/google_drive"
-    app:startDestination="@id/selectGoogleDriveFragment">
+    app:startDestination="@id/googleDriveConnectFragment">
+
+    <fragment
+        android:id="@+id/googleDriveConnectFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.setp0.ConnectGoogleDriveFragment"
+        android:label="ConnectGoogleDriveFragment"
+        tools:layout="@layout/fragment_connect_google_drive">
+        <action
+            android:id="@+id/action_googleDriveConnectFragment_to_selectGoogleDriveFragment"
+            app:destination="@id/selectGoogleDriveFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/selectGoogleDriveFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step1.FragmentSelectGoogleDriveFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step1.SelectGoogleDriveFragment"
         android:label="SelectGoogleDriveFragment"
-        tools:layout="@layout/fragment_select_google_drive"/>
+        tools:layout="@layout/fragment_select_google_drive">
+        <action
+            android:id="@+id/action_selectGoogleDriveFragment_to_selectSharedDriveFragment"
+            app:destination="@id/selectSharedDriveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectSharedDriveFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step2.SelectSharedDriveFragment"
+        android:label="FragmentSelectSharedDriveFragment"
+        tools:layout="@layout/fragment_select_shared_drive" />
 
 </navigation>

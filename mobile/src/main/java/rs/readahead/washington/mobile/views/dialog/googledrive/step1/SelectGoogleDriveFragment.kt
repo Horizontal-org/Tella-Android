@@ -6,14 +6,14 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,20 +21,33 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import timber.log.Timber
 
-class FragmentSelectGoogleDriveFragment :
+class SelectGoogleDriveFragment :
     BaseBindingFragment<FragmentSelectGoogleDriveBinding>(FragmentSelectGoogleDriveBinding::inflate),
     View.OnClickListener {
     private var server: TellaReportServer? = null
     private lateinit var requestAuthorizationLauncher: ActivityResultLauncher<Intent>
     private lateinit var driveService: Drive
+    private var sharedDrives: List<String>? = null // Data to pass to the next fragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        //   initListeners()
+        // Retrieve the email from the Intent
+        val email = arguments?.getString("email_key")
+        val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
+            context, listOf(DriveScopes.DRIVE)
+        ).apply {
+            selectedAccountName = email
+        }
+
+        // Initialize the Drive service
+        driveService = Drive.Builder(
+            NetHttpTransport(),
+            GsonFactory(),
+            googleAccountCredential
+        ).setApplicationName("Tella").build()
 
         requestAuthorizationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -56,14 +69,12 @@ class FragmentSelectGoogleDriveFragment :
             try {
                 val request = driveService.Files().list()
                 val result = request.execute()
-                val sharedDrives = result.files
+                sharedDrives = result.files.map { it.name } // Adjust this based on your data model
 
-                if (sharedDrives != null && sharedDrives.isNotEmpty()) {
-//                    val navHostFragment =
-//                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//                    val navController = navHostFragment.navController
-                    // navController.navigate(R.id.google_drive)
+                if (sharedDrives != null && sharedDrives!!.isNotEmpty()) {
+                    binding.sharedDriveBtn.isEnabled = true
                 } else {
+                    binding.sharedDriveBtn.isEnabled = false
                     Timber.d("No shared drives found.")
                 }
             } catch (e: UserRecoverableAuthIOException) {
@@ -80,12 +91,7 @@ class FragmentSelectGoogleDriveFragment :
 //        }
 
     private fun initView() {
-
-        if (arguments == null) return
-
-        arguments?.getString(OBJECT_KEY)?.let {
-            server = Gson().fromJson(it, TellaReportServer::class.java)
-        }
+        binding.sharedDriveBtn.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -94,19 +100,32 @@ class FragmentSelectGoogleDriveFragment :
                 baseActivity.onBackPressed()
             }
 
-            R.id.next_btn -> {
-                validateAndLogin()
+            R.id.shared_drive_btn -> {
+                sharedDrives?.let {
+                    // Create a Bundle to pass data
+                    val args = Bundle().apply {
+                        putStringArrayList("shared_drives_key", ArrayList(it))
+                    }
+
+                    // Navigate with the Bundle
+                    findNavController().navigate(
+                        R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment,
+                        args
+                    )
+                } ?: run {
+                    Timber.d("No shared drives data to pass.")
+                }
             }
         }
     }
 
-    private fun validateAndLogin() {
-        if (server == null) return
-        if (binding?.createFolderBtn?.isChecked == true) {
-
-        } else {
-
-        }
-    }
+//    private fun validateAndLogin() {
+//        if (server == null) return
+//        if (binding?.createFolderBtn?.isChecked == true) {
+//
+//        } else {
+//
+//        }
+   // }
 }
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:background="@color/space_cadet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -74,8 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="24dp"
-            android:text="Use shared drive"
-            app:check_state="false"
+            app:text="@string/use_shared_drive"
+            app:check_state="true"
             app:layout_constraintBottom_toTopOf="@+id/create_folder_btn"
             app:layout_constraintTop_toBottomOf="@+id/description_textView" />
 
@@ -84,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="12dp"
-            android:text="Create new folder"
+            app:text="@string/create_new_folder"
             app:layout_constraintTop_toBottomOf="@+id/shared_drive_btn" />
 
 
