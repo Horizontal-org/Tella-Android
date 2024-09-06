@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.dialog.googledrive
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
@@ -26,6 +27,7 @@ class StringListAdapter(
         holder.itemView.isSelected = selectedPosition == position
 
         holder.itemView.setOnClickListener {
+            holder.setChecked(true)
             selectedPosition = holder.adapterPosition
             notifyDataSetChanged()
             itemClickListener.onItemClick(items[position])
@@ -33,10 +35,14 @@ class StringListAdapter(
     }
 
     inner class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val textView: TextView = view.findViewById(R.id.simple_text)
+        private val textView: TextView = view.findViewById(R.id.titleTextView)
+        private val checkBox: CheckBox = view.findViewById(R.id.checkBox)
 
         fun bind(item: String) {
             textView.text = item
+        }
+        fun setChecked(isChecked: Boolean) {
+            checkBox.isChecked = isChecked
         }
     }
 

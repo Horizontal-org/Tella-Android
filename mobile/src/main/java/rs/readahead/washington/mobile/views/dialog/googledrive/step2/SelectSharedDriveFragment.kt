@@ -19,17 +19,17 @@ class SelectSharedDriveFragment :
     private fun initRecyclerView() {
         // Get the RecyclerView from the binding
         val recyclerView = binding.recyclerView
-
-        // Create some sample data
-        val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
-
+     // Retrieve the Bundle arguments
+        val sharedDrives = arguments?.getStringArrayList("shared_drives_key")
         // Initialize the adapter and pass the data
-        val adapter = StringListAdapter(items, object : StringListAdapter.ItemClickListener {
-            override fun onItemClick(item: String) {
-                // Handle item click
-                Toast.makeText(requireContext(), "Clicked: $item", Toast.LENGTH_SHORT).show()
-            }
-        })
+        val adapter = sharedDrives?.let {
+            StringListAdapter(it, object : StringListAdapter.ItemClickListener {
+                override fun onItemClick(item: String) {
+                    // Handle item click
+                    Toast.makeText(requireContext(), "Clicked: $item", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
 
         // Set the adapter to the RecyclerView
         recyclerView.adapter = adapter

@@ -27,6 +27,7 @@ class SelectGoogleDriveFragment :
     BaseBindingFragment<FragmentSelectGoogleDriveBinding>(FragmentSelectGoogleDriveBinding::inflate),
     View.OnClickListener {
     private var server: TellaReportServer? = null
+    private lateinit var email : String
     private lateinit var requestAuthorizationLauncher: ActivityResultLauncher<Intent>
     private lateinit var driveService: Drive
     private var sharedDrives: List<String>? = null // Data to pass to the next fragment
@@ -35,7 +36,7 @@ class SelectGoogleDriveFragment :
         super.onViewCreated(view, savedInstanceState)
         initView()
         // Retrieve the email from the Intent
-        val email = arguments?.getString("email_key")
+         email = arguments?.getString("email_key").toString()
         val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
             context, listOf(DriveScopes.DRIVE)
         ).apply {
@@ -48,6 +49,7 @@ class SelectGoogleDriveFragment :
             GsonFactory(),
             googleAccountCredential
         ).setApplicationName("Tella").build()
+        fetchSharedDrives(driveService)
 
         requestAuthorizationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
@@ -67,16 +69,19 @@ class SelectGoogleDriveFragment :
     private fun fetchSharedDrives(driveService: Drive) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val request = driveService.Files().list()
+               // val request = driveService.Files().list()
+                // Query to list folders shared with the user
+                val query = "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
+                val request = driveService.files().list().setQ(query).setFields("files(id, name)")
                 val result = request.execute()
                 sharedDrives = result.files.map { it.name } // Adjust this based on your data model
 
-                if (sharedDrives != null && sharedDrives!!.isNotEmpty()) {
-                    binding.sharedDriveBtn.isEnabled = true
-                } else {
-                    binding.sharedDriveBtn.isEnabled = false
-                    Timber.d("No shared drives found.")
-                }
+//                if (sharedDrives != null && sharedDrives!!.isNotEmpty()) {
+//                    binding.sharedDriveBtn.isEnabled = true
+//                } else {
+//                    binding.sharedDriveBtn.isEnabled = false
+//                    Timber.d("No shared drives found.")
+//                }
             } catch (e: UserRecoverableAuthIOException) {
                 requestAuthorizationLauncher.launch(e.intent)
                 Timber.e(e, "Failed to fetch shared drives.")
@@ -91,7 +96,12 @@ class SelectGoogleDriveFragment :
 //        }
 
     private fun initView() {
+        binding.learnMoreTextView.setOnClickListener(this)
+        binding.backBtn.setOnClickListener (this)
+        binding.createFolderBtn.setOnClickListener(this)
         binding.sharedDriveBtn.setOnClickListener(this)
+        binding.nextBtn.setOnClickListener (this)
+
     }
 
     override fun onClick(v: View?) {
@@ -100,7 +110,33 @@ class SelectGoogleDriveFragment :
                 baseActivity.onBackPressed()
             }
 
-            R.id.shared_drive_btn -> {
+            R.id.learn_more_textView -> {
+                val args = Bundle().apply {
+                    putString("email_key", email)
+                }
+                findNavController().navigate(
+                    R.id.action_selectGoogleDriveFragment_to_createFolderFragment,
+                    args
+                )
+            }
+
+            R.id.next_btn -> {
+                sharedDrives?.let {
+                    // Create a Bundle to pass data
+                    val args = Bundle().apply {
+                        putStringArrayList("shared_drives_key", ArrayList(it))
+                    }
+
+                    // Navigate with the Bundle
+                    findNavController().navigate(
+                        R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment,
+                        args
+                    )
+                } ?: run {
+                    Timber.d("No shared drives data to pass.")
+                }
+            }
+            R.id.create_folder_btn -> {
                 sharedDrives?.let {
                     // Create a Bundle to pass data
                     val args = Bundle().apply {

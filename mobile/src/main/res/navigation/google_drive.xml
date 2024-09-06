@@ -23,11 +23,28 @@
         <action
             android:id="@+id/action_selectGoogleDriveFragment_to_selectSharedDriveFragment"
             app:destination="@id/selectSharedDriveFragment" />
+        <action
+            android:id="@+id/action_selectGoogleDriveFragment_to_createFolderFragment"
+            app:destination="@id/createFolderFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectSharedDriveFragment"
         android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step2.SelectSharedDriveFragment"
         android:label="FragmentSelectSharedDriveFragment"
         tools:layout="@layout/fragment_select_shared_drive" />
+    <fragment
+        android:id="@+id/createFolderFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step3.CreateFolderFragment"
+        tools:layout="@layout/fragment_create_folder"
+        android:label="CreateFolderFragment" >
+        <action
+            android:id="@+id/action_createFolderFragment_to_googleDriveConnectedServerFragment"
+            app:destination="@id/googleDriveConnectedServerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/googleDriveConnectedServerFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step4.GoogleDriveConnectedServerFragment"
+        tools:layout="@layout/fragment_connect_google_drive"
+        android:label="GoogleDriveConnectedServerFragment" />
 
 </navigation>

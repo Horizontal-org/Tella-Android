@@ -25,7 +25,7 @@ class ConnectGoogleDriveFragment :
         credentialManager = context?.let { CredentialManager.create(it) }!!
 
         val signInWithGoogleOption: GetSignInWithGoogleOption =
-            GetSignInWithGoogleOption.Builder("166289458819-43i302vr6n3r62unoboiinq91ccvur3o.apps.googleusercontent.com")
+            GetSignInWithGoogleOption.Builder("166289458819-e5nt7d2lahv55ld0j527o07kovqdbip2.apps.googleusercontent.com")
                 .build()
         val request: GetCredentialRequest = GetCredentialRequest.Builder()
             .addCredentialOption(signInWithGoogleOption)
