@@ -1,12 +1,12 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive.step2
 
+import StringListAdapter
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.dialog.googledrive.StringListAdapter
 
 class SelectSharedDriveFragment :
     BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate){

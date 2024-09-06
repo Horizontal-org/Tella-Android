@@ -1,5 +1,3 @@
-package rs.readahead.washington.mobile.views.dialog.googledrive
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +11,7 @@ class StringListAdapter(
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<StringListAdapter.StringViewHolder>() {
 
-    private var selectedPosition = -1
+    private var selectedPosition = -1  // Track the currently selected position
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StringViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.simple_list_item, parent, false)
@@ -24,13 +22,18 @@ class StringListAdapter(
 
     override fun onBindViewHolder(holder: StringViewHolder, position: Int) {
         holder.bind(items[position])
-        holder.itemView.isSelected = selectedPosition == position
+
+        // Set the checkbox checked state based on the selected position
+        //holder.setChecked(position == selectedPosition)
 
         holder.itemView.setOnClickListener {
-            holder.setChecked(true)
-            selectedPosition = holder.adapterPosition
-            notifyDataSetChanged()
-            itemClickListener.onItemClick(items[position])
+            // Check if the selected position has changed
+            if (selectedPosition != position) {
+                selectedPosition = position  // Update the selected position
+                notifyDataSetChanged()  // Notify the adapter to refresh the view
+                itemClickListener.onItemClick(items[position])
+                holder.setChecked(true)
+            }
         }
     }
 
@@ -41,6 +44,8 @@ class StringListAdapter(
         fun bind(item: String) {
             textView.text = item
         }
+
+        // Set the checked state of the checkbox
         fun setChecked(isChecked: Boolean) {
             checkBox.isChecked = isChecked
         }
