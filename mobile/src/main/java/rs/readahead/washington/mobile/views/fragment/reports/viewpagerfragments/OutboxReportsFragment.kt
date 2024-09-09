@@ -13,6 +13,8 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
@@ -20,51 +22,44 @@ import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
 @AndroidEntryPoint
-class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
-    FragmentReportsListBinding::inflate
-) {
+class OutboxReportsFragment : BaseReportsFragment() {
+
     private val viewModel by viewModels<ReportsViewModel>()
-    private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initData()
     }
 
-    private fun initView() {
-        binding.textViewEmpty.setText(getString(R.string.Outbox_Reports_Empty_Message))
-        binding.draftsRecyclerView.apply {
-            adapter = entityAdapter
-            layoutManager = LinearLayoutManager(baseActivity)
-        }
+    override fun getViewModel(): BaseReportsViewModel {
+        return viewModel
     }
 
-    @SuppressLint("StringFormatInvalid")
-    private fun initData() {
+    override fun getEmptyMessage(): Int {
+        return R.string.Outbox_Reports_Empty_Message
+    }
+
+    override fun navigateToReportScreen(reportInstance: ReportInstance) {
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
+        navManager().navigateFromReportsScreenToReportSendScreen()
+    }
+
+    override fun initData() {
         with(viewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                if (outboxes.isEmpty()) {
-                    binding.draftsRecyclerView.hide()
-                    binding.textViewEmpty.show()
-                } else {
-                    entityAdapter.setEntities(outboxes)
-                    binding.draftsRecyclerView.show()
-                    binding.textViewEmpty.hide()
-                }
+                handleReportList(outboxes)
             }
+
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
-                showOutboxMenu(instance)
+                showMenu(
+                    instance = instance,
+                   title =  instance.title,
+                   viewText =  getString(R.string.View_Report),
+                    deleteText = getString(R.string.Delete_Report),
+                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Delete_Submitted_Report_Confirmation),)
             }
-
-            reportInstance.observe(viewLifecycleOwner) { instance ->
-                openEntityInstance(instance)
-            }
-
-            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
-                loadEntityInstance(instance)
-            }
-
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
@@ -98,16 +93,6 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
             requireContext().getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )
-    }
-
-    private fun loadEntityInstance(reportInstance: ReportInstance) {
-        viewModel.getReportBundle(reportInstance)
-    }
-
-    private fun openEntityInstance(reportInstance: ReportInstance) {
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
-        navManager().navigateFromReportsScreenToReportSendScreen()
     }
 
     override fun onResume() {

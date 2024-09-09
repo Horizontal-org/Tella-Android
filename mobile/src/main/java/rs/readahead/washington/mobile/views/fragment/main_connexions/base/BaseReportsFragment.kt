@@ -50,6 +50,14 @@ abstract class BaseReportsFragment :
         getViewModel().error.observe(viewLifecycleOwner) { throwable ->
             showError(throwable)
         }
+
+        getViewModel().reportInstance.observe(viewLifecycleOwner) { instance ->
+            openEntityInstance(instance)
+        }
+
+        getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
+            loadEntityInstance(instance)
+        }
     }
 
     @SuppressLint("BinaryOperationInTimber")
@@ -82,14 +90,13 @@ abstract class BaseReportsFragment :
         binding.draftsRecyclerView.visibility = View.GONE
     }
 
-    private fun showMenu(
+    protected fun showMenu(
         instance: ReportInstance,
         title: String,
         viewText: String,
         deleteText: String,
         deleteConfirmation: String,
         deleteActionText: String,
-        cancelActionText: String
     ) {
 
         BottomSheetUtils.showEditDeleteMenuSheet(
@@ -109,8 +116,8 @@ abstract class BaseReportsFragment :
             },
             deleteActionText,
             deleteConfirmation,
-            deleteActionText,
-            cancelActionText,
+            getString(R.string.action_delete) ,
+            getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )
     }

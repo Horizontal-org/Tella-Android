@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 import android.annotation.SuppressLint
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
@@ -35,16 +34,16 @@ class DraftsReportsFragment : BaseReportsFragment() {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
             }
+
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
-                showDraftsMenu(instance)
-            }
-
-            reportInstance.observe(viewLifecycleOwner) { instance ->
-                openEntityInstance(instance)
-            }
-
-            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
-                loadEntityInstance(instance)
+                showMenu(
+                    instance = instance,
+                    title = instance.title,
+                    viewText = getString(R.string.Uwazi_Action_EditDraft),
+                    deleteText = getString(R.string.Delete_Report),
+                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Delete_Report_Confirmation)
+                )
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
@@ -57,30 +56,6 @@ class DraftsReportsFragment : BaseReportsFragment() {
             }
         }
     }
-
-    private fun showDraftsMenu(instance: ReportInstance) {
-        BottomSheetUtils.showEditDeleteMenuSheet(
-            requireActivity().supportFragmentManager,
-            instance.title,
-            getString(R.string.Uwazi_Action_EditDraft),
-            getString(R.string.Delete_Report),
-            object : BottomSheetUtils.ActionSeleceted {
-                override fun accept(action: BottomSheetUtils.Action) {
-                    if (action === BottomSheetUtils.Action.EDIT) {
-                        loadEntityInstance(instance)
-                    }
-                    if (action === BottomSheetUtils.Action.DELETE) {
-                        viewModel.deleteReport(instance)
-                    }
-                }
-            },
-            getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            baseActivity.resources.getString(R.string.Delete_Report_Confirmation),
-            requireContext().getString(R.string.action_delete),
-            requireContext().getString(R.string.action_cancel)
-        )
-    }
-
 
     override fun onResume() {
         super.onResume()

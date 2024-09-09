@@ -21,7 +21,6 @@ class EntityAdapter :
         this.entities = entities
         notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

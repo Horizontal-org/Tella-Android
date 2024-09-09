@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:textDirection="locale"
     android:layout_width="match_parent"
@@ -11,13 +11,11 @@
         android:layout_width="match_parent"
         app:popupMenuRes="@drawable/ic_more"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/space_cadet"
-        app:layout_constraintTop_toBottomOf="@id/submittedItem"
-       />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_gravity="bottom" />
+</FrameLayout>
