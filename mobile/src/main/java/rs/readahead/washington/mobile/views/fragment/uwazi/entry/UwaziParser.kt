@@ -205,7 +205,6 @@ class UwaziParser(private val context: Context?) {
                                 )
                             )
                         }
-
                         else -> {
                             hashmap[answer.key] =
                                 arrayListOf(UwaziValue((answer.value as UwaziValue).value))
@@ -280,15 +279,12 @@ class UwaziParser(private val context: Context?) {
 
         return UwaziFormView(context, arr)
     }
-
     fun getGsonTemplate(): String {
         return Gson().toJson(entityInstance)
     }
-
     fun getToGsonTemplate(): String {
         return Gson().toJson(template)
     }
-
     fun setInstanceStatus(entityStatus: EntityStatus) {
         entityInstance.status = entityStatus
     }
