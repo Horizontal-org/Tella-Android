@@ -52,10 +52,10 @@ fun <T> String.fromJsonToObjectList(clazz: Class<T>?): List<T>? {
 }
 
 fun View.setMargins(
-        leftMarginDp: Int? = null,
-        topMarginDp: Int? = null,
-        rightMarginDp: Int? = null,
-        bottomMarginDp: Int? = null
+    leftMarginDp: Int? = null,
+    topMarginDp: Int? = null,
+    rightMarginDp: Int? = null,
+    bottomMarginDp: Int? = null
 ) {
     if (layoutParams is ViewGroup.MarginLayoutParams) {
         val params = layoutParams as ViewGroup.MarginLayoutParams
@@ -79,32 +79,14 @@ fun Window.changeStatusColor(context: Context, color: Int) {
         statusBarColor = context.resources.getColor(color)
     }
 }
-/*
-fun createCleanInsightsInstance(context: Context, startDate: Long): CleanInsights? {
-    return try {
-        val endDate = startDate + (7 * 86400)
-        val cleanInsightsConfiguration = CleanInsightsConfiguration(
-                URL("https://analytics.wearehorizontal.org/ci/cleaninsights.php"),
-                3,
-                mapOf(CleanInsightUtils.CAMPAIGN_ID to Campaign(startDate, endDate, 1L))
-        )
-        CleanInsights(cleanInsightsConfiguration, context.filesDir)
-    } catch (e: Exception) {
-        Timber.e("createCleanInsightsInstance Exception ${e.message}")
-        e.printStackTrace()
-        null
-    }
-}*/
-
 
 fun View.setTint(@ColorRes colorRes: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         background.setTintList(
-                ContextCompat.getColorStateList(context, colorRes)
+            ContextCompat.getColorStateList(context, colorRes)
         );
     }
 }
-
 
 fun View.hide() {
     visibility = View.GONE
@@ -133,23 +115,25 @@ fun ImageView.setCheckDrawable(drawableRes: Int, context: Context) {
 
 fun FragmentManager.setupForAccessibility(context: Context) {
     if (context.isScreenReaderOn())
-    addOnBackStackChangedListener {
-        val lastFragmentWithView = fragments.last { it.view != null }
-        for (fragment in fragments) {
-            if (fragment == lastFragmentWithView) {
-                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            } else {
-                fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+        addOnBackStackChangedListener {
+            val lastFragmentWithView = fragments.last { it.view != null }
+            for (fragment in fragments) {
+                if (fragment == lastFragmentWithView) {
+                    fragment.view?.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                } else {
+                    fragment.view?.importantForAccessibility =
+                        View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                }
             }
         }
-    }
 }
 
 fun Context.isScreenReaderOn(): Boolean {
-    val accessibilityManager = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+    val accessibilityManager =
+        getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
     if (accessibilityManager != null && accessibilityManager.isEnabled) {
         val serviceInfoList =
-                accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN)
+            accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN)
         if (serviceInfoList.isNotEmpty())
             return true
     }

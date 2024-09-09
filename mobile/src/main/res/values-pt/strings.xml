@@ -34,16 +34,16 @@ ativação do modo</string>
   <string name="lock_dialog.expl_save.pattern">Salvando seus padrões de bloqueio</string>
   <string name="lock_dialog.expl_unlock.app">Desbloqueando Tella</string>
   <string name="action_skip">Pular</string>
-  <string name="settings.docu_delete.server_dialog.expl">Se excluir este servidor, todos os esboços e formulários submetidos serão apagados do seu dispositivo. Excluir mesmo assim?</string>
+  <string name="settings.docu_delete.server_dialog.expl">Se você excluir este servidor, todos os rascunhos e formulários enviados serão excluídos do seu aparelho celular. Você deseja excluí-lo mesmo assim?</string>
   <string name="settings.docu_toast_server.deleted">Servidor excluído</string>
   <string name="settings.docu_toast_server.created">O servidor foi criado</string>
   <string name="settings.docu_toast_server.updated">O servidor foi atualizado</string>
   <string name="settings.docu_dialog.title_server.settings">Configurações do servidor</string>
   <string name="settings.docu_field_server.name">Nome do servidor</string>
   <string name="settings.docu_field_server.url">URL do servidor</string>
-  <string name="collect.sent_tab.title">Enviado</string>
+  <string name="collect.sent_tab.title">Submetido</string>
   <string name="home_expl_cancel.quick.delete">Toque em qualquer lugar para cancelar</string>
-  <string name="recorder_app.bar">Gravador de áudio</string>
+  <string name="recorder_app.bar">Gravar audio</string>
   <string name="settings.docu_field_username">Nome de usuário</string>
   <string name="collect.draft_meta_date.updated">Atualizado: %1$s</string>
   <string name="settings.about_app.version">Versão</string>
@@ -62,7 +62,7 @@ ativação do modo</string>
   <string name="collect.end_action.desc_save.send.later">Salvar formulário</string>
   <string name="action.desc_confirm">Confirmar</string>
   <string name="collect.form_action_previous.section">Anterior</string>
-  <string name="collect.form_action_next.section">Continuar</string>
+  <string name="collect.form_action_next.section">Próximo</string>
   <string name="action_stop">Parar</string>
   <string name="action_play">Tocar</string>
   <string name="action_record">Registrar</string>
@@ -74,7 +74,7 @@ ativação do modo</string>
   <string name="settings.lang_select_default">Padrão</string>
   <string name="settings.lang_app.bar">Idioma</string>
   <string name="action_share">Compartilhar</string>
-  <string name="collect_toast_fail.submission.unauthorized">Você não tem permissão para enviar este formulário. Se achar que isso é um erro, por favor, entre em contato com a sua organização</string>
+  <string name="collect_toast_fail.submission.unauthorized">Você não tem permissão para enviar este formulário. Se você pensa que isso é um erro, por favor, entre em contato com a sua organização</string>
   <string name="gallery_toast_fail.importing.file">Ocorreu um erro ao importar o arquivo. Por favor, tente novamente</string>
   <string name="collect.end_heading">Você chegou ao fim do formulário</string>
   <string name="collect.end_toast_notification.form.not.sent.no.connection">Você não está conectado(a) à internet. Tente novamente quando estiver conectado(a)</string>
@@ -111,14 +111,14 @@ ativação do modo</string>
   <string name="gallery_list.item_newest.to.oldest">Mais novo para mais antigo</string>
   <string name="gallery_list.item_oldest.to.newest">Mais antigo para o mais novo</string>
   <string name="action_exit">Sair</string>
-  <string name="settings.prot_select_camouflage">Camuflagem</string>
+  <string name="settings.prot_select_camouflage">Camuflar</string>
   <string name="settings.docu_error_wrong.credentials">Credenciais incorretas, verifique nome de usuário e senha.</string>
-  <string name="settings.docu_error_domain.doesnt.exit">Nenhum endereço associado ao nome do usuário</string>
+  <string name="settings.docu_error_domain.doesnt.exit">O servidor URL está incorreto.</string>
   <string name="settings.docu_error_unknown.connection.error">Ocorreu um erro ao tentar se conectar ao servidor.</string>
   <string name="settings.docu_error_no.internet">Você não está conectado à internet. Tente novamente quando estiver conectado.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Tente novamente</string>
   <string name="settings.about_select_tutorial">Tutorial</string>
-  <string name="settings.camo_expl">Seleccionar um ícone e nome personalizados para melhor esconder Tella no seu aparelho. Note que o ícone de Tella permanecerá visível a partir das configurações do Android.</string>
+  <string name="settings.camo_expl">Selecione um ícone e um nome personalizados para melhor ocultar o Tella no seu aparelho. Note que o ícone do Tella permanecerá visível no menu de configurações do Android.</string>
   <string name="gallery_action.desc_save.to.device">Salvar no aparelho celular</string>
   <string name="settings.docu_verification_action">Modo de verificação</string>
   <string name="settings.docu_verification_action.expl">Torna seus arquivos de mídia verificáveis, coletando informações sobre seu aparelho celular e localização.</string>
@@ -128,7 +128,7 @@ ativação do modo</string>
   <string name="collect.blank_expl_no.forms">Não há formulários para mostrar. Toque no botão Atualizar para verificar se há formulários disponíveis nos servidores aos quais você está conectado(a).</string>
   <string name="settings.camo_heading">Selecione um nome e logotipo diferentes</string>
   <string name="gallery_expl_empty">Não há arquivos para mostrar. Toque no botão + para importar arquivos.</string>
-  <string name="collect.blank_toast_not.connected">Não está conectado à Internet. Tente novamente quando estiver conectado</string>
+  <string name="collect.blank_toast_not.connected">Você não está conectado(a) à internet. Tente novamente quando estiver conectado(a)</string>
   <string name="settings.gen_crash.reports_action">Compartilhar relatórios de falhas</string>
   <string name="settings.gen_crash.reports_action.expl">Os relatórios de falhas nos ajudam a melhorar o aplicativo Tella. Eles são enviados automaticamente e incluem dados como modelo do aparelho e versão do Android.</string>
   <string name="collect.form_dialog.action_add.group">Adicionar</string>
@@ -261,27 +261,27 @@ ativação do modo</string>
   <string name="play.audio_action.expl_minus15s">-15s</string>
   <string name="recorder_meta_space.available.days">%1$d dias %2$d horas (%3$s) restantes</string>
   <string name="recorder_meta_space.available.hours">%1$d horas %2$d min (%3$s) restantes</string>
-  <string name="camera_video.resolution_dialog.title">Seleccionar resolução de vídeo</string>
-  <string name="camera_video.resolution_dialog.expl">Uma resolução mais alta significa que o vídeo será de maior qualidade, mas o tamanho do arquivo também será maior.</string>
-  <string name="camera_video.resolution_select_highest">O mais alto possível</string>
+  <string name="camera_video.resolution_dialog.title">Selecione a resolução de vídeo</string>
+  <string name="camera_video.resolution_dialog.expl">Resoluções mais altas significam que o vídeo terá uma qualidade superior, mas o tamanho do arquivo também será maior.</string>
+  <string name="camera_video.resolution_select_highest">A mais alta possível</string>
   <string name="camera_video.resolution_select_1080p">Alta (1080p)</string>
   <string name="camera_video.resolution_select_720p">Média (720p)</string>
   <string name="camera_video.resolution_select_480p">Baixa (480p)</string>
-  <string name="settings.docu_auto.upload_action.expl">Tella carregará suas fotos, vídeos ou gravações de áudio no servidor assim que forem gravados ou importados no Tella.</string>
-  <string name="settings.docu_auto.delete_action">Exclusão automática</string>
+  <string name="settings.docu_auto.upload_action.expl">Tella carregará suas fotos, vídeos, ou gravações de áudio no servidor, assim que forem gravados ou importados no Tella.</string>
+  <string name="settings.docu_auto.delete_action">Excluir automaticamente</string>
   <string name="settings.docu_choose.auto.upload.server_dialog.expl">Para qual servidor você gostaria de enviar arquivos automaticamente?</string>
   <string name="settings.docu_error_must.select.auto.upload.server">Você deve selecionar um servidor.</string>
   <string name="camera_tab.title_video">Vídeo</string>
   <string name="camera_tab.title_photo">Foto</string>
-  <string name="action_upload">Carregar</string>
+  <string name="action_upload">Subir</string>
   <string name="collect.blank_action.desc_more.options">Mais opções</string>
-  <string name="action_next">Continuar</string>
+  <string name="action_next">Próximo</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
-  <string name="onboard_password">Password</string>
+  <string name="onboard_password">Senha</string>
   <string name="onboard_password_description">The most secure option</string>
   <string name="onboard_pin">PIN</string>
   <string name="onboard_pin_description">Moderately secure</string>
@@ -346,14 +346,14 @@ ativação do modo</string>
   <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
  use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
-  <string name="action_continue">Continue</string>
+  <string name="action_continue">Continuar</string>
   <string name="settings.camo_icamera">iCamera</string>
   <string name="settings.camo_selfie_cam">Selfie Cam</string>
   <string name="settings.camo_snap_camera">Snap Camera</string>
   <string name="settings.camo_calculate">Calculate</string>
   <string name="settings.camo_calculator_plus">Calculator Plus</string>
   <string name="settings.camo_icalculator">iCalculator</string>
-  <string name="settings.camo_weather">Weather</string>
+  <string name="settings.camo_weather">Clima</string>
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
   <string name="settings.camo_gamestation">GameStation</string>
@@ -369,7 +369,7 @@ ativação do modo</string>
   <string name="onboard.intro_get_started">Começar</string>
   <string name="onboard.title_camera">Câmera</string>
   <string name="onboard.expl_camera">Tire fotos e grave vídeos diretamente no Tella. Esses arquivos são criptografados e salvos automaticamente no Tella e não serão visíveis na galeria normal do seu telefone.</string>
-  <string name="onboard.title_recorder">Gravador</string>
+  <string name="onboard.title_recorder">Gravar audio</string>
   <string name="onboard.expl_recorder">Grave entrevistas ou qualquer som ao seu redor com o gravador de áudio do Tella. Os arquivos de áudio são criptografados automaticamente e salvos na pasta oculta do Tella.</string>
   <string name="onboard.title_files">Arquivos e pastas criptografados</string>
   <string name="onboard.expl_files">Armazene e organize com segurança todos os seus arquivos. Enquanto o Tella estiver trancado, seus arquivos e pastas permanecerão inacessíveis se alguém apreender ou pesquisar o aparelho.</string>
@@ -406,7 +406,7 @@ conectar a um servidor</string>
   <string name="Home_BottomNav_Home">Início</string>
   <string name="Home_BottomNav_Rec">Áudio</string>
   <string name="Home_BottomNav_Camera">Câmera</string>
-  <string name="Home_BottomNav_Forms">Formulários</string>
+  <string name="Home_BottomNav_Forms">Forms</string>
   <string name="Home_BottomNav_Reports">Relatórios</string>
   <string name="Vault_Move_AppBar">Relocalizar</string>
   <string name="Vault_CreateFolder_SheetAction">Criar</string>
@@ -490,7 +490,7 @@ conectar a um servidor</string>
   <string name="Uwazi_WidgetImage_Select_Description_Text">Anexe um arquivo de imagem</string>
   <string name="Uwazi_WidgetMedia_Take_Video">Faça um vídeo com a câmera</string>
   <string name="Uwazi_WidgetMedia_Take_Photo">Tire uma foto com a câmera</string>
-  <string name="Uwazi_WidgetMedia_Select_From_Tella">Select from Tella files</string>
+  <string name="Uwazi_WidgetMedia_Select_From_Tella">Selecione um dos arquivos Tella</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">Selecione no seu dispositivo</string>
   <string name="Uwazi_Widget_Sheet_Description">Escolha como você deseja adicionar arquivos</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">Este campo é obrigatório.</string>
@@ -768,7 +768,7 @@ conectar a um servidor</string>
   <string name="action_hide_pin">ocultar alfinete</string>
   <string name="action_go_back">volte</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_unlock_screen_instructions">Na tela de desbloqueio, mostre o número restante de tentativas de desbloqueio malsucedidas antes que tudo dentro do Tella seja excluído</string>
   <string name="Settings_Delete_After_Failed_Unlock">Excluir após falha no desbloqueio</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Decida quantas tentativas de desbloqueio malsucedidas são permitidas antes que tudo dentro do Tella seja excluído.</string>
   <string name="Settings_Off_Do_Not_Delete">Desligado (não excluir dados)</string>
@@ -913,4 +913,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

@@ -15,7 +15,7 @@
   <string name="Vault_Move_SheetDesc">Move to another folder</string>
   <string name="Vault_Rename_SheetAction">Rename</string>
   <string name="Vault_Save_SheetAction">ಉಳಿಸು</string>
-  <string name="Vault_Delete_SheetAction">ಅಳಿಸು</string>
+  <string name="Vault_Delete_SheetAction">ಅಳಿಸುವುದಾ</string>
   <string name="Vault_Share_SheetAction">ಹಂಚು</string>
   <string name="Vault_Upload_SheetAction">ಅಪ್‌ಲೋಡ್</string>
   <string name="Vault_File_SheetAction">File information</string>
@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Created</string>
   <string name="Vault_FileResolution">Resolution</string>
   <string name="Vault_FileLength">Length</string>
-  <string name="Vault_FilePath">File path</string>
+  <string name="Vault_FilePath">ಪೈಲ್ ಮಾರ್ಗ</string>
   <string name="Vault_RenameFile_SheetTitle">Rename file</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">Delete file?</item>

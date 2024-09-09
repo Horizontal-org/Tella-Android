@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="LockSelect_Action_Cancel">Cancelar</string>
-  <string name="LockSelect_Action_Back">Voltar</string>
-  <string name="LockSelect_Action_Confirm">Continuar</string>
+  <string name="LockSelect_Action_Back">Cancelar</string>
+  <string name="LockSelect_Action_Confirm">Próximo</string>
   <string name="LockPatternConfirm_Action_Confirm">Desenhe o padrão novamente para confirmar</string>
-  <string name="LockSelect_Action_Continue">Continuar</string>
+  <string name="LockSelect_Action_Continue">Próximo</string>
   <string name="LockPatternSet_Draw_Pattern">Desenhe um padrão de desbloqueio</string>
   <string name="UnlockPattern_DrawToUnlock">Desenhe o padrão para desbloquear Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">O seu novo padrão para desbloquear</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Agora, este é o seu padrão para desbloquear Datshin</string>
   <string name="LockPatternSet_Pattern_Recorded">Padrão registrado</string>
   <string name="UnlockPattern_PatternTooShort">Conecte pelo menos %d pontos. Por favor, redesenhe</string>
   <string name="LockPatternSet_RecordingPattern">Solte o dedo quando terminar</string>

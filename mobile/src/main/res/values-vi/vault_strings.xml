@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Tạo</string>
   <string name="Vault_FileResolution">Độ phân giải</string>
   <string name="Vault_FileLength">Độ dài</string>
-  <string name="Vault_FilePath">Đường dẫn tệp tin</string>
+  <string name="Vault_FilePath">Đường dẫn tệp</string>
   <string name="Vault_RenameFile_SheetTitle">Đổi tên tệp tin</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="other">Trống</item>
@@ -36,7 +36,7 @@
   <string name="Vault_SortNameAsc_SheetAction">Tên A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Tên Z &gt; A</string>
   <string name="Vault_SortDateAsc_SheetAction">Mới nhất đến cũ nhất</string>
-  <string name="Vault_SortDateDesc_SheetAction">Từ cũ nhất đến mới nhất</string>
+  <string name="Vault_SortDateDesc_SheetAction">Cũ nhất đến mới nhất</string>
   <string name="Vault_ManageFiles_SheetTitle">Quản lý tệp tin</string>
   <string name="Vault_DeleteFile_SheetDesc">Sau khi nhập tệp tin vào Tella, tệp tin gốc sẽ bị xóa khỏi thiết bị của bạn. Bản sao duy nhất còn lại sẽ được lưu giữ bên trong Tella.</string>
   <string name="Vault_TakePhotoVideo_SheetAction">Chụp ảnh/quay phim</string>
@@ -56,7 +56,7 @@
     <item quantity="other">Tệp đã được di chuyển thành công.</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Một số tệp đã chọn hiện đang được sử dụng trong các kết nối của bạn. Việc xóa có thể ảnh hưởng đến các biểu mẫu và báo cáo chưa được gửi.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">Cảnh báo</string>
   <string name="Vault_Delete_anyway">Vẫn xóa</string>
   <string name="Vault_Keep_Original">GIỮ TỆP GỐC</string>
   <string name="Vault_Delete_Original">XÓA TỆP GỐC</string>

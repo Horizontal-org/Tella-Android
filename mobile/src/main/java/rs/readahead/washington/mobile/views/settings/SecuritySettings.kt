@@ -306,7 +306,7 @@ class SecuritySettings :
 
     private fun setUpDefaultLauncherVisibility() {
         with(binding) {
-            val failedUnlockOption = failedUnlockManager.getFailedUnlockOption()
+            val failedUnlockOptionLabel = failedUnlockManager.getFailedUnlockOptionText()
             if (failedUnlockManager.getOption() == 0L) {
                 setUpCamouflageButtonForDefaultLauncher()
             } else {
@@ -316,7 +316,7 @@ class SecuritySettings :
             unlockRemainingSwitch.isVisible = failedUnlockManager.getOption() != 0L
             deleteUnlockSettingsButton.apply {
                 isBottomLineVisible(failedUnlockManager.getOption() != 0L)
-                setLabelText(getString(failedUnlockOption))
+                setLabelText(getString(failedUnlockOptionLabel))
                 setOnClickListener { showDeleteAfterFailedUnlockDialog() }
                 setLabelColor(R.color.wa_white)
             }
