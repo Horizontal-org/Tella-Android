@@ -58,7 +58,7 @@ public class CollectSubmittedFormInstanceRecycleViewAdapter extends RecyclerView
             holder.setPendingIcon();
         }
 
-        holder.item.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
+        holder.item.getPopupMenu().setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
     }
 
     @Override

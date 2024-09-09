@@ -34,7 +34,7 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
 
     private fun initView() {
         binding.textViewEmpty.setText(getString(R.string.Outbox_Reports_Empty_Message))
-        binding.listReportsRecyclerView.apply {
+        binding.draftsRecyclerView.apply {
             adapter = entityAdapter
             layoutManager = LinearLayoutManager(baseActivity)
         }
@@ -45,11 +45,11 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
         with(viewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 if (outboxes.isEmpty()) {
-                    binding.listReportsRecyclerView.hide()
+                    binding.draftsRecyclerView.hide()
                     binding.textViewEmpty.show()
                 } else {
                     entityAdapter.setEntities(outboxes)
-                    binding.listReportsRecyclerView.show()
+                    binding.draftsRecyclerView.show()
                     binding.textViewEmpty.hide()
                 }
             }

@@ -1,8 +1,6 @@
 package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -11,7 +9,6 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
-import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 
 @AndroidEntryPoint
@@ -27,22 +24,13 @@ class DraftsReportsFragment : BaseReportsFragment() {
         return R.string.Uwazi_Draft_Entities_Empty_Description
     }
 
-    override fun getAdapter(): EntityAdapter {
-        return EntityAdapter()
-    }
-
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         this.navManager().navigateFromReportsScreenToNewReportScreen()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
-
     @SuppressLint("StringFormatInvalid")
-    private fun initData() {
+    override fun initData() {
         with(viewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
