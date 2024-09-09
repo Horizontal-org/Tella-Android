@@ -48,7 +48,7 @@
   <string name="Vault_CreateFolder_SheetTitle">Создать новую папку</string>
   <string name="Vault_MoveHere">Перенести сюда</string>
   <string name="Vault_ViewerOther_SheetDesc">Этот формат файла не может быть открыт внутри Tella. Вы хотите экспортировать файл на свое устройство, чтобы открыть его через другое приложение? Это может привести к раскрытию содержимого файла. </string>
-  <string name="Vault_Export_SheetAction">Сохранить на устройстве</string>
+  <string name="Vault_Export_SheetAction">Экспорт</string>
   <plurals name="Vault_Items">
     <item quantity="one">items</item>
     <item quantity="other"></item>
@@ -60,7 +60,7 @@
     <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Некоторые из выбранных файлов в настоящее время используются в ваших соединениях. Удаление может повлиять на формы и отчеты, которые еще не были отправлены.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">Внимание</string>
   <string name="Vault_Delete_anyway">Удалить в любом случае</string>
   <string name="Vault_Keep_Original">СОХРАНИТЬ ОРИГИНАЛ
 </string>

@@ -7,7 +7,7 @@
   <string name="LockSelect_Action_Continue">працягваць</string>
   <string name="LockPatternSet_Draw_Pattern">Намалюйце шаблон разблакоўкі</string>
   <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Цяпер гэта ваш узор каб разблакаваць Тэлу</string>
   <string name="LockPatternSet_Pattern_Recorded">Узор запісана</string>
   <string name="UnlockPattern_PatternTooShort">Падключэнне да сервераў%dкропкі,калі ласка, перамалюйце</string>
   <string name="LockPatternSet_RecordingPattern">Адпусціце палец, калі скончыце</string>

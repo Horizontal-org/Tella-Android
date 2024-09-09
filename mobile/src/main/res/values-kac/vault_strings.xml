@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Shalat shapraw da sai</string>
   <string name="Vault_FileResolution">Dan leng atsam</string>
   <string name="Vault_FileLength">Aten ladaw</string>
-  <string name="Vault_FilePath">Lam mahkrun</string>
+  <string name="Vault_FilePath">Lamag nhtan lam mahkrun</string>
   <string name="Vault_RenameFile_SheetTitle">Lamang nhtan (file) hpe mying bai shamying u</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="zero">Lamang nhtan (file) hpe shaprai kau na kun?</item>
@@ -79,5 +79,5 @@
   <string name="Vault_deleteFileImported_SheetDesc"> After importing the file into Tella, do you want to keep the original file on your device or delete it?
  
  If you delete it, the file imported into Tella will be the only copy left. </string>
-  <string name="Vault_FileEdit_SheetAction">Edit</string>
+  <string name="Vault_FileEdit_SheetAction">Jep shagrin u</string>
 </resources>
