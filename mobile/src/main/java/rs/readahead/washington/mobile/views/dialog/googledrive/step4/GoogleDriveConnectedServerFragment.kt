@@ -1,15 +1,21 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive.step4
 
+import SharedGoogleDriveViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.fragment.app.activityViewModels
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 
 class GoogleDriveConnectedServerFragment : BaseFragment() {
-
+    private val sharedViewModel: SharedGoogleDriveViewModel by activityViewModels()
+    private lateinit var credentialManager: CredentialManager
+    private lateinit var request: GetCredentialRequest
     private lateinit var nextBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
