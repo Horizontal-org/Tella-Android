@@ -20,11 +20,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/wa_white"
         android:textStyle="normal" />
-    <CheckBox
-        android:id="@+id/checkBox"
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@null"
-        android:background="@drawable/custom_check"/>
+        android:visibility="gone"
+        android:background="@drawable/check_tiger_orange"/>
 
 </LinearLayout>

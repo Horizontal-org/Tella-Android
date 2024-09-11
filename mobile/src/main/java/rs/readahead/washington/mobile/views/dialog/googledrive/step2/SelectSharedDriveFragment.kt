@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive.step2
 
-import SharedGoogleDriveViewModel
 import StringListAdapter
 import android.os.Bundle
 import android.view.View
@@ -9,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
 class SelectSharedDriveFragment :
     BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate){
@@ -18,6 +18,8 @@ class SelectSharedDriveFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        binding.toolbar.setStartTextTitle("Select Google drive")
+        binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
 
         // Observe shared drives from ViewModel
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->

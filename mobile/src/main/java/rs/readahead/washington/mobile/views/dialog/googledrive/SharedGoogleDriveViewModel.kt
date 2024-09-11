@@ -1,5 +1,8 @@
+package rs.readahead.washington.mobile.views.dialog.googledrive
+
 import android.content.Context
-import androidx.credentials.CredentialManager
+import androidx.core.content.ContextCompat.getString
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.lifecycle.LiveData
@@ -12,13 +15,20 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
-import com.google.api.services.drive.model.FileList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import timber.log.Timber
+import javax.inject.Inject
 
-class SharedGoogleDriveViewModel : ViewModel() {
+@HiltViewModel
+class SharedGoogleDriveViewModel @Inject constructor(
+    private val repository: GoogleDriveRepository
+) : ViewModel() {
 
     private val _signInResult = MutableLiveData<GetCredentialResponse?>()
     val signInResult: LiveData<GetCredentialResponse?> get() = _signInResult
@@ -37,21 +47,16 @@ class SharedGoogleDriveViewModel : ViewModel() {
 
     private lateinit var driveService: Drive
 
-    // Perform the sign-in process
-    fun signInWithGoogle(
-        credentialManager: CredentialManager,
-        request: GetCredentialRequest,
-        context: Context
-    ) {
-        viewModelScope.launch(Dispatchers.Main) {
+
+    // Perform the sign-in process using coroutines
+    fun signInWithGoogle(request: GetCredentialRequest, context: Context) {
+        viewModelScope.launch {
             try {
-                val result = credentialManager.getCredential(context, request)
-                _signInResult.value = result
-                result?.let {
-                    handleSignIn(it)
+                val result = withContext(Dispatchers.IO) {
+                    repository.getCredential(request, context)
                 }
+                handleSignIn(result)
             } catch (e: Exception) {
-                Timber.e(e, "Failed to retrieve or process Google ID Token")
                 _errorMessage.value = e.message
             }
         }
@@ -60,27 +65,31 @@ class SharedGoogleDriveViewModel : ViewModel() {
     // Handle the sign-in result
     private fun handleSignIn(result: GetCredentialResponse) {
         when (val credential = result.credential) {
-            is GoogleIdTokenCredential -> {
-                try {
-                    val idToken = credential.idToken
-                    Timber.d("Google ID Token: $idToken")
-
-                    // Extract email from the Google ID token
-                    val email = getEmailFromIdToken(idToken)
-                    _email.value = email
-
-                    // You can navigate to the next fragment by passing the email
-                    // through LiveData or use a callback to notify the fragment.
-                } catch (e: Exception) {
-                    Timber.e(e, "Failed to retrieve or process Google ID Token")
-                    _errorMessage.value = e.message
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    processGoogleIdTokenCredential(credential)
+                } else {
+                    _errorMessage.value = "Credential type is not a Google ID Token Credential"
                 }
             }
-
             else -> {
-                Timber.e("Unexpected credential type or no credentials returned")
                 _errorMessage.value = "Unexpected credential type or no credentials returned"
             }
+        }
+    }
+
+    // Process Google ID token and extract email
+    private fun processGoogleIdTokenCredential(credential: CustomCredential) {
+        try {
+            val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            val idToken = googleIdTokenCredential.idToken
+            Timber.d("Google ID Token: $idToken")
+
+            val extractedEmail = getEmailFromIdToken(idToken)
+            _email.value = extractedEmail
+        } catch (e: Exception) {
+            _errorMessage.value = "Failed to retrieve or process Google ID Token: ${e.message}"
+            Timber.e(e)
         }
     }
 
@@ -102,23 +111,23 @@ class SharedGoogleDriveViewModel : ViewModel() {
         ).apply {
             selectedAccountName = _email.value
         }
-
         driveService = Drive.Builder(
             NetHttpTransport(),
             GsonFactory(),
             googleAccountCredential
-        ).setApplicationName("Tella").build()
+        ).setApplicationName(getString(context,R.string.app_name)).build()
     }
+
+    // Fetch shared drives using the repository
     fun fetchSharedDrives() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             try {
-                val query =
-                    "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
-                val request = driveService.files().list().setQ(query).setFields("files(id, name)")
-                val result: FileList = request.execute()
-                _sharedDrives.postValue(result.files.map { it.name })
+                val sharedDriveList = withContext(Dispatchers.IO) {
+                    repository.fetchSharedDrives(driveService)
+                }
+                _sharedDrives.value = sharedDriveList
             } catch (e: Exception) {
-                _signInError.postValue("Failed to retrieve Google ID Token: ${e.message}")
+                _signInError.value = "Failed to retrieve shared drives: ${e.message}"
             }
         }
     }

@@ -53,11 +53,13 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
             googleAccountCredential
         ).setApplicationName("Tella").build()
         binding.nextBtn.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
+
     }
 
     private fun createFolder() {
         val folderMetadata = File()
-        folderMetadata.name = binding.createFolderEdit.toString()
+        folderMetadata.name = binding.createFolderEdit.text.toString()
         folderMetadata.mimeType = "application/vnd.google-apps.folder"
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -80,6 +82,8 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
             R.id.next_btn -> {
                 createFolder()
             }
+            R.id.back_btn -> baseActivity.onBackPressed()
+
         }
     }
 }

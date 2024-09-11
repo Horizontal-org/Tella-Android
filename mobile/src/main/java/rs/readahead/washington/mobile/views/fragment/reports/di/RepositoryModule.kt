@@ -1,15 +1,19 @@
 package rs.readahead.washington.mobile.views.fragment.reports.di
 
 import android.content.Context
+import androidx.credentials.CredentialManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.repository.ReportsRepositoryImp
 import rs.readahead.washington.mobile.domain.repository.ITellaUploadServersRepository
+import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.util.StatusProvider
@@ -51,5 +55,15 @@ object RepositoryModule {
     fun provideDataSource(): DataSource {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
+    @Provides
+    @Singleton
+    fun provideGoogleDriveRepository(credentialManager: CredentialManager): GoogleDriveRepositoryInterface {
+        return GoogleDriveRepository(credentialManager)
+    }
 
+    @Provides
+    @Singleton
+    fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager {
+        return CredentialManager.create(context)
+    }
 }

@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive.step4
 
-import SharedGoogleDriveViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,13 @@ import android.widget.TextView
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
+import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
 class GoogleDriveConnectedServerFragment : BaseFragment() {
-    private val sharedViewModel: SharedGoogleDriveViewModel by activityViewModels()
+    private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
     private lateinit var credentialManager: CredentialManager
     private lateinit var request: GetCredentialRequest
     private lateinit var nextBtn: TextView
@@ -28,16 +29,6 @@ class GoogleDriveConnectedServerFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        (baseActivity as OnBoardActivityInterface).enableSwipe(
-//            isSwipeable = true, isTabLayoutVisible = true
-//        )
-//        (baseActivity as OnBoardActivityInterface).showButtons(
-//            isNextButtonVisible = true, isBackButtonVisible = true
-//        )
     }
 
     override fun initView(view: View) {
