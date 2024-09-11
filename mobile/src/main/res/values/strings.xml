@@ -918,6 +918,12 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
   <!-- Next cloud string -->
   <string name="NextCloud">Nextcloud</string>
   <string name="NextCloud_Create_New_Folder">Create new folder</string>

@@ -7,7 +7,7 @@
   <string name="LockSelect_Action_Continue">തുടരുക</string>
   <string name="LockPatternSet_Draw_Pattern">ഒരു അൺലോക്ക് പാറ്റേൺ/മാതൃക വരയ്‌ക്കുക</string>
   <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Tella (റ്റെല്ല) അൺലോക്കുചെയ്യാനുള്ള നിങ്ങളുടെ പാറ്റേൺ/മാതൃക ഇതായിരിക്കും</string>
   <string name="LockPatternSet_Pattern_Recorded">പാറ്റേൺ/മാതൃക റെക്കോർഡ്‌ചെയ്തു</string>
   <string name="UnlockPattern_PatternTooShort">കുറഞ്ഞത് %d ഡോട്ടുകളെങ്കിലും കണക്ട് ചെയ്യുക, ദയവായി വീണ്ടും വരയ്ക്കുക</string>
   <string name="LockPatternSet_RecordingPattern">പൂർത്തിയാകുമ്പോൾ വിരൽ മാറ്റുക</string>

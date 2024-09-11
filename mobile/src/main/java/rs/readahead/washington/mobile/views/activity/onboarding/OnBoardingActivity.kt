@@ -41,7 +41,8 @@ private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
 private const val ONBOARDING_CAMERA_VIEW_INDEX = 1
 private const val ONBOARDING_RECORDER_VIEW_INDEX = 2
 private const val ONBOARDING_FILES_VIEW_INDEX = 3
-private const val ONBOARDING_LOCK_VIEW_INDEX = 4
+private const val ONBOARDING_COLLECT_DATA_VIEW = 4
+private const val ONBOARDING_LOCK_VIEW_INDEX = 5
 
 @AndroidEntryPoint
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
@@ -64,7 +65,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         setContentView(binding.root)
 
         // Instantiate a ViewPager and a Tablayout
-        if (!isOnboardLockSet && !isFromSettings) initViewPager(5)
+        if (!isOnboardLockSet && !isFromSettings) initViewPager(6)
 
         // Instantiate next and back buttons
         initButtons()
@@ -150,7 +151,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         } else {
             // Otherwise, select the previous step.
             if (binding.viewPager.size > 0)
-                binding.viewPager.currentItem = binding.viewPager.currentItem - 1
+                binding.viewPager.currentItem -= 1
         }
 
     }
@@ -158,7 +159,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     fun onNextPressed() {
         if (binding.viewPager.currentItem != viewpagerItemsCount) {
             // select the Next step in the viewpager
-            binding.viewPager.currentItem = binding.viewPager.currentItem + 1
+            binding.viewPager.currentItem += 1
         }
 
     }
@@ -298,6 +299,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         startActivity(Intent(this, ReportsConnectFlowActivity::class.java))
     }
 
+    //TODO WHY THIS HARCODED?
     override fun enterCustomizationCode() {
         BottomSheetUtils.showEnterCustomizationCodeSheet(this.supportFragmentManager,
             "Customization",
@@ -344,6 +346,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 ONBOARDING_CAMERA_VIEW_INDEX -> OnBoardCameraFragment()
                 ONBOARDING_RECORDER_VIEW_INDEX -> OnBoardRecorderFragment()
                 ONBOARDING_FILES_VIEW_INDEX -> OnBoardFilesFragment()
+                ONBOARDING_COLLECT_DATA_VIEW -> OnboardCollectDataFragment()
                 ONBOARDING_LOCK_VIEW_INDEX -> OnBoardLockFragment()
                 else -> OnBoardIntroFragment()
             }
