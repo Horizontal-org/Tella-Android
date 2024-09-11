@@ -10,6 +10,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -57,8 +58,12 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _serversList = MutableLiveData<List<TellaReportServer>>()
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
 
+    abstract val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
+    abstract val instanceProgress: SingleLiveEvent<ReportInstance>
+
 
     // Abstract methods to be implemented in derived ViewModels
+    abstract fun clearDisposable()
     abstract fun deleteReport(instance: ReportInstance)
     abstract fun getReportBundle(instance: ReportInstance)
     abstract fun getFormInstance(
@@ -86,6 +91,7 @@ abstract class BaseReportsViewModel : ViewModel() {
     abstract fun saveOutbox(reportInstance: ReportInstance)
     abstract fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean)
     abstract fun listServers()
+    abstract fun submitReport(instance: ReportInstance, backButtonPressed: Boolean)
 
     // Method to handle error posting
     protected fun handleError(error: Throwable) {

@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.reports
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +12,6 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.exception.NoConnectivityException
 import rs.readahead.washington.mobile.domain.repository.reports.ReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.reports.DeleteReportUseCase
@@ -39,8 +36,8 @@ class ReportsViewModel @Inject constructor(
     private val dataSource: DataSource
 ) : BaseReportsViewModel() {
 
-    val reportProcess = reportsRepository.getReportProgress()
-    val instanceProgress = reportsRepository.geInstanceProgress()
+    override val reportProcess = reportsRepository.getReportProgress()
+    override val instanceProgress = reportsRepository.geInstanceProgress()
 
     override fun listServers() {
         _progress.postValue(true)
@@ -250,7 +247,7 @@ class ReportsViewModel @Inject constructor(
         )
     }
 
-    fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
+    override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { servers ->
             val server = servers.first { it.id == instance.serverId }
             reportsRepository.submitReport(
@@ -272,7 +269,7 @@ class ReportsViewModel @Inject constructor(
         )
     }
 
-    fun clearDisposable() {
+    override fun clearDisposable() {
         reportsRepository.getDisposable().clear()
     }
 

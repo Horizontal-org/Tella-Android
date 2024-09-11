@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.reports.entry
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -15,11 +13,6 @@ import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 class ReportsEntryFragment :
     BaseReportsEntryFragment() {
     override val viewModel: ReportsViewModel by viewModels()
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 
 
     override fun submitReport(reportInstance: ReportInstance) {
