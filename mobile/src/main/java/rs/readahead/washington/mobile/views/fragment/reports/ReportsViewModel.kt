@@ -38,8 +38,6 @@ class ReportsViewModel @Inject constructor(
     private val reportsRepository: ReportsRepository,
     private val dataSource: DataSource
 ) : BaseReportsViewModel() {
-    protected val _serversList = MutableLiveData<List<TellaReportServer>>()
-    val serversList: LiveData<List<TellaReportServer>> get() = _serversList
 
     val reportProcess = reportsRepository.getReportProgress()
     val instanceProgress = reportsRepository.geInstanceProgress()
@@ -159,47 +157,7 @@ class ReportsViewModel @Inject constructor(
     private fun onMoreClicked(reportInstance: ReportInstance) {
         _onMoreClickedFormInstance.postValue(reportInstance)
     }
-
-    fun getDraftFormInstance(
-        title: String,
-        description: String,
-        files: List<FormMediaFile>?,
-        server: TellaReportServer,
-        id: Long? = null
-    ): ReportInstance {
-        return ReportInstance(
-            id = id ?: 0L,
-            title = title,
-            description = description,
-            status = EntityStatus.DRAFT,
-            widgetMediaFiles = files ?: emptyList(),
-            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
-            serverId = server.id
-        )
-    }
-
-    fun getFormInstance(
-        title: String,
-        description: String,
-        files: List<FormMediaFile>?,
-        server: TellaReportServer,
-        id: Long? = null,
-        reportApiId: String = "",
-        status: EntityStatus
-    ): ReportInstance {
-        return ReportInstance(
-            id = id ?: 0L,
-            title = title,
-            reportApiId = reportApiId,
-            description = description,
-            status = status,
-            widgetMediaFiles = files ?: emptyList(),
-            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
-            serverId = server.id
-        )
-    }
-
-
+    
     override fun deleteReport(instance: ReportInstance) {
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
@@ -262,7 +220,16 @@ class ReportsViewModel @Inject constructor(
         reportApiId: String,
         status: EntityStatus
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            reportApiId = reportApiId,
+            description = description,
+            status = status,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     override fun getDraftFormInstance(
@@ -272,7 +239,15 @@ class ReportsViewModel @Inject constructor(
         server: Server,
         id: Long?
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            description = description,
+            status = EntityStatus.DRAFT,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {

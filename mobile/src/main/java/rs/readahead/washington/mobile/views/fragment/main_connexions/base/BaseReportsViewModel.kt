@@ -13,14 +13,13 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
 abstract class BaseReportsViewModel : ViewModel() {
 
     protected val disposables = CompositeDisposable()
-
-    // Common LiveData properties
 
     protected val _draftListReportFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
@@ -54,6 +53,9 @@ abstract class BaseReportsViewModel : ViewModel() {
     // Common LiveData for error handling
     protected val _error = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable> get() = _error
+
+    protected val _serversList = MutableLiveData<List<TellaReportServer>>()
+    val serversList: LiveData<List<TellaReportServer>> get() = _serversList
 
 
     // Abstract methods to be implemented in derived ViewModels
