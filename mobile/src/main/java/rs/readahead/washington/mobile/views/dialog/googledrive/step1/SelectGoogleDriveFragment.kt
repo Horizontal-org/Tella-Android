@@ -34,9 +34,6 @@ class SelectGoogleDriveFragment :
             sharedViewModel.setEmail(email)
         }
 
-        // Initialize Drive service in ViewModel
-        context?.let { sharedViewModel.initializeDriveService(it) }
-
         // Observe shared drives and update UI accordingly
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->
             binding.sharedDriveBtn.isEnabled = !drives.isNullOrEmpty()

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment

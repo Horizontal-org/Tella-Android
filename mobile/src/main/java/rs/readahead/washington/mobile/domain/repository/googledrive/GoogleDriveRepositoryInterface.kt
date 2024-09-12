@@ -7,7 +7,13 @@ import com.google.api.services.drive.Drive
 import io.reactivex.Single
 
 interface GoogleDriveRepositoryInterface {
-    suspend fun getCredential(request: GetCredentialRequest, context: Context): GetCredentialResponse
+    suspend fun getCredential(
+        request: GetCredentialRequest,
+        context: Context
+    ): GetCredentialResponse
+
     // New method to fetch shared drives
-    suspend fun fetchSharedDrives(driveService: Drive): List<String>
+    suspend fun fetchSharedDrives(email: String): List<String>
+    suspend fun createFolder(email: String, folderName: String): String
+
 }
