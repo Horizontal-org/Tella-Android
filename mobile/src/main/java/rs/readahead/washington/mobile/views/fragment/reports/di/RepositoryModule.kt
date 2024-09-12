@@ -91,8 +91,8 @@ object RepositoryModule {
     @Singleton
     fun provideGoogleDriveRepository(
         credentialManager: CredentialManager,
+        driveServiceProvider: (String) -> Drive
     ): GoogleDriveRepositoryInterface {
-        return GoogleDriveRepository(credentialManager)
+        return GoogleDriveRepository(credentialManager, driveServiceProvider)
     }
-
 }

@@ -15,5 +15,4 @@ interface GoogleDriveRepositoryInterface {
     // New method to fetch shared drives
     suspend fun fetchSharedDrives(email: String): List<String>
     suspend fun createFolder(email: String, folderName: String): String
-
 }
