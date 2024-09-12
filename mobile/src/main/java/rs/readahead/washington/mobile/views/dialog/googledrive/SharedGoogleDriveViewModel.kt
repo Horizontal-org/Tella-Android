@@ -21,17 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedGoogleDriveViewModel @Inject constructor(
-    private val repository: GoogleDriveRepository,
-    private val driveServiceProvider: (String) -> Drive
+    private val repository: GoogleDriveRepository
 ) : ViewModel() {
-
-    private lateinit var driveService: Drive
-    private fun initializeDriveService(email: String) {
-        driveService = driveServiceProvider(email)
-    }
     fun setEmail(email: String) {
         _email.value = email
-        initializeDriveService(email)
     }
 
     private val _signInResult = MutableLiveData<GetCredentialResponse?>()
