@@ -31,7 +31,11 @@
         android:id="@+id/selectSharedDriveFragment"
         android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step2.SelectSharedDriveFragment"
         android:label="FragmentSelectSharedDriveFragment"
-        tools:layout="@layout/fragment_select_shared_drive" />
+        tools:layout="@layout/fragment_select_shared_drive" >
+        <action
+            android:id="@+id/action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment"
+            app:destination="@id/googleDriveConnectedServerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createFolderFragment"
         android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step3.CreateFolderFragment"

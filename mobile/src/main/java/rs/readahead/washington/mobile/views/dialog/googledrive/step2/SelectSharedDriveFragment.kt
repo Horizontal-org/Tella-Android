@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
 class SelectSharedDriveFragment :
-    BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate){
+    BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate) {
 
     private val sharedViewModel: SharedGoogleDriveViewModel by activityViewModels()
 
@@ -27,7 +29,9 @@ class SelectSharedDriveFragment :
             val adapter = StringListAdapter(drives, object : StringListAdapter.ItemClickListener {
                 override fun onItemClick(item: String) {
                     // Handle item click
-                    Toast.makeText(requireContext(), "Clicked: $item", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(
+                        R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment
+                    )
                 }
             })
             binding.recyclerView.adapter = adapter

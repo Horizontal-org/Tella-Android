@@ -9,12 +9,13 @@ import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import rs.readahead.washington.mobile.views.fragment.reports.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 class GoogleDriveRepository @Inject constructor(
     private val credentialManager: CredentialManager,
-    private val driveServiceProvider: (String) -> Drive
+    private val driveServiceProvider: DriveServiceProvider
 ) : GoogleDriveRepositoryInterface {
 
     override suspend fun getCredential(
@@ -33,12 +34,11 @@ class GoogleDriveRepository @Inject constructor(
 
     // New method to fetch shared drives
     override suspend fun fetchSharedDrives(email: String): List<String> {
-        val driveService = provideDriveService(email)
         return withContext(Dispatchers.IO) {
             try {
                 val query =
                     "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
-                val request = driveService.files().list().setQ(query).setFields("files(id, name)")
+                val request = driveServiceProvider.getDriveService(email).files().list().setQ(query).setFields("files(id, name)")
                 val result: FileList = request.execute()
                 result.files.map { it.name }
             } catch (e: Exception) {
@@ -48,12 +48,7 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    private fun provideDriveService(email: String): Drive {
-        return driveServiceProvider(email)
-    }
-
     override suspend fun createFolder(email: String, folderName: String): String {
-        val driveService = provideDriveService(email)
         val folderMetadata = File().apply {
             name = folderName
             mimeType = "application/vnd.google-apps.folder"
@@ -61,7 +56,7 @@ class GoogleDriveRepository @Inject constructor(
 
         return withContext(Dispatchers.IO) {
             try {
-                val folder = driveService.files().create(folderMetadata)
+                val folder = driveServiceProvider.getDriveService(email).files().create(folderMetadata)
                     .setFields("id")
                     .execute()
                 folder.id

@@ -71,6 +71,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    @JvmSuppressWildcards
     fun provideDriveServiceProvider(@ApplicationContext context: Context): (String) -> Drive {
         return { email ->
             val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
@@ -91,8 +92,9 @@ object RepositoryModule {
     @Singleton
     fun provideGoogleDriveRepository(
         credentialManager: CredentialManager,
-        driveServiceProvider: (String) -> Drive
+        driveServiceProvider: DriveServiceProvider
     ): GoogleDriveRepositoryInterface {
         return GoogleDriveRepository(credentialManager, driveServiceProvider)
     }
+
 }

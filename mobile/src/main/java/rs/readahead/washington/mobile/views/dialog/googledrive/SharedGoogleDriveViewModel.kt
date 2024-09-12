@@ -16,13 +16,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.views.fragment.reports.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedGoogleDriveViewModel @Inject constructor(
-    private val repository: GoogleDriveRepository
+    private val repository: GoogleDriveRepository,
 ) : ViewModel() {
+
     fun setEmail(email: String) {
         _email.value = email
     }
@@ -111,19 +113,6 @@ class SharedGoogleDriveViewModel @Inject constructor(
         return json.getString("email")
     }
 
-
-//    fun initializeDriveService(context: Context) {
-//        val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
-//            context, listOf(DriveScopes.DRIVE)
-//        ).apply {
-//            selectedAccountName = _email.value
-//        }
-//        driveService = Drive.Builder(
-//            NetHttpTransport(),
-//            GsonFactory(),
-//            googleAccountCredential
-//        ).setApplicationName(getString(context, R.string.app_name)).build()
-//    }
 
     // Fetch shared drives using the repository
     fun fetchSharedDrives() {
