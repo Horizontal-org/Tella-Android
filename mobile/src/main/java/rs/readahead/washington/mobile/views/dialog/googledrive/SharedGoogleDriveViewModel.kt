@@ -9,14 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.api.services.drive.Drive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
-import rs.readahead.washington.mobile.views.fragment.reports.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
 

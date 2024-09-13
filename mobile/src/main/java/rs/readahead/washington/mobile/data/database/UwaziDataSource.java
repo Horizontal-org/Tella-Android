@@ -46,7 +46,6 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivit
 import timber.log.Timber;
 
 public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTemplatesRepository {
-
     private static UwaziDataSource dataSource;
     private final SQLiteDatabase database;
 

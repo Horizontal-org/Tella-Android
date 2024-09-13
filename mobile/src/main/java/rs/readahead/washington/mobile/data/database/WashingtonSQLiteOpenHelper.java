@@ -195,6 +195,14 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
+    private String createTableGoogleDrive() {
+        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.T_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, false) + " UNIQUE, " +
+                cddl(D.T_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, false) + " , " +
+                ");";
+    }
+
     private String alterTableMediaFileUploadsAddManual() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_MANUAL_UPLOAD, D.INTEGER, true) + " DEFAULT 0";
@@ -434,6 +442,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV12
         db.execSQL(createTableResources());
+        //DBV13
+        db.execSQL(createTableGoogleDrive());
+
     }
 
     @Override
@@ -492,6 +503,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 12:
                 db.execSQL(createTableResources());
                // break;
+            case 13:
+                db.execSQL(createTableGoogleDrive());
         }
     }
 

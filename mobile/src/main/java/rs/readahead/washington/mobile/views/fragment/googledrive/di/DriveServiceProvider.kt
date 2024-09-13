@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.reports.di
+package rs.readahead.washington.mobile.views.fragment.googledrive.di
 
 import android.content.Context
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential

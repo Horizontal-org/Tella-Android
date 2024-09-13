@@ -16,7 +16,7 @@ class D {
 
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 13;
+    static final int DATABASE_VERSION = 14;
     static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
@@ -133,5 +133,9 @@ class D {
     static final String C_RESOURCES_PROJECT = "c_resources_project";
     static final String C_RESOURCES_FILE_ID = "c_resources_file_id";
 
+    /* GOOGLE DRIVE */
+    static final String T_GOOGLE_DRIVE = "t_google_drive";
+    static final String T_GOOGLE_DRIVE_FOLDER_ID = "t_google_drive_folder_id";
+    static final String T_GOOGLE_DRIVE_FOLDER_NAME = "t_google_drive_folder_name";
 
 }
