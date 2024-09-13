@@ -36,7 +36,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
 
     @NonNull
     @Override
-    public Single<Folder> saveResource(@NonNull Folder instance) {
+    public Single<Folder> saveFolder(@NonNull Folder instance) {
         return Single.fromCallable(() -> updateResourceInstance(instance)).compose(applySchedulers());
     }
 

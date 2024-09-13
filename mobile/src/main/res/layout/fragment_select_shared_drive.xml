@@ -22,8 +22,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/space_cadet"
-        android:padding="24dp"
+        android:background="@color/light_space_cadet"
+        android:layout_marginTop="?attr/actionBarSize"
         app:behavior_hideable="true">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

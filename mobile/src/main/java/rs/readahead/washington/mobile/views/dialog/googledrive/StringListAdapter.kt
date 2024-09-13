@@ -1,29 +1,30 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 
 class StringListAdapter(
-    private val items: List<String>,
+    private val items: List<Folder>,
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<StringListAdapter.StringViewHolder>() {
 
     private var selectedPosition = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StringViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.simple_list_item, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.simple_list_item, parent, false)
         return StringViewHolder(view)
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: StringViewHolder, position: Int) {
-        holder.bind(items[position], position == selectedPosition)
+        holder.bind(items[position].name, position == selectedPosition)
 
         holder.itemView.setOnClickListener {
             val previousPosition = selectedPosition
@@ -46,6 +47,6 @@ class StringListAdapter(
     }
 
     interface ItemClickListener {
-        fun onItemClick(item: String)
+        fun onItemClick(item: Folder)
     }
 }

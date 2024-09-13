@@ -2,13 +2,16 @@ package rs.readahead.washington.mobile.views.dialog.googledrive.step2
 
 import StringListAdapter
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
+import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
@@ -27,17 +30,25 @@ class SelectSharedDriveFragment :
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->
             // Update RecyclerView with the new list of shared drives
             val adapter = StringListAdapter(drives, object : StringListAdapter.ItemClickListener {
-                override fun onItemClick(item: String) {
+                override fun onItemClick(folder: Folder) {
                     // Handle item click
-                    findNavController().navigate(
-                        R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment
-                    )
+                    sharedViewModel.saveSelectedFolder(folder)
                 }
             })
             binding.recyclerView.adapter = adapter
         }
-
-        // Fetch shared drives if not already loaded
+        sharedViewModel.successMessage.observe(viewLifecycleOwner, Observer { message ->
+            message?.let {
+                // Introduce a delay before navigating
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Hide the ImageView or revert UI changes if needed
+                    // Perform navigation after delay
+                    findNavController().navigate(
+                        R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment
+                    )
+                }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 seconds)
+            }
+        })
         if (sharedViewModel.sharedDrives.value.isNullOrEmpty()) {
             sharedViewModel.fetchSharedDrives()
         }

@@ -8,6 +8,7 @@ import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,14 +33,21 @@ class GoogleDriveRepository @Inject constructor(
     }
 
     // New method to fetch shared drives
-    override suspend fun fetchSharedDrives(email: String): List<String> {
+    override suspend fun fetchSharedDrives(email: String): List<Folder> {
         return withContext(Dispatchers.IO) {
             try {
-                val query =
-                    "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
-                val request = driveServiceProvider.getDriveService(email).files().list().setQ(query).setFields("files(id, name)")
+                val query = "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
+                val request = driveServiceProvider.getDriveService(email)
+                    .files()
+                    .list()
+                    .setQ(query)
+                    .setFields("files(id, name)")
+
                 val result: FileList = request.execute()
-                result.files.map { it.name }
+
+                // Map the result to a list of Folder objects
+                result.files.map { file -> Folder(file.id, file.name) }
+
             } catch (e: Exception) {
                 Timber.e(e, "Error fetching shared drives")
                 throw e
@@ -52,7 +60,6 @@ class GoogleDriveRepository @Inject constructor(
             name = folderName
             mimeType = "application/vnd.google-apps.folder"
         }
-
         return withContext(Dispatchers.IO) {
             try {
                 val folder = driveServiceProvider.getDriveService(email).files().create(folderMetadata)

@@ -921,4 +921,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="create_new_folder">CREATE NEW FOLDER</string>
   <string name="use_shared_drive">USE SHARED DRIVE</string>
   <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
+  <string name="select_google_drive">Select Google drive</string>
 </resources>

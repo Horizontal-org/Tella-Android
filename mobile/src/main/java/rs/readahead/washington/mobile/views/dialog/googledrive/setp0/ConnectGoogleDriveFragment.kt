@@ -12,13 +12,18 @@ import rs.readahead.washington.mobile.databinding.FragmentConnectGoogleDriveBind
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
+const val EMAIL_KEY = "email_key"
+
 @AndroidEntryPoint
 class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
+
     companion object {
-        const val GOOGLE_CLIENT_ID = "166289458819-e5nt7d2lahv55ld0j527o07kovqdbip2.apps.googleusercontent.com"
+        const val GOOGLE_CLIENT_ID =
+            "166289458819-e5nt7d2lahv55ld0j527o07kovqdbip2.apps.googleusercontent.com"
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val request = createCredentialRequest()
@@ -58,7 +63,7 @@ class ConnectGoogleDriveFragment :
     // Extracted method to handle navigation
     private fun navigateToSelectGoogleDriveFragment(email: String) {
         val args = Bundle().apply {
-            putString("email_key", email)
+            putString(EMAIL_KEY, email)
         }
         nav().navigate(
             R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment,

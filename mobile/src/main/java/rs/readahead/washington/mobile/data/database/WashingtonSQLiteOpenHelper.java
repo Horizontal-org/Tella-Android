@@ -199,7 +199,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.T_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, false) + " UNIQUE, " +
-                cddl(D.T_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, false) + " , " +
+                cddl(D.T_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, false)  +
                 ");";
     }
 

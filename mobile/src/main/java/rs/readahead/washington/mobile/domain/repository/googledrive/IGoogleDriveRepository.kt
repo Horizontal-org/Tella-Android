@@ -4,5 +4,5 @@ import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 
 interface IGoogleDriveRepository {
-    fun saveResource(instance: Folder): Single<Folder>
+    fun saveFolder(instance: Folder): Single<Folder>
 }
