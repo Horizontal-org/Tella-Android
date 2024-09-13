@@ -71,7 +71,6 @@ object RepositoryModule {
         return GoogleDriveRepository(credentialManager, driveServiceProvider)
     }
 
-
     @Provides
     @Singleton
     fun provideGoogleDriveDataSource(): IGoogleDriveRepository {
