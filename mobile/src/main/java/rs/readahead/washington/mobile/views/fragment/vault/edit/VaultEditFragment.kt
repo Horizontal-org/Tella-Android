@@ -96,9 +96,12 @@ class VaultEditFragment :
         binding.close.setOnClickListener { goBack() }
         binding.cropImageView.setOnCropImageCompleteListener(this)
         binding.rotate.setOnClickListener { rotateImage() }
+        binding.flipVertically.setOnClickListener { flipImageVertically() }
+        binding.flipHorizontally.setOnClickListener { flipImageHorizontally() }
         binding.cropImageView.setOnSetCropOverlayReleasedListener {
             showAcceptButton()
         }
+        binding.cropImageView.maxZoom = 2
     }
 
     /**
@@ -115,6 +118,16 @@ class VaultEditFragment :
 
     private fun rotateImage() {
         binding.cropImageView.rotateImage(270)
+        showAcceptButton()
+    }
+
+    private fun flipImageVertically() {
+        binding.cropImageView.flipImageVertically()
+        showAcceptButton()
+    }
+
+    private fun flipImageHorizontally() {
+        binding.cropImageView.flipImageHorizontally()
         showAcceptButton()
     }
 
@@ -189,7 +202,6 @@ class VaultEditFragment :
         if (isNavigationCall) {
             back()
         } else {
-            @Suppress("DEPRECATION")
             activity?.onBackPressed()
         }
     }

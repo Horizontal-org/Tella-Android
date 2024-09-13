@@ -7,15 +7,15 @@
   <string name="Vault_Audios_Title">တၢ်ကလုၢ်</string>
   <string name="Vault_Videos_Title">တၢ်ဂီၤမူတဖၣ်</string>
   <string name="Vault_Others_Title">တၢ်အဂုၤအဂၤတဖၣ်</string>
-  <string name="Vault_Select_Title">ဃုထၢလံာ်တြံ၁်တဖၣ်</string>
+  <string name="Vault_Select_Title">ဃုထၢဘၣ်လံာ်တြံ၁်တဖၣ်</string>
   <string name="Vault_RecentFiles">လံာ်တြံ၁်လၢအတယံ၁်ဒံးဘၣ်တဖၣ်</string>
   <string name="Vault_PhotosAndVideos_Title">တၢ်ဂီၤဒီးတၢ်ဂီၤမူတဖၣ်</string>
   <string name="Vault_FavoriteForms_Title">လံာ်ကွီၣ်ဒိလၢ အလီၤသးစဲတဖၣ်</string>
   <string name="Vault_Empty_Msg">လၢန Tella ပူၤအံၤ လံာ်ဒၢတအိၣ်နီတဖျၢၣ်ဒံးဘၣ်. စံၣ်လီၤဖဲ + တၢ်ပနီၣ်အလိၤ ဖဲလာ်အံၤ လၢတၢ်ဆှၢနုာ်လီၤလံာ်တြံာ်အဂီၢ် (မ့တမ့ၢ်) လၢတၢ်ကဒုးအိၣ်ထီၣ်လံာ်ဒၢတဖျၢၣ်အဂီၢ်န့ၣ်တက့ၢ်</string>
   <string name="Vault_Move_SheetDesc">သုးအလီၢ်ဆူလံာ်ဒၢအဂၤတဖျၢၣ်အပူၤ</string>
   <string name="Vault_Rename_SheetAction">ယုၢ်က့ၤအမံၤလၢအသီ</string>
-  <string name="Vault_Save_SheetAction">ပာ်ကီၤပာ်ဃာ်</string>
-  <string name="Vault_Delete_SheetAction">ထုးသံကွံာ်</string>
+  <string name="Vault_Save_SheetAction">ကပာ်ကီၤဃာ်အီၤလီၤ</string>
+  <string name="Vault_Delete_SheetAction">ထူးသံကွံာ်</string>
   <string name="Vault_Share_SheetAction">ဟ့ၣ်နီၤလီၤ</string>
   <string name="Vault_Upload_SheetAction">တီၣ်ထီၣ်</string>
   <string name="Vault_File_SheetAction">လံ၁်တြံ၁်အတၢ်ဂ့ၢ်တၢ်ကျိၤ</string>
@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">တၢ်ဒုးအိၣ်ထီၣ်တ့ၢ်အီၤဖဲ</string>
   <string name="Vault_FileResolution">တၢ်ဂီၤအကံၢ်အစီ</string>
   <string name="Vault_FileLength">အဆၢကတီၢ်အယံာ်</string>
-  <string name="Vault_FilePath">တၢ်လဲၤကျဲဆူလံာ်တြံာ်အိၣ်အလီၢ်</string>
+  <string name="Vault_FilePath">လံာ်တြံာ်အလီၢ်အကျဲ</string>
   <string name="Vault_RenameFile_SheetTitle">ယုၢ်န့ၢ်က့ၤလံာ်တြံာ်အမံၤလၢအသီ</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="zero">၀ ခါ</item>
@@ -76,7 +76,7 @@
     <item quantity="other">လံာ်တြံာ်တဖၣ်အံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">လံာ်တြံာ်တနီၤလၢနဃုထၢဃာ်အီၤအံၤ အခဲအံၤအဘၣ်တၢ်သူအီၤဒံးလၢ တၢ်ဘျးစဲတခါအပူၤအဖၢမုၢ်န့ၣ်လီၤ. နမ့ၢ်ကထူးသံကွံာ်လံာ်တြံာ်သ့ၣ်တဖၣ်အံၤန့ၣ်ဒီး ကလဲၤမၤဘၣ်ဒိစ့ၢ်ကီး လံာ်တၢ်ဂ့ၢ်တၢ်ကျိၤ ဒီး လံာ်ပာ်ဖျါတဖၣ်လၢ တၢ်ဆှၢအီၤတတုၤဒံးဘၣ်တဖၣ်န့ၣ်လီၤ.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">တၢ်ဟ့ၣ်ပလီၢ်</string>
   <string name="Vault_Delete_anyway">ဒ်လဲၣ်ဂ့ၤဒ်လဲၣ်ဂ့ၤထူးသံကွံာ်အီၤ</string>
   <string name="Vault_Keep_Original">ကပာ်ဃာ် လံာ်တြံာ်အခီၣ်ထံးခီၣ်ဘိအံၤန့ၣ်လီၤ.</string>
   <string name="Vault_Delete_Original">ကထူးသံကွံာ် လံာ်တြံာ်အခီၣ်ထံးခီၣ်ဘိအံၤန့ၣ်လီၤ.</string>

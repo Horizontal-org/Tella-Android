@@ -7,7 +7,7 @@
   <string name="Vault_Audios_Title">Audio</string>
   <string name="Vault_Videos_Title">Vidéos</string>
   <string name="Vault_Others_Title">Autres</string>
-  <string name="Vault_Select_Title">Sélectionnez des fichiers</string>
+  <string name="Vault_Select_Title">Sélectionnez les fichiers</string>
   <string name="Vault_RecentFiles">Fichiers récents</string>
   <string name="Vault_PhotosAndVideos_Title">Photos et vidéos</string>
   <string name="Vault_FavoriteForms_Title">Formulaires favoris</string>
@@ -60,7 +60,7 @@
     <item quantity="other">Fichiers déplacés avec succès</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Certains des fichiers sélectionnés sont actuellement utilisés dans vos connexions. La suppression peut avoir un impact sur les formulaires et les rapports qui n\'ont pas encore été envoyés.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">Avertissement</string>
   <string name="Vault_Delete_anyway">Supprimer quand même</string>
   <string name="Vault_Keep_Original">GARDER L\'ORIGINAL</string>
   <string name="Vault_Delete_Original">SUPPRIMER L’ORIGINAL</string>

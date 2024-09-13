@@ -1,4 +1,4 @@
-<img src="https://github.com/Horizontal-org/Tella-Android/blob/master/Tella-02-feature-B.png" alt="Tella" width="350"/>
+<img src="docs/Tella2.0-feature.png" alt="Tella" width="350"/>
 
 ## Table of Contents
 
@@ -22,18 +22,18 @@
 
 Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
 
-| [![Camouflage](docs/Camouflage.gif)](https://hzontal.org/tella)  | [![Encrypting](docs/Encrypting.gif)](https://hzontal.org/tella) | [![Collecting data](docs/data_collection.gif)](https://hzontal.org/tella) |
+| ![Camouflage](docs/Camouflage.gif) | ![Encrypting](docs/Encrypting.gif) | ![Connection](docs/Server.gif) |
 |:---:|:---:|:---:|
-| Tella camouflaged as a calculator | Taking and encrypting a photo | Collecting data |
+| [Tella camouflaged as a calculator](https://tella-app.org/features#camouflage) | [Taking and encrypting a video](https://tella-app.org/features#encryption) | [Sending data to a server](https://tella-app.org/for-organizations) |
 
 Tella:
-- encrypts photo, video, and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer
-- hides itself by changing its name and icon in the list of apps
-- captures metadata when taking photos, videos, and audio recordings to verify the origin of the files
-- allows users to quickly delete all files in Tella's encrypted Gallery
-- enables users working with a group or organization to collect and send data to a server without relying on third-party apps or servers
+- encrypts photo, video, audio and PDF files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer.
+- hides itself by changing its name and icon in the list of apps or behind a working calculator.
+- captures metadata when taking photos, videos, and audio recordings to verify the origin of the files.
+- allows users to quickly delete all files in Tella's encrypted vault.
+- enables users working with a group or organization to collect and send data to a server without relying on third-party apps or servers.
 
-You can watch a [short video demonstrating Tella's main features here](https://vimeo.com/344220220/8c7f2fba67)
+You can watch a [short video demonstrating Tella's main features here](https://www.youtube.com/watch?v=aJIyWESxM_o&t=1s)
 
 ## Why Tella? <a id="why-tella"></a>
 
@@ -47,37 +47,22 @@ Tella has three main objectives:
 - Empowering individuals and groups to easily, quickly, and effectively collect data and produce high quality documentation that can be used for research, advocacy, or transitional justice
 
 Tella is used by:
-- Activists, organizers and human rights defenders to safely document events in their communities, produce reliable and verifiable evidence, and store data encrypted on their mobile devices
-- Media, professional reporters and citizen journalists to store sensitive media files encrypted as they travel, particularly as they cross borders
-- Civil society professionals and humanitarian workers to conduct interviews and collect data in poorly connected environments or in conflict areas
-- Electoral observation and monitoring organizations to monitor elections from inside and outside polling stations in real time and expose electoral fraud
-- Research institutions and international organizations to conduct research, interviews or surveys in challenging environments, particularly in conflict areas
+- Activists, organizers and human rights defenders to safely document events in their communities, produce reliable and verifiable evidence, and store data encrypted on their mobile devices.
+- Media, professional reporters and citizen journalists to store sensitive media files encrypted as they travel, particularly as they cross borders.
+- Civil society professionals and humanitarian workers to conduct interviews and collect data in poorly connected environments or in conflict areas.
+- Electoral observation and monitoring organizations to monitor elections from inside and outside polling stations in real time and expose electoral fraud.
+- Research institutions and international organizations to conduct research, interviews or surveys in challenging environments, particularly in conflict areas.
+
+You can read usage stories [here](https://tella-app.org/user-stories).
 
 ## Detailed list of features <a id="features"></a>
 
-### Encrypted container
-All of the content and data stored in Tella are encrypted. This means that unless the app is unlocked (using the 6-point pattern set up by the user upon installation), all the data will remain inaccessible to someone seizing or searching the device. Even if it is plugged into a computer and all of the device's data is extracted to be analyzed, all Tella content and data will look like gibberish and will be useless. Unlocking the app by entering the correct pattern is the only way to decrypt, and therefore read, the content stored in Tella.
+A detailed list of all Tella features can be found here: https://tella-app.org/features. 
 
-### Camouflage
-In order to protect the data produced and shared through Tella, the application and its content can be hidden on the user's device.
-The app's icon can be changed to a seemingly harmless one, such as a calcultor or a camera. This means that an individual searching the device will not see the Tella name and icon, and instead see an app that doesn't raise suspicions.
-WARNING: the name and icon of Tella will remain visible in the Android settings; this means that this camouflage will not protect against an individual actively looking for Tella or conducting an in-depth analysis of the device. This is a good protection against superficial searches of the user's device, avoiding to raise suspicions if an individual is quickly searching for incriminating evidence.
-
-### Data collection
-Users working with an organization can upload photos, videos, and audio files, or fill and submit forms, to document events they are witnessing. The organization decides which method is most appropriate to their needs and capacity: receiving the files through a third-party app like WhatsApp or Signal; or using forms get ask questions about the specific data they need. 
-
-Previous Tella deployments have ranged between 10 and 2,000 users. 
-Tella includes an "Offline Mode" for users who are collecting data in remote areas with limited or no internet connection. When Offline Mode is activated, all data is saved on the app and and users can submit it easily when they reach an internet connection.
-
-### Wipe data
-A Quick Delete button allows users, in a just a few seconds, to delete sensitive data within Tella. The button can also be set to delete the app itself.
-
-### Verification
-In the Tella settings, users can activate "Verification Mode". When activated, every time a user takes a photo or a video, or records audio, Tella automatically captures metadata about the file. This metadata can be used to corroborate evidence, cross check with other facts known about the event or about the area where it was captured.
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
-Tella is currently available only on Android. You can [download it](https://play.google.com/store/apps/details?id=org.hzontal.tella) from the Google Play Store or [get the APK from here](https://web.tresorit.com/l/7737s#WKoGVN82C0lQK8KSL30CuA) to install manually on your device.
+Tella is currently available on Android, iOS and the F-Droid store. We also share the Tella .apk to be installed manually. [Here there is more information](https://tella-app.org/faq#general). A step-by-step guide on how to use Tella can be found [here](https://tella-app.org/get-started-android).
 
 ## Tech & frameworks used <a id="tech-used"></a>
 
@@ -102,12 +87,14 @@ This software uses the following open source packages:
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
 
 ## Translating the app <a id="translating"></a>
-Tella is currently available in Belarusian, English, French, Portuguese, Russian, and Spanish. We are always looking to translate Tella into more languages. 
+Tella is currently available in [17 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
 
-If you are interested in adding a new language, or if you noticed a mistake in our translation, you can join [the Tella project on Transifex](https://www.transifex.com/otf/tella/dashboard/) and contribute from there. 
+If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator). 
 
 ## Contact us <a id="contact"></a>
-We love hearing from users, designers, and developers! If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
+We love hearing from users, designers, and developers!
 
-You can create an issue [here on our Github](https://github.com/H0rizontal/Tella/issues) or email us at contact@tella-app.org. 
+We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us). 
+
+ If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
 

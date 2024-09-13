@@ -47,6 +47,7 @@ const val UWAZI_PRIMARY_DOCUMENTS = "primary_documents"
 const val BUNDLE_IS_FROM_UWAZI_ENTRY = "bundle_is_from_uwazi_entry"
 const val UWAZI_TEMPLATE = "uwazi_template"
 const val UWAZI_ENTRY_PROMPT_ID = "uwazi_entry_prompt_id"
+const val UWAZI_ENTRY_PROMPT_TITLE = "uwazi_entry_prompt_title"
 const val UWAZI_SELECTED_ENTITIES = "uwazi_selected_entities"
 
 class UwaziEntryFragment :
@@ -301,6 +302,7 @@ class UwaziEntryFragment :
         bundle.apply {
             putString(UWAZI_TEMPLATE, uwaziParser.getToGsonTemplate())
             putString(UWAZI_ENTRY_PROMPT_ID, formEntryPrompt.index.toString())
+            putString(UWAZI_ENTRY_PROMPT_TITLE, formEntryPrompt.longText.toString())
             putString(UWAZI_SELECTED_ENTITIES, Gson().toJson(entitiesNames))
         }
         navManager().navigateFromUwaziEntryToSelectEntities()

@@ -7,7 +7,7 @@
   <string name="LockSelect_Action_Continue">தொடர்</string>
   <string name="LockPatternSet_Draw_Pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
   <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">இப்போது, டெல்லா கணக்கைத் திறக்கப் பயன்படுத்தப்படும் உங்கள் வடிவம் இது</string>
   <string name="LockPatternSet_Pattern_Recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
   <string name="UnlockPattern_PatternTooShort">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
   <string name="LockPatternSet_RecordingPattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>

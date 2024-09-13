@@ -62,7 +62,7 @@ kích hoạt chế độ</string>
   <string name="collect.end_action.desc_save.send.later">Lưu biểu mẫu</string>
   <string name="action.desc_confirm">Xác nhận</string>
   <string name="collect.form_action_previous.section">Trước</string>
-  <string name="collect.form_action_next.section">Tiếp tục</string>
+  <string name="collect.form_action_next.section">Tiếp theo</string>
   <string name="action_stop">Dừng</string>
   <string name="action_play">Phát</string>
   <string name="action_record">Ghi</string>
@@ -371,7 +371,7 @@ kích hoạt chế độ</string>
   <string name="onboard.expl_recorder">Ghi lại các cuộc phỏng vấn hoặc bất kỳ âm thanh nào xung quanh bạn bằng máy ghi âm của Tella. Các tệp tin âm thanh được tự động mã hóa và lưu vào thư mục ẩn của Tella.</string>
   <string name="onboard.title_files">Tệp và thư mục được mã hóa</string>
   <string name="onboard.expl_files">Lưu trữ và sắp xếp an toàn tất cả các tệp tin của bạn. Người đang chiếm giữ hoặc lục soát thiết bị sẽ không thể truy cập được tệp tin và thư mục bên trong Tella khi Tella bị khóa.</string>
-  <string name="onboard.title_lock_finish">Khóa</string>
+  <string name="onboard.title_lock_finish">Khóa</string>
   <string name="onboard.expl_lock_finish">Mật khẩu của bạn đã được thiết lập! Bạn có thể thay đổi nó bất cứ lúc nào trong Cài đặt.</string>
   <string name="onboard.title_all_done">Bạn đã hoàn tất!</string>
   <string name="onboard.expl_all_done">Bạn có thể truy cập Tella ngay bây giờ hoặc tiếp tục tùy chỉnh Tella để thiết lập cài đặt nâng cao.</string>
@@ -423,7 +423,7 @@ kết nối với máy chủ</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Delete">XÓA TỆP TIN</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Thay đổi phương pháp khóa và loại bỏ ngụy trang?</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Ngụy trang Máy tính hiện tại của bạn chỉ khả dụng với khóa PIN. Nếu bạn thay đổi phương thức khóa, Tella sẽ không còn được ngụy trang và sẽ hiển thị trên màn hình chính điện thoại.</string>
-  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">LOẠI BỎ NGỤY TRANG</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">TẮT NGỤY TRANG</string>
   <string name="SettingsCamo_EnterLock_Password">Nhập mật khẩu của bạn để thay đổi phương pháp ngụy trang</string>
   <string name="settings.gen_select_about">Giới thiệu &amp; Trợ giúp</string>
   <string name="settings.gen_select_language">Ngôn ngữ</string>
@@ -448,7 +448,7 @@ kết nối với máy chủ</string>
   <string name="UWAZI_Language_Header_Title">Ngôn ngữ Uwazi</string>
   <string name="Uwazi_Language_Screen_Description">Bộ sưu tập Uwazi này có sẵn bằng nhiều ngôn ngữ. Vui lòng chọn ngôn ngữ mà bạn muốn tải biểu mẫu xuống. </string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Hiển thị phím tắt đến các biểu mẫu yêu thích của bạn trên màn hình chính của Tella.</string>
-  <string name="Uwazi_General_Favorite_Template_Switch_Title">Biểu mẫu yêu thích</string>
+  <string name="Uwazi_General_Favorite_Template_Switch_Title">Biểu mẫu ưa thích</string>
   <string name="Uwazi_Templates_Empty_Description">Bạn chưa lưu biểu mẫu nào. Nhấn vào nút “+”
 để thêm biểu mẫu mới.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">Bạn chưa có thực thể được gửi.</string>
@@ -700,7 +700,7 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="Setting_Reports_Connection_Name">Tên kết nối</string>
   <string name="Setting_Reports_Auto_Report">Báo cáo tự động</string>
   <string name="Setting_Reports_Auto_Report_Description">Mỗi khi bạn chụp ảnh/quay video/ghi âm trong Tella, một báo cáo sẽ tự động được tạo với tệp đó và được tải lên dự án này.</string>
-  <string name="Setting_Reports_Auto_Delete">Xóa tự động</string>
+  <string name="Setting_Reports_Auto_Delete">Tự động xóa</string>
   <string name="Setting_Reports_Auto_Delete_Description">Tự động xóa các tệp khỏi thiết bị của bạn sau khi chúng được tải lên dự án này dưới dạng báo cáo.</string>
   <string name="Send_Action_Label">GỬI</string>
   <string name="Modified_Label">đã chỉnh sửa</string>
@@ -753,7 +753,7 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="action_hide_pin">giấu mã pin</string>
   <string name="action_go_back">quay lại</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
-  <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
+  <string name="Settings_unlock_screen_instructions">Trên màn hình mở khóa, hiển thị số lần mở khóa thất bại còn lại trước khi mọi thứ bên trong Tella bị xóa.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Xóa sau khi mở khóa thất bại.</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Quyết định số lần thử mở khóa thất bại được phép trước khi mọi thứ bên trong Tella bị xóa.</string>
   <string name="Settings_Off_Do_Not_Delete">Tắt (Không xóa dữ liệu)</string>
@@ -811,7 +811,7 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="share_feedback_action">chia sẻ nhận xét</string>
   <string name="Forms_NoOutboxForms">Hộp thư đi của bạn đang trống. Các biểu mẫu sẵn sàng gửi đi sẽ hiển thị ở đây.</string>
   <string name="Forms_NoDraftForms">Bạn không có bản nháp nào</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Các biểu mẫu có sẵn trên máy chủ</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Biểu mẫu có sẵn trên máy chủ</string>
   <string name="Forms_BlankSubheadingDownloadedForms">Đây là những biểu mẫu trống bạn có thể điền vào.</string>
   <string name="background_activities">Background activities</string>
   <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
@@ -893,4 +893,10 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
+  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
+ forms, reports, and files directly from Tella
+ to your organization.</string>
+  <string name="action_flip_vertically">Flip vertically</string>
+  <string name="action_flip_horizontally">Flip horizontally</string>
 </resources>

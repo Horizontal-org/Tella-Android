@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -45,7 +49,6 @@
         android:icon="@mipmap/tella_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/tella_icon_round"
