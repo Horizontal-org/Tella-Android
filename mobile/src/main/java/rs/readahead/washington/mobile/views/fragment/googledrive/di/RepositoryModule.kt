@@ -37,19 +37,6 @@ object RepositoryModule {
         System.loadLibrary("sqlcipher")
     }
 
-
-    @Provides
-    @Singleton
-    fun provideReportsDataSource(): ITellaReportsRepository {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
-    }
-
-    @Provides
-    @Singleton
-    fun provideDataSource(): DataSource {
-        return MyApplication.getKeyDataSource().dataSource.blockingFirst()
-    }
-
     @Provides
     @Singleton
     fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager {
