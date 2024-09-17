@@ -35,14 +35,17 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.GoogleDriveServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
@@ -62,16 +65,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
-        IUWAZIServersPresenterContract.IView {
+        IUWAZIServersPresenterContract.IView,
+        IGoogleDriveServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
     private UwaziServersPresenter uwaziServersPresenter;
+    private GoogleDriveServersPresenter googleDriveServersPresenter;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
+    private List<GoogleDriveServer> googleDriveServers;
     private ActivityDocumentationSettingsBinding binding;
 
     @Override
@@ -104,6 +110,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         uwaziServersPresenter = new UwaziServersPresenter(this);
         uwaziServersPresenter.getUwaziServers();
+
+        googleDriveServersPresenter = new GoogleDriveServersPresenter(this);
+        googleDriveServersPresenter.getGoogleDriveServers();
 
         createRefreshPresenter();
         initUwaziEvents();
@@ -794,5 +803,45 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         if (server.isActivatedBackgroundUpload()) {
             Preferences.setAutoUploadServerId(server.getId());
         }
+    }
+
+    @Override
+    public void onGoogleDriveServersLoaded(@NonNull List<GoogleDriveServer> uzServers) {
+
+    }
+
+    @Override
+    public void onLoadGoogleDriveServersError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCreatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+
+    }
+
+    @Override
+    public void onCreateGoogleDriveServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onRemovedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+
+    }
+
+    @Override
+    public void onRemoveGoogleDriveServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onUpdatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+
+    }
+
+    @Override
+    public void onUpdateGoogleDriveServerError(@NonNull Throwable throwable) {
+
     }
 }
