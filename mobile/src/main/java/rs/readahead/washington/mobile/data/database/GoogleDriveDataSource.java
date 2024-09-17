@@ -10,7 +10,10 @@ import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableTransformer;
 import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,6 +26,14 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
 
     private static GoogleDriveDataSource dataSource;
     private final SQLiteDatabase database;
+
+    final private CompletableTransformer schedulersCompletableTransformer =
+            observable -> observable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+
+    private CompletableTransformer applyCompletableSchedulers() {
+        return schedulersCompletableTransformer;
+    }
 
     private GoogleDriveDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
@@ -107,7 +118,16 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
         return servers;
     }
 
-    private void removeGoogleDriveServer(long id) {
+    @NonNull
+    @Override
+    public Completable removeGoogleDriveServer(long id) {
+        return Completable.fromCallable((Callable<Void>) () -> {
+            removeServer(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
+    }
+
+    private void removeServer(long id) {
         database.delete(D.T_GOOGLE_DRIVE, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 

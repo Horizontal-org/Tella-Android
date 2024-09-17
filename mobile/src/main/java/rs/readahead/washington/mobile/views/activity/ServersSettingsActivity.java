@@ -664,6 +664,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             case UWAZI:
                 uwaziServersPresenter.remove((UWaziUploadServer) server);
                 break;
+            case GOOGLE_DRIVE:
+                googleDriveServersPresenter.remove((GoogleDriveServer) server);
+                break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
                 break;
@@ -830,11 +833,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onCreatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+        servers.add(server);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
 
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
     @Override
     public void onCreateGoogleDriveServerError(@NonNull Throwable throwable) {
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
 
     }
 
@@ -845,7 +852,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onRemoveGoogleDriveServerError(@NonNull Throwable throwable) {
-
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
     @Override
@@ -855,6 +862,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onUpdateGoogleDriveServerError(@NonNull Throwable throwable) {
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_update_server), true);
 
     }
 }

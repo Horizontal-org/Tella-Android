@@ -7,6 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract
 
@@ -65,7 +66,24 @@ class GoogleDriveServersPresenter(var view: IGoogleDriveServersPresenterContract
     }
 
     override fun remove(server: GoogleDriveServer) {
-
+        disposables.add(keyDataSource.googleDriveDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { view.showLoading() }
+            .flatMapCompletable { dataSource: GoogleDriveDataSource ->
+                dataSource.removeGoogleDriveServer(server.id)
+            }
+            .doFinally { view.hideLoading() }
+            .subscribe(
+                {
+                    OpenRosaService.clearCache()
+                    view.onRemovedGoogleDriveServer(server)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view.onRemoveGoogleDriveServerError(throwable)
+            }
+        )
     }
 
     override fun destroy() {
