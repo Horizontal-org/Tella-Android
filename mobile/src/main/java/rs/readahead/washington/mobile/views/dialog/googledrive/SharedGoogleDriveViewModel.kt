@@ -34,6 +34,7 @@ class SharedGoogleDriveViewModel @Inject constructor(
 ) : AndroidViewModel(mApplication) {
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
+    private val disposables = CompositeDisposable()
     fun setEmail(email: String) {
         _email.value = email
     }
@@ -59,15 +60,13 @@ class SharedGoogleDriveViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    fun createFolder(folderName: String) {
+    fun createFolder(googleDriveServer: GoogleDriveServer) {
         viewModelScope.launch {
             try {
-                val email = _email.value ?: return@launch
-                val folderId = repository.createFolder(email, folderName)
+                val folderId = repository.createFolder(googleDriveServer)
                 _folderCreated.value = folderId
-
                 // Call the RxJava source within the coroutine
-                val result = saveGoogleDriveServerWithRx(googleDriveServer = )
+                val result = saveGoogleDriveServerWithRx(googleDriveServer)
                 result?.let {
                 } ?: run {
                     _errorMessage.value = "Failed to save folder"

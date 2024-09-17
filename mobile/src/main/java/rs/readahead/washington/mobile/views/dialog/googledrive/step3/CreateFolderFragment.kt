@@ -6,11 +6,14 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentCreateFolderBinding
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
+import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 
 @AndroidEntryPoint
 class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
@@ -18,6 +21,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
 ), View.OnClickListener {
 
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
+    private lateinit var googleDriveServer: GoogleDriveServer // for the update
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,9 +29,15 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         binding.nextBtn.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
 
+        if (arguments == null) return
+        arguments?.getString(OBJECT_KEY)?.let {
+            googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
+            sharedViewModel.setEmail(googleDriveServer.username)
+        }
         // Observe folder creation result
         sharedViewModel.folderCreated.observe(viewLifecycleOwner) { folderId ->
             Log.d("Drive", "Folder ID: $folderId")
+            googleDriveServer.folderId = folderId
             findNavController().navigate(
                 R.id.action_createFolderFragment_to_googleDriveConnectedServerFragment
             )
@@ -39,16 +49,14 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
 
-        arguments?.getString("email_key")?.let { email ->
-            sharedViewModel.setEmail(email)
-        }
 
     }
 
     private fun createFolder() {
         val folderName = binding.createFolderEdit.text.toString()
+        googleDriveServer.folderName = folderName
         if (folderName.isNotEmpty()) {
-            sharedViewModel.createFolder(folderName)
+            sharedViewModel.createFolder(googleDriveServer)
         } else {
             Toast.makeText(requireContext(), "Folder name cannot be empty", Toast.LENGTH_SHORT)
                 .show()

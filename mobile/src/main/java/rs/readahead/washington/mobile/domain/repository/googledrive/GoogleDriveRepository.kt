@@ -9,6 +9,7 @@ import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,14 +56,14 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    override suspend fun createFolder(email: String, folderName: String): String {
+    override suspend fun createFolder(googleDriveServer: GoogleDriveServer): String {
         val folderMetadata = File().apply {
-            name = folderName
+            name = googleDriveServer.folderName
             mimeType = "application/vnd.google-apps.folder"
         }
         return withContext(Dispatchers.IO) {
             try {
-                val folder = driveServiceProvider.getDriveService(email).files().create(folderMetadata)
+                val folder = driveServiceProvider.getDriveService(googleDriveServer.username).files().create(folderMetadata)
                     .setFields("id")
                     .execute()
                 folder.id

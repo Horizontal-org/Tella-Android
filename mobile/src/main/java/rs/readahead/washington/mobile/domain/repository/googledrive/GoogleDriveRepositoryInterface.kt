@@ -6,6 +6,7 @@ import androidx.credentials.GetCredentialResponse
 import com.google.api.services.drive.Drive
 import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 
 interface GoogleDriveRepositoryInterface {
     suspend fun getCredential(
@@ -15,5 +16,5 @@ interface GoogleDriveRepositoryInterface {
 
     // New method to fetch shared drives
     suspend fun fetchSharedDrives(email: String): List<Folder>
-    suspend fun createFolder(email: String, folderName: String): String
+    suspend fun createFolder(googleDriveServer: GoogleDriveServer): String
 }
