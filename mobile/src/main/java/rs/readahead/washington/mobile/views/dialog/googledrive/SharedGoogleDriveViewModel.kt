@@ -21,6 +21,7 @@ import org.json.JSONObject
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,7 +34,6 @@ class SharedGoogleDriveViewModel @Inject constructor(
 ) : AndroidViewModel(mApplication) {
 
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
-    private val disposables = CompositeDisposable()
     fun setEmail(email: String) {
         _email.value = email
     }
@@ -67,7 +67,7 @@ class SharedGoogleDriveViewModel @Inject constructor(
                 _folderCreated.value = folderId
 
                 // Call the RxJava source within the coroutine
-                val result = saveFolderWithRx(folderId, folderName)
+                val result = saveGoogleDriveServerWithRx(googleDriveServer = )
                 result?.let {
                 } ?: run {
                     _errorMessage.value = "Failed to save folder"
@@ -79,10 +79,10 @@ class SharedGoogleDriveViewModel @Inject constructor(
         }
     }
 
-    fun saveSelectedFolder(folder: Folder) {
+    fun saveSelectedFolder(googleDriveServer: GoogleDriveServer) {
         viewModelScope.launch {
             try {
-                val result = saveFolderWithRx(folder.folderId, folder.name)
+                val result = saveGoogleDriveServerWithRx(googleDriveServer)
                 result?.let {
                     _successMessage.value = "Folder saved successfully" // Update success message
                 } ?: run {
@@ -96,13 +96,13 @@ class SharedGoogleDriveViewModel @Inject constructor(
     }
 
     @SuppressLint("CheckResult")
-    suspend fun saveFolderWithRx(folderId: String, folderName: String): Folder? {
+    suspend fun saveGoogleDriveServerWithRx(googleDriveServer : GoogleDriveServer): GoogleDriveServer? {
         return suspendCancellableCoroutine { continuation ->
             keyDataSource.googleDriveDataSource
                 .blockingFirst()
-                .saveFolder(Folder(folderId, folderName))
+                .saveGoogleDriveServer(googleDriveServer)
                 .subscribe({
-                    continuation.resume(Folder(folderId, folderName))
+                    continuation.resume(googleDriveServer)
                 }, { error ->
                     continuation.resumeWithException(error)
                 })

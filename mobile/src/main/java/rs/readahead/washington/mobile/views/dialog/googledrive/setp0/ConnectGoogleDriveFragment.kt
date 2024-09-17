@@ -16,14 +16,14 @@ import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
 const val EMAIL_KEY = "email_key"
-internal const val OBJECT_KEY = "ok"
+const val OBJECT_KEY = "ok"
 
 @AndroidEntryPoint
 class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
     private lateinit var googleDriveServer: GoogleDriveServer // for the update
-    private val server by lazy { GoogleDriveServer() }
+   // private val server by lazy { GoogleDriveServer() }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class ConnectGoogleDriveFragment :
             email?.let {
                 googleDriveServer.username = email
                 bundle.putSerializable(OBJECT_KEY, googleDriveServer)
-                navigateToSelectGoogleDriveFragment(it)
+                navigateToSelectGoogleDriveFragment()
             }
         }
         sharedViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
@@ -65,7 +65,7 @@ class ConnectGoogleDriveFragment :
     }
 
     // Extracted method to handle navigation
-    private fun navigateToSelectGoogleDriveFragment(email: String) {
+    private fun navigateToSelectGoogleDriveFragment() {
         bundle.putSerializable(OBJECT_KEY, googleDriveServer)
         navManager().navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment()
     }

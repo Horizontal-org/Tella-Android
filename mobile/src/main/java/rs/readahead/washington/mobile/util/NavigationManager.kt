@@ -92,4 +92,11 @@ class NavigationManager(
     fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment(){
         navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)
     }
+    fun navigateFromSelectGoogleDriveToCreateFolderFragment(){
+        navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_createFolderFragment)
+    }
+    fun navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment(){
+        navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment)
+    }
+
 }

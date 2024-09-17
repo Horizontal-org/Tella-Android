@@ -137,5 +137,7 @@ class D {
     static final String T_GOOGLE_DRIVE = "t_google_drive";
     static final String T_GOOGLE_DRIVE_FOLDER_ID = "t_google_drive_folder_id";
     static final String T_GOOGLE_DRIVE_FOLDER_NAME = "t_google_drive_folder_name";
+    static final String T_GOOGLE_DRIVE_SERVER_NAME = "t_google_drive_server_name";
+
 
 }

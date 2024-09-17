@@ -9,30 +9,40 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
+import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 
 class SelectSharedDriveFragment :
     BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate) {
 
     private val sharedViewModel: SharedGoogleDriveViewModel by activityViewModels()
+    private lateinit var googleDriveServer: GoogleDriveServer // for the update
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        binding.toolbar.setStartTextTitle("Select Google drive")
+        binding.toolbar.run { setStartTextTitle(context.getString(R.string.select_google_drive)) }
         binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
-
+        if (arguments == null) return
+        arguments?.getString(OBJECT_KEY)?.let {
+            googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
+        }
         // Observe shared drives from ViewModel
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->
             // Update RecyclerView with the new list of shared drives
             val adapter = StringListAdapter(drives, object : StringListAdapter.ItemClickListener {
                 override fun onItemClick(folder: Folder) {
                     // Handle item click
-                    sharedViewModel.saveSelectedFolder(folder)
+                    googleDriveServer.folderId = folder.folderId
+                    googleDriveServer.folderName = folder.name
+                    googleDriveServer.name = getString(R.string.google_drive)
+                    sharedViewModel.saveSelectedFolder(googleDriveServer)
                 }
             })
             binding.recyclerView.adapter = adapter

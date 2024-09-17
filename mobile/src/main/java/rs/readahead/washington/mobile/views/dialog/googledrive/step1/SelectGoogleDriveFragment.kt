@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
-import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.EMAIL_KEY
+import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 import timber.log.Timber
 
 class SelectGoogleDriveFragment :
@@ -34,8 +35,11 @@ class SelectGoogleDriveFragment :
 
     private fun setupViewModel() {
         // Retrieve email from arguments and set it in ViewModel
-        arguments?.getString(EMAIL_KEY)?.let { email ->
-            sharedViewModel.setEmail(email)
+        if (arguments == null) return
+
+        arguments?.getString(OBJECT_KEY)?.let {
+            googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
+            sharedViewModel.setEmail(googleDriveServer.username)
         }
 
         // Observe shared drives and update UI accordingly
@@ -114,19 +118,14 @@ class SelectGoogleDriveFragment :
     }
 
     private fun navigateToCreateFolderFragment() {
-        findNavController().navigate(
-            R.id.action_selectGoogleDriveFragment_to_createFolderFragment,
-            Bundle().apply {
-                putString(EMAIL_KEY, sharedViewModel.email.value)
-            }
-        )
+        bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+        navManager().navigateFromSelectGoogleDriveToCreateFolderFragment()
     }
 
     private fun navigateToSelectSharedDriveFragment() {
-        sharedViewModel.sharedDrives.value?.let { drives ->
-            findNavController().navigate(
-                R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment,
-            )
+        sharedViewModel.sharedDrives.value?.let {
+            bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+            navManager().navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment()
         } ?: run {
             Timber.d("No shared drives data to pass.")
         }
