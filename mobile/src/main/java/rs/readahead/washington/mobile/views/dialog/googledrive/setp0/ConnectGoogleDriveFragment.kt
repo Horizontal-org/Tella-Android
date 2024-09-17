@@ -9,20 +9,22 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentConnectGoogleDriveBinding
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
 const val EMAIL_KEY = "email_key"
+internal const val OBJECT_KEY = "ok"
 
 @AndroidEntryPoint
 class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
+    private lateinit var googleDriveServer: GoogleDriveServer // for the update
+    private val server by lazy { GoogleDriveServer() }
 
-    companion object {
-        const val GOOGLE_CLIENT_ID =
-            "166289458819-e5nt7d2lahv55ld0j527o07kovqdbip2.apps.googleusercontent.com"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +37,7 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to create Google Sign-In option
     private fun getGoogleSignInOption(): GetSignInWithGoogleOption {
-        return GetSignInWithGoogleOption.Builder(GOOGLE_CLIENT_ID).build()
+        return GetSignInWithGoogleOption.Builder(googleDriveServer.googleClientId).build()
     }
 
     // Extracted method to create credential request
@@ -50,6 +52,8 @@ class ConnectGoogleDriveFragment :
     private fun observeViewModel() {
         sharedViewModel.email.observe(viewLifecycleOwner) { email ->
             email?.let {
+                googleDriveServer.username = email
+                bundle.putSerializable(OBJECT_KEY, googleDriveServer)
                 navigateToSelectGoogleDriveFragment(it)
             }
         }
@@ -62,13 +66,15 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to handle navigation
     private fun navigateToSelectGoogleDriveFragment(email: String) {
-        val args = Bundle().apply {
-            putString(EMAIL_KEY, email)
-        }
-        nav().navigate(
-            R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment,
-            args
-        )
+        bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+        navManager().navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment()
+    }
+
+    private fun copyFields(server: GoogleDriveServer): GoogleDriveServer {
+        googleDriveServer.folderName = server.folderName
+        googleDriveServer.folderId = server.folderId
+        googleDriveServer.username = server.username
+        return server
     }
 }
 

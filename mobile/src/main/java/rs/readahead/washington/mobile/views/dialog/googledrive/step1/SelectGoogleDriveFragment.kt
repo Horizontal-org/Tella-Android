@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectGoogleDriveBinding
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.EMAIL_KEY
@@ -22,6 +23,7 @@ class SelectGoogleDriveFragment :
 
     private val sharedViewModel: SharedGoogleDriveViewModel by activityViewModels()
     private lateinit var requestAuthorizationLauncher: ActivityResultLauncher<Intent>
+    private lateinit var googleDriveServer: GoogleDriveServer // for the update
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -128,5 +130,12 @@ class SelectGoogleDriveFragment :
         } ?: run {
             Timber.d("No shared drives data to pass.")
         }
+    }
+
+    private fun copyFields(server: GoogleDriveServer): GoogleDriveServer {
+        googleDriveServer.folderName = server.folderName
+        googleDriveServer.folderId = server.folderId
+        googleDriveServer.username = server.username
+        return server
     }
 }

@@ -89,4 +89,7 @@ class NavigationManager(
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
+    fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment(){
+        navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)
+    }
 }
