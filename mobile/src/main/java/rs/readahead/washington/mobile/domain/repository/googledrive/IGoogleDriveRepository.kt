@@ -6,4 +6,5 @@ import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServe
 
 interface IGoogleDriveRepository {
     fun saveGoogleDriveServer(instance: GoogleDriveServer): Single<GoogleDriveServer>
+    fun listGoogleDriveServers() : Single<List<GoogleDriveServer>>
 }
