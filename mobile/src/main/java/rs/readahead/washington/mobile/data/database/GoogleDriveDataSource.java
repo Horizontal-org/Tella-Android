@@ -46,9 +46,8 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
             ContentValues values = new ContentValues();
 
             values.put(D.T_GOOGLE_DRIVE_FOLDER_ID, instance.getFolderId());
-            values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, instance.getName());
-            values.put(D.T, instance.);
-            values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, instance.getName());
+            values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, instance.getFolderName());
+            values.put(D.T_GOOGLE_DRIVE_SERVER_NAME, instance.getName());
             database.beginTransaction();
 
             // insert/update resource instance
