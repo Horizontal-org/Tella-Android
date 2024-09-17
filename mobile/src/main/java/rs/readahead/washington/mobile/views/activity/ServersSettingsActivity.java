@@ -491,6 +491,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         showUwaziServerDialog(uWaziUploadServer);
     }
 
+    private void editGoogleDriveServer(GoogleDriveServer googleDriveServer) {
+        showGoogleDriveServerDialog(uWaziUploadServer);
+    }
+
     private void turnOffAutoUpload() {
         binding.autoUploadSwitch.setChecked(false);
         serversPresenter.removeAutoUploadServersSettings();
@@ -539,14 +543,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
-    private void showGoogleDriveServerDialog() {
-        startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
-//        } else {
-//            Intent intent = new Intent(this, UwaziConnectFlowActivity.class);
-//            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
-//            intent.putExtra(IS_UPDATE_SERVER, true);
-//            startActivity(intent);
-//        }
+    private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
+        if (googleDriveServer == null) {
+            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+        } else {
+            Intent intent = new Intent(this, GoogleDriveConnectFlowActivity.class);
+            intent.putExtra(OBJECT_KEY, new Gson().toJson(googleDriveServer));
+            intent.putExtra(IS_UPDATE_SERVER, true);
+            startActivity(intent);
+        }
     }
 
     private void stopPresenting() {
@@ -650,6 +655,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             case UWAZI:
                 editUwaziServer((UWaziUploadServer) server);
                 break;
+            case GOOGLE_DRIVE:
+
             default:
                 editTUServer((TellaReportServer) server);
                 break;
@@ -847,6 +854,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onRemovedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+        servers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
 
     }
 
