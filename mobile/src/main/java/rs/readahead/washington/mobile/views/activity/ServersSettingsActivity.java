@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
 import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.INSTANCE;
+import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.createGoogleDriveServer;
 import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
 
 import android.annotation.SuppressLint;
@@ -102,6 +103,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         servers = new ArrayList<>();
         tuServers = new ArrayList<>();
         uwaziServers = new ArrayList<>();
+        googleDriveServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
         collectServersPresenter.getCollectServers();
@@ -150,6 +152,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         INSTANCE.getUpdateReportsServer().observe(this, server -> {
             if (server != null) {
                 tellaUploadServersPresenter.update(server);
+            }
+        });
+    }
+
+    private void initGoogleDriveEvents(){
+        INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
+            if (server != null) {
+                googleDriveServersPresenter.create(server);
             }
         });
     }
@@ -806,8 +816,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     @Override
-    public void onGoogleDriveServersLoaded(@NonNull List<GoogleDriveServer> uzServers) {
-
+    public void onGoogleDriveServersLoaded(@NonNull List<GoogleDriveServer> googleDriveServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(googleDriveServers);
+        createServerViews(servers);
+        this.googleDriveServers = googleDriveServers;
     }
 
     @Override

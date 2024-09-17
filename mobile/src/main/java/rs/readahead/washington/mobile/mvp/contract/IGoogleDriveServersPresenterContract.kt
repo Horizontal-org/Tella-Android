@@ -11,7 +11,7 @@ class IGoogleDriveServersPresenterContract {
 
         fun showLoading()
         fun hideLoading()
-        fun onGoogleDriveServersLoaded(uzServers: List<GoogleDriveServer>)
+        fun onGoogleDriveServersLoaded(googleDriveServers: List<GoogleDriveServer>)
         fun onLoadGoogleDriveServersError(throwable: Throwable)
         fun onCreatedGoogleDriveServer(server: GoogleDriveServer)
         fun onCreateGoogleDriveServerError(throwable: Throwable)

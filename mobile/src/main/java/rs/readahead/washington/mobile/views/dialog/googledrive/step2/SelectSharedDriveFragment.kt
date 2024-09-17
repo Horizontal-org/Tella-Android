@@ -41,21 +41,17 @@ class SelectSharedDriveFragment :
                     googleDriveServer.folderId = folder.folderId
                     googleDriveServer.folderName = folder.name
                     googleDriveServer.name = getString(R.string.google_drive)
-                    sharedViewModel.saveSelectedFolder(googleDriveServer)
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        // Perform navigation after delay
+                        bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
+                        navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
+                    }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 se
                 }
             })
             binding.recyclerView.adapter = adapter
         }
-        sharedViewModel.successMessage.observe(viewLifecycleOwner, Observer { message ->
-            message?.let {
-                // Introduce a delay before navigating
-                Handler(Looper.getMainLooper()).postDelayed({
-                    // Perform navigation after delay
-                    bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
-                    navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
-                }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 seconds)
-            }
-        })
+
         if (sharedViewModel.sharedDrives.value.isNullOrEmpty()) {
             sharedViewModel.fetchSharedDrives()
         }

@@ -122,6 +122,9 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
         return servers;
     }
 
+    private void removeGoogleDriveServer(long id) {
+        database.delete(D.T_GOOGLE_DRIVE, D.C_ID + " = ?", new String[]{Long.toString(id)});
+    }
 
     private GoogleDriveServer cursorToGoogleDriveServer(Cursor cursor) {
 
