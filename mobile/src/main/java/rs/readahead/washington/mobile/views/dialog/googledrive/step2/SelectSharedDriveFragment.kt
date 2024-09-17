@@ -7,7 +7,6 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
@@ -51,11 +50,9 @@ class SelectSharedDriveFragment :
             message?.let {
                 // Introduce a delay before navigating
                 Handler(Looper.getMainLooper()).postDelayed({
-                    // Hide the ImageView or revert UI changes if needed
                     // Perform navigation after delay
-                    findNavController().navigate(
-                        R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment
-                    )
+                    bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+                    navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
                 }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 seconds)
             }
         })

@@ -200,6 +200,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.T_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, false) + " UNIQUE, " +
                 cddl(D.T_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, false)  +
+                cddl(D.T_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, false)  +
                 ");";
     }
 

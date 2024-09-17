@@ -38,9 +38,8 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         sharedViewModel.folderCreated.observe(viewLifecycleOwner) { folderId ->
             Log.d("Drive", "Folder ID: $folderId")
             googleDriveServer.folderId = folderId
-            findNavController().navigate(
-                R.id.action_createFolderFragment_to_googleDriveConnectedServerFragment
-            )
+            bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+            navManager().navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment()
         }
 
         // Observe errors

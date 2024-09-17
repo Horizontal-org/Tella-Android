@@ -50,7 +50,8 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
 
             values.put(D.T_GOOGLE_DRIVE_FOLDER_ID, server.getFolderId());
             values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, server.getFolderName());
-            //    values.put(D.T_GOOGLE_DRIVE_SERVER_NAME, instance.getName());
+            values.put(D.T_GOOGLE_DRIVE_SERVER_NAME, server.getName());
+
             database.beginTransaction();
 
             // insert/update resource instance
@@ -96,7 +97,9 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
                     new String[]{D.C_ID,
                             D.C_SERVER_ID,
                             D.T_GOOGLE_DRIVE_FOLDER_ID,
-                            D.T_GOOGLE_DRIVE_FOLDER_NAME
+                            D.T_GOOGLE_DRIVE_FOLDER_NAME,
+                            D.T_GOOGLE_DRIVE_SERVER_NAME
+
                     },
                     null,
                     null,
@@ -125,8 +128,11 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
         long googleDriveId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
         String folderId = cursor.getString(cursor.getColumnIndexOrThrow(D.T_GOOGLE_DRIVE_FOLDER_ID));
         String folderName = cursor.getString(cursor.getColumnIndexOrThrow(D.T_GOOGLE_DRIVE_FOLDER_NAME));
+        String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.T_GOOGLE_DRIVE_SERVER_NAME));
 
+        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderId, folderName);
+        server.setName(serverName);
 
-        return new GoogleDriveServer(googleDriveId, folderId, folderName);
+        return server;
     }
 }

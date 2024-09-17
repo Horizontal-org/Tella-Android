@@ -23,7 +23,7 @@ class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
     private lateinit var googleDriveServer: GoogleDriveServer // for the update
-   // private val server by lazy { GoogleDriveServer() }
+    private val server by lazy { GoogleDriveServer() }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to create Google Sign-In option
     private fun getGoogleSignInOption(): GetSignInWithGoogleOption {
-        return GetSignInWithGoogleOption.Builder(googleDriveServer.googleClientId).build()
+        return GetSignInWithGoogleOption.Builder(server.googleClientId).build()
     }
 
     // Extracted method to create credential request
@@ -52,8 +52,8 @@ class ConnectGoogleDriveFragment :
     private fun observeViewModel() {
         sharedViewModel.email.observe(viewLifecycleOwner) { email ->
             email?.let {
-                googleDriveServer.username = email
-                bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+                server.username = email
+                bundle.putSerializable(OBJECT_KEY, server)
                 navigateToSelectGoogleDriveFragment()
             }
         }
@@ -66,7 +66,7 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to handle navigation
     private fun navigateToSelectGoogleDriveFragment() {
-        bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+        bundle.putSerializable(OBJECT_KEY, server)
         navManager().navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment()
     }
 
