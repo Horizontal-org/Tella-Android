@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive
 
 import android.content.Context
+import android.content.Intent
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,14 +45,20 @@ class SharedGoogleDriveViewModel @Inject constructor(
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
+    // Fetch shared drives using the repository
+    private val _authorizationIntent = MutableLiveData<Intent?>()
+    val authorizationIntent: LiveData<Intent?> get() = _authorizationIntent
 
     fun createFolder(googleDriveServer: GoogleDriveServer) {
         viewModelScope.launch {
             try {
-                val folderId = repository.createFolder(googleDriveServer)
-                // Call the RxJava source within the coroutine
+                val folderId = withContext(Dispatchers.IO) {
+                    repository.createFolder(googleDriveServer)
+                }
                 _folderCreated.postValue(folderId)
 
+            } catch (e: UserRecoverableAuthIOException) {
+                _authorizationIntent.value = e.intent // Pass the authorization intent
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to create folder: ${e.message}"
             }
@@ -111,7 +119,6 @@ class SharedGoogleDriveViewModel @Inject constructor(
         return json.getString("email")
     }
 
-    // Fetch shared drives using the repository
     fun fetchSharedDrives() {
         viewModelScope.launch {
             try {
@@ -120,6 +127,8 @@ class SharedGoogleDriveViewModel @Inject constructor(
                     repository.fetchSharedDrives(email = email)
                 }
                 _sharedDrives.value = sharedDriveList
+            } catch (e: UserRecoverableAuthIOException) {
+                _authorizationIntent.value = e.intent // Pass the authorization intent
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to retrieve shared drives: ${e.message}"
             }

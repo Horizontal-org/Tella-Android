@@ -929,4 +929,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
   <string name="select_google_drive">Select Google drive</string>
   <string name="google_drive">Google Drive\n</string>
+    <string name="learn_more_about_the_types_of_drives">Learn more about the types of drives.</string>
+  <string name="description_google_drive">You can either connect to an organizational Shared Drive or create a new folder in your personal Drive.</string>
+  <string name="select_a_drive_to_connect">Select a Drive to connect to</string>
+  <string name="gdrive_documentation_url">https://tella-app.org/g-drive/</string>
 </resources>

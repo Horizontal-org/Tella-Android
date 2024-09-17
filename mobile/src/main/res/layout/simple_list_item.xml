@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="8dp"
+    android:id="@+id/item_container"
+    android:padding="16dp"
     android:orientation="horizontal">
 
     <TextView
@@ -11,11 +11,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="4dp"
         android:layout_weight="1"
         android:gravity="start"
-        android:padding="2dp"
-        android:text=""
+        android:paddingHorizontal="2dp"
         style="@style/Tella_Main_White_Text.Meduim"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/wa_white"

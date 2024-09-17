@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,7 +42,6 @@ class SelectSharedDriveFragment :
                     googleDriveServer.folderId = folder.folderId
                     googleDriveServer.folderName = folder.name
                     googleDriveServer.name = getString(R.string.google_drive)
-
                     Handler(Looper.getMainLooper()).postDelayed({
                         // Perform navigation after delay
                         bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
@@ -59,6 +59,9 @@ class SelectSharedDriveFragment :
 
     private fun initRecyclerView() {
         // Initialize RecyclerView settings
+        binding.recyclerView.setBackgroundColor(
+            ContextCompat.getColor(baseActivity, R.color.wa_white_8)
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 

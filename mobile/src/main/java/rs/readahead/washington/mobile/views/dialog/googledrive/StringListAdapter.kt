@@ -2,7 +2,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import rs.readahead.washington.mobile.R
@@ -31,18 +33,25 @@ class StringListAdapter(
             selectedPosition = holder.adapterPosition
             notifyItemChanged(previousPosition) // Refresh the previously selected item
             notifyItemChanged(selectedPosition) // Refresh the newly selected item
-
             itemClickListener.onItemClick(items[holder.adapterPosition])
+
         }
     }
 
     inner class StringViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val textView: TextView = view.findViewById(R.id.titleTextView)
         private val imageChecked: ImageView = view.findViewById(R.id.image)
+        private val container: LinearLayout = view.findViewById(R.id.item_container)
 
         fun bind(item: String, isSelected: Boolean) {
             textView.text = item
             imageChecked.isVisible = isSelected // Show the image only if the item is selected
+            container.setBackgroundColor(
+                if (isSelected)
+                    ContextCompat.getColor(itemView.context, R.color.wa_white_8)
+                else
+                    ContextCompat.getColor(itemView.context, R.color.wa_white_16)
+            )
         }
     }
 

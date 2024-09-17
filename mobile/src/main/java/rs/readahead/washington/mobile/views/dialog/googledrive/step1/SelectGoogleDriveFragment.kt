@@ -16,6 +16,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
+import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
@@ -38,7 +39,6 @@ class SelectGoogleDriveFragment :
 
 
     private fun setupViewModel() {
-
         // Observe shared drives and update UI accordingly
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->
             binding.sharedDriveBtn.isEnabled = !drives.isNullOrEmpty()
@@ -54,11 +54,15 @@ class SelectGoogleDriveFragment :
                 binding.sharedDriveBtn.setOnClickListener({})
             }
         }
-
+        // Observe authorization intent and launch it if needed
+        sharedViewModel.authorizationIntent.observe(viewLifecycleOwner) { intent ->
+            intent?.let {
+                requestAuthorizationLauncher.launch(it)
+            }
+        }
         // Fetch shared drives
         sharedViewModel.fetchSharedDrives()
     }
-
     private fun setupAuthorizationLauncher() {
         requestAuthorizationLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -85,7 +89,9 @@ class SelectGoogleDriveFragment :
             }
             nextBtn.setOnClickListener(this@SelectGoogleDriveFragment)
         }
-
+        binding?.learnMoreTextView?.setOnClickListener {
+            Util.startBrowserIntent(context, getString(R.string.gdrive_documentation_url))
+        }
         // Retrieve email from arguments and set it in ViewModel
         arguments?.getString(OBJECT_KEY)?.let {
             googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
