@@ -10,8 +10,8 @@ class D {
     //static final String DATE = " DATE ";
 
     /* DATABASE */
-    public static final String CIPHER3_DATABASE_NAME    = "tella.db";
-    public static final String  DATABASE_NAME            = "tella-v4.db";
+    public static final String CIPHER3_DATABASE_NAME = "tella.db";
+    public static final String DATABASE_NAME = "tella-v4.db";
 
 
     // 1=start,2=form media file status,3=updated flag in xforms
@@ -71,6 +71,9 @@ class D {
     static final String C_COLLECT_SERVER_ID = "c_collect_server_id";
     static final String C_REPORT_SERVER_ID = "c_report_server_id";
     static final String C_REPORT_API_ID = "c_report_api_id";
+
+    static final String C_GOOGLE_DRIVE_SERVER_ID = "c_collect_server_id";
+
     static final String C_CURRENT_UPLOAD = "C_CURRENT_UPLOAD";
     static final String C_FORM_DEF = "c_form_def";
     static final String C_FORM_NAME = "c_form_name";
@@ -135,9 +138,9 @@ class D {
 
     /* GOOGLE DRIVE */
     static final String T_GOOGLE_DRIVE = "t_google_drive";
-    static final String T_GOOGLE_DRIVE_FOLDER_ID = "t_google_drive_folder_id";
-    static final String T_GOOGLE_DRIVE_FOLDER_NAME = "t_google_drive_folder_name";
-    static final String T_GOOGLE_DRIVE_SERVER_NAME = "t_google_drive_server_name";
+    static final String C_GOOGLE_DRIVE_FOLDER_ID = "c_google_drive_folder_id";
+    static final String C_GOOGLE_DRIVE_FOLDER_NAME = "c_google_drive_folder_name";
+    static final String C_GOOGLE_DRIVE_SERVER_NAME = "c_google_drive_server_name";
 
 
 }

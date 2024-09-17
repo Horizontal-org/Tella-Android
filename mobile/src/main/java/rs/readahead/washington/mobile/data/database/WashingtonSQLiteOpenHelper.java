@@ -20,7 +20,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     WashingtonSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
-        if (!isAlreadyMigratedMainDB()){
+        if (!isAlreadyMigratedMainDB()) {
             migrateSqlCipher3To4IfNeeded(context, password);
         }
     }
@@ -198,9 +198,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String createTableGoogleDrive() {
         return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
-                cddl(D.T_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, false) + " UNIQUE, " +
-                cddl(D.T_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, false)  +
-                cddl(D.T_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, false)  +
+                cddl(D.C_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_USERNAME, D.TEXT, true) + " , " +
+                cddl(D.C_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, true) +
                 ");";
     }
 
@@ -454,19 +455,19 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 1:
                 db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
                 db.execSQL(alterTableCollectServerAddChecked());
-               // break;
+                // break;
             case 2:
                 db.execSQL(alterTableCollectBlankFormAddUpdated());
-               // break;
+                // break;
             case 3:
                 db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-               // break;
+                // break;
             case 4:
                 db.execSQL(alterTableMediaFileAddHash());
-              //  break;
+                //  break;
             case 5:
                 db.execSQL(createTableTellaUploadServer());
-               // break;
+                // break;
             case 6:
                 db.execSQL(createTableMediaFileUploads());
                 //break;
@@ -474,7 +475,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
-               // break;
+                // break;
             case 8:
                 db.execSQL(createTableUwaziServer());
                 db.execSQL(createTableCollectEntityUwazi());
@@ -492,18 +493,18 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
-               // break;
+                // break;
             case 10:
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
                 db.execSQL(alterTableTellaUploadServerAddAutoDelete());
                 db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-              //  break;
+                //  break;
             case 11:
                 db.execSQL(createTableFeedback());
-               // break;
+                // break;
             case 12:
                 db.execSQL(createTableResources());
-               // break;
+                // break;
             case 13:
                 db.execSQL(createTableGoogleDrive());
         }

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R

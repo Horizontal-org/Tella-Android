@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.activity;
 
 import static rs.readahead.washington.mobile.views.dialog.ConstantsKt.IS_UPDATE_SERVER;
 import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.INSTANCE;
-import static rs.readahead.washington.mobile.views.dialog.SharedLiveData.createGoogleDriveServer;
 import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
 
 import android.annotation.SuppressLint;
@@ -119,6 +118,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         createRefreshPresenter();
         initUwaziEvents();
         initReportsEvents();
+        initGoogleDriveEvents();
         initListeners();
     }
 
@@ -156,7 +156,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         });
     }
 
-    private void initGoogleDriveEvents(){
+    private void initGoogleDriveEvents() {
         INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
             if (server != null) {
                 googleDriveServersPresenter.create(server);
