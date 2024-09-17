@@ -80,7 +80,6 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
             cursor = database.query(
                     D.T_GOOGLE_DRIVE,
                     new String[]{D.C_ID,
-                            D.C_SERVER_ID,
                             D.C_USERNAME,
                             D.C_GOOGLE_DRIVE_FOLDER_ID,
                             D.C_GOOGLE_DRIVE_FOLDER_NAME,
