@@ -29,7 +29,6 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         binding.nextBtn.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
 
-        if (arguments == null) return
         arguments?.getString(OBJECT_KEY)?.let {
             googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
             sharedViewModel.setEmail(googleDriveServer.username)
@@ -38,7 +37,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         sharedViewModel.folderCreated.observe(viewLifecycleOwner) { folderId ->
             Log.d("Drive", "Folder ID: $folderId")
             googleDriveServer.folderId = folderId
-            bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+            bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
             navManager().navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment()
         }
 

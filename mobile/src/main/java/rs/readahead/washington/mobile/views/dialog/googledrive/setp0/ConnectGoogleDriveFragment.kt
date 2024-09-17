@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.viewModels
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentConnectGoogleDriveBinding
@@ -15,7 +16,6 @@ import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 
-const val EMAIL_KEY = "email_key"
 const val OBJECT_KEY = "ok"
 
 @AndroidEntryPoint
@@ -53,7 +53,7 @@ class ConnectGoogleDriveFragment :
         sharedViewModel.email.observe(viewLifecycleOwner) { email ->
             email?.let {
                 server.username = email
-                bundle.putSerializable(OBJECT_KEY, server)
+                bundle.putString(OBJECT_KEY, Gson().toJson(server))
                 navigateToSelectGoogleDriveFragment()
             }
         }
@@ -66,7 +66,6 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to handle navigation
     private fun navigateToSelectGoogleDriveFragment() {
-        bundle.putSerializable(OBJECT_KEY, server)
         navManager().navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment()
     }
 

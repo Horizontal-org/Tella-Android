@@ -28,7 +28,7 @@ class SelectSharedDriveFragment :
         initRecyclerView()
         binding.toolbar.run { setStartTextTitle(context.getString(R.string.select_google_drive)) }
         binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
-        if (arguments == null) return
+
         arguments?.getString(OBJECT_KEY)?.let {
             googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
         }
@@ -51,7 +51,7 @@ class SelectSharedDriveFragment :
                 // Introduce a delay before navigating
                 Handler(Looper.getMainLooper()).postDelayed({
                     // Perform navigation after delay
-                    bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+                    bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
                     navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
                 }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 seconds)
             }

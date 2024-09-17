@@ -17,8 +17,6 @@ class GoogleDriveConnectedServerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (arguments == null) return
-
         arguments?.getString(OBJECT_KEY)?.let {
             googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
         }

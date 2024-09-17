@@ -2,7 +2,9 @@ package rs.readahead.washington.mobile.views.dialog.googledrive.step1
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,7 @@ import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
@@ -33,14 +36,8 @@ class SelectGoogleDriveFragment :
         setupAuthorizationLauncher()
     }
 
-    private fun setupViewModel() {
-        // Retrieve email from arguments and set it in ViewModel
-        if (arguments == null) return
 
-        arguments?.getString(OBJECT_KEY)?.let {
-            googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
-            sharedViewModel.setEmail(googleDriveServer.username)
-        }
+    private fun setupViewModel() {
 
         // Observe shared drives and update UI accordingly
         sharedViewModel.sharedDrives.observe(viewLifecycleOwner) { drives ->
@@ -89,6 +86,11 @@ class SelectGoogleDriveFragment :
             nextBtn.setOnClickListener(this@SelectGoogleDriveFragment)
         }
 
+        // Retrieve email from arguments and set it in ViewModel
+        arguments?.getString(OBJECT_KEY)?.let {
+            googleDriveServer = Gson().fromJson(it, GoogleDriveServer::class.java)
+            sharedViewModel.setEmail(googleDriveServer.username)
+        }
     }
 
     private fun onSharedDriveSelected() {
@@ -118,13 +120,13 @@ class SelectGoogleDriveFragment :
     }
 
     private fun navigateToCreateFolderFragment() {
-        bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+        bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
         navManager().navigateFromSelectGoogleDriveToCreateFolderFragment()
     }
 
     private fun navigateToSelectSharedDriveFragment() {
         sharedViewModel.sharedDrives.value?.let {
-            bundle.putSerializable(OBJECT_KEY, googleDriveServer)
+            bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
             navManager().navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment()
         } ?: run {
             Timber.d("No shared drives data to pass.")
