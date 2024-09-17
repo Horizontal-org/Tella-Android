@@ -12,6 +12,7 @@ import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder;
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository;
 import timber.log.Timber;
 
@@ -36,19 +37,17 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
 
     @NonNull
     @Override
-    public Single<Folder> saveFolder(@NonNull Folder instance) {
+    public Single<GoogleDriveServer> saveGoogleDriveServer(@NonNull GoogleDriveServer instance) {
         return Single.fromCallable(() -> updateResourceInstance(instance)).compose(applySchedulers());
     }
 
-    private Folder updateResourceInstance(Folder instance) {
+    private GoogleDriveServer updateResourceInstance(GoogleDriveServer instance) {
         try {
             ContentValues values = new ContentValues();
 
-//            if (instance.getId() > 0) {
-//                values.put(D.C_ID, instance.getResourceId());
-//            }
-
             values.put(D.T_GOOGLE_DRIVE_FOLDER_ID, instance.getFolderId());
+            values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, instance.getName());
+            values.put(D.T, instance.);
             values.put(D.T_GOOGLE_DRIVE_FOLDER_NAME, instance.getName());
             database.beginTransaction();
 
