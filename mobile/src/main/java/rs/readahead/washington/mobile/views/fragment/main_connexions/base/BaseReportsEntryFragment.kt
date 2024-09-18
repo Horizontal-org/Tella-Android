@@ -104,18 +104,25 @@ abstract class BaseReportsEntryFragment :
     private fun exitOrSave() {
         val title = binding.reportTitleEt.text.toString()
         val description = binding.reportDescriptionEt.text.toString()
-        if (reportInstance == null && title.isEmpty()) {
-            nav().popBackStack()
-        } else if (reportInstance == null && title.isNotEmpty()) {
-            showConfirmSaveOrExit(reportInstance)
-        } else if (reportInstance != null && (reportInstance?.title != title || reportInstance?.description != description
+        when {
+            reportInstance == null && title.isEmpty() -> {
+                nav().popBackStack()
+            }
+
+            reportInstance == null && title.isNotEmpty() -> {
+                showConfirmSaveOrExit(reportInstance)
+            }
+
+            reportInstance != null && (reportInstance?.title != title || reportInstance?.description != description
                     || filesRecyclerViewAdapter.getFiles() != viewModel.mediaFilesToVaultFiles(
                 reportInstance?.widgetMediaFiles
-            ))
-        ) {
-            showConfirmSaveOrExit(reportInstance)
-        } else {
-            nav().popBackStack()
+            )) -> {
+                showConfirmSaveOrExit(reportInstance)
+            }
+
+            else -> {
+                nav().popBackStack()
+            }
         }
     }
 
@@ -147,27 +154,30 @@ abstract class BaseReportsEntryFragment :
     }
 
     private fun highLightButtonsInit() {
-        binding.reportTitleEt.let { title ->
-            isTitleEnabled = title.length() > 0
+        binding.apply {
+            reportTitleEt.let { title ->
+                isTitleEnabled = title.length() > 0
+            }
+
+            reportDescriptionEt.let { description ->
+                isDescriptionEnabled = description.length() > 0
+            }
+
+            reportTitleEt.onChange { title ->
+                isTitleEnabled = title.isNotEmpty()
+                highLightButtons()
+            }
+
+            reportDescriptionEt.onChange { description ->
+                isDescriptionEnabled = description.isNotEmpty()
+                highLightButtons()
+            }
+
+            deleteBtn.setOnClickListener {
+                reportInstance?.let { instance -> showDeleteBottomSheet(instance) }
+            }
         }
 
-        binding.reportDescriptionEt.let { description ->
-            isDescriptionEnabled = description.length() > 0
-        }
-
-        binding.reportTitleEt.onChange { title ->
-            isTitleEnabled = title.isNotEmpty()
-            highLightButtons()
-        }
-
-        binding.reportDescriptionEt.onChange { description ->
-            isDescriptionEnabled = description.isNotEmpty()
-            highLightButtons()
-        }
-
-        binding.deleteBtn.setOnClickListener {
-            reportInstance?.let { instance -> showDeleteBottomSheet(instance) }
-        }
     }
 
     private fun highLightButtons() {
@@ -182,6 +192,10 @@ abstract class BaseReportsEntryFragment :
         binding.sendLaterBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
         binding.sendReportBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
 
+        initClickListeners(isSubmitEnabled)
+    }
+
+    private fun initClickListeners(isSubmitEnabled: Boolean) {
         binding.sendLaterBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 saveReportAsOutbox()
@@ -206,6 +220,7 @@ abstract class BaseReportsEntryFragment :
             binding.toolbar.onRightClickListener = {}
         }
     }
+
 
     private fun showSubmitReportErrorSnackBar() {
         val errorRes =
