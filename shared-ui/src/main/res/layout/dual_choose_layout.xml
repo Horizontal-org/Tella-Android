@@ -8,16 +8,14 @@
     android:padding="24dp"
     app:behavior_hideable="true">
 
-
     <ImageView
         android:id="@+id/standard_sheet_cancel_btn"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:contentDescription="@string/action_cancel"
         android:src="@drawable/ic_baseline_close_24_white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/action_cancel"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/standard_sheet_title"

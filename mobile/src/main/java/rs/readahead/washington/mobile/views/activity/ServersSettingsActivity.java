@@ -418,7 +418,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private void showChooseServerTypeDialog() {
         BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),
                 getString(R.string.settings_servers_add_server_dialog_title),
-                getString(R.string.settings_serv_add_server_selection_dialog_title),
+                getString(R.string.settings_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),
                 getString(R.string.action_cancel), //TODO CHECk THIS
                 getString(R.string.action_ok),//TODO CHECk THIS
@@ -426,11 +426,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
-
+                getString(R.string.unavailable_connections),
+                getString(R.string.unavailable_connections_desc),
+                !googleDriveServers.isEmpty(),
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
                     public void addGoogleDriveServer() {
-                        showGoogleDriveServerDialog();
+                        showGoogleDriveServerDialog(null);
                     }
 
                     @Override
@@ -492,7 +494,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void editGoogleDriveServer(GoogleDriveServer googleDriveServer) {
-        showGoogleDriveServerDialog(uWaziUploadServer);
+        showGoogleDriveServerDialog(googleDriveServer);
     }
 
     private void turnOffAutoUpload() {
@@ -656,7 +658,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 editUwaziServer((UWaziUploadServer) server);
                 break;
             case GOOGLE_DRIVE:
-
+                editGoogleDriveServer((GoogleDriveServer) server);
             default:
                 editTUServer((TellaReportServer) server);
                 break;

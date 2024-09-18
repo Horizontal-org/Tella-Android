@@ -187,14 +187,17 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     override fun showChooseServerTypeDialog() {
         showBinaryTypeSheet(this.supportFragmentManager,
             getString(R.string.settings_servers_add_server_dialog_title),
-            getString(R.string.settings_serv_add_server_selection_dialog_title),
+            getString(R.string.settings_add_server_selection_dialog_title),
             getString(R.string.settings_serv_add_server_selection_dialog_description),
-            getString(R.string.action_cancel),  //TODO CHECk THIS
-            getString(R.string.action_ok),  //TODO CHECk THIS
+            getString(R.string.action_cancel),
+            getString(R.string.action_ok),
             getString(R.string.settings_docu_add_server_dialog_select_odk),
             getString(R.string.settings_docu_add_server_dialog_select_tella_web),
             getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
             getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+            getString(R.string.unavailable_connections),
+            getString(R.string.unavailable_connections_desc),
+            false,
             object : IServerChoiceActions {
                 override fun addUwaziServer() {
                     showUwaziServerDialog()
