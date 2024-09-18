@@ -860,7 +860,8 @@ object BottomSheetUtils {
         descriptionText: String?,
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
-        iconView: Int = -1
+        iconView: Int = -1,
+        isEditVisible: Boolean = true
     ) {
 
         val customSheetFragment2 =
@@ -871,6 +872,7 @@ object BottomSheetUtils {
                 with(holder) {
                     title.text = titleText2
                     description.text = descriptionText
+
                     actionButtonLabel?.let {
                         actionButton.text = it
                     }
@@ -908,6 +910,7 @@ object BottomSheetUtils {
                     actionEditLabel?.let {
                         actionEdit.text = it
                     }
+                    actionEdit.isVisible = isEditVisible
                     actionDeleteLabel?.let {
                         actionDelete.text = it
                     }

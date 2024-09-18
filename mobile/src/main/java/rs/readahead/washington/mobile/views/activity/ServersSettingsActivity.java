@@ -642,7 +642,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
                     getString(R.string.settings_docu_delete_server_dialog_expl),
                     getString(R.string.action_delete),
-                    getString(R.string.action_cancel), -1
+                    getString(R.string.action_cancel),
+                    -1,
+                    !(server instanceof GoogleDriveServer)
             ));
         }
         item.setTag(servers.indexOf(server));
