@@ -17,14 +17,11 @@ class IGoogleDriveServersPresenterContract {
         fun onCreateGoogleDriveServerError(throwable: Throwable)
         fun onRemovedGoogleDriveServer(server: GoogleDriveServer)
         fun onRemoveGoogleDriveServerError(throwable: Throwable)
-        fun onUpdatedGoogleDriveServer(server: GoogleDriveServer)
-        fun onUpdateGoogleDriveServerError(throwable: Throwable)
     }
 
     interface IPresenter : IBasePresenter {
         fun getGoogleDriveServers()
         fun create(server: GoogleDriveServer)
-        fun update(server: GoogleDriveServer)
         fun remove(server: GoogleDriveServer)
     }
 }

@@ -8,7 +8,8 @@ class GoogleDriveServer @JvmOverloads constructor(
     var folderName: String = "",
     var folderId: String = "",
     val googleClientId: String =
-        "1098763340400-bbulddkibve2tqc0uak31netdvtjvepj.apps.googleusercontent.com"
+        "166289458819-e5nt7d2lahv55ld0j527o07kovqdbip2.apps.googleusercontent.com"
+   // "1098763340400-bbulddkibve2tqc0uak31netdvtjvepj.apps.googleusercontent.com"
 ) : Server() {
     init {
         serverType = ServerType.GOOGLE_DRIVE

@@ -61,10 +61,6 @@ class GoogleDriveServersPresenter(var view: IGoogleDriveServersPresenterContract
         )
     }
 
-    override fun update(server: GoogleDriveServer) {
-
-    }
-
     override fun remove(server: GoogleDriveServer) {
         disposables.add(keyDataSource.googleDriveDataSource
             .subscribeOn(Schedulers.io())

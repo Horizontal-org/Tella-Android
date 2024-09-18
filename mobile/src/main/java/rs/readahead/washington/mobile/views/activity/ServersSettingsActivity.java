@@ -428,7 +428,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
                 getString(R.string.unavailable_connections),
                 getString(R.string.unavailable_connections_desc),
-                !googleDriveServers.isEmpty(),
+                servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
                     public void addGoogleDriveServer() {
@@ -493,10 +493,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         showUwaziServerDialog(uWaziUploadServer);
     }
 
-    private void editGoogleDriveServer(GoogleDriveServer googleDriveServer) {
-        showGoogleDriveServerDialog(googleDriveServer);
-    }
-
     private void turnOffAutoUpload() {
         binding.autoUploadSwitch.setChecked(false);
         serversPresenter.removeAutoUploadServersSettings();
@@ -548,11 +544,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
             startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
-        } else {
-            Intent intent = new Intent(this, GoogleDriveConnectFlowActivity.class);
-            intent.putExtra(OBJECT_KEY, new Gson().toJson(googleDriveServer));
-            intent.putExtra(IS_UPDATE_SERVER, true);
-            startActivity(intent);
         }
     }
 
@@ -660,7 +651,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 editUwaziServer((UWaziUploadServer) server);
                 break;
             case GOOGLE_DRIVE:
-                editGoogleDriveServer((GoogleDriveServer) server);
+                // editGoogleDriveServer((GoogleDriveServer) server);
             default:
                 editTUServer((TellaReportServer) server);
                 break;
@@ -845,8 +836,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onCreatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
         servers.add(server);
+        googleDriveServers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
-
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
@@ -859,6 +850,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     @Override
     public void onRemovedGoogleDriveServer(@NonNull GoogleDriveServer server) {
         servers.remove(server);
+        googleDriveServers.remove(server);
         binding.collectServersList.removeAllViews();
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
@@ -870,14 +862,4 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
-    @Override
-    public void onUpdatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
-
-    }
-
-    @Override
-    public void onUpdateGoogleDriveServerError(@NonNull Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_update_server), true);
-
-    }
 }

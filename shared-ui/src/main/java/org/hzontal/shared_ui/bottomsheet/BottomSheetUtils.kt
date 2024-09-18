@@ -303,7 +303,7 @@ object BottomSheetUtils {
     ) {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.settings_add_server_connecection_layout).cancellable(true).fullScreen()
+            .page(R.layout.settings_add_server_connection_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DualChoiceSheetHolder(), object : Binder<DualChoiceSheetHolder> {
             @RequiresApi(Build.VERSION_CODES.M)
