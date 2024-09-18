@@ -23,6 +23,10 @@ class DraftsReportsFragment : BaseReportsFragment() {
         return R.string.Uwazi_Draft_Entities_Empty_Description
     }
 
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_reports
+    }
+
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         this.navManager().navigateFromReportsScreenToNewReportScreen()

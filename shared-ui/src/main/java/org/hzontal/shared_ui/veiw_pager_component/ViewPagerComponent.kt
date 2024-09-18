@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.veiw_pager_component.adapter.ViewPagerAdapter
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 
@@ -21,6 +22,7 @@ class ViewPagerComponent @JvmOverloads constructor(
     private val viewPager: ViewPager2
     private val toolBarTextView: TextView
     private val viewPagerAdapter: ViewPagerAdapter
+    private val toolBar : ToolbarComponent
     private var tabTitles: List<String> = emptyList()
     private var fragmentProvider: FragmentProvider? = null
 
@@ -29,6 +31,7 @@ class ViewPagerComponent @JvmOverloads constructor(
         tabLayout = findViewById(R.id.tab_layout)
         viewPager = findViewById(R.id.view_pager)
         toolBarTextView = findViewById(R.id.toolbar_textView)
+        toolBar = findViewById(R.id.toolbar)
 
         viewPagerAdapter = ViewPagerAdapter((context as FragmentActivity), mutableListOf())
         viewPager.adapter = viewPagerAdapter
@@ -73,5 +76,11 @@ class ViewPagerComponent @JvmOverloads constructor(
 
     fun setToolBarTitle(title: String) {
         toolBarTextView.text = title
+    }
+
+    fun setOnToolbarBackClickListener(onBackClick: (() -> Unit)? = null) {
+        toolBar.backClickListener = {
+            onBackClick?.invoke()  // Call the passed lambda function if it's not null
+        }
     }
 }

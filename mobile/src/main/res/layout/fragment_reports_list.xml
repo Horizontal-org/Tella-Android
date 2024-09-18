@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:textMessage="@string/Uwazi_Draft_Entities_Empty_Description"
-        app:topImg="@drawable/ic_uwazi" />
+        />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress"

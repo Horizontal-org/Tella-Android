@@ -37,5 +37,6 @@ abstract class MainReportFragment :
         binding.newReportBtn.setOnClickListener {
             this.navManager().navigateFromReportsScreenToNewReportScreen()
         }
+        binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
     }
 }

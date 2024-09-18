@@ -20,6 +20,7 @@ abstract class BaseReportsFragment :
 
     protected abstract fun getViewModel(): BaseReportsViewModel // Child classes provide the specific ViewModel
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
+    protected abstract fun getEmptyMessageIcon(): Int
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
     protected abstract fun initData()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
@@ -27,12 +28,15 @@ abstract class BaseReportsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.draftsRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.draftsRecyclerView.adapter = entityAdapter
-
         // Initialize RecyclerView and Adapter
         initData()
         observeViewModel()
+        setUpRecyclerView()
+    }
+
+    private fun setUpRecyclerView() {
+        binding.draftsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.draftsRecyclerView.adapter = entityAdapter
     }
 
     // Observe ViewModel data changes (e.g., report lists, progress, errors)
@@ -81,6 +85,7 @@ abstract class BaseReportsFragment :
 
     private fun showEmptyMessage() {
         binding.textViewEmpty.setText(getString(getEmptyMessage()))
+        binding.textViewEmpty.setTopIcon(getEmptyMessageIcon())
         binding.textViewEmpty.visibility = View.VISIBLE
         binding.draftsRecyclerView.visibility = View.GONE
     }
@@ -111,7 +116,7 @@ abstract class BaseReportsFragment :
             },
             deleteActionText,
             deleteConfirmation,
-            getString(R.string.action_delete) ,
+            getString(R.string.action_delete),
             getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )

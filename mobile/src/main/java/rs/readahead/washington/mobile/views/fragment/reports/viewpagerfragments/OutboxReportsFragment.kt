@@ -32,6 +32,10 @@ class OutboxReportsFragment : BaseReportsFragment() {
         return R.string.Outbox_Reports_Empty_Message
     }
 
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_reports
+    }
+
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)

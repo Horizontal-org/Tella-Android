@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
@@ -28,6 +29,10 @@ class SubmittedReportsFragment : BaseReportsFragment() {
 
     override fun getEmptyMessage(): Int {
         return string.Submitted_Reports_Empty_Message
+    }
+
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_reports
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
