@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DataSource
+import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
@@ -66,6 +67,21 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
                 Completable.complete()
             }
             .blockingAwait()
+    }
+    override fun countGoogleDriveServers() {
+        disposable.add(keyDataSource.googleDriveDataSource
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .flatMapSingle { obj: GoogleDriveDataSource -> obj.listGoogleDriveServers() }
+            .subscribe(
+                { servers ->
+                    view?.onCountGoogleDriveServersEnded(servers)
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                view?.onCountGoogleDriveServersFailed(throwable)
+            }
+        )
     }
 
     override fun countTUServers() {

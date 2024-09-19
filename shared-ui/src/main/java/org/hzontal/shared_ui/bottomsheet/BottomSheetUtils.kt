@@ -351,7 +351,7 @@ object BottomSheetUtils {
                         when {
                             buttonOne.isChecked -> consumer.addODKServer()
                             buttonTwo.isChecked -> consumer.addTellaWebServer()
-                            buttonThree.isChecked -> consumer.addODKServer()
+                            buttonThree.isChecked -> consumer.addUwaziServer()
                             buttonFour.isChecked -> consumer.addGoogleDriveServer()
                         }
                         customSheetFragment.dismiss()

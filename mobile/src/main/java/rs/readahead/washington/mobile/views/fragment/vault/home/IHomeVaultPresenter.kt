@@ -8,6 +8,7 @@ import com.hzontal.tella_vault.filter.Sort
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.mvp.contract.IBasePresenter
@@ -15,6 +16,8 @@ import rs.readahead.washington.mobile.mvp.contract.IBasePresenter
 class IHomeVaultPresenter {
     interface IView {
         fun getContext(): Context?
+        fun onCountGoogleDriveServersEnded(servers: List<GoogleDriveServer>?)
+        fun onCountGoogleDriveServersFailed(throwable: Throwable?)
         fun onCountTUServersEnded(servers: List<TellaReportServer>?)
         fun onCountTUServersFailed(throwable: Throwable?)
         fun onCountCollectServersEnded(servers: List<CollectServer>?)
@@ -35,6 +38,7 @@ class IHomeVaultPresenter {
 
     interface IPresenter : IBasePresenter {
         fun executePanicMode()
+        fun countGoogleDriveServers()
         fun countTUServers()
         fun countCollectServers()
         fun countUwaziServers()
