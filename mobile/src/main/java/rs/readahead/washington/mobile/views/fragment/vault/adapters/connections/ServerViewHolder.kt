@@ -67,7 +67,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.google_drive_small,
+                        R.drawable.ic_google_drive_small,
                         null
                     )
                 )
