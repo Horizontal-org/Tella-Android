@@ -416,7 +416,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),
+        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),getContext(),
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -14,6 +15,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -287,11 +289,12 @@ object BottomSheetUtils {
     @JvmStatic
     fun showBinaryTypeSheet(
         fragmentManager: FragmentManager,
-        titleText: String?,
-        descriptionText: String?,
-        descriptionContentText: String?,
-        backText: String?,
-        nextText: String?,
+        context: Context,
+        titleText: String? = null,
+        descriptionText: String? = null,
+        descriptionContentText: String? = null,
+        backText: String? = "Back",
+        nextText: String? = "Next",
         buttonOneLabel: String? = null,
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
@@ -301,102 +304,90 @@ object BottomSheetUtils {
         isConnexionAvailable: Boolean = false,
         consumer: IServerChoiceActions
     ) {
-
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.settings_add_server_connection_layout).cancellable(true).fullScreen()
+            .page(R.layout.settings_add_server_connection_layout)
+            .cancellable(true)
+            .fullScreen()
             .statusBarColor(R.color.space_cadet)
+
         customSheetFragment.holder(DualChoiceSheetHolder(), object : Binder<DualChoiceSheetHolder> {
             @RequiresApi(Build.VERSION_CODES.M)
             override fun onBind(holder: DualChoiceSheetHolder) {
                 with(holder) {
-                    title.text = titleText
-                    backButton.text = backText
-                    nextButton.text = nextText
-                    descriptionContent.text = descriptionContentText
-                    buttonOne.setText(buttonOneLabel)
-                    buttonTwo.setText(buttonTwoLabel)
-                    buttonThree.setText(buttonThreeLabel)
-                    buttonFour.setText(buttonFourLabel)
+                    title.text = titleText ?: ""
+                    backButton.text = backText ?: "Back"
+                    nextButton.text = nextText ?: "Next"
+                    descriptionContent.text = descriptionContentText ?: ""
+
+                    setupButton(buttonOne, buttonOneLabel)
+                    setupButton(buttonTwo, buttonTwoLabel)
+                    setupButton(buttonThree, buttonThreeLabel)
+                    setupButton(buttonFour, buttonFourLabel)
                     unavailableConnexionText.text = unavailableConnexionLabel;
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
-                    if (isConnexionAvailable) {
-                        unavailableConnexionText.isVisible = true
-                        unavailableConnexionTextDesc.isVisible = true
-                        buttonFour.setBackgroundColor(
-                            unavailableConnexionText.context.getColor(
-                                R.color.wa_white_8
-                            )
-                        )
-                        buttonFour.setTextColor(R.color.wa_white_38)
-                    } else {
-                        unavailableConnexionText.isVisible = false
-                        unavailableConnexionTextDesc.isVisible = false
+                    // Set button click listeners using a helper method
+                    listOf(
+                        buttonOne,
+                        buttonTwo,
+                        buttonThree,
+                        buttonFour
+                    ).forEachIndexed { index, button ->
+                        button.setOnClickListener {
+                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour)
+                            button.isChecked = true
+                        }
                     }
-
-                    buttonOne.setOnClickListener {
-                        buttonOne.isChecked = true
-                        buttonTwo.isChecked = false
-                        buttonThree.isChecked = false
-                        buttonFour.isChecked = false
-                    }
-
-                    buttonTwo.setOnClickListener {
-                        buttonOne.isChecked = false
-                        buttonTwo.isChecked = true
-                        buttonThree.isChecked = false
-                        buttonFour.isChecked = false
-                    }
-
-                    buttonThree.setOnClickListener {
-                        buttonOne.isChecked = false
-                        buttonTwo.isChecked = false
-                        buttonFour.isChecked = false
-                        buttonThree.isChecked = true
-                    }
-
-                    buttonFour.setOnClickListener {
-                        buttonOne.isChecked = false
-                        buttonTwo.isChecked = false
-                        buttonThree.isChecked = false
-                        buttonFour.isChecked = true
-                    }
-
-                    backButton.setOnClickListener {
-                        customSheetFragment.dismiss()
-                    }
+                    handleConnexionAvailability(
+                        context,
+                        isConnexionAvailable,
+                        unavailableConnexionText,
+                        unavailableConnexionTextDesc,
+                        buttonFour
+                    )
+                    backButton.setOnClickListener { customSheetFragment.dismiss() }
 
                     nextButton.setOnClickListener {
                         when {
-                            buttonOne.isChecked -> {
-                                consumer.addODKServer()
-                                customSheetFragment.dismiss()
-                            }
-
-                            buttonTwo.isChecked -> {
-                                consumer.addTellaWebServer()
-                                customSheetFragment.dismiss()
-                            }
-
-                            buttonFour.isChecked -> {
-                                consumer.addGoogleDriveServer()
-                                customSheetFragment.dismiss()
-                            }
-
-                            else -> {
-                                consumer.addUwaziServer()
-                                customSheetFragment.dismiss()
-                            }
+                            buttonOne.isChecked -> consumer.addODKServer()
+                            buttonTwo.isChecked -> consumer.addTellaWebServer()
+                            buttonThree.isChecked -> consumer.addODKServer()
+                            buttonFour.isChecked -> consumer.addGoogleDriveServer()
                         }
+                        customSheetFragment.dismiss()
                     }
-
                 }
-
             }
         })
 
-        customSheetFragment.transparentBackground()
-        customSheetFragment.launch()
+        customSheetFragment.transparentBackground().launch()
+    }
+
+    private fun setupButton(button: RoundButton, label: String?) {
+        button.setText(label)
+    }
+
+    private fun handleConnexionAvailability(
+        context: Context,
+        isConnexionAvailable: Boolean,
+        unavailableConnexionText: TextView,
+        unavailableConnexionTextDesc: TextView,
+        buttonFour: RoundButton
+    ) {
+        if (isConnexionAvailable) {
+            unavailableConnexionText.isVisible = true
+            unavailableConnexionTextDesc.isVisible = true
+            buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white_8))
+            buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_white_38))
+            buttonFour.setOnClickListener {} // Disable interaction
+        } else {
+            unavailableConnexionText.isVisible = false
+            unavailableConnexionTextDesc.isVisible = false
+        }
+    }
+
+    private fun resetButtons(vararg buttons: RoundButton) {
+        buttons.forEach { it.isChecked = false }
     }
 
     class CamouflageSheetHolder : PageHolder() {

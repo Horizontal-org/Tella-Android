@@ -185,7 +185,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun showChooseServerTypeDialog() {
-        showBinaryTypeSheet(this.supportFragmentManager,
+        showBinaryTypeSheet(this.supportFragmentManager, context = this,
             getString(R.string.settings_servers_add_server_dialog_title),
             getString(R.string.settings_add_server_selection_dialog_title),
             getString(R.string.settings_serv_add_server_selection_dialog_description),

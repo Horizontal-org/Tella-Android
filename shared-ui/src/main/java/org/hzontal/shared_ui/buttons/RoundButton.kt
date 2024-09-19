@@ -86,7 +86,7 @@ class RoundButton @JvmOverloads constructor(
         }
     }
 
-    private fun setBackgroundTintColor(tintColor: Int) {
+     fun setBackgroundTintColor(tintColor: Int) {
         if (tintColor != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 binding.sheetTextView.backgroundTintList = ColorStateList.valueOf(tintColor)
