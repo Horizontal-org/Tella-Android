@@ -21,8 +21,8 @@ abstract class BaseReportsSendFragment :
     OnNavBckListener {
 
     abstract val viewModel: BaseReportsViewModel
-    private lateinit var endView: ReportsFormEndView
-    private var reportInstance: ReportInstance? = null
+    protected lateinit var endView: ReportsFormEndView
+    protected var reportInstance: ReportInstance? = null
     protected var isFromOutbox = false
     private var isFromDraft = false
 
@@ -35,43 +35,6 @@ abstract class BaseReportsSendFragment :
         checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
 
         with(viewModel) {
-            reportProcess.observe(viewLifecycleOwner) { progress ->
-                if (progress.second.id == this@BaseReportsSendFragment.reportInstance?.id) {
-                    val pct = progress.first
-                    val instance = progress.second
-
-                    pauseResumeLabel(instance)
-                    endView.setUploadProgress(instance, pct.current.toFloat() / pct.size.toFloat())
-                }
-            }
-
-            instanceProgress.observe(viewLifecycleOwner) { entity ->
-                if (entity.id == this@BaseReportsSendFragment.reportInstance?.id) {
-                    when (entity.status) {
-                        EntityStatus.SUBMITTED -> {
-                            viewModel.saveSubmitted(entity)
-                        }
-
-                        EntityStatus.FINALIZED -> {
-                            viewModel.saveOutbox(entity)
-                        }
-
-                        EntityStatus.PAUSED -> {
-                            pauseResumeLabel(entity)
-                            viewModel.saveOutbox(entity)
-                        }
-
-                        EntityStatus.DELETED -> {
-                            instanceProgress.postValue(null)
-                            handleBackButton()
-                        }
-
-                        else -> {
-                            this@BaseReportsSendFragment.reportInstance = entity
-                        }
-                    }
-                }
-            }
 
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
@@ -95,7 +58,7 @@ abstract class BaseReportsSendFragment :
     // This method will be used to define the specific behavior for the back button in subclasses
     protected abstract fun navigateBack()
 
-    private fun handleBackButton() {
+    protected fun handleBackButton() {
         navigateBack()
         reportInstance?.let { viewModel.submitReport(instance = it, true) }
         DialogUtils.showBottomMessage(
@@ -146,7 +109,7 @@ abstract class BaseReportsSendFragment :
         pauseResumeLabel(reportInstance)
     }
 
-    private fun pauseResumeLabel(reportFormInstance: ReportInstance?) {
+    protected fun pauseResumeLabel(reportFormInstance: ReportInstance?) {
         if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
             binding.nextBtn.text = getString(R.string.Reports_Pause)
         } else {

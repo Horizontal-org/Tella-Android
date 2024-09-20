@@ -6,6 +6,7 @@
     app:startDestination="@+id/homeScreen">
     <include app:graph="@navigation/uwazi" />
     <include app:graph="@navigation/reports_graph" />
+    <include app:graph="@navigation/google_drive_graph" />
     <fragment
         android:id="@+id/homeScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
@@ -44,6 +45,11 @@
         <action
             android:id="@+id/action_homeScreen_to_resources_screen"
             app:destination="@id/resourcesScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_homeScreen_to_google_drive_screen"
+            app:destination="@id/google_drive_graph"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
     </fragment>

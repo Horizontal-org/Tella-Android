@@ -22,6 +22,10 @@ class ReportTabsFragment : MainReportFragment() {
         return getString(R.string.Home_BottomNav_Reports)
     }
 
+    override fun navigateToNewReportScreen() {
+        this.navManager().navigateFromReportsScreenToNewReportScreen()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         scheduleWorker()

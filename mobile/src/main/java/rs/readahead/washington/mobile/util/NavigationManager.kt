@@ -43,6 +43,22 @@ class NavigationManager(
     fun navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment() {
         navigateToWithBundle(R.id.action_serverAdvancedSettingsFragment_to_successfulSetServerFragment)
     }
+    fun navigateFromGoogleDriveScreenToNewGoogleDriveScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
+    }
+
+    fun navigateFromGoogleDriveScreenToGoogleDriveSendScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
+    }
+
+    fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
+    }
+
+    fun navigateFromNewGoogleDriveScreenToGoogleDriveSendScreen() {
+        navigateWithBundleAndClearBackStack(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
+    }
+
 
     fun navigateFromReportsScreenToReportSendScreen() {
         navigateToWithBundle(R.id.action_reportsScreen_to_reportSendScreen)
@@ -55,7 +71,6 @@ class NavigationManager(
     fun navigateFromNewReportsScreenToReportSendScreen() {
         navigateWithBundleAndClearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
-
     private fun navigateWithBundleAndClearBackStack(destinationId: Int) {
         navigateToWithBundle(destinationId)
         navControllerProvider.navController.clearBackStack(destinationId)

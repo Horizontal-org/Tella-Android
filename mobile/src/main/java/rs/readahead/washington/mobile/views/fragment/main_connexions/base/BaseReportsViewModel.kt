@@ -58,8 +58,9 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _serversList = MutableLiveData<List<TellaReportServer>>()
     val serversList: LiveData<List<TellaReportServer>> get() = _serversList
 
-    abstract val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
-    abstract val instanceProgress: SingleLiveEvent<ReportInstance>
+    //TODO CHECK FOR LATER AHLEM + WAFA
+    // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
+    // val instanceProgress: SingleLiveEvent<ReportInstance>
 
 
     // Abstract methods to be implemented in derived ViewModels

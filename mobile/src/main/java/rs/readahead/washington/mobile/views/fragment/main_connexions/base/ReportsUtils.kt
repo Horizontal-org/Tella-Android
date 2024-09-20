@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
+package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity

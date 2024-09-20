@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
+package rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -15,7 +15,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Report
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class SubmittedReportsFragment : BaseReportsFragment() {
+class SubmittedGoogleDriveFragment : BaseReportsFragment() {
 
     private val viewModel by viewModels<ReportsViewModel>()
 

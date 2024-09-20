@@ -15,6 +15,7 @@ abstract class MainReportFragment :
 
     // Abstract method to be implemented by subclasses to provide their own toolbar title
     abstract fun getToolbarTitle(): String
+    abstract fun navigateToNewReportScreen()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,7 +36,7 @@ abstract class MainReportFragment :
         binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
 
         binding.newReportBtn.setOnClickListener {
-            this.navManager().navigateFromReportsScreenToNewReportScreen()
+           navigateToNewReportScreen()
         }
         binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
     }

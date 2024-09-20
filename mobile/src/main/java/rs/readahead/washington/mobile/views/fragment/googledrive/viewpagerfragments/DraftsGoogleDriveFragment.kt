@@ -1,35 +1,27 @@
-package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
+package rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 
 @AndroidEntryPoint
-class SubmittedReportsFragment : BaseReportsFragment() {
+class DraftsGoogleDriveFragment : BaseReportsFragment() {
 
-    private val viewModel by viewModels<ReportsViewModel>()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
+    private val viewModel: ReportsViewModel by viewModels()
 
     override fun getViewModel(): BaseReportsViewModel {
         return viewModel
     }
 
     override fun getEmptyMessage(): Int {
-        return string.Submitted_Reports_Empty_Message
+        return R.string.Uwazi_Draft_Entities_Empty_Description
     }
 
     override fun getEmptyMessageIcon(): Int {
@@ -38,39 +30,42 @@ class SubmittedReportsFragment : BaseReportsFragment() {
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        navManager().navigateFromReportsScreenToReportSubmittedScreen()
+        this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
+
     }
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
         with(viewModel) {
-            submittedReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                handleReportList(outboxes)
+            draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
+                handleReportList(drafts)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showMenu(
                     instance = instance,
                     title = instance.title,
-                    viewText = getString(string.View_Report),
-                    deleteText = getString(string.Delete_Report),
-                    deleteConfirmation = getString(string.action_delete) + " \"" + instance.title + "\"?",
-                    deleteActionText = getString(string.Delete_Submitted_Report_Confirmation),
+                    viewText = getString(R.string.Uwazi_Action_EditDraft),
+                    deleteText = getString(R.string.Delete_Report),
+                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Delete_Report_Confirmation)
                 )
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
-                        string.Report_Deleted_Confirmation, it
+                        R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listSubmitted()
+                viewModel.listDrafts()
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
-        viewModel.listSubmitted()
+        viewModel.listDrafts()
     }
+
 }

@@ -52,6 +52,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    @DefaultReports
     fun provideReportsDataSource(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
@@ -61,6 +62,5 @@ object RepositoryModule {
     fun provideDataSource(): DataSource {
         return MyApplication.getKeyDataSource().dataSource.blockingFirst()
     }
-
 
 }

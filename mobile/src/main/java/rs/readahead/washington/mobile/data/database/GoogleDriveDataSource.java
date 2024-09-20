@@ -19,10 +19,13 @@ import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository;
+import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import timber.log.Timber;
 
-public class GoogleDriveDataSource implements IGoogleDriveRepository {
+public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaReportsRepository {
 
     private static GoogleDriveDataSource dataSource;
     private final SQLiteDatabase database;
@@ -143,5 +146,47 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository {
         server.setUsername(userName);
 
         return server;
+    }
+
+    @NonNull
+    @Override
+    public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Completable deleteReportInstance(long id) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listAllReportInstances() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listDraftReportInstances() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listOutboxReportInstances() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<List<ReportInstance>> listSubmittedReportInstances() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Single<ReportInstanceBundle> getReportBundle(long id) {
+        return null;
     }
 }

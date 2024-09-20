@@ -1,13 +1,13 @@
-package rs.readahead.washington.mobile.domain.usecases.reports
+package rs.readahead.washington.mobile.domain.usecases.googledrive
 
 import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import rs.readahead.washington.mobile.domain.usecases.base.SingleUseCase
-import rs.readahead.washington.mobile.views.fragment.reports.di.DefaultReports
+import rs.readahead.washington.mobile.views.fragment.googledrive.di.GoogleDrive
 import javax.inject.Inject
 
-class SaveReportFormInstanceUseCase @Inject constructor(@DefaultReports private val reportsRepository: ITellaReportsRepository) :
+class SaveReportFormInstanceUseCase @Inject constructor(@GoogleDrive private val reportsRepository: ITellaReportsRepository) :
     SingleUseCase<ReportInstance>() {
 
     private lateinit var reportInstance: ReportInstance

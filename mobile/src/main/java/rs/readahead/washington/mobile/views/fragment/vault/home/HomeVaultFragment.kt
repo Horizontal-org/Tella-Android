@@ -386,6 +386,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
 
+            ServerType.GOOGLE_DRIVE -> {
+                nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+            }
+
             else -> {}
         }
     }

@@ -36,8 +36,8 @@ class ReportsViewModel @Inject constructor(
     private val dataSource: DataSource
 ) : BaseReportsViewModel() {
 
-    override val reportProcess = reportsRepository.getReportProgress()
-    override val instanceProgress = reportsRepository.geInstanceProgress()
+     val reportProcess = reportsRepository.getReportProgress()
+     val instanceProgress = reportsRepository.geInstanceProgress()
 
     override fun listServers() {
         _progress.postValue(true)
