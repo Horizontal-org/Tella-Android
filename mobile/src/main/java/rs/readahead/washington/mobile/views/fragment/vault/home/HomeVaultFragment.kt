@@ -17,7 +17,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -55,7 +54,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
@@ -137,7 +135,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         if (analyticsActions == AnalyticsActions.YES) {
             CommonPreferences.setIsAcceptedAnalytics(true)
-            DivviupUtils.runInstallEvent(requireContext())
+            baseActivity.divviupUtils.runInstallEvent()
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.Settings_Analytics_turn_on_dialog),
@@ -525,7 +523,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun executePanicMode() {
         try {
-            context?.let { DivviupUtils.runQuickDeleteEvent(it) }
+            baseActivity.divviupUtils.runQuickDeleteEvent()
             homeVaultPresenter.executePanicMode()
         } catch (ignored: Throwable) {
             panicActivated = true

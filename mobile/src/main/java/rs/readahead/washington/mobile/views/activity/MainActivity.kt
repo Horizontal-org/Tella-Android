@@ -196,6 +196,7 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
             if (data != null) {
                 val uri = data.data
                 if (uri != null) {
+                    divviupUtils.runFileImportEvent()
                     when (requestCode) {
                         C.IMPORT_VIDEO -> mediaImportPresenter.importVideo(uri)
                         C.IMPORT_IMAGE -> mediaImportPresenter.importImage(uri)

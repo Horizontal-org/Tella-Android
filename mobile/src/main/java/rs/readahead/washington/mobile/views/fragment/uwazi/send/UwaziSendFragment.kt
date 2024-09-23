@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.UwaziSendFragmentBinding
@@ -80,7 +79,7 @@ class UwaziSendFragment :
             progress.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMITTED -> {
-                        context?.let { DivviupUtils.runUwaziSentEvent(it) }
+                       baseActivity.divviupUtils.runUwaziSentEvent()
                         handleBackButton()
                     }
 

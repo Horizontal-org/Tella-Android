@@ -1,8 +1,5 @@
 package rs.readahead.washington.mobile.media;
 
-import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
-import static rs.readahead.washington.mobile.util.C.RESOURCE_PDF;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -30,7 +27,6 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -255,7 +251,6 @@ public class MediaFileHandler {
         boolean keepExif = Preferences.isKeepExif();
         ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
         ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
-        DivviupUtils.Companion.runFileImportEvent(context);
 
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream); // bitmap of photo
@@ -360,7 +355,7 @@ public class MediaFileHandler {
     public static Single<VaultFile> downloadResourcePdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) {
         return MyApplication.rxVault
                 .builder(inputStream)
-                .setMimeType(RESOURCE_PDF)
+                .setMimeType(C.RESOURCE_PDF)
                 .setAnonymous(true)
                 .setName(fileName)
                 .setType(VaultFile.Type.FILE)
@@ -371,8 +366,6 @@ public class MediaFileHandler {
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
-        DivviupUtils.Companion.runFileImportEvent(context);
-
         try {
             retriever.setDataSource(context, uri);
 
@@ -409,7 +402,6 @@ public class MediaFileHandler {
 
     public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
-        DivviupUtils.Companion.runFileImportEvent(context);
 
         try {
 
@@ -722,7 +714,7 @@ public class MediaFileHandler {
 
         context.startActivityForResult(
                 Intent.createChooser(intent, "Import files"),
-                IMPORT_MULTIPLE_FILES
+                C.IMPORT_MULTIPLE_FILES
         );
     }
 

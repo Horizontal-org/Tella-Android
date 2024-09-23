@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.send
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
@@ -59,7 +58,7 @@ class ReportsSendFragment :
                             viewModel.saveSubmitted(entity)
                         }
 
-                         EntityStatus.FINALIZED -> {
+                        EntityStatus.FINALIZED -> {
                             viewModel.saveOutbox(entity)
                         }
 
@@ -83,12 +82,12 @@ class ReportsSendFragment :
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.SUBMITTED -> {
-                        DivviupUtils.runReportSentEvent(baseActivity)
+                        baseActivity.divviupUtils.runReportSentEvent()
                         handleBackButton()
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                     }
 
-                     EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
+                    EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
                         handleBackButton()
                     }
 

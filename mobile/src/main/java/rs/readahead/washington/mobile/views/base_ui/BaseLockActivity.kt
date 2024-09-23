@@ -6,7 +6,6 @@ import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_YELLOW_SKIN
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
@@ -22,7 +21,6 @@ import rs.readahead.washington.mobile.MyApplication.isConnectedToInternet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
-import timber.log.Timber
 
 abstract class BaseLockActivity : BaseActivity() {
 
@@ -123,7 +121,7 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun sendTimeSpentAnalytics() {
         if (isConnectedToInternet(baseContext)) {
-            DivviupUtils.runTimeSpentEvent(baseContext, CommonPreferences.getTimeSpent())
+            divviupUtils.runTimeSpentEvent(CommonPreferences.getTimeSpent())
             CommonPreferences.setTimeSpent(0L)
         }
     }

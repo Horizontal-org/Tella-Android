@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.hzontal.tella_locking_ui.*
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
@@ -32,8 +31,7 @@ open class BaseActivity : AppCompatActivity() {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
+            WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
         )
         overridePendingTransition(R.anim.`in`, R.anim.out)
     }
@@ -77,8 +75,6 @@ open class BaseActivity : AppCompatActivity() {
                 TellaKeysUI.getCredentialsCallback().onSuccessfulUnlock(this)
             }
         }
-        sendUnlockMeasure(context = baseContext)
-        maybeSendInstallMeasure(context = baseContext)
     }
 
     protected fun onSuccessConfirmUnlock() {
@@ -107,26 +103,16 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun maybeEnableSecurityScreen() {
         if (getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE).getBoolean(
-                SET_SECURITY_SCREEN,
-                false
+                SET_SECURITY_SCREEN, false
             )
         ) {
             window.setFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE
+                WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
             )
         } else {
             window.clearFlags(
                 WindowManager.LayoutParams.FLAG_SECURE
             )
         }
-    }
-
-    private fun sendUnlockMeasure(context: Context) {
-        DivviupUtils.runUnlockEvent(context)
-    }
-
-    private fun maybeSendInstallMeasure(context: Context) {
-        DivviupUtils.runInstallEvent(context)
     }
 }

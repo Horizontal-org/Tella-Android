@@ -77,7 +77,4 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
-
-    implementation "org.divviup.android:divviup-android:$versions.divviup"
-
 }

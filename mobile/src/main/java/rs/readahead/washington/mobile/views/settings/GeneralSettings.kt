@@ -10,7 +10,6 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
@@ -67,7 +66,7 @@ class GeneralSettings :
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
                 )
-                DivviupUtils.runInstallEvent(requireContext())
+                baseActivity.divviupUtils.runInstallEvent()
             } else {
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false

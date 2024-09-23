@@ -23,8 +23,10 @@ class CamouflageNameAndLogo : BaseFragment() {
     private lateinit var adapter: CamouflageRecycleViewAdapter
     private lateinit var recyclerView: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_name_and_logo, container, false)
 
         initView(view)
@@ -38,7 +40,8 @@ class CamouflageNameAndLogo : BaseFragment() {
         recyclerView = view.findViewById(R.id.iconsRecyclerView)
 
         adapter = CamouflageRecycleViewAdapter()
-        val galleryLayoutManager: RecyclerView.LayoutManager = GridLayoutManager(requireContext(), 3)
+        val galleryLayoutManager: RecyclerView.LayoutManager =
+            GridLayoutManager(requireContext(), 3)
         recyclerView.setLayoutManager(galleryLayoutManager)
         recyclerView.setAdapter(adapter)
 
@@ -60,10 +63,13 @@ class CamouflageNameAndLogo : BaseFragment() {
             getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
             getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
             getString(R.string.settings_sec_confirm_camouflage_title),
-            getString(R.string.settings_sec_confirm_camouflage_desc, getString(cm.options[position].stringResId)),
+            getString(
+                R.string.settings_sec_confirm_camouflage_desc,
+                getString(cm.options[position].stringResId)
+            ),
             getString(R.string.settings_sec_confirm_exit_tella),
             getString(R.string.action_cancel),
-            ContextCompat.getDrawable(baseActivity,cm.options[position].drawableResId),
+            ContextCompat.getDrawable(baseActivity, cm.options[position].drawableResId),
             consumer = object : BottomSheetUtils.ActionConfirmed {
                 override fun accept(isConfirmed: Boolean) {
                     camouflage(position)
@@ -76,7 +82,13 @@ class CamouflageNameAndLogo : BaseFragment() {
         try {
             val option = cm.options[position]
             if (option != null) {
-                if (cm.setLauncherActivityAlias(requireContext(), option.alias)) {
+                if (cm.setLauncherActivityAlias(
+                        requireContext(),
+                        option.alias,
+
+                    )
+                ) {
+                    baseActivity.divviupUtils.runCamouflageEnabledEvent()
                     MyApplication.bus()
                         .post(CamouflageAliasChangedEvent())
                 }
