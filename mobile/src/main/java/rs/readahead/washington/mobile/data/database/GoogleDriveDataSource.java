@@ -29,6 +29,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
 
     private static GoogleDriveDataSource dataSource;
     private final SQLiteDatabase database;
+    private final DataBaseUtils dataBaseUtils;
 
     final private CompletableTransformer schedulersCompletableTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
@@ -42,6 +43,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         System.loadLibrary("sqlcipher");
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
+        dataBaseUtils = new DataBaseUtils(database);
     }
 
     public static synchronized GoogleDriveDataSource getInstance(Context context, byte[] key) {
@@ -151,8 +153,8 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return null;
-    }
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());    }
 
     @NonNull
     @Override

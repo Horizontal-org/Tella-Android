@@ -82,6 +82,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         IMediaFileRecordRepository, ITellaFeedBackRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
+    private final DataBaseUtils dataBaseUtils;
 
 
     final private SingleTransformer schedulersTransformer =
@@ -99,8 +100,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
+        dataBaseUtils = new DataBaseUtils(database);
     }
 
     public static synchronized DataSource getInstance(Context context, byte[] key) {
@@ -1324,7 +1326,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor == null || cursor.getColumnCount() == 0) {
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
-                updateTellaReportsFormInstance(newReportInstance);
+                dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
+                ;
             } else {
                 getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
             }
@@ -1354,19 +1357,19 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));
-                updateTellaReportsFormInstance(currentInstance);
+                dataBaseUtils.updateTellaReportsFormInstance(currentInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
-                reportInstance = updateTellaReportsFormInstance(newReportInstance);
+                reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
             } else {
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, mediaFile));
                 currentInstance.setStatus(EntityStatus.SCHEDULED);
-                reportInstance = updateTellaReportsFormInstance(currentInstance);
+                reportInstance = dataBaseUtils.updateTellaReportsFormInstance(currentInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
             }
         } else {
             ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
             newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance, mediaFile));
-            reportInstance = updateTellaReportsFormInstance(newReportInstance);
+            reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
         }
         return reportInstance;
     }
@@ -2486,7 +2489,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return Single.fromCallable(() -> updateTellaReportsFormInstance(instance))
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
@@ -2534,69 +2537,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
-        try {
-            int statusOrdinal;
-            ContentValues values = new ContentValues();
-
-            if (instance.getId() > 0) {
-                values.put(D.C_ID, instance.getId());
-            }
-
-            values.put(D.C_REPORT_SERVER_ID, instance.getServerId());
-            values.put(D.C_TITLE, instance.getTitle());
-            values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
-            values.put(D.C_UPDATED, Util.currentTimestamp());
-            values.put(D.C_CURRENT_UPLOAD, instance.getCurrent());
-            values.put(D.C_REPORT_API_ID, instance.getReportApiId());
-
-            //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
-            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
-
-            if (instance.getStatus() == EntityStatus.UNKNOWN) {
-                statusOrdinal = EntityStatus.DRAFT.ordinal();
-            } else {
-                statusOrdinal = instance.getStatus().ordinal();
-            }
-            values.put(D.C_STATUS, statusOrdinal);
-
-
-            database.beginTransaction();
-
-            // insert/update form instance
-            long id = database.insertWithOnConflict(
-                    D.T_REPORT_FORM_INSTANCE,
-                    null,
-                    values,
-                    SQLiteDatabase.CONFLICT_REPLACE);
-            instance.setId(id);
-
-            // clear FormMediaFiles
-            database.delete(
-                    D.T_REPORT_INSTANCE_VAULT_FILE,
-                    D.C_REPORT_INSTANCE_ID + " = ?",
-                    new String[]{Long.toString(id)});
-
-            // insert FormMediaFiles
-            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
-            for (FormMediaFile mediaFile : mediaFiles) {
-                values = new ContentValues();
-                values.put(D.C_REPORT_INSTANCE_ID, id);
-                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
-                values.put(D.C_STATUS, mediaFile.status.ordinal());
-                values.put(D.C_UPLOADED_SIZE, mediaFile.uploadedSize);
-                database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
-            }
-
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            database.endTransaction();
-        }
-
-        return instance;
-    }
 
     private List<ReportInstance> getReportFormInstances(EntityStatus[] statuses) {
         Cursor cursor = null;
