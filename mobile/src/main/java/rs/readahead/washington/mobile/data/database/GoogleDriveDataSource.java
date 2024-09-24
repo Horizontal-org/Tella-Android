@@ -22,6 +22,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
+import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import timber.log.Timber;
@@ -161,7 +162,10 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
-        return null;
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataBaseUtils.deleteReportFormInstance(id,D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+            return null;
+        }).compose(applyCompletableSchedulers());
     }
 
     @NonNull

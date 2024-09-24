@@ -2531,7 +2531,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Completable deleteReportInstance(long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            deleteReportFormInstance(id);
+            dataBaseUtils.deleteReportFormInstance(id,D.T_REPORT_FORM_INSTANCE);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -2829,15 +2829,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             }
         }
         return ids;
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteReportFormInstance(long id) throws NotFountException {
-        int count = database.delete(D.T_REPORT_FORM_INSTANCE, D.C_ID + " = ?", new String[]{Long.toString(id)});
-
-        if (count != 1) {
-            throw new NotFountException();
-        }
     }
 
     @NonNull

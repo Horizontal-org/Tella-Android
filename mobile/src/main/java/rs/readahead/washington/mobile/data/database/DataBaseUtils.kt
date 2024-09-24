@@ -7,6 +7,7 @@ import net.zetetic.database.sqlcipher.SQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteQueryBuilder
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.util.Util
 import timber.log.Timber
 
@@ -143,5 +144,17 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
 
     private fun cn(table: String, column: String, cast: String): String {
         return "$table.$column AS $cast"
+    }
+
+    @Throws(NotFountException::class)
+    protected fun deleteReportFormInstance(id: Long,reportTable: String) {
+        val count = database.delete(
+            reportTable,
+            D.C_ID + " = ?",
+            arrayOf(java.lang.Long.toString(id))
+        )
+        if (count != 1) {
+            throw NotFountException()
+        }
     }
 }
