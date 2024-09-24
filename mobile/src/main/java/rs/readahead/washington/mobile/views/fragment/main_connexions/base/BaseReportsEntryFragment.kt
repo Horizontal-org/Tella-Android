@@ -19,6 +19,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -52,8 +53,8 @@ abstract class BaseReportsEntryFragment :
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(this)
     }
-    private lateinit var selectedServer: TellaReportServer
-    private lateinit var servers: ArrayList<TellaReportServer>
+    private lateinit var selectedServer: Server
+    private lateinit var servers: ArrayList<Server>
     private var reportInstance: ReportInstance? = null
     private var isNewDraft = true
     private var isTitleEnabled = false
@@ -273,27 +274,32 @@ abstract class BaseReportsEntryFragment :
     }
 
     private fun initData() {
-
         viewModel.listServers()
         viewModel.serversList.observe(viewLifecycleOwner) { serversList ->
             servers = arrayListOf()
             servers.addAll(serversList)
+
             if (serversList.size > 1) {
                 val listDropDown = mutableListOf<DropDownItem>()
-                serversList.map { server ->
-                    listDropDown.add(DropDownItem(server.projectId, server.projectName))
+
+                serversList.forEach { server ->
+                    if (server is TellaReportServer) {
+                        listDropDown.add(DropDownItem(server.projectId, server.projectName))
+                    }
                 }
+
                 binding.dropdownGroup.show()
                 binding.serversDropdown.setListAdapter(
                     listDropDown,
                     this@BaseReportsEntryFragment,
                     baseActivity
                 )
+
                 this@BaseReportsEntryFragment.reportInstance?.let {
-                    servers.first { server -> server.id == it.serverId }.let {
-                        selectedServer = it
+                    servers.firstOrNull { server -> server.id == it.serverId }?.let { selectedServer ->
+                        this.selectedServer = selectedServer
                         isServerSelected = true
-                        binding.serversDropdown.setDefaultName(it.name)
+                        binding.serversDropdown.setDefaultName(selectedServer.name)
                         highLightButtons()
                     }
                 }

@@ -28,7 +28,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -2537,59 +2536,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-
-    private List<ReportInstance> getReportFormInstances(EntityStatus[] statuses) {
-        Cursor cursor = null;
-        List<ReportInstance> instances = new ArrayList<>();
-
-        List<String> s = new ArrayList<>(statuses.length);
-        for (EntityStatus status : statuses) {
-            s.add(Integer.toString(status.ordinal()));
-        }
-        String selection = "(" + TextUtils.join(", ", s) + ")";
-
-        try {
-
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_FORM_INSTANCE +
-                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
-                    new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
-                            D.C_REPORT_SERVER_ID,
-                            D.C_STATUS,
-                            D.C_UPDATED,
-                            D.C_CURRENT_UPLOAD,
-                            //   D.C_METADATA,
-                            D.C_DESCRIPTION_TEXT,
-                            D.C_TITLE,
-                            D.C_REPORT_API_ID,
-                            //  D.C_FORM_PART_STATUS,
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_STATUS + " IN " + selection,
-                    null, null,
-                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
-                    null
-            );
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportInstance instance = cursorToReportFormInstance(cursor);
-                instances.add(instance);
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return instances;
-    }
-
     private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
         Cursor cursor = null;
         List<ReportInstance> instances = new ArrayList<>();
@@ -2650,10 +2596,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<ReportInstance> getDraftReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.UNKNOWN,
                 EntityStatus.DRAFT
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     @NonNull
@@ -2699,7 +2645,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<ReportInstance> getOutboxReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.FINALIZED,
                 EntityStatus.SUBMISSION_ERROR,
                 EntityStatus.SUBMISSION_PENDING,
@@ -2707,13 +2653,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 EntityStatus.SUBMISSION_IN_PROGRESS,
                 EntityStatus.SCHEDULED,
                 EntityStatus.PAUSED
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     private List<ReportInstance> getSubmittedReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.SUBMITTED
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     @NonNull

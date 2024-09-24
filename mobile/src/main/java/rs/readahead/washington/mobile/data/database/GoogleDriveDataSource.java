@@ -18,6 +18,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
@@ -153,8 +154,9 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
-                .compose(applySchedulers());    }
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());
+    }
 
     @NonNull
     @Override
@@ -171,9 +173,15 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Single<List<ReportInstance>> listDraftReportInstances() {
-        return null;
+        return Single.fromCallable(this::getDraftReportInstances)
+                .compose(applySchedulers());
     }
-
+    private List<ReportInstance> getDraftReportInstances() {
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.UNKNOWN,
+                EntityStatus.DRAFT
+        },D.T_GOOGLE_DRIVE_FORM_INSTANCE,D.T_GOOGLE_DRIVE);
+    }
     @NonNull
     @Override
     public Single<List<ReportInstance>> listOutboxReportInstances() {

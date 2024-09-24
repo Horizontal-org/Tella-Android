@@ -55,8 +55,8 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _error = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable> get() = _error
 
-    protected val _serversList = MutableLiveData<List<TellaReportServer>>()
-    val serversList: LiveData<List<TellaReportServer>> get() = _serversList
+    protected val _serversList = MutableLiveData<List<Server>>()
+    val serversList: LiveData<List<Server>> get() = _serversList
 
     //TODO CHECK FOR LATER AHLEM + WAFA
     // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>

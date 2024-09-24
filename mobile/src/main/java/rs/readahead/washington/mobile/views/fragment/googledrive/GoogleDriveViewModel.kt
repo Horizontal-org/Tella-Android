@@ -1,25 +1,27 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
-import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
+import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import javax.inject.Inject
 
 @HiltViewModel
 class GoogleDriveViewModel @Inject constructor(
-   // private val getReportsServersUseCase: GetReportsServersUseCase,
+    // private val getReportsServersUseCase: GetReportsServersUseCase,
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
-//    private val getReportsUseCase: GetReportsUseCase,
-//    private val deleteReportUseCase: DeleteReportUseCase,
+    private val getReportsUseCase: GetReportsUseCase,
+    private val deleteReportUseCase: DeleteReportUseCase,
 //    private val getReportBundleUseCase: GetReportBundleUseCase,
     private val googleDriveRepository: GoogleDriveRepository,
     private val googleDriveDataSource: GoogleDriveDataSource
@@ -78,24 +80,24 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun listDrafts() {
-//        _progress.postValue(true)
-//        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
-//
-//        getReportsUseCase.execute(onSuccess = { result ->
-//            val resultList = mutableListOf<ViewEntityTemplateItem>()
-//
-//            result.map { instance ->
-//                resultList.add(
-//                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-//                        onMoreClicked = { onMoreClicked(instance) })
-//                )
-//            }
-//            _draftListReportFormInstance.postValue(resultList)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
+
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _draftListReportFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listOutbox() {
@@ -143,18 +145,18 @@ class GoogleDriveViewModel @Inject constructor(
     private fun onMoreClicked(reportInstance: ReportInstance) {
         _onMoreClickedFormInstance.postValue(reportInstance)
     }
-    
+
     override fun deleteReport(instance: ReportInstance) {
-//        _progress.postValue(true)
-//        deleteReportUseCase.setId(instance.id)
-//
-//        deleteReportUseCase.execute(onSuccess = {
-//            _instanceDeleted.postValue(instance.title)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        deleteReportUseCase.setId(instance.id)
+
+        deleteReportUseCase.execute(onSuccess = {
+            _instanceDeleted.postValue(instance.title)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun getReportBundle(instance: ReportInstance) {
@@ -259,13 +261,13 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun clearDisposable() {
-      //  googleDriveRepository.getDisposable().clear()
+        //  googleDriveRepository.getDisposable().clear()
     }
 
     override fun onCleared() {
         super.onCleared()
         dispose()
-    //    googleDriveRepository.cleanup()
+        //    googleDriveRepository.cleanup()
     }
 }
 
