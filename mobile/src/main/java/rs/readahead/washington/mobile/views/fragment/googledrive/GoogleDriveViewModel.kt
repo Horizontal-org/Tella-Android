@@ -1,6 +1,11 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
@@ -9,11 +14,13 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
+import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +29,7 @@ class GoogleDriveViewModel @Inject constructor(
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
-//    private val getReportBundleUseCase: GetReportBundleUseCase,
+    private val getReportBundleUseCase: GetReportBundleUseCase,
     private val googleDriveRepository: GoogleDriveRepository,
     private val googleDriveDataSource: GoogleDriveDataSource
 ) : BaseReportsViewModel() {
@@ -160,43 +167,43 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun getReportBundle(instance: ReportInstance) {
-//        _progress.postValue(true)
-//        getReportBundleUseCase.setId(instance.id)
-//        getReportBundleUseCase.execute(onSuccess = { result ->
-//            val resultInstance = result.instance
-//            disposables.add(dataSource.getReportMediaFiles(result.instance)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({ files ->
-//                    val vaultFiles: MutableList<VaultFile?> =
-//                        MyApplication.rxVault.get(result.fileIds).blockingGet()
-//                            ?: return@subscribe
-//                    val filesResult = arrayListOf<FormMediaFile>()
-//
-//                    files.forEach { formMediaFile ->
-//                        val vaultFile =
-//                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
-//                        if (vaultFile != null) {
-//                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-//                            fileResult.status = formMediaFile.status
-//                            fileResult.uploadedSize = formMediaFile.uploadedSize
-//                            filesResult.add(fileResult)
-//
-//                        }
-//                    }
-//                    resultInstance.widgetMediaFiles = filesResult
-//                    _reportInstance.postValue(resultInstance)
-//                }) { throwable: Throwable? ->
-//                    Timber.d(throwable)
-//                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-//                }
-//            )
-//
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        getReportBundleUseCase.setId(instance.id)
+        getReportBundleUseCase.execute(onSuccess = { result ->
+            val resultInstance = result.instance
+            disposables.add(googleDriveDataSource.getReportMediaFiles(result.instance)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ files ->
+                    val vaultFiles: MutableList<VaultFile?> =
+                        MyApplication.rxVault.get(result.fileIds).blockingGet()
+                            ?: return@subscribe
+                    val filesResult = arrayListOf<FormMediaFile>()
+
+                    files.forEach { formMediaFile ->
+                        val vaultFile =
+                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
+                        if (vaultFile != null) {
+                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
+                            fileResult.status = formMediaFile.status
+                            fileResult.uploadedSize = formMediaFile.uploadedSize
+                            filesResult.add(fileResult)
+
+                        }
+                    }
+                    resultInstance.widgetMediaFiles = filesResult
+                    _reportInstance.postValue(resultInstance)
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                }
+            )
+
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun getFormInstance(

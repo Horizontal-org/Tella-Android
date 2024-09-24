@@ -6,7 +6,10 @@ import android.text.TextUtils
 import net.zetetic.database.sqlcipher.SQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteQueryBuilder
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle
 import rs.readahead.washington.mobile.domain.exception.NotFountException
 import rs.readahead.washington.mobile.util.Util
 import timber.log.Timber
@@ -74,9 +77,115 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
         return instance
     }
 
+    protected fun getReportMediaFilesDB(instance: ReportInstance,reportTable: String): List<FormMediaFile>? {
+        var cursor: Cursor? = null
+        val files: MutableList<FormMediaFile> = java.util.ArrayList()
+        try {
+            val query = SQLiteQueryBuilder.buildQueryString(
+                false,
+                reportTable,
+                arrayOf(D.C_VAULT_FILE_ID, D.C_STATUS, D.C_UPLOADED_SIZE),
+                D.C_REPORT_INSTANCE_ID + "= ?",
+                null,
+                null,
+                null,
+                null
+            )
+            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(instance.id)))
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                val formMediaFile: FormMediaFile = cursorToFormMediaFile(cursor)
+                files.add(formMediaFile)
+                cursor.moveToNext()
+            }
+        } catch (e: java.lang.Exception) {
+            Timber.e(e, javaClass.name)
+        } finally {
+            cursor?.close()
+        }
+        return files
+    }
 
-    protected fun getReportFormInstances(statuses: Array<EntityStatus>,reportTable: String,
-                                         serverTable: String): List<ReportInstance>? {
+    protected fun getReportInstanceBundle(id: Long,reportTable: String): ReportInstanceBundle {
+        var cursor: Cursor? = null
+        val bundle = ReportInstanceBundle()
+        try {
+            val query = SQLiteQueryBuilder.buildQueryString(
+                false,
+                reportTable, arrayOf(
+                    cn(reportTable, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
+                    D.C_REPORT_SERVER_ID,
+                    D.C_REPORT_API_ID,
+                    D.C_CURRENT_UPLOAD,
+                    D.C_STATUS,
+                    D.C_UPDATED,
+                    D.C_METADATA,
+                    D.C_DESCRIPTION_TEXT,
+                    D.C_TITLE
+                ),
+                cn(reportTable, D.C_ID) + "= ?",
+                null, null, null, null
+            )
+            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(id)))
+            if (cursor.moveToFirst()) {
+                val instance = cursorToReportFormInstance(cursor)
+                bundle.instance = instance
+                val vaultFileIds: List<String> = getReportInstanceFileIds(instance.id,reportTable)
+                val iDs = vaultFileIds.toTypedArray() // Convert list to array
+                bundle.fileIds = iDs
+                return bundle
+            }
+        } catch (e: Exception) {
+            Timber.e(e, javaClass.name)
+            throw e
+        } finally {
+            cursor?.close()
+        }
+        return ReportInstanceBundle()
+    }
+
+    private fun getReportInstanceFileIds(instanceId: Long,reportTable: String): List<String> {
+        val ids: MutableList<String> = java.util.ArrayList()
+        var cursor: Cursor? = null
+        try {
+            val query = SQLiteQueryBuilder.buildQueryString(
+                false,
+                reportTable, arrayOf(
+                    D.C_VAULT_FILE_ID
+                ),
+                D.C_REPORT_INSTANCE_ID + "= ?",
+                null, null, D.C_VAULT_FILE_ID + " DESC", null
+            )
+            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(instanceId)))
+            cursor.moveToFirst()
+            while (!cursor.isAfterLast) {
+                val vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID))
+                ids.add(vaultFileId)
+                cursor.moveToNext()
+            }
+        } catch (e: java.lang.Exception) {
+            Timber.e(e, javaClass.name)
+        } finally {
+            cursor?.close()
+        }
+        return ids
+    }
+
+    protected fun cursorToFormMediaFile(cursor: Cursor): FormMediaFile {
+        val formMediaFile = FormMediaFile()
+        val statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS))
+        val id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID))
+        val uploadedSize = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED_SIZE))
+        formMediaFile.status = FormMediaFileStatus.entries[statusOrdinal]
+        formMediaFile.id = id
+        formMediaFile.uploadedSize = uploadedSize
+        return formMediaFile
+    }
+
+    protected fun getReportFormInstances(
+        statuses: Array<EntityStatus>, reportTable: String,
+        serverTable: String
+    ): List<ReportInstance>? {
         var cursor: Cursor? = null
         val instances: MutableList<ReportInstance> = ArrayList()
         val s: MutableList<String?> = ArrayList(statuses.size)
@@ -147,7 +256,7 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
     }
 
     @Throws(NotFountException::class)
-    protected fun deleteReportFormInstance(id: Long,reportTable: String) {
+    protected fun deleteReportFormInstance(id: Long, reportTable: String) {
         val count = database.delete(
             reportTable,
             D.C_ID + " = ?",

@@ -19,10 +19,10 @@ import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
-import rs.readahead.washington.mobile.domain.exception.NotFountException;
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import timber.log.Timber;
@@ -155,7 +155,12 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());
+    }
+
+    public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE))
                 .compose(applySchedulers());
     }
 
@@ -163,7 +168,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @Override
     public Completable deleteReportInstance(long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            dataBaseUtils.deleteReportFormInstance(id,D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+            dataBaseUtils.deleteReportFormInstance(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE);
             return null;
         }).compose(applyCompletableSchedulers());
     }
@@ -180,27 +185,51 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         return Single.fromCallable(this::getDraftReportInstances)
                 .compose(applySchedulers());
     }
+
     private List<ReportInstance> getDraftReportInstances() {
         return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.UNKNOWN,
                 EntityStatus.DRAFT
-        },D.T_GOOGLE_DRIVE_FORM_INSTANCE,D.T_GOOGLE_DRIVE);
+        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
     }
+
     @NonNull
     @Override
     public Single<List<ReportInstance>> listOutboxReportInstances() {
-        return null;
+        return Single.fromCallable(this::getOutboxReportInstances)
+                .compose(applySchedulers());
     }
 
     @NonNull
     @Override
     public Single<List<ReportInstance>> listSubmittedReportInstances() {
-        return null;
+        return Single.fromCallable(this::getSubmittedReportInstances)
+                .compose(applySchedulers());
     }
 
     @NonNull
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return null;
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE))
+                .compose(applySchedulers());
+    }
+
+    private List<ReportInstance> getOutboxReportInstances() {
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_ERROR,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS,
+                EntityStatus.SUBMISSION_IN_PROGRESS,
+                EntityStatus.SCHEDULED,
+                EntityStatus.PAUSED
+        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
+    }
+
+    private List<ReportInstance> getSubmittedReportInstances() {
+
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.SUBMITTED
+        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
     }
 }
