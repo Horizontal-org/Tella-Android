@@ -49,6 +49,8 @@ abstract class BaseReportsSendFragment :
                 if (entity.id == this@BaseReportsSendFragment.reportInstance?.id) {
                     when (entity.status) {
                         EntityStatus.SUBMITTED -> {
+                            //TODO SPECIFY FOR WHICH TYPE OF REPORT
+                            baseActivity.divviupUtils.runReportSentEvent()
                             viewModel.saveSubmitted(entity)
                         }
 
