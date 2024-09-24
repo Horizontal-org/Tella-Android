@@ -1,68 +1,64 @@
 package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.util.hide
-import rs.readahead.washington.mobile.util.show
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
-import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
-import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_FORM_INSTANCE
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
 @AndroidEntryPoint
-class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
-    FragmentReportsListBinding::inflate
-) {
+class OutboxReportsFragment : BaseReportsFragment() {
+
     private val viewModel by viewModels<ReportsViewModel>()
-    private val entityAdapter: EntityAdapter by lazy { EntityAdapter(isOutbox = true) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initData()
     }
 
-    private fun initView() {
-        binding.textViewEmpty.setText(getString(R.string.Outbox_Reports_Empty_Message))
-        binding.listReportsRecyclerView.apply {
-            adapter = entityAdapter
-            layoutManager = LinearLayoutManager(baseActivity)
-        }
+    override fun getViewModel(): BaseReportsViewModel {
+        return viewModel
     }
 
-    private fun initData() {
+    override fun getEmptyMessage(): Int {
+        return R.string.Outbox_Reports_Empty_Message
+    }
+
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_reports
+    }
+
+    override fun navigateToReportScreen(reportInstance: ReportInstance) {
+        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
+        navManager().navigateFromReportsScreenToReportSendScreen()
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    override fun initData() {
         with(viewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                if (outboxes.isEmpty()) {
-                    binding.listReportsRecyclerView.hide()
-                    binding.textViewEmpty.show()
-                } else {
-                    entityAdapter.setEntities(outboxes)
-                    binding.listReportsRecyclerView.show()
-                    binding.textViewEmpty.hide()
-                }
+                handleReportList(outboxes)
             }
+
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
-                showOutboxMenu(instance)
+                showMenu(
+                    instance = instance,
+                    title = instance.title,
+                    viewText = getString(R.string.View_Report),
+                    deleteText = getString(R.string.Delete_Report),
+                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
+                    deleteActionText = getString(R.string.Delete_Submitted_Report_Confirmation),
+                )
             }
-
-            reportInstance.observe(viewLifecycleOwner) { instance ->
-                openEntityInstance(instance)
-            }
-
-            onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
-                loadEntityInstance(instance)
-            }
-
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
@@ -72,40 +68,6 @@ class OutboxReportsFragment : BaseBindingFragment<FragmentReportsListBinding>(
                 viewModel.listOutbox()
             }
         }
-    }
-
-    private fun showOutboxMenu(instance: ReportInstance) {
-        BottomSheetUtils.showEditDeleteMenuSheet(
-            requireActivity().supportFragmentManager,
-            instance.title,
-            getString(R.string.View_Report),
-            getString(R.string.Delete_Report),
-            object : BottomSheetUtils.ActionSeleceted {
-                override fun accept(action: BottomSheetUtils.Action) {
-                    if (action === BottomSheetUtils.Action.EDIT) {
-                        loadEntityInstance(instance)
-                    }
-                    if (action === BottomSheetUtils.Action.DELETE) {
-                        viewModel.deleteReport(instance)
-                    }
-                }
-            },
-            getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Delete_Submitted_Report_Confirmation),
-            requireContext().getString(R.string.action_delete),
-            requireContext().getString(R.string.action_cancel),
-            R.drawable.ic_eye_white
-        )
-    }
-
-    private fun loadEntityInstance(reportInstance: ReportInstance) {
-        viewModel.getReportBundle(reportInstance)
-    }
-
-    private fun openEntityInstance(reportInstance: ReportInstance) {
-        bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
-        navManager().navigateFromReportsScreenToReportSendScreen()
     }
 
     override fun onResume() {
