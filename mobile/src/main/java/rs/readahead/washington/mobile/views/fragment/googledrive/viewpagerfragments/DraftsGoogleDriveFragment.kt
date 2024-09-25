@@ -14,7 +14,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Report
 @AndroidEntryPoint
 class DraftsGoogleDriveFragment : BaseReportsFragment() {
 
-    private val viewModel: GoogleDriveViewModel by viewModels()
+    private val viewModel by viewModels<GoogleDriveViewModel>()
 
     override fun getViewModel(): BaseReportsViewModel {
         return viewModel
@@ -25,7 +25,7 @@ class DraftsGoogleDriveFragment : BaseReportsFragment() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_reports
+        return R.drawable.ic_google_drive_logo
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {

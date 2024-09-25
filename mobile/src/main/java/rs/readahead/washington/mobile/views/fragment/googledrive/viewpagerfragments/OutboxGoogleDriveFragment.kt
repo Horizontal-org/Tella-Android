@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
@@ -18,7 +19,7 @@ const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 @AndroidEntryPoint
 class OutboxGoogleDriveFragment : BaseReportsFragment() {
 
-    private val viewModel by viewModels<ReportsViewModel>()
+    private val viewModel by viewModels<GoogleDriveViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,7 +35,7 @@ class OutboxGoogleDriveFragment : BaseReportsFragment() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_google_drive_small
+        return R.drawable.ic_google_drive_logo
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {

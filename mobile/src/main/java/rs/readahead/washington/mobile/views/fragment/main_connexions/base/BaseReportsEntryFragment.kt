@@ -296,12 +296,13 @@ abstract class BaseReportsEntryFragment :
                 )
 
                 this@BaseReportsEntryFragment.reportInstance?.let {
-                    servers.firstOrNull { server -> server.id == it.serverId }?.let { selectedServer ->
-                        this.selectedServer = selectedServer
-                        isServerSelected = true
-                        binding.serversDropdown.setDefaultName(selectedServer.name)
-                        highLightButtons()
-                    }
+                    servers.firstOrNull { server -> server.id == it.serverId }
+                        ?.let { selectedServer ->
+                            this.selectedServer = selectedServer
+                            isServerSelected = true
+                            binding.serversDropdown.setDefaultName(selectedServer.name)
+                            highLightButtons()
+                        }
                 }
             } else {
                 binding.dropdownGroup.hide()

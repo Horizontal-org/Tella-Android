@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
+import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GoogleDriveViewModel @Inject constructor(
-    // private val getReportsServersUseCase: GetReportsServersUseCase,
+    private val getReportsServersUseCase: GetReportsServersUseCase,
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportsUseCase: GetReportsUseCase,
     private val deleteReportUseCase: DeleteReportUseCase,
@@ -34,18 +35,15 @@ class GoogleDriveViewModel @Inject constructor(
     private val googleDriveDataSource: GoogleDriveDataSource
 ) : BaseReportsViewModel() {
 
-//   override val reportProcess = googleDriveRepository.getReportProgress()
-//    override val instanceProgress = googleDriveRepository.geInstanceProgress()
-
     override fun listServers() {
-//        _progress.postValue(true)
-//        getReportsServersUseCase.execute(onSuccess = { result ->
-//            _serversList.postValue(result)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            _serversList.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
