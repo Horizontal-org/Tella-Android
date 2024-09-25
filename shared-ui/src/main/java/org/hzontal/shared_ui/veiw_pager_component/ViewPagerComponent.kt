@@ -34,7 +34,11 @@ class ViewPagerComponent @JvmOverloads constructor(
         toolBar = findViewById(R.id.toolbar)
 
         viewPagerAdapter = ViewPagerAdapter((context as FragmentActivity), mutableListOf())
-        viewPager.adapter = viewPagerAdapter
+        viewPager.apply {
+            offscreenPageLimit = 3
+            isSaveEnabled = false
+            adapter = viewPagerAdapter
+        }
 
         context.theme.obtainStyledAttributes(attrs, R.styleable.ViewPagerComponent, 0, 0).apply {
             try {
