@@ -77,13 +77,16 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
         return instance
     }
 
-    protected fun getReportMediaFilesDB(instance: ReportInstance,reportTable: String): List<FormMediaFile>? {
+    protected fun getReportMediaFilesDB(
+        instance: ReportInstance,
+        tableName: String
+    ): List<FormMediaFile>? {
         var cursor: Cursor? = null
         val files: MutableList<FormMediaFile> = java.util.ArrayList()
         try {
             val query = SQLiteQueryBuilder.buildQueryString(
                 false,
-                reportTable,
+                tableName,
                 arrayOf(D.C_VAULT_FILE_ID, D.C_STATUS, D.C_UPLOADED_SIZE),
                 D.C_REPORT_INSTANCE_ID + "= ?",
                 null,
@@ -91,7 +94,7 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
                 null,
                 null
             )
-            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(instance.id)))
+            cursor = database.rawQuery(query, arrayOf(instance.id.toString()))
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 val formMediaFile: FormMediaFile = cursorToFormMediaFile(cursor)
@@ -106,7 +109,11 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
         return files
     }
 
-    protected fun getReportInstanceBundle(id: Long,reportTable: String): ReportInstanceBundle {
+    protected fun getReportInstanceBundle(
+        id: Long,
+        reportTable: String,
+        filesTableName: String
+    ): ReportInstanceBundle {
         var cursor: Cursor? = null
         val bundle = ReportInstanceBundle()
         try {
@@ -126,11 +133,12 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
                 cn(reportTable, D.C_ID) + "= ?",
                 null, null, null, null
             )
-            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(id)))
+            cursor = database.rawQuery(query, arrayOf(id.toString()))
             if (cursor.moveToFirst()) {
                 val instance = cursorToReportFormInstance(cursor)
                 bundle.instance = instance
-                val vaultFileIds: List<String> = getReportInstanceFileIds(instance.id,reportTable)
+                val vaultFileIds: List<String> =
+                    getReportInstanceFileIds(instance.id, filesTableName)
                 val iDs = vaultFileIds.toTypedArray() // Convert list to array
                 bundle.fileIds = iDs
                 return bundle
@@ -144,19 +152,19 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
         return ReportInstanceBundle()
     }
 
-    private fun getReportInstanceFileIds(instanceId: Long,reportTable: String): List<String> {
+    private fun getReportInstanceFileIds(instanceId: Long, tableName: String): List<String> {
         val ids: MutableList<String> = java.util.ArrayList()
         var cursor: Cursor? = null
         try {
             val query = SQLiteQueryBuilder.buildQueryString(
                 false,
-                reportTable, arrayOf(
+                tableName, arrayOf(
                     D.C_VAULT_FILE_ID
                 ),
                 D.C_REPORT_INSTANCE_ID + "= ?",
                 null, null, D.C_VAULT_FILE_ID + " DESC", null
             )
-            cursor = database.rawQuery(query, arrayOf(java.lang.Long.toString(instanceId)))
+            cursor = database.rawQuery(query, arrayOf(instanceId.toString()))
             cursor.moveToFirst()
             while (!cursor.isAfterLast) {
                 val vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID))

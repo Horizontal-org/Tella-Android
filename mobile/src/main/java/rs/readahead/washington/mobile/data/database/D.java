@@ -73,8 +73,6 @@ class D {
     static final String C_REPORT_SERVER_ID = "c_report_server_id";
     static final String C_REPORT_API_ID = "c_report_api_id";
 
-    static final String C_GOOGLE_DRIVE_SERVER_ID = "c_collect_server_id";
-
     static final String C_CURRENT_UPLOAD = "C_CURRENT_UPLOAD";
     static final String C_FORM_DEF = "c_form_def";
     static final String C_FORM_NAME = "c_form_name";

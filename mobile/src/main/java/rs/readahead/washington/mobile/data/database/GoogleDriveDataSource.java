@@ -160,7 +160,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     }
 
     public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
@@ -210,7 +210,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     @NonNull
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 

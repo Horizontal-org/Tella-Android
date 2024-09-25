@@ -420,7 +420,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_REPORT_FORM_INSTANCE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
@@ -2712,7 +2712,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE,D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
