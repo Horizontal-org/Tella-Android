@@ -106,41 +106,41 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun listOutbox() {
-//        _progress.postValue(true)
-//        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
-//        getReportsUseCase.execute(onSuccess = { result ->
-//            val resultList = mutableListOf<ViewEntityTemplateItem>()
-//            result.map { instance ->
-//                resultList.add(
-//                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-//                        onMoreClicked = { onMoreClicked(instance) })
-//                )
-//            }
-//            _outboxReportListFormInstance.postValue(resultList)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _outboxReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listSubmitted() {
-//        _progress.postValue(true)
-//        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
-//        getReportsUseCase.execute(onSuccess = { result ->
-//            val resultList = mutableListOf<ViewEntityTemplateItem>()
-//            result.map { instance ->
-//                resultList.add(
-//                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-//                        onMoreClicked = { onMoreClicked(instance) })
-//                )
-//            }
-//            _submittedReportListFormInstance.postValue(resultList)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _submittedReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     private fun openInstance(reportInstance: ReportInstance) {
