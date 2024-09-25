@@ -40,6 +40,7 @@ class GoogleDriveViewModel @Inject constructor(
     private val googleDriveDataSource: GoogleDriveDataSource
 ) : BaseReportsViewModel() {
 
+
     override fun listServers() {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { result ->
@@ -65,28 +66,28 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun saveOutbox(reportInstance: ReportInstance) {
-//        _progress.postValue(true)
-//        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
-//        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
-//            _reportInstance.postValue(result)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
 
     override fun saveSubmitted(reportInstance: ReportInstance) {
-//        _progress.postValue(true)
-//        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
-//        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
-//            _reportInstance.postValue(result)
-//        }, onError = {
-//            _error.postValue(it)
-//        }, onFinished = {
-//            _progress.postValue(false)
-//        })
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listDrafts() {
@@ -269,25 +270,37 @@ class GoogleDriveViewModel @Inject constructor(
 //            }
 //        )
     }
+
     private val _uploadResult = MutableLiveData<String>()
     val uploadResult: LiveData<String> get() = _uploadResult
 
     // Function to upload a file
     fun uploadFile(
-        localFile: java.io.File,
-        title: String,
-        description: String
+        reportInstance: ReportInstance
     ) {
-        viewModelScope.launch {
-            try {
-                val fileId = googleDriveRepository.uploadFile( serversList.value?.first() as GoogleDriveServer,localFile, title, description)
-                _uploadResult.postValue(fileId) // Post the result to LiveData
-            } catch (e: Exception) {
-                Timber.e(e, "File upload failed")
-                _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
+
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            viewModelScope.launch {
+                try {
+                    val fileId = googleDriveRepository.uploadFiles(
+                        result.first(),
+                        reportInstance
+                    )
+                    _uploadResult.postValue(fileId.first()) // Post the result to LiveData
+                } catch (e: Exception) {
+                    Timber.e(e, "File upload failed")
+                    _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
+                }
             }
-        }
+
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+
     }
+
     override fun clearDisposable() {
         //  googleDriveRepository.getDisposable().clear()
     }
@@ -295,7 +308,6 @@ class GoogleDriveViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         dispose()
-        //    googleDriveRepository.cleanup()
     }
 }
 

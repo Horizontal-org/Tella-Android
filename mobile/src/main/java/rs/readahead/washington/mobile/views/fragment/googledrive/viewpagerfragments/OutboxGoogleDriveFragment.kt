@@ -12,9 +12,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
-
-const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
+import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
 class OutboxGoogleDriveFragment : BaseReportsFragment() {
@@ -41,7 +39,7 @@ class OutboxGoogleDriveFragment : BaseReportsFragment() {
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
-        navManager().navigateFromGoogleDriveScreenToGoogleDriveSendScreen()
+        navManager().navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen()
     }
 
     @SuppressLint("StringFormatInvalid")

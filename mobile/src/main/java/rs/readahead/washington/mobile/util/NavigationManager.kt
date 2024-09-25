@@ -47,8 +47,12 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
     }
 
-    fun navigateFromGoogleDriveScreenToGoogleDriveSendScreen() {
+    fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
+    }
+
+    fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
     }
 
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {

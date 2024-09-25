@@ -7,12 +7,17 @@ import androidx.credentials.GetCredentialResponse
 import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
+import com.hzontal.tella_vault.rx.RxVault
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.apache.http.HttpException
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class GoogleDriveRepository @Inject constructor(
@@ -38,7 +43,8 @@ class GoogleDriveRepository @Inject constructor(
     override suspend fun fetchSharedDrives(email: String): List<Folder> {
         return withContext(Dispatchers.IO) {
             try {
-                val query = "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
+                val query =
+                    "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
                 val request = driveServiceProvider.getDriveService(email)
                     .files()
                     .list()
@@ -64,9 +70,11 @@ class GoogleDriveRepository @Inject constructor(
         }
         return withContext(Dispatchers.IO) {
             try {
-                val folder = driveServiceProvider.getDriveService(googleDriveServer.username).files().create(folderMetadata)
-                    .setFields("id")
-                    .execute()
+                val folder =
+                    driveServiceProvider.getDriveService(googleDriveServer.username).files()
+                        .create(folderMetadata)
+                        .setFields("id")
+                        .execute()
                 folder.id
             } catch (e: Exception) {
                 throw e
@@ -74,39 +82,45 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadFile(
+
+    suspend fun uploadFiles(
         googleDriveServer: GoogleDriveServer,
-        localFile: java.io.File, // This is a java.io.File for the local file
-        title: String,            // Title of the file
-        descriptionFile: String        // Description of the file
-    ): String {
+        reportInstance: ReportInstance // List of files from the database
+    ): List<String> {
         return withContext(Dispatchers.IO) {
-            try {
-                // Create the metadata for the Google Drive file
-                val fileMetadata = File().apply {
-                    name = title // Set the title as the file name
-                    description = descriptionFile // Add the description to metadata
-                    mimeType = "image/jpeg" // Adjust this based on the file type (e.g., "application/pdf")
-                    googleDriveServer.folderId?.let { parents = listOf(it) } // Add the file to the folder if folderId is provided
+            val uploadedFileIds = mutableListOf<String>()
+
+            for (mediaFile in reportInstance.widgetMediaFiles) {
+                try {
+                    val fileMetadata = File().apply {
+                        name = mediaFile.name // Use the file name from FormMediaFile
+                        description = mediaFile.id // Set the file description
+                        mimeType = mediaFile.mimeType // Set the mime type from the file metadata
+                        googleDriveServer.folderId
+                    }
+
+                    val file = MyApplication.rxVault.getFile(mediaFile.id)
+
+                    val fileContent = FileContent(mediaFile.mimeType, file)
+
+                    val uploadedFile = driveServiceProvider.getDriveService(googleDriveServer.username)
+                        .files()
+                        .create(fileMetadata, fileContent)
+                        .setFields("id") // Request only the file ID back
+                        .execute()
+
+                    Timber.d("File uploaded with ID: ${uploadedFile.id}")
+                    uploadedFileIds.add(uploadedFile.id) // Collect the uploaded file ID
+                } catch (e: Exception) {
+                    Timber.e(e, "Error uploading file: ${mediaFile.name}")
+                    throw e // Re-throw the exception to handle it later
                 }
-
-                // Create the FileContent for the upload
-                val fileContent = FileContent("image/jpeg", localFile) // Using the local file here
-
-                // Execute the upload request
-                val uploadedFile = driveServiceProvider.getDriveService(googleDriveServer.username)
-                    .files()
-                    .create(fileMetadata, fileContent)
-                    .setFields("id") // Only get the file ID back
-                    .execute()
-
-                Timber.d("File uploaded with ID: ${uploadedFile.id}")
-                uploadedFile.id // Return the file ID
-            } catch (e: Exception) {
-                Timber.e(e, "Error uploading file")
-                throw e
             }
+
+            uploadedFileIds // Return the list of uploaded file IDs
         }
     }
+
+
 
 }

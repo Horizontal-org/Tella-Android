@@ -8,7 +8,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 import java.io.File
 
 @AndroidEntryPoint
@@ -17,28 +16,15 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
     override val viewModel by viewModels<GoogleDriveViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        super.onViewCreated(view, savedInstanceState) // Call the base class's onViewCreated
+
         viewModel.uploadResult.observe(viewLifecycleOwner) { result ->
             // Handle the result here, e.g., show a Toast or update UI
             Toast.makeText(context, "Upload Result: $result", Toast.LENGTH_SHORT).show()
         }
+        reportInstance?.let { viewModel.uploadFile(it) }
 
-        // Trigger file upload (localFile, folderId, title, and description should be provided)
-        val localFile = createTempImageFile() // Create the local file
-        val title = "My Image Title"
-        val description = "This is a description of the image"
-
-        viewModel.uploadFile(localFile, title, description)
-
-    }
-
-    private fun createTempImageFile(): java.io.File {
-        // Create a temporary file in the app's cache directory
-        val tempFile = File.createTempFile("temp_image", ".jpg")
-
-        // Optionally, you can write some data to the file for testing
-        tempFile.writeText("This is a temporary image file for testing.")
-
-        return tempFile
     }
 
     override fun navigateBack() {
