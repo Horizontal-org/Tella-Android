@@ -206,11 +206,12 @@ abstract class BaseReportsEntryFragment :
         }
 
         binding.sendReportBtn.setOnClickListener {
-            if (isSubmitEnabled) {
-                saveReportAsPending()
-            } else {
-                showSubmitReportErrorSnackBar()
-            }
+//            if (isSubmitEnabled) {
+//                saveReportAsPending()
+//            } else {
+//                showSubmitReportErrorSnackBar()
+//            }
+              submitReport(null)
         }
 
         if (isTitleEnabled && isServerSelected) {
@@ -471,7 +472,7 @@ abstract class BaseReportsEntryFragment :
         highLightButtons()
     }
 
-    abstract fun submitReport(reportInstance: ReportInstance)
+    abstract fun submitReport(reportInstance: ReportInstance?)
 
     private fun showDeleteBottomSheet(reportInstance: ReportInstance) {
         BottomSheetUtils.showConfirmSheet(

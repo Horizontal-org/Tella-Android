@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import com.google.api.client.http.FileContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +74,40 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
+    suspend fun uploadFile(
+        googleDriveServer: GoogleDriveServer?,
+        localFile: java.io.File, // This is a java.io.File for the local file
+        folderId: String? = null, // ID of the folder to upload into
+        title: String,            // Title of the file
+        description: String        // Description of the file
+    ): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Create the metadata for the Google Drive file
+                val fileMetadata = File().apply {
+                    name = title // Set the title as the file name
+                  //  description = description // Add the description to metadata
+                    mimeType = "image/jpeg" // Adjust this based on the file type (e.g., "application/pdf")
+                    folderId?.let { parents = listOf(it) } // Add the file to the folder if folderId is provided
+                }
 
+                // Create the FileContent for the upload
+                val fileContent = FileContent("image/jpeg", localFile) // Using the local file here
+
+                // Execute the upload request
+                val uploadedFile = driveServiceProvider.getDriveService("Lakwafa@gmail.com")
+                    .files()
+                    .create(fileMetadata, fileContent)
+                    .setFields("id") // Only get the file ID back
+                    .execute()
+
+                Timber.d("File uploaded with ID: ${uploadedFile.id}")
+                uploadedFile.id // Return the file ID
+            } catch (e: Exception) {
+                Timber.e(e, "Error uploading file")
+                throw e
+            }
+        }
+    }
 
 }

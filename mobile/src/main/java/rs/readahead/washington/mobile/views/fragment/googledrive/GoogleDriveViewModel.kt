@@ -1,10 +1,14 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
@@ -264,7 +268,26 @@ class GoogleDriveViewModel @Inject constructor(
 //            }
 //        )
     }
+    private val _uploadResult = MutableLiveData<String>()
+    val uploadResult: LiveData<String> get() = _uploadResult
 
+    // Function to upload a file
+    fun uploadFile(
+        localFile: java.io.File,
+        folderId: String? = null,
+        title: String,
+        description: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val fileId = googleDriveRepository.uploadFile( null,localFile, folderId, title, description)
+                _uploadResult.postValue(fileId) // Post the result to LiveData
+            } catch (e: Exception) {
+                Timber.e(e, "File upload failed")
+                _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
+            }
+        }
+    }
     override fun clearDisposable() {
         //  googleDriveRepository.getDisposable().clear()
     }

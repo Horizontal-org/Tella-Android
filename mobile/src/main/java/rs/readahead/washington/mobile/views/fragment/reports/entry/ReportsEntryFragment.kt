@@ -15,7 +15,7 @@ class ReportsEntryFragment :
     override val viewModel: ReportsViewModel by viewModels()
 
 
-    override fun submitReport(reportInstance: ReportInstance) {
+    override fun submitReport(reportInstance: ReportInstance?) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
         navManager().navigateFromNewReportsScreenToReportSendScreen()
