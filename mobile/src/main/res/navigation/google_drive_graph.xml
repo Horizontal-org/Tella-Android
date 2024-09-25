@@ -39,11 +39,13 @@
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
     </fragment>
+
     <fragment
         android:id="@+id/googleDriveSendScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.googledrive.send.GoogleDriveSendFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
+
     <fragment
         android:id="@+id/googleDriveSubmittedScreen"
         android:name="rs.readahead.washington.mobile.views.fragment.googledrive.submitted.GoogleDriveSubmittedFragment"

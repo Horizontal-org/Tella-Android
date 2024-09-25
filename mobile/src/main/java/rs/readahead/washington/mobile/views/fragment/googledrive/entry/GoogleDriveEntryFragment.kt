@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive.entry
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -16,9 +14,6 @@ class GoogleDriveEntryFragment :
     BaseReportsEntryFragment() {
     override val viewModel: GoogleDriveViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
     override fun submitReport(reportInstance: ReportInstance?) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)

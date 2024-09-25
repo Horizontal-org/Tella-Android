@@ -48,17 +48,12 @@ class NavigationManager(
     }
 
     fun navigateFromGoogleDriveScreenToGoogleDriveSendScreen() {
-        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
+        navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }
 
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
-
-    fun navigateFromNewGoogleDriveScreenToGoogleDriveSendScreen() {
-        navigateWithBundleAndClearBackStack(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
-    }
-
 
     fun navigateFromReportsScreenToReportSendScreen() {
         navigateToWithBundle(R.id.action_reportsScreen_to_reportSendScreen)

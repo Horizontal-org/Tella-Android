@@ -15,6 +15,7 @@ import java.io.File
 class GoogleDriveSendFragment : BaseReportsSendFragment() {
 
     override val viewModel by viewModels<GoogleDriveViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.uploadResult.observe(viewLifecycleOwner) { result ->
             // Handle the result here, e.g., show a Toast or update UI
