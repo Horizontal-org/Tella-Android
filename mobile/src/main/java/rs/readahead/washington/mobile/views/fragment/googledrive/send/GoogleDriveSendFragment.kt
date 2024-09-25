@@ -24,11 +24,10 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
 
         // Trigger file upload (localFile, folderId, title, and description should be provided)
         val localFile = createTempImageFile() // Create the local file
-        val folderId = "1" // Folder ID
         val title = "My Image Title"
         val description = "This is a description of the image"
 
-        viewModel.uploadFile(localFile, folderId, title, description)
+        viewModel.uploadFile(localFile, title, description)
 
     }
 

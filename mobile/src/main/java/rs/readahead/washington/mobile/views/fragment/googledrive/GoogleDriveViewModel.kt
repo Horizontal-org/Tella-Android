@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
@@ -274,13 +275,12 @@ class GoogleDriveViewModel @Inject constructor(
     // Function to upload a file
     fun uploadFile(
         localFile: java.io.File,
-        folderId: String? = null,
         title: String,
         description: String
     ) {
         viewModelScope.launch {
             try {
-                val fileId = googleDriveRepository.uploadFile( null,localFile, folderId, title, description)
+                val fileId = googleDriveRepository.uploadFile( serversList.value?.first() as GoogleDriveServer,localFile, title, description)
                 _uploadResult.postValue(fileId) // Post the result to LiveData
             } catch (e: Exception) {
                 Timber.e(e, "File upload failed")

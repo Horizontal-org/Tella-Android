@@ -206,12 +206,11 @@ abstract class BaseReportsEntryFragment :
         }
 
         binding.sendReportBtn.setOnClickListener {
-//            if (isSubmitEnabled) {
-//                saveReportAsPending()
-//            } else {
-//                showSubmitReportErrorSnackBar()
-//            }
-              submitReport(null)
+            if (isSubmitEnabled) {
+                saveReportAsPending()
+            } else {
+                showSubmitReportErrorSnackBar()
+            }
         }
 
         if (isTitleEnabled && isServerSelected) {
