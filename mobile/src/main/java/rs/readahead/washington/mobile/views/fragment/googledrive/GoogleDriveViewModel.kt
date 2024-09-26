@@ -258,17 +258,26 @@ class GoogleDriveViewModel @Inject constructor(
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { result ->
-
             if (backButtonPressed) {
                 if (instance.status != EntityStatus.SUBMITTED) {
                     instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-                    googleDriveDataSource.saveInstance(instance).subscribe()
+                    disposables.add(
+                        googleDriveDataSource.saveInstance(instance)
+                            .subscribeOn(Schedulers.io()) // Run on background thread
+                            .observeOn(AndroidSchedulers.mainThread()) // Observe result on main thread
+                            .subscribe()
+                    )
                 }
             }
 
             if (!statusProvider.isOnline()) {
                 instance.status = EntityStatus.SUBMISSION_PENDING
-                googleDriveDataSource.saveInstance(instance).subscribe()
+                disposables.add(
+                    googleDriveDataSource.saveInstance(instance)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe()
+                )
             }
 
             if (instance.reportApiId.isEmpty()) {
@@ -277,32 +286,42 @@ class GoogleDriveViewModel @Inject constructor(
                         googleDriveServer = result.first(),
                         result.first().folderId,
                         instance.title, instance.description
-                    ).subscribe({ folderId ->
-                        instance.reportApiId = folderId
-                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-                        googleDriveDataSource.saveInstance(instance).subscribe()
-                        googleDriveRepository.uploadFilesWithProgress(
-                            folderId,
-                            result.first().username,
-                            instance
-                        )
-                    }, { error ->
-                        _error.postValue(error)
-                        instance.status = EntityStatus.SUBMISSION_ERROR
-                        googleDriveDataSource.saveInstance(instance).subscribe()
-                    })
+                    )
+                        .subscribeOn(Schedulers.io()) // Ensure network call runs on background thread
+                        .observeOn(AndroidSchedulers.mainThread()) // Observe result on main thread
+                        .subscribe({ folderId ->
+                            instance.reportApiId = folderId
+                            instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                            disposables.add(
+                                googleDriveDataSource.saveInstance(instance)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe()
+                            )
+                            googleDriveRepository.uploadFilesWithProgress(
+                                folderId,
+                                result.first().username,
+                                instance
+                            )
+                        }, { error ->
+                            _error.postValue(error)
+                            instance.status = EntityStatus.SUBMISSION_ERROR
+                            disposables.add(
+                                googleDriveDataSource.saveInstance(instance)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe()
+                            )
+                        })
                 )
-            } else {
-
             }
-
-
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
             _progress.postValue(false)
         })
     }
+
 
 
     override fun clearDisposable() {
