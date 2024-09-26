@@ -298,11 +298,18 @@ class GoogleDriveViewModel @Inject constructor(
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe()
                             )
-                            googleDriveRepository.uploadFilesWithProgress(
-                                folderId,
-                                result.first().username,
-                                instance
+
+                            disposables.add(
+                                googleDriveRepository.uploadFilesWithProgress(
+                                    folderId,
+                                    result.first().username,
+                                    instance
+                                ).subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe()
                             )
+
+
                         }, { error ->
                             _error.postValue(error)
                             instance.status = EntityStatus.SUBMISSION_ERROR
@@ -321,7 +328,6 @@ class GoogleDriveViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
-
 
 
     override fun clearDisposable() {
