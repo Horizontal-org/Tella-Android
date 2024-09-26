@@ -59,7 +59,7 @@ abstract class BaseReportsViewModel : ViewModel() {
     val serversList: LiveData<List<Server>> get() = _serversList
 
     //TODO CHECK FOR LATER AHLEM + WAFA
-    // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
+   // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
     // val instanceProgress: SingleLiveEvent<ReportInstance>
 
 

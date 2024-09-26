@@ -10,9 +10,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
@@ -39,6 +41,12 @@ class GoogleDriveViewModel @Inject constructor(
     private val googleDriveRepository: GoogleDriveRepository,
     private val googleDriveDataSource: GoogleDriveDataSource
 ) : BaseReportsViewModel() {
+
+    protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
+    val reportProcess: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _reportProcess
+
+    protected val _instanceProgress = MutableLiveData<ReportInstance>()
+    val instanceProgress: LiveData<ReportInstance> get() = _instanceProgress
 
 
     override fun listServers() {
@@ -282,14 +290,14 @@ class GoogleDriveViewModel @Inject constructor(
         getReportsServersUseCase.execute(onSuccess = { result ->
             viewModelScope.launch {
                 try {
-                    val fileId = googleDriveRepository.uploadFiles(
+                    val fileId = googleDriveRepository.uploadFilesWithProgress(
                         result.first(),
                         reportInstance
                     )
-                    _uploadResult.postValue(fileId.first()) // Post the result to LiveData
+                  //  _uploadResult.postValue(fileId.first()) // Post the result to LiveData
                 } catch (e: Exception) {
                     Timber.e(e, "File upload failed")
-                    _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
+                  //  _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
                 }
             }
 

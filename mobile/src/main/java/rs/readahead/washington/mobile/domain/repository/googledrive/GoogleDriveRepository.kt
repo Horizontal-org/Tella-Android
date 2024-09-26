@@ -9,11 +9,15 @@ import com.google.api.client.http.InputStreamContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.hzontal.tella_vault.rx.RxVault
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.FlowableEmitter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.http.HttpException
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
+import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -84,47 +88,59 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-
-    suspend fun uploadFiles(
+    fun uploadFilesWithProgress(
         googleDriveServer: GoogleDriveServer,
-        reportInstance: ReportInstance // List of files from the database
-    ): List<String> {
-        return withContext(Dispatchers.IO) {
-            val uploadedFileIds = mutableListOf<String>()
-
+        reportInstance: ReportInstance
+    ): Flowable<UploadProgressInfo> {
+        return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             for (mediaFile in reportInstance.widgetMediaFiles) {
                 try {
+                    // Prepare metadata for the file upload
                     val fileMetadata = File().apply {
-                        name = mediaFile.name // Use the file name from FormMediaFile
-                        description = mediaFile.id // Set the file description
-                        mimeType = mediaFile.mimeType // Set the mime type from the file metadata
-                        googleDriveServer.folderId
+                        name = mediaFile.name
+                        description = mediaFile.id
+                        mimeType = mediaFile.mimeType
+                        parents = listOf(googleDriveServer.folderId) // Specify the parent folder in Google Drive
                     }
 
-                    // Replace FileContent with SkippableMediaFileRequestBody
+                    // Create request body for uploading with progress
                     val requestBody = SkippableMediaFileRequestBody(
-                        mediaFile, // VaultFile from your code
-                        0L, // Set any bytes to skip if needed
-                         null // You can pass your own progress listener here
-                    )
+                        mediaFile, // The file to be uploaded
+                        0L
+                    ) // Starting from the beginning
+                    { currentProgress: Long, _ ->
+                        // Emit progress updates
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                currentProgress,
+                                mediaFile.size
+                            )
+                        )
+                    }
 
-                    // Upload the file using the request body
+                    // Build the file content for Google Drive API
+                    val fileContent = InputStreamContent(mediaFile.mimeType, requestBody.getPublicInputStream())
+
+                    // Upload the file to Google Drive
                     val uploadedFile = driveServiceProvider.getDriveService(googleDriveServer.username)
                         .files()
-                        .create(fileMetadata, InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream))
+                        .create(fileMetadata, fileContent)
                         .setFields("id") // Request only the file ID back
                         .execute()
 
+                    // Emit final progress as complete
+                    emitter.onNext(UploadProgressInfo(mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED))
+
+                    // Add uploaded file ID to the list
                     Timber.d("File uploaded with ID: ${uploadedFile.id}")
-                    uploadedFileIds.add(uploadedFile.id) // Collect the uploaded file ID
                 } catch (e: Exception) {
                     Timber.e(e, "Error uploading file: ${mediaFile.name}")
-                    throw e // Re-throw the exception to handle it later
+                    emitter.onError(e) // Emit error in case of failure
                 }
             }
-
-            uploadedFileIds // Return the list of uploaded file IDs
-        }
+            emitter.onComplete() // Complete the Flowable when all files are uploaded
+        }, BackpressureStrategy.BUFFER) // Use BUFFER strategy for backpressure management
     }
 
 
