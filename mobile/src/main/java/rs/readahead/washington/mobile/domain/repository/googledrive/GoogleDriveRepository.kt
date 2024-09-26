@@ -5,6 +5,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import com.google.api.client.http.FileContent
+import com.google.api.client.http.InputStreamContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
 import com.hzontal.tella_vault.rx.RxVault
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.http.HttpException
 import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -99,13 +101,17 @@ class GoogleDriveRepository @Inject constructor(
                         googleDriveServer.folderId
                     }
 
-                    val file = MyApplication.rxVault.getFile(mediaFile.id)
+                    // Replace FileContent with SkippableMediaFileRequestBody
+                    val requestBody = SkippableMediaFileRequestBody(
+                        mediaFile, // VaultFile from your code
+                        0L, // Set any bytes to skip if needed
+                         null // You can pass your own progress listener here
+                    )
 
-                    val fileContent = FileContent(mediaFile.mimeType, file)
-
+                    // Upload the file using the request body
                     val uploadedFile = driveServiceProvider.getDriveService(googleDriveServer.username)
                         .files()
-                        .create(fileMetadata, fileContent)
+                        .create(fileMetadata, InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream))
                         .setFields("id") // Request only the file ID back
                         .execute()
 
@@ -120,7 +126,6 @@ class GoogleDriveRepository @Inject constructor(
             uploadedFileIds // Return the list of uploaded file IDs
         }
     }
-
 
 
 }
