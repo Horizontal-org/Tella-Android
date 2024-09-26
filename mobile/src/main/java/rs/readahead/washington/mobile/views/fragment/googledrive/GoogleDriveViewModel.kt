@@ -6,6 +6,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
@@ -271,15 +272,29 @@ class GoogleDriveViewModel @Inject constructor(
             }
 
             if (instance.reportApiId.isEmpty()) {
-                googleDriveRepository.uploadFilesWithProgress(
-                    result.first(),
-                    instance
+                disposables.add(
+                    googleDriveRepository.createFolder(
+                        googleDriveServer = result.first(),
+                        result.first().folderId,
+                        instance.title, instance.description
+                    ).subscribe({ folderId ->
+                        instance.reportApiId = folderId
+                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                        googleDriveDataSource.saveInstance(instance).subscribe()
+                        googleDriveRepository.uploadFilesWithProgress(
+                            folderId,
+                            result.first().username,
+                            instance
+                        )
+                    }, { error ->
+                        _error.postValue(error)
+                        instance.status = EntityStatus.SUBMISSION_ERROR
+                        googleDriveDataSource.saveInstance(instance).subscribe()
+                    })
                 )
-
             } else {
 
             }
-
 
 
         }, onError = {

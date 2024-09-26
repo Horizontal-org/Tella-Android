@@ -28,8 +28,7 @@ class GoogleDriveRepository @Inject constructor(
 ) : GoogleDriveRepositoryInterface {
 
     override suspend fun getCredential(
-        request: GetCredentialRequest,
-        context: Context
+        request: GetCredentialRequest, context: Context
     ): GetCredentialResponse {
         return withContext(Dispatchers.IO) {
             try {
@@ -47,10 +46,7 @@ class GoogleDriveRepository @Inject constructor(
             try {
                 val query =
                     "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
-                val request = driveServiceProvider.getDriveService(email)
-                    .files()
-                    .list()
-                    .setQ(query)
+                val request = driveServiceProvider.getDriveService(email).files().list().setQ(query)
                     .setFields("files(id, name)")
 
                 val result: FileList = request.execute()
@@ -74,9 +70,7 @@ class GoogleDriveRepository @Inject constructor(
             try {
                 val folder =
                     driveServiceProvider.getDriveService(googleDriveServer.username).files()
-                        .create(folderMetadata)
-                        .setFields("id")
-                        .execute()
+                        .create(folderMetadata).setFields("id").execute()
                 folder.id
             } catch (e: Exception) {
                 throw e
@@ -85,22 +79,20 @@ class GoogleDriveRepository @Inject constructor(
     }
 
     override fun createFolder(
-        googleDriveServer: GoogleDriveServer,
-        parentFile: String
+        googleDriveServer: GoogleDriveServer, parentFile: String, title: String, folderDescription: String
     ): Single<String> {
         return Single.create { emitter ->
             try {
                 val folderMetadata = File().apply {
-                    name = googleDriveServer.folderName
+                    name = title
+                    description = folderDescription
                     mimeType = "application/vnd.google-apps.folder"
                     parents = listOf(parentFile)
                 }
 
-                val folder = driveServiceProvider.getDriveService(googleDriveServer.username)
-                    .files()
-                    .create(folderMetadata)
-                    .setFields("id")
-                    .execute()
+                val folder =
+                    driveServiceProvider.getDriveService(googleDriveServer.username).files()
+                        .create(folderMetadata).setFields("id").execute()
 
                 // Emit the folder ID on success
                 emitter.onSuccess(folder.id)
@@ -112,8 +104,7 @@ class GoogleDriveRepository @Inject constructor(
     }
 
     fun uploadFilesWithProgress(
-        googleDriveServer: GoogleDriveServer,
-        reportInstance: ReportInstance
+        folderParentId: String, email: String, reportInstance: ReportInstance
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             for (mediaFile in reportInstance.widgetMediaFiles) {
@@ -124,7 +115,7 @@ class GoogleDriveRepository @Inject constructor(
                         description = mediaFile.id
                         mimeType = mediaFile.mimeType
                         parents =
-                            listOf(googleDriveServer.folderId) // Specify the parent folder in Google Drive
+                            listOf(folderParentId) // Specify the parent folder in Google Drive
                     }
 
                     // Create request body for uploading with progress
@@ -136,9 +127,7 @@ class GoogleDriveRepository @Inject constructor(
                         // Emit progress updates
                         emitter.onNext(
                             UploadProgressInfo(
-                                mediaFile,
-                                currentProgress,
-                                mediaFile.size
+                                mediaFile, currentProgress, mediaFile.size
                             )
                         )
                     }
@@ -149,8 +138,7 @@ class GoogleDriveRepository @Inject constructor(
 
                     // Upload the file to Google Drive
                     val uploadedFile =
-                        driveServiceProvider.getDriveService(googleDriveServer.username)
-                            .files()
+                        driveServiceProvider.getDriveService(email).files()
                             .create(fileMetadata, fileContent)
                             .setFields("id") // Request only the file ID back
                             .execute()
@@ -158,9 +146,7 @@ class GoogleDriveRepository @Inject constructor(
                     // Emit final progress as complete
                     emitter.onNext(
                         UploadProgressInfo(
-                            mediaFile,
-                            mediaFile.size,
-                            UploadProgressInfo.Status.FINISHED
+                            mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED
                         )
                     )
 
