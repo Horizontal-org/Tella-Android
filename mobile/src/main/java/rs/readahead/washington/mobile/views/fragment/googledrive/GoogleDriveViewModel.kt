@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -15,7 +16,9 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
@@ -183,12 +186,10 @@ class GoogleDriveViewModel @Inject constructor(
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
             disposables.add(googleDriveDataSource.getReportMediaFiles(result.instance)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ files ->
                     val vaultFiles: MutableList<VaultFile?> =
-                        MyApplication.rxVault.get(result.fileIds).blockingGet()
-                            ?: return@subscribe
+                        MyApplication.rxVault.get(result.fileIds).blockingGet() ?: return@subscribe
                     val filesResult = arrayListOf<FormMediaFile>()
 
                     files.forEach { formMediaFile ->
@@ -207,8 +208,7 @@ class GoogleDriveViewModel @Inject constructor(
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
                     FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                }
-            )
+                })
 
         }, onError = {
             _error.postValue(it)
@@ -239,11 +239,7 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun getDraftFormInstance(
-        title: String,
-        description: String,
-        files: List<FormMediaFile>?,
-        server: Server,
-        id: Long?
+        title: String, description: String, files: List<FormMediaFile>?, server: Server, id: Long?
     ): ReportInstance {
         return ReportInstance(
             id = id ?: 0L,
@@ -273,10 +269,8 @@ class GoogleDriveViewModel @Inject constructor(
             if (!statusProvider.isOnline()) {
                 instance.status = EntityStatus.SUBMISSION_PENDING
                 disposables.add(
-                    googleDriveDataSource.saveInstance(instance)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe()
+                    googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe()
                 )
             }
 
@@ -285,9 +279,9 @@ class GoogleDriveViewModel @Inject constructor(
                     googleDriveRepository.createFolder(
                         googleDriveServer = result.first(),
                         result.first().folderId,
-                        instance.title, instance.description
-                    )
-                        .subscribeOn(Schedulers.io()) // Ensure network call runs on background thread
+                        instance.title,
+                        instance.description
+                    ).subscribeOn(Schedulers.io()) // Ensure network call runs on background thread
                         .observeOn(AndroidSchedulers.mainThread()) // Observe result on main thread
                         .subscribe({ folderId ->
                             instance.reportApiId = folderId
@@ -295,20 +289,9 @@ class GoogleDriveViewModel @Inject constructor(
                             disposables.add(
                                 googleDriveDataSource.saveInstance(instance)
                                     .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe()
+                                    .observeOn(AndroidSchedulers.mainThread()).subscribe()
                             )
-
-                            disposables.add(
-                                googleDriveRepository.uploadFilesWithProgress(
-                                    folderId,
-                                    result.first().username,
-                                    instance
-                                ).subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe()
-                            )
-
+                            submitFiles(instance, result.first(), folderId)
 
                         }, { error ->
                             _error.postValue(error)
@@ -316,8 +299,7 @@ class GoogleDriveViewModel @Inject constructor(
                             disposables.add(
                                 googleDriveDataSource.saveInstance(instance)
                                     .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe()
+                                    .observeOn(AndroidSchedulers.mainThread()).subscribe()
                             )
                         })
                 )
@@ -327,6 +309,65 @@ class GoogleDriveViewModel @Inject constructor(
         }, onFinished = {
             _progress.postValue(false)
         })
+    }
+
+
+    fun submitFiles(
+        instance: ReportInstance, server: GoogleDriveServer, reportApiId: String
+    ) {
+        if (instance.widgetMediaFiles.isEmpty()) {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
+            return
+        }
+
+        disposables.add(Flowable.fromIterable(instance.widgetMediaFiles).flatMap { file ->
+                googleDriveRepository.uploadFilesWithProgress(reportApiId, server.name, file)
+            }.doOnEach {
+                if (instance.status != EntityStatus.SUBMITTED) {
+                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                }
+            }.doOnTerminate { handleInstanceOnTerminate(instance) }
+            .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }.doOnError {
+                handleInstanceStatus(
+                    instance, EntityStatus.SUBMISSION_ERROR
+                )
+            }.doOnNext { progressInfo: UploadProgressInfo ->
+                updateFileStatus(instance, progressInfo)
+            }.doAfterNext { progressInfo ->
+                _reportProcess.postValue(Pair(progressInfo, instance))
+            }.subscribeOn(Schedulers.io()) // Non-blocking operation
+            .subscribe())
+    }
+
+    private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
+        val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+        file.apply {
+            status =
+                if (progressInfo.status == UploadProgressInfo.Status.FINISHED) FormMediaFileStatus.SUBMITTED else FormMediaFileStatus.NOT_SUBMITTED
+            uploadedSize = progressInfo.current
+        }
+        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+            status = file.status
+            uploadedSize = file.uploadedSize
+        }
+        googleDriveDataSource.saveInstance(instance).subscribe()
+    }
+
+    private fun handleInstanceStatus(
+        instance: ReportInstance, status: EntityStatus
+    ) {
+        instance.status = status
+        googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
+            .subscribe({}, { throwable ->
+                throwable.printStackTrace()
+            })
+        _instanceProgress.postValue(instance)
+    }
+
+    private fun handleInstanceOnTerminate(instance: ReportInstance) {
+        if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+        }
     }
 
 

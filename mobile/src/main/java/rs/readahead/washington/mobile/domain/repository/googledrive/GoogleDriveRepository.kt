@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
@@ -79,7 +80,10 @@ class GoogleDriveRepository @Inject constructor(
     }
 
     override fun createFolder(
-        googleDriveServer: GoogleDriveServer, parentFile: String, title: String, folderDescription: String
+        googleDriveServer: GoogleDriveServer,
+        parentFile: String,
+        title: String,
+        folderDescription: String
     ): Single<String> {
         return Single.create { emitter ->
             try {
@@ -104,59 +108,59 @@ class GoogleDriveRepository @Inject constructor(
     }
 
     fun uploadFilesWithProgress(
-        folderParentId: String, email: String, reportInstance: ReportInstance
+        folderParentId: String, email: String, mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-            for (mediaFile in reportInstance.widgetMediaFiles) {
-                try {
-                    // Prepare metadata for the file upload
-                    val fileMetadata = File().apply {
-                        name = mediaFile.name
-                        description = mediaFile.id
-                        mimeType = mediaFile.mimeType
-                        parents =
-                            listOf(folderParentId) // Specify the parent folder in Google Drive
-                    }
 
-                    // Create request body for uploading with progress
-                    val requestBody = SkippableMediaFileRequestBody(
-                        mediaFile, // The file to be uploaded
-                        0L
-                    ) // Starting from the beginning
-                    { currentProgress: Long, _ ->
-                        // Emit progress updates
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile, currentProgress, mediaFile.size
-                            )
-                        )
-                    }
+            try {
+                // Prepare metadata for the file upload
+                val fileMetadata = File().apply {
+                    name = mediaFile.name
+                    description = mediaFile.id
+                    mimeType = mediaFile.mimeType
+                    parents =
+                        listOf(folderParentId) // Specify the parent folder in Google Drive
+                }
 
-                    // Build the file content for Google Drive API
-                    val fileContent =
-                        InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
-
-                    // Upload the file to Google Drive
-                    val uploadedFile =
-                        driveServiceProvider.getDriveService(email).files()
-                            .create(fileMetadata, fileContent)
-                            .setFields("id") // Request only the file ID back
-                            .execute()
-
-                    // Emit final progress as complete
+                // Create request body for uploading with progress
+                val requestBody = SkippableMediaFileRequestBody(
+                    mediaFile, // The file to be uploaded
+                    0L
+                ) // Starting from the beginning
+                { currentProgress: Long, _ ->
+                    // Emit progress updates
                     emitter.onNext(
                         UploadProgressInfo(
-                            mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED
+                            mediaFile, currentProgress, mediaFile.size
                         )
                     )
-
-                    // Add uploaded file ID to the list
-                    Timber.d("File uploaded with ID: ${uploadedFile.id}")
-                } catch (e: Exception) {
-                    Timber.e(e, "Error uploading file: ${mediaFile.name}")
-                    emitter.onError(e) // Emit error in case of failure
                 }
+
+                // Build the file content for Google Drive API
+                val fileContent =
+                    InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
+
+                // Upload the file to Google Drive
+                val uploadedFile =
+                    driveServiceProvider.getDriveService(email).files()
+                        .create(fileMetadata, fileContent)
+                        .setFields("id") // Request only the file ID back
+                        .execute()
+
+                // Emit final progress as complete
+                emitter.onNext(
+                    UploadProgressInfo(
+                        mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED
+                    )
+                )
+
+                // Add uploaded file ID to the list
+                Timber.d("File uploaded with ID: ${uploadedFile.id}")
+            } catch (e: Exception) {
+                Timber.e(e, "Error uploading file: ${mediaFile.name}")
+                emitter.onError(e) // Emit error in case of failure
             }
+
             emitter.onComplete() // Complete the Flowable when all files are uploaded
         }, BackpressureStrategy.BUFFER) // Use BUFFER strategy for backpressure management
     }
