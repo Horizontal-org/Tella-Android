@@ -273,6 +273,8 @@ class GoogleDriveViewModel @Inject constructor(
                         .observeOn(AndroidSchedulers.mainThread()).subscribe()
                 )
             }
+            //TODO create an attribute for the server
+
 
             if (instance.reportApiId.isEmpty()) {
                 disposables.add(
@@ -303,6 +305,9 @@ class GoogleDriveViewModel @Inject constructor(
                             )
                         })
                 )
+            } else {
+                //TODO send the google drive if we already created a folder
+                submitFiles(instance, result.first(), instance.reportApiId)
             }
         }, onError = {
             _error.postValue(it)
@@ -359,16 +364,15 @@ class GoogleDriveViewModel @Inject constructor(
         instance: ReportInstance, status: EntityStatus
     ) {
         instance.status = status
-        googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
-            .subscribe({}, { throwable ->
-                throwable.printStackTrace()
-            })
+        googleDriveDataSource.saveInstance(instance).subscribe()
         _instanceProgress.postValue(instance)
     }
 
     private fun handleInstanceOnTerminate(instance: ReportInstance) {
         if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
             handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+        } else {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
         }
     }
 
