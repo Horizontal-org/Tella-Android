@@ -364,7 +364,10 @@ class GoogleDriveViewModel @Inject constructor(
         instance: ReportInstance, status: EntityStatus
     ) {
         instance.status = status
-        googleDriveDataSource.saveInstance(instance).subscribe()
+        googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
+            .subscribe({}, { throwable ->
+                throwable.printStackTrace()
+            })
         _instanceProgress.postValue(instance)
     }
 
