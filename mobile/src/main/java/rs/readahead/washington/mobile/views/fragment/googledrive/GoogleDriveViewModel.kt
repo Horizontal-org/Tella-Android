@@ -312,7 +312,7 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
 
-    fun submitFiles(
+    private fun submitFiles(
         instance: ReportInstance, server: GoogleDriveServer, reportApiId: String
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
@@ -320,23 +320,25 @@ class GoogleDriveViewModel @Inject constructor(
             return
         }
 
-        disposables.add(Flowable.fromIterable(instance.widgetMediaFiles).flatMap { file ->
-                googleDriveRepository.uploadFilesWithProgress(reportApiId, server.name, file)
+        disposables.add(
+            Flowable.fromIterable(instance.widgetMediaFiles).flatMap { file ->
+                googleDriveRepository.uploadFilesWithProgress(reportApiId, server.username, file)
             }.doOnEach {
                 if (instance.status != EntityStatus.SUBMITTED) {
                     instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
                 }
             }.doOnTerminate { handleInstanceOnTerminate(instance) }
-            .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }.doOnError {
-                handleInstanceStatus(
-                    instance, EntityStatus.SUBMISSION_ERROR
-                )
-            }.doOnNext { progressInfo: UploadProgressInfo ->
-                updateFileStatus(instance, progressInfo)
-            }.doAfterNext { progressInfo ->
-                _reportProcess.postValue(Pair(progressInfo, instance))
-            }.subscribeOn(Schedulers.io()) // Non-blocking operation
-            .subscribe())
+                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }.doOnError {
+                    handleInstanceStatus(
+                        instance, EntityStatus.SUBMISSION_ERROR
+                    )
+                }.doOnNext { progressInfo: UploadProgressInfo ->
+                    updateFileStatus(instance, progressInfo)
+                }.doAfterNext { progressInfo ->
+                    _reportProcess.postValue(Pair(progressInfo, instance))
+                }.subscribeOn(Schedulers.io()) // Non-blocking operation
+                .subscribe()
+        )
     }
 
     private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {

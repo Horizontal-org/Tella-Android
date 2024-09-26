@@ -118,16 +118,14 @@ class GoogleDriveRepository @Inject constructor(
                     name = mediaFile.name
                     description = mediaFile.id
                     mimeType = mediaFile.mimeType
-                    parents =
-                        listOf(folderParentId) // Specify the parent folder in Google Drive
+                    parents = listOf(folderParentId) // Specify the parent folder in Google Drive
                 }
 
                 // Create request body for uploading with progress
                 val requestBody = SkippableMediaFileRequestBody(
                     mediaFile, // The file to be uploaded
-                    0L
-                ) // Starting from the beginning
-                { currentProgress: Long, _ ->
+                    0L // Starting from the beginning
+                ) { currentProgress: Long, _ ->
                     // Emit progress updates
                     emitter.onNext(
                         UploadProgressInfo(
@@ -137,15 +135,13 @@ class GoogleDriveRepository @Inject constructor(
                 }
 
                 // Build the file content for Google Drive API
-                val fileContent =
-                    InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
+                val fileContent = InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
                 // Upload the file to Google Drive
-                val uploadedFile =
-                    driveServiceProvider.getDriveService(email).files()
-                        .create(fileMetadata, fileContent)
-                        .setFields("id") // Request only the file ID back
-                        .execute()
+                val uploadedFile = driveServiceProvider.getDriveService(email).files()
+                    .create(fileMetadata, fileContent)
+                    .setFields("id") // Request only the file ID back
+                    .execute()
 
                 // Emit final progress as complete
                 emitter.onNext(
@@ -156,12 +152,15 @@ class GoogleDriveRepository @Inject constructor(
 
                 // Add uploaded file ID to the list
                 Timber.d("File uploaded with ID: ${uploadedFile.id}")
+
+                // Complete the Flowable emission
+                emitter.onComplete()
+
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file: ${mediaFile.name}")
                 emitter.onError(e) // Emit error in case of failure
             }
 
-            emitter.onComplete() // Complete the Flowable when all files are uploaded
         }, BackpressureStrategy.BUFFER) // Use BUFFER strategy for backpressure management
     }
 
