@@ -2,22 +2,18 @@ package rs.readahead.washington.mobile.views.fragment.googledrive
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
-import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
@@ -25,6 +21,7 @@ import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundl
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
+import rs.readahead.washington.mobile.util.StatusProvider
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
@@ -39,7 +36,8 @@ class GoogleDriveViewModel @Inject constructor(
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val googleDriveRepository: GoogleDriveRepository,
-    private val googleDriveDataSource: GoogleDriveDataSource
+    private val googleDriveDataSource: GoogleDriveDataSource,
+    private val statusProvider: StatusProvider
 ) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
@@ -258,56 +256,39 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
-//        getReportsServersUseCase.execute(onSuccess = { servers ->
-//            val server = servers.first { it.id == instance.serverId }
-//            reportsRepository.submitReport(
-//                server,
-//                instance,
-//                backButtonPressed
-//            )
-//        },
-//            onError = { throwable ->
-//                if (throwable is NoConnectivityException) {
-//                    instance.status = EntityStatus.SUBMISSION_PENDING
-//                } else {
-//                    instance.status = EntityStatus.SUBMISSION_ERROR
-//                }
-//                _entityStatus.postValue(instance)
-//            },
-//            onFinished = {
-//            }
-//        )
-    }
-
-    private val _uploadResult = MutableLiveData<String>()
-    val uploadResult: LiveData<String> get() = _uploadResult
-
-    // Function to upload a file
-    fun uploadFile(
-        reportInstance: ReportInstance
-    ) {
-
         getReportsServersUseCase.execute(onSuccess = { result ->
-            viewModelScope.launch {
-                try {
-                    val fileId = googleDriveRepository.uploadFilesWithProgress(
-                        result.first(),
-                        reportInstance
-                    )
-                  //  _uploadResult.postValue(fileId.first()) // Post the result to LiveData
-                } catch (e: Exception) {
-                    Timber.e(e, "File upload failed")
-                  //  _uploadResult.postValue("Upload failed: ${e.message}") // Post the error message
+
+            if (backButtonPressed) {
+                if (instance.status != EntityStatus.SUBMITTED) {
+                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    googleDriveDataSource.saveInstance(instance).subscribe()
                 }
             }
+
+            if (!statusProvider.isOnline()) {
+                instance.status = EntityStatus.SUBMISSION_PENDING
+                googleDriveDataSource.saveInstance(instance).subscribe()
+            }
+
+            if (instance.reportApiId.isEmpty()) {
+                googleDriveRepository.uploadFilesWithProgress(
+                    result.first(),
+                    instance
+                )
+
+            } else {
+
+            }
+
+
 
         }, onError = {
             _error.postValue(it)
         }, onFinished = {
             _progress.postValue(false)
         })
-
     }
+
 
     override fun clearDisposable() {
         //  googleDriveRepository.getDisposable().clear()

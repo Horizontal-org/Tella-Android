@@ -58,10 +58,6 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
             }
         }
 
-
-
-        reportInstance?.let { viewModel.uploadFile(it) }
-
     }
 
     override fun navigateBack() {

@@ -4,18 +4,15 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import com.google.api.client.http.FileContent
 import com.google.api.client.http.InputStreamContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
-import com.hzontal.tella_vault.rx.RxVault
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
+import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.apache.http.HttpException
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
@@ -23,7 +20,6 @@ import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServe
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 class GoogleDriveRepository @Inject constructor(
@@ -88,6 +84,33 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
+    override fun createFolder(
+        googleDriveServer: GoogleDriveServer,
+        parentFile: String
+    ): Single<String> {
+        return Single.create { emitter ->
+            try {
+                val folderMetadata = File().apply {
+                    name = googleDriveServer.folderName
+                    mimeType = "application/vnd.google-apps.folder"
+                    parents = listOf(parentFile)
+                }
+
+                val folder = driveServiceProvider.getDriveService(googleDriveServer.username)
+                    .files()
+                    .create(folderMetadata)
+                    .setFields("id")
+                    .execute()
+
+                // Emit the folder ID on success
+                emitter.onSuccess(folder.id)
+            } catch (e: Exception) {
+                // Emit the error in case of failure
+                emitter.onError(e)
+            }
+        }
+    }
+
     fun uploadFilesWithProgress(
         googleDriveServer: GoogleDriveServer,
         reportInstance: ReportInstance
@@ -100,7 +123,8 @@ class GoogleDriveRepository @Inject constructor(
                         name = mediaFile.name
                         description = mediaFile.id
                         mimeType = mediaFile.mimeType
-                        parents = listOf(googleDriveServer.folderId) // Specify the parent folder in Google Drive
+                        parents =
+                            listOf(googleDriveServer.folderId) // Specify the parent folder in Google Drive
                     }
 
                     // Create request body for uploading with progress
@@ -120,17 +144,25 @@ class GoogleDriveRepository @Inject constructor(
                     }
 
                     // Build the file content for Google Drive API
-                    val fileContent = InputStreamContent(mediaFile.mimeType, requestBody.getPublicInputStream())
+                    val fileContent =
+                        InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
                     // Upload the file to Google Drive
-                    val uploadedFile = driveServiceProvider.getDriveService(googleDriveServer.username)
-                        .files()
-                        .create(fileMetadata, fileContent)
-                        .setFields("id") // Request only the file ID back
-                        .execute()
+                    val uploadedFile =
+                        driveServiceProvider.getDriveService(googleDriveServer.username)
+                            .files()
+                            .create(fileMetadata, fileContent)
+                            .setFields("id") // Request only the file ID back
+                            .execute()
 
                     // Emit final progress as complete
-                    emitter.onNext(UploadProgressInfo(mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED))
+                    emitter.onNext(
+                        UploadProgressInfo(
+                            mediaFile,
+                            mediaFile.size,
+                            UploadProgressInfo.Status.FINISHED
+                        )
+                    )
 
                     // Add uploaded file ID to the list
                     Timber.d("File uploaded with ID: ${uploadedFile.id}")
