@@ -306,8 +306,9 @@ class GoogleDriveViewModel @Inject constructor(
                         })
                 )
             } else {
-                //TODO send the google drive if we already created a folder
-                submitFiles(instance, result.first(), instance.reportApiId)
+                if (instance.status != EntityStatus.SUBMITTED) {
+                    submitFiles(instance, result.first(), instance.reportApiId)
+                }
             }
         }, onError = {
             _error.postValue(it)
@@ -381,12 +382,13 @@ class GoogleDriveViewModel @Inject constructor(
 
 
     override fun clearDisposable() {
-        //  googleDriveRepository.getDisposable().clear()
+        disposables.clear()
     }
 
     override fun onCleared() {
         super.onCleared()
         dispose()
+        disposables.clear()
     }
 }
 
