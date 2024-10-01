@@ -47,7 +47,7 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
                     }
 
                     EntityStatus.DELETED -> {
-                       // viewModel.instanceProgress.postValue(null)
+                        // viewModel.instanceProgress.postValue(null)
                         //handleBackButton()
                     }
 
@@ -58,13 +58,15 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
             }
         }
 
+
     }
 
     override fun navigateBack() {
-        if (isFromOutbox) {
-            nav().popBackStack()
+        if (isFromDraft) {
+            nav().popBackStack(R.id.newGoogleDriveScreen, true)
         } else {
-            nav().popBackStack(R.id.newReportScreen, true)
+            nav().popBackStack()
+
         }
     }
 

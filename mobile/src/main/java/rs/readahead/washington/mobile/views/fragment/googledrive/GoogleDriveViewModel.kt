@@ -7,7 +7,6 @@ import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
@@ -18,7 +17,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
@@ -254,67 +252,59 @@ class GoogleDriveViewModel @Inject constructor(
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { result ->
-            if (backButtonPressed) {
-                if (instance.status != EntityStatus.SUBMITTED) {
-                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-                    disposables.add(
-                        googleDriveDataSource.saveInstance(instance)
-                            .subscribeOn(Schedulers.io()) // Run on background thread
-                            .observeOn(AndroidSchedulers.mainThread()) // Observe result on main thread
-                            .subscribe()
-                    )
-                }
+            if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
+                updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
             }
 
             if (!statusProvider.isOnline()) {
-                instance.status = EntityStatus.SUBMISSION_PENDING
-                disposables.add(
-                    googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe()
-                )
+                updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
             }
-            //TODO create an attribute for the server
-
 
             if (instance.reportApiId.isEmpty()) {
-                disposables.add(
-                    googleDriveRepository.createFolder(
-                        googleDriveServer = result.first(),
-                        result.first().folderId,
-                        instance.title,
-                        instance.description
-                    ).subscribeOn(Schedulers.io()) // Ensure network call runs on background thread
-                        .observeOn(AndroidSchedulers.mainThread()) // Observe result on main thread
-                        .subscribe({ folderId ->
-                            instance.reportApiId = folderId
-                            instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-                            disposables.add(
-                                googleDriveDataSource.saveInstance(instance)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread()).subscribe()
-                            )
-                            submitFiles(instance, result.first(), folderId)
-
-                        }, { error ->
-                            _error.postValue(error)
-                            instance.status = EntityStatus.SUBMISSION_ERROR
-                            disposables.add(
-                                googleDriveDataSource.saveInstance(instance)
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread()).subscribe()
-                            )
-                        })
-                )
-            } else {
-                if (instance.status != EntityStatus.SUBMITTED) {
-                    submitFiles(instance, result.first(), instance.reportApiId)
-                }
+                createFolderAndSubmitFiles(instance, result.first())
+            } else if (instance.status != EntityStatus.SUBMITTED) {
+                submitFiles(instance, result.first(), instance.reportApiId)
             }
-        }, onError = {
-            _error.postValue(it)
+        }, onError = { error ->
+            _error.postValue(error)
         }, onFinished = {
             _progress.postValue(false)
         })
+    }
+
+    private fun updateInstanceStatus(instance: ReportInstance, status: EntityStatus) {
+        instance.status = status
+        disposables.add(
+            googleDriveDataSource.saveInstance(instance)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
+    }
+
+    private fun createFolderAndSubmitFiles(instance: ReportInstance, server: GoogleDriveServer) {
+        disposables.add(
+            googleDriveRepository.createFolder(
+                server,
+                server.folderId,
+                instance.title,
+                instance.description
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ folderId ->
+                    instance.reportApiId = folderId
+                    updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+                    submitFiles(instance, server, folderId)
+                }, { error ->
+                    handleSubmissionError(instance, error)
+                })
+        )
+    }
+
+    private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
+        _error.postValue(error)
+        updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
     }
 
 

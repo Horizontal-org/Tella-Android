@@ -24,7 +24,7 @@ abstract class BaseReportsSendFragment :
     protected lateinit var endView: ReportsFormEndView
     protected var reportInstance: ReportInstance? = null
     protected var isFromOutbox = false
-    private var isFromDraft = false
+    protected var isFromDraft = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
