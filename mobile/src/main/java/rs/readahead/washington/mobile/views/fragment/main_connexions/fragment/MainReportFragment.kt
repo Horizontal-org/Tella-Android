@@ -25,6 +25,7 @@ abstract class MainReportFragment :
     private fun initView() {
         // Setup the view with the fragment provider from the subclass
         val fragmentProvider = getFragmentProvider()
+        binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
         binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
         binding.viewPagerComponent.setTabTitles(
             listOf(
@@ -36,7 +37,7 @@ abstract class MainReportFragment :
         binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
 
         binding.newReportBtn.setOnClickListener {
-           navigateToNewReportScreen()
+            navigateToNewReportScreen()
         }
         binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
     }

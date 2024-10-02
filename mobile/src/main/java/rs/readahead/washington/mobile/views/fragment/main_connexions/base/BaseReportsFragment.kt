@@ -3,8 +3,11 @@ package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
@@ -40,6 +43,7 @@ abstract class BaseReportsFragment :
     }
 
     // Observe ViewModel data changes (e.g., report lists, progress, errors)
+    @SuppressLint("StringFormatInvalid")
     private fun observeViewModel() {
 
         getViewModel().progress.observe(viewLifecycleOwner) { isLoading ->
@@ -57,6 +61,7 @@ abstract class BaseReportsFragment :
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
             loadEntityInstance(instance)
         }
+
     }
 
     @SuppressLint("BinaryOperationInTimber")

@@ -1,16 +1,20 @@
 package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.proxym.shared.widget.dropdown_list.CustomDropdownItemClickListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
@@ -273,6 +277,7 @@ abstract class BaseReportsEntryFragment :
         )
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun initData() {
         viewModel.listServers()
         viewModel.serversList.observe(viewLifecycleOwner) { serversList ->
@@ -344,7 +349,15 @@ abstract class BaseReportsEntryFragment :
         }
 
         viewModel.instanceDeleted.observe(viewLifecycleOwner) {
-            nav().popBackStack()
+            viewLifecycleOwner.lifecycleScope.launch {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
+                delay(200) // Delay for 200 milliseconds before popping the back stack
+                nav().popBackStack() // Pop the back stack after showing the SnackBar
+            }
         }
 
     }

@@ -22,11 +22,5 @@ internal class GoogleDriveTabsFragment : MainReportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scheduleWorker()
-    }
-
-    //Todo add worker
-    private fun scheduleWorker() {
-
     }
 }

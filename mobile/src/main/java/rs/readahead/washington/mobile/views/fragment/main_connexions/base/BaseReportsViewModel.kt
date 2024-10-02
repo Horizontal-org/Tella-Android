@@ -37,7 +37,7 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _onOpenClickedFormInstance = MutableLiveData<ReportInstance>()
     val onOpenClickedInstance: LiveData<ReportInstance> get() = _onOpenClickedFormInstance
 
-    protected val _instanceDeleted = SingleLiveEvent<String?>()
+    protected val _instanceDeleted = MutableLiveData<String?>()
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
 
     protected val _reportInstance = SingleLiveEvent<ReportInstance>()

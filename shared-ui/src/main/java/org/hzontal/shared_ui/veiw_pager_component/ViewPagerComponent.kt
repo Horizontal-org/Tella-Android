@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,8 +23,8 @@ class ViewPagerComponent @JvmOverloads constructor(
     private val tabLayout: TabLayout
     private val viewPager: ViewPager2
     private val toolBarTextView: TextView
-    private val viewPagerAdapter: ViewPagerAdapter
-    private val toolBar : ToolbarComponent
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private val toolBar: ToolbarComponent
     private var tabTitles: List<String> = emptyList()
     private var fragmentProvider: FragmentProvider? = null
 
@@ -33,12 +35,6 @@ class ViewPagerComponent @JvmOverloads constructor(
         toolBarTextView = findViewById(R.id.toolbar_textView)
         toolBar = findViewById(R.id.toolbar)
 
-        viewPagerAdapter = ViewPagerAdapter((context as FragmentActivity), mutableListOf())
-        viewPager.apply {
-            offscreenPageLimit = 3
-            isSaveEnabled = false
-            adapter = viewPagerAdapter
-        }
 
         context.theme.obtainStyledAttributes(attrs, R.styleable.ViewPagerComponent, 0, 0).apply {
             try {
@@ -50,6 +46,16 @@ class ViewPagerComponent @JvmOverloads constructor(
                 recycle()
             }
         }
+    }
+
+    fun initViewPager(fm: FragmentManager, lifecycle: Lifecycle, pageLimit: Int) {
+        viewPagerAdapter = ViewPagerAdapter(fm, lifecycle)
+        viewPager.apply {
+            offscreenPageLimit = pageLimit
+            isSaveEnabled = true
+            adapter = viewPagerAdapter
+        }
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()

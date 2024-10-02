@@ -1,7 +1,11 @@
 package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
@@ -13,7 +17,7 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEn
 abstract class BaseReportSubmittedFragment :
     BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
 
-    protected abstract val viewModel :BaseReportsViewModel
+    protected abstract val viewModel: BaseReportsViewModel
     private lateinit var endView: ReportsFormEndView
     private var reportInstance: ReportInstance? = null
 
@@ -23,13 +27,19 @@ abstract class BaseReportSubmittedFragment :
         initData()
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun initData() {
         with(viewModel) {
-            instanceDeleted.observe(viewLifecycleOwner) { title ->
-                title?.let {
-                    nav().popBackStack()
+            instanceDeleted.observe(viewLifecycleOwner) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    ReportsUtils.showReportDeletedSnackBar(
+                        getString(
+                            R.string.Report_Deleted_Confirmation, it
+                        ), baseActivity
+                    )
+                    delay(200) // Delay for 200 milliseconds before popping the back stack
+                    nav().popBackStack() // Pop the back stack after showing the SnackBar
                 }
-
             }
         }
     }

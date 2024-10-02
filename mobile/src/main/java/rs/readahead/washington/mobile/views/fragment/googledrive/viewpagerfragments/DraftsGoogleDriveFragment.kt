@@ -2,7 +2,10 @@ package rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragm
 
 import android.annotation.SuppressLint
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
@@ -50,15 +53,6 @@ class DraftsGoogleDriveFragment : BaseReportsFragment() {
                     deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
                     deleteActionText = getString(R.string.Delete_Report_Confirmation)
                 )
-            }
-
-            instanceDeleted.observe(viewLifecycleOwner) {
-                ReportsUtils.showReportDeletedSnackBar(
-                    getString(
-                        R.string.Report_Deleted_Confirmation, it
-                    ), baseActivity
-                )
-                viewModel.listDrafts()
             }
         }
     }

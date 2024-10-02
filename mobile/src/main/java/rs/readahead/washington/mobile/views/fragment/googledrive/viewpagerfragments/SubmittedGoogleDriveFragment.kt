@@ -59,15 +59,6 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment() {
                     deleteActionText = getString(string.Delete_Submitted_Report_Confirmation),
                 )
             }
-
-            instanceDeleted.observe(viewLifecycleOwner) {
-                ReportsUtils.showReportDeletedSnackBar(
-                    getString(
-                        string.Report_Deleted_Confirmation, it
-                    ), baseActivity
-                )
-                viewModel.listSubmitted()
-            }
         }
     }
 
