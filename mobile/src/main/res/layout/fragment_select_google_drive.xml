@@ -34,7 +34,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
             android:contentDescription="@string/Server_Connect_Icon"
-            android:src="@drawable/ic_google_drive_logo"
+            android:src="@drawable/ic_google_drive"
             android:textColor="@color/wa_white"
             app:layout_constraintBottom_toTopOf="@+id/title_textView"
             app:layout_constraintEnd_toEndOf="parent"

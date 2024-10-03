@@ -28,7 +28,7 @@ class DraftsGoogleDriveFragment : BaseReportsFragment() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_google_drive_logo
+        return R.drawable.ic_google_drive
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
