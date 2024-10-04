@@ -41,6 +41,7 @@ import rs.readahead.washington.mobile.util.C
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.fragment.feedback.SendFeedbackFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsEntryFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
 import rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment
@@ -289,6 +290,12 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                 }
 
                 is BaseReportsEntryFragment -> {
+                    if (fragment.onBackPressed()) {
+                        return true
+                    }
+                }
+
+                is BaseReportsSendFragment -> {
                     if (fragment.onBackPressed()) {
                         return true
                     }
