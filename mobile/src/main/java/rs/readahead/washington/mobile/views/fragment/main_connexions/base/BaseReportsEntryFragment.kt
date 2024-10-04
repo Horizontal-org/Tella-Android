@@ -49,7 +49,7 @@ const val BUNDLE_IS_FROM_DRAFT = "bundle_is_from_draft"
 
 abstract class BaseReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
-    IReportAttachmentsHandler, CustomDropdownItemClickListener {
+    IReportAttachmentsHandler, CustomDropdownItemClickListener, OnNavBckListener {
     protected abstract val viewModel: BaseReportsViewModel // Child classes provide the specific ViewModel
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
@@ -497,5 +497,10 @@ abstract class BaseReportsEntryFragment :
                     }
                 }
             })
+    }
+
+    override fun onBackPressed(): Boolean {
+        exitOrSave()
+        return true
     }
 }
