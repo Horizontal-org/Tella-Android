@@ -21,6 +21,9 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
+        packagingOptions {
+            resources.excludes.add("META-INF/*")
+        }
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
 
@@ -184,15 +187,21 @@ dependencies {
     implementation "androidx.credentials:credentials:1.2.2"
     implementation "androidx.credentials:credentials-play-services-auth:1.2.2"
     implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"
+
     implementation 'com.google.api-client:google-api-client-android:1.33.0'
     implementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
     implementation 'com.google.api-client:google-api-client-gson:1.34.0'
+
     // Google HTTP Client Library
     implementation 'com.google.http-client:google-http-client-android:1.41.2'
+
     // Gson for JSON parsing
     implementation 'com.google.code.gson:gson:2.11.0'
+
     // Google Drive API
     implementation 'com.google.apis:google-api-services-drive:v3-rev20230227-1.34.1'
+
+
 }
 
 kapt {
