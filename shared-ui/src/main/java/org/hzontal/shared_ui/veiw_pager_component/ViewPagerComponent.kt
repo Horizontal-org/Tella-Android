@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -92,5 +91,9 @@ class ViewPagerComponent @JvmOverloads constructor(
         toolBar.backClickListener = {
             onBackClick?.invoke()  // Call the passed lambda function if it's not null
         }
+    }
+
+    fun getViewPager(): ViewPager2 {
+        return viewPager
     }
 }

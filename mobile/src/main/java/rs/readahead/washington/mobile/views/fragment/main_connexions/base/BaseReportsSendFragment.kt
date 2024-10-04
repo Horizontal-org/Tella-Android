@@ -10,9 +10,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.reports.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
-import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -44,6 +42,7 @@ abstract class BaseReportsSendFragment :
                     }
 
                     EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
+                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                         handleBackButton()
                     }
 
@@ -68,7 +67,7 @@ abstract class BaseReportsSendFragment :
 
     private fun initView() {
         arguments?.let { bundle ->
-            reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
+            reportInstance = bundle.getSerializable(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
             isFromOutbox = bundle.getBoolean(BUNDLE_IS_FROM_OUTBOX)
             isFromDraft = bundle.getBoolean(BUNDLE_IS_FROM_DRAFT)
             showFormEndView()
@@ -110,7 +109,7 @@ abstract class BaseReportsSendFragment :
     }
 
     protected fun pauseResumeLabel(reportFormInstance: ReportInstance?) {
-        if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
+        if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS || reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
             binding.nextBtn.text = getString(R.string.Reports_Pause)
         } else {
             binding.nextBtn.text = getString(R.string.Reports_Resume)

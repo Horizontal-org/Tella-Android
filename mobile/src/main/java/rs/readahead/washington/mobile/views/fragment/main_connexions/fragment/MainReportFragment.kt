@@ -6,6 +6,11 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.MainReportConnexionBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.DRAFT_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SUBMITTED_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData
+
 
 abstract class MainReportFragment :
     BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate) {
@@ -40,5 +45,21 @@ abstract class MainReportFragment :
             navigateToNewReportScreen()
         }
         binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
+
+        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
+            when (position) {
+                DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+            }
+        }
+    }
+
+    private fun setCurrentTab(position: Int) {
+        if (isViewInitialized) {
+            binding.viewPagerComponent.getViewPager().post {
+                binding.viewPagerComponent.getViewPager().setCurrentItem(position, true)
+            }
+        }
     }
 }

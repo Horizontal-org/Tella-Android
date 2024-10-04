@@ -36,8 +36,6 @@ import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Compa
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.REPORT_ENTRY
-import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
