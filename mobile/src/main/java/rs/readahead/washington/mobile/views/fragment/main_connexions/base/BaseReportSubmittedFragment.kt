@@ -13,9 +13,11 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 abstract class BaseReportSubmittedFragment :
-    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate) {
+    BaseBindingFragment<FragmentSendReportBinding>(FragmentSendReportBinding::inflate),
+    OnNavBckListener {
 
     protected abstract val viewModel: BaseReportsViewModel
     private lateinit var endView: ReportsFormEndView
@@ -93,6 +95,10 @@ abstract class BaseReportSubmittedFragment :
             binding.endViewContainer.addView(endView)
             endView.clearPartsProgress(reportFormInstance)
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        return nav().popBackStack()
     }
 
 }

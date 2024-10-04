@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.views.fragment.main_connexions.fragment.MainReportFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.MainReportFragment
 
 internal class GoogleDriveTabsFragment : MainReportFragment() {
 

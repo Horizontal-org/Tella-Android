@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.fragment.main_connexions.fragment
+package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
 import android.os.Bundle
 import android.view.View
@@ -6,14 +6,12 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.MainReportConnexionBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.DRAFT_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.OUTBOX_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SUBMITTED_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
 abstract class MainReportFragment :
-    BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate) {
+    BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate),
+    OnNavBckListener {
 
     // Abstract method to be implemented by subclasses to provide their own FragmentProvider
     abstract fun getFragmentProvider(): FragmentProvider
@@ -61,5 +59,10 @@ abstract class MainReportFragment :
                 binding.viewPagerComponent.getViewPager().setCurrentItem(position, true)
             }
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        back()
+        return true
     }
 }
