@@ -46,10 +46,6 @@ class OutboxReportsFragment : BaseReportsFragment() {
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
         with(viewModel) {
-            outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                handleReportList(outboxes)
-            }
-
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showMenu(
                     instance = instance,
@@ -69,10 +65,5 @@ class OutboxReportsFragment : BaseReportsFragment() {
                 viewModel.listOutbox()
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.listOutbox()
     }
 }

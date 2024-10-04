@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -11,8 +12,11 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.util.jobs.WorkerUploadReport
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.MainReportFragment
+import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 class ReportTabsFragment : MainReportFragment() {
+
+    override val viewModel by viewModels<ReportsViewModel>()
 
     override fun getFragmentProvider(): FragmentProvider {
         return ReportsFragmentProvider()

@@ -20,6 +20,9 @@ abstract class BaseReportsViewModel : ViewModel() {
 
     protected val disposables = CompositeDisposable()
 
+    protected val _reportCounts = SingleLiveEvent<ReportCounts>()
+    val reportCounts: LiveData<ReportCounts> get() = _reportCounts
+
     protected val _draftListReportFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
 
@@ -85,6 +88,7 @@ abstract class BaseReportsViewModel : ViewModel() {
 
     abstract fun listSubmitted()
     abstract fun listOutbox()
+    abstract fun listOutboxAndSubmitted()
     abstract fun listDrafts()
     abstract fun saveSubmitted(reportInstance: ReportInstance)
     abstract fun saveOutbox(reportInstance: ReportInstance)

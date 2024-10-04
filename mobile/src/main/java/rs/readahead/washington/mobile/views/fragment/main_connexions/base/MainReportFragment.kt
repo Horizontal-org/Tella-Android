@@ -6,12 +6,16 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.MainReportConnexionBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
 
 abstract class MainReportFragment :
     BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate),
     OnNavBckListener {
+
+    protected abstract val viewModel: BaseReportsViewModel
 
     // Abstract method to be implemented by subclasses to provide their own FragmentProvider
     abstract fun getFragmentProvider(): FragmentProvider
@@ -28,8 +32,6 @@ abstract class MainReportFragment :
     private fun initView() {
         // Setup the view with the fragment provider from the subclass
         val fragmentProvider = getFragmentProvider()
-        binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
-        binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
         binding.viewPagerComponent.setTabTitles(
             listOf(
                 getString(R.string.collect_draft_tab_title),
@@ -37,6 +39,11 @@ abstract class MainReportFragment :
                 getString(R.string.collect_sent_tab_title)
             )
         )
+        viewModel.listOutboxAndSubmitted()
+
+        binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
+        binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
+
         binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
 
         binding.newReportBtn.setOnClickListener {
@@ -51,6 +58,33 @@ abstract class MainReportFragment :
                 SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
             }
         }
+
+        updateOutboxTitle.observe(baseActivity) { outBoxesSize ->
+            binding.viewPagerComponent.updateTabTitle(
+                OUTBOX_LIST_PAGE_INDEX,
+                outBoxesSize
+            )
+        }
+
+        updateSubmittedTitle.observe(baseActivity) { outBoxesSize ->
+            binding.viewPagerComponent.updateTabTitle(
+                SUBMITTED_LIST_PAGE_INDEX,
+                outBoxesSize
+            )
+        }
+
+        viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
+            binding.viewPagerComponent.updateTabTitle(
+                OUTBOX_LIST_PAGE_INDEX,
+                reportCounts.outboxCount
+            )
+            binding.viewPagerComponent.updateTabTitle(
+                SUBMITTED_LIST_PAGE_INDEX,
+                reportCounts.submittedCount
+            )
+        }
+
+
     }
 
     private fun setCurrentTab(position: Int) {

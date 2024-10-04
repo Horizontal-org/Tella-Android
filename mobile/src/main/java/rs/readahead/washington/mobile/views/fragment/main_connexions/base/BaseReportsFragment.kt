@@ -15,6 +15,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
@@ -61,6 +62,12 @@ abstract class BaseReportsFragment :
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
             loadEntityInstance(instance)
         }
+
+        getViewModel().outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
+            handleReportList(outboxes)
+            updateOutboxTitle.postValue(outboxes.size)
+        }
+
 
     }
 
@@ -135,6 +142,11 @@ abstract class BaseReportsFragment :
 
     protected fun loadEntityInstance(reportInstance: ReportInstance) {
         getViewModel().getReportBundle(reportInstance)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getViewModel().listOutbox()
     }
 
 }
