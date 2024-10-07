@@ -16,7 +16,6 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Shared
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
-
 abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
 

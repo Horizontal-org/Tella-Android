@@ -18,7 +18,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Shared
 class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     // Use the ViewModel provided by Hilt
-    private val viewModel: GoogleDriveViewModel by viewModels()
+    private val submittedGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,7 +26,7 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
     }
 
     override fun getViewModel(): GoogleDriveViewModel {
-        return viewModel
+        return submittedGoogleDriveViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -44,7 +44,7 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(viewModel) {
+        with(submittedGoogleDriveViewModel) {
             submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
                 handleReportList(submitted)
                 updateSubmittedTitle.postValue(submitted.size)
@@ -67,13 +67,13 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listSubmitted()
+                submittedGoogleDriveViewModel.listSubmitted()
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.listSubmitted()
+        submittedGoogleDriveViewModel.listSubmitted()
     }
 }

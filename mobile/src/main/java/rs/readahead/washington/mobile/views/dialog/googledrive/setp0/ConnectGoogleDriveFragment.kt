@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentConnectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
@@ -23,7 +22,7 @@ class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
     private lateinit var googleDriveServer: GoogleDriveServer // for the update
-    private val server by lazy { GoogleDriveServer() }
+    private val server by lazy { GoogleDriveServer(0,requireContext()) }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

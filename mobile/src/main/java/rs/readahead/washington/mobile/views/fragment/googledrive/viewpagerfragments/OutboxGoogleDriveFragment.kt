@@ -18,7 +18,7 @@ import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.
 class OutboxGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     // Use the ViewModel provided by Hilt
-    private val viewModel: GoogleDriveViewModel by viewModels()
+    private val outboxGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -27,7 +27,7 @@ class OutboxGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     // Provide the specific ViewModel to the base class
     override fun getViewModel(): GoogleDriveViewModel {
-        return viewModel
+        return outboxGoogleDriveViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -46,7 +46,7 @@ class OutboxGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(viewModel) {
+        with(outboxGoogleDriveViewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 updateOutboxTitle.postValue(outboxes.size)
                 handleReportList(outboxes)
@@ -68,13 +68,13 @@ class OutboxGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listOutbox()
+                outboxGoogleDriveViewModel.listOutbox()
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.listOutbox()
+        outboxGoogleDriveViewModel.listOutbox()
     }
 }
