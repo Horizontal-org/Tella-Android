@@ -144,7 +144,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         String folderName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_FOLDER_NAME));
         String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_SERVER_NAME));
         String userName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME));
-        GoogleDriveServer server = new GoogleDriveServer(googleDriveId,folderName ,folderId);
+        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderName, folderId);
         server.setName(serverName);
         server.setUsername(userName);
         return server;
