@@ -102,7 +102,6 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
                             D.C_GOOGLE_DRIVE_FOLDER_ID,
                             D.C_GOOGLE_DRIVE_FOLDER_NAME,
                             D.C_GOOGLE_DRIVE_SERVER_NAME
-
                     },
                     null,
                     null,
