@@ -356,24 +356,33 @@ class GoogleDriveViewModel @Inject constructor(
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
             return
         }
-
         disposables.add(
-            Flowable.fromIterable(instance.widgetMediaFiles).flatMap { file ->
-                googleDriveRepository.uploadFilesWithProgress(reportApiId, server.username, file)
-            }.doOnEach {
-                if (instance.status != EntityStatus.SUBMITTED) {
-                    instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
-                }
-            }.doOnTerminate { handleInstanceOnTerminate(instance) }
-                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }.doOnError {
-                    handleInstanceStatus(
-                        instance, EntityStatus.SUBMISSION_ERROR
+            Flowable.fromIterable(instance.widgetMediaFiles)
+                .flatMap { file ->
+                    googleDriveRepository.uploadFilesWithProgress(
+                        reportApiId,
+                        server.username,
+                        file
                     )
-                }.doOnNext { progressInfo: UploadProgressInfo ->
-                    updateFileStatus(instance, progressInfo)
-                }.doAfterNext { progressInfo ->
-                    _reportProcess.postValue(Pair(progressInfo, instance))
-                }.subscribeOn(Schedulers.io()) // Non-blocking operation
+                }
+                .doOnEach {
+                    if (instance.status != EntityStatus.SUBMITTED) {
+                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    }
+                }
+                .doOnTerminate { handleInstanceOnTerminate(instance) }
+                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
+                .doOnError {
+                    handleInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+                }
+                .doOnNext { progressInfo: UploadProgressInfo ->
+                    updateFileStatus(instance, progressInfo) // Ensure this block is efficient
+                }
+                .observeOn(AndroidSchedulers.mainThread())  // Move results to main thread
+                .doAfterNext { progressInfo ->
+                    _reportProcess.postValue(Pair(progressInfo, instance)) // Post progress quickly
+                }
+                .subscribeOn(Schedulers.io())  // Keep the upload process on IO thread
                 .subscribe()
         )
     }
