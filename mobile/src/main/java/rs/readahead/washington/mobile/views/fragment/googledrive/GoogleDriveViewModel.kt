@@ -378,10 +378,10 @@ class GoogleDriveViewModel @Inject constructor(
                 .doOnNext { progressInfo: UploadProgressInfo ->
                     updateFileStatus(instance, progressInfo) // Ensure this block is efficient
                 }
-                .observeOn(AndroidSchedulers.mainThread())  // Move results to main thread
                 .doAfterNext { progressInfo ->
                     _reportProcess.postValue(Pair(progressInfo, instance)) // Post progress quickly
                 }
+                .observeOn(AndroidSchedulers.mainThread())  // Move results to main thread
                 .subscribeOn(Schedulers.io())  // Keep the upload process on IO thread
                 .subscribe()
         )
