@@ -182,25 +182,30 @@ dependencies {
 
     implementation("com.vanniktech:android-image-cropper:4.5.0")
 
-    //google drive 
-    implementation 'com.google.android.gms:play-services-auth:21.2.0'
-    implementation "androidx.credentials:credentials:1.2.2"
-    implementation "androidx.credentials:credentials-play-services-auth:1.2.2"
-    implementation "com.google.android.libraries.identity.googleid:googleid:1.1.1"
+    // Google Play Services Auth (needed for authenticating with Google)
+    implementation "com.google.android.gms:play-services-auth:$versions.playServicesAuthVersion"
 
-    implementation 'com.google.api-client:google-api-client-android:1.33.0'
-    implementation 'com.google.apis:google-api-services-drive:v3-rev136-1.25.0'
-    implementation 'com.google.api-client:google-api-client-gson:1.34.0'
+    // AndroidX Credentials API for handling credentials in the app
+    implementation "androidx.credentials:credentials:$versions.credentialsVersion"
+    implementation "androidx.credentials:credentials-play-services-auth:$versions.credentialsVersion"
 
-    // Google HTTP Client Library
-    implementation 'com.google.http-client:google-http-client-android:1.41.2'
+    // Google Identity Library for managing user identities
+    implementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
 
-    // Gson for JSON parsing
-    implementation 'com.google.code.gson:gson:2.11.0'
+    // Google API Client for Android (used for making API requests to Google services)
+    implementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
 
-    // Google Drive API
-    implementation 'com.google.apis:google-api-services-drive:v3-rev20230227-1.34.1'
+    // Google Drive API (used to interact with Google Drive services)
+    implementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
 
+    // Google API Client with Gson for parsing JSON responses
+    implementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
+
+    // Google HTTP Client for Android (used to send HTTP requests)
+    implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
+
+    // Gson library for JSON parsing
+    implementation "com.google.code.gson:gson:$gsonVersion"
 
 }
 
