@@ -191,21 +191,16 @@ dependencies {
 
     // Google Identity Library for managing user identities
     implementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
-
     // Google API Client for Android (used for making API requests to Google services)
     implementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
-
     // Google Drive API (used to interact with Google Drive services)
     implementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
-
     // Google API Client with Gson for parsing JSON responses
     implementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
-
     // Google HTTP Client for Android (used to send HTTP requests)
     implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
-
     // Gson library for JSON parsing
-    implementation "com.google.code.gson:gson:$gsonVersion"
+    implementation "com.google.code.gson:gson:$versions.gsonVersion"
 
 }
 

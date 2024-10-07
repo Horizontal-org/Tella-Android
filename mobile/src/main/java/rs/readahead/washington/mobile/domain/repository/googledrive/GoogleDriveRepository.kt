@@ -45,8 +45,7 @@ class GoogleDriveRepository @Inject constructor(
     override suspend fun fetchSharedDrives(email: String): List<Folder> {
         return withContext(Dispatchers.IO) {
             try {
-                val query =
-                    "mimeType = 'application/vnd.google-apps.folder' and sharedWithMe = true"
+                val query = DriveConstants.SHARED_WITH_ME_QUERY
                 val request = driveServiceProvider.getDriveService(email).files().list().setQ(query)
                     .setFields("files(id, name)")
 
@@ -135,7 +134,8 @@ class GoogleDriveRepository @Inject constructor(
                 }
 
                 // Build the file content for Google Drive API
-                val fileContent = InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
+                val fileContent =
+                    InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
                 // Upload the file to Google Drive
                 val uploadedFile = driveServiceProvider.getDriveService(email).files()
