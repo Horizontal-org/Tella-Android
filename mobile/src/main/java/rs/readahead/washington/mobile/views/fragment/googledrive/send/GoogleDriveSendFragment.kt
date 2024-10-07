@@ -45,8 +45,8 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
                     }
 
                     EntityStatus.DELETED -> {
-                        // viewModel.instanceProgress.postValue(null)
-                        //handleBackButton()
+                        viewModel.instanceProgress.postValue(null)
+                        handleBackButton()
                     }
 
                     else -> {

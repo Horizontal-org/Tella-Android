@@ -3,11 +3,8 @@ package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsListBinding
@@ -19,10 +16,12 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Shared
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
-abstract class BaseReportsFragment :
+
+abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
 
-    protected abstract fun getViewModel(): BaseReportsViewModel // Child classes provide the specific ViewModel
+    // Child classes provide the specific ViewModel through this method
+    protected abstract fun getViewModel(): VM
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
     protected abstract fun getEmptyMessageIcon(): Int
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses

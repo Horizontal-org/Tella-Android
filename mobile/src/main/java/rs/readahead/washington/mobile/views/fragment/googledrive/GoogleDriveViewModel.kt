@@ -47,7 +47,7 @@ class GoogleDriveViewModel @Inject constructor(
     val reportProcess: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _reportProcess
 
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
-    val instanceProgress: LiveData<ReportInstance> get() = _instanceProgress
+    val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
 
     override fun listServers() {

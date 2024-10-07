@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.views.dialog.googledrive.step3
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -13,6 +12,7 @@ import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServe
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
@@ -34,7 +34,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         }
         // Observe folder creation result
         sharedViewModel.folderCreated.observe(viewLifecycleOwner) { folderId ->
-            Log.d("Drive", "Folder ID: $folderId")
+            Timber.d("Drive Folder ID: $folderId")
             googleDriveServer.folderId = folderId
             bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
             navManager().navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment()
@@ -42,11 +42,9 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
 
         // Observe errors
         sharedViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            Log.e("Drive", errorMessage)
+            Timber.d("Drive %s", errorMessage)
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
     private fun createFolder() {

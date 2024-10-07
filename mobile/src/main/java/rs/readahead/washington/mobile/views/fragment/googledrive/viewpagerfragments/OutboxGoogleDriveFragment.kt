@@ -10,22 +10,23 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
-class OutboxGoogleDriveFragment : BaseReportsFragment() {
+class OutboxGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
-    private val viewModel by viewModels<GoogleDriveViewModel>()
+    // Use the ViewModel provided by Hilt
+    private val viewModel: GoogleDriveViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
     }
 
-    override fun getViewModel(): BaseReportsViewModel {
+    // Provide the specific ViewModel to the base class
+    override fun getViewModel(): GoogleDriveViewModel {
         return viewModel
     }
 

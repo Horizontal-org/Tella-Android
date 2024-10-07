@@ -8,7 +8,6 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsEntryFragment
 
-
 @AndroidEntryPoint
 class GoogleDriveEntryFragment :
     BaseReportsEntryFragment() {

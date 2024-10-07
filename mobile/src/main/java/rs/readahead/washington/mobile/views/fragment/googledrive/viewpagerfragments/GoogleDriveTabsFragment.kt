@@ -1,7 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragments
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
