@@ -22,10 +22,11 @@ import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
 
-class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
+class HomeVaultPresenter (var view: IHomeVaultPresenter.IView?, val config: Config) :
     IHomeVaultPresenter.IPresenter {
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private var disposable = CompositeDisposable()
@@ -43,6 +44,7 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
         disposable.dispose()
         view = null
     }
+
     override fun executePanicMode() {
         keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
@@ -68,11 +70,12 @@ class HomeVaultPresenter constructor(var view: IHomeVaultPresenter.IView?) :
             }
             .blockingAwait()
     }
+
     override fun countGoogleDriveServers() {
         disposable.add(keyDataSource.googleDriveDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: GoogleDriveDataSource -> obj.listGoogleDriveServers() }
+            .flatMapSingle { obj: GoogleDriveDataSource -> obj.listGoogleDriveServers(config.googleClientId) }
             .subscribe(
                 { servers ->
                     view?.onCountGoogleDriveServersEnded(servers)

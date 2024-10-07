@@ -10,10 +10,13 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.databinding.FragmentConnectGoogleDriveBinding
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
+import timber.log.Timber
+import javax.inject.Inject
 
 const val OBJECT_KEY = "ok"
 
@@ -22,7 +25,8 @@ class ConnectGoogleDriveFragment :
     BaseBindingFragment<FragmentConnectGoogleDriveBinding>(FragmentConnectGoogleDriveBinding::inflate) {
     private val sharedViewModel: SharedGoogleDriveViewModel by viewModels()
     private lateinit var googleDriveServer: GoogleDriveServer // for the update
-    private val server by lazy { GoogleDriveServer(0,requireContext()) }
+    @Inject lateinit var config: Config
+    private val server by lazy { GoogleDriveServer(googleClientId = config.googleClientId) }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,11 +35,13 @@ class ConnectGoogleDriveFragment :
         baseActivity.maybeChangeTemporaryTimeout {
             sharedViewModel.signInWithGoogle(request, requireContext())
         }
+        Timber.d("config " + config.googleClientId)
         observeViewModel()
     }
 
     // Extracted method to create Google Sign-In option
     private fun getGoogleSignInOption(): GetSignInWithGoogleOption {
+        Timber.d("server " + server.googleClientId)
         return GetSignInWithGoogleOption.Builder(server.googleClientId).build()
     }
 

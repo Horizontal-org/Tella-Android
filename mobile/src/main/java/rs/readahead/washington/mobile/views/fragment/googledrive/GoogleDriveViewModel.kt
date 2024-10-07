@@ -40,7 +40,7 @@ class GoogleDriveViewModel @Inject constructor(
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val googleDriveRepository: GoogleDriveRepository,
     private val googleDriveDataSource: GoogleDriveDataSource,
-    private val statusProvider: StatusProvider
+    private val statusProvider: StatusProvider,
 ) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()

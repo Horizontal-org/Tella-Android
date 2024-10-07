@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
@@ -35,6 +37,7 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
@@ -79,6 +82,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private List<UWaziUploadServer> uwaziServers;
     private List<GoogleDriveServer> googleDriveServers;
     private ActivityDocumentationSettingsBinding binding;
+    @Inject
+    public Config config;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,7 +118,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         uwaziServersPresenter.getUwaziServers();
 
         googleDriveServersPresenter = new GoogleDriveServersPresenter(this);
-        googleDriveServersPresenter.getGoogleDriveServers();
+        googleDriveServersPresenter.getGoogleDriveServers(config.getGoogleClientId());
 
         createRefreshPresenter();
         initUwaziEvents();
@@ -416,7 +421,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),getContext(),
+        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), getContext(),
                 getString(R.string.settings_servers_add_server_dialog_title),
                 getString(R.string.settings_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),

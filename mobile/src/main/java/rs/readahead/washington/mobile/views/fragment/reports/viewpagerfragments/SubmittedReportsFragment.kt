@@ -15,17 +15,17 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.Report
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class SubmittedReportsFragment : BaseReportsFragment() {
+class SubmittedReportsFragment : BaseReportsFragment<ReportsViewModel>()  {
 
-    private val viewModel by viewModels<ReportsViewModel>()
+    private val submittedReportsViewModel by viewModels<ReportsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
     }
 
-    override fun getViewModel(): BaseReportsViewModel {
-        return viewModel
+    override fun getViewModel(): ReportsViewModel {
+        return submittedReportsViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -43,7 +43,7 @@ class SubmittedReportsFragment : BaseReportsFragment() {
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(viewModel) {
+        with(submittedReportsViewModel) {
             submittedReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
                 handleReportList(outboxes)
             }
@@ -65,12 +65,12 @@ class SubmittedReportsFragment : BaseReportsFragment() {
                         string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listSubmitted()
+                submittedReportsViewModel.listSubmitted()
             }
         }
     }
     override fun onResume() {
         super.onResume()
-        viewModel.listSubmitted()
+        submittedReportsViewModel.listSubmitted()
     }
 }

@@ -7,6 +7,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,10 +15,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
+import java.io.InputStreamReader
 import javax.inject.Singleton
 
 @Module
@@ -80,5 +84,13 @@ object RepositoryModule {
     @GoogleDrive
     fun provideGoogleDriveDataSourceRepository(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().googleDriveDataSource.blockingFirst()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGoogleDriveId(@ApplicationContext context: Context, gson: Gson): Config {
+        val inputStream = context.assets.open("config.json")
+        val reader = InputStreamReader(inputStream)
+        return gson.fromJson(reader, Config::class.java)
     }
 }

@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.mvp.contract
 
 import android.content.Context
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 
 class IGoogleDriveServersPresenterContract {
@@ -20,7 +19,7 @@ class IGoogleDriveServersPresenterContract {
     }
 
     interface IPresenter : IBasePresenter {
-        fun getGoogleDriveServers()
+        fun getGoogleDriveServers(googleDriveId: String)
         fun create(server: GoogleDriveServer)
         fun remove(server: GoogleDriveServer)
     }

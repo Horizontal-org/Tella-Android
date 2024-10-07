@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
 import io.reactivex.Single;
@@ -20,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
@@ -32,7 +35,8 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
     private static GoogleDriveDataSource dataSource;
     private final SQLiteDatabase database;
     private final DataBaseUtils dataBaseUtils;
-
+    @Inject
+    Config config;
     final private CompletableTransformer schedulersCompletableTransformer =
             observable -> observable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
@@ -85,12 +89,12 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
 
     @NonNull
     @Override
-    public Single<List<GoogleDriveServer>> listGoogleDriveServers() {
-        return Single.fromCallable(() -> dataSource.getListGoogleDriveServers())
+    public Single<List<GoogleDriveServer>> listGoogleDriveServers(String googleDriveId) {
+        return Single.fromCallable(() -> dataSource.getListGoogleDriveServers(googleDriveId))
                 .compose(applySchedulers());
     }
 
-    private List<GoogleDriveServer> getListGoogleDriveServers(Context context) {
+    private List<GoogleDriveServer> getListGoogleDriveServers(String googleDriveId) {
         Cursor cursor = null;
         List<GoogleDriveServer> servers = new ArrayList<>();
 
@@ -110,7 +114,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
                     null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                GoogleDriveServer server = cursorToGoogleDriveServer(cursor,context);
+                GoogleDriveServer server = cursorToGoogleDriveServer(cursor, googleDriveId);
                 servers.add(server);
             }
         } catch (Exception e) {
@@ -137,13 +141,13 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         database.delete(D.T_GOOGLE_DRIVE, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
-    private GoogleDriveServer cursorToGoogleDriveServer(Cursor cursor,Context context) {
+    private GoogleDriveServer cursorToGoogleDriveServer(Cursor cursor, String googleId) {
         long googleDriveId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
         String folderId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_FOLDER_ID));
         String folderName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_FOLDER_NAME));
         String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_SERVER_NAME));
         String userName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME));
-        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderName, folderId,context);
+        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderName, folderId, googleId);
         server.setName(serverName);
         server.setUsername(userName);
         return server;

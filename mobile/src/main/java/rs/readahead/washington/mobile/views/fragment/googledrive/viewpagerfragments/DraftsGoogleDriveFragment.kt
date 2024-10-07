@@ -13,10 +13,10 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseRe
 class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     // Use the ViewModel provided by Hilt
-    private val googleDriveViewModel: GoogleDriveViewModel by viewModels()
+    private val draftGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
 
     override fun getViewModel(): GoogleDriveViewModel {
-        return googleDriveViewModel
+        return draftGoogleDriveViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -35,7 +35,7 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(googleDriveViewModel) {
+        with(draftGoogleDriveViewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
             }
@@ -55,7 +55,7 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        googleDriveViewModel.listDrafts()
+        draftGoogleDriveViewModel.listDrafts()
     }
 
 }

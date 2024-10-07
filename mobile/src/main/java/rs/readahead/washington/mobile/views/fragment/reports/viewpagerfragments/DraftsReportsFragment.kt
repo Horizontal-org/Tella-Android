@@ -7,17 +7,16 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class DraftsReportsFragment : BaseReportsFragment() {
+class DraftsReportsFragment : BaseReportsFragment<ReportsViewModel>() {
 
-    private val viewModel: ReportsViewModel by viewModels()
+    private val draftReportsDriveViewModel: ReportsViewModel by viewModels()
 
-    override fun getViewModel(): BaseReportsViewModel {
-        return viewModel
+    override fun getViewModel(): ReportsViewModel {
+        return draftReportsDriveViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -35,7 +34,7 @@ class DraftsReportsFragment : BaseReportsFragment() {
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(viewModel) {
+        with(draftReportsDriveViewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
             }
@@ -57,14 +56,14 @@ class DraftsReportsFragment : BaseReportsFragment() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listDrafts()
+                draftReportsDriveViewModel.listDrafts()
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.listDrafts()
+        draftReportsDriveViewModel.listDrafts()
     }
 
 }

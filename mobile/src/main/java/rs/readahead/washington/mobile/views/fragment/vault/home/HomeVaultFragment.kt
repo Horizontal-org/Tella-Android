@@ -12,13 +12,11 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -39,11 +37,11 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigra
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isFreshInstall
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
-import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
@@ -57,7 +55,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
@@ -66,6 +63,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 import timber.log.Timber
+import javax.inject.Inject
 
 
 const val VAULT_FILTER = "vf"
@@ -99,8 +97,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
-
-
+    @Inject
+    lateinit var config: Config
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -150,7 +148,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun initData() {
-        homeVaultPresenter = HomeVaultPresenter(this)
+        homeVaultPresenter = HomeVaultPresenter(this,config)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)

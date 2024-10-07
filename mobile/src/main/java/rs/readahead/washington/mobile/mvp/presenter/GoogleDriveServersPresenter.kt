@@ -10,6 +10,7 @@ import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract
+import javax.inject.Inject
 
 class GoogleDriveServersPresenter(var view: IGoogleDriveServersPresenterContract.IView) :
     IGoogleDriveServersPresenterContract.IPresenter {
@@ -17,13 +18,12 @@ class GoogleDriveServersPresenter(var view: IGoogleDriveServersPresenterContract
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
 
-
-    override fun getGoogleDriveServers() {
+    override fun getGoogleDriveServers(googleDriveId: String) {
         disposables.add(keyDataSource.googleDriveDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view.showLoading() }
-            .flatMapSingle { dataSource: GoogleDriveDataSource -> dataSource.listGoogleDriveServers() }
+            .flatMapSingle { dataSource: GoogleDriveDataSource -> dataSource.listGoogleDriveServers(googleDriveId) }
             .doFinally { view.hideLoading() }
             .subscribe(
                 { list: List<GoogleDriveServer> ->
