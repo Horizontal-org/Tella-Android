@@ -90,7 +90,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
                 .compose(applySchedulers());
     }
 
-    private List<GoogleDriveServer> getListGoogleDriveServers() {
+    private List<GoogleDriveServer> getListGoogleDriveServers(Context context) {
         Cursor cursor = null;
         List<GoogleDriveServer> servers = new ArrayList<>();
 
@@ -110,7 +110,7 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
                     null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                GoogleDriveServer server = cursorToGoogleDriveServer(cursor);
+                GoogleDriveServer server = cursorToGoogleDriveServer(cursor,context);
                 servers.add(server);
             }
         } catch (Exception e) {
@@ -137,14 +137,13 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         database.delete(D.T_GOOGLE_DRIVE, D.C_ID + " = ?", new String[]{Long.toString(id)});
     }
 
-    private GoogleDriveServer cursorToGoogleDriveServer(Cursor cursor) {
-
+    private GoogleDriveServer cursorToGoogleDriveServer(Cursor cursor,Context context) {
         long googleDriveId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
         String folderId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_FOLDER_ID));
         String folderName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_FOLDER_NAME));
         String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_GOOGLE_DRIVE_SERVER_NAME));
         String userName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME));
-        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderName, folderId);
+        GoogleDriveServer server = new GoogleDriveServer(googleDriveId, folderName, folderId,context);
         server.setName(serverName);
         server.setUsername(userName);
         return server;
