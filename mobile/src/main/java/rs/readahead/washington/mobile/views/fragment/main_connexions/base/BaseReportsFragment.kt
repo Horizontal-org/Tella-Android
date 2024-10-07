@@ -67,8 +67,6 @@ abstract class BaseReportsFragment :
             handleReportList(outboxes)
             updateOutboxTitle.postValue(outboxes.size)
         }
-
-
     }
 
     @SuppressLint("BinaryOperationInTimber")

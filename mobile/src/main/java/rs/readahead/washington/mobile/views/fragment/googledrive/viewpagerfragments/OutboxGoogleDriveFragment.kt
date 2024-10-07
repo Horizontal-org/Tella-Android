@@ -12,6 +12,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
@@ -46,6 +47,7 @@ class OutboxGoogleDriveFragment : BaseReportsFragment() {
     override fun initData() {
         with(viewModel) {
             outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
+                updateOutboxTitle.postValue(outboxes.size)
                 handleReportList(outboxes)
             }
 

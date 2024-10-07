@@ -13,7 +13,7 @@ import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
-import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 
 @AndroidEntryPoint
 class SubmittedGoogleDriveFragment : BaseReportsFragment() {
@@ -45,8 +45,9 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment() {
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
         with(viewModel) {
-            submittedReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                handleReportList(outboxes)
+            submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
+                handleReportList(submitted)
+                updateSubmittedTitle.postValue(submitted.size)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
@@ -58,6 +59,15 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment() {
                     deleteConfirmation = getString(string.action_delete) + " \"" + instance.title + "\"?",
                     deleteActionText = getString(string.Delete_Submitted_Report_Confirmation),
                 )
+            }
+
+            instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
+                viewModel.listSubmitted()
             }
         }
     }

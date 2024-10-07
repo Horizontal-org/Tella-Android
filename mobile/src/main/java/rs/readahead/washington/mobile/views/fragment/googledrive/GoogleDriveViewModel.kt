@@ -6,7 +6,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
@@ -406,7 +405,8 @@ class GoogleDriveViewModel @Inject constructor(
     ) {
         instance.status = status
         googleDriveDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
-            .subscribe({}, { throwable ->
+            .subscribe({
+            }, { throwable ->
                 throwable.printStackTrace()
             })
         _instanceProgress.postValue(instance)

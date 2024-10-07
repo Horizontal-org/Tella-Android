@@ -2,14 +2,12 @@ package rs.readahead.washington.mobile.views.fragment.googledrive.send
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
-import java.io.File
 
 @AndroidEntryPoint
 class GoogleDriveSendFragment : BaseReportsSendFragment() {
@@ -58,7 +56,6 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
             }
         }
 
-
     }
 
     override fun navigateBack() {
@@ -66,7 +63,6 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
             nav().popBackStack(R.id.newGoogleDriveScreen, true)
         } else {
             nav().popBackStack()
-
         }
     }
 

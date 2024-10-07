@@ -20,14 +20,8 @@ internal class GoogleDriveTabsFragment : MainReportFragment() {
         return getString(R.string.google_drive)
     }
 
-
     override fun navigateToNewReportScreen() {
         this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }
 }
