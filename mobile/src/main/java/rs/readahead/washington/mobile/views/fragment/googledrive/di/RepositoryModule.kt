@@ -20,7 +20,6 @@ import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveR
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
 import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import java.io.InputStreamReader
 import javax.inject.Singleton
 
