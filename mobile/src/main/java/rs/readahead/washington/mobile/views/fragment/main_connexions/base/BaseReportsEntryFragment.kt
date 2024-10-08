@@ -1,16 +1,20 @@
 package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.proxym.shared.widget.dropdown_list.CustomDropdownItemClickListener
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
@@ -19,6 +23,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -31,8 +36,6 @@ import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Compa
 import rs.readahead.washington.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.fragment.recorder.REPORT_ENTRY
-import rs.readahead.washington.mobile.views.fragment.reports.viewpager.OUTBOX_LIST_PAGE_INDEX
-import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
 import rs.readahead.washington.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
@@ -46,14 +49,14 @@ const val BUNDLE_IS_FROM_DRAFT = "bundle_is_from_draft"
 
 abstract class BaseReportsEntryFragment :
     BaseBindingFragment<FragmentReportsEntryBinding>(FragmentReportsEntryBinding::inflate),
-    IReportAttachmentsHandler, CustomDropdownItemClickListener {
+    IReportAttachmentsHandler, CustomDropdownItemClickListener, OnNavBckListener {
     protected abstract val viewModel: BaseReportsViewModel // Child classes provide the specific ViewModel
     private lateinit var gridLayoutManager: GridLayoutManager
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(this)
     }
-    private lateinit var selectedServer: TellaReportServer
-    private lateinit var servers: ArrayList<TellaReportServer>
+    private lateinit var selectedServer: Server
+    private lateinit var servers: ArrayList<Server>
     private var reportInstance: ReportInstance? = null
     private var isNewDraft = true
     private var isTitleEnabled = false
@@ -272,30 +275,37 @@ abstract class BaseReportsEntryFragment :
         )
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun initData() {
-
         viewModel.listServers()
         viewModel.serversList.observe(viewLifecycleOwner) { serversList ->
             servers = arrayListOf()
             servers.addAll(serversList)
+
             if (serversList.size > 1) {
                 val listDropDown = mutableListOf<DropDownItem>()
-                serversList.map { server ->
-                    listDropDown.add(DropDownItem(server.projectId, server.projectName))
+
+                serversList.forEach { server ->
+                    if (server is TellaReportServer) {
+                        listDropDown.add(DropDownItem(server.projectId, server.projectName))
+                    }
                 }
+
                 binding.dropdownGroup.show()
                 binding.serversDropdown.setListAdapter(
                     listDropDown,
                     this@BaseReportsEntryFragment,
                     baseActivity
                 )
+
                 this@BaseReportsEntryFragment.reportInstance?.let {
-                    servers.first { server -> server.id == it.serverId }.let {
-                        selectedServer = it
-                        isServerSelected = true
-                        binding.serversDropdown.setDefaultName(it.name)
-                        highLightButtons()
-                    }
+                    servers.firstOrNull { server -> server.id == it.serverId }
+                        ?.let { selectedServer ->
+                            this.selectedServer = selectedServer
+                            isServerSelected = true
+                            binding.serversDropdown.setDefaultName(selectedServer.name)
+                            highLightButtons()
+                        }
                 }
             } else {
                 binding.dropdownGroup.hide()
@@ -337,7 +347,15 @@ abstract class BaseReportsEntryFragment :
         }
 
         viewModel.instanceDeleted.observe(viewLifecycleOwner) {
-            nav().popBackStack()
+            viewLifecycleOwner.lifecycleScope.launch {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
+                delay(200) // Delay for 200 milliseconds before popping the back stack
+                nav().popBackStack() // Pop the back stack after showing the SnackBar
+            }
         }
 
     }
@@ -464,7 +482,7 @@ abstract class BaseReportsEntryFragment :
         highLightButtons()
     }
 
-    abstract fun submitReport(reportInstance: ReportInstance)
+    abstract fun submitReport(reportInstance: ReportInstance?)
 
     private fun showDeleteBottomSheet(reportInstance: ReportInstance) {
         BottomSheetUtils.showConfirmSheet(
@@ -479,5 +497,10 @@ abstract class BaseReportsEntryFragment :
                     }
                 }
             })
+    }
+
+    override fun onBackPressed(): Boolean {
+        exitOrSave()
+        return true
     }
 }

@@ -11,7 +11,7 @@ import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract
 
-class UwaziServersPresenter constructor(var view: IUWAZIServersPresenterContract.IView?) :
+class UwaziServersPresenter(var view: IUWAZIServersPresenterContract.IView?) :
     IUWAZIServersPresenterContract.IPresenter {
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()

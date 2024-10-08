@@ -28,7 +28,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -82,6 +81,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         IMediaFileRecordRepository, ITellaFeedBackRepository {
     private static DataSource dataSource;
     private final SQLiteDatabase database;
+    private final DataBaseUtils dataBaseUtils;
 
 
     final private SingleTransformer schedulersTransformer =
@@ -99,8 +99,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
+        dataBaseUtils = new DataBaseUtils(database);
     }
 
     public static synchronized DataSource getInstance(Context context, byte[] key) {
@@ -419,7 +420,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
-        return Single.fromCallable(() -> getReportMediaFilesDB(instance))
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
@@ -443,7 +444,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                     null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                FormMediaFile formMediaFile = cursorToFormMediaFile(cursor);
+                FormMediaFile formMediaFile = dataBaseUtils.cursorToFormMediaFile(cursor);
                 files.add(formMediaFile);
             }
 
@@ -458,35 +459,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return files;
     }
 
-    private List<FormMediaFile> getReportMediaFilesDB(final ReportInstance instance) {
-        Cursor cursor = null;
-        List<FormMediaFile> files = new ArrayList<>();
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_INSTANCE_VAULT_FILE,
-                    new String[]{D.C_VAULT_FILE_ID, D.C_STATUS, D.C_UPLOADED_SIZE},
-                    D.C_REPORT_INSTANCE_ID + "= ?",
-                    null, null, null, null
-            );
-
-            cursor = database.rawQuery(query, new String[]{Long.toString(instance.getId())});
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                FormMediaFile formMediaFile = cursorToFormMediaFile(cursor);
-                files.add(formMediaFile);
-            }
-
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return files;
-    }
 
     public Single<List<ReportInstance>> getFileUploadReportBundles(final UploadStatus status) {
         return null;
@@ -1324,7 +1296,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
             if (cursor == null || cursor.getColumnCount() == 0) {
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
-                updateTellaReportsFormInstance(newReportInstance);
+                dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
+                ;
             } else {
                 getLastScheduledReportFromCursor(cursor, mediaFile, serverId);
             }
@@ -1354,25 +1327,25 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));
-                updateTellaReportsFormInstance(currentInstance);
+                dataBaseUtils.updateTellaReportsFormInstance(currentInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
                 ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
                 newReportInstance.getWidgetMediaFiles().add(mediaFile);
-                reportInstance = updateTellaReportsFormInstance(newReportInstance);
+                reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
             } else {
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, mediaFile));
                 currentInstance.setStatus(EntityStatus.SCHEDULED);
-                reportInstance = updateTellaReportsFormInstance(currentInstance);
+                reportInstance = dataBaseUtils.updateTellaReportsFormInstance(currentInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
             }
         } else {
             ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
             newReportInstance.setWidgetMediaFiles(getReportFiles(newReportInstance, mediaFile));
-            reportInstance = updateTellaReportsFormInstance(newReportInstance);
+            reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
         }
         return reportInstance;
     }
 
     private List<FormMediaFile> getReportFiles(ReportInstance instance, @Nullable FormMediaFile mediaFile) {
-        List<FormMediaFile> mediaFiles = getReportMediaFilesDB(instance);
+        List<FormMediaFile> mediaFiles = dataBaseUtils.getReportMediaFilesDB(instance, D.T_REPORT_FORM_INSTANCE);
         if (mediaFile != null) {
             mediaFiles.add(mediaFile);
         }
@@ -2379,18 +2352,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         return mediaFile;
     }
 
-    private FormMediaFile cursorToFormMediaFile(Cursor cursor) {
-        FormMediaFile formMediaFile = new FormMediaFile();
-
-        int statusOrdinal = cursor.getInt(cursor.getColumnIndexOrThrow(D.C_STATUS));
-        String id = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
-        long uploadedSize = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_UPLOADED_SIZE));
-        formMediaFile.status = FormMediaFileStatus.values()[statusOrdinal];
-        formMediaFile.id = id;
-        formMediaFile.uploadedSize = uploadedSize;
-
-        return formMediaFile;
-    }
 
     private VaultFile cursorToMediaFile(Cursor cursor) {
         //  String path = cursor.getString(cursor.getColumnIndexOrThrow(D.C_PATH));
@@ -2486,7 +2447,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return Single.fromCallable(() -> updateTellaReportsFormInstance(instance))
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
@@ -2529,125 +2490,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Override
     public Completable deleteReportInstance(long id) {
         return Completable.fromCallable((Callable<Void>) () -> {
-            deleteReportFormInstance(id);
+            dataBaseUtils.deleteReportFormInstance(id, D.T_REPORT_FORM_INSTANCE);
             return null;
         }).compose(applyCompletableSchedulers());
-    }
-
-    private ReportInstance updateTellaReportsFormInstance(ReportInstance instance) {
-        try {
-            int statusOrdinal;
-            ContentValues values = new ContentValues();
-
-            if (instance.getId() > 0) {
-                values.put(D.C_ID, instance.getId());
-            }
-
-            values.put(D.C_REPORT_SERVER_ID, instance.getServerId());
-            values.put(D.C_TITLE, instance.getTitle());
-            values.put(D.C_DESCRIPTION_TEXT, instance.getDescription());
-            values.put(D.C_UPDATED, Util.currentTimestamp());
-            values.put(D.C_CURRENT_UPLOAD, instance.getCurrent());
-            values.put(D.C_REPORT_API_ID, instance.getReportApiId());
-
-            //TODO CHECK FILES IMPLEMENTATION AND ADD FILES STATUS
-            values.put(D.C_FORM_PART_STATUS, instance.getFormPartStatus().ordinal());
-
-            if (instance.getStatus() == EntityStatus.UNKNOWN) {
-                statusOrdinal = EntityStatus.DRAFT.ordinal();
-            } else {
-                statusOrdinal = instance.getStatus().ordinal();
-            }
-            values.put(D.C_STATUS, statusOrdinal);
-
-
-            database.beginTransaction();
-
-            // insert/update form instance
-            long id = database.insertWithOnConflict(
-                    D.T_REPORT_FORM_INSTANCE,
-                    null,
-                    values,
-                    SQLiteDatabase.CONFLICT_REPLACE);
-            instance.setId(id);
-
-            // clear FormMediaFiles
-            database.delete(
-                    D.T_REPORT_INSTANCE_VAULT_FILE,
-                    D.C_REPORT_INSTANCE_ID + " = ?",
-                    new String[]{Long.toString(id)});
-
-            // insert FormMediaFiles
-            List<FormMediaFile> mediaFiles = instance.getWidgetMediaFiles();
-            for (FormMediaFile mediaFile : mediaFiles) {
-                values = new ContentValues();
-                values.put(D.C_REPORT_INSTANCE_ID, id);
-                values.put(D.C_VAULT_FILE_ID, mediaFile.id);
-                values.put(D.C_STATUS, mediaFile.status.ordinal());
-                values.put(D.C_UPLOADED_SIZE, mediaFile.uploadedSize);
-                database.insert(D.T_REPORT_INSTANCE_VAULT_FILE, null, values);
-            }
-
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            database.endTransaction();
-        }
-
-        return instance;
-    }
-
-    private List<ReportInstance> getReportFormInstances(EntityStatus[] statuses) {
-        Cursor cursor = null;
-        List<ReportInstance> instances = new ArrayList<>();
-
-        List<String> s = new ArrayList<>(statuses.length);
-        for (EntityStatus status : statuses) {
-            s.add(Integer.toString(status.ordinal()));
-        }
-        String selection = "(" + TextUtils.join(", ", s) + ")";
-
-        try {
-
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_FORM_INSTANCE +
-                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
-                    new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
-                            D.C_REPORT_SERVER_ID,
-                            D.C_STATUS,
-                            D.C_UPDATED,
-                            D.C_CURRENT_UPLOAD,
-                            //   D.C_METADATA,
-                            D.C_DESCRIPTION_TEXT,
-                            D.C_TITLE,
-                            D.C_REPORT_API_ID,
-                            //  D.C_FORM_PART_STATUS,
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_STATUS + " IN " + selection,
-                    null, null,
-                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
-                    null
-            );
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportInstance instance = cursorToReportFormInstance(cursor);
-                instances.add(instance);
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return instances;
     }
 
     private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
@@ -2710,10 +2555,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<ReportInstance> getDraftReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.UNKNOWN,
                 EntityStatus.DRAFT
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     @NonNull
@@ -2759,7 +2604,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<ReportInstance> getOutboxReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.FINALIZED,
                 EntityStatus.SUBMISSION_ERROR,
                 EntityStatus.SUBMISSION_PENDING,
@@ -2767,13 +2612,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                 EntityStatus.SUBMISSION_IN_PROGRESS,
                 EntityStatus.SCHEDULED,
                 EntityStatus.PAUSED
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     private List<ReportInstance> getSubmittedReportInstances() {
-        return getReportFormInstances(new EntityStatus[]{
+
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
                 EntityStatus.SUBMITTED
-        });
+        }, D.T_REPORT_FORM_INSTANCE, D.T_TELLA_UPLOAD_SERVER);
     }
 
     @NonNull
@@ -2866,92 +2712,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> getReportInstanceBundle(id))
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE,D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 
-    private ReportInstanceBundle getReportInstanceBundle(long id) {
-        Cursor cursor = null;
-        ReportInstanceBundle bundle = new ReportInstanceBundle();
-
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_FORM_INSTANCE,
-                    new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
-                            D.C_REPORT_SERVER_ID,
-                            D.C_REPORT_API_ID,
-                            D.C_CURRENT_UPLOAD,
-                            D.C_STATUS,
-                            D.C_UPDATED,
-                            D.C_METADATA,
-                            D.C_DESCRIPTION_TEXT,
-                            D.C_TITLE},
-                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + "= ?",
-                    null, null, null, null
-            );
-
-            cursor = database.rawQuery(query, new String[]{Long.toString(id)});
-
-            if (cursor.moveToFirst()) {
-                ReportInstance instance = cursorToReportFormInstance(cursor);
-                bundle.setInstance(instance);
-
-                List<String> vaultFileIds = getReportInstanceFileIds(instance.getId());
-                String[] iDs = new String[vaultFileIds.size()];
-                vaultFileIds.toArray(iDs);
-                bundle.setFileIds(iDs);
-
-                return bundle;
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-            throw e;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return new ReportInstanceBundle();
-    }
-
-    private List<String> getReportInstanceFileIds(long instanceId) {
-        List<String> ids = new ArrayList<>();
-        Cursor cursor = null;
-        try {
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_INSTANCE_VAULT_FILE,
-                    new String[]{
-                            D.C_VAULT_FILE_ID},
-                    D.C_REPORT_INSTANCE_ID + "= ?",
-                    null, null, D.C_VAULT_FILE_ID + " DESC", null
-            );
-            cursor = database.rawQuery(query, new String[]{Long.toString(instanceId)});
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                String vaultFileId = cursor.getString(cursor.getColumnIndexOrThrow(D.C_VAULT_FILE_ID));
-                ids.add(vaultFileId);
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return ids;
-    }
-
-    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
-    private void deleteReportFormInstance(long id) throws NotFountException {
-        int count = database.delete(D.T_REPORT_FORM_INSTANCE, D.C_ID + " = ?", new String[]{Long.toString(id)});
-
-        if (count != 1) {
-            throw new NotFountException();
-        }
-    }
 
     @NonNull
     @Override

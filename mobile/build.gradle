@@ -21,6 +21,9 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
+        packagingOptions {
+            resources.excludes.add("META-INF/*")
+        }
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
 
@@ -111,7 +114,6 @@ dependencies {
     }
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
-    apply plugin: 'kotlin-kapt'
     implementation("com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher") {
         exclude module: "support-v13"
     }
@@ -122,7 +124,8 @@ dependencies {
     kapt("org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
-    implementation "com.squareup:tape:$versions.squareupTape" // todo: follow this, v2 should be soon
+    implementation "com.squareup:tape:$versions.squareupTape"
+    // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
     //sqlite dependency
     implementation "net.zetetic:sqlcipher-android:$versions.sqlcipher"
@@ -155,7 +158,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
     //hilt-view-model
-   // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
+    // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
     //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
 
@@ -164,20 +167,41 @@ dependencies {
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
-   //worker manager
+    //worker manager
     implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
     implementation("androidx.hilt:hilt-work:$versions.hilt_version")
 
     //optional - RxJava2 support
     implementation "androidx.work:work-rxjava2:$versions.workermanger"
 
-   // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
 
     testImplementation "junit:junit:$versions.junit"
 
-    implementation("com.vanniktech:android-image-cropper:4.3.3")
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
+
+    // Google Play Services Auth (needed for authenticating with Google)
+    implementation "com.google.android.gms:play-services-auth:$versions.playServicesAuthVersion"
+
+    // AndroidX Credentials API for handling credentials in the app
+    implementation "androidx.credentials:credentials:$versions.credentialsVersion"
+    implementation "androidx.credentials:credentials-play-services-auth:$versions.credentialsVersion"
+
+    // Google Identity Library for managing user identities
+    implementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
+    // Google API Client for Android (used for making API requests to Google services)
+    implementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
+    // Google Drive API (used to interact with Google Drive services)
+    implementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
+    // Google API Client with Gson for parsing JSON responses
+    implementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
+    // Google HTTP Client for Android (used to send HTTP requests)
+    implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
+    // Gson library for JSON parsing
+    implementation "com.google.code.gson:gson:$versions.gsonVersion"
+
 }
 
 kapt {

@@ -61,6 +61,17 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
+            ServerType.GOOGLE_DRIVE -> {
+                reportTypeTextView.text = view.context.getText(R.string.google_drive)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_google_drive_small,
+                        null
+                    )
+                )
+            }
             else -> { //todo create default server type
             }
         }

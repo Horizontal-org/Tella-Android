@@ -3,9 +3,11 @@ package org.hzontal.shared_ui.veiw_pager_component
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,8 +23,8 @@ class ViewPagerComponent @JvmOverloads constructor(
     private val tabLayout: TabLayout
     private val viewPager: ViewPager2
     private val toolBarTextView: TextView
-    private val viewPagerAdapter: ViewPagerAdapter
-    private val toolBar : ToolbarComponent
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private val toolBar: ToolbarComponent
     private var tabTitles: List<String> = emptyList()
     private var fragmentProvider: FragmentProvider? = null
 
@@ -33,8 +35,6 @@ class ViewPagerComponent @JvmOverloads constructor(
         toolBarTextView = findViewById(R.id.toolbar_textView)
         toolBar = findViewById(R.id.toolbar)
 
-        viewPagerAdapter = ViewPagerAdapter((context as FragmentActivity), mutableListOf())
-        viewPager.adapter = viewPagerAdapter
 
         context.theme.obtainStyledAttributes(attrs, R.styleable.ViewPagerComponent, 0, 0).apply {
             try {
@@ -46,33 +46,56 @@ class ViewPagerComponent @JvmOverloads constructor(
                 recycle()
             }
         }
+    }
+
+    fun initViewPager(fm: FragmentManager, lifecycle: Lifecycle, pageLimit: Int) {
+        viewPagerAdapter = ViewPagerAdapter(fm, lifecycle)
+        viewPager.apply {
+            offscreenPageLimit = pageLimit
+            isSaveEnabled = true
+            adapter = viewPagerAdapter
+        }
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = getTabTitle(position)
+            tab.customView = getTabTitleView(position, 0)
         }.attach()
+
     }
 
     fun setupTabs(fragmentProvider: FragmentProvider, tabCount: Int) {
         this.fragmentProvider = fragmentProvider
         val fragments = List(tabCount) { fragmentProvider.createFragment(it) }
         viewPagerAdapter.updateFragments(fragments)
-        updateTabTitles()
+     //   initTabTitles()
     }
 
     fun setTabTitles(titles: List<String>) {
         tabTitles = titles
-        updateTabTitles()
     }
 
-    private fun updateTabTitles() {
-        for (i in 0 until tabLayout.tabCount) {
-            val tab = tabLayout.getTabAt(i)
-            tab?.text = getTabTitle(i)
+    private fun getTabTitleView(position: Int, count: Int): View {
+        val tabView = LayoutInflater.from(context).inflate(R.layout.tabs_title_layout, null)
+        val tabTitleTextView = tabView.findViewById<TextView>(R.id.tab_title)
+        val tabNumberTextView = tabView.findViewById<TextView>(R.id.tab_number)
+
+        tabTitleTextView.text = tabTitles.getOrNull(position) ?: "Tab $position"
+        tabNumberTextView.text = if (count > 0) " ($count)" else ""
+        return tabView
+    }
+
+    fun updateTabTitle(position: Int, count: Int) {
+        val tab = tabLayout.getTabAt(position)
+        tab?.customView?.let { customView ->
+            // Update the existing custom view directly
+            val tabTitleTextView = customView.findViewById<TextView>(R.id.tab_title)
+            val tabNumberTextView = customView.findViewById<TextView>(R.id.tab_number)
+
+            // Update the title and count text
+            tabTitleTextView.text = tabTitles.getOrNull(position) ?: "Tab $position"
+            tabNumberTextView.text = if (count > 0) " ($count)" else ""
         }
     }
 
-    private fun getTabTitle(position: Int): String {
-        return tabTitles.getOrNull(position) ?: "Tab $position"
-    }
 
     fun setToolBarTitle(title: String) {
         toolBarTextView.text = title
@@ -82,5 +105,9 @@ class ViewPagerComponent @JvmOverloads constructor(
         toolBar.backClickListener = {
             onBackClick?.invoke()  // Call the passed lambda function if it's not null
         }
+    }
+
+    fun getViewPager(): ViewPager2 {
+        return viewPager
     }
 }

@@ -30,6 +30,11 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody {
         return mediaFile.size - skip;
     }
 
+    // Add a public method to expose the InputStream
+    public InputStream getPublicInputStream() throws IOException {
+        return getInputStream();
+    }
+
     @Override
     protected InputStream getInputStream() throws IOException {
         InputStream is = MediaFileHandler.getStream(mediaFile);

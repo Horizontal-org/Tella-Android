@@ -12,13 +12,11 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -39,11 +37,12 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigra
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isFreshInstall
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
-import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.LockTimeoutManager
@@ -56,7 +55,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
@@ -65,6 +63,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 import timber.log.Timber
+import javax.inject.Inject
 
 
 const val VAULT_FILTER = "vf"
@@ -89,15 +88,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var tuServers: ArrayList<TellaReportServer>? = null
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
+    private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
+    private var googleDriveServersCounted = false
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
-
-
+    @Inject
+    lateinit var config: Config
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -147,7 +148,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun initData() {
-        homeVaultPresenter = HomeVaultPresenter(this)
+        homeVaultPresenter = HomeVaultPresenter(this,config)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
@@ -160,6 +161,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         tuServers = ArrayList()
         uwaziServers = ArrayList()
         collectServers = ArrayList()
+        googleDriveServers = ArrayList()
+
     }
 
     private fun initPermissions() {
@@ -210,7 +213,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * This function show connections when all the server types are counted.
      **/
     private fun maybeShowConnections() {
-        if (serversList?.isEmpty() == false && reportServersCounted && collectServersCounted && uwaziServersCounted) {
+        if (serversList?.isEmpty() == false && reportServersCounted && collectServersCounted && uwaziServersCounted && googleDriveServersCounted) {
             vaultAdapter.addConnectionServers(serversList!!)
         } else {
             vaultAdapter.removeConnectionServers()
@@ -381,6 +384,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
 
+            ServerType.GOOGLE_DRIVE -> {
+                nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+            }
+
             else -> {}
         }
     }
@@ -471,6 +478,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         homeVaultPresenter.countCollectServers()
         homeVaultPresenter.countTUServers()
         homeVaultPresenter.countUwaziServers()
+        homeVaultPresenter.countGoogleDriveServers()
     }
 
     /**
@@ -478,6 +486,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * At the start, the list of servers and shown connections are cleared.
      **/
     private fun clearServerCount() {
+        googleDriveServersCounted = false
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false
@@ -542,6 +551,24 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             disposables.dispose()
         }
         // descriptionLiveData.removeObservers(viewLifecycleOwner)
+    }
+
+    override fun onCountGoogleDriveServersEnded(servers: List<GoogleDriveServer>?) {
+        googleDriveServersCounted = true
+        googleDriveServers?.clear()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            serversList?.removeIf { item -> item.type == ServerType.GOOGLE_DRIVE }
+        }
+        if (!servers.isNullOrEmpty()) {
+            googleDriveServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.GOOGLE_DRIVE))
+        }
+        maybeShowConnections()
+    }
+
+    override fun onCountGoogleDriveServersFailed(throwable: Throwable?) {
+        googleDriveServersCounted = true
+        Timber.d("***onCountGoogleServersFailed**$throwable")
     }
 
 
