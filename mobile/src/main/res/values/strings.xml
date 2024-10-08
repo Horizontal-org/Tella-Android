@@ -936,4 +936,5 @@ Would you like to share analytics with the Tella team?</string>
     <string name="settings_add.server.selection_dialog.title" translatable="false">What type of server would you like to connect to?</string>
     <string name="unavailable_connections">Unavailable connections</string>
     <string name="unavailable_connections_desc">For the following categories, only one connection can be\n enabled at a time. To add a new connection, please delete\n the current one by going to Connections Settings. </string>
+    <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
 </resources>

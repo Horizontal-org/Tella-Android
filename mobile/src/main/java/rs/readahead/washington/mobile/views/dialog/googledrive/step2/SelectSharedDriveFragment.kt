@@ -7,9 +7,9 @@ import android.os.Looper
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSelectSharedDriveBinding
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
@@ -17,6 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServe
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 
 class SelectSharedDriveFragment :
     BaseBindingFragment<FragmentSelectSharedDriveBinding>(FragmentSelectSharedDriveBinding::inflate) {
@@ -38,20 +39,39 @@ class SelectSharedDriveFragment :
             // Update RecyclerView with the new list of shared drives
             val adapter = StringListAdapter(drives, object : StringListAdapter.ItemClickListener {
                 override fun onItemClick(folder: Folder) {
-                    // Handle item click
+                    // Set folder details in the server object
                     googleDriveServer.folderId = folder.folderId
                     googleDriveServer.folderName = folder.name
                     googleDriveServer.name = getString(R.string.google_drive)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // Perform navigation after delay
-                        bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
-                        navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
-                    }, 500) // Delay in milliseconds (e.g., 2000 ms = 2 se
+
+                    // Check folder permissions
+                    sharedViewModel.checkFolderPermissions(
+                        folder.folderId,
+                        googleDriveServer.username
+                    )
                 }
             })
             binding.recyclerView.adapter = adapter
         }
-
+        // Observe the permission result
+        sharedViewModel.permissionResult.observe(viewLifecycleOwner) { hasAccess ->
+            if (hasAccess) {
+                // Proceed with uploading to the shared folder
+                Handler(Looper.getMainLooper()).postDelayed({
+                    bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
+                    navManager().navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment()
+                }, 500)
+            } else {
+                // Show error message or alert that the user doesn't have permission
+                activity?.let {
+                    DialogUtils.showBottomMessage(
+                        it,
+                        getString(R.string.no_permission_to_folder_google_drive),
+                        true
+                    )
+                }
+            }
+        }
         if (sharedViewModel.sharedDrives.value.isNullOrEmpty()) {
             sharedViewModel.fetchSharedDrives()
         }
