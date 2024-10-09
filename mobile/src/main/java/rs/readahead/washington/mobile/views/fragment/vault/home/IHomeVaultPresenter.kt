@@ -16,14 +16,6 @@ import rs.readahead.washington.mobile.mvp.contract.IBasePresenter
 class IHomeVaultPresenter {
     interface IView {
         fun getContext(): Context?
-        fun onCountGoogleDriveServersEnded(servers: List<GoogleDriveServer>?)
-        fun onCountGoogleDriveServersFailed(throwable: Throwable?)
-        fun onCountTUServersEnded(servers: List<TellaReportServer>?)
-        fun onCountTUServersFailed(throwable: Throwable?)
-        fun onCountCollectServersEnded(servers: List<CollectServer>?)
-        fun onCountCollectServersFailed(throwable: Throwable?)
-        fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?)
-        fun onCountUwaziServersFailed(throwable: Throwable?)
         fun onGetFilesSuccess(files: List<VaultFile?>)
         fun onGetFilesError(error: Throwable?)
         fun onMediaExported(num: Int)
@@ -34,17 +26,16 @@ class IHomeVaultPresenter {
         fun onGetFavoriteCollectFormsError(error: Throwable?)
         fun onGetFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>?)
         fun onGetFavoriteCollectTemplateError(error: Throwable?)
+        fun onAllServerCountsEnded(serverCounts: ServerCounts)
+        fun onServerCountFailed(error: Throwable?)
     }
 
     interface IPresenter : IBasePresenter {
         fun executePanicMode()
-        fun countGoogleDriveServers()
-        fun countTUServers()
-        fun countCollectServers()
-        fun countUwaziServers()
         fun exportMediaFiles(vaultFiles: List<VaultFile?>)
         fun getRecentFiles(filterType: FilterType?, sort: Sort?, limits: Limits)
         fun getFavoriteCollectForms()
         fun getFavoriteCollectTemplates()
+        fun countAllServers()
     }
 }

@@ -11,4 +11,7 @@
     <dimen name="hide_tella_small_button_height">148dp</dimen>
 
     <item name="pattern_height_percent" type="dimen" format="float">.5</item>
+
+    <dimen name="extra_padding_top">24dp</dimen>
+
 </resources>

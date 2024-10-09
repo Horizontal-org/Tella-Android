@@ -21,12 +21,16 @@ import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.data.database.UwaziDataSource
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
+import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
 
-class HomeVaultPresenter (var view: IHomeVaultPresenter.IView?, val config: Config) :
+class HomeVaultPresenter(var view: IHomeVaultPresenter.IView?, val config: Config) :
     IHomeVaultPresenter.IPresenter {
     private var keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private var disposable = CompositeDisposable()
@@ -71,67 +75,49 @@ class HomeVaultPresenter (var view: IHomeVaultPresenter.IView?, val config: Conf
             .blockingAwait()
     }
 
-    override fun countGoogleDriveServers() {
-        disposable.add(keyDataSource.googleDriveDataSource
+    override fun countAllServers() {
+        val googleDriveCount = keyDataSource.googleDriveDataSource
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: GoogleDriveDataSource -> obj.listGoogleDriveServers(config.googleClientId) }
-            .subscribe(
-                { servers ->
-                    view?.onCountGoogleDriveServersEnded(servers)
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onCountGoogleDriveServersFailed(throwable)
-            }
-        )
-    }
+            .flatMapSingle { it.listGoogleDriveServers(config.googleClientId) }
 
-    override fun countTUServers() {
-        disposable.add(keyDataSource.dataSource
+        val tellaUploadCount = keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: DataSource -> obj.listTellaUploadServers() }
-            .subscribe(
-                { servers ->
-                    view?.onCountTUServersEnded(servers)
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onCountUwaziServersFailed(throwable)
-            }
-        )
-    }
+            .flatMapSingle { it.listTellaUploadServers() }
 
-    override fun countCollectServers() {
-        disposable.add(keyDataSource.dataSource
+        val collectServersCount = keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: DataSource -> obj.listCollectServers() }
-            .subscribe(
-                { servers ->
-                    view?.onCountCollectServersEnded(servers)
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onCountCollectServersFailed(throwable)
-            }
-        )
-    }
+            .flatMapSingle { it.listCollectServers() }
 
-    override fun countUwaziServers() {
-        disposable.add(keyDataSource.uwaziDataSource
+        val uwaziServersCount = keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: UwaziDataSource -> obj.listUwaziServers() }
-            .subscribe(
-                { servers ->
-                    view?.onCountUwaziServersEnded(servers)
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view?.onCountUwaziServersFailed(throwable)
+            .flatMapSingle { it.listUwaziServers() }
+
+        // Combine all server count results
+        disposable.add(
+            Single.zip(
+                googleDriveCount.firstOrError(),  // Convert Observable to Single
+                tellaUploadCount.firstOrError(),  // Convert Observable to Single
+                collectServersCount.firstOrError(),  // Convert Observable to Single
+                uwaziServersCount.firstOrError()
+            )  // Convert Observable to Single
+            { googleDriveServers: List<GoogleDriveServer>, tellaUploadServers: List<TellaReportServer>, collectServers: List<CollectServer>, uwaziServers: List<UWaziUploadServer> ->
+                ServerCounts(
+                    googleDriveServers = googleDriveServers,
+                    tellaUploadServers = tellaUploadServers,
+                    collectServers = collectServers,
+                    uwaziServers = uwaziServers
+                )
             }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { serverCounts ->
+                        view?.onAllServerCountsEnded(serverCounts)
+                    },
+                    { throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        view?.onServerCountFailed(throwable)
+                    }
+                )
         )
     }
 

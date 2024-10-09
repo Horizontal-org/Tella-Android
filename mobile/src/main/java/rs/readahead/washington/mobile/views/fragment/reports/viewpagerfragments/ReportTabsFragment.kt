@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType

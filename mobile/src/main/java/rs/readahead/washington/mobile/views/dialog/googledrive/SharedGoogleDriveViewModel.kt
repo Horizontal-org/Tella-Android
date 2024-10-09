@@ -19,32 +19,32 @@ import org.json.JSONObject
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedGoogleDriveViewModel @Inject constructor(
-    private val repository: GoogleDriveRepository
+    private val repository: GoogleDriveRepository,
+    private val driveServiceProvider: DriveServiceProvider
 ) : ViewModel() {
-
     fun setEmail(email: String) {
         _email.value = email
     }
 
     private val _email = MutableLiveData<String?>()
     val email: MutableLiveData<String?> get() = _email
-
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
-
     private val _sharedDrives = MutableLiveData<List<Folder>>()
     val sharedDrives: LiveData<List<Folder>> get() = _sharedDrives
-
     private val _folderCreated = MutableLiveData<String>()
     val folderCreated: LiveData<String> get() = _folderCreated
-
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
+    private val _permissionResult = MutableLiveData<Boolean>()
+    val permissionResult: LiveData<Boolean> get() = _permissionResult
+
     // Fetch shared drives using the repository
     private val _authorizationIntent = MutableLiveData<Intent?>()
     val authorizationIntent: LiveData<Intent?> get() = _authorizationIntent
@@ -131,6 +131,31 @@ class SharedGoogleDriveViewModel @Inject constructor(
                 _authorizationIntent.value = e.intent // Pass the authorization intent
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to retrieve shared drives: ${e.message}"
+            }
+        }
+    }
+
+    fun checkFolderPermissions(folderId: String, email: String) {
+        viewModelScope.launch {
+            try {
+                val driveService = driveServiceProvider.getDriveService(email)
+                val permissions = withContext(Dispatchers.IO) {
+                    // Fetch permissions for the given folder
+                    driveService.permissions().list(folderId).execute()
+                }
+                var hasWriteAccess = false
+                // Check if the user has write or owner access
+                for (permission in permissions.permissions) {
+                    if (permission.role == "writer" || permission.role == "owner") {
+                        hasWriteAccess = true
+                        break
+                    }
+                }
+                _permissionResult.postValue(hasWriteAccess) // Post the result to LiveData
+            } catch (e: Exception) {
+                // Handle errors appropriately
+                _errorMessage.postValue("Failed to check folder permissions: ${e.message}")
+                _permissionResult.postValue(false) // Post failure to LiveData
             }
         }
     }

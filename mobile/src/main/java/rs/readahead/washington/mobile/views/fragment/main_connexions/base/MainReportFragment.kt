@@ -30,61 +30,63 @@ abstract class MainReportFragment :
     }
 
     private fun initView() {
-        // Setup the view with the fragment provider from the subclass
-        val fragmentProvider = getFragmentProvider()
-        binding.viewPagerComponent.setTabTitles(
-            listOf(
-                getString(R.string.collect_draft_tab_title),
-                getString(R.string.collect_outbox_tab_title),
-                getString(R.string.collect_sent_tab_title)
+        if (isViewInitialized) {
+            // Setup the view with the fragment provider from the subclass
+            val fragmentProvider = getFragmentProvider()
+            binding.viewPagerComponent.setTabTitles(
+                listOf(
+                    getString(R.string.collect_draft_tab_title),
+                    getString(R.string.collect_outbox_tab_title),
+                    getString(R.string.collect_sent_tab_title)
+                )
             )
-        )
-        viewModel.listOutboxAndSubmitted()
+            viewModel.listOutboxAndSubmitted()
 
-        binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
-        binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
+            binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
+            binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
 
-        binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
+            binding.viewPagerComponent.setToolBarTitle(getToolbarTitle())
 
-        binding.newReportBtn.setOnClickListener {
-            navigateToNewReportScreen()
-        }
-        binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
-
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
-            when (position) {
-                DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
-                OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+            binding.newReportBtn.setOnClickListener {
+                navigateToNewReportScreen()
             }
+            binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
+
+            SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
+                when (position) {
+                    DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                    OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                    SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+                }
+            }
+
+            updateOutboxTitle.observe(viewLifecycleOwner) { outBoxesSize ->
+                binding.viewPagerComponent.updateTabTitle(
+                    OUTBOX_LIST_PAGE_INDEX,
+                    outBoxesSize
+                )
+            }
+
+            updateSubmittedTitle.observe(viewLifecycleOwner) { outBoxesSize ->
+                binding.viewPagerComponent.updateTabTitle(
+                    SUBMITTED_LIST_PAGE_INDEX,
+                    outBoxesSize
+                )
+            }
+
+            viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
+                binding.viewPagerComponent.updateTabTitle(
+                    OUTBOX_LIST_PAGE_INDEX,
+                    reportCounts.outboxCount
+                )
+
+                binding.viewPagerComponent.updateTabTitle(
+                    SUBMITTED_LIST_PAGE_INDEX,
+                    reportCounts.submittedCount
+                )
+            }
+
         }
-
-        updateOutboxTitle.observe(baseActivity) { outBoxesSize ->
-            binding.viewPagerComponent.updateTabTitle(
-                OUTBOX_LIST_PAGE_INDEX,
-                outBoxesSize
-            )
-        }
-
-        updateSubmittedTitle.observe(baseActivity) { outBoxesSize ->
-            binding.viewPagerComponent.updateTabTitle(
-                SUBMITTED_LIST_PAGE_INDEX,
-                outBoxesSize
-            )
-        }
-
-        viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
-            binding.viewPagerComponent.updateTabTitle(
-                OUTBOX_LIST_PAGE_INDEX,
-                reportCounts.outboxCount
-            )
-            binding.viewPagerComponent.updateTabTitle(
-                SUBMITTED_LIST_PAGE_INDEX,
-                reportCounts.submittedCount
-            )
-        }
-
-
     }
 
     private fun setCurrentTab(position: Int) {
