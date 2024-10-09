@@ -16,9 +16,12 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
     private lateinit var reportTypeImg: ImageView
 
     override fun bind(item: ServerDataItem, vaultClickListener: VaultClickListener) {
-
         reportTypeTextView = view.findViewById(R.id.server_name_textView)
         reportTypeImg = view.findViewById(R.id.server_img)
+
+        // Set the default padding
+       // val defaultPadding = view.context.resources.getDimensionPixelSize(R.dimen.hide_tella_small_margin)
+      //  view.setPadding(view.paddingLeft, defaultPadding, view.paddingRight, view.paddingBottom)
 
         when (item.type) {
             ServerType.UWAZI -> {
@@ -61,7 +64,21 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
-            else -> { //todo create default server type
+            ServerType.GOOGLE_DRIVE -> {
+                reportTypeTextView.text = view.context.getText(R.string.google_drive)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_google_drive_white,
+                        null
+                    )
+                )
+
+                // Add extra top padding for Google Drive items
+                val extraPaddingTop = view.context.resources.getDimensionPixelSize(R.dimen.extra_padding_top)
+                view.setPadding(view.paddingLeft, extraPaddingTop, view.paddingRight, view.paddingBottom)
+            }
+            else -> { // todo create default server type
             }
         }
 
@@ -69,7 +86,6 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
             vaultClickListener.onServerItemClickListener(item)
         }
     }
-
 
     companion object {
         fun from(parent: ViewGroup): ServerViewHolder {

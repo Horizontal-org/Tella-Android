@@ -10,17 +10,18 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
-import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.fromJsonToObjectList
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
 abstract class BaseReportsViewModel : ViewModel() {
 
     protected val disposables = CompositeDisposable()
+
+    protected val _reportCounts = SingleLiveEvent<ReportCounts>()
+    val reportCounts: LiveData<ReportCounts> get() = _reportCounts
 
     protected val _draftListReportFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
@@ -37,7 +38,7 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _onOpenClickedFormInstance = MutableLiveData<ReportInstance>()
     val onOpenClickedInstance: LiveData<ReportInstance> get() = _onOpenClickedFormInstance
 
-    protected val _instanceDeleted = SingleLiveEvent<String?>()
+    protected val _instanceDeleted = MutableLiveData<String?>()
     val instanceDeleted: LiveData<String?> get() = _instanceDeleted
 
     protected val _reportInstance = SingleLiveEvent<ReportInstance>()
@@ -55,11 +56,12 @@ abstract class BaseReportsViewModel : ViewModel() {
     protected val _error = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable> get() = _error
 
-    protected val _serversList = MutableLiveData<List<TellaReportServer>>()
-    val serversList: LiveData<List<TellaReportServer>> get() = _serversList
+    protected val _serversList = MutableLiveData<List<Server>>()
+    val serversList: LiveData<List<Server>> get() = _serversList
 
-    abstract val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
-    abstract val instanceProgress: SingleLiveEvent<ReportInstance>
+    //TODO CHECK FOR LATER AHLEM + WAFA
+   // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
+    // val instanceProgress: SingleLiveEvent<ReportInstance>
 
 
     // Abstract methods to be implemented in derived ViewModels
@@ -86,6 +88,7 @@ abstract class BaseReportsViewModel : ViewModel() {
 
     abstract fun listSubmitted()
     abstract fun listOutbox()
+    abstract fun listOutboxAndSubmitted()
     abstract fun listDrafts()
     abstract fun saveSubmitted(reportInstance: ReportInstance)
     abstract fun saveOutbox(reportInstance: ReportInstance)

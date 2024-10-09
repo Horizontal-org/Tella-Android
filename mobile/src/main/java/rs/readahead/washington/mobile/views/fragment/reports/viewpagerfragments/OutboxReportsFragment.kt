@@ -9,23 +9,23 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
 @AndroidEntryPoint
-class OutboxReportsFragment : BaseReportsFragment() {
+class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
 
-    private val viewModel by viewModels<ReportsViewModel>()
+    private val outboxReportsViewModel by viewModels<ReportsViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
     }
 
-    override fun getViewModel(): BaseReportsViewModel {
-        return viewModel
+    override fun getViewModel(): ReportsViewModel {
+        return outboxReportsViewModel
     }
 
     override fun getEmptyMessage(): Int {
@@ -44,11 +44,7 @@ class OutboxReportsFragment : BaseReportsFragment() {
 
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
-        with(viewModel) {
-            outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-                handleReportList(outboxes)
-            }
-
+        with(outboxReportsViewModel) {
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showMenu(
                     instance = instance,
@@ -65,13 +61,8 @@ class OutboxReportsFragment : BaseReportsFragment() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                viewModel.listOutbox()
+                outboxReportsViewModel.listOutbox()
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.listOutbox()
     }
 }

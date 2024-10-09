@@ -7,7 +7,6 @@ import static rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageVie
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
 import rs.readahead.washington.mobile.MyApplication;
@@ -36,20 +37,25 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.GoogleDriveServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
@@ -62,17 +68,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         ICollectBlankFormListRefreshPresenterContract.IView,
         CollectServerDialogFragment.CollectServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
-        IUWAZIServersPresenterContract.IView {
+        IUWAZIServersPresenterContract.IView,
+        IGoogleDriveServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
     private UwaziServersPresenter uwaziServersPresenter;
+    private GoogleDriveServersPresenter googleDriveServersPresenter;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
+    private List<GoogleDriveServer> googleDriveServers;
     private ActivityDocumentationSettingsBinding binding;
+    @Inject
+    public Config config;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +107,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         servers = new ArrayList<>();
         tuServers = new ArrayList<>();
         uwaziServers = new ArrayList<>();
+        googleDriveServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
         collectServersPresenter.getCollectServers();
@@ -105,9 +117,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         uwaziServersPresenter = new UwaziServersPresenter(this);
         uwaziServersPresenter.getUwaziServers();
 
+        googleDriveServersPresenter = new GoogleDriveServersPresenter(this);
+        googleDriveServersPresenter.getGoogleDriveServers(config.getGoogleClientId());
+
         createRefreshPresenter();
         initUwaziEvents();
         initReportsEvents();
+        initGoogleDriveEvents();
         initListeners();
     }
 
@@ -141,6 +157,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         INSTANCE.getUpdateReportsServer().observe(this, server -> {
             if (server != null) {
                 tellaUploadServersPresenter.update(server);
+            }
+        });
+    }
+
+    private void initGoogleDriveEvents() {
+        INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
+            if (server != null) {
+                googleDriveServersPresenter.create(server);
             }
         });
     }
@@ -397,16 +421,25 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(),
+        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), getContext(),
                 getString(R.string.settings_servers_add_server_dialog_title),
-                getString(R.string.settings_serv_add_server_selection_dialog_title),
+                getString(R.string.settings_add_server_selection_dialog_title),
                 getString(R.string.settings_serv_add_server_selection_dialog_description),
                 getString(R.string.action_cancel), //TODO CHECk THIS
                 getString(R.string.action_ok),//TODO CHECk THIS
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
+                getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+                getString(R.string.unavailable_connections),
+                getString(R.string.unavailable_connections_desc),
+                servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
                 new BottomSheetUtils.IServerChoiceActions() {
+                    @Override
+                    public void addGoogleDriveServer() {
+                        showGoogleDriveServerDialog(null);
+                    }
+
                     @Override
                     public void addUwaziServer() {
                         showUwaziServerDialog(null);
@@ -513,6 +546,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
+    private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
+        if (googleDriveServer == null) {
+            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+        }
+    }
+
     private void stopPresenting() {
         if (collectServersPresenter != null) {
             collectServersPresenter.destroy();
@@ -599,7 +638,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
                     getString(R.string.settings_docu_delete_server_dialog_expl),
                     getString(R.string.action_delete),
-                    getString(R.string.action_cancel), -1
+                    getString(R.string.action_cancel),
+                    -1,
+                    !(server instanceof GoogleDriveServer)
             ));
         }
         item.setTag(servers.indexOf(server));
@@ -614,6 +655,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             case UWAZI:
                 editUwaziServer((UWaziUploadServer) server);
                 break;
+            case GOOGLE_DRIVE:
+                // editGoogleDriveServer((GoogleDriveServer) server);
             default:
                 editTUServer((TellaReportServer) server);
                 break;
@@ -627,6 +670,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 break;
             case UWAZI:
                 uwaziServersPresenter.remove((UWaziUploadServer) server);
+                break;
+            case GOOGLE_DRIVE:
+                googleDriveServersPresenter.remove((GoogleDriveServer) server);
                 break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
@@ -778,4 +824,47 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             Preferences.setAutoUploadServerId(server.getId());
         }
     }
+
+    @Override
+    public void onGoogleDriveServersLoaded(@NonNull List<GoogleDriveServer> googleDriveServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(googleDriveServers);
+        createServerViews(servers);
+        this.googleDriveServers = googleDriveServers;
+    }
+
+    @Override
+    public void onLoadGoogleDriveServersError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCreatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+        servers.add(server);
+        googleDriveServers.add(server);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
+    }
+
+    @Override
+    public void onCreateGoogleDriveServerError(@NonNull Throwable throwable) {
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
+
+    }
+
+    @Override
+    public void onRemovedGoogleDriveServer(@NonNull GoogleDriveServer server) {
+        servers.remove(server);
+        googleDriveServers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+
+    }
+
+    @Override
+    public void onRemoveGoogleDriveServerError(@NonNull Throwable throwable) {
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
+    }
+
 }

@@ -12,13 +12,16 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.EntityAdapter
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
-abstract class BaseReportsFragment :
+abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     BaseBindingFragment<FragmentReportsListBinding>(FragmentReportsListBinding::inflate) {
 
-    protected abstract fun getViewModel(): BaseReportsViewModel // Child classes provide the specific ViewModel
+    // Child classes provide the specific ViewModel through this method
+    protected abstract fun getViewModel(): VM
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
     protected abstract fun getEmptyMessageIcon(): Int
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
@@ -40,6 +43,7 @@ abstract class BaseReportsFragment :
     }
 
     // Observe ViewModel data changes (e.g., report lists, progress, errors)
+    @SuppressLint("StringFormatInvalid")
     private fun observeViewModel() {
 
         getViewModel().progress.observe(viewLifecycleOwner) { isLoading ->
@@ -56,6 +60,17 @@ abstract class BaseReportsFragment :
 
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
             loadEntityInstance(instance)
+        }
+
+        getViewModel().outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
+            handleReportList(outboxes)
+            updateOutboxTitle.postValue(outboxes.size)
+        }
+
+
+        getViewModel().submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
+            handleReportList(submitted)
+            updateSubmittedTitle.postValue(submitted.size)
         }
     }
 
@@ -130,6 +145,11 @@ abstract class BaseReportsFragment :
 
     protected fun loadEntityInstance(reportInstance: ReportInstance) {
         getViewModel().getReportBundle(reportInstance)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getViewModel().listOutbox()
     }
 
 }

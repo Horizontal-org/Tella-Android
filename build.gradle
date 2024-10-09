@@ -73,6 +73,14 @@ buildscript {
     versions.googlePlayServices = "17.0.0"
     versions.pdf_viewer = "2.8.2"
     versions.divviup = "0.2.0"
+    versions.credentialsVersion = '1.2.2'
+    versions.googleIdVersion = '1.1.1'
+    versions.playServicesAuthVersion = '21.2.0'
+    versions.googleApiClientAndroidVersion = '1.33.0'
+    versions.googleApiServicesDriveV3Version = 'v3-rev136-1.25.0'
+    versions.googleHttpClientAndroidVersion = '1.41.2'
+    versions.gsonVersion = '2.11.0'
+    versions.googleApiClientGsonVersion = '1.34.0'
 
     repositories {
         mavenCentral()
