@@ -18,12 +18,7 @@ public class CommonPrefs {
     public static final String NONE = "";
     private static final String SHARED_PREFERENCES_NAME = "tella_shared_preferences";
 
-    static final String SHOW_IMPROVEMENT_SECTION = "show_improvement_section";
-    static final String HAS_IMPROVEMENT_ACCEPTED = "has_improvement_accepted";
-    static final String TIME_IMPROVEMENT_ACCEPTED = "time_improvement_accepted";
-    static final String INSTALL_METRIC_SENT = "install_metric_sent";
-    static final String UNLOCK_TIME = "unlock_time";
-    static final String TIME_SPENT = "time_spent";
+
 
 
     private static CommonPrefs instance;

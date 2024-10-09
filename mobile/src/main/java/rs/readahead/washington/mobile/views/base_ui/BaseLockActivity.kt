@@ -19,6 +19,9 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.MyApplication.isConnectedToInternet
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.getTimeSpent
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.getUnlockTime
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setTimeSpent
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.views.activity.PatternUpgradeActivity
 
@@ -42,8 +45,8 @@ abstract class BaseLockActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        val lastTimeSpent = CommonPreferences.getTimeSpent()
-        CommonPreferences.setTimeSpent(lastTimeSpent + (System.currentTimeMillis() - CommonPreferences.getUnlockTime()))
+        val lastTimeSpent = getTimeSpent()
+        setTimeSpent(lastTimeSpent + (System.currentTimeMillis() - getUnlockTime()))
     }
 
     private fun startKeySetup() {
@@ -88,7 +91,7 @@ abstract class BaseLockActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        CommonPreferences.setUnlockTime(System.currentTimeMillis())
+        Preferences.setUnlockTime(System.currentTimeMillis())
         restrictActivity()
         maybeEnableSecurityScreen()
         super.onResume()
@@ -121,8 +124,8 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun sendTimeSpentAnalytics() {
         if (isConnectedToInternet(baseContext)) {
-            divviupUtils.runTimeSpentEvent(CommonPreferences.getTimeSpent())
-            CommonPreferences.setTimeSpent(0L)
+            divviupUtils.runTimeSpentEvent(getTimeSpent())
+            setTimeSpent(0L)
         }
     }
 }

@@ -9,6 +9,9 @@ import org.divviup.android.Client
 import org.divviup.android.TaskId
 import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isInstallMetricSent
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setInstallMetricSent
 import timber.log.Timber
 import java.net.URI
 import javax.inject.Inject
@@ -20,7 +23,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
     fun runUwaziSentEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -39,7 +42,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
 
     fun runReportSentEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -58,7 +61,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
 
     fun runQuickDeleteEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -76,7 +79,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runUnlockEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -94,7 +97,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runInstallEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || CommonPreferences.isInstallMetricSent() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isInstallMetricSent() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -104,7 +107,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
                     timePrecision = R.integer.divviup_count_unlocks_timePrecisionSeconds,
                     isCount = true
                 )
-                CommonPreferences.setInstallMetricSent(true)
+                setInstallMetricSent(true)
                 Timber.d("Divviup runInstallEvent measurement sent")
             } catch (e: Exception) {
                 Timber.e(e, "Divviup sending runInstallEvent failed")
@@ -130,7 +133,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runPhotoTakenEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -148,7 +151,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runVideoTakenEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -167,7 +170,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
 
     fun runAudioTakenEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -186,7 +189,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
 
     fun runODKSentEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -204,7 +207,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
     }
 
     fun runFileImportEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(
@@ -223,7 +226,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
 
     fun runCamouflageEnabledEvent() {
-        if (!CommonPreferences.hasAcceptedAnalytics() || isDebugBuild()) return
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
             try {
                 sendCountMeasurement(

@@ -36,7 +36,9 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isFreshInstall
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setIsAcceptedAnalytics
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowVaultAnalyticsSection
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
@@ -139,7 +141,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         if (analyticsActions == AnalyticsActions.YES) {
-            CommonPreferences.setIsAcceptedAnalytics(true)
+            setIsAcceptedAnalytics(true)
             baseActivity.divviupUtils.runInstallEvent()
             DialogUtils.showBottomMessage(
                 requireActivity(),
@@ -411,14 +413,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
-                CommonPreferences.setIsAcceptedAnalytics(true)
+                setIsAcceptedAnalytics(true)
                 nav().navigate(R.id.main_settings)
             }
         }
     }
 
     private fun removeImprovementSection() {
-        CommonPreferences.setShowVaultAnalyticsSection(false)
+        setShowVaultAnalyticsSection(false)
         vaultAdapter.removeImprovementSection()
     }
 
