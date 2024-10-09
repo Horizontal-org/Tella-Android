@@ -61,7 +61,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
         // Check if the current connections are the same as the new ones
         if (connections.isEmpty() || !areListsEqual(
-                (connections.first() as DataItem.ConnectionsItem).item, sortedConnectionsList
+                connections.first().item, sortedConnectionsList
             )
         ) {
             connections = listOf(newConnectionsItem)
@@ -81,7 +81,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
         // Check if the current recent files are the same as the new ones
         if (recentFiles.isEmpty() || !areListsEqual(
-                (recentFiles.first() as DataItem.RecentFiles).vaultFiles, vaultFiles
+                recentFiles.first().vaultFiles, vaultFiles
             )
         ) {
             recentFiles = listOf(newRecentFilesItem)

@@ -10,7 +10,6 @@ import rs.readahead.washington.mobile.R.string
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
@@ -50,7 +49,7 @@ class SubmittedReportsFragment : BaseReportsFragment<ReportsViewModel>() {
                 handleReportList(submitted)
                 updateSubmittedTitle.postValue(submitted.size)
             }
-            
+
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showMenu(
                     instance = instance,
