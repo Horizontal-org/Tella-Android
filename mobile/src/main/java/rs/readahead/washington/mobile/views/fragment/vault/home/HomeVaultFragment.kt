@@ -107,11 +107,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         return inflater.inflate(R.layout.fragment_vault, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
