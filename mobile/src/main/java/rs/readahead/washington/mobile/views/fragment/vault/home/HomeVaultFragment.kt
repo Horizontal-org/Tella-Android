@@ -107,6 +107,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         return inflater.inflate(R.layout.fragment_vault, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.toolbar)
         vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
@@ -684,6 +689,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    private fun maybeHideFilesTitle() {
+        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms() && serversList?.isEmpty() == false) {
+            vaultAdapter.removeTitle()
+        } else {
+            vaultAdapter.addTitle()
+        }
+    }
+
+
     override fun onGetFavoriteCollectTemplateError(error: Throwable?) {
         Timber.d(error)
     }
@@ -721,13 +735,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun maybeHideFilesTitle() {
-        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms() && serversList?.isEmpty() == false) {
-            vaultAdapter.removeTitle()
-        } else {
-            vaultAdapter.addTitle()
-        }
-    }
 
     private fun fixAppBarShadow(view: View) {
         val appBar = view.findViewById<View>(R.id.appbar)
