@@ -1,7 +1,6 @@
 package rs.readahead.washington.mobile.util.divviup
 
 import android.content.Context
-import com.hzontal.tella_locking_ui.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -9,6 +8,7 @@ import kotlinx.coroutines.withContext
 import org.divviup.android.Client
 import org.divviup.android.TaskId
 import org.hzontal.shared_ui.data.CommonPreferences
+import rs.readahead.washington.mobile.R
 import timber.log.Timber
 import java.net.URI
 import javax.inject.Inject
