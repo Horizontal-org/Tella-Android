@@ -60,14 +60,14 @@ abstract class MainReportFragment :
                 }
             }
 
-            updateOutboxTitle.observe(baseActivity) { outBoxesSize ->
+            updateOutboxTitle.observe(viewLifecycleOwner) { outBoxesSize ->
                 binding.viewPagerComponent.updateTabTitle(
                     OUTBOX_LIST_PAGE_INDEX,
                     outBoxesSize
                 )
             }
 
-            updateSubmittedTitle.observe(baseActivity) { outBoxesSize ->
+            updateSubmittedTitle.observe(viewLifecycleOwner) { outBoxesSize ->
                 binding.viewPagerComponent.updateTabTitle(
                     SUBMITTED_LIST_PAGE_INDEX,
                     outBoxesSize
@@ -79,6 +79,7 @@ abstract class MainReportFragment :
                     OUTBOX_LIST_PAGE_INDEX,
                     reportCounts.outboxCount
                 )
+
                 binding.viewPagerComponent.updateTabTitle(
                     SUBMITTED_LIST_PAGE_INDEX,
                     reportCounts.submittedCount
