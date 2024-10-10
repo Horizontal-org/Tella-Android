@@ -73,10 +73,6 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                         null
                     )
                 )
-
-                // Add extra top padding for Google Drive items
-                val extraPaddingTop = view.context.resources.getDimensionPixelSize(R.dimen.extra_padding_top)
-                view.setPadding(view.paddingLeft, extraPaddingTop, view.paddingRight, view.paddingBottom)
             }
             else -> { // todo create default server type
             }
