@@ -36,14 +36,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         ListDiffCallback()
     ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
-    private var recentFiles = listOf<DataItem.RecentFiles>()
-    private var favoriteForms = listOf<DataItem.FavoriteForms>()
-    private var favoriteTemplates = listOf<DataItem.FavoriteTemplates>()
-    private var actions = listOf<DataItem.FileActions>()
-    private var titles = listOf<DataItem.Titles>()
-    private var analyticsBanner = listOf<DataItem.ImproveAction>()
-    private var connections = listOf<DataItem.ConnectionsItem>()
-    private var items = listOf<DataItem>()
+    private var recentFiles = mutableListOf<DataItem.RecentFiles>()
+    private var favoriteForms = mutableListOf<DataItem.FavoriteForms>()
+    private var favoriteTemplates = mutableListOf<DataItem.FavoriteTemplates>()
+    private var actions = mutableListOf<DataItem.FileActions>()
+    private var titles = mutableListOf<DataItem.Titles>()
+    private var analyticsBanner = mutableListOf<DataItem.ImproveAction>()
+    private var connections = mutableListOf<DataItem.ConnectionsItem>()
+    private var items = mutableListOf<DataItem>()
 
     init {
         addFileActions()
@@ -64,14 +64,14 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 connectionsList.first().servers, newConnectionsItem.item
             )
         ) {
-            connections = listOf(newConnectionsItem)
+            connections = mutableListOf(newConnectionsItem)
             updateItems()
         }
     }
 
     fun removeConnectionServers() {
         adapterScope.launch {
-            items = items - connections.toSet()
+            items.removeAll(connections)
             updateItems()
         }
     }
@@ -84,41 +84,41 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 recentFiles.first().vaultFiles, vaultFiles
             )
         ) {
-            recentFiles = listOf(newRecentFilesItem)
+            recentFiles = mutableListOf(newRecentFilesItem)
             updateItems()
         }
     }
 
     fun removeRecentFiles() {
         adapterScope.launch {
-            items = items - recentFiles.toSet()
+            items.removeAll(recentFiles)
             updateItems()
         }
     }
 
     fun removeFavoriteForms() {
         adapterScope.launch {
-            items = items - favoriteForms.toSet()
+            items.removeAll(favoriteForms)
             updateItems()
         }
     }
 
     fun removeFavoriteTemplates() {
         adapterScope.launch {
-            items = items - favoriteTemplates.toSet()
+            items.removeAll(favoriteTemplates)
             updateItems()
         }
     }
 
     fun removeTitle() {
         adapterScope.launch {
-            items = items - titles.toSet()
+            items.removeAll(titles)
             updateItems()
         }
     }
 
     private fun addFileActions() {
-        actions = listOf(
+        actions = mutableListOf(
             DataItem.FileActions(
                 ID_FILES_ACTIONS
             )
@@ -128,14 +128,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
     fun addAnalyticsBanner() {
         if ((CommonPreferences.isShowVaultAnalyticsSection() && !CommonPreferences.hasAcceptedAnalytics()) || CommonPreferences.isTimeToShowReminderAnalytics()) {
-            analyticsBanner = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
+            analyticsBanner = mutableListOf(DataItem.ImproveAction(ID_IMPROVEMENT))
             updateItems()
         }
     }
 
     fun removeImprovementSection() {
+        analyticsBanner.clear()
         adapterScope.launch {
-            items = items - analyticsBanner.toSet()
+            items.removeAll(analyticsBanner)
             updateItems()
         }
     }
@@ -148,13 +149,13 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 favoriteForms.first().forms, forms
             )
         ) {
-            favoriteForms = listOf(newFavoriteFormsItem)
+            favoriteForms = mutableListOf(newFavoriteFormsItem)
             updateItems()
         }
     }
 
     fun addTitle() {
-        titles = listOf(DataItem.Titles(ID_FILES_TITLE))
+        titles = mutableListOf(DataItem.Titles(ID_FILES_TITLE))
         updateItemsAfterward()
     }
 
@@ -166,17 +167,28 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 (favoriteTemplates.first() as DataItem.FavoriteTemplates).templates, templates
             )
         ) {
-            favoriteTemplates = listOf(newFavoriteTemplatesItem)
+            favoriteTemplates = mutableListOf(newFavoriteTemplatesItem)
             updateItems()
         }
     }
 
     private fun updateItems() {
         adapterScope.launch {
-            items =
-                analyticsBanner + connections + favoriteForms + favoriteTemplates + recentFiles + titles + actions
-            withContext(Dispatchers.Main.immediate) {
-                submitList(items)
+            val newItems = mutableListOf<DataItem>().apply {
+                addAll(analyticsBanner)
+                addAll(connections)
+                addAll(favoriteForms)
+                addAll(favoriteTemplates)
+                addAll(recentFiles)
+                addAll(titles)
+                addAll(actions)
+            }
+
+            if (items != newItems) {
+                items = newItems
+                withContext(Dispatchers.Main.immediate) {
+                    submitList(items.toList())
+                }
             }
         }
     }
