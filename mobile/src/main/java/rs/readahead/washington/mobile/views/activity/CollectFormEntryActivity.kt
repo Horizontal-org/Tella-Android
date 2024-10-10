@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -56,8 +55,8 @@ import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
-import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import timber.log.Timber
@@ -157,11 +156,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     }
 
     private fun initView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.appbar.outlineProvider = null
-        } else {
-            binding.appbar.bringToFront()
-        }
+        binding.appbar.outlineProvider = null
         binding.prevSection.setOnClickListener { v -> showPrevScreen() }
         binding.nextSection.setOnClickListener { v -> showNextScreen() }
         binding.submitButton.setOnClickListener { v ->
@@ -204,6 +199,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             }
 
             formPartSubmitSuccess.observe(this@CollectFormEntryActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                divviupUtils.runODKSentEvent()
                 second?.let { formPartSubmitSuccess(first, second) }
             }
 

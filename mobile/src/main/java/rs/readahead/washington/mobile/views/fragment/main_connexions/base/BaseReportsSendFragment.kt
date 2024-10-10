@@ -34,6 +34,7 @@ abstract class BaseReportsSendFragment :
 
         with(viewModel) {
 
+                            baseActivity.divviupUtils.runReportSentEvent()
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.SUBMITTED -> {

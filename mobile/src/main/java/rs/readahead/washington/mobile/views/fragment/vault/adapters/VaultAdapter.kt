@@ -7,8 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowVaultAnalyticsSection
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isTimeToShowReminderAnalytics
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
@@ -127,7 +129,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun addAnalyticsBanner() {
-        if ((CommonPreferences.isShowVaultAnalyticsSection() && !CommonPreferences.hasAcceptedAnalytics()) || CommonPreferences.isTimeToShowReminderAnalytics()) {
+        if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
             analyticsBanner = mutableListOf(DataItem.ImproveAction(ID_IMPROVEMENT))
             updateItems()
         }
@@ -164,7 +166,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
         // Check if the current favorite templates are the same as the new ones
         if (favoriteTemplates.isEmpty() || !areListsEqual(
-                (favoriteTemplates.first() as DataItem.FavoriteTemplates).templates, templates
+                favoriteTemplates.first().templates, templates
             )
         ) {
             favoriteTemplates = mutableListOf(newFavoriteTemplatesItem)
@@ -184,10 +186,11 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 addAll(actions)
             }
 
+            // Compare the current items with the new items
             if (items != newItems) {
                 items = newItems
                 withContext(Dispatchers.Main.immediate) {
-                    submitList(items.toList())
+                    submitList(items.toList())  // Ensures a fresh list is submitted
                 }
             }
         }
@@ -196,7 +199,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private fun updateItemsAfterward() {
         adapterScope.launch {
             items = mutableListOf<DataItem>().apply {
-                if ((CommonPreferences.isShowVaultAnalyticsSection() && !CommonPreferences.hasAcceptedAnalytics()) || CommonPreferences.isTimeToShowReminderAnalytics()) {
+                if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
                     addAll(analyticsBanner)
                 }
                 if (Preferences.isShowFavoriteForms()) {
@@ -316,5 +319,4 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             return oldItem == newItem
         }
     }
-
 }

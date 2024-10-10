@@ -1,8 +1,5 @@
 package rs.readahead.washington.mobile.media;
 
-import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
-import static rs.readahead.washington.mobile.util.C.RESOURCE_PDF;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -358,7 +355,7 @@ public class MediaFileHandler {
     public static Single<VaultFile> downloadResourcePdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) {
         return MyApplication.rxVault
                 .builder(inputStream)
-                .setMimeType(RESOURCE_PDF)
+                .setMimeType(C.RESOURCE_PDF)
                 .setAnonymous(true)
                 .setName(fileName)
                 .setType(VaultFile.Type.FILE)
@@ -369,7 +366,6 @@ public class MediaFileHandler {
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
-
         try {
             retriever.setDataSource(context, uri);
 
@@ -718,7 +714,7 @@ public class MediaFileHandler {
 
         context.startActivityForResult(
                 Intent.createChooser(intent, "Import files"),
-                IMPORT_MULTIPLE_FILES
+                C.IMPORT_MULTIPLE_FILES
         );
     }
 

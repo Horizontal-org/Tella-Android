@@ -25,6 +25,15 @@ public class Preferences {
                 .commit();
     }
 
+    @SuppressLint("ApplySharedPref")
+    public static void store(Context context, String key, Long value) {
+        // todo: move away from main thread
+        getPreferences(context)
+                .edit()
+                .putLong(key, value)
+                .commit();
+    }
+
     public static void store(Context context, String key, byte[] value) {
         store(context, key, Base64.encodeToString(value, Base64.DEFAULT));
     }
@@ -36,6 +45,11 @@ public class Preferences {
                 .edit()
                 .putString(key, value)
                 .commit();
+    }
+
+    public static Long loadLong(Context context, String key, Long defaultValue) {
+        // todo: move away from main thread
+        return getPreferences(context).getLong(key, defaultValue);
     }
 
     public static int load(Context context, String key, int defaultValue) {
