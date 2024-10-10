@@ -55,22 +55,13 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         return oldList.zip(newList).all { (oldItem, newItem) -> oldItem == newItem }
     }
 
-    private fun areListsExactlyEqual(
-        list1: List<ServerDataItem>,
-        list2: List<ServerDataItem>
-    ): Boolean {
-        if (list1.size != list2.size) return false
-        return list1.zip(list2).all { (item1, item2) -> item1 == item2 }
-    }
-    
     fun addConnectionServers(connectionsList: List<ServerDataItem>) {
         val sortedConnectionsList = connectionsList.sortedBy { server -> server.type }
         val newConnectionsItem = DataItem.ConnectionsItem(sortedConnectionsList)
 
         // Check if the current connections are the same as the new ones
-        if (connections.isEmpty() || !areListsExactlyEqual(
-                connections.first().item,
-                sortedConnectionsList
+        if (favoriteForms.isEmpty() || !areListsEqual(
+                connectionsList.first().servers, newConnectionsItem.item
             )
         ) {
             connections = listOf(newConnectionsItem)
@@ -154,7 +145,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
 
         // Check if the current favorite forms are the same as the new ones
         if (favoriteForms.isEmpty() || !areListsEqual(
-                (favoriteForms.first() as DataItem.FavoriteForms).forms, forms
+                favoriteForms.first().forms, forms
             )
         ) {
             favoriteForms = listOf(newFavoriteFormsItem)
