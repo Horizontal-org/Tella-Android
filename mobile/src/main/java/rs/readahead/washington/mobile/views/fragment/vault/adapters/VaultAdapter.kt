@@ -7,7 +7,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowVaultAnalyticsSection
@@ -34,145 +33,187 @@ private const val ID_PANIC_MODE = "3"
 private const val ID_FILES_TITLE = "4"
 private const val ID_IMPROVEMENT = "5"
 
-
 class VaultAdapter(private val onClick: VaultClickListener) :
     androidx.recyclerview.widget.ListAdapter<DataItem, BaseViewHolder<*>>(
         ListDiffCallback()
     ) {
     private val adapterScope = CoroutineScope(Dispatchers.Default)
-    private var recentFiles = listOf<DataItem.RecentFiles>()
-    private var favoriteForms = listOf<DataItem.FavoriteForms>()
-    private var favoriteTemplates = listOf<DataItem.FavoriteTemplates>()
-    private var actions = listOf<DataItem.FileActions>()
-    private var titles = listOf<DataItem.Titles>()
-    private var analyticsBanner = listOf<DataItem.ImproveAction>()
-    private var connections = listOf<DataItem.ConnectionsItem>()
-    private var items = listOf<DataItem>()
+    private var recentFiles = mutableListOf<DataItem.RecentFiles>()
+    private var favoriteForms = mutableListOf<DataItem.FavoriteForms>()
+    private var favoriteTemplates = mutableListOf<DataItem.FavoriteTemplates>()
+    private var actions = mutableListOf<DataItem.FileActions>()
+    private var titles = mutableListOf<DataItem.Titles>()
+    private var analyticsBanner = mutableListOf<DataItem.ImproveAction>()
+    private var connections = mutableListOf<DataItem.ConnectionsItem>()
+    private var items = mutableListOf<DataItem>()
 
     init {
         addFileActions()
     }
 
+    // Utility function to check if two lists are the same
+    private fun <T> areListsEqual(oldList: List<T>, newList: List<T>): Boolean {
+        if (oldList.size != newList.size) return false
+        return oldList.zip(newList).all { (oldItem, newItem) -> oldItem == newItem }
+    }
+
     fun addConnectionServers(connectionsList: List<ServerDataItem>) {
-        connections = listOf(DataItem.ConnectionsItem(connectionsList))
-        renderList()
+        val sortedConnectionsList = connectionsList.sortedBy { server -> server.type }
+        val newConnectionsItem = DataItem.ConnectionsItem(sortedConnectionsList)
+
+        // Check if the current connections are the same as the new ones
+        if (favoriteForms.isEmpty() || !areListsEqual(
+                connectionsList.first().servers, newConnectionsItem.item
+            )
+        ) {
+            connections = mutableListOf(newConnectionsItem)
+            updateItems()
+        }
     }
 
     fun removeConnectionServers() {
         adapterScope.launch {
-            items = items - connections.toSet()
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+            items.removeAll(connections)
+            updateItems()
         }
     }
 
     fun addRecentFiles(vaultFiles: List<VaultFile?>) {
-        recentFiles = listOf(DataItem.RecentFiles(vaultFiles))
-        renderList()
+        val newRecentFilesItem = DataItem.RecentFiles(vaultFiles)
+
+        // Check if the current recent files are the same as the new ones
+        if (recentFiles.isEmpty() || !areListsEqual(
+                recentFiles.first().vaultFiles, vaultFiles
+            )
+        ) {
+            recentFiles = mutableListOf(newRecentFilesItem)
+            updateItems()
+        }
     }
 
     fun removeRecentFiles() {
         adapterScope.launch {
-            items = items - recentFiles.toSet()
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+            items.removeAll(recentFiles)
+            updateItems()
         }
     }
 
     fun removeFavoriteForms() {
         adapterScope.launch {
-            items = items - favoriteForms.toSet()
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+            items.removeAll(favoriteForms)
+            updateItems()
         }
     }
 
     fun removeFavoriteTemplates() {
         adapterScope.launch {
-            items = items - favoriteTemplates.toSet()
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+            items.removeAll(favoriteTemplates)
+            updateItems()
         }
     }
 
     fun removeTitle() {
         adapterScope.launch {
-            items = items - titles.toSet()
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
+            items.removeAll(titles)
+            updateItems()
         }
     }
 
     private fun addFileActions() {
-        actions = listOf(
+        actions = mutableListOf(
             DataItem.FileActions(
                 ID_FILES_ACTIONS
             )
         )
-        renderList()
+        updateItems()
     }
 
     fun addAnalyticsBanner() {
         if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
-            analyticsBanner = listOf(DataItem.ImproveAction(ID_IMPROVEMENT))
-            renderList()
+            analyticsBanner = mutableListOf(DataItem.ImproveAction(ID_IMPROVEMENT))
+            updateItems()
         }
     }
 
     fun removeImprovementSection() {
+        analyticsBanner.clear()
         adapterScope.launch {
-            items = items - analyticsBanner.toSet()
-            withContext(Dispatchers.Main) { submitList(items) }
+            items.removeAll(analyticsBanner)
+            updateItems()
         }
     }
 
     fun addFavoriteForms(forms: List<CollectForm>) {
-        favoriteForms = listOf(DataItem.FavoriteForms(forms))
-        renderList()
+        val newFavoriteFormsItem = DataItem.FavoriteForms(forms)
+
+        // Check if the current favorite forms are the same as the new ones
+        if (favoriteForms.isEmpty() || !areListsEqual(
+                favoriteForms.first().forms, forms
+            )
+        ) {
+            favoriteForms = mutableListOf(newFavoriteFormsItem)
+            updateItems()
+        }
     }
 
     fun addTitle() {
-        titles = listOf(DataItem.Titles(ID_FILES_TITLE))
-        renderListAfterward()
+        titles = mutableListOf(DataItem.Titles(ID_FILES_TITLE))
+        updateItemsAfterward()
     }
 
     fun addFavoriteTemplates(templates: List<CollectTemplate>) {
-        favoriteTemplates = listOf(DataItem.FavoriteTemplates(templates))
-        renderList()
+        val newFavoriteTemplatesItem = DataItem.FavoriteTemplates(templates)
+
+        // Check if the current favorite templates are the same as the new ones
+        if (favoriteTemplates.isEmpty() || !areListsEqual(
+                favoriteTemplates.first().templates, templates
+            )
+        ) {
+            favoriteTemplates = mutableListOf(newFavoriteTemplatesItem)
+            updateItems()
+        }
     }
 
-    private fun renderList() {
+    private fun updateItems() {
         adapterScope.launch {
-            items = analyticsBanner + connections + favoriteForms + favoriteTemplates + recentFiles + titles + actions
-            withContext(Dispatchers.Main.immediate) {
-                submitList(items)
+            val newItems = mutableListOf<DataItem>().apply {
+                addAll(analyticsBanner)
+                addAll(connections)
+                addAll(favoriteForms)
+                addAll(favoriteTemplates)
+                addAll(recentFiles)
+                addAll(titles)
+                addAll(actions)
+            }
+
+            // Compare the current items with the new items
+            if (items != newItems) {
+                items = newItems
+                withContext(Dispatchers.Main.immediate) {
+                    submitList(items.toList())  // Ensures a fresh list is submitted
+                }
             }
         }
     }
 
-    private fun renderListAfterward() {
+    private fun updateItemsAfterward() {
         adapterScope.launch {
-            items = emptyList()
-            if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
-                items = items + analyticsBanner
+            items = mutableListOf<DataItem>().apply {
+                if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
+                    addAll(analyticsBanner)
+                }
+                if (Preferences.isShowFavoriteForms()) {
+                    addAll(favoriteForms)
+                }
+                if (Preferences.isShowRecentFiles()) {
+                    addAll(recentFiles)
+                }
+                if (Preferences.isShowFavoriteTemplates()) {
+                    addAll(favoriteTemplates)
+                }
+                addAll(titles)
+                addAll(actions)
             }
-            if (Preferences.isShowFavoriteForms()) {
-                items = items + favoriteForms
-            }
-            if (Preferences.isShowRecentFiles()) {
-                items = items + recentFiles
-            }
-            if (Preferences.isShowFavoriteTemplates()) {
-                items = items + favoriteTemplates
-
-            }
-            items = items + titles
-            items = items + actions
 
             withContext(Dispatchers.Main) {
                 submitList(items)
@@ -185,27 +226,35 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             ITEM_CONNECTIONS -> {
                 ServersViewHolder.from(view)
             }
+
             ITEM_RECENT_FILES -> {
                 RecentFilesViewHolder.from(view)
             }
+
             ITEM_FAVORITES_FORMS -> {
                 FavoriteFormsViewHolder.from(view)
             }
+
             ITEM_FAVORITES_TEMPLATES -> {
                 FavoriteTemplatesViewHolder.from(view)
             }
+
             ITEM_PANIC_BUTTON -> {
                 PanicModeViewHolder.from(view)
             }
+
             ITEM_FILES_ACTIONS -> {
                 FileActionsViewHolder.from(view)
             }
+
             ITEM_TITLE -> {
                 TitleViewHolder.from(view)
             }
+
             ITEM_TEllA_IMPROVE -> {
                 ImproveViewHolder.from(view)
             }
+
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -216,26 +265,32 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 val connectionsList = getItem(position) as DataItem.ConnectionsItem
                 holder.bind(connectionsList.item, onClick)
             }
+
             is FavoriteFormsViewHolder -> {
                 val favoriteItem = getItem(position) as DataItem.FavoriteForms
                 holder.bind(favoriteItem.forms, onClick)
             }
+
             is FavoriteTemplatesViewHolder -> {
                 val favoriteItemTemplate = getItem(position) as DataItem.FavoriteTemplates
                 holder.bind(favoriteItemTemplate.templates, onClick)
             }
+
             is RecentFilesViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.RecentFiles
                 holder.bind(recentFiles.vaultFiles, onClick)
             }
+
             is FileActionsViewHolder -> {
                 val recentFiles = getItem(position) as DataItem.FileActions
                 holder.bind(recentFiles.idActions, onClick)
             }
+
             is TitleViewHolder -> {
                 val titles = getItem(position) as DataItem.Titles
                 holder.bind(titles.idTitles, onClick)
             }
+
             is ImproveViewHolder -> {
                 holder.bind(null, onClick)
             }
@@ -249,20 +304,19 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             is DataItem.RecentFiles -> ITEM_RECENT_FILES
             is DataItem.FavoriteForms -> ITEM_FAVORITES_FORMS
             is DataItem.FavoriteTemplates -> ITEM_FAVORITES_TEMPLATES
-            is DataItem.Titles -> ITEM_TITLE
             is DataItem.ImproveAction -> ITEM_TEllA_IMPROVE
-            else -> throw ClassCastException("Unknown position $position")
+            is DataItem.Titles -> ITEM_TITLE
+            else -> ITEM_PANIC_BUTTON
         }
     }
-}
 
-class ListDiffCallback : DiffUtil.ItemCallback<DataItem>() {
-    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem.id == newItem.id
+    private class ListDiffCallback : DiffUtil.ItemCallback<DataItem>() {
+        override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+            return oldItem == newItem
+        }
     }
-
-    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
-        return oldItem == newItem
-    }
-
 }

@@ -470,17 +470,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             maybeClosePanic()
         }
+        maybeCountServers()
         maybeGetFiles()
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
         updateToolbarIcon()
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        maybeCountServers()
-    }
+
 
     private fun maybeCountServers() {
         clearServerCount()
