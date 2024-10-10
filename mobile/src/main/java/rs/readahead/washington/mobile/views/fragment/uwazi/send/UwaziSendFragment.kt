@@ -79,6 +79,7 @@ class UwaziSendFragment :
             progress.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMITTED -> {
+                       baseActivity.divviupUtils.runUwaziSentEvent()
                         handleBackButton()
                     }
 

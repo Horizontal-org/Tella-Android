@@ -32,6 +32,7 @@ class ReportsSendFragment : BaseReportsSendFragment() {
                 when (entity.status) {
                     EntityStatus.SUBMITTED -> {
                         viewModel.saveSubmitted(entity)
+                        baseActivity.divviupUtils.runReportSentEvent()
                     }
 
                     EntityStatus.FINALIZED -> {

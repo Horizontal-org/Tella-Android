@@ -285,6 +285,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun onAddSuccess(vaultFile: VaultFile) {
+        metadataActivity.divviupUtils.runAudioTakenEvent()
         if (!isCollect) {
             DialogUtils.showBottomMessage(
                 metadataActivity,

@@ -2,14 +2,21 @@ package rs.readahead.washington.mobile.data.sharedpref;
 
 
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.FAILED_UNLOCK_OPTION;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.HAS_IMPROVEMENT_ACCEPTED;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.INSTALL_METRIC_SENT;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_FRESH_INSTALL;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.IS_MIGRATED_MAIN_DB;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.REMAINING_UNLOCK_ATTEMPTS;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_IMPROVEMENT_SECTION;
 import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.SHOW_REMAINING_UNLOCK_ATTEMPTS;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.TIME_IMPROVEMENT_ACCEPTED;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.TIME_SPENT;
+import static rs.readahead.washington.mobile.data.sharedpref.SharedPrefs.UNLOCK_TIME;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.hzontal.shared_ui.data.CommonPrefs;
 import org.hzontal.shared_ui.utils.CalculatorTheme;
 import org.joda.time.DateTime;
 
@@ -414,11 +421,11 @@ public class Preferences {
     }
 
     public static boolean isShowVaultImprovementSection() {
-        return getBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, true);
+        return getBoolean(SHOW_IMPROVEMENT_SECTION, true);
     }
 
     public static void setShowVaultImprovementSection(boolean value) {
-        setBoolean(SharedPrefs.SHOW_IMPROVEMENT_SECTION, value);
+        setBoolean(SHOW_IMPROVEMENT_SECTION, value);
     }
 
     public static boolean isShowUpdateMigrationSheet() {
@@ -428,6 +435,7 @@ public class Preferences {
     public static void setShowUpdateMigrationSheet(boolean value) {
         setBoolean(SharedPrefs.SHOW_UPDATE_MIGRATION_BOTTOM_SHEET, value);
     }
+
     public static boolean isShowFailedMigrationSheet() {
         return getBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, true);
     }
@@ -437,20 +445,77 @@ public class Preferences {
     }
 
     public static boolean hasAcceptedImprovements() {
-        return getBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
+        return getBoolean(HAS_IMPROVEMENT_ACCEPTED, false);
     }
 
     public static void setIsAcceptedImprovements(boolean value) {
-        setBoolean(SharedPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
+        setBoolean(HAS_IMPROVEMENT_ACCEPTED, value);
         setTimeAcceptedImprovements(new Date().getTime());
     }
 
+    public static Long getUnlockTime() {
+        return getLong(UNLOCK_TIME, 0L);
+    }
+
+    public static void setUnlockTime(Long value) {
+        setLong(UNLOCK_TIME, value);
+    }
+
+    public static Long getTimeSpent() {
+        return getLong(TIME_SPENT, 0L);
+    }
+
+    public static void setTimeSpent(Long value) {
+        setLong(TIME_SPENT, value);
+    }
+
+    public static boolean isShowVaultAnalyticsSection() {
+        return getBoolean(SHOW_IMPROVEMENT_SECTION, true);
+    }
+
+    public static void setShowVaultAnalyticsSection(boolean value) {
+        setBoolean(SHOW_IMPROVEMENT_SECTION, value);
+    }
+
+    public static boolean isInstallMetricSent() {
+        return getBoolean(INSTALL_METRIC_SENT, false);
+    }
+
+    public static void setInstallMetricSent(boolean value) {
+        setBoolean(INSTALL_METRIC_SENT, value);
+    }
+
+    public static boolean hasAcceptedAnalytics() {
+        return getBoolean(HAS_IMPROVEMENT_ACCEPTED, false);
+    }
+
+    public static void setIsAcceptedAnalytics(boolean value) {
+        setBoolean(HAS_IMPROVEMENT_ACCEPTED, value);
+        setTimeAcceptedAnalytics(new Date().getTime());
+    }
+
+    public static Long getTimeAcceptedAnalytics() {
+        return getLong(TIME_IMPROVEMENT_ACCEPTED, 0L);
+    }
+
+    private static void setTimeAcceptedAnalytics(Long value) {
+        setLong(TIME_IMPROVEMENT_ACCEPTED, value);
+    }
+
+
+    public static boolean isTimeToShowReminderAnalytics() {
+        if (getTimeAcceptedAnalytics() == 0L || !hasAcceptedAnalytics()) return false;
+        Date currentDate = new Date();
+        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedAnalytics())).plusMonths(6).toDate();
+        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
+    }
+
     public static Long getTimeAcceptedImprovements() {
-        return getLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
+        return getLong(TIME_IMPROVEMENT_ACCEPTED, 0L);
     }
 
     private static void setTimeAcceptedImprovements(Long value) {
-        setLong(SharedPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
+        setLong(TIME_IMPROVEMENT_ACCEPTED, value);
     }
 
     public static boolean isTimeToShowReminderImprovements() {

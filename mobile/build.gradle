@@ -180,6 +180,10 @@ dependencies {
 
     testImplementation "junit:junit:$versions.junit"
 
+    implementation("com.vanniktech:android-image-cropper:4.3.3")
+
+    implementation "org.divviup.android:divviup-android:$versions.divviup"
+
     implementation("com.vanniktech:android-image-cropper:4.5.0")
 
     // Google Play Services Auth (needed for authenticating with Google)
