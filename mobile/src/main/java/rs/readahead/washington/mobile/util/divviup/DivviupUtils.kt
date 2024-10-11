@@ -22,6 +22,24 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
+    fun runGoogleDriveEvent() {
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
+        ioScope.launch {
+            try {
+                sendCountMeasurement(
+                    taskId = R.string.divviup_count_google_drive_sent_id,
+                    leader = R.string.divviup_leader,
+                    helper = R.string.divviup_helper,
+                    timePrecision = R.integer.divviup_count_unlocks_timePrecisionSeconds,
+                    isCount = true
+                )
+                Timber.d("Divviup runGoogleDriveEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runGoogleDriveEvent failed")
+            }
+        }
+    }
+
     fun runUwaziSentEvent() {
         if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {

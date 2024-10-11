@@ -33,6 +33,7 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
                 when (entity.status) {
                     EntityStatus.SUBMITTED -> {
                         viewModel.saveSubmitted(entity)
+                        baseActivity.divviupUtils.runGoogleDriveEvent()
                     }
 
                     EntityStatus.FINALIZED -> {
