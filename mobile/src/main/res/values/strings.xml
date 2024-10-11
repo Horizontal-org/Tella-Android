@@ -924,6 +924,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
+  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="create_new_folder">CREATE NEW FOLDER</string>
   <string name="use_shared_drive">USE SHARED DRIVE</string>
   <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>

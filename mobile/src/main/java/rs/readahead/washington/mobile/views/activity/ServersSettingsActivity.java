@@ -431,10 +431,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+                getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox),
                 getString(R.string.unavailable_connections),
                 getString(R.string.unavailable_connections_desc),
                 servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
                 new BottomSheetUtils.IServerChoiceActions() {
+                    @Override
+                    public void addDropBoxServer() {
+
+                    }
+
                     @Override
                     public void addGoogleDriveServer() {
                         showGoogleDriveServerDialog(null);

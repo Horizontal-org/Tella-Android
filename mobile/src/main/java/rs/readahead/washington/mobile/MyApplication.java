@@ -20,6 +20,7 @@ import androidx.work.Configuration;
 //import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
@@ -324,5 +325,9 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public Configuration getWorkManagerConfiguration() {
         return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
+    }
+
+    private void initializeGoogleDrive(){
+        //Auth
     }
 }

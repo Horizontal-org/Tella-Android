@@ -249,6 +249,7 @@ object BottomSheetUtils {
         lateinit var buttonTwo: RoundButton
         lateinit var buttonThree: RoundButton
         lateinit var buttonFour: RoundButton
+        lateinit var buttonFive: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -261,11 +262,11 @@ object BottomSheetUtils {
 
         override fun bindView(view: View) {
             toolbarComponent = view.findViewById(R.id.toolbar)
-            //  cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
             buttonThree = view.findViewById(R.id.sheet_three_btn)
             buttonFour = view.findViewById(R.id.sheet_four_btn)
+            buttonFive = view.findViewById(R.id.sheet_five_btn)
             title = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
             nextButton = view.findViewById(R.id.next_btn)
@@ -284,6 +285,7 @@ object BottomSheetUtils {
         fun addTellaWebServer()
         fun addUwaziServer()
         fun addGoogleDriveServer()
+        fun addDropBoxServer()
     }
 
     @JvmStatic
@@ -299,6 +301,7 @@ object BottomSheetUtils {
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
         buttonFourLabel: String? = null,
+        buttonFiveLabel: String? = null,
         unavailableConnexionLabel: String? = null,
         unavailableConnexionDesc: String? = null,
         isConnexionAvailable: Boolean = false,
@@ -323,6 +326,7 @@ object BottomSheetUtils {
                     setupButton(buttonTwo, buttonTwoLabel)
                     setupButton(buttonThree, buttonThreeLabel)
                     setupButton(buttonFour, buttonFourLabel)
+                    setupButton(buttonFive, buttonFiveLabel)
                     unavailableConnexionText.text = unavailableConnexionLabel;
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
@@ -331,10 +335,11 @@ object BottomSheetUtils {
                         buttonOne,
                         buttonTwo,
                         buttonThree,
-                        buttonFour
+                        buttonFour,
+                        buttonFive
                     ).forEachIndexed { index, button ->
                         button.setOnClickListener {
-                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour)
+                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive)
                             button.isChecked = true
                         }
                     }
@@ -353,6 +358,7 @@ object BottomSheetUtils {
                             buttonTwo.isChecked -> consumer.addTellaWebServer()
                             buttonThree.isChecked -> consumer.addUwaziServer()
                             buttonFour.isChecked -> consumer.addGoogleDriveServer()
+                            buttonFive.isChecked -> consumer.addDropBoxServer()
                         }
                         customSheetFragment.dismiss()
                     }
