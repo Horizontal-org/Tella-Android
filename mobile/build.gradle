@@ -206,6 +206,9 @@ dependencies {
     // Gson library for JSON parsing
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
 
+    implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
+
+
 }
 
 kapt {
