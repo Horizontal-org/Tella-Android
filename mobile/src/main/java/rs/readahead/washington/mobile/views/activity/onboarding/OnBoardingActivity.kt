@@ -199,6 +199,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             getString(R.string.unavailable_connections),
             getString(R.string.unavailable_connections_desc),
             false,
+            false,
             object : IServerChoiceActions {
                 override fun addUwaziServer() {
                     showUwaziServerDialog()

@@ -304,7 +304,8 @@ object BottomSheetUtils {
         buttonFiveLabel: String? = null,
         unavailableConnexionLabel: String? = null,
         unavailableConnexionDesc: String? = null,
-        isConnexionAvailable: Boolean = false,
+        isGoogleDriveServerAvailable: Boolean = false,
+        isDropBoxServerAvailable: Boolean = false,
         consumer: IServerChoiceActions
     ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -345,10 +346,12 @@ object BottomSheetUtils {
                     }
                     handleConnexionAvailability(
                         context,
-                        isConnexionAvailable,
+                        isGoogleDriveServerAvailable,
+                        isDropBoxServerAvailable,
                         unavailableConnexionText,
                         unavailableConnexionTextDesc,
-                        buttonFour
+                        buttonFour,
+                        buttonFive
                     )
                     backButton.setOnClickListener { customSheetFragment.dismiss() }
 
@@ -375,22 +378,68 @@ object BottomSheetUtils {
 
     private fun handleConnexionAvailability(
         context: Context,
-        isConnexionAvailable: Boolean,
+        isGoogleDriveAvailable: Boolean,
+        isDropboxAvailable: Boolean,
         unavailableConnexionText: TextView,
         unavailableConnexionTextDesc: TextView,
-        buttonFour: RoundButton
+        buttonFour: RoundButton,  // Google Drive button
+        buttonFive: RoundButton   // Dropbox button
     ) {
-        if (isConnexionAvailable) {
+        // Case where at least one server is available
+        if (isGoogleDriveAvailable || isDropboxAvailable) {
+            // Show unavailable text and description when either server is available
             unavailableConnexionText.isVisible = true
             unavailableConnexionTextDesc.isVisible = true
-            buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white_8))
-            buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_white_38))
-            buttonFour.setOnClickListener {} // Disable interaction
-        } else {
+
+            if (isGoogleDriveAvailable && isDropboxAvailable) {
+                // Both Google Drive and Dropbox available
+                buttonFour.isVisible = true
+                buttonFive.isVisible = true
+
+                // Enable Google Drive button
+                buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
+                buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
+                buttonFour.setOnClickListener { /* Handle Google Drive button click */ }
+
+                // Enable Dropbox button
+                buttonFive.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
+                buttonFive.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
+                buttonFive.setOnClickListener { /* Handle Dropbox button click */ }
+
+            } else if (isGoogleDriveAvailable) {
+                // Only Google Drive available
+                buttonFour.isVisible = true
+                buttonFive.isVisible = false
+
+                // Enable Google Drive button and disable Dropbox
+                buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
+                buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
+                buttonFour.setOnClickListener { /* Handle Google Drive button click */ }
+
+            } else if (isDropboxAvailable) {
+                // Only Dropbox available
+                buttonFour.isVisible = false
+                buttonFive.isVisible = true
+
+                // Enable Dropbox button and disable Google Drive
+                buttonFive.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
+                buttonFive.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
+                buttonFive.setOnClickListener { /* Handle Dropbox button click */ }
+            }
+        }
+        // Case where neither Google Drive nor Dropbox is available
+        else {
+            // Hide unavailable text and description when no connection is available
             unavailableConnexionText.isVisible = false
             unavailableConnexionTextDesc.isVisible = false
+
+            // Disable both buttons
+            buttonFour.isVisible = false
+            buttonFive.isVisible = false
         }
     }
+
+
 
     private fun resetButtons(vararg buttons: RoundButton) {
         buttons.forEach { it.isChecked = false }

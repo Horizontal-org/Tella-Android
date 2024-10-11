@@ -639,6 +639,12 @@
             android:name=".views.dialog.googledrive.GoogleDriveConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

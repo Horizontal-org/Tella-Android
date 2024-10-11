@@ -37,6 +37,7 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
@@ -435,10 +436,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.unavailable_connections),
                 getString(R.string.unavailable_connections_desc),
                 servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
+                servers.stream().anyMatch(server -> server instanceof DropBoxServer),
                 new BottomSheetUtils.IServerChoiceActions() {
                     @Override
                     public void addDropBoxServer() {
-
+                        showDropBoxServerDialog(null);
                     }
 
                     @Override
@@ -554,6 +556,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
+            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+        }
+    }
+
+    private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
+        if (dropBoxServer == null) {
             startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
         }
     }
