@@ -56,6 +56,7 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
@@ -562,7 +563,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
         if (dropBoxServer == null) {
-            startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
+            startActivity(new Intent(this, DropBoxConnectFlowActivity.class));
         }
     }
 

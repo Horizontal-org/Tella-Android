@@ -434,8 +434,8 @@ object BottomSheetUtils {
             unavailableConnexionTextDesc.isVisible = false
 
             // Disable both buttons
-            buttonFour.isVisible = false
-            buttonFive.isVisible = false
+            buttonFour.isVisible = true
+            buttonFive.isVisible = true
         }
     }
 

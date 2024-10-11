@@ -643,7 +643,19 @@
         <activity
             android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            android:launchMode="singleTask"> <!-- Added launchMode -->
+
+            <intent-filter>
+                <data android:scheme="db-${dropboxKey}" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
