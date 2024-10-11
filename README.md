@@ -22,42 +22,64 @@
 
 In challenging environments, with limited or no internet connectivity or in the face of repression, Tella is an app that makes it easier and safer to document human rights violations and collect data. Tella is available Android and iOS. 
 
-More information about how to get Tella --including user guides-- can be found on our [documentation platfrom](https://docs.tella-app.org/).
+More information about how to get Tella --including user guides-- can be found on our [documentation platform](https://docs.tella-app.org/).
 
-| [![Camouflage](docs/camouflage.gif)](https://tella-app.org/)  | [![Encrypting](docs/encrypting.gif)](https://tella-app.org/) | [![Offline data collection](docs/data_collection.gif)](https://tella-app.org/) |
+| [![Camouflage](docs/camouflage.gif)](https://tella-app.org/features#encryption/)  | [![Encrypting](docs/encrypting.gif)](https://tella-app.org/) | [![Server Connections](docs/data_collection.gif)](https://tella-app.org/for-organizations) |
 |:---:|:---:|:---:|
 | Tella camouflaged as a calculator | Taking and encrypting a photo | Collecting data |
 
 Tella:
-- encrypts photo, video, and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer
-- hides itself by changing its name and icon in the list of apps
-- captures metadata when taking photos, videos, and audio recordings to verify the origin of the files
-- allows users to quickly delete all files in Tella's encrypted Gallery
-- enables users working with a group or organization to collect and send data to a server without relying on third-party apps or servers
+- encrypts photo, video, and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer.
+- hides itself by changing its name and icon in the list of apps.
+- captures metadata when taking photos, videos, and audio recordings to verify the origin of the files.
+- allows users to quickly delete all files in Tella's encrypted Gallery.
+- enables users working with a group or organization to collect and send data to a server without relying on third-party apps or servers.
 
 
 
 ## Why Tella? <a id="why-tella"></a>
 
-If you are an activist, journalist, human rights defender, or anyone who engages in documentation of injustice, you can use Tella to:
+Across the world, journalists and human rights defenders are facing increasing levels of physical repression, with mobile devices searched or seized at border crossings and airports, checkpoints, in the street, or in targeted raids. At the same time, digital surveillance and censorship threaten the flow of information out of repressive areas, particularly on violence, human rights abuse, or corruption.
 
-Protect yourself from physical and digital repression while collecting and storing sensitive information.
-Protect the data you collect from censorship, tampering, interception, and destruction.
-Easily produce high quality documentation that can be used for research, advocacy, or transitional justice.
+Tella's goal is to protect at-risk individuals and groups--advocates, journalists, human rights defenders--from repressive surveillance, whether physical or digital. Tella aims to provide a highly usable solution, accessible to all with minimal or no training, to collect, safeguard, and communicate sensitive information in highly repressive environments.
+
+Tella has three main objectives:
+
+- Protecting users who engage in documentation from physical and digital repression
+- Protecting the data they collect from censorship, tampering, interception, and destruction
+- Empowering individuals and groups to easily, quickly, and effectively collect data and produce high quality documentation that can be used for research, advocacy, or transitional justice
+
+Tella is used by:
+
+- Activists, organizers and human rights defenders to safely document events in their communities, produce reliable and verifiable evidence, and store data encrypted on their mobile devices.
+- Media, professional reporters and citizen journalists to store sensitive media files encrypted as they travel, particularly as they cross borders.
+- Civil society professionals and humanitarian workers to conduct interviews and collect data in poorly connected environments or in conflict areas.
+- Electoral observation and monitoring organizations to monitor elections from inside and outside polling stations in real time and expose electoral fraud.
+- Research institutions and international organizations to conduct research, interviews or surveys in challenging environments, particularly in conflict areas.
+
+You can read [user stories](https://tella-app.org/user-stories) here.
+
+
 
 ## Detailed list of features <a id="features"></a>
 
-A detailed list of features for both Tella Android and iOS can be found [on the documentation](https://docs.tella-app.org/).
+A detailed list of features for both Tella Android and iOS can be found [on the documentation](https://tella-app.org/features).
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
 ### Tella for Android
 Tella for Android can be downloaded:
-- directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella)
-- from [this folder](https://web.tresorit.com/l/7737s#WKoGVN82C0lQK8KSL30CuA), as an APK, to be installed manually
+- directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella).
+- from [this folder](https://web.tresorit.com/l/JgMjK#FV9IoIZdDxwAUPqtupJzsQ) or from our [Telegram channel](https://t.me/tellaapp), as an APK, to be installed manually.
 
-### Tella for iPhone
-Tella for iOS can downloaded [from the App Store](https://apps.apple.com/us/app/tella-document-protect/id1598152580).
+### Tella FOSS (F-droid)
+We also maintain a version of Tella in the [F-droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/). And the code for it can be found here: https://github.com/Horizontal-org/Tella-Android-FOSS
+
+
+### Get started on Tella Android
+A get started guide for Tella Android is available [here](https://tella-app.org/get-started-android).
+
+
 
 ## Tech & frameworks used <a id="tech-used"></a>
 
@@ -82,29 +104,17 @@ This software uses the following open source packages:
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
 
 ## Translating the app <a id="translating"></a>
-Language accessibility is one of our priority, so we work hard to make Tella available in languages spoken by communities who express the need for Tella.
 
-Currently Tella is available in:
-- Arabic
-- Belarusian
-- Burmese
-- English
-- Indonesian
-- Jingpho
-- Kannada
-- Karen Sgaw
-- Malayalam
-- Portuguese
-- Russian
-- Spanish (Latin America)
-- Tamil
+Tella is currently available in [17 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages.
 
-We, however, don't always have the capacity or resources to keep all translations up to date.  If you wish to contribute to the translation of Tella, you can join [the Tella project on Lokalise](https://app.lokalise.com/public/9394139661a3d89da6fa91.77098206/) and contribute from there. 
+If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator).
 
-If you want us to add a new language, send us an email.
+
 
 ## Contact us <a id="contact"></a>
-We love hearing from users, designers, and developers! If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
+We love hearing from users, designers, and developers!
 
-You email us at contact@tella-app.org. 
+We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us).
+
+If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
 
