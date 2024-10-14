@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
@@ -76,6 +77,10 @@ class HomeVaultPresenter(var view: IHomeVaultPresenter.IView?, val config: Confi
     }
 
     override fun countAllServers() {
+        val dropBoxCount = keyDataSource.dropBoxDataSource
+            .subscribeOn(Schedulers.io())
+            .flatMapSingle { it.listDropBoxServers() }
+
         val googleDriveCount = keyDataSource.googleDriveDataSource
             .subscribeOn(Schedulers.io())
             .flatMapSingle { it.listGoogleDriveServers(config.googleClientId) }
@@ -95,13 +100,15 @@ class HomeVaultPresenter(var view: IHomeVaultPresenter.IView?, val config: Confi
         // Combine all server count results
         disposable.add(
             Single.zip(
+                dropBoxCount.firstOrError(),
                 googleDriveCount.firstOrError(),  // Convert Observable to Single
                 tellaUploadCount.firstOrError(),  // Convert Observable to Single
                 collectServersCount.firstOrError(),  // Convert Observable to Single
                 uwaziServersCount.firstOrError()
             )  // Convert Observable to Single
-            { googleDriveServers: List<GoogleDriveServer>, tellaUploadServers: List<TellaReportServer>, collectServers: List<CollectServer>, uwaziServers: List<UWaziUploadServer> ->
+            { dropboxServers: List<DropBoxServer>,googleDriveServers: List<GoogleDriveServer>, tellaUploadServers: List<TellaReportServer>, collectServers: List<CollectServer>, uwaziServers: List<UWaziUploadServer> ->
                 ServerCounts(
+                    dropBoxServers = dropboxServers,
                     googleDriveServers = googleDriveServers,
                     tellaUploadServers = tellaUploadServers,
                     collectServers = collectServers,

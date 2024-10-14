@@ -74,6 +74,16 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+            ServerType.DROP_BOX -> {
+                reportTypeTextView.text = "Dropbox"
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_dropbox_logo_white,
+                        null
+                    )
+                )
+            }
             else -> { // todo create default server type
             }
         }
