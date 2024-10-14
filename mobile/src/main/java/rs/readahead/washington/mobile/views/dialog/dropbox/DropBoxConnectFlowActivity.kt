@@ -36,7 +36,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
 
         if (accessToken != null) {
             val server = DropBoxServer(token = accessToken)
-            addFragment(DropBoxConnectedServerFragment.newInstance(server, false), R.id.container)
+            addFragment(DropBoxConnectedServerFragment.newInstance(server), R.id.container)
         }
     }
 

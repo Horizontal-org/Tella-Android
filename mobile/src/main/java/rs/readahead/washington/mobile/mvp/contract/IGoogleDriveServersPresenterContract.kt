@@ -7,7 +7,6 @@ class IGoogleDriveServersPresenterContract {
 
     interface IView {
         val context: Context?
-
         fun showLoading()
         fun hideLoading()
         fun onGoogleDriveServersLoaded(googleDriveServers: List<GoogleDriveServer>)

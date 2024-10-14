@@ -2,10 +2,14 @@ package rs.readahead.washington.mobile.views.dialog.dropbox.connected
 
 import android.os.Bundle
 import android.view.View
+import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.GoogleDriveConnectedServerFragmentBinding
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
+import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createDropBoxServer
 
 class DropBoxConnectedServerFragment :
     BaseBindingFragment<GoogleDriveConnectedServerFragmentBinding>(
@@ -19,10 +23,10 @@ class DropBoxConnectedServerFragment :
         @JvmStatic
         fun newInstance(
             dropBoxServer: DropBoxServer,
-            isUpdate: Boolean
         ): DropBoxConnectedServerFragment {
             val frag = DropBoxConnectedServerFragment()
             val args = Bundle()
+            args.putString(OBJECT_KEY, Gson().toJson(dropBoxServer))
             return frag
         }
     }
@@ -40,10 +44,9 @@ class DropBoxConnectedServerFragment :
 
     private fun setupData() {
         // Use requireArguments to avoid nullable arguments handling
-        //  dropBoxServer =
-        //    Gson().fromJson(requireArguments().getString(OBJECT_KEY), GoogleDriveServer::class.java)
-
-        //  isUpdate = requireArguments().getBoolean(IS_UPDATE_SERVER, false)
+        arguments?.getString(OBJECT_KEY)?.let {
+            dropBoxServer = Gson().fromJson(it, DropBoxServer::class.java)
+        }
     }
 
     private fun initListeners() {
@@ -54,10 +57,6 @@ class DropBoxConnectedServerFragment :
     }
 
     private fun handleServerUpdate() {
-        //   if (isUpdate) {
-        //     updateGoogleDriveServer.postValue(googleDriveServer)
-        //  } else {
-        //  createGoogleDriveServer.postValue(googleDriveServer)
-        // }
+        createDropBoxServer.postValue(dropBoxServer)
     }
 }

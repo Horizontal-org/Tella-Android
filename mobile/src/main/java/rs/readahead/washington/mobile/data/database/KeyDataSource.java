@@ -13,6 +13,7 @@ public class KeyDataSource {
     private final AsyncSubject<UwaziDataSource> asyncUwaziSubject;
     private final AsyncSubject<ResourceDataSource> asyncResourceSubject;
     private final AsyncSubject<GoogleDriveDataSource> asyncGoogleDriveSubject;
+    private final AsyncSubject<DropBoxDataSource> asyncDropBoxSubject;
 
     private final Context context;
 
@@ -23,6 +24,7 @@ public class KeyDataSource {
         asyncUwaziSubject = AsyncSubject.create();
         asyncResourceSubject = AsyncSubject.create();
         asyncGoogleDriveSubject = AsyncSubject.create();
+        asyncDropBoxSubject = AsyncSubject.create();
     }
 
     public void initKeyDataSource() {
@@ -38,11 +40,13 @@ public class KeyDataSource {
 
             asyncGoogleDriveSubject.onNext(GoogleDriveDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
             asyncGoogleDriveSubject.onComplete();
+
+            asyncDropBoxSubject.onNext(DropBoxDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncDropBoxSubject.onComplete();
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             e.printStackTrace();
         }
     }
-
 
     public Observable<DataSource> getDataSource() {
         return asyncSubject;
@@ -52,13 +56,15 @@ public class KeyDataSource {
         return asyncUwaziSubject;
     }
 
-
     public Observable<ResourceDataSource> getResourceDataSource() {
         return asyncResourceSubject;
     }
 
     public Observable<GoogleDriveDataSource> getGoogleDriveDataSource() {
         return asyncGoogleDriveSubject;
+    }
+    public Observable<DropBoxDataSource> getDropBoxDataSource() {
+        return asyncDropBoxSubject;
     }
 
 }
