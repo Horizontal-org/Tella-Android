@@ -1,4 +1,6 @@
 package rs.readahead.washington.mobile.views.dialog.dropbox
 
-class DropBoxConnectFlowViewModel {
+import androidx.lifecycle.ViewModel
+
+class DropBoxConnectFlowViewModel : ViewModel() {
 }

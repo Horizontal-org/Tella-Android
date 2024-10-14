@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.dropbox.core.android.Auth;
 import com.google.gson.Gson;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
+import rs.readahead.washington.mobile.BuildConfig;
 import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
@@ -56,9 +58,6 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxAppConfig;
-import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxCredentialUtil;
-import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxOAuthUtil;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
@@ -567,10 +566,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         //   maybeChangeTemporaryTimeout(() -> {
         maybeChangeTemporaryTimeout();
         if (dropBoxServer == null) {
-            DropboxCredentialUtil dropboxCredentialUtil = new DropboxCredentialUtil(this);
-            DropboxAppConfig dropboxAppConfig = new DropboxAppConfig();
-            DropboxOAuthUtil dropboxOAuthUtil = new DropboxOAuthUtil(dropboxCredentialUtil, dropboxAppConfig);
-            dropboxOAuthUtil.startDropboxAuthorizationOAuth2(this);
+            Auth.startOAuth2Authentication(this, BuildConfig.DROPBOX_APP_KEY);
         }
         //   return Unit.INSTANCE;
         //    });

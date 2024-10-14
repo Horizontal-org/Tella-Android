@@ -16,7 +16,7 @@ class D {
 
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 14;
+    static final int DATABASE_VERSION = 15;
     static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
@@ -25,6 +25,7 @@ class D {
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";
     static final String T_REPORT_FORM_INSTANCE = "t_report_form_instance";
     static final String T_GOOGLE_DRIVE_FORM_INSTANCE = "t_google_drive_form_instance";
+    static final String T_DROPBOX_FORM_INSTANCE = "t_dropbox_form_instance";
     static final String T_MEDIA_FILE = "t_media_file";
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
     static final String T_SETTINGS = "t_settings";
@@ -108,6 +109,7 @@ class D {
     static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
     static final String T_REPORT_INSTANCE_VAULT_FILE = "t_report_instance_vault_file";
     static final String T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE = "t_google_drive_instance_vault_file";
+    static final String T_DROPBOX_INSTANCE_VAULT_FILE = "t_dropbox_instance_vault_file";
     static final String C_REPORT_INSTANCE_ID = "c_report_instance_id";
     static final String C_UPLOADED_SIZE = "c_uploaded_size";
 
@@ -142,5 +144,10 @@ class D {
     static final String C_GOOGLE_DRIVE_FOLDER_NAME = "c_google_drive_folder_name";
     static final String C_GOOGLE_DRIVE_SERVER_NAME = "c_google_drive_server_name";
 
+    /* DropBox*/
+    static final String T_DROPBOX = "t_dropbox";
+    static final String C_DROPBOX_FOLDER_ID = "c_dropbox_folder_id";
+    static final String C_DROPBOX_FOLDER_NAME = "c_dropbox_folder_name";
+    static final String C_DROPBOX_SERVER_NAME = "c_dropbox_server_name";
 
 }

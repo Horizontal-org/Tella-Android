@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.divviup.android.Client
 import org.divviup.android.TaskId
-import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isInstallMetricSent

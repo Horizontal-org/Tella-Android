@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.dropbox.core.DbxRequestConfig
+import com.dropbox.core.android.Auth
 
 class DropboxOAuthUtil(
     private val dropboxCredentialUtil: DropboxCredentialUtil,
