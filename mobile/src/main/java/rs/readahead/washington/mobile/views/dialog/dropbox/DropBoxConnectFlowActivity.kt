@@ -15,11 +15,14 @@ class DropBoxConnectFlowActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_dropbox)
-        loginToDropbox()
+        maybeChangeTemporaryTimeout {
+            loginToDropbox()
+        }
     }
 
     // Function to initiate Dropbox login
     private fun loginToDropbox() {
+        //TODO inject this with DI
         val dropboxCredentialUtil = DropboxCredentialUtil(this)
         val dropboxAppConfig = DropboxAppConfig()
         val dropBoxUtil = DropboxOAuthUtil(dropboxCredentialUtil, dropboxAppConfig)
@@ -32,7 +35,8 @@ class DropBoxConnectFlowActivity : BaseActivity() {
         val accessToken = Auth.getOAuth2Token()
 
         if (accessToken != null) {
-            addFragment(DropBoxConnectedServerFragment.newInstance(DropBoxServer(), false), R.id.container)
+            val server = DropBoxServer(token = accessToken)
+            addFragment(DropBoxConnectedServerFragment.newInstance(server, false), R.id.container)
         }
     }
 

@@ -564,16 +564,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
-        //   maybeChangeTemporaryTimeout(() -> {
-        maybeChangeTemporaryTimeout();
         if (dropBoxServer == null) {
-            Intent intent= new Intent(this, DropBoxConnectFlowActivity.class);
+            Intent intent = new Intent(this, DropBoxConnectFlowActivity.class);
             startActivity(intent);
-           // Auth.startOAuth2Authentication(this, BuildConfig.DROPBOX_APP_KEY);
         }
-        //   return Unit.INSTANCE;
-        //    });
-
     }
 
     private void stopPresenting() {
