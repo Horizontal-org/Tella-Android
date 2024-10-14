@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/googleDriveConnectedServerFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.googledrive.step4.GoogleDriveConnectedServerFragment"
+        android:name="rs.readahead.washington.mobile.views.dialog.dropbox.connected.DropBoxConnectedServerFragment"
         tools:layout="@layout/fragment_connect_google_drive"
         android:label="GoogleDriveConnectedServerFragment" />
 

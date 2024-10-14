@@ -58,6 +58,7 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
@@ -566,7 +567,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         //   maybeChangeTemporaryTimeout(() -> {
         maybeChangeTemporaryTimeout();
         if (dropBoxServer == null) {
-            Auth.startOAuth2Authentication(this, BuildConfig.DROPBOX_APP_KEY);
+            Intent intent= new Intent(this, DropBoxConnectFlowActivity.class);
+            startActivity(intent);
+           // Auth.startOAuth2Authentication(this, BuildConfig.DROPBOX_APP_KEY);
         }
         //   return Unit.INSTANCE;
         //    });

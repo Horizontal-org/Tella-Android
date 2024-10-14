@@ -941,4 +941,7 @@ Would you like to share analytics with the Tella team?</string>
  enabled at a time. To add a new connection, please delete
  the current one by going to Connections Settings. </string>
   <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+
+  <string name="go_to_dropbox">GO TO DROPBOX</string>
+
 </resources>

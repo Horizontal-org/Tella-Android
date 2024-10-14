@@ -645,16 +645,8 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
-            android:launchMode="singleTask"> <!-- Added launchMode -->
+           > <!-- Added launchMode -->
 
-            <intent-filter>
-                <data android:scheme="db-${dropboxKey}" />
-
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -677,6 +669,25 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:exported="true"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <!-- Your activity starting authorization flow should also configured with android:launchMode="singleTask".
+                 If that activity is configured with android:taskAffinity, this AuthActivity should also configured
+                 with the same android:taskAffinity so the auth result can be correctly passed back. -->
+            <intent-filter>
+                <data android:scheme="db-${dropboxKey}" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

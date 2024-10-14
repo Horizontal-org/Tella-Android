@@ -1,5 +1,6 @@
 package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
@@ -12,6 +13,7 @@ class DropboxCredentialUtil(appContext: Context) {
         AppCompatActivity.MODE_PRIVATE
     )
 
+    @SuppressLint("LogNotTimber")
     fun readCredentialLocally(): DbxCredential? {
         val serializedCredentialJson = sharedPreferences.getString("credential", null)
         Log.d(TAG, "Local Credential Value from Shared Preferences: $serializedCredentialJson")
