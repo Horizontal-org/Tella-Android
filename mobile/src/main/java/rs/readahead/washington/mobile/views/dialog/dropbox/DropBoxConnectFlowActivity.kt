@@ -33,6 +33,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         val accessToken = Auth.getOAuth2Token()
+        val refreshToken = Auth.getDbxCredential()?.refreshToken
 
         if (accessToken != null) {
             val server = DropBoxServer(token = accessToken)

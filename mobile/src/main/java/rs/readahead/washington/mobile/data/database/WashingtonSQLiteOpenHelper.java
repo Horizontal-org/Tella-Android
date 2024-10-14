@@ -448,10 +448,9 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String createTableDropBox() {
         return "CREATE TABLE " + sq(D.T_DROPBOX) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
-                cddl(D.C_DROPBOX_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
-                cddl(D.C_DROPBOX_FOLDER_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_DROPBOX_ACCESS_TOKEN, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
-                cddl(D.C_USERNAME, D.TEXT, true) + " , " +
+                cddl(D.C_USERNAME, D.TEXT, false) + " , " +
                 cddl(D.C_DROPBOX_SERVER_NAME, D.TEXT, true) +
                 ");";
     }

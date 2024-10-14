@@ -5,7 +5,6 @@ import android.view.View
 import com.google.gson.Gson
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.GoogleDriveConnectedServerFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
@@ -15,7 +14,7 @@ class DropBoxConnectedServerFragment :
     BaseBindingFragment<GoogleDriveConnectedServerFragmentBinding>(
         GoogleDriveConnectedServerFragmentBinding::inflate
     ) {
-    private lateinit var dropBoxServer: DropBoxServer
+    private var dropBoxServer: DropBoxServer? = null
 
     companion object {
         val TAG = DropBoxConnectedServerFragment::class.java.simpleName
@@ -27,6 +26,7 @@ class DropBoxConnectedServerFragment :
             val frag = DropBoxConnectedServerFragment()
             val args = Bundle()
             args.putString(OBJECT_KEY, Gson().toJson(dropBoxServer))
+            frag.arguments = args
             return frag
         }
     }

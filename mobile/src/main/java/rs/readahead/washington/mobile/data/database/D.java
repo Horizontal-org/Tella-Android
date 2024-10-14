@@ -146,8 +146,7 @@ class D {
 
     /* DropBox*/
     static final String T_DROPBOX = "t_dropbox";
-    static final String C_DROPBOX_FOLDER_ID = "c_dropbox_folder_id";
-    static final String C_DROPBOX_FOLDER_NAME = "c_dropbox_folder_name";
+    static final String C_DROPBOX_ACCESS_TOKEN = "c_dropbox_access_token";
     static final String C_DROPBOX_SERVER_NAME = "c_dropbox_server_name";
 
 }

@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.repository.dropbox.IDropBoxRepository;
@@ -68,8 +69,9 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
         ContentValues values = new ContentValues();
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_DROPBOX_SERVER_NAME, server.getName());
+        values.put(D.C_NAME, server.getName());
+        values.put(D.C_DROPBOX_ACCESS_TOKEN, server.getToken());
         server.setId(database.insert(D.T_DROPBOX, null, values));
-
         return server;
     }
 
@@ -92,7 +94,7 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
         List<DropBoxServer> servers = new ArrayList<>();
 
         try {
-            cursor = database.query(D.T_DROPBOX, new String[]{D.C_ID, D.C_USERNAME,}, null, null, null, null, D.C_ID + " ASC", null);
+            cursor = database.query(D.T_DROPBOX, new String[]{D.C_ID, D.C_DROPBOX_ACCESS_TOKEN, D.C_DROPBOX_SERVER_NAME}, null, null, null, null, D.C_ID + " ASC", null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 DropBoxServer server = cursorToDropBoxServer(cursor);
@@ -123,9 +125,12 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
     }
 
     private DropBoxServer cursorToDropBoxServer(Cursor cursor) {
-
-        ///TODO finish this
-        return null;
+        long serverID = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
+        String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_DROPBOX_SERVER_NAME));
+        String token = cursor.getString(cursor.getColumnIndexOrThrow(D.C_DROPBOX_ACCESS_TOKEN));
+        DropBoxServer server = new DropBoxServer(serverID, token);
+        server.setName(serverName);
+        return server;
     }
 
     @NonNull

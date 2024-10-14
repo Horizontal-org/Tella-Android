@@ -73,7 +73,6 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         values.put(D.C_GOOGLE_DRIVE_FOLDER_NAME, server.getFolderName());
         values.put(D.C_GOOGLE_DRIVE_SERVER_NAME, server.getName());
         server.setId(database.insert(D.T_GOOGLE_DRIVE, null, values));
-
         return server;
     }
 
