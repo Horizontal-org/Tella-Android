@@ -707,6 +707,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             case GOOGLE_DRIVE:
                 googleDriveServersPresenter.remove((GoogleDriveServer) server);
                 break;
+            case DROP_BOX:
+                dropBoxServersPresenter.remove((DropBoxServer) server);
+                break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
                 break;
@@ -928,7 +931,11 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onRemovedDropBoxServer(@NonNull DropBoxServer server) {
-
+        servers.remove(server);
+        dropBoxServers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
     @Override
