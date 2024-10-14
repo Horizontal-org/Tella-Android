@@ -24,6 +24,16 @@ android {
         packagingOptions {
             resources.excludes.add("META-INF/*")
         }
+
+        Properties localProperties = getLocalProperties()
+        String dropboxKey = localProperties['DROPBOX_APP_KEY']
+        if (dropboxKey == null) {
+            logger.warn("No value provided for DROPBOX_APP_KEY.  Specify a value in a examples/android/local.properties file. You can register for one at https://developers.dropbox.com/")
+            dropboxKey = "Put_YOUR_KEY_HERE"
+        }
+        buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
+        manifestPlaceholders = [dropboxKey: dropboxKey]
+
         // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
 
@@ -209,6 +219,14 @@ dependencies {
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
 
 
+}
+
+def getLocalProperties() {
+    Properties props = new Properties()
+    if (file('local.properties').exists()) {
+        props.load(new FileInputStream(file('local.properties')))
+    }
+    return props
 }
 
 kapt {
