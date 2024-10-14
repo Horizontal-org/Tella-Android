@@ -215,8 +215,8 @@ dependencies {
     implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
     // Gson library for JSON parsing
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
-
-    implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
+    implementation 'com.dropbox.core:dropbox-core-sdk:7.0.0'
+    implementation 'com.dropbox.core:dropbox-android-sdk:7.0.0'
 
 
 }

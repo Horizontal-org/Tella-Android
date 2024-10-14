@@ -75,7 +75,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 )
             }
             ServerType.DROP_BOX -> {
-                reportTypeTextView.text = "Dropbox"
+                reportTypeTextView.text = view.context.getString(R.string.dropbox)
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,

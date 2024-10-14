@@ -943,5 +943,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
 
   <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="dropbox">Dropbox</string>
 
 </resources>
