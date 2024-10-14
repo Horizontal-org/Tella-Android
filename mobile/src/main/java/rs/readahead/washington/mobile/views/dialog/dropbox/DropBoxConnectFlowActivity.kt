@@ -9,19 +9,22 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.dropbox.core.DbxHost
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.DbxRequestUtil
 import com.dropbox.core.IncludeGrantedScopes
 import com.dropbox.core.TokenAccessType
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.AuthParameters
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.AuthUtils.createPKCEStateNonce
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.AuthUtils.createStateNonce
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.DropboxAuthIntent
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.QueryParamsUtil
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.TokenRequestAsyncTask
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.TokenType
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.AuthParameters
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.AuthSessionViewModel
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.AuthUtils.createPKCEStateNonce
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.AuthUtils.createStateNonce
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DbxOfficialAppConnector
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxAuthIntent
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.QueryParamsUtil
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.TokenRequestAsyncTask
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.TokenType
 import java.security.SecureRandom
 import java.util.Locale
 
@@ -34,7 +37,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
      * simply configure `java.security`'s providers to match your preferences.
      *
      */
-    public interface SecurityProvider {
+    interface SecurityProvider {
         /**
          * Gets a SecureRandom implementation for use during authentication.
          */
@@ -176,6 +179,8 @@ class DropBoxConnectFlowActivity : BaseActivity() {
                         secret = uri.getQueryParameter("oauth_token_secret")
                         uid = uri.getQueryParameter("uid")
                         state = uri.getQueryParameter("state")
+                        Toast.makeText(this, "token  = $token", Toast.LENGTH_SHORT).show()
+
                     } catch (e: UnsupportedOperationException) {
                     }
                 }
@@ -191,54 +196,58 @@ class DropBoxConnectFlowActivity : BaseActivity() {
             }
 
             // Successful auth.
-            if (token == TokenType.OAUTH2.toString()) {
-                // token flow
-                newResult = Intent()
-                newResult.putExtra(DropboxAuthIntent.EXTRA_ACCESS_TOKEN, token)
-                newResult.putExtra(DropboxAuthIntent.EXTRA_ACCESS_SECRET, secret)
-                newResult.putExtra(DropboxAuthIntent.EXTRA_UID, uid)
-            } else if (token == TokenType.OAUTH2CODE.toString()) {
-                // code flow with PKCE
-                val tokenRequest = TokenRequestAsyncTask(
-                    secret,
-                    mState.mPKCEManager,
-                    mState.mRequestConfig!!,
-                    mState.mAppKey!!,
-                    mState.mHost!!
-                )
-                try {
-                    val dbxAuthFinish = tokenRequest.execute().get()
-                    if (dbxAuthFinish == null) {
+            when (token) {
+                TokenType.OAUTH2.toString() -> {
+                    // token flow
+                    newResult = Intent()
+                    newResult.putExtra(DropboxAuthIntent.EXTRA_ACCESS_TOKEN, token)
+                    newResult.putExtra(DropboxAuthIntent.EXTRA_ACCESS_SECRET, secret)
+                    newResult.putExtra(DropboxAuthIntent.EXTRA_UID, uid)
+                }
+                TokenType.OAUTH2CODE.toString() -> {
+                    // code flow with PKCE
+                    val tokenRequest = TokenRequestAsyncTask(
+                        secret,
+                        mState.mPKCEManager,
+                        mState.mRequestConfig!!,
+                        mState.mAppKey!!,
+                        mState.mHost!!
+                    )
+                    try {
+                        val dbxAuthFinish = tokenRequest.execute().get()
+                        if (dbxAuthFinish == null) {
+                            newResult = null
+                        } else {
+                            newResult = Intent()
+                            // access_token and access_secret are OAuth1 concept. In OAuth2 we only
+                            // have access token. So I put both of them to be the same.
+                            newResult.putExtra(
+                                DropboxAuthIntent.EXTRA_ACCESS_TOKEN,
+                                dbxAuthFinish.accessToken
+                            )
+                            newResult.putExtra(
+                                DropboxAuthIntent.EXTRA_ACCESS_SECRET,
+                                dbxAuthFinish.accessToken
+                            )
+                            newResult.putExtra(
+                                DropboxAuthIntent.EXTRA_REFRESH_TOKEN,
+                                dbxAuthFinish.refreshToken
+                            )
+                            newResult.putExtra(
+                                DropboxAuthIntent.EXTRA_EXPIRES_AT,
+                                dbxAuthFinish.expiresAt
+                            )
+                            newResult.putExtra(DropboxAuthIntent.EXTRA_UID, dbxAuthFinish.userId)
+                            newResult.putExtra(DropboxAuthIntent.EXTRA_CONSUMER_KEY, mState.mAppKey)
+                            newResult.putExtra(DropboxAuthIntent.EXTRA_SCOPE, dbxAuthFinish.scope)
+                        }
+                    } catch (e: Exception) {
                         newResult = null
-                    } else {
-                        newResult = Intent()
-                        // access_token and access_secret are OAuth1 concept. In OAuth2 we only
-                        // have access token. So I put both of them to be the same.
-                        newResult.putExtra(
-                            DropboxAuthIntent.EXTRA_ACCESS_TOKEN,
-                            dbxAuthFinish.accessToken
-                        )
-                        newResult.putExtra(
-                            DropboxAuthIntent.EXTRA_ACCESS_SECRET,
-                            dbxAuthFinish.accessToken
-                        )
-                        newResult.putExtra(
-                            DropboxAuthIntent.EXTRA_REFRESH_TOKEN,
-                            dbxAuthFinish.refreshToken
-                        )
-                        newResult.putExtra(
-                            DropboxAuthIntent.EXTRA_EXPIRES_AT,
-                            dbxAuthFinish.expiresAt
-                        )
-                        newResult.putExtra(DropboxAuthIntent.EXTRA_UID, dbxAuthFinish.userId)
-                        newResult.putExtra(DropboxAuthIntent.EXTRA_CONSUMER_KEY, mState.mAppKey)
-                        newResult.putExtra(DropboxAuthIntent.EXTRA_SCOPE, dbxAuthFinish.scope)
                     }
-                } catch (e: Exception) {
+                }
+                else -> {
                     newResult = null
                 }
-            } else {
-                newResult = null
             }
         } else {
             // Unsuccessful auth, or missing required parameters.
@@ -549,7 +558,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
          */
         @JvmStatic
         @Deprecated("Use Methods in com.dropbox.core.android.Auth, This will be removed in future versions.")
-        public fun checkAppBeforeAuth(
+        fun checkAppBeforeAuth(
             context: Context,
             appKey: String,
             alertUser: Boolean

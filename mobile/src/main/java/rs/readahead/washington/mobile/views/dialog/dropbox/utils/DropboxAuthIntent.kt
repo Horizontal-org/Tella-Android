@@ -1,10 +1,9 @@
-package rs.readahead.washington.mobile.views.dialog.dropbox.internal
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import com.dropbox.core.DbxSdkVersion
-import rs.readahead.washington.mobile.views.dialog.dropbox.AuthSessionViewModel
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity.Companion.ACTION_AUTHENTICATE_V2
 

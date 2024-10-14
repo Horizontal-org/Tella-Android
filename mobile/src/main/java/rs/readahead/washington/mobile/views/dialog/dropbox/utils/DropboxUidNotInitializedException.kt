@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package rs.readahead.washington.mobile.views.dialog.dropbox
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import com.dropbox.core.DbxException
 

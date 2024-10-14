@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.dialog.dropbox
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import android.content.Intent
 import com.dropbox.core.DbxHost
@@ -6,7 +6,6 @@ import com.dropbox.core.DbxPKCEManager
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.IncludeGrantedScopes
 import com.dropbox.core.TokenAccessType
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.AuthParameters
 
 internal class AuthSessionViewModel {
 
@@ -56,12 +55,12 @@ internal class AuthSessionViewModel {
 
         fun startAuthSession(state: State) {
             authInProgress = true
-            this._state = state
+            _state = state
         }
 
         fun endAuthSession() {
             authInProgress = false
-            this._state = State()
+            _state = State()
         }
     }
 }

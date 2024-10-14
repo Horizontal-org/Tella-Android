@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.dialog.dropbox.internal
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import android.os.AsyncTask
 import android.util.Log

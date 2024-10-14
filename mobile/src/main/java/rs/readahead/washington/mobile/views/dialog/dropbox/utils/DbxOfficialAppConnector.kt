@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package rs.readahead.washington.mobile.views.dialog.dropbox
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import android.content.Context
 import android.content.Intent
@@ -29,13 +29,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Parcel
 import android.util.Base64
-import rs.readahead.washington.mobile.views.dialog.dropbox.internal.DropboxAuthIntent
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxUidNotInitializedException
 
 /**
  * The DbxOfficialAppConnector is used by an app to communicate with the Official Android Dropbox
  * app.
  */
-public class DbxOfficialAppConnector(uid: String?) {
+class DbxOfficialAppConnector(uid: String?) {
     /**
      * uid associated with this DbxOfficialAppConnector
      */

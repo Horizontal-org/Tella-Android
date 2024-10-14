@@ -56,7 +56,9 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
-import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxAppConfig;
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxCredentialUtil;
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxOAuthUtil;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
@@ -562,9 +564,17 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
+        //   maybeChangeTemporaryTimeout(() -> {
+        maybeChangeTemporaryTimeout();
         if (dropBoxServer == null) {
-            startActivity(new Intent(this, DropBoxConnectFlowActivity.class));
+            DropboxCredentialUtil dropboxCredentialUtil = new DropboxCredentialUtil(this);
+            DropboxAppConfig dropboxAppConfig = new DropboxAppConfig();
+            DropboxOAuthUtil dropboxOAuthUtil = new DropboxOAuthUtil(dropboxCredentialUtil, dropboxAppConfig);
+            dropboxOAuthUtil.startDropboxAuthorizationOAuth2(this);
         }
+        //   return Unit.INSTANCE;
+        //    });
+
     }
 
     private void stopPresenting() {

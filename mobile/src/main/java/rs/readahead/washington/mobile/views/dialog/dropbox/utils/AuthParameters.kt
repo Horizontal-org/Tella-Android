@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.views.dialog.dropbox.internal
+package rs.readahead.washington.mobile.views.dialog.dropbox.utils
 
 import com.dropbox.core.DbxHost
 import com.dropbox.core.DbxRequestConfig
