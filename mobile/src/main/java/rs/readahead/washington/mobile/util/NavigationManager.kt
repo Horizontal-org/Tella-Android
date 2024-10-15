@@ -59,9 +59,9 @@ class NavigationManager(
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
-
+    
     fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
-        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
+        navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
     }
 
     fun navigateFromDropBoxScreenToNewDropBoxScreen() {
