@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.views.fragment.dropbox.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,11 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-
-    @JvmStatic
-    fun init(context: Context) {
-        System.loadLibrary("sqlcipher")
-    }
 
     @Provides
     @Singleton

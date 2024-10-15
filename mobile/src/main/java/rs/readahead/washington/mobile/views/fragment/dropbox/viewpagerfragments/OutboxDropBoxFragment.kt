@@ -35,7 +35,7 @@ class OutboxDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_google_drive
+        return R.drawable.ic_dropbox_logo_white
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {

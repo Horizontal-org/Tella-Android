@@ -6,7 +6,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel
-import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 
@@ -25,7 +24,7 @@ class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_google_drive
+        return R.drawable.ic_dropbox_logo_white
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
