@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-
 import io.reactivex.Completable;
 import io.reactivex.CompletableTransformer;
 import io.reactivex.Single;
@@ -23,8 +21,6 @@ import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
-import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
-import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
 import rs.readahead.washington.mobile.domain.repository.dropbox.IDropBoxRepository;
@@ -36,8 +32,6 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
     private static DropBoxDataSource dataSource;
     private final SQLiteDatabase database;
     private final DataBaseUtils dataBaseUtils;
-    @Inject
-    Config config;
     final private CompletableTransformer schedulersCompletableTransformer = observable -> observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     private CompletableTransformer applyCompletableSchedulers() {
@@ -45,7 +39,6 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
     }
 
     private DropBoxDataSource(Context context, byte[] key) {
-        System.loadLibrary("sqlcipher");
         WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
@@ -191,7 +184,6 @@ public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepos
     }
 
     private List<ReportInstance> getSubmittedReportInstances() {
-
         return dataBaseUtils.getReportFormInstances(new EntityStatus[]{EntityStatus.SUBMITTED}, D.T_DROPBOX_FORM_INSTANCE, D.T_DROPBOX);
     }
 }

@@ -6,6 +6,7 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportCounts
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DropBoxViewModel @Inject constructor(
-    val getReportsUseCase : GetReportsUseCase
+    private val getReportsUseCase : GetReportsUseCase,
+    private val getReportsServersUseCase : GetReportsServersUseCase,
 ) : BaseReportsViewModel() {
 
     override fun clearDisposable() {
@@ -175,6 +177,14 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun listServers() {
+        _progress.postValue(true)
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            _serversList.postValue(result)
+        }, onError = { error ->
+            _error.postValue(error)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
