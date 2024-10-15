@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 
 @AndroidEntryPoint
 class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
@@ -49,6 +50,15 @@ class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
                     deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
                     deleteActionText = getString(R.string.Delete_Report_Confirmation)
                 )
+            }
+
+            instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
+                draftDropBoxViewModel.listOutbox()
             }
         }
     }

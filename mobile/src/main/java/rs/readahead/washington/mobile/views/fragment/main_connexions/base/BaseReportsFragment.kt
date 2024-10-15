@@ -138,18 +138,13 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     }
 
     // Method to be used by subclasses to define how the navigation is handled
-    protected fun openEntityInstance(reportInstance: ReportInstance) {
+    private fun openEntityInstance(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         navigateToReportScreen(reportInstance)
     }
 
     protected fun loadEntityInstance(reportInstance: ReportInstance) {
         getViewModel().getReportBundle(reportInstance)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getViewModel().listOutbox()
     }
 
 }

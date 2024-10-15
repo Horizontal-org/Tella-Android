@@ -13,6 +13,7 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.usecases.dropbox.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsUseCase
@@ -31,6 +32,7 @@ class DropBoxViewModel @Inject constructor(
     private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val dropBoxDataSource: DropBoxDataSource,
+    private val deleteReportUseCase: DeleteReportUseCase,
     private val dropBoxRepository: DropBoxRepository,
 ) : BaseReportsViewModel() {
 
@@ -39,6 +41,16 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun deleteReport(instance: ReportInstance) {
+        _progress.postValue(true)
+        deleteReportUseCase.setId(instance.id)
+
+        deleteReportUseCase.execute(onSuccess = {
+            _instanceDeleted.postValue(instance.title)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun getReportBundle(instance: ReportInstance) {
