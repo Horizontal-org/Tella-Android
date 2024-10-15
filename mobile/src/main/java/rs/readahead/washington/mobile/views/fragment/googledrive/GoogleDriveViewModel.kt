@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.data.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsServersUseCase

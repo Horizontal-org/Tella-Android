@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
-import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.data.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
