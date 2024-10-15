@@ -6,11 +6,16 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportCounts
+import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import javax.inject.Inject
 
 @HiltViewModel
 class DropBoxViewModel @Inject constructor(
+    val getReportsUseCase : GetReportsUseCase
 ) : BaseReportsViewModel() {
 
     override fun clearDisposable() {
@@ -63,15 +68,101 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun listSubmitted() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _submittedReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listOutbox() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _outboxReportListFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listOutboxAndSubmitted() {
+        _progress.postValue(true)
+
+        // Initialize counters for lengths
+        var outboxLength: Int
+        var submittedLength: Int
+
+        // Execute the Outbox report retrieval
+        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
+        getReportsUseCase.execute(
+            onSuccess = { outboxResult ->
+                outboxLength = outboxResult.size // Get the length of outbox
+
+                // Now execute the Submitted report retrieval
+                getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+                getReportsUseCase.execute(
+                    onSuccess = { submittedResult ->
+                        submittedLength = submittedResult.size // Get the length of submitted
+
+                        // Post the combined lengths to LiveData
+                        _reportCounts.postValue(ReportCounts(outboxLength, submittedLength))
+                    },
+                    onError = {
+                        _error.postValue(it)
+                    },
+                    onFinished = {
+                        _progress.postValue(false)
+                    }
+                )
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                // Handle progress here if needed
+            }
+        )
     }
 
     override fun listDrafts() {
+        _progress.postValue(true)
+        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
+
+        getReportsUseCase.execute(onSuccess = { result ->
+            val resultList = mutableListOf<ViewEntityTemplateItem>()
+
+            result.map { instance ->
+                resultList.add(
+                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) })
+                )
+            }
+            _draftListReportFormInstance.postValue(resultList)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun saveSubmitted(reportInstance: ReportInstance) {

@@ -143,8 +143,8 @@ class GoogleDriveViewModel @Inject constructor(
         _progress.postValue(true)
 
         // Initialize counters for lengths
-        var outboxLength = 0
-        var submittedLength = 0
+        var outboxLength: Int
+        var submittedLength: Int
 
         // Execute the Outbox report retrieval
         getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
@@ -195,14 +195,6 @@ class GoogleDriveViewModel @Inject constructor(
         }, onFinished = {
             _progress.postValue(false)
         })
-    }
-
-    private fun openInstance(reportInstance: ReportInstance) {
-        getReportBundle(reportInstance)
-    }
-
-    private fun onMoreClicked(reportInstance: ReportInstance) {
-        _onMoreClickedFormInstance.postValue(reportInstance)
     }
 
     override fun deleteReport(instance: ReportInstance) {

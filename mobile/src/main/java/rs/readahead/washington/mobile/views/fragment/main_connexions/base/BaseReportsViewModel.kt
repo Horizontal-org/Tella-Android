@@ -115,6 +115,14 @@ abstract class BaseReportsViewModel : ViewModel() {
         disposables.dispose()
     }
 
+    protected fun openInstance(reportInstance: ReportInstance) {
+        getReportBundle(reportInstance)
+    }
+
+    protected fun onMoreClicked(reportInstance: ReportInstance) {
+        _onMoreClickedFormInstance.postValue(reportInstance)
+    }
+
 
     fun vaultFilesToMediaFiles(files: List<VaultFile>): List<FormMediaFile> {
         val vaultFiles = mutableListOf<FormMediaFile>()
