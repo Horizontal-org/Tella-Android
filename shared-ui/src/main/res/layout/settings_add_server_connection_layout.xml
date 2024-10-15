@@ -25,10 +25,13 @@
         <!-- Main content with padding -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:padding="24dp"
+            android:id="@+id/buttonsConstraint"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:layout_marginBottom="50dp"
+            >
 
             <ImageView
                 android:id="@+id/server_icon"
@@ -97,6 +100,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn" />
 
+            <!-- Button 4 -->
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_four_activated_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_three_btn" />
+
+            <!-- Button 5 -->
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_five_activated_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_four_activated_btn" />
+
+
             <!-- Unavailable Connection Text -->
             <TextView
                 android:id="@+id/unavailable_connection_text"
@@ -104,7 +130,7 @@
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sheet_three_btn"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_five_activated_btn"
                 tools:text="Unavailable connections" />
 
             <!-- Unavailable Connection Description -->
@@ -120,25 +146,29 @@
 
             <!-- Button 4 -->
             <org.hzontal.shared_ui.buttons.RoundButton
-                android:id="@+id/sheet_four_btn"
+                android:id="@+id/sheet_four_deactivated_btn"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                android:visibility="visible"
+                android:visibility="gone"
+                app:tint_color="@color/wa_white_8"
+                app:text_color="@color/wa_white_38"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/unavailable_connection_desc_text" />
 
             <!-- Button 5 -->
             <org.hzontal.shared_ui.buttons.RoundButton
-                android:id="@+id/sheet_five_btn"
+                android:id="@+id/sheet_five_deactivated_btn"
                 android:layout_width="match_parent"
+                app:tint_color="@color/wa_white_8"
+                app:text_color="@color/wa_white_38"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sheet_four_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/sheet_four_deactivated_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

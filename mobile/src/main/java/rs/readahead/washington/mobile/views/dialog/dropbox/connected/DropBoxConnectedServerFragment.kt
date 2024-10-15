@@ -3,16 +3,15 @@ package rs.readahead.washington.mobile.views.dialog.dropbox.connected
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
-import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.GoogleDriveConnectedServerFragmentBinding
+import rs.readahead.washington.mobile.databinding.DropBoxConnectedServerFragmentBinding
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createDropBoxServer
 
 class DropBoxConnectedServerFragment :
-    BaseBindingFragment<GoogleDriveConnectedServerFragmentBinding>(
-        GoogleDriveConnectedServerFragmentBinding::inflate
+    BaseBindingFragment<DropBoxConnectedServerFragmentBinding>(
+        DropBoxConnectedServerFragmentBinding::inflate
     ) {
     private var dropBoxServer: DropBoxServer? = null
 
@@ -33,13 +32,8 @@ class DropBoxConnectedServerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpView()
         setupData()
         initListeners()
-    }
-
-    private fun setUpView() {
-        binding.goToBtn.setText(getString(R.string.go_to_dropbox))
     }
 
     private fun setupData() {

@@ -15,6 +15,8 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatRadioButton
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
@@ -250,6 +252,8 @@ object BottomSheetUtils {
         lateinit var buttonThree: RoundButton
         lateinit var buttonFour: RoundButton
         lateinit var buttonFive: RoundButton
+        lateinit var buttonFourDeactivated: RoundButton
+        lateinit var buttonFiveDeactivated: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -258,6 +262,7 @@ object BottomSheetUtils {
         lateinit var toolbarComponent: ToolbarComponent
         lateinit var unavailableConnexionText: TextView
         lateinit var unavailableConnexionTextDesc: TextView
+        lateinit var buttonConstraint: ConstraintLayout
 
 
         override fun bindView(view: View) {
@@ -265,14 +270,17 @@ object BottomSheetUtils {
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
             buttonThree = view.findViewById(R.id.sheet_three_btn)
-            buttonFour = view.findViewById(R.id.sheet_four_btn)
-            buttonFive = view.findViewById(R.id.sheet_five_btn)
+            buttonFour = view.findViewById(R.id.sheet_four_activated_btn)
+            buttonFive = view.findViewById(R.id.sheet_five_activated_btn)
+            buttonFourDeactivated = view.findViewById(R.id.sheet_four_deactivated_btn)
+            buttonFiveDeactivated = view.findViewById(R.id.sheet_five_deactivated_btn)
             title = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
             nextButton = view.findViewById(R.id.next_btn)
             backButton = view.findViewById(R.id.back_btn)
             unavailableConnexionText = view.findViewById(R.id.unavailable_connection_text)
             unavailableConnexionTextDesc = view.findViewById(R.id.unavailable_connection_desc_text)
+            buttonConstraint = view.findViewById(R.id.buttonsConstraint)
         }
     }
 
@@ -309,9 +317,7 @@ object BottomSheetUtils {
         consumer: IServerChoiceActions
     ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.settings_add_server_connection_layout)
-            .cancellable(true)
-            .fullScreen()
+            .page(R.layout.settings_add_server_connection_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
 
         customSheetFragment.holder(DualChoiceSheetHolder(), object : Binder<DualChoiceSheetHolder> {
@@ -327,17 +333,15 @@ object BottomSheetUtils {
                     setupButton(buttonTwo, buttonTwoLabel)
                     setupButton(buttonThree, buttonThreeLabel)
                     setupButton(buttonFour, buttonFourLabel)
+                    setupButton(buttonFourDeactivated, buttonFourLabel)
+                    setupButton(buttonFiveDeactivated, buttonFiveLabel)
                     setupButton(buttonFive, buttonFiveLabel)
                     unavailableConnexionText.text = unavailableConnexionLabel;
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
                     // Set button click listeners using a helper method
                     listOf(
-                        buttonOne,
-                        buttonTwo,
-                        buttonThree,
-                        buttonFour,
-                        buttonFive
+                        buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive
                     ).forEachIndexed { index, button ->
                         button.setOnClickListener {
                             resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive)
@@ -351,7 +355,9 @@ object BottomSheetUtils {
                         unavailableConnexionText,
                         unavailableConnexionTextDesc,
                         buttonFour,
-                        buttonFive
+                        buttonFive,
+                        buttonFourDeactivated,
+                        buttonFiveDeactivated
                     )
                     backButton.setOnClickListener { customSheetFragment.dismiss() }
 
@@ -383,8 +389,11 @@ object BottomSheetUtils {
         unavailableConnexionText: TextView,
         unavailableConnexionTextDesc: TextView,
         buttonFour: RoundButton,  // Google Drive button
-        buttonFive: RoundButton   // Dropbox button
+        buttonFive: RoundButton, // Dropbox button
+        buttonFourDeactivated: RoundButton,  // Google Drive button Deactivated
+        buttonFiveDeactivated: RoundButton, // Dropbox button Deactivated
     ) {
+
         // Case where at least one server is available
         if (isGoogleDriveAvailable || isDropboxAvailable) {
             // Show unavailable text and description when either server is available
@@ -393,38 +402,24 @@ object BottomSheetUtils {
 
             if (isGoogleDriveAvailable && isDropboxAvailable) {
                 // Both Google Drive and Dropbox available
-                buttonFour.isVisible = true
-                buttonFive.isVisible = true
+                buttonFour.isVisible = false
+                buttonFive.isVisible = false
 
-                // Enable Google Drive button
-                buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
-                buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
-                buttonFour.setOnClickListener { /* Handle Google Drive button click */ }
+                buttonFourDeactivated.isVisible = true
+                buttonFiveDeactivated.isVisible = true
 
-                // Enable Dropbox button
-                buttonFive.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
-                buttonFive.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
-                buttonFive.setOnClickListener { /* Handle Dropbox button click */ }
 
             } else if (isGoogleDriveAvailable) {
                 // Only Google Drive available
-                buttonFour.isVisible = true
-                buttonFive.isVisible = false
+                buttonFour.isVisible = false
+                buttonFourDeactivated.isVisible = true
 
-                // Enable Google Drive button and disable Dropbox
-                buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
-                buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
-                buttonFour.setOnClickListener { /* Handle Google Drive button click */ }
 
             } else if (isDropboxAvailable) {
-                // Only Dropbox available
-                buttonFour.isVisible = false
-                buttonFive.isVisible = true
+                // Only Google Drive available
+                buttonFive.isVisible = false
+                buttonFiveDeactivated.isVisible = true
 
-                // Enable Dropbox button and disable Google Drive
-                buttonFive.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white))
-                buttonFive.setTextColor(ContextCompat.getColor(context, R.color.wa_black))
-                buttonFive.setOnClickListener { /* Handle Dropbox button click */ }
             }
         }
         // Case where neither Google Drive nor Dropbox is available
@@ -436,9 +431,11 @@ object BottomSheetUtils {
             // Disable both buttons
             buttonFour.isVisible = true
             buttonFive.isVisible = true
+
+            buttonFourDeactivated.isVisible = false
+            buttonFiveDeactivated.isVisible = false
         }
     }
-
 
 
     private fun resetButtons(vararg buttons: RoundButton) {
@@ -690,8 +687,7 @@ object BottomSheetUtils {
 
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment2.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment2.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -715,8 +711,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(true)
             .screenTag("ConfirmImageSheet")
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -770,8 +765,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -1234,8 +1228,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.three_options_sheet_layout).cancellable(true)
-        customSheetFragment.holder(
-            ThreeOptionsMenuSheetHolder(),
+        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(),
             object : Binder<ThreeOptionsMenuSheetHolder> {
                 override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
                     with(holder) {
