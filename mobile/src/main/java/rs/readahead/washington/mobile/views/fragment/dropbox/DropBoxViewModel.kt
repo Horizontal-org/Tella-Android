@@ -1,23 +1,37 @@
 package rs.readahead.washington.mobile.views.fragment.dropbox
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
+import rs.readahead.washington.mobile.data.database.DropBoxDataSource
+import rs.readahead.washington.mobile.data.dropbox.DropBoxRepository
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsUseCase
+import rs.readahead.washington.mobile.domain.usecases.dropbox.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportCounts
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DropBoxViewModel @Inject constructor(
-    private val getReportsUseCase : GetReportsUseCase,
-    private val getReportsServersUseCase : GetReportsServersUseCase,
+    private val getReportsUseCase: GetReportsUseCase,
+    private val getReportsServersUseCase: GetReportsServersUseCase,
+    private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
+    private val getReportBundleUseCase: GetReportBundleUseCase,
+    private val dropBoxDataSource: DropBoxDataSource,
+    private val dropBoxRepository: DropBoxRepository,
 ) : BaseReportsViewModel() {
 
     override fun clearDisposable() {
@@ -28,6 +42,40 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun getReportBundle(instance: ReportInstance) {
+        _progress.postValue(true)
+        getReportBundleUseCase.setId(instance.id)
+        getReportBundleUseCase.execute(onSuccess = { result ->
+            val resultInstance = result.instance
+            disposables.add(dropBoxDataSource.getReportMediaFiles(result.instance)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ files ->
+                    val vaultFiles: MutableList<VaultFile?> =
+                        MyApplication.rxVault.get(result.fileIds).blockingGet() ?: return@subscribe
+                    val filesResult = arrayListOf<FormMediaFile>()
+
+                    files.forEach { formMediaFile ->
+                        val vaultFile =
+                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
+                        if (vaultFile != null) {
+                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
+                            fileResult.status = formMediaFile.status
+                            fileResult.uploadedSize = formMediaFile.uploadedSize
+                            filesResult.add(fileResult)
+
+                        }
+                    }
+                    resultInstance.widgetMediaFiles = filesResult
+                    _reportInstance.postValue(resultInstance)
+                }) { throwable: Throwable? ->
+                    Timber.d(throwable)
+                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                })
+
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun getFormInstance(
@@ -167,13 +215,42 @@ class DropBoxViewModel @Inject constructor(
         })
     }
 
-    override fun saveSubmitted(reportInstance: ReportInstance) {
+    override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+            _exitAfterSave.postValue(exitAfterSave)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun saveOutbox(reportInstance: ReportInstance) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
-    override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
+
+    override fun saveSubmitted(reportInstance: ReportInstance) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listServers() {

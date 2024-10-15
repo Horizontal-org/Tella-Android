@@ -6,7 +6,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.DropBoxDataSource
+import rs.readahead.washington.mobile.data.dropbox.DropBoxRepository
 import rs.readahead.washington.mobile.domain.repository.dropbox.IDropBoxRepository
+import rs.readahead.washington.mobile.domain.repository.dropbox.ITellaDropBoxRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import javax.inject.Singleton
 
@@ -22,7 +24,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideServeDropBoxDataSource(): IDropBoxRepository {
+    fun provideServeDropBoxDataSource(): ITellaDropBoxRepository {
         return MyApplication.getKeyDataSource().dropBoxDataSource.blockingFirst()
     }
 
@@ -32,6 +34,13 @@ object RepositoryModule {
     @DropBox
     fun provideDropBoxDataSourceRepository(): ITellaReportsRepository {
         return MyApplication.getKeyDataSource().dropBoxDataSource.blockingFirst()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDropBoxRepository(
+    ): IDropBoxRepository {
+        return DropBoxRepository()
     }
 
 }

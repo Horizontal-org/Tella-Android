@@ -23,11 +23,11 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
-import rs.readahead.washington.mobile.domain.repository.dropbox.IDropBoxRepository;
+import rs.readahead.washington.mobile.domain.repository.dropbox.ITellaDropBoxRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import timber.log.Timber;
 
-public class DropBoxDataSource implements IDropBoxRepository, ITellaReportsRepository {
+public class DropBoxDataSource implements ITellaDropBoxRepository, ITellaReportsRepository {
 
     private static DropBoxDataSource dataSource;
     private final SQLiteDatabase database;
