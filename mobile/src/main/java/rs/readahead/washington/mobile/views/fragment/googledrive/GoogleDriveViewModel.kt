@@ -350,7 +350,7 @@ class GoogleDriveViewModel @Inject constructor(
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    googleDriveRepository.uploadFilesWithProgress(
+                    googleDriveRepository.uploadFileWithProgress(
                         reportApiId,
                         server.username,
                         file

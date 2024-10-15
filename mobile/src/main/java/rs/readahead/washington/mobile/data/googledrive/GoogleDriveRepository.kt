@@ -106,7 +106,7 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    fun uploadFilesWithProgress(
+    fun uploadFileWithProgress(
         folderParentId: String, email: String, mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
