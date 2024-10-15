@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drop_box_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drop_box_graph"
+    app:startDestination="@id/dropBoxScreen">
 
+    <fragment
+        android:id="@+id/dropBoxScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.viewpagerfragments.DropBoxTabsFragment"
+        android:label="@string/dropbox"
+        tools:layout="@layout/fragment_reports">
+        <action
+            android:id="@+id/action_dropBoxScreen_to_dropBoxSubmittedScreen"
+            app:destination="@id/dropBoxSubmittedScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_dropBoxScreen_to_dropBoxSendScreen"
+            app:destination="@id/dropBoxSendScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_dropBoxScreen_to_newdropBoxScreen"
+            app:destination="@id/newdropBoxScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newdropBoxScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.entry.DropBoxEntryFragment"
+        android:label="@string/Reports_Title_Screen"
+        tools:layout="@layout/fragment_reports_entry">
+
+        <action
+            android:id="@+id/action_newDropBoxScreen_to_dropBoxSendScreen"
+            app:destination="@id/dropBoxSendScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dropBoxSendScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.send.DropBoxSendFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
+
+    <fragment
+        android:id="@+id/dropBoxSubmittedScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.submitted.DropboxSubmittedFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
 </navigation>

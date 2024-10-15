@@ -40,7 +40,7 @@ class SubmittedDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        navManager().navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen()
+        navManager().navigateFromDropBoxScreenToDropBoxSubmittedScreen()
     }
 
     @SuppressLint("StringFormatInvalid")

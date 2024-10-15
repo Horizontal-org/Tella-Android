@@ -20,7 +20,7 @@ internal class DropBoxTabsFragment : MainReportFragment() {
     }
 
     override fun navigateToNewReportScreen() {
-        this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
+        this.navManager().navigateFromDropBoxScreenToNewDropBoxScreen()
     }
 
 }

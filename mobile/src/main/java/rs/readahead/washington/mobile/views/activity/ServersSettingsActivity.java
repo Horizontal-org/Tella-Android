@@ -690,6 +690,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 break;
             case GOOGLE_DRIVE:
                 // editGoogleDriveServer((GoogleDriveServer) server);
+            case DROP_BOX:
+                // editGoogleDriveServer((GoogleDriveServer) server);
             default:
                 editTUServer((TellaReportServer) server);
                 break;

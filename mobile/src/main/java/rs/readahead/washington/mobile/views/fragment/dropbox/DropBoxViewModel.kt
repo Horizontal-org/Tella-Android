@@ -40,11 +40,9 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun deleteReport(instance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun getReportBundle(instance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun getFormInstance(
@@ -56,7 +54,16 @@ class DropBoxViewModel @Inject constructor(
         reportApiId: String,
         status: EntityStatus
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            reportApiId = reportApiId,
+            description = description,
+            status = status,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     override fun getDraftFormInstance(
@@ -66,39 +73,39 @@ class DropBoxViewModel @Inject constructor(
         server: Server,
         id: Long?
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            description = description,
+            status = EntityStatus.DRAFT,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     override fun listSubmitted() {
-        TODO("Not yet implemented")
     }
 
     override fun listOutbox() {
-        TODO("Not yet implemented")
     }
 
     override fun listOutboxAndSubmitted() {
-        TODO("Not yet implemented")
     }
 
     override fun listDrafts() {
-        TODO("Not yet implemented")
     }
 
     override fun saveSubmitted(reportInstance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun saveOutbox(reportInstance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun listServers() {
-        TODO("Not yet implemented")
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
