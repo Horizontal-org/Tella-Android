@@ -1,17 +1,23 @@
 package rs.readahead.washington.mobile.views.fragment.dropbox.send
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
+import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity
+import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxOAuthUtil
 import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel
-import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DropBoxSendFragment : BaseReportsSendFragment() {
+
+    @Inject
+    lateinit var dropBoxUtil: DropboxOAuthUtil
 
     override val viewModel by viewModels<DropBoxViewModel>()
 
@@ -57,15 +63,24 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
                 }
             }
         }
+        viewModel.tokenExpired.observe(viewLifecycleOwner) { dropBoxServer ->
+            if (dropBoxServer != null) {
+                dropBoxUtil.startDropboxAuthorizationOAuth2(baseActivity)
+            }
+        }
 
     }
 
     override fun navigateBack() {
         if (isFromDraft) {
-            nav().popBackStack(R.id.newGoogleDriveScreen, true)
+            nav().popBackStack(R.id.newdropBoxScreen, true)
         } else {
             nav().popBackStack()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 

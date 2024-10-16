@@ -69,7 +69,7 @@ class NavigationManager(
     }
 
     fun navigateFromDropBoxEntryScreenToDropBoxSendScreen() {
-        navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSendScreen)
+        navigateToWithBundle(R.id.action_newDropBoxScreen_to_dropBoxSendScreen)
     }
 
     fun navigateFromDropBoxMainScreenToDropBoxSendScreen() {

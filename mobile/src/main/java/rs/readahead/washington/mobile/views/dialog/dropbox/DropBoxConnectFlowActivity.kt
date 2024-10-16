@@ -2,15 +2,19 @@ package rs.readahead.washington.mobile.views.dialog.dropbox
 
 import android.os.Bundle
 import com.dropbox.core.android.Auth
+import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
 import rs.readahead.washington.mobile.views.dialog.dropbox.connected.DropBoxConnectedServerFragment
-import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxAppConfig
-import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxCredentialUtil
 import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxOAuthUtil
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DropBoxConnectFlowActivity : BaseActivity() {
+
+    @Inject
+    lateinit var dropBoxUtil: DropboxOAuthUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +26,6 @@ class DropBoxConnectFlowActivity : BaseActivity() {
 
     // Function to initiate Dropbox login
     private fun loginToDropbox() {
-        //TODO inject this with DI
-        val dropboxCredentialUtil = DropboxCredentialUtil(this)
-        val dropboxAppConfig = DropboxAppConfig()
-        val dropBoxUtil = DropboxOAuthUtil(dropboxCredentialUtil, dropboxAppConfig)
         dropBoxUtil.startDropboxAuthorizationOAuth2(this)
     }
 
@@ -33,8 +33,6 @@ class DropBoxConnectFlowActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         val accessToken = Auth.getOAuth2Token()
-        val refreshToken = Auth.getDbxCredential()?.refreshToken
-
         if (accessToken != null) {
             val server = DropBoxServer(token = accessToken)
             addFragment(DropBoxConnectedServerFragment.newInstance(server), R.id.container)

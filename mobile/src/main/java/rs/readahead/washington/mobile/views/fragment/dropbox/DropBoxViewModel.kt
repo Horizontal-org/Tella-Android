@@ -20,6 +20,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.exception.InvalidTokenException
 import rs.readahead.washington.mobile.domain.usecases.dropbox.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsServersUseCase
@@ -50,6 +51,9 @@ class DropBoxViewModel @Inject constructor(
 
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
+
+    protected val _tokenExpired = MutableLiveData<DropBoxServer>()
+    val tokenExpired: MutableLiveData<DropBoxServer> get() = _tokenExpired
 
 
     override fun clearDisposable() {
@@ -324,29 +328,46 @@ class DropBoxViewModel @Inject constructor(
         )
     }
 
-    private fun createFolderAndSubmitFiles(instance: ReportInstance, server: DropBoxServer) {
-        val dbxClient = createDropboxClient(server)
 
+    private fun createFolderAndSubmitFiles(instance: ReportInstance, server: DropBoxServer) {
         disposables.add(
-            dropBoxRepository.createDropboxFolder(
-                dbxClient,
-                instance.title
-            )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ folderId ->
+            dropBoxRepository.createDropboxClient(server)
+                .subscribeOn(Schedulers.io()) // Perform on IO thread
+                .flatMap { dbxClient ->
+                    // If token is valid, create folder and submit files
+                    dropBoxRepository.createDropboxFolder(dbxClient, instance.title)
+                        .map { folderId ->
+                            Pair(
+                                dbxClient,
+                                folderId
+                            )
+                        } // Pass both client and folderId forward
+                }
+                .observeOn(AndroidSchedulers.mainThread()) // Observe on the main thread
+                .subscribe({ (dbxClient, folderId) ->
+                    // Folder creation successful, now update instance and submit files
                     instance.reportApiId = folderId
                     updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
                     submitFiles(instance, server, folderId)
                 }, { error ->
-                    handleSubmissionError(instance, error)
+                    if (error is InvalidTokenException) {
+                        if (statusProvider.isOnline()) {
+                            _tokenExpired.postValue(server)
+                        }
+                    } else {
+                        handleSubmissionError(instance, error)
+                    }
+                    // Handle any error (token validation, folder creation, etc.)
+
                 })
         )
     }
+
     // Helper function to create DbxClientV2 instance using access token
     private fun createDropboxClient(server: DropBoxServer): DbxClientV2 {
         val accessToken = server.token // Get the access token from the DropBoxServer object
-        val config = DbxRequestConfig.newBuilder("dropbox/tella").build() // Create Dropbox request config
+        val config =
+            DbxRequestConfig.newBuilder("dropbox/tella").build() // Create Dropbox request config
         return DbxClientV2(config, accessToken) // Create and return DbxClientV2 instance
     }
 
