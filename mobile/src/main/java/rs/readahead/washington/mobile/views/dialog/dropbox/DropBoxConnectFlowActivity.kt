@@ -15,6 +15,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
 
     @Inject
     lateinit var dropBoxUtil: DropboxOAuthUtil
+    private var isFromDropBoxSendView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

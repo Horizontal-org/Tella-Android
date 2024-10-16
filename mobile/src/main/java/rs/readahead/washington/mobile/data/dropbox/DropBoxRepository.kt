@@ -36,7 +36,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
             } catch (e: InvalidTokenException) {
                 emitter.onError(e)
             } catch (e: DbxException) {
-                emitter.onError(e)
+                emitter.onError(InvalidTokenException("Dropbox token is invalid or expired"))
             } catch (e: Exception) {
                 emitter.onError(e)
             }
