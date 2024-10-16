@@ -65,9 +65,13 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
         }
         viewModel.tokenExpired.observe(viewLifecycleOwner) { dropBoxServer ->
             if (dropBoxServer != null) {
-                dropBoxUtil.startDropboxAuthorizationOAuth2(baseActivity)
+
+              //  dropBoxUtil.startDropboxAuthorizationOAuth2(baseActivity)
             }
         }
+
+
+        //todo Observer shared live data call submitreport
 
     }
 

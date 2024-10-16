@@ -16,6 +16,12 @@ class DropBoxConnectFlowActivity : BaseActivity() {
     @Inject
     lateinit var dropBoxUtil: DropboxOAuthUtil
     private var isFromDropBoxSendView = false
+    //1 TODO INITLIZE VIEWMODEL
+
+    //
+    // 2 todo live date to listen to the update
+
+    // 3 todo shalredlive date post server to refresh the send
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +41,14 @@ class DropBoxConnectFlowActivity : BaseActivity() {
         super.onResume()
         val accessToken = Auth.getOAuth2Token()
         if (accessToken != null) {
-            val server = DropBoxServer(token = accessToken)
-            addFragment(DropBoxConnectedServerFragment.newInstance(server), R.id.container)
+            if (isFromDropBoxSendView) {
+                //call view model and update the server
+
+                //call view model update
+            } else {
+                val server = DropBoxServer(token = accessToken)
+                addFragment(DropBoxConnectedServerFragment.newInstance(server), R.id.container)
+            }
         }
     }
 
