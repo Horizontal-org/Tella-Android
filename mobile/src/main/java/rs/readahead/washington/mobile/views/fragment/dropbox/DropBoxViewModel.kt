@@ -310,7 +310,7 @@ class DropBoxViewModel @Inject constructor(
             if (instance.reportApiId.isEmpty()) {
                 createFolderAndSubmitFiles(instance, result.first())
             } else if (instance.status != EntityStatus.SUBMITTED) {
-                submitFiles(instance, result.first(), instance.reportApiId)
+                // submitFiles(instance, result.first(), instance.reportApiId, dbxClient = )
             }
         }, onError = { error ->
             _error.postValue(error)
@@ -349,11 +349,11 @@ class DropBoxViewModel @Inject constructor(
                     // Folder creation successful, now update instance and submit files
                     instance.reportApiId = folderId
                     updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
-                    submitFiles(instance, server, folderId)
+                    submitFiles(instance, server, folderId, dbxClient)
                 }, { error ->
                     if (error is InvalidTokenException) {
                         if (statusProvider.isOnline()) {
-                            _tokenExpired.postValue(RefreshDropBoxServer(true,server))
+                            _tokenExpired.postValue(RefreshDropBoxServer(true, server))
                         }
                     } else {
                         handleSubmissionError(instance, error)
@@ -364,14 +364,6 @@ class DropBoxViewModel @Inject constructor(
         )
     }
 
-    // Helper function to create DbxClientV2 instance using access token
-    private fun createDropboxClient(server: DropBoxServer): DbxClientV2 {
-        val accessToken = server.token // Get the access token from the DropBoxServer object
-        val config =
-            DbxRequestConfig.newBuilder("dropbox/tella").build() // Create Dropbox request config
-        return DbxClientV2(config, accessToken) // Create and return DbxClientV2 instance
-    }
-
     private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
         _error.postValue(error)
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
@@ -379,14 +371,14 @@ class DropBoxViewModel @Inject constructor(
 
 
     private fun submitFiles(
-        instance: ReportInstance, server: DropBoxServer, folderPath: String
+        instance: ReportInstance, server: DropBoxServer, folderPath: String, dbxClient: DbxClientV2
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
             return
         }
 
-        val dbxClient = createDropboxClient(server)
+        // val dbxClient = createDropboxClient(server)
 
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)

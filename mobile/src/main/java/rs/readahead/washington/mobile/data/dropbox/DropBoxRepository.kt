@@ -25,7 +25,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                 val config = DbxRequestConfig.newBuilder("dropbox/tella").build()
                 val dbxClient = DbxClientV2(config, accessToken)
                 val account = dbxClient.users().currentAccount
-
+                // dbxClient.auth().tokenRevoke()
                 if (account != null) {
                     emitter.onSuccess(dbxClient)
                 } else {

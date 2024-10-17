@@ -48,6 +48,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
         viewModel.refreshServerSuccess.observe(this)
         {
             refreshTokenServer.postValue(it)
+            finish()
         }
     }
 
