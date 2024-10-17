@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsServersU
 import rs.readahead.washington.mobile.domain.usecases.dropbox.GetReportsUseCase
 import rs.readahead.washington.mobile.domain.usecases.dropbox.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.util.StatusProvider
+import rs.readahead.washington.mobile.views.fragment.dropbox.data.RefreshDropBoxServer
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportCounts
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
@@ -52,8 +53,8 @@ class DropBoxViewModel @Inject constructor(
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
-    protected val _tokenExpired = MutableLiveData<DropBoxServer>()
-    val tokenExpired: MutableLiveData<DropBoxServer> get() = _tokenExpired
+    protected val _tokenExpired = MutableLiveData<RefreshDropBoxServer>()
+    val tokenExpired: MutableLiveData<RefreshDropBoxServer> get() = _tokenExpired
 
 
     override fun clearDisposable() {
@@ -352,7 +353,7 @@ class DropBoxViewModel @Inject constructor(
                 }, { error ->
                     if (error is InvalidTokenException) {
                         if (statusProvider.isOnline()) {
-                            _tokenExpired.postValue(server)
+                            _tokenExpired.postValue(RefreshDropBoxServer(true,server))
                         }
                     } else {
                         handleSubmissionError(instance, error)

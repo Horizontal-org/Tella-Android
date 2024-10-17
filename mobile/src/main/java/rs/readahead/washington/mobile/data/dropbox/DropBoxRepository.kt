@@ -18,8 +18,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DropBoxRepository @Inject constructor() : IDropBoxRepository {
-
-
     override fun createDropboxClient(server: DropBoxServer): Single<DbxClientV2> {
         return Single.create { emitter ->
             try {
