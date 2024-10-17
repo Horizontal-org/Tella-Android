@@ -1,4 +1,4 @@
-![Tella](docs/feature_image.png?raw=true "Tella")
+![Tella](docs/Tella2.0-feature.png?raw=true "Tella")
 
 ## Table of Contents
 
