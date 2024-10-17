@@ -20,32 +20,35 @@ class DropBoxConnectFlowActivity : BaseActivity() {
 
     @Inject
     lateinit var gson: Gson
+
     @Inject
     lateinit var dropBoxUtil: DropboxOAuthUtil
+
     private val viewModel by viewModels<DropBoxConnectFlowViewModel>()
+
     private lateinit var refreshDropBoxServer: RefreshDropBoxServer
 
-    private fun initView(){
-        intent.getStringExtra(REFRESH_SERVER_INTENT)?.let{
-            refreshDropBoxServer = gson.fromJson(it,RefreshDropBoxServer::class.java)
+    private fun initView() {
+        intent.getStringExtra(REFRESH_SERVER_INTENT)?.let {
+            refreshDropBoxServer = gson.fromJson(it, RefreshDropBoxServer::class.java)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_dropbox)
+        initView()
+        initObservers()
         maybeChangeTemporaryTimeout {
             loginToDropbox()
         }
-        initView()
-        initObservers()
     }
 
-    private  fun initObservers() {
+    private fun initObservers() {
         viewModel.refreshServerSuccess.observe(this)
-            {
-                refreshTokenServer.postValue(it)
-            }
+        {
+            refreshTokenServer.postValue(it)
+        }
     }
 
     // Function to initiate Dropbox login

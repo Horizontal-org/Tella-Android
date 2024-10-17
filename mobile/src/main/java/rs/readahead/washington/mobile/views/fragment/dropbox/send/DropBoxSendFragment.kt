@@ -74,6 +74,7 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
             if (refreshDropBoxServer != null) {
                 val intent = Intent(baseActivity, DropBoxConnectFlowActivity::class.java)
                 intent.putExtra(REFRESH_SERVER_INTENT, gson.toJson(refreshDropBoxServer))
+                startActivity(intent)
             }
         }
         //todo Observer shared live data call submitreport

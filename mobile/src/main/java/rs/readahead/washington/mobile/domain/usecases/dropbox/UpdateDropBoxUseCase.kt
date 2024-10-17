@@ -7,14 +7,15 @@ import rs.readahead.washington.mobile.domain.usecases.base.SingleUseCase
 import rs.readahead.washington.mobile.views.fragment.dropbox.di.DropBox
 import javax.inject.Inject
 
-class UpdateDropBoxUseCase @Inject constructor(@DropBox private val dropBoxRepository: ITellaDropBoxRepository) :
+class UpdateDropBoxUseCase @Inject constructor(private val dropBoxRepository: ITellaDropBoxRepository) :
     SingleUseCase<DropBoxServer>() {
-       private lateinit var  serverDropBoxServer: DropBoxServer
+    private lateinit var serverDropBoxServer: DropBoxServer
 
-       public fun setDropBox(server: DropBoxServer)  {
-           serverDropBoxServer = server
-       }
+    fun setDropBox(server: DropBoxServer) {
+        serverDropBoxServer = server
+    }
+
     override fun buildUseCaseSingle(): Single<DropBoxServer> {
-         return  dropBoxRepository.saveDropBoxServer(serverDropBoxServer)
+        return dropBoxRepository.saveDropBoxServer(serverDropBoxServer)
     }
 }
