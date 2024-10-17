@@ -64,6 +64,10 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
                         handleBackButton()
                     }
 
+                    EntityStatus.SUBMISSION_PENDING -> {
+                        viewModel.saveOutbox(entity)
+                    }
+
                     else -> {
                         this@DropBoxSendFragment.reportInstance = entity
                     }
@@ -77,7 +81,6 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
                 startActivity(intent)
             }
         }
-        //todo Observer shared live data call submitreport
 
         refreshTokenServer.observe(viewLifecycleOwner){
             reportInstance?.let { viewModel.submitReport(it,false) }

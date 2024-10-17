@@ -305,6 +305,8 @@ class DropBoxViewModel @Inject constructor(
 
             if (!statusProvider.isOnline()) {
                 updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+                instanceProgress.postValue(instance)
+                return@execute
             }
 
             if (instance.reportApiId.isEmpty()) {
