@@ -65,45 +65,63 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
     }
 
     override fun uploadFileWithProgress(
-        client: DbxClientV2, folderPath: String, mediaFile: FormMediaFile
+        client: DbxClientV2,
+        folderPath: String,
+        mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-
             try {
-                // Prepare the InputStream for the file
+                // Create the request body with progress tracking
                 val requestBody = SkippableMediaFileRequestBody(
-                    mediaFile, // The file to be uploaded
-                    0L
-                ) // Starting from the beginning
-                { currentProgress: Long, _ ->
-                    // Emit progress updates
+                    mediaFile,
+                    0L // Start from the beginning
+                ) { currentProgress: Long, _ ->
                     emitter.onNext(UploadProgressInfo(mediaFile, currentProgress, mediaFile.size))
                 }
 
-                // Create the full path for the file in Dropbox
-                val filePath = "$folderPath/${mediaFile.name}" // Full path for the file
+                val bufferSize = 1024 * 1024 // 1MB buffer for efficient reading
+                val inputStream = requestBody.publicInputStream.buffered(bufferSize)
 
-                // Create an upload builder for the file
-                val uploadBuilder =
-                    client.files().uploadBuilder(filePath).withMode(WriteMode.OVERWRITE)
+                // Full file path in Dropbox
+                val filePath = "$folderPath/${mediaFile.name}"
 
-                // Upload the file using the request body
-                uploadBuilder.uploadAndFinish(requestBody.publicInputStream)
+                // Create upload builder for Dropbox
+                val uploadBuilder = client.files()
+                    .uploadBuilder(filePath)
+                    .withMode(WriteMode.OVERWRITE)
 
-                // Emit final progress for this file as complete emitter.onNext(
-                UploadProgressInfo(
-                    mediaFile, mediaFile.size, UploadProgressInfo.Status.FINISHED
+                // Track time for emitting progress updates
+                var lastEmittedTime = 0L
+
+                // Upload file and track progress
+                uploadBuilder.uploadAndFinish(inputStream) { bytesUploaded: Long ->
+                    val currentProgress = bytesUploaded
+                    val fileSize = mediaFile.size
+
+                    // Emit progress updates every 500ms
+                    if (System.currentTimeMillis() - lastEmittedTime > 500) {
+                        lastEmittedTime = System.currentTimeMillis()
+                        emitter.onNext(UploadProgressInfo(mediaFile, currentProgress, fileSize))
+                    }
+                }
+
+                // Emit final progress and completion
+                emitter.onNext(
+                    UploadProgressInfo(
+                        mediaFile,
+                        mediaFile.size,
+                        UploadProgressInfo.Status.FINISHED
+                    )
                 )
-
-                // Complete the Flowable emission
                 emitter.onComplete()
+
             } catch (e: Exception) {
-                // Emit error in case of failure
+                // Handle errors
                 Timber.e(e, "Error uploading file: ${mediaFile.name}")
                 emitter.onError(e)
             }
-
-        }, BackpressureStrategy.BUFFER) // Use BUFFER strategy for backpressure management
+        }, BackpressureStrategy.LATEST) // Emit only the latest progress update
     }
+
 
 }

@@ -310,7 +310,7 @@ class DropBoxViewModel @Inject constructor(
             if (instance.reportApiId.isEmpty()) {
                 createFolderAndSubmitFiles(instance, result.first())
             } else if (instance.status != EntityStatus.SUBMITTED) {
-                // submitFiles(instance, result.first(), instance.reportApiId, dbxClient = )
+               // submitFiles(instance, result.first(), instance.reportApiId)
             }
         }, onError = { error ->
             _error.postValue(error)
@@ -378,7 +378,6 @@ class DropBoxViewModel @Inject constructor(
             return
         }
 
-        // val dbxClient = createDropboxClient(server)
 
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
