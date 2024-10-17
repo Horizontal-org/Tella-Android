@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.views.fragment.dropbox
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
@@ -298,6 +297,7 @@ class DropBoxViewModel @Inject constructor(
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
+
         getReportsServersUseCase.execute(onSuccess = { result ->
             if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
                 updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
@@ -310,9 +310,25 @@ class DropBoxViewModel @Inject constructor(
             }
 
             if (instance.reportApiId.isEmpty()) {
+                // If reportApiId is empty, create a folder and submit files
                 createFolderAndSubmitFiles(instance, result.first())
             } else if (instance.status != EntityStatus.SUBMITTED) {
-               // submitFiles(instance, result.first(), instance.reportApiId)
+                disposables.add(
+                    dropBoxRepository.createDropboxClient(result.first())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ dbxClient ->
+                            submitFiles(instance, instance.reportApiId, dbxClient)
+                        }, { error ->
+                            if (error is InvalidTokenException) {
+                                if (statusProvider.isOnline()) {
+                                    _tokenExpired.postValue(RefreshDropBoxServer(true,  result.first()))
+                                }
+                            } else {
+                                handleSubmissionError(instance, error) // Handle other errors
+                            }
+                        })
+                )
             }
         }, onError = { error ->
             _error.postValue(error)
@@ -351,7 +367,7 @@ class DropBoxViewModel @Inject constructor(
                     // Folder creation successful, now update instance and submit files
                     instance.reportApiId = folderId
                     updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
-                    submitFiles(instance, server, folderId, dbxClient)
+                    submitFiles(instance, folderId, dbxClient)
                 }, { error ->
                     if (error is InvalidTokenException) {
                         if (statusProvider.isOnline()) {
@@ -373,7 +389,7 @@ class DropBoxViewModel @Inject constructor(
 
 
     private fun submitFiles(
-        instance: ReportInstance, server: DropBoxServer, folderPath: String, dbxClient: DbxClientV2
+        instance: ReportInstance, folderPath: String, dbxClient: DbxClientV2
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
