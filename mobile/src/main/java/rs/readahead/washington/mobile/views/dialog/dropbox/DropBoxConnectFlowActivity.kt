@@ -26,7 +26,7 @@ class DropBoxConnectFlowActivity : BaseActivity() {
 
     private val viewModel by viewModels<DropBoxConnectFlowViewModel>()
 
-    private lateinit var refreshDropBoxServer: RefreshDropBoxServer
+    private var refreshDropBoxServer = RefreshDropBoxServer(false, DropBoxServer())
 
     private fun initView() {
         intent.getStringExtra(REFRESH_SERVER_INTENT)?.let {

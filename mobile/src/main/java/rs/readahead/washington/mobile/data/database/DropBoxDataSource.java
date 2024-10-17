@@ -19,6 +19,7 @@ import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import rs.readahead.washington.mobile.domain.entity.EntityStatus;
+import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
@@ -55,10 +56,10 @@ public class DropBoxDataSource implements ITellaDropBoxRepository, ITellaReports
     @NonNull
     @Override
     public Single<DropBoxServer> saveDropBoxServer(@NonNull DropBoxServer server) {
-        return Single.fromCallable(() -> updateDropBoxServer(server)).compose(applySchedulers());
+        return Single.fromCallable(() -> saveServer(server)).compose(applySchedulers());
     }
 
-    private DropBoxServer updateDropBoxServer(DropBoxServer server) {
+    private DropBoxServer saveServer(DropBoxServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_DROPBOX_SERVER_NAME, server.getName());
@@ -185,5 +186,18 @@ public class DropBoxDataSource implements ITellaDropBoxRepository, ITellaReports
 
     private List<ReportInstance> getSubmittedReportInstances() {
         return dataBaseUtils.getReportFormInstances(new EntityStatus[]{EntityStatus.SUBMITTED}, D.T_DROPBOX_FORM_INSTANCE, D.T_DROPBOX);
+    }
+
+    @NonNull
+    @Override
+    public Single<DropBoxServer> updateDropBoxServer(@NonNull DropBoxServer server) {
+        return Single.fromCallable(() -> updateServer(server)).compose(applySchedulers());
+    }
+
+    private DropBoxServer updateServer(final DropBoxServer server) {
+        ContentValues values = new ContentValues();
+        values.put(D.C_DROPBOX_ACCESS_TOKEN, server.getToken());
+        database.update(D.T_DROPBOX, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
+        return server;
     }
 }
