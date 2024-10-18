@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +29,8 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     protected abstract fun initData()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
 
+    private var visibilityHandler: EmptyMessageVisibilityHandler? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -36,6 +39,18 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         observeViewModel()
         setUpRecyclerView()
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Ensure the parent fragment implements the EmptyMessageVisibilityHandler interface
+        visibilityHandler = parentFragment as? EmptyMessageVisibilityHandler
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        visibilityHandler = null
+    }
+
 
     private fun setUpRecyclerView() {
         binding.draftsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -81,7 +96,7 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         } else {
             entityAdapter.setEntities(reports)
             binding.draftsRecyclerView.show()
-            binding.textViewEmpty.hide()
+            visibilityHandler?.setEmptyTextViewMessageVisibility(false)
         }
     }
 
@@ -99,9 +114,7 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     }
 
     private fun showEmptyMessage() {
-        binding.textViewEmpty.setText(getString(getEmptyMessage()))
-        binding.textViewEmpty.setTopIcon(getEmptyMessageIcon())
-        binding.textViewEmpty.visibility = View.VISIBLE
+        visibilityHandler?.setEmptyTextViewMessageVisibility(true)
         binding.draftsRecyclerView.visibility = View.GONE
     }
 

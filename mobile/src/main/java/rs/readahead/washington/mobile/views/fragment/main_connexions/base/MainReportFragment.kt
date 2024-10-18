@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
 import android.os.Bundle
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.MainReportConnexionBinding
@@ -13,7 +14,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBck
 
 abstract class MainReportFragment :
     BaseBindingFragment<MainReportConnexionBinding>(MainReportConnexionBinding::inflate),
-    OnNavBckListener {
+    OnNavBckListener, EmptyMessageVisibilityHandler {
 
     protected abstract val viewModel: BaseReportsViewModel
 
@@ -28,6 +29,8 @@ abstract class MainReportFragment :
         super.onViewCreated(view, savedInstanceState)
         initView()
     }
+
+    protected abstract fun getEmptyMessageIcon(): Int
 
     private fun initView() {
         if (isViewInitialized) {
@@ -62,31 +65,29 @@ abstract class MainReportFragment :
 
             updateOutboxTitle.observe(viewLifecycleOwner) { outBoxesSize ->
                 binding.viewPagerComponent.updateTabTitle(
-                    OUTBOX_LIST_PAGE_INDEX,
-                    outBoxesSize
+                    OUTBOX_LIST_PAGE_INDEX, outBoxesSize
                 )
             }
 
             updateSubmittedTitle.observe(viewLifecycleOwner) { outBoxesSize ->
                 binding.viewPagerComponent.updateTabTitle(
-                    SUBMITTED_LIST_PAGE_INDEX,
-                    outBoxesSize
+                    SUBMITTED_LIST_PAGE_INDEX, outBoxesSize
                 )
             }
 
             viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
                 binding.viewPagerComponent.updateTabTitle(
-                    OUTBOX_LIST_PAGE_INDEX,
-                    reportCounts.outboxCount
+                    OUTBOX_LIST_PAGE_INDEX, reportCounts.outboxCount
                 )
 
                 binding.viewPagerComponent.updateTabTitle(
-                    SUBMITTED_LIST_PAGE_INDEX,
-                    reportCounts.submittedCount
+                    SUBMITTED_LIST_PAGE_INDEX, reportCounts.submittedCount
                 )
             }
 
         }
+
+        setUpEmptyTextViewMessage()
     }
 
     private fun setCurrentTab(position: Int) {
@@ -97,8 +98,39 @@ abstract class MainReportFragment :
         }
     }
 
+    private fun setUpEmptyTextViewMessage() {
+        binding.viewPagerComponent.getViewPager()
+            .registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    setUpEmptyTextViewMessage(position)
+                }
+            })
+    }
+
+    private fun setUpEmptyTextViewMessage(position: Int) {
+        when (position) {
+            DRAFT_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
+                getString(R.string.Drafts_Reports_Empty_Message), getEmptyMessageIcon()
+            )
+
+            OUTBOX_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
+                getString(R.string.Outbox_Reports_Empty_Message), getEmptyMessageIcon()
+            )
+
+            SUBMITTED_LIST_PAGE_INDEX -> binding.viewPagerComponent.setCenterMessageImg(
+                getString(R.string.Submitted_Reports_Empty_Message), getEmptyMessageIcon()
+            )
+        }
+    }
+
+
     override fun onBackPressed(): Boolean {
         back()
         return true
+    }
+
+    override fun setEmptyTextViewMessageVisibility(isVisible: Boolean) {
+        binding.viewPagerComponent.setEmptyTextViewMessageVisibility(isVisible)
     }
 }

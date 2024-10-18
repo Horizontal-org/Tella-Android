@@ -35,6 +35,10 @@ class ReportTabsFragment : MainReportFragment() {
         scheduleWorker()
     }
 
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_reports
+    }
+
     private fun scheduleWorker() {
         val constraints =
             Constraints.Builder()

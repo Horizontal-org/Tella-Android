@@ -23,4 +23,8 @@ internal class DropBoxTabsFragment : MainReportFragment() {
         this.navManager().navigateFromDropBoxScreenToNewDropBoxScreen()
     }
 
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_dropbox_logo
+    }
+
 }
