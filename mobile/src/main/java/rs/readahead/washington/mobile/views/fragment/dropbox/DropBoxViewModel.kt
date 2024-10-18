@@ -322,7 +322,12 @@ class DropBoxViewModel @Inject constructor(
                         }, { error ->
                             if (error is InvalidTokenException) {
                                 if (statusProvider.isOnline()) {
-                                    _tokenExpired.postValue(RefreshDropBoxServer(true,  result.first()))
+                                    _tokenExpired.postValue(
+                                        RefreshDropBoxServer(
+                                            true,
+                                            result.first()
+                                        )
+                                    )
                                 }
                             } else {
                                 handleSubmissionError(instance, error) // Handle other errors
@@ -354,7 +359,11 @@ class DropBoxViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io()) // Perform on IO thread
                 .flatMap { dbxClient ->
                     // If token is valid, create folder and submit files
-                    dropBoxRepository.createDropboxFolder(dbxClient, instance.title)
+                    dropBoxRepository.createDropboxFolder(
+                        dbxClient,
+                        instance.title,
+                        instance.description
+                    )
                         .map { folderId ->
                             Pair(
                                 dbxClient,

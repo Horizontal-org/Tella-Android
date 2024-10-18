@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.data.dropbox
 import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
+import com.dropbox.core.v2.fileproperties.PropertyField
 import com.dropbox.core.v2.files.WriteMode
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -41,7 +42,11 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
         }
     }
 
-    override fun createDropboxFolder(client: DbxClientV2, folderName: String): Single<String> {
+    override fun createDropboxFolder(
+        client: DbxClientV2,
+        folderName: String,
+        description: String // Add description parameter
+    ): Single<String> {
         return Single.create { emitter ->
             try {
                 // Create the folder path
@@ -50,7 +55,23 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
 
                 // Emit the folder path on success or handle possible null value
                 folderMetadata.metadata.pathLower?.let { path ->
-                    emitter.onSuccess(path)
+                    try {
+                        // Create description file content
+                        val descriptionFileName = "description.txt"
+                        val descriptionFilePath = "$folderPath/$descriptionFileName"
+                        val descriptionInputStream = description.byteInputStream()
+
+                        // Upload the description file to Dropbox
+                        client.files().uploadBuilder(descriptionFilePath)
+                            .withMode(WriteMode.OVERWRITE)
+                            .uploadAndFinish(descriptionInputStream)
+
+                        // Emit success after creating folder and description file
+                        emitter.onSuccess(path)
+                    } catch (e: Exception) {
+                        // Handle error while uploading description file
+                        emitter.onError(Exception("Failed to create description file: ${e.message}", e))
+                    }
                 } ?: run {
                     emitter.onError(Exception("Failed to create folder: Path is null"))
                 }
@@ -67,7 +88,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
     override fun uploadFileWithProgress(
         client: DbxClientV2,
         folderPath: String,
-        mediaFile: FormMediaFile
+        mediaFile: FormMediaFile,
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
@@ -89,6 +110,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                 val uploadBuilder = client.files()
                     .uploadBuilder(filePath)
                     .withMode(WriteMode.OVERWRITE)
+
 
                 // Track time for emitting progress updates
                 var lastEmittedTime = 0L
