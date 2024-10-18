@@ -7,12 +7,12 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -64,18 +64,13 @@ abstract class BaseReportSubmittedFragment :
     }
 
     private fun showDeleteBottomSheet(entityInstance: ReportInstance) {
-        BottomSheetUtils.showConfirmSheet(
+        showStandardSheet(
             baseActivity.supportFragmentManager,
-            entityInstance.title,
             getString(R.string.Delete_Report_Confirmation),
+            getString(R.string.action_delete) + " \"" + entityInstance.title + "\"?",
             getString(R.string.action_yes),
-            getString(R.string.action_no), consumer = object : BottomSheetUtils.ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    if (isConfirmed) {
-                        viewModel.deleteReport(entityInstance)
-                    }
-                }
-            })
+            getString(R.string.action_cancel),
+            { viewModel.deleteReport(entityInstance) })
     }
 
     private fun showFormEndView() {
