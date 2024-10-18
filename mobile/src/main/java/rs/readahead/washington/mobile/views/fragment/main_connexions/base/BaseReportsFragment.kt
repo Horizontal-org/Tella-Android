@@ -24,6 +24,7 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     // Child classes provide the specific ViewModel through this method
     protected abstract fun getViewModel(): VM
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
+    protected abstract fun getHeaderRecyclerViewMessage(): Int
     protected abstract fun getEmptyMessageIcon(): Int
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
     protected abstract fun initData()
@@ -94,7 +95,11 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         if (reports.isEmpty()) {
             showEmptyMessage()
         } else {
-            entityAdapter.setEntities(reports)
+            entityAdapter.setEntities(
+                reports, if (getHeaderRecyclerViewMessage() != -1) {
+                    getString(getHeaderRecyclerViewMessage())
+                } else ""
+            )
             binding.draftsRecyclerView.show()
             visibilityHandler?.setEmptyTextViewMessageVisibility(false)
         }

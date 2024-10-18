@@ -33,6 +33,10 @@ class SubmittedDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
         return string.Submitted_Reports_Empty_Message
     }
 
+    override fun getHeaderRecyclerViewMessage(): Int {
+        return -1
+    }
+
     override fun getEmptyMessageIcon(): Int {
         return R.drawable.ic_dropbox_logo
     }

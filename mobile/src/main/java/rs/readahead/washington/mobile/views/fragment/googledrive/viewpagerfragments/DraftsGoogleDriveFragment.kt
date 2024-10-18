@@ -24,6 +24,10 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
         return R.string.Uwazi_Draft_Entities_Empty_Description
     }
 
+    override fun getHeaderRecyclerViewMessage(): Int {
+        return R.string.Drafts_Header_Message
+    }
+
     override fun getEmptyMessageIcon(): Int {
         return R.drawable.ic_google_drive
     }
