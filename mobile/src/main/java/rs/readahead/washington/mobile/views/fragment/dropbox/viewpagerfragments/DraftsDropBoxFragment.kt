@@ -25,7 +25,7 @@ class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_dropbox_logo_white
+        return R.drawable.ic_dropbox_logo
     }
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {

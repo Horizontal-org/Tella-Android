@@ -352,7 +352,6 @@ class DropBoxViewModel @Inject constructor(
         )
     }
 
-
     private fun createFolderAndSubmitFiles(instance: ReportInstance, server: DropBoxServer) {
         disposables.add(
             dropBoxRepository.createDropboxClient(server)
@@ -361,7 +360,7 @@ class DropBoxViewModel @Inject constructor(
                     // If token is valid, create folder and submit files
                     dropBoxRepository.createDropboxFolder(
                         dbxClient,
-                        instance.title,
+                        instance.title.trim(),
                         instance.description
                     )
                         .map { folderId ->
@@ -386,7 +385,6 @@ class DropBoxViewModel @Inject constructor(
                         handleSubmissionError(instance, error)
                     }
                     // Handle any error (token validation, folder creation, etc.)
-
                 })
         )
     }
@@ -396,7 +394,6 @@ class DropBoxViewModel @Inject constructor(
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
     }
 
-
     private fun submitFiles(
         instance: ReportInstance, folderPath: String, dbxClient: DbxClientV2
     ) {
@@ -404,7 +401,6 @@ class DropBoxViewModel @Inject constructor(
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
             return
         }
-
 
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
