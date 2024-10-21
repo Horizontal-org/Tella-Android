@@ -2,7 +2,8 @@
 <resources>
     <string name="api_base_url" translatable="false">https://www.hzontal.org/rest/v1/</string>
     <!-- todo: make this version enabled -->
-    <string name="config_faq_url" translatable="false">https://docs.tella-app.org</string>
+    <string name="config_tutorial_url" translatable="false">https://tella-app.org/get-started-android/</string>
+    <string name="config_faq_url" translatable="false">https://tella-app.org/faq/</string>
     <string name="config_contact_url" translatable="false">mailto:contact@tella-app.org</string>
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy</string>
     <string name="config_feedback_url" translatable="false">https://tella-app.org/features#feedback</string>
