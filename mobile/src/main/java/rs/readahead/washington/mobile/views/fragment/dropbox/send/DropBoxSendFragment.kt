@@ -47,7 +47,7 @@ class DropBoxSendFragment : BaseReportsSendFragment() {
                 when (entity.status) {
                     EntityStatus.SUBMITTED -> {
                         viewModel.saveSubmitted(entity)
-                        baseActivity.divviupUtils.runGoogleDriveEvent()
+                        baseActivity.divviupUtils.runDropBoxEvent()
                     }
 
                     EntityStatus.FINALIZED -> {

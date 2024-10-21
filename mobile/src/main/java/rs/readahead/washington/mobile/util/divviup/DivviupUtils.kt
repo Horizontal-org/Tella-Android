@@ -39,6 +39,24 @@ class DivviupUtils @Inject constructor(private val context: Context) {
         }
     }
 
+    fun runDropBoxEvent() {
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
+        ioScope.launch {
+            try {
+                sendCountMeasurement(
+                    taskId = R.string.divviup_count_drop_box_sent_id,
+                    leader = R.string.divviup_leader,
+                    helper = R.string.divviup_helper,
+                    timePrecision = R.integer.divviup_count_unlocks_timePrecisionSeconds,
+                    isCount = true
+                )
+                Timber.d("Divviup runDropBoxEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runDropBoxEvent failed")
+            }
+        }
+    }
+
     fun runUwaziSentEvent() {
         if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {
