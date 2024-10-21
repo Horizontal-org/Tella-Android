@@ -99,7 +99,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding = ActivityDocumentationSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings));
+        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
 
         binding.toolbar.setBackClickListener(() -> {

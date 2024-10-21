@@ -20,7 +20,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp" />
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+         <!--   app:rightIcon="@drawable/orange_help_24" -->
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -73,7 +75,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="start"
                                 android:padding="2dp"
-                                android:text="@string/settings.servers.title_server.settings"
+                                android:text="@string/settings.servers.title_server.settings2"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -82,7 +84,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="2dp"
-                                android:text="@string/settings.servers.add_server.expl" />
+                                android:text="@string/settings.servers.add_server.expl2" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 

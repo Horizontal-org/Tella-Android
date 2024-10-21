@@ -48,7 +48,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="start"
                             android:padding="2dp"
-                            android:text="@string/settings.servers.title_server.settings"
+                            android:text="@string/settings.servers.title_server.settings2"
                             android:textStyle="bold" />
 
                         <TextView
@@ -57,7 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="2dp"
-                            android:text="@string/settings.servers.add_server.expl" />
+                            android:text="@string/settings.servers.add_server.expl2" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -68,7 +68,7 @@
                         android:layout_gravity="center"
                         android:layout_margin="2dp"
                         android:layout_weight=".15"
-                        android:contentDescription="@string/settings.servers.add_server.expl"
+                        android:contentDescription="@string/settings.servers.add_server.expl2"
                         android:src="@drawable/ic_add_circle_outline_24_orange" />
                 </LinearLayout>
 
