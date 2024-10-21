@@ -2236,6 +2236,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_REPORT_FILES_UPLOAD);
         deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
         deleteTable(D.T_RESOURCES);
+
+        deleteTable(D.T_GOOGLE_DRIVE);
+        deleteTable(D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+        deleteTable(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+
+        deleteTable(D.T_DROPBOX);
+        deleteTable(D.T_DROPBOX_FORM_INSTANCE);
+        deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
     }
 
     public void deleteFormsAndRelatedTables() {
