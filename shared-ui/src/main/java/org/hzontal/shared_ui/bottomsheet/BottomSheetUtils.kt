@@ -232,8 +232,8 @@ object BottomSheetUtils {
                         button.tag = option.key
                         button.setText(option.value)
                         radioGroup.addView(button)
+                        radioGroup.check(button.id)
                     }
-
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
