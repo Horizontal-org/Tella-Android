@@ -326,8 +326,4 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     public Configuration getWorkManagerConfiguration() {
         return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
     }
-
-    private void initializeGoogleDrive(){
-        //Auth
-    }
 }
