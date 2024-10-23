@@ -6,24 +6,8 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.android.Auth
 
 class DropboxOAuthUtil(
-    private val dropboxCredentialUtil: DropboxCredentialUtil,
     private val dropboxAppConfig: DropboxAppConfig
 ) {
-    fun showWarningDialogIfAppKeyNotSet(context: Context) {
-        if (dropboxAppConfig.apiKey == "PUT_YOUR_APP_KEY_HERE") {
-            AlertDialog.Builder(context)
-                .setTitle("API KEY Required")
-                .setMessage(
-                    """
-                    You must specify a value for DROPBOX_APP_KEY in examples/android/local.properties.
-                    
-                    You can register an application and obtain an API key at https://developers.dropbox.com/
-                    """.trimIndent()
-                )
-                .create()
-                .show()
-        }
-    }
 
     var isAwaitingResult: Boolean = false
 
@@ -61,20 +45,6 @@ class DropboxOAuthUtil(
     fun startDropboxAuthorizationOAuth2(context: Context) {
         Auth.startOAuth2Authentication(context, dropboxAppConfig.apiKey)
         isAwaitingResult = true
-    }
-
-
-    /**
-     * Call this from onResume() in the activity you are awaiting an Auth Result
-     */
-    fun onResume() {
-        if (isAwaitingResult) {
-            val authDbxCredential = Auth.getDbxCredential() //fetch the result from the AuthActivity
-            isAwaitingResult = false
-            if (authDbxCredential != null) {
-                dropboxCredentialUtil.storeCredentialLocally(authDbxCredential)
-            }
-        }
     }
 
 }

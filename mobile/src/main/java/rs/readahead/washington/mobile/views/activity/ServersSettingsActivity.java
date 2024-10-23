@@ -673,7 +673,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     getString(R.string.action_delete),
                     getString(R.string.action_cancel),
                     -1,
-                    !(server instanceof GoogleDriveServer)
+                    !(server instanceof GoogleDriveServer || server instanceof DropBoxServer)
             ));
         }
         item.setTag(servers.indexOf(server));

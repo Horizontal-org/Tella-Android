@@ -11,7 +11,7 @@ import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.mvp.contract.IDropBoxServersPresenterContract
 
-class DropBoxServersPresenter (var view: IDropBoxServersPresenterContract.IView) :
+class DropBoxServersPresenter(var view: IDropBoxServersPresenterContract.IView) :
     IDropBoxServersPresenterContract.IPresenter {
 
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()

@@ -355,7 +355,7 @@ class DropBoxViewModel @Inject constructor(
     private fun createFolderAndSubmitFiles(instance: ReportInstance, server: DropBoxServer) {
         disposables.add(
             dropBoxRepository.createDropboxClient(server)
-                .subscribeOn(Schedulers.io()) // Perform on IO thread
+                .subscribeOn(Schedulers.io())
                 .flatMap { dbxClient ->
                     // If token is valid, create folder and submit files
                     dropBoxRepository.createDropboxFolder(

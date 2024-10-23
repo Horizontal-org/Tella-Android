@@ -8,7 +8,6 @@ import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
-import rs.readahead.washington.mobile.views.activity.viewer.sharedViewModel
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity
 import rs.readahead.washington.mobile.views.dialog.dropbox.utils.DropboxOAuthUtil
 import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel

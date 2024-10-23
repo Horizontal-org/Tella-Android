@@ -14,9 +14,7 @@ public class KeyDataSource {
     private final AsyncSubject<ResourceDataSource> asyncResourceSubject;
     private final AsyncSubject<GoogleDriveDataSource> asyncGoogleDriveSubject;
     private final AsyncSubject<DropBoxDataSource> asyncDropBoxSubject;
-
     private final Context context;
-
 
     public KeyDataSource(Context context) {
         this.context = context.getApplicationContext();
@@ -63,6 +61,7 @@ public class KeyDataSource {
     public Observable<GoogleDriveDataSource> getGoogleDriveDataSource() {
         return asyncGoogleDriveSubject;
     }
+
     public Observable<DropBoxDataSource> getDropBoxDataSource() {
         return asyncDropBoxSubject;
     }
