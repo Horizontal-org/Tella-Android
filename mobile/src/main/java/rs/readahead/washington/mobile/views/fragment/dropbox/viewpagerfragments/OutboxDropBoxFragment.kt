@@ -35,7 +35,7 @@ class OutboxDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
     }
 
     override fun getHeaderRecyclerViewMessage(): Int {
-        return R.string.Outbox_Reports_Empty_Message
+       return R.string.Outboxes_Header_Message
     }
 
     override fun getEmptyMessageIcon(): Int {
