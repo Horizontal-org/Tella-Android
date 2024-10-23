@@ -3,7 +3,6 @@ package rs.readahead.washington.mobile.data.dropbox
 import com.dropbox.core.DbxException
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.fileproperties.PropertyField
 import com.dropbox.core.v2.files.WriteMode
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -26,7 +25,6 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                 val config = DbxRequestConfig.newBuilder("dropbox/tella").build()
                 val dbxClient = DbxClientV2(config, accessToken)
                 val account = dbxClient.users().currentAccount
-                // dbxClient.auth().tokenRevoke()
                 if (account != null) {
                     emitter.onSuccess(dbxClient)
                 } else {
@@ -117,13 +115,12 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
 
                 // Upload file and track progress
                 uploadBuilder.uploadAndFinish(inputStream) { bytesUploaded: Long ->
-                    val currentProgress = bytesUploaded
                     val fileSize = mediaFile.size
 
                     // Emit progress updates every 500ms
                     if (System.currentTimeMillis() - lastEmittedTime > 500) {
                         lastEmittedTime = System.currentTimeMillis()
-                        emitter.onNext(UploadProgressInfo(mediaFile, currentProgress, fileSize))
+                        emitter.onNext(UploadProgressInfo(mediaFile, bytesUploaded, fileSize))
                     }
                 }
 
@@ -144,6 +141,5 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
             }
         }, BackpressureStrategy.LATEST) // Emit only the latest progress update
     }
-
 
 }
