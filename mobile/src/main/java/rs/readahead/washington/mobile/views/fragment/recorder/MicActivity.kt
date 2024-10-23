@@ -7,20 +7,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -31,30 +27,19 @@ import rs.readahead.washington.mobile.mvp.contract.IMetadataAttachPresenterContr
 import rs.readahead.washington.mobile.mvp.presenter.MetadataAttacher
 import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.StringUtils
-import rs.readahead.washington.mobile.views.activity.MainActivity
+import rs.readahead.washington.mobile.views.activity.MetadataActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.viewer.toolBar
-import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
-import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
-import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
-import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-
-const val TIME_FORMAT: String = "%02d:%02d"
-const val COLLECT_ENTRY = "collect_entry"
-const val REPORT_ENTRY = "report_entry"
-const val UPDATE_SPACE_TIME_MS: Long = 60000
-
 @AndroidEntryPoint
-class MicFragment : MetadataBaseLockFragment(),
-    IMetadataAttachPresenterContract.IView, OnNavBckListener {
+class MicActivity : MetadataActivity(),
+    IMetadataAttachPresenterContract.IView {
 
     private var animator: ObjectAnimator? = null
     private var isCollect: Boolean = false
@@ -72,18 +57,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private var callback: VerificationWorkStatusCallback? = null
 
-    companion object {
-        @JvmStatic
-        fun newInstance(value: Boolean, currentId: String?) =
-            MicFragment().apply {
-                arguments = Bundle().apply {
-                    putBoolean(COLLECT_ENTRY, value)
-                    putBoolean(REPORT_ENTRY, value)
-                    putString(VAULT_CURRENT_ROOT_PARENT, currentId)
-                }
-            }
-    }
-
     private lateinit var metadataAttacher: MetadataAttacher
     private lateinit var mRecord: ImageButton
     private lateinit var mPlay: ImageButton
@@ -94,58 +67,54 @@ class MicFragment : MetadataBaseLockFragment(),
     private lateinit var recordingName: TextView
     private var currentRootParent: String? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_mic, container, false)
-        initView(view)
-        return view
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            isCollect = it.getBoolean(COLLECT_ENTRY)
-            isReport = it.getBoolean(REPORT_ENTRY)
-            currentRootParent = it.getString(VAULT_CURRENT_ROOT_PARENT)
+        setContentView(R.layout.fragment_mic) // Set your activity layout here
+
+        if (intent != null) {
+            isCollect = intent.getBooleanExtra(COLLECT_ENTRY, false)
+            isReport = intent.getBooleanExtra(REPORT_ENTRY, false)
+            currentRootParent = intent.getStringExtra(VAULT_CURRENT_ROOT_PARENT)
         }
+
+        initView()
+
+        handleBackStack()
     }
 
-    fun initView(view: View) {
-        mRecord = view.findViewById(R.id.record_audio)
-        mPlay = view.findViewById(R.id.play_audio)
-        mPause = view.findViewById(R.id.stop_audio)
-        mTimer = view.findViewById(R.id.audio_time)
-        freeSpace = view.findViewById(R.id.free_space)
-        redDot = view.findViewById(R.id.red_dot)
-        recordingName = view.findViewById(R.id.rec_name)
-        toolBar = view.findViewById(R.id.toolbar)
+    fun initView() {
+        mRecord = findViewById(R.id.record_audio)
+        mPlay = findViewById(R.id.play_audio)
+        mPause = findViewById(R.id.stop_audio)
+        mTimer = findViewById(R.id.audio_time)
+        freeSpace = findViewById(R.id.free_space)
+        redDot = findViewById(R.id.red_dot)
+        recordingName = findViewById(R.id.rec_name)
+        toolBar = findViewById(R.id.toolbar)
 
         if (isCollect || isReport || currentRootParent?.isNotEmpty() == true) {
             mPlay.visibility = View.GONE
-            val activity = activity as IMainNavigationInterface
-            activity.hideBottomNavigation()
         }
 
         if (currentRootParent?.isNotEmpty() == true) {
             toolBar.navigationIcon =
-                activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_close_white) }
+                ContextCompat.getDrawable(this, R.drawable.ic_close_white)
 
             // Set a click listener for the navigation icon
             toolBar.setNavigationOnClickListener {
                 // Handle back or close action here
-                activity?.supportFragmentManager?.popBackStack()
+                finish()
 
             }
         }
 
         mRecord.setOnClickListener {
             if (notRecording) {
-                if (hastRecordingPermissions(requireContext())) {
+                if (hastRecordingPermissions(this)) {
                     handleRecord()
                 } else {
-                    metadataActivity.maybeChangeTemporaryTimeout()
+                    maybeChangeTemporaryTimeout()
                     requestRecordingPermissions(RECORD_REQUEST_CODE)
                 }
             } else {
@@ -156,11 +125,11 @@ class MicFragment : MetadataBaseLockFragment(),
         updateRecordingName()
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
-                metadataActivity.supportFragmentManager,
+               supportFragmentManager,
                 getString(R.string.mic_rename_recording),
                 getString(R.string.action_cancel),
                 getString(R.string.action_ok),
-                requireActivity(),
+                this,
                 recordingName.text.toString()
             ) { it1 -> updateRecordingName(it1) }
         }
@@ -174,7 +143,7 @@ class MicFragment : MetadataBaseLockFragment(),
         notRecording = true
 
         animator = AnimatorInflater.loadAnimator(
-            metadataActivity,
+            this,
             R.animator.fade_in
         ) as ObjectAnimator
 
@@ -184,26 +153,26 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun initObservers() {
-        viewModel.durationLiveData.observe(viewLifecycleOwner, ::onDurationUpdate)
-        viewModel.recordingStoppedLiveData.observe(viewLifecycleOwner, ::onRecordingStopped)
-        viewModel.availableStorageLiveData.observe(viewLifecycleOwner, ::onAvailableStorage)
-        viewModel.recordingErrorLiveData.observe(viewLifecycleOwner, ::onRecordingError)
+        viewModel.durationLiveData.observe(this, ::onDurationUpdate)
+        viewModel.recordingStoppedLiveData.observe(this, ::onRecordingStopped)
+        viewModel.availableStorageLiveData.observe(this, ::onAvailableStorage)
+        viewModel.recordingErrorLiveData.observe(this, ::onRecordingError)
         viewModel.mediaFilesUploadScheduleError.observe(
-            viewLifecycleOwner,
+            this,
             ::onMediaFilesUploadScheduleError
         )
-        viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
+        viewModel.addingInProgress.observe(this) { isAdding ->
             callback?.setBackgroundWorkStatus(isAdding && !Preferences.isAnonymousMode())
         }
     }
 
     private fun handleBackStack() {
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        onBackPressedDispatcher.addCallback(
+            this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (!Preferences.isAnonymousMode() && isAddingInProgress) {
-                        BottomSheetUtils.showConfirmSheet(fragmentManager = activity?.supportFragmentManager!!,
+                        BottomSheetUtils.showConfirmSheet(fragmentManager = supportFragmentManager,
                             getString(R.string.exit_and_discard_verification_info),
                             getString(R.string.recording_in_progress_exit_warning),
                             getString(R.string.exit_and_discard_info),
@@ -219,34 +188,21 @@ class MicFragment : MetadataBaseLockFragment(),
             })
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is VerificationWorkStatusCallback) {
-            callback = context
-        } else {
-            throw RuntimeException("$context must implement BackgroundWorkStatusCallback")
-        }
-    }
-
     override fun onStart() {
         super.onStart()
-        metadataActivity.startLocationMetadataListening()
+        startLocationMetadataListening()
     }
 
     override fun onStop() {
-        metadataActivity.stopLocationMetadataListening()
+        stopLocationMetadataListening()
         super.onStop()
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         if (isCollect) {
             val activity = context as ICollectEntryInterface
             activity.stopWaitingForData()
         }
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
         animator?.end()
         animator = null
         cancelRecorder()
@@ -256,9 +212,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
     override fun onResume() {
         super.onResume()
-        if (!isCollect) {
-            (metadataActivity as MainActivity).selectNavMic()
-        }
         viewModel.checkAvailableStorage()
     }
 
@@ -269,6 +222,7 @@ class MicFragment : MetadataBaseLockFragment(),
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @SuppressLint("NewApi")
     private fun requestRecordingPermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
@@ -292,7 +246,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun onDurationUpdate(duration: Long) {
-        metadataActivity.runOnUiThread { mTimer.text = timeToString(duration) }
+        runOnUiThread { mTimer.text = timeToString(duration) }
 
         if (duration > UPDATE_SPACE_TIME_MS + lastUpdateTime) {
             lastUpdateTime += UPDATE_SPACE_TIME_MS
@@ -301,10 +255,10 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun onAddSuccess(vaultFile: VaultFile) {
-        metadataActivity.divviupUtils.runAudioTakenEvent()
+        divviupUtils.runAudioTakenEvent()
         if (!isCollect) {
             DialogUtils.showBottomMessage(
-                metadataActivity,
+                this,
                 String.format(
                     getString(R.string.recorder_toast_recording_saved),
                     getString(R.string.app_name)
@@ -313,7 +267,7 @@ class MicFragment : MetadataBaseLockFragment(),
         }
 
         if (!Preferences.isAnonymousMode()) {
-            metadataActivity.attachMediaFileMetadata(vaultFile, metadataAttacher)
+            attachMediaFileMetadata(vaultFile, metadataAttacher)
         } else {
             onMetadataAttached(vaultFile)
         }
@@ -322,7 +276,7 @@ class MicFragment : MetadataBaseLockFragment(),
 
     private fun onAddError(error: Throwable?) {
         DialogUtils.showBottomMessage(
-            metadataActivity,
+            this,
             getString(R.string.gallery_toast_fail_saving_file),
             true
         )
@@ -354,17 +308,21 @@ class MicFragment : MetadataBaseLockFragment(),
         if (isReport) {
             val bundle = Bundle()
             bundle.putSerializable(BUNDLE_REPORT_VAULT_FILE, vaultFile)
-            setFragmentResult(BUNDLE_REPORT_AUDIO, bundle)
-            nav().navigateUp()
+            //setFragmentResult(BUNDLE_REPORT_AUDIO, bundle)
+           /// nav().navigateUp()
         }
     }
 
     override fun onMetadataAttachError(throwable: Throwable?) {
         DialogUtils.showBottomMessage(
-            metadataActivity,
+            this,
             getString(R.string.gallery_toast_fail_saving_file),
             true
         )
+    }
+
+    override fun getContext(): Context {
+        return this
     }
 
     private fun onMediaFilesUploadScheduled() {
@@ -379,7 +337,7 @@ class MicFragment : MetadataBaseLockFragment(),
             return
         }
 
-        DialogUtils.showBottomMessage(metadataActivity, message, false)
+        DialogUtils.showBottomMessage(this, message, false)
     }
 
     private fun onMediaFilesUploadScheduleError(throwable: Throwable?) {
@@ -424,7 +382,7 @@ class MicFragment : MetadataBaseLockFragment(),
         enableRecord()
         mTimer.text = timeToString(0)
         DialogUtils.showBottomMessage(
-            metadataActivity,
+            this,
             getString(R.string.recorder_toast_fail_recording),
             true
         )
@@ -433,7 +391,7 @@ class MicFragment : MetadataBaseLockFragment(),
     private fun disableRecord() {
         mRecord.apply {
             background =
-                AppCompatResources.getDrawable(requireContext(), R.drawable.red_circle_background)
+                AppCompatResources.getDrawable(this@MicActivity, R.drawable.red_circle_background)
             setImageResource(R.drawable.stop_white)
             contentDescription = getString(R.string.action_stop)
         }
@@ -445,7 +403,7 @@ class MicFragment : MetadataBaseLockFragment(),
     private fun enableRecord() {
         mRecord.apply {
             background = ContextCompat.getDrawable(
-                requireContext(),
+                this@MicActivity,
                 R.drawable.audio_record_button_background
             )
             setImageResource(R.drawable.ic_mic_white)
@@ -486,8 +444,8 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun openRecordings() {
-        bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
-        nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
+       // bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
+       // nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
     }
 
     private fun stopRecorder() {
@@ -543,8 +501,5 @@ class MicFragment : MetadataBaseLockFragment(),
     private fun updateRecordingName() {
         recordingName.text = UUID.randomUUID().toString() + ".aac"
     }
-
-    override fun onBackPressed(): Boolean {
-        return true
+    
     }
-}

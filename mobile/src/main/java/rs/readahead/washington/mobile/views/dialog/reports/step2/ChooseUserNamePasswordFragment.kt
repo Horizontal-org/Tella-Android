@@ -21,7 +21,7 @@ class ChooseUserNamePasswordFragment :
     }
 
     private fun initListeners() {
-        binding?.yesBtn?.setOnClickListener {
+        binding.yesBtn.setOnClickListener {
             binding?.yesBtn?.isChecked = true
             binding?.noBtn?.isChecked = false
         }

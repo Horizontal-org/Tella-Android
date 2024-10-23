@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:keepScreenOn="true"
     android:textDirection="locale"
-    tools:context=".views.fragmens">
+   >
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
