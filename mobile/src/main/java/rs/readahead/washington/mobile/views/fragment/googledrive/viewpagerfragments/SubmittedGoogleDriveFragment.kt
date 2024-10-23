@@ -68,7 +68,7 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
-                        R.string.Report_Deleted_Confirmation, it
+                        string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
                 submittedGoogleDriveViewModel.listSubmitted()
