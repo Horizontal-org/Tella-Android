@@ -14,8 +14,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline20h"
@@ -70,16 +70,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_vertical_margin"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginTop="32dp"
                 android:background="@drawable/rounded_light_purple_background"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/version">
-<!--
+
                 <TextView
+                    android:id="@+id/tutorial"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginStart="@dimen/activity_vertical_margin"
@@ -92,7 +93,7 @@
                     app:drawableStartCompat="@drawable/ic_baseline_error_outline_24" />
 
                 <View style="@style/SettingsMainShadowLine" />
--->
+
                 <TextView
                     android:id="@+id/faq"
                     android:layout_width="match_parent"

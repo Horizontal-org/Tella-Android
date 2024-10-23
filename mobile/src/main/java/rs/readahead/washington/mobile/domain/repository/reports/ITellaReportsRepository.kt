@@ -13,4 +13,5 @@ interface ITellaReportsRepository {
     fun listOutboxReportInstances(): Single<List<ReportInstance>>
     fun listSubmittedReportInstances(): Single<List<ReportInstance>>
     fun getReportBundle(id: Long): Single<ReportInstanceBundle>
+
 }

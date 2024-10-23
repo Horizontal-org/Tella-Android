@@ -224,8 +224,8 @@ class UwaziParser(private val context: Context?) {
             ?.forEach { property ->
                 val selectedEntities: ArrayList<Any> = ArrayList()
                 uwaziFormView.entities.forEach { selectedEntity ->
-                    property.entities?.filter { it.id == selectedEntity.value }?.forEach {
-                        selectedEntities.add(UwaziRelationShipEntity(it.id, it.label))
+                    property.entities?.filter { it.id == selectedEntity.value && property.label == selectedEntity.type}?.forEach {
+                        selectedEntities.add(UwaziRelationShipEntity(it.id, it.label,selectedEntity.type))
                     }
                 }
                 property.selectedEntities = selectedEntities as List<UwaziRelationShipEntity>

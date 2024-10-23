@@ -22,4 +22,8 @@ internal class GoogleDriveTabsFragment : MainReportFragment() {
         this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
     }
 
+    override fun getEmptyMessageIcon(): Int {
+        return R.drawable.ic_google_drive
+    }
+
 }

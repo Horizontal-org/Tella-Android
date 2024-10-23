@@ -17,7 +17,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
-import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.data.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportBundleUseCase
 import rs.readahead.washington.mobile.domain.usecases.googledrive.GetReportsServersUseCase
@@ -143,8 +143,8 @@ class GoogleDriveViewModel @Inject constructor(
         _progress.postValue(true)
 
         // Initialize counters for lengths
-        var outboxLength = 0
-        var submittedLength = 0
+        var outboxLength: Int
+        var submittedLength: Int
 
         // Execute the Outbox report retrieval
         getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
@@ -195,14 +195,6 @@ class GoogleDriveViewModel @Inject constructor(
         }, onFinished = {
             _progress.postValue(false)
         })
-    }
-
-    private fun openInstance(reportInstance: ReportInstance) {
-        getReportBundle(reportInstance)
-    }
-
-    private fun onMoreClicked(reportInstance: ReportInstance) {
-        _onMoreClickedFormInstance.postValue(reportInstance)
     }
 
     override fun deleteReport(instance: ReportInstance) {
@@ -358,7 +350,7 @@ class GoogleDriveViewModel @Inject constructor(
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    googleDriveRepository.uploadFilesWithProgress(
+                    googleDriveRepository.uploadFileWithProgress(
                         reportApiId,
                         server.username,
                         file

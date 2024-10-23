@@ -2236,6 +2236,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_REPORT_FILES_UPLOAD);
         deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
         deleteTable(D.T_RESOURCES);
+
+        deleteTable(D.T_GOOGLE_DRIVE);
+        deleteTable(D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+        deleteTable(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+
+        deleteTable(D.T_DROPBOX);
+        deleteTable(D.T_DROPBOX_FORM_INSTANCE);
+        deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
     }
 
     public void deleteFormsAndRelatedTables() {
@@ -2255,6 +2263,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         // Delete resources table
         deleteTable(D.T_RESOURCES);
+
+        // Delete tables related to Google Drive instances
+        deleteTable(D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+        deleteTable(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+
+        // Delete tables related to DropBox instances
+        deleteTable(D.T_DROPBOX_FORM_INSTANCE);
+        deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
+
     }
 
     private void deleteAllServersDB() {
@@ -2266,6 +2283,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_RESOURCES);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
+        deleteTable(D.T_GOOGLE_DRIVE);
+        deleteTable(D.T_DROPBOX);
+
     }
 
     public void deleteMediaFiles() {
@@ -2712,7 +2732,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE,D.T_REPORT_INSTANCE_VAULT_FILE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 

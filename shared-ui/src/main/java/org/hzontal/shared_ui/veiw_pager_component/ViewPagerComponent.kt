@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.hzontal.shared_ui.R
 import org.hzontal.shared_ui.appbar.ToolbarComponent
+import org.hzontal.shared_ui.textviews.CenterMessageTextView
 import org.hzontal.shared_ui.veiw_pager_component.adapter.ViewPagerAdapter
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 
@@ -27,6 +28,7 @@ class ViewPagerComponent @JvmOverloads constructor(
     private val toolBar: ToolbarComponent
     private var tabTitles: List<String> = emptyList()
     private var fragmentProvider: FragmentProvider? = null
+    private var textViewEmpty: CenterMessageTextView
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_pager_component_layout, this, true)
@@ -34,7 +36,7 @@ class ViewPagerComponent @JvmOverloads constructor(
         viewPager = findViewById(R.id.view_pager)
         toolBarTextView = findViewById(R.id.toolbar_textView)
         toolBar = findViewById(R.id.toolbar)
-
+        textViewEmpty = findViewById(R.id.textView_empty)
 
         context.theme.obtainStyledAttributes(attrs, R.styleable.ViewPagerComponent, 0, 0).apply {
             try {
@@ -109,5 +111,18 @@ class ViewPagerComponent @JvmOverloads constructor(
 
     fun getViewPager(): ViewPager2 {
         return viewPager
+    }
+
+    fun setCenterMessageImg(description: String, img: Int) {
+        textViewEmpty.setText(description)
+        textViewEmpty.setTopIcon(img)
+    }
+
+    fun setEmptyTextViewMessageVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            textViewEmpty.visibility = View.VISIBLE
+        } else {
+            textViewEmpty.visibility = View.GONE
+        }
     }
 }

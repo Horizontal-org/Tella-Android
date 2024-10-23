@@ -12,7 +12,7 @@
         android:background="@color/space_cadet"
         app:behavior_hideable="true">
 
-        <!-- Toolbar without padding -->
+        <!-- Toolbar -->
         <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -22,13 +22,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Container with padding applied to the rest of the views -->
+        <!-- Main content with padding -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:padding="24dp"
+            android:id="@+id/buttonsConstraint"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:layout_marginBottom="50dp"
+            >
 
             <ImageView
                 android:id="@+id/server_icon"
@@ -36,7 +39,6 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/ic_server"
-                android:textColor="@color/wa_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +49,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:fontFamily="@font/open_sans"
                 android:gravity="center"
                 android:paddingStart="12dp"
                 android:textColor="@color/wa_white"
@@ -55,7 +56,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/server_icon"
-                tools:ignore="RtlSymmetry"
                 tools:text="Add Server" />
 
             <TextView
@@ -67,52 +67,73 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content"
-                tools:ignore="RtlSymmetry"
                 tools:text="Add Server ServerServerServerServerServerServerServer" />
 
+            <!-- Button 1 -->
             <org.hzontal.shared_ui.buttons.RoundButton
                 android:id="@+id/sheet_one_btn"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                app:check_state="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content_description"
                 app:text="knjkenkk" />
 
+            <!-- Button 2 -->
             <org.hzontal.shared_ui.buttons.RoundButton
                 android:id="@+id/sheet_two_btn"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                app:check_state="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sheet_one_btn" />
 
+            <!-- Button 3 -->
             <org.hzontal.shared_ui.buttons.RoundButton
                 android:id="@+id/sheet_three_btn"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                app:check_state="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn" />
 
-            <!-- New Unavailable Connection Text -->
+            <!-- Button 4 -->
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_four_activated_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_three_btn" />
+
+            <!-- Button 5 -->
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_five_activated_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_four_activated_btn" />
+
+
+            <!-- Unavailable Connection Text -->
             <TextView
                 android:id="@+id/unavailable_connection_text"
                 style="@style/Tella_Main_White_Text.MeduimbBold"
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sheet_three_btn"
-                tools:ignore="RtlSymmetry"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_five_activated_btn"
                 tools:text="Unavailable connections" />
 
-            <!-- New Unavailable Connection Description -->
+            <!-- Unavailable Connection Description -->
             <TextView
                 android:id="@+id/unavailable_connection_desc_text"
                 style="@style/Tella_Main_White_Text.Small"
@@ -121,22 +142,37 @@
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/unavailable_connection_text"
-                tools:ignore="RtlSymmetry"
-                tools:text="For the following categories, only one connection can be enabled at a time. \nTo add a new connection, please delete the current one by going to Connections Settings." />
+                tools:text="Only one connection can be enabled..." />
 
+            <!-- Button 4 -->
             <org.hzontal.shared_ui.buttons.RoundButton
-                android:id="@+id/sheet_four_btn"
+                android:id="@+id/sheet_four_deactivated_btn"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="16dp"
-                app:check_state="false"
+                android:visibility="gone"
+                app:tint_color="@color/wa_white_8"
+                app:text_color="@color/wa_white_38"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/unavailable_connection_desc_text" />
 
+            <!-- Button 5 -->
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_five_deactivated_btn"
+                android:layout_width="match_parent"
+                app:tint_color="@color/wa_white_8"
+                app:text_color="@color/wa_white_38"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_four_deactivated_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Bottom buttons -->
         <TextView
             android:id="@+id/back_btn"
             style="@style/Tella_Main_White_Text"
@@ -158,5 +194,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Next" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

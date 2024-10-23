@@ -195,8 +195,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             getString(R.string.settings_docu_add_server_dialog_select_tella_web),
             getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
             getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+            getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox),
             getString(R.string.unavailable_connections),
             getString(R.string.unavailable_connections_desc),
+            false,
             false,
             object : IServerChoiceActions {
                 override fun addUwaziServer() {
@@ -204,6 +206,9 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 }
 
                 override fun addGoogleDriveServer() {
+                }
+
+                override fun addDropBoxServer() {
                 }
 
                 override fun addTellaWebServer() {

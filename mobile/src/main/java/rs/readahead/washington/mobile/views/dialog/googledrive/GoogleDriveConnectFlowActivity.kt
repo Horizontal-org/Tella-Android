@@ -12,7 +12,6 @@ class GoogleDriveConnectFlowActivity : BaseActivity() {
         setContentView(R.layout.activity_google_drive)
 
     }
-
 }
 
 

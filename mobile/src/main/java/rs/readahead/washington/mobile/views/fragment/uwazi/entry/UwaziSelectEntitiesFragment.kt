@@ -113,14 +113,15 @@ class UwaziSelectEntitiesFragment :
             promptTitle?.let { setStartTextTitle(it) }
             onRightClickListener = {
                 val resultList = items.filter { it.isSelected }
-                    .map { UwaziRelationShipEntity(it.value, it.text) }
+                    .map { UwaziRelationShipEntity(it.value, it.text,promptTitle.toString()) }
                     .toCollection(ArrayList())
                 val result: MutableList<UwaziRelationShipEntity> = ArrayList()
                 resultList.forEach { entity ->
                     result.add(
                         UwaziRelationShipEntity(
                             entity.value,
-                            entity.label
+                            entity.label,
+                            entity.type
                         )
                     )
                 }

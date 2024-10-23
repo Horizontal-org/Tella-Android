@@ -35,7 +35,7 @@
         <TextView
             android:id="@+id/servers_settings_button"
             style="@style/MainSettingsTextView"
-            android:text="@string/settings.servers.title_server.settings"
+            android:text="@string/settings.servers.title_server.settings2"
             app:drawableStartCompat="@drawable/ic_servers_icon" />
 
         <View style="@style/SettingsMainShadowLine" />

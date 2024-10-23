@@ -33,7 +33,7 @@ class GoogleDriveConnectedServerFragment :
     }
 
     private fun initListeners() {
-        binding.goToGoogleBtn.setOnClickListener {
+        binding.goToGoogleDriveBtn.setOnClickListener {
             handleServerUpdate()
             baseActivity.finish()
         }

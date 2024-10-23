@@ -985,7 +985,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
 
     override fun openAudioRecorder() {
         binding.entryLayout.visibility = View.GONE
-        micFragment = MicFragment.newInstance(true)
+        micFragment = MicFragment.newInstance(true, null)
         addFragment(micFragment!!, R.id.rootCollectEntry)
     }
 

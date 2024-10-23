@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
 
 @AndroidEntryPoint
 class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
@@ -21,6 +22,10 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     override fun getEmptyMessage(): Int {
         return R.string.Uwazi_Draft_Entities_Empty_Description
+    }
+
+    override fun getHeaderRecyclerViewMessage(): Int {
+        return R.string.Drafts_Header_Message
     }
 
     override fun getEmptyMessageIcon(): Int {
@@ -49,6 +54,15 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
                     deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
                     deleteActionText = getString(R.string.Delete_Report_Confirmation)
                 )
+            }
+
+            instanceDeleted.observe(viewLifecycleOwner) {
+                ReportsUtils.showReportDeletedSnackBar(
+                    getString(
+                        R.string.Report_Deleted_Confirmation, it
+                    ), baseActivity
+                )
+                draftGoogleDriveViewModel.listOutbox()
             }
         }
     }

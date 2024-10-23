@@ -26,11 +26,11 @@ import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstanceBundle;
-import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository;
+import rs.readahead.washington.mobile.domain.repository.googledrive.ITellaGoogleDriveRepository;
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository;
 import timber.log.Timber;
 
-public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaReportsRepository {
+public class GoogleDriveDataSource implements ITellaGoogleDriveRepository, ITellaReportsRepository {
 
     private static GoogleDriveDataSource dataSource;
     private final SQLiteDatabase database;
@@ -73,7 +73,6 @@ public class GoogleDriveDataSource implements IGoogleDriveRepository, ITellaRepo
         values.put(D.C_GOOGLE_DRIVE_FOLDER_NAME, server.getFolderName());
         values.put(D.C_GOOGLE_DRIVE_SERVER_NAME, server.getName());
         server.setId(database.insert(D.T_GOOGLE_DRIVE, null, values));
-
         return server;
     }
 

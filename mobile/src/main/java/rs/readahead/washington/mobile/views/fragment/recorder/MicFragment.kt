@@ -33,9 +33,11 @@ import rs.readahead.washington.mobile.util.C.RECORD_REQUEST_CODE
 import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
+import rs.readahead.washington.mobile.views.activity.viewer.toolBar
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
@@ -48,11 +50,11 @@ import java.util.concurrent.TimeUnit
 const val TIME_FORMAT: String = "%02d:%02d"
 const val COLLECT_ENTRY = "collect_entry"
 const val REPORT_ENTRY = "report_entry"
-private const val UPDATE_SPACE_TIME_MS: Long = 60000
+const val UPDATE_SPACE_TIME_MS: Long = 60000
 
 @AndroidEntryPoint
 class MicFragment : MetadataBaseLockFragment(),
-    IMetadataAttachPresenterContract.IView {
+    IMetadataAttachPresenterContract.IView, OnNavBckListener {
 
     private var animator: ObjectAnimator? = null
     private var isCollect: Boolean = false
@@ -72,11 +74,12 @@ class MicFragment : MetadataBaseLockFragment(),
 
     companion object {
         @JvmStatic
-        fun newInstance(value: Boolean) =
+        fun newInstance(value: Boolean, currentId: String?) =
             MicFragment().apply {
                 arguments = Bundle().apply {
                     putBoolean(COLLECT_ENTRY, value)
                     putBoolean(REPORT_ENTRY, value)
+                    putString(VAULT_CURRENT_ROOT_PARENT, currentId)
                 }
             }
     }
@@ -105,6 +108,7 @@ class MicFragment : MetadataBaseLockFragment(),
         arguments?.let {
             isCollect = it.getBoolean(COLLECT_ENTRY)
             isReport = it.getBoolean(REPORT_ENTRY)
+            currentRootParent = it.getString(VAULT_CURRENT_ROOT_PARENT)
         }
     }
 
@@ -116,11 +120,24 @@ class MicFragment : MetadataBaseLockFragment(),
         freeSpace = view.findViewById(R.id.free_space)
         redDot = view.findViewById(R.id.red_dot)
         recordingName = view.findViewById(R.id.rec_name)
+        toolBar = view.findViewById(R.id.toolbar)
 
-        if (isCollect || isReport) {
+        if (isCollect || isReport || currentRootParent?.isNotEmpty() == true) {
             mPlay.visibility = View.GONE
             val activity = activity as IMainNavigationInterface
             activity.hideBottomNavigation()
+        }
+
+        if (currentRootParent?.isNotEmpty() == true) {
+            toolBar.navigationIcon =
+                activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_close_white) }
+
+            // Set a click listener for the navigation icon
+            toolBar.setNavigationOnClickListener {
+                // Handle back or close action here
+                activity?.supportFragmentManager?.popBackStack()
+
+            }
         }
 
         mRecord.setOnClickListener {
@@ -163,7 +180,6 @@ class MicFragment : MetadataBaseLockFragment(),
 
         mTimer.text = timeToString(0)
         disablePause()
-        initData()
         initObservers()
     }
 
@@ -523,14 +539,12 @@ class MicFragment : MetadataBaseLockFragment(),
         recordingName.text = name
     }
 
-    private fun initData() {
-        arguments?.getString(VAULT_CURRENT_ROOT_PARENT)?.let {
-            currentRootParent = it
-        }
-    }
-
     @SuppressLint("SetTextI18n")
     private fun updateRecordingName() {
         recordingName.text = UUID.randomUUID().toString() + ".aac"
+    }
+
+    override fun onBackPressed(): Boolean {
+        return true
     }
 }

@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -15,7 +14,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatRadioButton
-import androidx.core.content.ContextCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -230,8 +229,8 @@ object BottomSheetUtils {
                         button.tag = option.key
                         button.setText(option.value)
                         radioGroup.addView(button)
+                        radioGroup.check(button.id)
                     }
-
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
@@ -249,6 +248,9 @@ object BottomSheetUtils {
         lateinit var buttonTwo: RoundButton
         lateinit var buttonThree: RoundButton
         lateinit var buttonFour: RoundButton
+        lateinit var buttonFive: RoundButton
+        lateinit var buttonFourDeactivated: RoundButton
+        lateinit var buttonFiveDeactivated: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -257,21 +259,25 @@ object BottomSheetUtils {
         lateinit var toolbarComponent: ToolbarComponent
         lateinit var unavailableConnexionText: TextView
         lateinit var unavailableConnexionTextDesc: TextView
+        lateinit var buttonConstraint: ConstraintLayout
 
 
         override fun bindView(view: View) {
             toolbarComponent = view.findViewById(R.id.toolbar)
-            //  cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             buttonOne = view.findViewById(R.id.sheet_one_btn)
             buttonTwo = view.findViewById(R.id.sheet_two_btn)
             buttonThree = view.findViewById(R.id.sheet_three_btn)
-            buttonFour = view.findViewById(R.id.sheet_four_btn)
+            buttonFour = view.findViewById(R.id.sheet_four_activated_btn)
+            buttonFive = view.findViewById(R.id.sheet_five_activated_btn)
+            buttonFourDeactivated = view.findViewById(R.id.sheet_four_deactivated_btn)
+            buttonFiveDeactivated = view.findViewById(R.id.sheet_five_deactivated_btn)
             title = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
             nextButton = view.findViewById(R.id.next_btn)
             backButton = view.findViewById(R.id.back_btn)
             unavailableConnexionText = view.findViewById(R.id.unavailable_connection_text)
             unavailableConnexionTextDesc = view.findViewById(R.id.unavailable_connection_desc_text)
+            buttonConstraint = view.findViewById(R.id.buttonsConstraint)
         }
     }
 
@@ -284,6 +290,7 @@ object BottomSheetUtils {
         fun addTellaWebServer()
         fun addUwaziServer()
         fun addGoogleDriveServer()
+        fun addDropBoxServer()
     }
 
     @JvmStatic
@@ -299,15 +306,15 @@ object BottomSheetUtils {
         buttonTwoLabel: String? = null,
         buttonThreeLabel: String? = null,
         buttonFourLabel: String? = null,
+        buttonFiveLabel: String? = null,
         unavailableConnexionLabel: String? = null,
         unavailableConnexionDesc: String? = null,
-        isConnexionAvailable: Boolean = false,
+        isGoogleDriveServerAvailable: Boolean = false,
+        isDropBoxServerAvailable: Boolean = false,
         consumer: IServerChoiceActions
     ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
-            .page(R.layout.settings_add_server_connection_layout)
-            .cancellable(true)
-            .fullScreen()
+            .page(R.layout.settings_add_server_connection_layout).cancellable(true).fullScreen()
             .statusBarColor(R.color.space_cadet)
 
         customSheetFragment.holder(DualChoiceSheetHolder(), object : Binder<DualChoiceSheetHolder> {
@@ -323,27 +330,31 @@ object BottomSheetUtils {
                     setupButton(buttonTwo, buttonTwoLabel)
                     setupButton(buttonThree, buttonThreeLabel)
                     setupButton(buttonFour, buttonFourLabel)
+                    setupButton(buttonFourDeactivated, buttonFourLabel)
+                    setupButton(buttonFiveDeactivated, buttonFiveLabel)
+                    setupButton(buttonFive, buttonFiveLabel)
                     unavailableConnexionText.text = unavailableConnexionLabel;
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
                     // Set button click listeners using a helper method
                     listOf(
-                        buttonOne,
-                        buttonTwo,
-                        buttonThree,
-                        buttonFour
+                        buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive
                     ).forEachIndexed { index, button ->
                         button.setOnClickListener {
-                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour)
+                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive)
                             button.isChecked = true
                         }
                     }
                     handleConnexionAvailability(
                         context,
-                        isConnexionAvailable,
+                        isGoogleDriveServerAvailable,
+                        isDropBoxServerAvailable,
                         unavailableConnexionText,
                         unavailableConnexionTextDesc,
-                        buttonFour
+                        buttonFour,
+                        buttonFive,
+                        buttonFourDeactivated,
+                        buttonFiveDeactivated
                     )
                     backButton.setOnClickListener { customSheetFragment.dismiss() }
 
@@ -353,6 +364,7 @@ object BottomSheetUtils {
                             buttonTwo.isChecked -> consumer.addTellaWebServer()
                             buttonThree.isChecked -> consumer.addUwaziServer()
                             buttonFour.isChecked -> consumer.addGoogleDriveServer()
+                            buttonFive.isChecked -> consumer.addDropBoxServer()
                         }
                         customSheetFragment.dismiss()
                     }
@@ -369,22 +381,59 @@ object BottomSheetUtils {
 
     private fun handleConnexionAvailability(
         context: Context,
-        isConnexionAvailable: Boolean,
+        isGoogleDriveAvailable: Boolean,
+        isDropboxAvailable: Boolean,
         unavailableConnexionText: TextView,
         unavailableConnexionTextDesc: TextView,
-        buttonFour: RoundButton
+        buttonFour: RoundButton,  // Google Drive button
+        buttonFive: RoundButton, // Dropbox button
+        buttonFourDeactivated: RoundButton,  // Google Drive button Deactivated
+        buttonFiveDeactivated: RoundButton, // Dropbox button Deactivated
     ) {
-        if (isConnexionAvailable) {
+
+        // Case where at least one server is available
+        if (isGoogleDriveAvailable || isDropboxAvailable) {
+            // Show unavailable text and description when either server is available
             unavailableConnexionText.isVisible = true
             unavailableConnexionTextDesc.isVisible = true
-            buttonFour.setBackgroundTintColor(ContextCompat.getColor(context, R.color.wa_white_8))
-            buttonFour.setTextColor(ContextCompat.getColor(context, R.color.wa_white_38))
-            buttonFour.setOnClickListener {} // Disable interaction
-        } else {
+
+            if (isGoogleDriveAvailable && isDropboxAvailable) {
+                // Both Google Drive and Dropbox available
+                buttonFour.isVisible = false
+                buttonFive.isVisible = false
+
+                buttonFourDeactivated.isVisible = true
+                buttonFiveDeactivated.isVisible = true
+
+
+            } else if (isGoogleDriveAvailable) {
+                // Only Google Drive available
+                buttonFour.isVisible = false
+                buttonFourDeactivated.isVisible = true
+
+
+            } else if (isDropboxAvailable) {
+                // Only Google Drive available
+                buttonFive.isVisible = false
+                buttonFiveDeactivated.isVisible = true
+
+            }
+        }
+        // Case where neither Google Drive nor Dropbox is available
+        else {
+            // Hide unavailable text and description when no connection is available
             unavailableConnexionText.isVisible = false
             unavailableConnexionTextDesc.isVisible = false
+
+            // Disable both buttons
+            buttonFour.isVisible = true
+            buttonFive.isVisible = true
+
+            buttonFourDeactivated.isVisible = false
+            buttonFiveDeactivated.isVisible = false
         }
     }
+
 
     private fun resetButtons(vararg buttons: RoundButton) {
         buttons.forEach { it.isChecked = false }
@@ -635,8 +684,7 @@ object BottomSheetUtils {
 
         val customSheetFragment2 = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment2.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment2.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -660,8 +708,7 @@ object BottomSheetUtils {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(true)
             .screenTag("ConfirmImageSheet")
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -715,8 +762,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.confirm_image_sheet_layout).cancellable(false)
-        customSheetFragment.holder(
-            ConfirmImageSheetHolder(),
+        customSheetFragment.holder(ConfirmImageSheetHolder(),
             object : Binder<ConfirmImageSheetHolder> {
                 override fun onBind(holder: ConfirmImageSheetHolder) {
                     with(holder) {
@@ -1179,8 +1225,7 @@ object BottomSheetUtils {
 
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
             .page(R.layout.three_options_sheet_layout).cancellable(true)
-        customSheetFragment.holder(
-            ThreeOptionsMenuSheetHolder(),
+        customSheetFragment.holder(ThreeOptionsMenuSheetHolder(),
             object : Binder<ThreeOptionsMenuSheetHolder> {
                 override fun onBind(holder: ThreeOptionsMenuSheetHolder) {
                     with(holder) {

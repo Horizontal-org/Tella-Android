@@ -639,6 +639,16 @@
             android:name=".views.dialog.googledrive.GoogleDriveConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+           > <!-- Added launchMode -->
+
+        </activity>
+
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -659,6 +669,25 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:exported="true"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <!-- Your activity starting authorization flow should also configured with android:launchMode="singleTask".
+                 If that activity is configured with android:taskAffinity, this AuthActivity should also configured
+                 with the same android:taskAffinity so the auth result can be correctly passed back. -->
+            <intent-filter>
+                <data android:scheme="db-${dropboxKey}" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

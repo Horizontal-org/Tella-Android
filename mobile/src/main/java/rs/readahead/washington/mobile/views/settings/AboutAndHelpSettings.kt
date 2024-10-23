@@ -15,8 +15,10 @@ class AboutAndHelpSettings : BaseFragment() {
 
     private var binding: FragmentAboutNHelpSettingsBinding? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentAboutNHelpSettingsBinding.inflate(inflater, container, false)
         return binding?.root!!
     }
@@ -36,6 +38,9 @@ class AboutAndHelpSettings : BaseFragment() {
                 BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")"
             )
         )
+        binding?.tutorial?.setOnClickListener {
+            Util.startBrowserIntent(context, getString(R.string.config_tutorial_url))
+        }
 
         binding?.faq?.setOnClickListener {
             Util.startBrowserIntent(context, getString(R.string.config_faq_url))

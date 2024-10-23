@@ -5,7 +5,6 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.views.base_ui.BaseActivity
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper
 
 object AttachmentsSheetHelper {
 
@@ -15,7 +14,7 @@ object AttachmentsSheetHelper {
     /**
      * Create and return options map for share dialog.
      */
-    private fun getShareDialogOptions() : LinkedHashMap<Int, Int> {
+    private fun getShareDialogOptions(): LinkedHashMap<Int, Int> {
         return linkedMapOf(
             OPTION_MEDIA_AND_VERIFICATION to R.string.verification_share_select_media_and_verification,
             OPTION_ONLY_MEDIA to R.string.verification_share_select_only_media
@@ -37,7 +36,11 @@ object AttachmentsSheetHelper {
             activity.getString(R.string.action_cancel),
             object : BottomSheetUtils.RadioOptionConsumer {
                 override fun accept(option: Int) {
-                    AttachmentsHelper.startShareActivity(option == OPTION_MEDIA_AND_VERIFICATION, selected, activity)
+                    AttachmentsHelper.startShareActivity(
+                        option == OPTION_MEDIA_AND_VERIFICATION,
+                        selected,
+                        activity
+                    )
                 }
             }
         )
@@ -58,7 +61,11 @@ object AttachmentsSheetHelper {
             activity.getString(R.string.action_cancel),
             object : BottomSheetUtils.RadioOptionConsumer {
                 override fun accept(option: Int) {
-                    MediaFileHandler.startShareActivity(activity, vaultFile, option == OPTION_MEDIA_AND_VERIFICATION)
+                    MediaFileHandler.startShareActivity(
+                        activity,
+                        vaultFile,
+                        option == OPTION_MEDIA_AND_VERIFICATION
+                    )
                 }
             }
         )

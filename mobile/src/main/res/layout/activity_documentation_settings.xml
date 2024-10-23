@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
-    android:textDirection="locale"
     android:orientation="vertical"
+    android:textDirection="locale"
     tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -30,8 +30,7 @@
         android:layout_height="wrap_content"
         android:background="@color/wa_purple"
         android:paddingTop="@dimen/navigation_tab_bar_padding"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -73,7 +72,7 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="start"
                                 android:padding="2dp"
-                                android:text="@string/settings.servers.title_server.settings"
+                                android:text="@string/settings.servers.title_server.settings2"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -82,7 +81,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="2dp"
-                                android:text="@string/settings.servers.add_server.expl" />
+                                android:text="@string/settings.servers.add_server.expl2" />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -111,9 +110,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/activity_vertical_margin"
                     android:animateLayoutChanges="true"
-                    android:visibility="gone"
                     android:background="@drawable/rounded_light_purple_background"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"

@@ -21,10 +21,12 @@ object AttachmentsHelper {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             Environment.isExternalStorageManager()
         } else {
-            val result: Int = ContextCompat.checkSelfPermission(context,
+            val result: Int = ContextCompat.checkSelfPermission(
+                context,
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
-            val result1: Int = ContextCompat.checkSelfPermission(context,
+            val result1: Int = ContextCompat.checkSelfPermission(
+                context,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
             result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
@@ -37,13 +39,17 @@ object AttachmentsHelper {
         val hasMetadata = selected.any { file -> file.metadata != null }
 
         if (hasMetadata) {
-            showShareWithMetadataDialog(activity,selected)
+            showShareWithMetadataDialog(activity, selected)
         } else {
-            startShareActivity(false,selected,activity)
+            startShareActivity(false, selected, activity)
         }
     }
 
-    internal fun setToolbarLabel(filterType: FilterType, toolbarComponent: ToolbarComponent,activity: BaseActivity) {
+    internal fun setToolbarLabel(
+        filterType: FilterType,
+        toolbarComponent: ToolbarComponent,
+        activity: BaseActivity
+    ) {
         when (filterType) {
             FilterType.PHOTO -> toolbarComponent.setStartTextTitle(activity.getString(R.string.Vault_Images_Title))
             FilterType.VIDEO -> toolbarComponent.setStartTextTitle(activity.getString(R.string.Vault_Videos_Title))
@@ -69,7 +75,11 @@ object AttachmentsHelper {
     }
 
 
-    internal fun startShareActivity(includeMetadata: Boolean,selected: List<VaultFile>,activity: BaseActivity ) {
+    internal fun startShareActivity(
+        includeMetadata: Boolean,
+        selected: List<VaultFile>,
+        activity: BaseActivity
+    ) {
         if (selected.isNullOrEmpty()) return
         if (selected.size > 1) {
             val attachments = MediaFileHandler.walkAllFilesWithDirectories(selected)

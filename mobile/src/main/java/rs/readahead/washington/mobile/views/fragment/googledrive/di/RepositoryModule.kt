@@ -16,9 +16,9 @@ import dagger.hilt.components.SingletonComponent
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config
-import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepository
+import rs.readahead.washington.mobile.data.googledrive.GoogleDriveRepository
 import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
-import rs.readahead.washington.mobile.domain.repository.googledrive.IGoogleDriveRepository
+import rs.readahead.washington.mobile.domain.repository.googledrive.ITellaGoogleDriveRepository
 import rs.readahead.washington.mobile.domain.repository.reports.ITellaReportsRepository
 import java.io.InputStreamReader
 import javax.inject.Singleton
@@ -74,7 +74,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideServerGoogleDriveDataSource(): IGoogleDriveRepository {
+    fun provideServerGoogleDriveDataSource(): ITellaGoogleDriveRepository {
         return MyApplication.getKeyDataSource().googleDriveDataSource.blockingFirst()
     }
 
