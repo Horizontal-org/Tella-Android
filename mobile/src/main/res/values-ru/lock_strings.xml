@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="LockSelect_Action_Cancel">Отмена</string>
-  <string name="LockSelect_Action_Back">Back</string>
-  <string name="LockSelect_Action_Confirm">Продолжить</string>
+  <string name="LockSelect_Action_Back">Назад</string>
+  <string name="LockSelect_Action_Confirm">Следующий</string>
   <string name="LockPatternConfirm_Action_Confirm">Нарисуйте шаблон еще раз, чтобы подтвердить</string>
-  <string name="LockSelect_Action_Continue">Продолжить</string>
+  <string name="LockSelect_Action_Continue">Следующий</string>
   <string name="LockPatternSet_Draw_Pattern">Нарисуйте шаблон разблокировки</string>
   <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">Теперь это ваш шаблон для разблокировки Tella</string>

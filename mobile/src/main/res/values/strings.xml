@@ -296,8 +296,6 @@ mode activation</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
   <string name="settings.servers.title_server.settings">Servers</string>
   <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
-  <string name="settings.servers.title_server.settings2">Connections</string>
-  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its\n server to send files and data. Your organization\n should provide you with the server details. </string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
   <string name="settings.servers_auto.upload_action.expl">Upload your files to your Reports server as soon as they are captured (photos, videos, or audio recordings) or imported into Tella.</string>
   <string name="settings.servers_auto.delete_action.expl">If activated, Tella will automatically delete the files uploaded as soon as the upload is complete.</string>
@@ -926,7 +924,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
-  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="create_new_folder">CREATE NEW FOLDER</string>
   <string name="use_shared_drive">USE SHARED DRIVE</string>
   <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
@@ -943,8 +940,13 @@ Would you like to share analytics with the Tella team?</string>
  enabled at a time. To add a new connection, please delete
  the current one by going to Connections Settings. </string>
   <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+  <string name="settings.servers.title_server.settings2">Connections</string>
+  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
+ server to send files and data. Your organization
+ should provide you with the server details. </string>
+  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="go_to_dropbox">GO TO DROPBOX</string>
-  <string name="dropbox">Dropbox</string>
+  <string name="dropbox" translatable="false">Dropbox</string>
   <string name="Drafts_Header_Message">These are reports you are working on.</string>
   <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
 </resources>
