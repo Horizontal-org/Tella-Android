@@ -384,6 +384,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
+            divviupUtils.runPhotoTakenEvent()
         } else {
             gridButton.visibility = if (videoRecording) View.VISIBLE else View.GONE
             switchButton.visibility = if (videoRecording) View.VISIBLE else View.GONE
@@ -395,6 +396,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     gridButton.visibility = View.VISIBLE
                     switchButton.visibility = View.VISIBLE
                     resolutionButton.visibility = View.VISIBLE
+                    divviupUtils.runVideoTakenEvent()
                 }
             } else {
                 setVideoQuality()

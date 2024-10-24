@@ -16,12 +16,14 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import rs.readahead.washington.mobile.R;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.presentation.entity.CamouflageOption;
+import rs.readahead.washington.mobile.util.divviup.DivviupUtils;
 import rs.readahead.washington.mobile.views.activity.SplashActivity;
 
 
@@ -29,7 +31,6 @@ public class CamouflageManager {
     private static CamouflageManager instance;
     private static final String defaultAlias = SplashActivity.class.getCanonicalName();
     private final List<CamouflageOption> options;
-
     public final CamouflageOption calculatorOption = new CamouflageOption(getOptionAlias(CALC_ALIAS_GREEN_SKIN), R.drawable.calc_green_skin_foreground, R.string.settings_camo_calculator2);
     final CamouflageOption defaultOption = new CamouflageOption(defaultAlias, R.drawable.tella_black, R.string.app_name);
 

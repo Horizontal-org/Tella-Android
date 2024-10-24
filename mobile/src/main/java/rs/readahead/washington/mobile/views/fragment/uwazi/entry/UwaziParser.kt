@@ -14,8 +14,6 @@ import rs.readahead.washington.mobile.domain.entity.uwazi.UwaziEntityInstance
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziRelationShipEntity
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValue
 import rs.readahead.washington.mobile.presentation.uwazi.UwaziValueAttachment
-import java.util.Objects
-import java.util.stream.Collectors
 
 class UwaziParser(private val context: Context?) {
 
@@ -197,9 +195,8 @@ class UwaziParser(private val context: Context?) {
                 } else {
                     when (answer.value) {
                         is List<*> -> {
-                            hashmap[answer.key] = listOf((answer.value) as List<*>)
+                            hashmap[answer.key] =  (answer.value as List<UwaziValue>).toCollection(ArrayList())
                         }
-
                         is UwaziValueAttachment -> {
                             hashmap[answer.key] = arrayListOf(
                                 UwaziValueAttachment(

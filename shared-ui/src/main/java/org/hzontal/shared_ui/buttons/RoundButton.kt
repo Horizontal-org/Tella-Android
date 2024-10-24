@@ -22,8 +22,8 @@ class RoundButton @JvmOverloads constructor(
 
     @StringRes
     private var text: Int = -1
-    private var tintColor : Int = -1
-    private var textColor : Int = -1
+    private var tintColor: Int = -1
+    private var textColor: Int = -1
     private val binding: LayoutRoundButtonBinding =
         LayoutRoundButtonBinding.inflate(LayoutInflater.from(context), this, true)
     private var mChecked = false
@@ -36,7 +36,8 @@ class RoundButton @JvmOverloads constructor(
     }
 
     private fun initView() {
-        binding.sheetTextView.background = ContextCompat.getDrawable(context, R.drawable.bg_information_button)
+        binding.sheetTextView.background =
+            ContextCompat.getDrawable(context, R.drawable.bg_information_button)
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
@@ -85,13 +86,13 @@ class RoundButton @JvmOverloads constructor(
         }
     }
 
-    private fun setBackgroundTintColor(tintColor : Int){
-        if (tintColor != -1){
+     fun setBackgroundTintColor(tintColor: Int) {
+        if (tintColor != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                binding.sheetTextView.backgroundTintList  = ColorStateList.valueOf(tintColor)
+                binding.sheetTextView.backgroundTintList = ColorStateList.valueOf(tintColor)
             }
         }
-        if (textColor != -1){
+        if (textColor != -1) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 binding.sheetTextView.setTextColor(textColor)
             }
@@ -100,6 +101,10 @@ class RoundButton @JvmOverloads constructor(
 
     fun setText(text: String?) {
         binding.sheetTextView.text = text
+    }
+
+    fun setTextColor(color: Int) {
+        binding.sheetTextView.setTextColor(color)
     }
 
     override fun isChecked(): Boolean {

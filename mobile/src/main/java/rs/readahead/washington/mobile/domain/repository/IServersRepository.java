@@ -1,6 +1,5 @@
 package rs.readahead.washington.mobile.domain.repository;
 
-
 import io.reactivex.Completable;
 
 

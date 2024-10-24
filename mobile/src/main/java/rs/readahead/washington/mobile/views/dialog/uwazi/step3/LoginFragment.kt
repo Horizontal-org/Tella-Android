@@ -153,9 +153,9 @@ class LoginFragment : BaseFragment() {
             binding.username.setText(serverUwazi.username)
             binding.password.setText(serverUwazi.password)
         }
-        KeyboardLiveData(binding.root).observe(this,{
+        KeyboardLiveData(binding.root).observe(this) {
             binding.backBtn.isVisible = !it.first
-        })
+        }
     }
 
 }

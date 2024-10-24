@@ -20,7 +20,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
     WashingtonSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
-        if (!isAlreadyMigratedMainDB()){
+        if (!isAlreadyMigratedMainDB()) {
             migrateSqlCipher3To4IfNeeded(context, password);
         }
     }
@@ -192,6 +192,17 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_RESOURCES_SAVED, D.INTEGER, false) + " , " +
                 cddl(D.C_RESOURCES_PROJECT, D.TEXT, false) + " , " +
                 cddl(D.C_RESOURCES_FILE_ID, D.TEXT, false) +
+                ");";
+    }
+
+    private String createTableGoogleDrive() {
+        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_GOOGLE_DRIVE_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_GOOGLE_DRIVE_FOLDER_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_NAME, D.TEXT) + " , " +
+                cddl(D.C_USERNAME, D.TEXT, true) + " , " +
+                cddl(D.C_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, true) +
                 ");";
     }
 
@@ -374,6 +385,36 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 ");";
     }
 
+    private String createTableGoogleDriveInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPLOADED_SIZE, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_GOOGLE_DRIVE_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
+                ");";
+    }
+
+    private String createTableGoogleDriveFormInstance() {
+        return "CREATE TABLE " + sq(D.T_GOOGLE_DRIVE_FORM_INSTANCE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, false) + " , " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_GOOGLE_DRIVE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE" +
+                ");";
+    }
+
     @Override
     public void onCreate(net.zetetic.database.sqlcipher.SQLiteDatabase db) {
         // we have started from version 1
@@ -434,6 +475,12 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV12
         db.execSQL(createTableResources());
+        //DBV13
+        db.execSQL(createTableGoogleDrive());
+        db.execSQL(createTableGoogleDriveFormInstance());
+        db.execSQL(createTableGoogleDriveInstanceVaultFile());
+
+
     }
 
     @Override
@@ -442,19 +489,19 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
             case 1:
                 db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
                 db.execSQL(alterTableCollectServerAddChecked());
-               // break;
+                // break;
             case 2:
                 db.execSQL(alterTableCollectBlankFormAddUpdated());
-               // break;
+                // break;
             case 3:
                 db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-               // break;
+                // break;
             case 4:
                 db.execSQL(alterTableMediaFileAddHash());
-              //  break;
+                //  break;
             case 5:
                 db.execSQL(createTableTellaUploadServer());
-               // break;
+                // break;
             case 6:
                 db.execSQL(createTableMediaFileUploads());
                 //break;
@@ -462,7 +509,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(alterTableMediaFileUploadsAddServer());
                 db.execSQL(alterTableMediaFileUploadsAddManual());
                 db.execSQL(alterTableMediaFileUploadsAddMetadata());
-               // break;
+                // break;
             case 8:
                 db.execSQL(createTableUwaziServer());
                 db.execSQL(createTableCollectEntityUwazi());
@@ -480,18 +527,23 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableReportFormInstance());
                 db.execSQL(createTableReportInstanceVaultFile());
                 db.execSQL(createTableReportFileUploads());
-               // break;
+                // break;
             case 10:
                 db.execSQL(alterTableTellaUploadServerAddAutoUpload());
                 db.execSQL(alterTableTellaUploadServerAddAutoDelete());
                 db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-              //  break;
+                //  break;
             case 11:
                 db.execSQL(createTableFeedback());
-               // break;
+                // break;
             case 12:
                 db.execSQL(createTableResources());
-               // break;
+                // break;
+            case 13:
+                db.execSQL(createTableGoogleDrive());
+                db.execSQL(createTableGoogleDriveFormInstance());
+                db.execSQL(createTableGoogleDriveInstanceVaultFile());
+
         }
     }
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
+    android:textDirection="locale">
+
+    <org.hzontal.shared_ui.veiw_pager_component.ViewPagerComponent
+        android:id="@+id/view_pager_component"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </org.hzontal.shared_ui.veiw_pager_component.ViewPagerComponent>
+
+    <Button
+        android:id="@+id/new_report_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginHorizontal="@dimen/tella_main_vertical"
+        android:layout_marginBottom="@dimen/activity_vertical_large_margin"
+        android:background="@drawable/bg_round_orange_btn"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center_vertical"
+        android:text="@string/New_Reports_Text"
+        android:textAlignment="center"
+        android:textColor="@color/btn_dark_letter"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="RtlCompat" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

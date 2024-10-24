@@ -3,4 +3,7 @@
     <dimen name="calc_key_size">80dp</dimen>
     <dimen name="calc_key_wide">174dp</dimen>
     <dimen name="calc_text_size">32sp</dimen>
+
+    <dimen name="extra_padding_top">24dp</dimen>
+
 </resources>

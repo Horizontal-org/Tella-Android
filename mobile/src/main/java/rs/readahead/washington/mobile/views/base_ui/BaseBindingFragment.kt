@@ -21,7 +21,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
 
     protected lateinit var baseActivity: BaseActivity
     private var _binding: VB? = null
-    private val navigationManager by lazy { NavigationManager(navController,bundle) }
+    private val navigationManager by lazy { NavigationManager(navController, bundle) }
     protected val bundle by lazy { Bundle() }
     private val navController by lazy { NavControllerProvider(this) }
 

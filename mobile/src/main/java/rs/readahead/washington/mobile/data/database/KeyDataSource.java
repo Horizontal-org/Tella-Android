@@ -12,6 +12,8 @@ public class KeyDataSource {
     private final AsyncSubject<DataSource> asyncSubject;
     private final AsyncSubject<UwaziDataSource> asyncUwaziSubject;
     private final AsyncSubject<ResourceDataSource> asyncResourceSubject;
+    private final AsyncSubject<GoogleDriveDataSource> asyncGoogleDriveSubject;
+
     private final Context context;
 
 
@@ -20,6 +22,7 @@ public class KeyDataSource {
         asyncSubject = AsyncSubject.create();
         asyncUwaziSubject = AsyncSubject.create();
         asyncResourceSubject = AsyncSubject.create();
+        asyncGoogleDriveSubject = AsyncSubject.create();
     }
 
     public void initKeyDataSource() {
@@ -32,6 +35,9 @@ public class KeyDataSource {
 
             asyncResourceSubject.onNext(ResourceDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
             asyncResourceSubject.onComplete();
+
+            asyncGoogleDriveSubject.onNext(GoogleDriveDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncGoogleDriveSubject.onComplete();
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             e.printStackTrace();
         }
@@ -50,4 +56,10 @@ public class KeyDataSource {
     public Observable<ResourceDataSource> getResourceDataSource() {
         return asyncResourceSubject;
     }
+
+    public Observable<GoogleDriveDataSource> getGoogleDriveDataSource() {
+        return asyncGoogleDriveSubject;
+    }
+
 }
+

@@ -150,6 +150,7 @@ class FormSubmitActivity : BaseLockActivity() {
             }
 
             formPartResubmitSuccess.observe(this@FormSubmitActivity) { (first, second): Pair<CollectFormInstance, OpenRosaPartResponse?> ->
+                divviupUtils.runODKSentEvent()
                 second?.let { formPartResubmitSuccess(first, second) }
             }
 

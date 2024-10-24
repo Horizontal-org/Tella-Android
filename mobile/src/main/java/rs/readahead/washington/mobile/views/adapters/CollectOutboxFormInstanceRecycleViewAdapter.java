@@ -59,7 +59,7 @@ public class CollectOutboxFormInstanceRecycleViewAdapter extends RecyclerView.Ad
             holder.setPartlySubmittedIcon();
         }
 
-        holder.item.popupMenu.setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
+        holder.item.getPopupMenu().setOnClickListener(v -> savedFormsInterface.showFormsMenu(instance));
         holder.item.setOnClickListener(v -> savedFormsInterface.reSubmitForm(instance));
     }
 

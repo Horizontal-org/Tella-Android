@@ -33,8 +33,6 @@ import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.data.CommonPrefs;
 
-import net.zetetic.database.sqlcipher.SQLiteDatabase;
-
 import org.hzontal.tella.keys.MainKeyStore;
 import org.hzontal.tella.keys.TellaKeys;
 import org.hzontal.tella.keys.config.IUnlockRegistryHolder;
@@ -65,6 +63,7 @@ import rs.readahead.washington.mobile.media.MediaFileHandler;
 import rs.readahead.washington.mobile.util.C;
 import rs.readahead.washington.mobile.util.LocaleManager;
 import rs.readahead.washington.mobile.util.TellaUpgrader;
+import rs.readahead.washington.mobile.util.divviup.DivviupUtils;
 import rs.readahead.washington.mobile.views.activity.ExitActivity;
 import rs.readahead.washington.mobile.views.activity.MainActivity;
 import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity;
@@ -80,9 +79,10 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     private static MainKeyStore mainKeyStore;
     private static UnlockRegistry unlockRegistry;
     private static KeyDataSource keyDataSource;
-    private final Long start = System.currentTimeMillis();
     @Inject
     public HiltWorkerFactory workerFactory;
+    @Inject
+    DivviupUtils divviupUtils;
     Vault.Config vaultConfig;
 
     public static void startMainActivity(@NonNull Context context) {
@@ -142,11 +142,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeysUI.getMainKeyHolder().clear();
     }
 
-    public static void initKeys(MainKey mainKey) {
-        getMainKeyHolder().set(mainKey);
-        TellaKeysUI.getMainKeyHolder().set(mainKey);
-    }
-
     @Override
     protected void attachBaseContext(Context newBase) {
         CommonPrefs.getInstance().init(newBase);
@@ -185,7 +180,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         //initialize WorkManager
         //  WorkManager.initialize(this, myConfig);
 
-        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+        RxJavaPlugins.setErrorHandler(new Consumer<>() {
             @Override
             public void accept(Throwable throwable) {
                 Timber.d(throwable, getClass().getName());
@@ -274,6 +269,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         } catch (Exception e) {
             Timber.e(e);
         }
+        divviupUtils.runUnlockEvent();
+        divviupUtils.runInstallEvent();
 
         startMainActivity(context);
     }

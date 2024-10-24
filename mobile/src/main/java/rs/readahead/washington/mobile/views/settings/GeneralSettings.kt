@@ -10,13 +10,13 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
 import rs.readahead.washington.mobile.databinding.FragmentGeneralSettingsBinding
 import rs.readahead.washington.mobile.util.C.LOCATION_PERMISSION
 import rs.readahead.washington.mobile.util.LocaleManager
@@ -55,18 +55,19 @@ class GeneralSettings :
                 getString(R.string.config_analytics_learn_url)
             )
         }
-        binding.shareDataSwitch.mSwitch.isChecked = CommonPreferences.hasAcceptedAnalytics()
+        binding.shareDataSwitch.mSwitch.isChecked = hasAcceptedAnalytics()
 
         setLanguageSetting()
 
         initSwitch(
             binding.shareDataSwitch,
-            CommonPreferences::setIsAcceptedAnalytics
+            Preferences::setIsAcceptedAnalytics
         ) { isChecked ->
             if (isChecked) {
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
                 )
+                baseActivity.divviupUtils.runInstallEvent()
             } else {
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false
@@ -181,7 +182,7 @@ class GeneralSettings :
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         when (analyticsActions) {
             AnalyticsActions.YES -> {
-                CommonPreferences.setIsAcceptedAnalytics(true)
+                Preferences.setIsAcceptedAnalytics(true)
                 binding.shareDataSwitch.mSwitch.isChecked = true
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
@@ -189,7 +190,7 @@ class GeneralSettings :
             }
 
             AnalyticsActions.NO -> {
-                CommonPreferences.setIsAcceptedAnalytics(false)
+                Preferences.setIsAcceptedAnalytics(false)
                 binding.shareDataSwitch.mSwitch.isChecked = false
                 DialogUtils.showBottomMessage(
                     requireActivity(), getString(R.string.Settings_Analytics_turn_off_dialog), false

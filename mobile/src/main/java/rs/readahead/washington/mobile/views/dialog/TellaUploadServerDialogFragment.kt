@@ -222,10 +222,10 @@ class TellaUploadServerDialogFragment : AppCompatDialogFragment(), ICheckTUSServ
             !securityProviderUpgradeAttempted && context != null
         ) {
             try {
-                ProviderInstaller.installIfNeeded(context)
+                ProviderInstaller.installIfNeeded(requireContext())
             } catch (e: GooglePlayServicesRepairableException) {
                 GoogleApiAvailability.getInstance()
-                    .showErrorNotification(context, e.connectionStatusCode)
+                    .showErrorNotification(requireContext(), e.connectionStatusCode)
                 securityProviderUpgradeAttempted = true
                 return
             } catch (e: GooglePlayServicesNotAvailableException) {

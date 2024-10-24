@@ -75,6 +75,9 @@ public class SharedPrefs {
     static final String SHOW_MIGRATION_FAILED_BOTTOM_SHEET = "show_migration_failed_bottom_sheet";
     static final String IS_MIGRATED_MAIN_DB = "is_migrated_main_db";
     static final String IS_FRESH_INSTALL = "is_fresh_install";
+    static final String INSTALL_METRIC_SENT = "install_metric_sent";
+    static final String UNLOCK_TIME = "unlock_time";
+    static final String TIME_SPENT = "time_spent";
 
     private static SharedPrefs instance;
     private SharedPreferences pref;

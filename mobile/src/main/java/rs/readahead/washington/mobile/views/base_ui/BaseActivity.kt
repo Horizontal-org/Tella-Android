@@ -20,13 +20,16 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.util.LocaleManager
 import rs.readahead.washington.mobile.util.LockTimeoutManager
 import rs.readahead.washington.mobile.util.ThemeStyleManager
+import rs.readahead.washington.mobile.util.divviup.DivviupUtils
 import rs.readahead.washington.mobile.util.setupForAccessibility
+import javax.inject.Inject
 
 @AndroidEntryPoint
 abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
+    @Inject lateinit var divviupUtils : DivviupUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setThemeStyle()

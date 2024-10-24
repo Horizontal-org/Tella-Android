@@ -21,7 +21,7 @@
     <string name="Analytics_questions_title">Specific questions</string>
     <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
     <string name="Analytics_questions_examples">🔓  Opened Tella 4 times a week\n💾  32 files stored in Tella\n📖  Spanish language selected\n⚡  1 server connected\n😎  Calculator camouflage enabled</string>
-    <string name="Analytics_share_data_title">Share your data to improve Tella</string>
+    <string name="Analytics_share_data_title">Share analytics to improve Tella</string>
     <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
     <string name="Analytics_respect_privacy_title">We will not</string>
     <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.\n• We will never share your data or sell it to anyone</string>

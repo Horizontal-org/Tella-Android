@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="false"
-            tools:src="@drawable/ic_uwazi_small" />
+            tools:src="@drawable/ic_google_drive_white" />
 
         <TextView
             android:id="@+id/server_name_textView"
