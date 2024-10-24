@@ -54,7 +54,6 @@
         android:roundIcon="@mipmap/tella_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
         tools:targetApi="n">

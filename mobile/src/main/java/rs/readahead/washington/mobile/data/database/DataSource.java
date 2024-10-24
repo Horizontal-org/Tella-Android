@@ -2499,12 +2499,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         Cursor cursor = null;
         List<ReportInstance> instances = new ArrayList<>();
 
-        List<String> s = new ArrayList<>(statuses.length);
-        for (EntityStatus status : statuses) {
-            s.add(Integer.toString(status.ordinal()));
-        }
-        String selection = "(" + TextUtils.join(", ", s) + ")";
-
         try {
 
             final String query = SQLiteQueryBuilder.buildQueryString(

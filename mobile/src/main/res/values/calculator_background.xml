@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<<< HEAD:mobile/src/main/res/values/calculator_background.xml
     <color name="calculator_background">#54A49F</color>
-========
     <color name="calculate_background">#457C8C</color>
->>>>>>>> master:mobile/src/main/res/values/calculate_background.xml
 </resources>
