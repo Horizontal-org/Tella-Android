@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.hzontal.utils.Util;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -101,6 +102,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setOnRightClickListener(() -> {
+            maybeChangeTemporaryTimeout(() -> {
+                Util.startBrowserIntent(this, getString(R.string.config_connections_url));
+                return null;
+            });
+            return null;
+        });
 
         binding.toolbar.setBackClickListener(() -> {
             onBackPressed();
@@ -440,10 +449,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), getContext(),
-                getString(R.string.settings_servers_add_server_dialog_title),
+
+        BottomSheetUtils.showBinaryTypeSheet(
+                this.getSupportFragmentManager(),
+                this,
                 getString(R.string.settings_add_server_selection_dialog_title),
-                getString(R.string.settings_serv_add_server_selection_dialog_description),
+                getString(R.string.settings_add_server_selection_dialog_title),
+                getString(R.string.Connections_description_selection),
+                getString(R.string.Connections_description),
+                this::browseIntent,
                 getString(R.string.action_cancel), //TODO CHECk THIS
                 getString(R.string.action_ok),//TODO CHECk THIS
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
@@ -614,11 +628,20 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         getString(R.string.settings_servers_disable_auto_delete_dialog_expl),
                         getString(R.string.action_disable),
                         getString(R.string.action_cancel),
-                        this::disableAutoDelete, this::turnOnAutoDeleteSwitch);
+                        this::disableAutoDelete,
+                        this::turnOnAutoDeleteSwitch);
             }
         });
         //metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
         //metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
+    }
+
+    private Unit browseIntent() {
+        maybeChangeTemporaryTimeout(() -> {
+            Util.startBrowserIntent(this, getString(R.string.config_organizations_url));
+            return null;
+        });
+        return Unit.INSTANCE;
     }
 
     private Unit disableAutoDelete() {

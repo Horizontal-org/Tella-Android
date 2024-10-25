@@ -158,6 +158,11 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         showOnce(manager, tag)
     }
 
+    fun showOnTop(): CustomBottomSheetFragment {
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppOverlayBottomSheetDialogTheme)
+        return this
+    }
+
     override fun onStart() {
         if (dialog != null && dialog!!.window != null) {
             dialog?.let {

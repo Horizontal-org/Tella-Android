@@ -590,6 +590,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CameraTheme" />
+
+        <activity
+            android:name=".views.fragment.recorder.MicActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.ExitActivity"
             android:autoRemoveFromRecents="true"
@@ -643,9 +649,8 @@
         <activity
             android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
-           > <!-- Added launchMode -->
+            android:theme="@style/AppTheme.NoActionBar"> <!-- Added launchMode -->
 
         </activity>
 
@@ -672,8 +677,8 @@
 
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
-            android:exported="true"
             android:configChanges="orientation|keyboard"
+            android:exported="true"
             android:launchMode="singleTask">
             <!-- Your activity starting authorization flow should also configured with android:launchMode="singleTask".
                  If that activity is configured with android:taskAffinity, this AuthActivity should also configured

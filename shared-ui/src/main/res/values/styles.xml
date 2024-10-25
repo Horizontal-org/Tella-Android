@@ -255,4 +255,14 @@
         <item name="hintTextColor">@color/wa_white</item>
     </style>
 
+    <!-- styles.xml -->
+    <style name="AppOverlayBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/OverlayBottomSheet</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <style name="OverlayBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

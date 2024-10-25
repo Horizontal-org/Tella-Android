@@ -1,6 +1,8 @@
 package rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragments
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
@@ -18,6 +20,11 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
 
     override fun getViewModel(): GoogleDriveViewModel {
         return draftGoogleDriveViewModel
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
     }
 
     override fun getEmptyMessage(): Int {

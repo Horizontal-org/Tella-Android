@@ -34,7 +34,7 @@ class SubmittedDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
     }
 
     override fun getHeaderRecyclerViewMessage(): Int {
-        return -1
+        return R.string.Submitted_Header_Message
     }
 
     override fun getEmptyMessageIcon(): Int {

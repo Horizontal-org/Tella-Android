@@ -33,7 +33,7 @@ class SubmittedReportsFragment : BaseReportsFragment<ReportsViewModel>() {
     }
 
     override fun getHeaderRecyclerViewMessage(): Int {
-        return -1
+        return string.Submitted_Header_Message
     }
 
     override fun getEmptyMessageIcon(): Int {

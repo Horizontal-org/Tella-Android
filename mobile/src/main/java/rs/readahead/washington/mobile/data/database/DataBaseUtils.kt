@@ -20,7 +20,7 @@ open class DataBaseUtils(private val database: SQLiteDatabase) {
         instance: ReportInstance,
         reportTable: String,
         vaultTable: String
-    ): ReportInstance? {
+    ): ReportInstance {
         try {
             var values = ContentValues()
             if (instance.id > 0) {
