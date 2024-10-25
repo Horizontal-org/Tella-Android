@@ -2,9 +2,17 @@ package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -15,6 +23,8 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
@@ -299,7 +309,9 @@ object BottomSheetUtils {
         context: Context,
         titleText: String? = null,
         descriptionText: String? = null,
+        descriptionTextSelection: String? = null,
         descriptionContentText: String? = null,
+        onDescriptionUrlSelected :(() -> Unit)? = null,
         backText: String? = "Back",
         nextText: String? = "Next",
         buttonOneLabel: String? = null,
@@ -324,7 +336,7 @@ object BottomSheetUtils {
                     title.text = titleText ?: ""
                     backButton.text = backText ?: "Back"
                     nextButton.text = nextText ?: "Next"
-                    descriptionContent.text = descriptionContentText ?: ""
+                  //  descriptionContent.text = descriptionContentText ?: ""
 
                     setupButton(buttonOne, buttonOneLabel)
                     setupButton(buttonTwo, buttonTwoLabel)
@@ -356,6 +368,36 @@ object BottomSheetUtils {
                         buttonFourDeactivated,
                         buttonFiveDeactivated
                     )
+
+                    if (descriptionTextSelection != null) {
+                        val spannableString = SpannableString(descriptionContentText)
+                        val clickableText = SpannableString(descriptionTextSelection)
+
+                        // Find the starting and ending indices of the text selection
+                        val startIndex = descriptionContentText!!.indexOf(descriptionTextSelection, 0, true)
+                        val endIndex = startIndex + clickableText.length
+
+                        if (startIndex != -1) {
+                            val clickableSpan = object : ClickableSpan() {
+                                override fun onClick(widget: View) {
+                                    onDescriptionUrlSelected?.invoke()
+                                }
+
+                                override fun updateDrawState(ds: TextPaint) {
+                                    super.updateDrawState(ds)
+                                    ds.isUnderlineText = false // Remove underline
+                                    ds.color = ContextCompat.getColor(context, R.color.tigers_eye) // Set custom color
+                                }
+                            }
+
+                            // Apply clickable span and color span
+                            spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                            // Set the spannable text to the TextView
+                            descriptionContent.text = spannableString
+                            descriptionContent.movementMethod = LinkMovementMethod.getInstance()
+                        }
+                    }
                     backButton.setOnClickListener { customSheetFragment.dismiss() }
 
                     nextButton.setOnClickListener {

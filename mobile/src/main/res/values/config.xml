@@ -8,6 +8,8 @@
     <string name="config_privacy_url" translatable="false">https://tella-app.org/privacy</string>
     <string name="config_feedback_url" translatable="false">https://tella-app.org/features#feedback</string>
     <string name="config_analytics_learn_url" translatable="false">https://tella-app.org/security-and-privacy#analytics?</string>
+    <string name="config_organizations_url" translatable="false">https://tella-app.org/for-organizations</string>
+    <string name="config_connections_url" translatable="false">https://tella-app.org/for-organizations</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
         <item>be</item>
