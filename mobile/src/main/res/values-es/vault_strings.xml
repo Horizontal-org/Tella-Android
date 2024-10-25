@@ -15,7 +15,7 @@
   <string name="Vault_Move_SheetDesc">Mover a otra carpeta</string>
   <string name="Vault_Rename_SheetAction">Renombrar</string>
   <string name="Vault_Save_SheetAction">Guardar</string>
-  <string name="Vault_Delete_SheetAction">Borrado</string>
+  <string name="Vault_Delete_SheetAction">Borrar</string>
   <string name="Vault_Share_SheetAction">Compartir</string>
   <string name="Vault_Upload_SheetAction">Subir</string>
   <string name="Vault_File_SheetAction">Información de archivo</string>

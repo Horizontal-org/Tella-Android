@@ -10,7 +10,7 @@
   <string name="settings_menu.item_contact">Contáctanos</string>
   <string name="collect_dialog.text_download.progress">Descargando el formulario</string>
   <string name="collect_toast_download.completed">Descarga completa</string>
-  <string name="action_delete">Borrado</string>
+  <string name="action_delete">borrar</string>
   <string name="collect.draft_tab.title">Borrador</string>
   <string name="collect.blank_action_download.form">Descargar</string>
   <string name="settings_text_empty.field">Este campo no puede estar vacío.</string>
@@ -105,7 +105,7 @@
   <string name="collect.form_exit_dialog.action_save.exit">GUARDAR Y SALIR</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">SALIR DE TODOS MODOS</string>
   <string name="settings.docu_error_not.valid.URL">Esta no es un URL válida.</string>
-  <string name="home_action.label_quick.delete">Borrado</string>
+  <string name="home_action.label_quick.delete">Borrar</string>
   <string name="gallery_subheading_sort.by">Ordenar por</string>
   <string name="gallery_list.item_newest.to.oldest">Más reciente a más antiguo</string>
   <string name="gallery_list.item_oldest.to.newest">Más antiguo a más reciente</string>
@@ -684,7 +684,7 @@ Pulsa sobre una entidad para seguir trabajando en ella.</string>
   <string name="Delete_Report_Confirmation">¿Tienes seguridad de querer borrar este reporte?</string>
   <string name="Delete_Submitted_Report_Confirmation">¿Tienes seguridad de querer borrar este reporte enviado de tus registros?</string>
   <string name="View_Report">Ver</string>
-  <string name="Delete_Report">Borrado</string>
+  <string name="Delete_Report">Borrar</string>
   <string name="Paused_Report">Pausado</string>
   <string name="Report_Waiting_For_Connection">Esperando por la conexión</string>
   <string name="Project_Url_Screen_Title">Ingresar URL del proyecto</string>
@@ -938,4 +938,9 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="dropbox" translatable="false">Dropbox</string>
   <string name="Drafts_Header_Message">These are reports you are working on.</string>
   <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
+  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
+  <string name="Connections_description">Learn more about connections here. If you
+ work with an organization, you can ask them
+ about which connection to use.</string>
+  <string name="Connections_description_selection">Learn more about connections here.</string>
 </resources>
