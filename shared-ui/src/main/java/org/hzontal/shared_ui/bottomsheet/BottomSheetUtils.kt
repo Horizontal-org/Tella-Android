@@ -56,6 +56,7 @@ object BottomSheetUtils {
 
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.standar_sheet_layout)
+                .showOnTop()
                 .cancellable(true)
         customSheetFragment.holder(GenericSheetHolder(), object : Binder<GenericSheetHolder> {
             override fun onBind(holder: GenericSheetHolder) {
@@ -86,6 +87,7 @@ object BottomSheetUtils {
             }
         })
 
+        customSheetFragment.screenTag("showStandardSheet22")
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
@@ -167,6 +169,7 @@ object BottomSheetUtils {
             }
         })
 
+        customSheetFragment.screenTag("showStandardSheet23")
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
@@ -311,7 +314,7 @@ object BottomSheetUtils {
         descriptionText: String? = null,
         descriptionTextSelection: String? = null,
         descriptionContentText: String? = null,
-        onDescriptionUrlSelected :(() -> Unit)? = null,
+        onDescriptionUrlSelected: (() -> Unit)? = null,
         backText: String? = "Back",
         nextText: String? = "Next",
         buttonOneLabel: String? = null,
@@ -336,7 +339,7 @@ object BottomSheetUtils {
                     title.text = titleText ?: ""
                     backButton.text = backText ?: "Back"
                     nextButton.text = nextText ?: "Next"
-                  //  descriptionContent.text = descriptionContentText ?: ""
+                    //  descriptionContent.text = descriptionContentText ?: ""
 
                     setupButton(buttonOne, buttonOneLabel)
                     setupButton(buttonTwo, buttonTwoLabel)
@@ -374,7 +377,8 @@ object BottomSheetUtils {
                         val clickableText = SpannableString(descriptionTextSelection)
 
                         // Find the starting and ending indices of the text selection
-                        val startIndex = descriptionContentText!!.indexOf(descriptionTextSelection, 0, true)
+                        val startIndex =
+                            descriptionContentText!!.indexOf(descriptionTextSelection, 0, true)
                         val endIndex = startIndex + clickableText.length
 
                         if (startIndex != -1) {
@@ -386,12 +390,20 @@ object BottomSheetUtils {
                                 override fun updateDrawState(ds: TextPaint) {
                                     super.updateDrawState(ds)
                                     ds.isUnderlineText = false // Remove underline
-                                    ds.color = ContextCompat.getColor(context, R.color.tigers_eye) // Set custom color
+                                    ds.color = ContextCompat.getColor(
+                                        context,
+                                        R.color.tigers_eye
+                                    ) // Set custom color
                                 }
                             }
 
                             // Apply clickable span and color span
-                            spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                            spannableString.setSpan(
+                                clickableSpan,
+                                startIndex,
+                                endIndex,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
 
                             // Set the spannable text to the TextView
                             descriptionContent.text = spannableString
