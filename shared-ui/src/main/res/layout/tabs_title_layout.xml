@@ -9,7 +9,9 @@
     <TextView
         android:id="@+id/tab_title"
         style="@style/Tella_Main_White_Text.MeduimbBold"
-        tools:text="OUtbox" />
+        tools:text="OUtbox"
+        android:textColor="@color/wa_white_50"
+        />
 
     <TextView
         android:id="@+id/tab_number"

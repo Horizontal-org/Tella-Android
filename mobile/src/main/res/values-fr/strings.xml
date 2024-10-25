@@ -940,4 +940,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="dropbox" translatable="false">Dropbox</string>
   <string name="Drafts_Header_Message">These are reports you are working on.</string>
   <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
+  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
 </resources>

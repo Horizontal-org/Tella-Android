@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
@@ -62,13 +63,26 @@ class ViewPagerComponent @JvmOverloads constructor(
             tab.customView = getTabTitleView(position, 0)
         }.attach()
 
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                updateTabTextColor(tab, true)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                updateTabTextColor(tab, false)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                // No action needed
+            }
+        })
     }
 
     fun setupTabs(fragmentProvider: FragmentProvider, tabCount: Int) {
         this.fragmentProvider = fragmentProvider
         val fragments = List(tabCount) { fragmentProvider.createFragment(it) }
         viewPagerAdapter.updateFragments(fragments)
-     //   initTabTitles()
     }
 
     fun setTabTitles(titles: List<String>) {
@@ -125,4 +139,18 @@ class ViewPagerComponent @JvmOverloads constructor(
             textViewEmpty.visibility = View.GONE
         }
     }
+
+
+    private fun updateTabTextColor(tab: TabLayout.Tab, isSelected: Boolean) {
+        tab.customView?.let { customView ->
+            val tabTitleTextView = customView.findViewById<TextView>(R.id.tab_title)
+
+            val selectedColor = ContextCompat.getColor(context, R.color.wa_white)
+            val unselectedColor = ContextCompat.getColor(context,R.color.wa_white_50)
+
+            // Update text color based on selection state
+            tabTitleTextView.setTextColor(if (isSelected) selectedColor else unselectedColor)
+        }
+    }
+
 }
