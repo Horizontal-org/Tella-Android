@@ -25,7 +25,6 @@ import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -262,7 +261,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun startCleanInsightActivity() {
+    private fun startAnalyticsActivity() {
         val intent = Intent(context, AnalyticsIntroActivity::class.java)
         startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
@@ -400,6 +399,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.GOOGLE_DRIVE -> {
                 nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
             }
+
             ServerType.DROP_BOX -> {
                 nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
             }
@@ -416,7 +416,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 showMessageForCleanInsightsApprove(AnalyticsActions.YES)
             }
 
-            ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
+            ImproveClickOptions.LEARN_MORE -> startAnalyticsActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
                 setIsAcceptedAnalytics(true)
