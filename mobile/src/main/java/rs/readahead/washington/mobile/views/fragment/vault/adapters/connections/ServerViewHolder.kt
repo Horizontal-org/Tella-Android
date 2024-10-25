@@ -79,7 +79,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_dropbox_logo_small,
+                        R.drawable.ic_dropbox_small,
                         null
                     )
                 )

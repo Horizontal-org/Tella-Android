@@ -4,7 +4,6 @@ import androidx.fragment.app.activityViewModels
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel
-import rs.readahead.washington.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.MainReportFragment
 
 internal class DropBoxTabsFragment : MainReportFragment() {
@@ -24,7 +23,7 @@ internal class DropBoxTabsFragment : MainReportFragment() {
     }
 
     override fun getEmptyMessageIcon(): Int {
-        return R.drawable.ic_dropbox_logo
+        return R.drawable.ic_dropbox
     }
 
 }
