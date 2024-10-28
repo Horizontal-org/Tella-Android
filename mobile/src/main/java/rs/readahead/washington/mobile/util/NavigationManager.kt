@@ -117,6 +117,10 @@ class NavigationManager(
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
 
+    fun navigateToEnterNextCloudLoginScreen() {
+        navigateTo(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+    }
+
     fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment() {
         navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)
     }

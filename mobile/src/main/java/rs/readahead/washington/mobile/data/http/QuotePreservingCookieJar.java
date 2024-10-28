@@ -28,8 +28,6 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.internal.platform.Platform;
 
-import static okhttp3.internal.Util.delimiterOffset;
-import static okhttp3.internal.Util.trimSubstring;
 import static okhttp3.internal.platform.Platform.WARN;
 
 /** A cookie jar that delegates to a {@link java.net.CookieHandler}. */

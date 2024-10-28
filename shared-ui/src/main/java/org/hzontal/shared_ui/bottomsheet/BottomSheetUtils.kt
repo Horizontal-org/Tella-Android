@@ -304,6 +304,7 @@ object BottomSheetUtils {
         fun addUwaziServer()
         fun addGoogleDriveServer()
         fun addDropBoxServer()
+        fun addNextCloudServer()
     }
 
     @JvmStatic

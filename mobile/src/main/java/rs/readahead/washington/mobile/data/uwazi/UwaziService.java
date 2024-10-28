@@ -23,7 +23,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.TlsVersion;
 import okhttp3.internal.platform.Platform;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -124,9 +123,9 @@ public class UwaziService {
 
 
             if (BuildConfig.DEBUG) {
-                okClientBuilder.addNetworkInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-                .addInterceptor(logger);
+                //okClientBuilder.addNetworkInterceptor(
+                  //      new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+             //   .addInterceptor(logger);
                 // or BODY
             }
         }

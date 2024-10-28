@@ -37,7 +37,6 @@ import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.TlsVersion;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -138,8 +137,8 @@ public class OpenRosaService {
                     .addInterceptor(new OpenRosaRequestInterceptor());
 
             if (BuildConfig.DEBUG) {
-                okClientBuilder.addNetworkInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)); // or BODY
+               // okClientBuilder.addNetworkInterceptor(
+                    //    new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)); // or BODY
             }
         }
 

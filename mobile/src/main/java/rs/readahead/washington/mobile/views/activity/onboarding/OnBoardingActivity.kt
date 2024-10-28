@@ -201,6 +201,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             getString(R.string.unavailable_connections_desc),
             false,
             false,
+            getString(R.string.settings_docu_add_server_dialog_select_next_cloud),
             object : IServerChoiceActions {
                 override fun addUwaziServer() {
                     showUwaziServerDialog()
@@ -210,6 +211,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 }
 
                 override fun addDropBoxServer() {
+                }
+
+                override fun addNextCloudServer() {
+                    TODO("Not yet implemented")
                 }
 
                 override fun addTellaWebServer() {

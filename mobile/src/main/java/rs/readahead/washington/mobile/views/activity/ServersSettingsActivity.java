@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
@@ -59,6 +60,8 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.authentication.AuthenticatorActivity;
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
@@ -77,6 +80,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         IGoogleDriveServersPresenterContract.IView,
         IDropBoxServersPresenterContract.IView {
 
+
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
     private UwaziServersPresenter uwaziServersPresenter;
@@ -90,6 +94,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private List<GoogleDriveServer> googleDriveServers;
     private List<DropBoxServer> dropBoxServers;
     private ActivityDocumentationSettingsBinding binding;
+    /// Identifier of operation in progress which result shouldn't be lost
+    private static final String TAG = ServersSettingsActivity.class.getSimpleName();
     @Inject
     public Config config;
 
@@ -470,6 +476,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
                 servers.stream().anyMatch(server -> server instanceof DropBoxServer),
                 new BottomSheetUtils.IServerChoiceActions() {
+
                     @Override
                     public void addDropBoxServer() {
                         showDropBoxServerDialog(null);
@@ -494,6 +501,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     public void addODKServer() {
                         showCollectServerDialog(null);
                     }
+
+                    @Override
+                    public void addNextCloudServer() {
+                        showNexCloudDialog(null);
+                    }
+
                 }
         );
     }
@@ -585,6 +598,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             startActivity(intent);
         }
     }
+
+    private void showNexCloudDialog(@Nullable NextCloudServer server) {
+        if (server == null) {
+            startActivity(new Intent(this, AuthenticatorActivity.class));
+        } else {
+            Intent intent = new Intent(this, AuthenticatorActivity.class);
+            intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
+            intent.putExtra(IS_UPDATE_SERVER, true);
+            startActivity(intent);
+        }
+    }
+
 
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {

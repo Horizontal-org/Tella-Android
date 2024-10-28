@@ -72,6 +72,8 @@ buildscript {
     versions.permissionDispatcher = "4.8.0"
     versions.googlePlayServices = "17.0.0"
     versions.pdf_viewer = "2.8.2"
+    versions.nextcloud = "2.19.0"
+    versions.fidoVersion = "4.1.0-patch1"
     versions.divviup = "0.2.0"
     versions.credentialsVersion = '1.2.2'
     versions.googleIdVersion = '1.1.1'
@@ -82,6 +84,7 @@ buildscript {
     versions.gsonVersion = '2.11.0'
     versions.googleApiClientGsonVersion = '1.34.0'
     versions.dropboxVersion = '7.0.0'
+
 
     repositories {
         mavenCentral()
