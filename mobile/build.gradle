@@ -136,7 +136,7 @@ dependencies {
     implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
     kapt("org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
-    //implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
     // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
