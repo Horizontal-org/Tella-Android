@@ -106,7 +106,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding = ActivityDocumentationSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings2));
+        binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
 
         binding.toolbar.setOnRightClickListener(() -> {
@@ -471,10 +471,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox),
+                getString(R.string.settings_docu_add_server_dialog_select_next_cloud),
                 getString(R.string.unavailable_connections),
                 getString(R.string.unavailable_connections_desc),
                 servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
                 servers.stream().anyMatch(server -> server instanceof DropBoxServer),
+                servers.stream().anyMatch(server -> server instanceof NextCloudServer),
                 new BottomSheetUtils.IServerChoiceActions() {
 
                     @Override

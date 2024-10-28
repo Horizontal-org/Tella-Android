@@ -262,8 +262,10 @@ object BottomSheetUtils {
         lateinit var buttonThree: RoundButton
         lateinit var buttonFour: RoundButton
         lateinit var buttonFive: RoundButton
+        lateinit var buttonSix: RoundButton
         lateinit var buttonFourDeactivated: RoundButton
         lateinit var buttonFiveDeactivated: RoundButton
+        lateinit var buttonSixDeactivated: RoundButton
         lateinit var title: TextView
         lateinit var description: TextView
         lateinit var nextButton: TextView
@@ -282,8 +284,10 @@ object BottomSheetUtils {
             buttonThree = view.findViewById(R.id.sheet_three_btn)
             buttonFour = view.findViewById(R.id.sheet_four_activated_btn)
             buttonFive = view.findViewById(R.id.sheet_five_activated_btn)
+            buttonSix = view.findViewById(R.id.sheet_six_activated_btn)
             buttonFourDeactivated = view.findViewById(R.id.sheet_four_deactivated_btn)
             buttonFiveDeactivated = view.findViewById(R.id.sheet_five_deactivated_btn)
+            buttonSixDeactivated = view.findViewById(R.id.sheet_six_deactivated_btn)
             title = view.findViewById(R.id.standard_sheet_content)
             descriptionContent = view.findViewById(R.id.standard_sheet_content_description)
             nextButton = view.findViewById(R.id.next_btn)
@@ -323,10 +327,12 @@ object BottomSheetUtils {
         buttonThreeLabel: String? = null,
         buttonFourLabel: String? = null,
         buttonFiveLabel: String? = null,
+        buttonSixLabel: String? = null,
         unavailableConnexionLabel: String? = null,
         unavailableConnexionDesc: String? = null,
         isGoogleDriveServerAvailable: Boolean = false,
         isDropBoxServerAvailable: Boolean = false,
+        isNextCloudServerAvailable: Boolean = false,
         consumer: IServerChoiceActions
     ) {
         val customSheetFragment = CustomBottomSheetFragment.with(fragmentManager)
@@ -346,18 +352,28 @@ object BottomSheetUtils {
                     setupButton(buttonTwo, buttonTwoLabel)
                     setupButton(buttonThree, buttonThreeLabel)
                     setupButton(buttonFour, buttonFourLabel)
+                    setupButton(buttonFive, buttonFiveLabel)
+                    setupButton(buttonSix, buttonSixLabel)
+
                     setupButton(buttonFourDeactivated, buttonFourLabel)
                     setupButton(buttonFiveDeactivated, buttonFiveLabel)
-                    setupButton(buttonFive, buttonFiveLabel)
+                    setupButton(buttonSixDeactivated, buttonSixLabel)
                     unavailableConnexionText.text = unavailableConnexionLabel;
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
                     // Set button click listeners using a helper method
                     listOf(
-                        buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive
+                        buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive, buttonSix
                     ).forEachIndexed { index, button ->
                         button.setOnClickListener {
-                            resetButtons(buttonOne, buttonTwo, buttonThree, buttonFour, buttonFive)
+                            resetButtons(
+                                buttonOne,
+                                buttonTwo,
+                                buttonThree,
+                                buttonFour,
+                                buttonFive,
+                                buttonSix
+                            )
                             button.isChecked = true
                         }
                     }
@@ -365,12 +381,15 @@ object BottomSheetUtils {
                         context,
                         isGoogleDriveServerAvailable,
                         isDropBoxServerAvailable,
+                        isNextCloudServerAvailable,
                         unavailableConnexionText,
                         unavailableConnexionTextDesc,
                         buttonFour,
                         buttonFive,
+                        buttonSix,
                         buttonFourDeactivated,
-                        buttonFiveDeactivated
+                        buttonFiveDeactivated,
+                        buttonSixDeactivated
                     )
 
                     if (descriptionTextSelection != null) {
@@ -438,40 +457,40 @@ object BottomSheetUtils {
         context: Context,
         isGoogleDriveAvailable: Boolean,
         isDropboxAvailable: Boolean,
+        isNextCloudAvailable: Boolean,
         unavailableConnexionText: TextView,
         unavailableConnexionTextDesc: TextView,
         buttonFour: RoundButton,  // Google Drive button
         buttonFive: RoundButton, // Dropbox button
+        buttonSix: RoundButton, // NextCloud button
         buttonFourDeactivated: RoundButton,  // Google Drive button Deactivated
         buttonFiveDeactivated: RoundButton, // Dropbox button Deactivated
+        buttonSixDeactivated: RoundButton, // Dropbox button Deactivated
     ) {
 
         // Case where at least one server is available
-        if (isGoogleDriveAvailable || isDropboxAvailable) {
+        if (isGoogleDriveAvailable || isDropboxAvailable || isNextCloudAvailable) {
             // Show unavailable text and description when either server is available
             unavailableConnexionText.isVisible = true
             unavailableConnexionTextDesc.isVisible = true
 
-            if (isGoogleDriveAvailable && isDropboxAvailable) {
-                // Both Google Drive and Dropbox available
-                buttonFour.isVisible = false
-                buttonFive.isVisible = false
 
-                buttonFourDeactivated.isVisible = true
-                buttonFiveDeactivated.isVisible = true
-
-
-            } else if (isGoogleDriveAvailable) {
+            if (isGoogleDriveAvailable) {
                 // Only Google Drive available
                 buttonFour.isVisible = false
                 buttonFourDeactivated.isVisible = true
+            }
 
 
-            } else if (isDropboxAvailable) {
+            if (isDropboxAvailable) {
                 // Only Google Drive available
                 buttonFive.isVisible = false
                 buttonFiveDeactivated.isVisible = true
+            }
 
+            if (isNextCloudAvailable) {
+                buttonSix.isVisible = false
+                buttonSixDeactivated.isVisible = true
             }
         }
         // Case where neither Google Drive nor Dropbox is available
@@ -483,6 +502,7 @@ object BottomSheetUtils {
             // Disable both buttons
             buttonFour.isVisible = true
             buttonFive.isVisible = true
+            buttonSix.isVisible = true
 
             buttonFourDeactivated.isVisible = false
             buttonFiveDeactivated.isVisible = false
