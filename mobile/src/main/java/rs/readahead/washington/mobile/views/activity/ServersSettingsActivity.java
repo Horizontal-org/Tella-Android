@@ -603,9 +603,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void showNexCloudDialog(@Nullable NextCloudServer server) {
         if (server == null) {
-            startActivity(new Intent(this, AuthenticatorActivity.class));
+            startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
         } else {
-            Intent intent = new Intent(this, AuthenticatorActivity.class);
+            Intent intent = new Intent(this, NextCloudLoginFlowActivity.class);
             intent.putExtra(OBJECT_KEY, new Gson().toJson(server));
             intent.putExtra(IS_UPDATE_SERVER, true);
             startActivity(intent);

@@ -439,6 +439,7 @@ object BottomSheetUtils {
                             buttonThree.isChecked -> consumer.addUwaziServer()
                             buttonFour.isChecked -> consumer.addGoogleDriveServer()
                             buttonFive.isChecked -> consumer.addDropBoxServer()
+                            buttonSix.isChecked -> consumer.addNextCloudServer()
                         }
                         customSheetFragment.dismiss()
                     }
