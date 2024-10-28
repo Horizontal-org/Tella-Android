@@ -91,9 +91,6 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
         }
     }
 
-
-
-
     /**
      * Show dialog for untrusted certificate.
      */

@@ -61,7 +61,6 @@ import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
-import rs.readahead.washington.mobile.views.dialog.nextcloud.authentication.AuthenticatorActivity;
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
