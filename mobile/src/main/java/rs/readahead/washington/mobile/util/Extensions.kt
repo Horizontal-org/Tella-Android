@@ -74,19 +74,15 @@ fun Int.dpToPx(context: Context): Int {
 }
 
 fun Window.changeStatusColor(context: Context, color: Int) {
-    if (Build.VERSION.SDK_INT >= 21) {
-        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        statusBarColor = context.resources.getColor(color)
-    }
+    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+    statusBarColor = context.resources.getColor(color)
 }
 
 fun View.setTint(@ColorRes colorRes: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        background.setTintList(
-            ContextCompat.getColorStateList(context, colorRes)
-        );
-    }
+    background.setTintList(
+        ContextCompat.getColorStateList(context, colorRes)
+    );
 }
 
 fun View.hide() {
@@ -142,6 +138,6 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle,)
+    navigate(destinationId, bundle)
 }
 

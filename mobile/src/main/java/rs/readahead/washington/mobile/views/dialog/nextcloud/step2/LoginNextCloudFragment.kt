@@ -96,7 +96,7 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
 
     private fun startRefresh(userName: String, password: String) {
         (activity as? INextCloudAuthFlow)?.onStartRefreshLogin(
-            "",
+            serverNextCloud.url,
             userName,
             password
         )

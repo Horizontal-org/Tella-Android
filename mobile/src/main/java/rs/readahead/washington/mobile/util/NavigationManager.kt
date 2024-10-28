@@ -118,7 +118,11 @@ class NavigationManager(
     }
 
     fun navigateToEnterNextCloudLoginScreen() {
-        navigateTo(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+        navigateToWithBundle(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+    }
+
+    fun navigateToNextCloudCreateFolderScreen() {
+        navigateToWithBundle(R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen)
     }
 
     fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment() {
