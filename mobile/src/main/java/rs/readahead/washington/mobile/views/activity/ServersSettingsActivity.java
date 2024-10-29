@@ -671,7 +671,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 if (action == BottomSheetUtils.Action.DELETE) {
                     removeServer(server);
                 }
-            }, String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()), getString(R.string.settings_docu_delete_server_dialog_expl), getString(R.string.action_delete), getString(R.string.action_cancel), -1, !(server instanceof GoogleDriveServer || server instanceof DropBoxServer)));
+            }, String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()), getString(R.string.settings_docu_delete_server_dialog_expl), getString(R.string.action_delete), getString(R.string.action_cancel), -1, !(server instanceof GoogleDriveServer || server instanceof DropBoxServer|| server instanceof NextCloudServer)));
         }
         item.setTag(servers.indexOf(server));
         return item;
@@ -689,6 +689,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 // editGoogleDriveServer((GoogleDriveServer) server);
             case DROP_BOX:
                 // editGoogleDriveServer((GoogleDriveServer) server);
+            case NEXTCLOUD:
             default:
                 editTUServer((TellaReportServer) server);
                 break;
@@ -708,6 +709,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 break;
             case DROP_BOX:
                 dropBoxServersPresenter.remove((DropBoxServer) server);
+                break;
+            case NEXTCLOUD:
+                nextCloudServersPresenter.remove((NextCloudServer) server);
                 break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
