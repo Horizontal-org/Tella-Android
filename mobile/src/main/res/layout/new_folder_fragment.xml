@@ -71,7 +71,7 @@
                 tools:ignore="RtlSymmetry" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/url_layout"
+                android:id="@+id/folder_layout"
                 style="@style/DialogDataCollectionTextEntryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

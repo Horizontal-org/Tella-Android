@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -44,7 +44,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     private val handler = Handler()
     private var ownCloudClient: OwnCloudClient? = null
     private var nextCloudServer = NextCloudServer()
-
+    private val viewModel by viewModels<NextCloudLoginFlowViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +55,6 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
             navController.navigate(R.id.nextcloud_settings)
-        } else {
-            //TODO EDIT SCREEN
         }
     }
 
@@ -116,9 +114,11 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     override fun onRemoteOperationFinish(
         operation: RemoteOperation<*>?, result: RemoteOperationResult<*>?
     ) {
+        viewModel.progress.postValue(false)
         if (result?.isSuccess == false) {
-            Toast.makeText(this, R.string.todo_operation_finished_in_fail, Toast.LENGTH_SHORT)
-                .show()
+            if (operation is ReadFolderRemoteOperation) {
+                viewModel.errorUserNamePassword.postValue(true)
+            }
         } else if (operation is ReadFolderRemoteOperation) {
             onSuccessfulRefresh(operation as ReadFolderRemoteOperation?, result)
         }
@@ -127,19 +127,13 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     private fun onSuccessfulRefresh(
         operation: ReadFolderRemoteOperation?, result: RemoteOperationResult<*>?
     ) {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        val bundle = Bundle()
-        bundle.putString(OBJECT_KEY, Gson().toJson(nextCloudServer))
-        navController.navigateSafe(
-            R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen, bundle
-        )
-    }
+        viewModel.progress.postValue(false)
 
-    private fun onFailedFulRefresh(
-        operation: ReadFolderRemoteOperation?, result: RemoteOperationResult<*>
-    ) {
+        ownCloudClient.let {
+            viewModel.successLoginToServer.postValue(NextCloudServer(userId = ownCloudClient!!.userId,
+                
+                ))
+        }
 
     }
 
@@ -156,6 +150,10 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
             this.password = password
         }
         startRefresh()
+    }
+
+    override fun onStartCreateRemoteFolder(folderName: String) {
+        createRemoteFolder(folderName)
     }
 
     private fun startRefresh() {

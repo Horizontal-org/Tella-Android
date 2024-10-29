@@ -6,6 +6,8 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -27,7 +29,7 @@ import timber.log.Timber
 class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
     FragmentLoginScreenBinding::inflate
 ) {
-    private val viewModel: NextCloudLoginFlowViewModel by viewModels()
+    private val viewModel by activityViewModels<NextCloudLoginFlowViewModel>()
     private lateinit var serverNextCloud: NextCloudServer
     private var validated = true
 
@@ -80,21 +82,19 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
 
     @SuppressLint("TimberArgCount")
     private fun initObservers() {
-        viewModel.userInfoResult.observe(viewLifecycleOwner) { userInfoResult ->
-            if (userInfoResult.isSuccess) {
-                // Operation was successful, access result data
-                val userInfo = userInfoResult.resultData
-                // Proceed with the successful result, e.g., navigate to the next screen or update UI
-            } else {
-                // Operation failed, handle the failure
-                Timber.e("LoginNextCloudFragment", "Operation failed: ${userInfoResult.logMessage}")
-                // Show an error message to the user or take appropriate action
-                Toast.makeText(context, "Failed to validate server URL", Toast.LENGTH_SHORT).show()
-            }
+
+        viewModel.errorUserNamePassword.observe(viewLifecycleOwner) {
+            validateRequired(binding.password, binding.passwordLayout)
+            binding.passwordLayout.error = getString(R.string.settings_docu_error_wrong_credentials)
+        }
+
+        viewModel.progress.observe(viewLifecycleOwner) { isVisible ->
+            binding.progressBar.isVisible = isVisible
         }
     }
 
     private fun startRefresh(userName: String, password: String) {
+        viewModel.progress.postValue(true)
         (activity as? INextCloudAuthFlow)?.onStartRefreshLogin(
             serverNextCloud.url,
             userName,

@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.bus.SingleLiveEvent
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.CheckUserCredentialsUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.ValidateNextcloudServerUrlUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.ValidationResult
@@ -20,7 +22,6 @@ class NextCloudLoginFlowViewModel @Inject constructor(
     private val checkUserCredentialsUseCase: CheckUserCredentialsUseCase
 ) : ViewModel() {
 
-
     private val _userInfoResult = MutableLiveData<RemoteOperationResult<UserInfo?>>()
     val userInfoResult: LiveData<RemoteOperationResult<UserInfo?>> get() = _userInfoResult
 
@@ -31,6 +32,12 @@ class NextCloudLoginFlowViewModel @Inject constructor(
     private val _error = MutableLiveData<ValidationError>()
     val error: LiveData<ValidationError> = _error
 
+    val errorUserNamePassword = MutableLiveData<Boolean>()
+
+    val successLoginToServer = SingleLiveEvent<NextCloudServer>()
+
+    val progress = MutableLiveData<Boolean>()
+
     fun validateServerUrl(serverUrl: String) {
         val disposable = validateServerUrlUseCase(serverUrl)
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,30 +47,27 @@ class NextCloudLoginFlowViewModel @Inject constructor(
                         _isValidServer.postValue(result.data)
 
                     }
+
                     is ValidationResult.Error -> {
-                       // _isValidServer.postValue(false)
-                        _error.postValue(ValidationError(result.exception.localizedMessage ?: "Unknown error occurred", result.exception))
+                        // _isValidServer.postValue(false)
+                        _error.postValue(
+                            ValidationError(
+                                result.exception.localizedMessage ?: "Unknown error occurred",
+                                result.exception
+                            )
+                        )
                     }
                 }
             }, { throwable ->
                 _isValidServer.postValue(false)
-                _error.postValue(ValidationError(throwable.localizedMessage ?: "Unknown error occurred", throwable))
+                _error.postValue(
+                    ValidationError(
+                        throwable.localizedMessage ?: "Unknown error occurred", throwable
+                    )
+                )
             })
 
         disposables.add(disposable)
-    }
-
-    fun checkUserCredentials(serverUrl: String, username: String, password: String) {
-        disposables.add(
-            checkUserCredentialsUseCase.execute(serverUrl, username, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ result ->
-                    _userInfoResult.postValue(result)
-                }, { error ->
-                    _userInfoResult.postValue(RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR))
-                })
-        )
     }
 
     override fun onCleared() {
