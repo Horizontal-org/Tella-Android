@@ -35,6 +35,7 @@ class NextCloudLoginFlowViewModel @Inject constructor(
     val errorUserNamePassword = MutableLiveData<Boolean>()
 
     val successLoginToServer = SingleLiveEvent<NextCloudServer>()
+    val successFolderCreation = SingleLiveEvent<NextCloudServer>()
 
     val progress = MutableLiveData<Boolean>()
 

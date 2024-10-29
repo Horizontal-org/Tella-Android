@@ -116,22 +116,22 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
         if (result?.isSuccess == false) {
             if (operation is ReadFolderRemoteOperation) {
                 viewModel.errorUserNamePassword.postValue(true)
-            }else if (operation is CreateFolderRemoteOperation){
+            } else if (operation is CreateFolderRemoteOperation) {
                 viewModel.errorFolderCreation.postValue(result.message)
             }
         } else if (operation is ReadFolderRemoteOperation) {
             onSuccessfulRefresh()
         } else if (operation is CreateFolderRemoteOperation) {
-            onSuccessfulRemoteServerOperation()
+            onSuccessfulCreateFolderOperation()
         }
     }
 
-    private fun onSuccessfulRemoteServerOperation() {
+    private fun onSuccessfulCreateFolderOperation() {
         viewModel.progress.postValue(false)
 
         ownCloudClient.let {
             nextCloudServer.folderName = folderPath
-            viewModel.successLoginToServer.postValue(nextCloudServer)
+            viewModel.successFolderCreation.postValue(nextCloudServer)
         }
     }
 

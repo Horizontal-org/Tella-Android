@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.dialog.nextcloud.step3
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +19,7 @@ import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowV
 class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
     NewFolderFragmentBinding::inflate
 ) {
-    private val viewModel: NextCloudLoginFlowViewModel by viewModels()
+    private val viewModel: NextCloudLoginFlowViewModel by activityViewModels()
     private lateinit var serverNextCloud: NextCloudServer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +62,7 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
             showToast(message)
         }
 
-        viewModel.successLoginToServer.observe(viewLifecycleOwner) { server ->
+        viewModel.successFolderCreation.observe(viewLifecycleOwner) { server ->
             bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
             navManager().actionNextCloudNewFolderScreenToSuccessfulScreen()
         }
