@@ -3,11 +3,14 @@ package rs.readahead.washington.mobile.views.dialog.nextcloud.step3
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.NewFolderFragmentBinding
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.INextCloudAuthFlow
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
 
@@ -23,6 +26,9 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
     }
 
     private fun initView() {
+        arguments?.getString(OBJECT_KEY)?.let {
+            serverNextCloud = Gson().fromJson(it, NextCloudServer::class.java)
+        }
         binding.nextBtn.setOnClickListener {
             createFolder()
         }

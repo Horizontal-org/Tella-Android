@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
-import com.google.gson.Gson
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
@@ -21,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.utils.DialogUtils.showBottomMessage
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
-import rs.readahead.washington.mobile.util.navigateSafe
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.normalizeScheme
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.normalizeUrlSuffix
 import rs.readahead.washington.mobile.util.operations.AuthenticatorUrlUtils.stripIndexPhpOrAppsFiles
@@ -31,7 +29,6 @@ import rs.readahead.washington.mobile.util.operations.OperationsService
 import rs.readahead.washington.mobile.util.operations.OperationsService.OperationsServiceBinder
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity
 import rs.readahead.washington.mobile.views.dialog.IS_UPDATE_SERVER
-import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.SslUntrustedCertDialog.OnSslUntrustedCertListener
 
 @AndroidEntryPoint
@@ -45,6 +42,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     private var ownCloudClient: OwnCloudClient? = null
     private var nextCloudServer = NextCloudServer()
     private val viewModel by viewModels<NextCloudLoginFlowViewModel>()
+    private var folderPath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,19 +118,30 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
                 viewModel.errorUserNamePassword.postValue(true)
             }
         } else if (operation is ReadFolderRemoteOperation) {
-            onSuccessfulRefresh(operation as ReadFolderRemoteOperation?, result)
+            onSuccessfulRefresh()
+        } else if (operation is CreateFolderRemoteOperation) {
+            onSuccessfulRemoteServerOperation()
+        }
+    }
+
+    private fun onSuccessfulRemoteServerOperation() {
+        viewModel.progress.postValue(false)
+
+        ownCloudClient.let {
+            nextCloudServer.folderName = folderPath
+            viewModel.successLoginToServer.postValue(nextCloudServer)
         }
     }
 
     private fun onSuccessfulRefresh(
-        operation: ReadFolderRemoteOperation?, result: RemoteOperationResult<*>?
     ) {
         viewModel.progress.postValue(false)
 
         ownCloudClient.let {
-            viewModel.successLoginToServer.postValue(NextCloudServer(userId = ownCloudClient!!.userId,
-                
-                ))
+            nextCloudServer.userId = ownCloudClient!!.userId
+            nextCloudServer.username = ownCloudClient!!.credentials.username
+            nextCloudServer.password = ownCloudClient!!.credentials.authToken
+            viewModel.successLoginToServer.postValue(nextCloudServer)
         }
 
     }
@@ -162,6 +171,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     }
 
     private fun createRemoteFolder(folderPath: String) {
+        this.folderPath = folderPath
         val createFolderOperation = CreateFolderRemoteOperation(folderPath, true)
         createFolderOperation.execute(ownCloudClient, this, handler)
     }

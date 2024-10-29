@@ -91,6 +91,11 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         viewModel.progress.observe(viewLifecycleOwner) { isVisible ->
             binding.progressBar.isVisible = isVisible
         }
+
+        viewModel.successLoginToServer.observe(viewLifecycleOwner){
+            bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+            navManager().navigateToNextCloudCreateFolderScreen()
+        }
     }
 
     private fun startRefresh(userName: String, password: String) {

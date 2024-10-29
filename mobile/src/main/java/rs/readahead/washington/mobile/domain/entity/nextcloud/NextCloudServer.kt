@@ -8,7 +8,7 @@ import java.io.Serializable
 class NextCloudServer @JvmOverloads constructor(
     id: Long = 0,
     var folderName: String = "",
-    userId: String = ""
+    var userId: String = ""
 ) : Server(), Serializable {
 
 
