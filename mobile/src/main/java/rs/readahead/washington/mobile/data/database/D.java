@@ -16,7 +16,7 @@ class D {
 
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 15;
+    static final int DATABASE_VERSION = 16;
     static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
@@ -137,6 +137,12 @@ class D {
     static final String C_RESOURCES_SAVED = "c_resources_saved";
     static final String C_RESOURCES_PROJECT = "c_resources_project";
     static final String C_RESOURCES_FILE_ID = "c_resources_file_id";
+
+    /* NEXT CLOUD */
+    static final String T_NEXT_CLOUD = "t_next_cloud";
+    static final String C_NEXT_CLOUD_SERVER_NAME = "c_next_cloud_server_name";
+    static final String C_NEXT_CLOUD_FOLDER_ID = "c_next_cloud_folder_id";
+    static final String C_NEXT_CLOUD_FOLDER_NAME = "c_next_cloud_folder_name";
 
     /* GOOGLE DRIVE */
     static final String T_GOOGLE_DRIVE = "t_google_drive";
