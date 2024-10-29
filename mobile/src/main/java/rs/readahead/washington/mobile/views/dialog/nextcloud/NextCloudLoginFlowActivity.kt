@@ -116,6 +116,8 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
         if (result?.isSuccess == false) {
             if (operation is ReadFolderRemoteOperation) {
                 viewModel.errorUserNamePassword.postValue(true)
+            }else if (operation is CreateFolderRemoteOperation){
+                viewModel.errorFolderCreation.postValue(result.message)
             }
         } else if (operation is ReadFolderRemoteOperation) {
             onSuccessfulRefresh()

@@ -124,6 +124,9 @@ class NavigationManager(
     fun navigateToNextCloudCreateFolderScreen() {
         navigateToWithBundle(R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen)
     }
+    fun actionNextCloudNewFolderScreenToSuccessfulScreen(){
+        navigateToWithBundle(R.id.action_nextCloudNewFolderScreen_to_successfulSetServerFragment)
+    }
 
     fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment() {
         navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)

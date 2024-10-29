@@ -23,6 +23,7 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initObservers()
     }
 
     private fun initView() {
@@ -53,5 +54,16 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
         (activity as? INextCloudAuthFlow)?.onStartCreateRemoteFolder(
             folderName = folderName
         )
+    }
+
+    private fun initObservers() {
+        viewModel.errorFolderCreation.observe(viewLifecycleOwner) { message ->
+            showToast(message)
+        }
+
+        viewModel.successLoginToServer.observe(viewLifecycleOwner) { server ->
+            bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+            navManager().actionNextCloudNewFolderScreenToSuccessfulScreen()
+        }
     }
 }

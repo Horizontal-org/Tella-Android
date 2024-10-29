@@ -35,7 +35,6 @@ class SuccessfulSetServerFragment :
         binding.okBtn.setOnClickListener {
             save(server)
         }
-
     }
 
     private fun save(server: NextCloudServer) {
