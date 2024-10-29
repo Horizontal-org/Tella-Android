@@ -17,15 +17,13 @@ class NextCloudServersPresenter(var view: INextCloudServersPresenterContract.IVi
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
 
-    override fun getNextCloudServers(nextCloudId: String) {
+    override fun getNextCloudServers() {
         disposables.add(keyDataSource.nextCloudDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view.showLoading() }
             .flatMapSingle { dataSource: NextCloudDataSource ->
-                dataSource.listNextCloudServers(
-                    nextCloudId
-                )
+                dataSource.listNextCloudServers()
             }
             .doFinally { view.hideLoading() }
             .subscribe(

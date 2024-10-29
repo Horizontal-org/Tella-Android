@@ -128,7 +128,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         nextCloudServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
-        nextCloudServersPresenter = new NextCloudServersPresenter(this);
         collectServersPresenter.getCollectServers();
         tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
         tellaUploadServersPresenter.getTUServers();
@@ -141,6 +140,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
         dropBoxServersPresenter = new DropBoxServersPresenter(this);
         dropBoxServersPresenter.getDropBoxServers();
+
+        //NextCloud server
+        nextCloudServersPresenter = new NextCloudServersPresenter(this);
+        nextCloudServersPresenter.getNextCloudServers();
         createRefreshPresenter();
         initUwaziEvents();
         initReportsEvents();
@@ -947,7 +950,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         nextCloudServers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
-
     }
 
     @Override

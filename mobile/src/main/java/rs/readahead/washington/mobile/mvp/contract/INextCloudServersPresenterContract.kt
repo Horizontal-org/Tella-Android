@@ -18,7 +18,7 @@ interface INextCloudServersPresenterContract {
     }
 
     interface IPresenter : IBasePresenter {
-        fun getNextCloudServers(nextCloudId: String)
+        fun getNextCloudServers()
         fun create(server: NextCloudServer)
         fun remove(server: NextCloudServer)
     }

@@ -86,12 +86,12 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
 
     @NonNull
     @Override
-    public Single<List<NextCloudServer>> listNextCloudServers(String nextCloudId) {
-        return Single.fromCallable(() -> dataSource.getListNextCloudServers(nextCloudId))
+    public Single<List<NextCloudServer>> listNextCloudServers() {
+        return Single.fromCallable(() -> dataSource.getListNextCloudServers())
                 .compose(applySchedulers());
     }
 
-    private List<NextCloudServer> getListNextCloudServers(String nextCloudId) {
+    private List<NextCloudServer> getListNextCloudServers() {
         Cursor cursor = null;
         List<NextCloudServer> servers = new ArrayList<>();
 
