@@ -10,6 +10,7 @@ import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -223,6 +224,9 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     @NonNull
     @Override
     public Completable removeNextCloudServer(long id) {
-        return null;
+        return Completable.fromCallable((Callable<Void>) () -> {
+            removeServer(id);
+            return null;
+        }).compose(applyCompletableSchedulers());
     }
 }
