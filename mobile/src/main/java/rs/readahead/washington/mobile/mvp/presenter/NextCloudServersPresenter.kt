@@ -5,78 +5,82 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
-import rs.readahead.washington.mobile.data.database.GoogleDriveDataSource
 import rs.readahead.washington.mobile.data.database.KeyDataSource
+import rs.readahead.washington.mobile.data.database.NextCloudDataSource
 import rs.readahead.washington.mobile.data.openrosa.OpenRosaService
-import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
-import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
+import rs.readahead.washington.mobile.mvp.contract.INextCloudServersPresenterContract
 
-class GoogleDriveServersPresenter(var view: IGoogleDriveServersPresenterContract.IView) :
-    IGoogleDriveServersPresenterContract.IPresenter {
+class NextCloudServersPresenter(var view: INextCloudServersPresenterContract.IView) :
+    INextCloudServersPresenterContract.IPresenter {
 
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
 
-    override fun getGoogleDriveServers(googleDriveId: String) {
-        disposables.add(keyDataSource.googleDriveDataSource
+    override fun getNextCloudServers(nextCloudId: String) {
+        disposables.add(keyDataSource.nextCloudDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view.showLoading() }
-            .flatMapSingle { dataSource: GoogleDriveDataSource -> dataSource.listGoogleDriveServers(googleDriveId) }
+            .flatMapSingle { dataSource: NextCloudDataSource ->
+                dataSource.listNextCloudServers(
+                    nextCloudId
+                )
+            }
             .doFinally { view.hideLoading() }
             .subscribe(
-                { list: List<GoogleDriveServer> ->
-                    view.onGoogleDriveServersLoaded(
+                { list: List<NextCloudServer> ->
+                    view.onNextCloudServersLoaded(
                         list
                     )
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view.onLoadGoogleDriveServersError(throwable)
+                view.onLoadNextCloudServersError(throwable)
             }
         )
     }
 
-    override fun create(server: GoogleDriveServer) {
+    override fun create(server: NextCloudServer) {
         disposables.add(
-            keyDataSource.googleDriveDataSource
+            keyDataSource.nextCloudDataSource
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view.showLoading() }
-                .flatMapSingle { dataSource: GoogleDriveDataSource ->
-                    dataSource.saveGoogleDriveServer(server)
+                .flatMapSingle { dataSource: NextCloudDataSource ->
+                    dataSource.saveNextCloudServer(server)
                 }
                 .doFinally { view.hideLoading() }
                 .subscribe(
-                    { googleDriveServer: GoogleDriveServer ->
-                        view.onCreatedGoogleDriveServer(
-                            googleDriveServer
+                    { server: NextCloudServer ->
+                        view.onCreatedNextCloudServer(
+                            server
                         )
                     },
                     { throwable: Throwable? ->
                         FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                        view.onCreateGoogleDriveServerError(throwable)
+                        view.onCreateNextCloudServerError(throwable)
                     })
         )
     }
 
-    override fun remove(server: GoogleDriveServer) {
-        disposables.add(keyDataSource.googleDriveDataSource
+    override fun remove(server: NextCloudServer) {
+        disposables.add(keyDataSource.nextCloudDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { view.showLoading() }
-            .flatMapCompletable { dataSource: GoogleDriveDataSource ->
-                dataSource.removeGoogleDriveServer(server.id)
+            .flatMapCompletable { dataSource: NextCloudDataSource ->
+                dataSource.removeNextCloudServer(server.id)
             }
             .doFinally { view.hideLoading() }
             .subscribe(
                 {
                     OpenRosaService.clearCache()
-                    view.onRemovedGoogleDriveServer(server)
+                    view.onRemovedNextCloudServer(server)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                view.onRemoveGoogleDriveServerError(throwable)
+                view.onRemoveNextCloudServerError(throwable)
             }
         )
     }

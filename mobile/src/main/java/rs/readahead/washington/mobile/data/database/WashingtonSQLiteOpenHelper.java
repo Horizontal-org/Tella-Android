@@ -205,16 +205,20 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, true) +
                 ");";
     }
+
     private String createTableNextCloud() {
         return "CREATE TABLE " + sq(D.T_NEXT_CLOUD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
                 cddl(D.C_NEXT_CLOUD_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_NEXT_CLOUD_FOLDER_NAME, D.TEXT, true) + " , " +
+                cddl(D.C_NEXT_CLOUD_USER_ID, D.TEXT, true) + " , " +
+                cddl(D.C_PASSWORD, D.TEXT, true) + " , " +
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT, true) + " , " +
                 cddl(D.C_NEXT_CLOUD_SERVER_NAME, D.TEXT, true) +
                 ");";
     }
+
     private String alterTableMediaFileUploadsAddManual() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
                 cddl(D.C_MANUAL_UPLOAD, D.INTEGER, true) + " DEFAULT 0";

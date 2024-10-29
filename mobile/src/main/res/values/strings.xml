@@ -1024,4 +1024,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="password"></string>
   <string name="server_base_url">https://cloud.wearehorizontal.org</string>
   <string name="Folder_Empty_Error">Folder name cannot be empty</string>
+  <string name="go_to_nextcloud">Go to Nextcloud</string>
 </resources>

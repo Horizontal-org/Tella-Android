@@ -52,6 +52,7 @@ class D {
     static final String C_PATH = "c_path";
     static final String C_URL = "c_url";
     static final String C_USERNAME = "c_username";
+    static final String C_USERID = "c_userid";
     static final String C_PASSWORD = "c_password";
     static final String C_VERSION = "c_version";
     static final String C_HASH = "c_hash";
@@ -143,6 +144,7 @@ class D {
     static final String C_NEXT_CLOUD_SERVER_NAME = "c_next_cloud_server_name";
     static final String C_NEXT_CLOUD_FOLDER_ID = "c_next_cloud_folder_id";
     static final String C_NEXT_CLOUD_FOLDER_NAME = "c_next_cloud_folder_name";
+    static final String C_NEXT_CLOUD_USER_ID = "c_next_cloud_user_id";
 
     /* GOOGLE DRIVE */
     static final String T_GOOGLE_DRIVE = "t_google_drive";

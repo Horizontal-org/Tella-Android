@@ -47,6 +47,7 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshP
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IDropBoxServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.INextCloudServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
@@ -54,6 +55,7 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshP
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.DropBoxServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.GoogleDriveServersPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.NextCloudServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
@@ -68,7 +70,7 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivit
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IGoogleDriveServersPresenterContract.IView, IDropBoxServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IGoogleDriveServersPresenterContract.IView, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
 
 
     private ServersPresenter serversPresenter;
@@ -78,11 +80,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private DropBoxServersPresenter dropBoxServersPresenter;
+    private NextCloudServersPresenter nextCloudServersPresenter;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
     private List<GoogleDriveServer> googleDriveServers;
     private List<DropBoxServer> dropBoxServers;
+    private List<NextCloudServer> nextCloudServers;
     private ActivityDocumentationSettingsBinding binding;
     /// Identifier of operation in progress which result shouldn't be lost
     private static final String TAG = ServersSettingsActivity.class.getSimpleName();
@@ -121,8 +125,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         uwaziServers = new ArrayList<>();
         googleDriveServers = new ArrayList<>();
         dropBoxServers = new ArrayList<>();
+        nextCloudServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
+        nextCloudServersPresenter = new NextCloudServersPresenter(this);
         collectServersPresenter.getCollectServers();
         tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
         tellaUploadServersPresenter.getTUServers();
@@ -140,6 +146,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         initReportsEvents();
         initGoogleDriveEvents();
         initDropBoxEvents();
+        initNextCloudEvents();
         initListeners();
     }
 
@@ -189,6 +196,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
             if (server != null) {
                 googleDriveServersPresenter.create(server);
+            }
+        });
+    }
+
+    private void initNextCloudEvents() {
+        INSTANCE.getCreateNextCloudServer().observe(this, server -> {
+            if (server != null) {
+                nextCloudServersPresenter.create(server);
             }
         });
     }
@@ -909,6 +924,49 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
     @Override
     public void onRemoveDropBoxServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onNextCloudServersLoaded(@NonNull List<NextCloudServer> nextCloudServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(nextCloudServers);
+        createServerViews(servers);
+
+        this.nextCloudServers = nextCloudServers;
+    }
+
+    @Override
+    public void onLoadNextCloudServersError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCreatedNextCloudServer(@NonNull NextCloudServer server) {
+        servers.add(server);
+        nextCloudServers.add(server);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
+
+    }
+
+    @Override
+    public void onCreateNextCloudServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onRemovedNextCloudServer(@NonNull NextCloudServer server) {
+        servers.remove(server);
+        nextCloudServers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+
+    }
+
+    @Override
+    public void onRemoveNextCloudServerError(@NonNull Throwable throwable) {
 
     }
 }

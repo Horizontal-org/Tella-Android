@@ -66,6 +66,9 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     private NextCloudServer updateNextCloudServer(NextCloudServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_USERNAME, server.getUsername());
+        values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_NEXT_CLOUD_USER_ID, server.getUserId());
+        values.put(D.C_NEXT_CLOUD_FOLDER_ID, server.getFolderId());
         values.put(D.C_NEXT_CLOUD_SERVER_NAME, server.getName());
         server.setId(database.insert(D.T_NEXT_CLOUD, null, values));
         return server;
