@@ -209,8 +209,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
     private String createTableNextCloud() {
         return "CREATE TABLE " + sq(D.T_NEXT_CLOUD) + " (" +
                 cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
-                cddl(D.C_NEXT_CLOUD_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
-                cddl(D.C_NEXT_CLOUD_FOLDER_NAME, D.TEXT, true) + " , " +
+                //  cddl(D.C_NEXT_CLOUD_FOLDER_ID, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_NEXT_CLOUD_FOLDER_NAME, D.TEXT, true) + " UNIQUE, " +
                 cddl(D.C_NEXT_CLOUD_USER_ID, D.TEXT, true) + " , " +
                 cddl(D.C_PASSWORD, D.TEXT, true) + " , " +
                 cddl(D.C_NAME, D.TEXT) + " , " +

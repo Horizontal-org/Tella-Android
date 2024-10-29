@@ -968,7 +968,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         binding.collectServersList.removeAllViews();
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
-
     }
 
     @Override

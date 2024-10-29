@@ -41,10 +41,8 @@ class SuccessfulSetServerFragment :
     }
 
     private fun handleServerUpdate() {
-        if (isUpdate) {
-            nextCloudServer.name = "NextCloud"
-            createNextCloudServer.postValue(nextCloudServer)
-        }
+        nextCloudServer.name = "NextCloud"
+        createNextCloudServer.postValue(nextCloudServer)
     }
 
 }

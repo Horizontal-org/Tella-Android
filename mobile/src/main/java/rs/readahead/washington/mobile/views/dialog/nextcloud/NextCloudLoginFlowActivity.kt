@@ -43,6 +43,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     private var nextCloudServer = NextCloudServer()
     private val viewModel by viewModels<NextCloudLoginFlowViewModel>()
     private var folderPath = ""
+    private var password = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,7 +143,7 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
         ownCloudClient.let {
             nextCloudServer.userId = ownCloudClient!!.userId
             nextCloudServer.username = ownCloudClient!!.credentials.username
-            nextCloudServer.password = ownCloudClient!!.credentials.authToken
+            nextCloudServer.password = password
             viewModel.successLoginToServer.postValue(nextCloudServer)
         }
 
@@ -155,6 +156,8 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
             userName, password
         )
         ownCloudClient?.userId = userName
+        this.password = password
+
 
         nextCloudServer.apply {
             name = userName
