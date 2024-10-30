@@ -89,7 +89,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_nextcloud,
+                        R.drawable.ic_nextcloud_small,
                         null
                     )
                 )
