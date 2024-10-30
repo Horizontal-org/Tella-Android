@@ -13,36 +13,35 @@ import rs.readahead.washington.mobile.views.dialog.SharedLiveData.createNextClou
 
 @AndroidEntryPoint
 class SuccessfulSetServerFragment :
-    BaseBindingFragment<FragmentSuccessfulSetServerBinding>(
-        FragmentSuccessfulSetServerBinding::inflate
-    ) {
+    BaseBindingFragment<FragmentSuccessfulSetServerBinding>(FragmentSuccessfulSetServerBinding::inflate) {
+
     private lateinit var nextCloudServer: NextCloudServer
-    private var isUpdate = false
+    private var isUpdate: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupData()
-        initListeners()
+        retrieveArguments()
+        setupListeners()
     }
 
-    private fun setupData() {
-        // Use requireArguments to avoid nullable arguments handling
-        nextCloudServer =
-            Gson().fromJson(requireArguments().getString(OBJECT_KEY), NextCloudServer::class.java)
-
-        isUpdate = requireArguments().getBoolean(IS_UPDATE_SERVER, false)
-    }
-
-    private fun initListeners() {
-        binding.okBtn.setOnClickListener {
-            handleServerUpdate()
+    private fun retrieveArguments() {
+        arguments?.let { args ->
+            nextCloudServer = Gson().fromJson(args.getString(OBJECT_KEY), NextCloudServer::class.java)
+            isUpdate = args.getBoolean(IS_UPDATE_SERVER, false)
+        } ?: run {
             baseActivity.finish()
         }
     }
 
-    private fun handleServerUpdate() {
+    private fun setupListeners() {
+        binding.okBtn.setOnClickListener {
+            applyServerUpdate()
+            baseActivity.finish()
+        }
+    }
+
+    private fun applyServerUpdate() {
         nextCloudServer.name = "NextCloud"
         createNextCloudServer.postValue(nextCloudServer)
     }
-
 }

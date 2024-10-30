@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.dialog.nextcloud.step3
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,52 +21,57 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
 ) {
     private val viewModel: NextCloudLoginFlowViewModel by activityViewModels()
     private lateinit var serverNextCloud: NextCloudServer
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initObservers()
+        initializeView()
+        setupObservers()
     }
 
-    private fun initView() {
+    private fun initializeView() {
         arguments?.getString(OBJECT_KEY)?.let {
             serverNextCloud = Gson().fromJson(it, NextCloudServer::class.java)
         }
-        binding.nextBtn.setOnClickListener {
-            createFolder()
-        }
-
-        binding.backBtn.setOnClickListener {
-            baseActivity.onBackPressed()
-        }
-
+        setupClickListeners()
         KeyboardUtil(binding.root)
     }
 
-    private fun createFolder() {
+    private fun setupClickListeners() {
+        binding.nextBtn.setOnClickListener { handleFolderCreation() }
+        binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
+    }
+
+    private fun handleFolderCreation() {
         val folderName = binding.createFolderEdit.text.toString()
-        serverNextCloud.folderName = folderName
-        if (folderName.isNotEmpty()) {
-            createFolder(serverNextCloud.folderName)
+        if (folderName.isNotBlank()) {
+            serverNextCloud.folderName = folderName
+            initiateFolderCreation(folderName)
         } else {
             binding.createFolderLayout.error = getString(R.string.Folder_Empty_Error)
         }
     }
 
-    private fun createFolder(folderName: String) {
+    private fun initiateFolderCreation(folderName: String) {
         viewModel.progress.postValue(true)
-        (activity as? INextCloudAuthFlow)?.onStartCreateRemoteFolder(
-            folderName = folderName
-        )
+        (activity as? INextCloudAuthFlow)?.onStartCreateRemoteFolder(folderName)
     }
 
-    private fun initObservers() {
+    private fun setupObservers() {
         viewModel.errorFolderCreation.observe(viewLifecycleOwner) { message ->
             showToast(message)
         }
 
-        viewModel.successFolderCreation.observe(viewLifecycleOwner) { server ->
-            bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
-            navManager().actionNextCloudNewFolderScreenToSuccessfulScreen()
+        viewModel.successFolderCreation.observe(viewLifecycleOwner) {
+            navigateToSuccessScreen()
         }
+
+        viewModel.progress.observe(viewLifecycleOwner) { isVisible ->
+            binding.progressBar.isVisible = isVisible
+        }
+    }
+
+    private fun navigateToSuccessScreen() {
+        bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+        navManager().actionNextCloudNewFolderScreenToSuccessfulScreen()
     }
 }

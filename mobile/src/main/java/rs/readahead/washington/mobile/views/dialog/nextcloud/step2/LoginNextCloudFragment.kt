@@ -28,82 +28,90 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
 ) {
     private val viewModel by activityViewModels<NextCloudLoginFlowViewModel>()
     private lateinit var serverNextCloud: NextCloudServer
-    private var validated = true
+    private var isValidated = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initListeners()
-        initObservers()
+        initializeView()
+        setupListeners()
+        observeViewModel()
     }
 
-    fun initView() {
+    private fun initializeView() {
         arguments?.getString(OBJECT_KEY)?.let {
             serverNextCloud = Gson().fromJson(it, NextCloudServer::class.java)
         }
         KeyboardUtil(binding.root)
     }
 
-    private fun initListeners() {
-        binding.loginButton.setOnClickListener {
-            if (!MyApplication.isConnectedToInternet(baseActivity)) {
-                DialogUtils.showBottomMessage(
-                    baseActivity,
-                    getString(R.string.settings_docu_error_no_internet),
-                    true
-                )
-            } else {
-                validate()
-                if (validated) {
-                    startRefresh(binding.username.text.toString(), binding.password.text.toString())
-                }
-            }
-        }
+    private fun setupListeners() {
+        binding.loginButton.setOnClickListener { handleLoginButtonClick() }
         binding.backBtn.setOnClickListener { nav().popBackStack() }
 
         KeyboardLiveData(binding.root).observe(viewLifecycleOwner) {
             binding.backBtn.isVisible = !it.first
         }
-
     }
 
-
-    private fun validate() {
-        validated = true
-        validateRequired(binding.username, binding.usernameLayout)
-        validateRequired(binding.password, binding.passwordLayout)
+    private fun handleLoginButtonClick() {
+        if (!MyApplication.isConnectedToInternet(baseActivity)) {
+            showBottomMessage(getString(R.string.settings_docu_error_no_internet))
+        } else {
+            validateFields()
+            if (isValidated) {
+                initiateLogin(binding.username.text.toString(), binding.password.text.toString())
+            }
+        }
     }
 
-    private fun validateRequired(field: EditText?, layout: TextInputLayout?) {
-        layout?.error = null
-        if (TextUtils.isEmpty(field!!.text.toString())) {
-            layout?.error = getString(R.string.settings_text_empty_field)
-            validated = false
+    private fun showBottomMessage(message: String) {
+        DialogUtils.showBottomMessage(baseActivity, message, true)
+    }
+
+    private fun validateFields() {
+        isValidated = true
+        validateField(binding.username, binding.usernameLayout)
+        validateField(binding.password, binding.passwordLayout)
+    }
+
+    private fun validateField(field: EditText, layout: TextInputLayout) {
+        layout.error = null
+        if (TextUtils.isEmpty(field.text.toString())) {
+            layout.error = getString(R.string.settings_text_empty_field)
+            isValidated = false
         }
     }
 
     @SuppressLint("TimberArgCount")
-    private fun initObservers() {
-
+    private fun observeViewModel() {
         viewModel.errorUserNamePassword.observe(viewLifecycleOwner) {
-            validateRequired(binding.password, binding.passwordLayout)
-            binding.passwordLayout.error = getString(R.string.settings_docu_error_wrong_credentials)
+            displayCredentialError()
         }
 
         viewModel.progress.observe(viewLifecycleOwner) { isVisible ->
             binding.progressBar.isVisible = isVisible
         }
 
-        viewModel.successLoginToServer.observe(viewLifecycleOwner) {
-            serverNextCloud.username = it.username
-            serverNextCloud.password = it.password
-            serverNextCloud.userId = it.userId
-            bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+        viewModel.successLoginToServer.observe(viewLifecycleOwner) { credentials ->
+            updateServerDetails(credentials)
             navManager().navigateToNextCloudCreateFolderScreen()
         }
     }
 
-    private fun startRefresh(userName: String, password: String) {
+    private fun displayCredentialError() {
+        binding.passwordLayout.error = getString(R.string.settings_docu_error_wrong_credentials)
+    }
+
+    private fun updateServerDetails(credentials: NextCloudServer) {
+        serverNextCloud.apply {
+            username = credentials.username
+            password = credentials.password
+            userId = credentials.userId
+        }
+        bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+    }
+
+    private fun initiateLogin(userName: String, password: String) {
         viewModel.progress.postValue(true)
         (activity as? INextCloudAuthFlow)?.onStartRefreshLogin(
             serverNextCloud.url,
@@ -111,5 +119,4 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
             password
         )
     }
-
 }

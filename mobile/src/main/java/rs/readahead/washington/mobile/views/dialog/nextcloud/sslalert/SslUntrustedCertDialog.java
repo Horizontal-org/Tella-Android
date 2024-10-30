@@ -10,12 +10,11 @@
  * SPDX-FileCopyrightText: 2014 María Asensio Valverde <masensio@solidgear.es>
  * SPDX-License-Identifier: GPL-2.0-only AND (AGPL-3.0-or-later OR GPL-2.0-only)
  */
-package rs.readahead.washington.mobile.views.dialog.nextcloud;
+package rs.readahead.washington.mobile.views.dialog.nextcloud.sslalert;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.drawable.ColorDrawable;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.view.View;
@@ -24,7 +23,6 @@ import android.view.Window;
 import android.webkit.SslErrorHandler;
 import android.widget.Button;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.lib.common.utils.Log_OC;
@@ -34,7 +32,6 @@ import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import rs.readahead.washington.mobile.R;

@@ -14,7 +14,7 @@ import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
-import rs.readahead.washington.mobile.views.dialog.nextcloud.SslUntrustedCertDialog
+import rs.readahead.washington.mobile.views.dialog.nextcloud.sslalert.SslUntrustedCertDialog
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -25,44 +25,31 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
 
     private val untrustedCertDialogTag = "UNTRUSTED_CERT_DIALOG"
     private val viewModel: NextCloudLoginFlowViewModel by viewModels()
-    private val serverNextCloud: NextCloudServer by lazy {
-        NextCloudServer()
-    }
+    private val serverNextCloud: NextCloudServer by lazy { NextCloudServer() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initObservers()
+        setupUI()
+        setupObservers()
     }
 
-    fun initView() {
+    private fun setupUI() {
         with(binding) {
-            backBtn.setOnClickListener {
-                baseActivity.finish()
-            }
+            backBtn.setOnClickListener { baseActivity.finish() }
             nextBtn.setOnClickListener {
-                if (isValidUrl(url.text.toString())) {
-                    serverNextCloud.url = url.text.toString()
-                    viewModel.validateServerUrl(url.text.toString())
+                val urlText = url.text.toString()
+                if (isValidUrl(urlText)) {
+                    serverNextCloud.url = urlText
+                    viewModel.validateServerUrl(urlText)
                 } else {
-                    DialogUtils.showBottomMessage(
-                        baseActivity,
-                        getString(R.string.Error_Connecting_To_Server_Msg),
-                        false
-                    )
+                    showErrorMessage(getString(R.string.Error_Connecting_To_Server_Msg))
                 }
             }
         }
     }
 
     private fun isValidUrl(urlString: String): Boolean {
-        // First, use Patterns to check if it matches a web URL pattern
-        if (!Patterns.WEB_URL.matcher(urlString).matches()) {
-            return false
-        }
-
-        // Then, try to create a URL object to check if it's a well-formed URL
-        return try {
+        return Patterns.WEB_URL.matcher(urlString).matches() && try {
             URL(urlString)
             true
         } catch (e: MalformedURLException) {
@@ -70,37 +57,41 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
         }
     }
 
-    private fun initObservers() {
+    private fun setupObservers() {
         viewModel.isValidServer.observe(viewLifecycleOwner) { isValid ->
             if (isValid) {
-                bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
-               navManager().navigateToEnterNextCloudLoginScreen()
+                navigateToNextScreen()
             } else {
-               DialogUtils.showBottomMessage(
-                    baseActivity,
-                    getString(R.string.Error_Connecting_To_Server_Msg),
-                    false
-                )
+                showErrorMessage(getString(R.string.Error_Connecting_To_Server_Msg))
             }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { validationError ->
-            validationError?.let {
-                it.exception?.let { it1 -> showUntrustedCertDialog(it1) }
-            }
+            validationError?.exception?.let { handleCertificateError(it) }
         }
     }
 
-    /**
-     * Show dialog for untrusted certificate.
-     */
-    private fun showUntrustedCertDialog(exception:Throwable) {
+    private fun navigateToNextScreen() {
+        bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
+        navManager().navigateToEnterNextCloudLoginScreen()
+    }
+
+    private fun showErrorMessage(message: String) {
+        DialogUtils.showBottomMessage(baseActivity, message, false)
+    }
+
+    private fun handleCertificateError(exception: Throwable) {
         if (exception is CertificateCombinedException) {
-            val dialog = SslUntrustedCertDialog.newInstanceForFullSslError(exception,serverNextCloud.url)
-            val fm = baseActivity.supportFragmentManager
-            val ft = fm.beginTransaction()
-            ft.addToBackStack(null)
-            dialog.show(ft, untrustedCertDialogTag)
+            showUntrustedCertDialog(exception)
+        }
+    }
+
+    private fun showUntrustedCertDialog(exception: CertificateCombinedException) {
+        SslUntrustedCertDialog.newInstanceForFullSslError(exception, serverNextCloud.url).apply {
+            show(
+                baseActivity.supportFragmentManager.beginTransaction().addToBackStack(null),
+                untrustedCertDialogTag
+            )
         }
     }
 }

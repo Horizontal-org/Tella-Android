@@ -8,12 +8,12 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.CheckUserCredentialsUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.ValidateNextcloudServerUrlUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.ValidationResult
+import rs.readahead.washington.mobile.views.dialog.nextcloud.sslalert.ValidationError
 import javax.inject.Inject
 
 @HiltViewModel
