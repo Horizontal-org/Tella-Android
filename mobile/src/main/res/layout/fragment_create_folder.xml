@@ -52,7 +52,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:paddingStart="12dp"
-                android:text="Create new folder"
+                android:text="@string/create_new_folder"
                 tools:ignore="RtlSymmetry" />
             <TextView
                 android:id="@+id/description_textView"
@@ -67,7 +67,7 @@
                 android:layout_marginTop="4dp"
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
-                android:text="Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here." />
+                android:text="@string/google_drive_create_folder_description" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -92,7 +92,7 @@
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:hint="Folder name"
+                    android:hint="@string/folder_name"
                     android:fontFamily="@font/open_sans"
                     android:textColor="@color/wa_white"
                     android:textDirection="ltr"

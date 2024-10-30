@@ -1025,4 +1025,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="server_base_url">https://cloud.wearehorizontal.org</string>
   <string name="Folder_Empty_Error">Folder name cannot be empty</string>
   <string name="go_to_nextcloud">Go to Nextcloud</string>
+  <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
+  <string name="folder_name">Folder name</string>
 </resources>
