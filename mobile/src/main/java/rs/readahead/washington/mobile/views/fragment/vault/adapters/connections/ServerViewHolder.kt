@@ -84,6 +84,16 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+            ServerType.NEXTCLOUD -> {
+                reportTypeTextView.text = view.context.getString(R.string.NextCloud)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_nextcloud,
+                        null
+                    )
+                )
+            }
             else -> { // todo create default server type
             }
         }

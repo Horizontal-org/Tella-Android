@@ -100,7 +100,7 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
             cursor = database.query(
                     D.T_NEXT_CLOUD,
                     new String[]{D.C_ID,
-                            D.C_USERNAME,
+                            D.C_USERNAME,D.C_NEXT_CLOUD_USER_ID,D.C_NEXT_CLOUD_FOLDER_NAME,D.C_NEXT_CLOUD_SERVER_NAME
                     },
                     null,
                     null,

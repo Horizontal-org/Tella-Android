@@ -95,6 +95,9 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         }
 
         viewModel.successLoginToServer.observe(viewLifecycleOwner) {
+            serverNextCloud.username = it.username
+            serverNextCloud.password = it.password
+            serverNextCloud.userId = it.userId
             bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
             navManager().navigateToNextCloudCreateFolderScreen()
         }
