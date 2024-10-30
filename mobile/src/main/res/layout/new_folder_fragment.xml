@@ -56,41 +56,42 @@
                 tools:ignore="RtlSymmetry" />
 
             <TextView
-                android:id="@+id/Disc_textView"
-                style="@style/Tella_Main_White_Text.Meduim"
+                android:id="@+id/description_textView"
+                style="@style/Tella_Main_White_Text.MeduimbBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
-                android:paddingStart="12dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp"
                 android:text="@string/NextCloud_Create_New_Folder_Description"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_textView"
-                tools:ignore="RtlSymmetry" />
+                app:layout_constraintTop_toBottomOf="@+id/title_textView"/>
+
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/folder_layout"
+                android:id="@+id/create_folder_layout"
                 style="@style/DialogDataCollectionTextEntryLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="34dp"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="24dp"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:hint="@string/NextCloud_Create_New_Folder"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
                 android:textColorHint="@color/wa_white"
                 app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
-                app:hintEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Disc_textView">
+                app:layout_constraintTop_toBottomOf="@+id/description_textView">
 
                 <EditText
-                    android:id="@+id/folderName"
+                    android:id="@+id/create_folder_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans"
+                    android:hint="Folder name"
                     android:imeOptions="actionNext"
                     android:importantForAutofill="no"
                     android:inputType="text"
@@ -104,6 +105,7 @@
             <TextView
                 android:id="@+id/back_btn"
                 style="@style/Unlock_White_Text_Back"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="@string/LockSelect_Action_Back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -111,6 +113,7 @@
             <TextView
                 android:id="@+id/next_btn"
                 style="@style/Unlock_White_Text_Back"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="34dp"
                 android:text="@string/action_next"
                 app:layout_constraintBottom_toBottomOf="parent"

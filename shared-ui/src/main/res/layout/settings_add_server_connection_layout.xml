@@ -142,7 +142,7 @@
                 android:layout_marginTop="24dp"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/sheet_five_activated_btn"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_six_activated_btn"
                 tools:text="Unavailable connections" />
 
             <!-- Unavailable Connection Description -->

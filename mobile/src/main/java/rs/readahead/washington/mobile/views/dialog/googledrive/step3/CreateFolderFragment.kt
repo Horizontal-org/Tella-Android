@@ -43,7 +43,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         // Observe errors
         sharedViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Timber.d("Drive %s", errorMessage)
-            Toast.makeText(baseActivity, errorMessage, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -53,7 +53,6 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
         if (folderName.isNotEmpty()) {
             sharedViewModel.createFolder(googleDriveServer)
         } else {
-            //TODO THIS SHOULD NOT BE HARDCODED
             Toast.makeText(requireContext(), "Folder name cannot be empty", Toast.LENGTH_SHORT)
                 .show()
         }

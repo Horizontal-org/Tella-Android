@@ -5,25 +5,22 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
-import com.owncloud.android.lib.resources.files.FileUtils
-import com.owncloud.android.lib.resources.files.ReadFolderRemoteOperation
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentLoginScreenBinding
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
+import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.OBJECT_KEY
 import rs.readahead.washington.mobile.views.dialog.nextcloud.INextCloudAuthFlow
 import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
-import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
@@ -44,6 +41,7 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         arguments?.getString(OBJECT_KEY)?.let {
             serverNextCloud = Gson().fromJson(it, NextCloudServer::class.java)
         }
+        KeyboardUtil(binding.root)
     }
 
     private fun initListeners() {
@@ -58,11 +56,15 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
                 validate()
                 if (validated) {
                     startRefresh(binding.username.text.toString(), binding.password.text.toString())
-
                 }
             }
         }
-        binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
+        binding.backBtn.setOnClickListener { nav().popBackStack() }
+
+        KeyboardLiveData(binding.root).observe(viewLifecycleOwner) {
+            binding.backBtn.isVisible = !it.first
+        }
+
     }
 
 
@@ -92,7 +94,7 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
             binding.progressBar.isVisible = isVisible
         }
 
-        viewModel.successLoginToServer.observe(viewLifecycleOwner){
+        viewModel.successLoginToServer.observe(viewLifecycleOwner) {
             bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
             navManager().navigateToNextCloudCreateFolderScreen()
         }

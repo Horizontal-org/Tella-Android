@@ -3,12 +3,11 @@ package rs.readahead.washington.mobile.views.dialog.nextcloud.step3
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.NewFolderFragmentBinding
-import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
@@ -38,15 +37,17 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
         binding.backBtn.setOnClickListener {
             baseActivity.onBackPressed()
         }
+
+        KeyboardUtil(binding.root)
     }
 
     private fun createFolder() {
-        val folderName = binding.folderName.text.toString()
+        val folderName = binding.createFolderEdit.text.toString()
         serverNextCloud.folderName = folderName
         if (folderName.isNotEmpty()) {
             createFolder(serverNextCloud.folderName)
         } else {
-            binding.folderLayout.error = getString(R.string.Folder_Empty_Error)
+            binding.createFolderLayout.error = getString(R.string.Folder_Empty_Error)
         }
     }
 
