@@ -48,6 +48,10 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
     }
 
+    fun navigateFromNextCloudScreenToNewNextCloudScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_newNextCloudScreen)
+    }
+
     fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }

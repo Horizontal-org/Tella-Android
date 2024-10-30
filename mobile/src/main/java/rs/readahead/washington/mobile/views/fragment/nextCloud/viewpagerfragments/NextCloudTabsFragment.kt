@@ -15,11 +15,11 @@ internal class NextCloudTabsFragment : MainReportFragment() {
     }
 
     override fun getToolbarTitle(): String {
-        return getString(R.string.google_drive)
+        return getString(R.string.NextCloud)
     }
 
     override fun navigateToNewReportScreen() {
-        this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
+        this.navManager().navigateFromNextCloudScreenToNewNextCloudScreen()
     }
 
     override fun getEmptyMessageIcon(): Int {

@@ -407,6 +407,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.DROP_BOX -> {
                 nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
             }
+
+            ServerType.NEXTCLOUD -> {
+                nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
+            }
             else -> {}
         }
     }

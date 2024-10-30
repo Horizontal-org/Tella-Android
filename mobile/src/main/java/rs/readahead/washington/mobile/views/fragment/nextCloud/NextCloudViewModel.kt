@@ -4,6 +4,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import javax.inject.Inject
@@ -11,15 +12,12 @@ import javax.inject.Inject
 @HiltViewModel
 class NextCloudViewModel @Inject constructor() : BaseReportsViewModel() {
     override fun clearDisposable() {
-        TODO("Not yet implemented")
     }
 
     override fun deleteReport(instance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun getReportBundle(instance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun getFormInstance(
@@ -31,7 +29,16 @@ class NextCloudViewModel @Inject constructor() : BaseReportsViewModel() {
         reportApiId: String,
         status: EntityStatus
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            reportApiId = reportApiId,
+            description = description,
+            status = status,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     override fun getDraftFormInstance(
@@ -41,43 +48,42 @@ class NextCloudViewModel @Inject constructor() : BaseReportsViewModel() {
         server: Server,
         id: Long?
     ): ReportInstance {
-        TODO("Not yet implemented")
+        return ReportInstance(
+            id = id ?: 0L,
+            title = title,
+            description = description,
+            status = EntityStatus.DRAFT,
+            widgetMediaFiles = files ?: emptyList(),
+            formPartStatus = FormMediaFileStatus.NOT_SUBMITTED,
+            serverId = server.id
+        )
     }
 
     override fun listSubmitted() {
-        TODO("Not yet implemented")
     }
 
     override fun listOutbox() {
-        TODO("Not yet implemented")
     }
 
     override fun listOutboxAndSubmitted() {
-        TODO("Not yet implemented")
     }
 
     override fun listDrafts() {
-        TODO("Not yet implemented")
     }
 
     override fun saveSubmitted(reportInstance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun saveOutbox(reportInstance: ReportInstance) {
-        TODO("Not yet implemented")
     }
 
     override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
-        TODO("Not yet implemented")
     }
 
     override fun listServers() {
-        TODO("Not yet implemented")
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
-        TODO("Not yet implemented")
     }
 }
 
