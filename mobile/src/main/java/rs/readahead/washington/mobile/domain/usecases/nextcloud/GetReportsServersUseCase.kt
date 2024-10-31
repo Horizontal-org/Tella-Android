@@ -7,9 +7,10 @@ import rs.readahead.washington.mobile.domain.usecases.base.SingleUseCase
 import javax.inject.Inject
 
 class GetReportsServersUseCase @Inject constructor(
-    private val serverRepository: ITellaNextCloudRepository,
+    private val serverRepository: ITellaNextCloudRepository
 ) :
     SingleUseCase<List<NextCloudServer>>() {
+
 
     override fun buildUseCaseSingle(): Single<List<NextCloudServer>> {
         return serverRepository.listNextCloudServers()

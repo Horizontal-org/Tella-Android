@@ -20,6 +20,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer;
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance;
@@ -57,7 +58,10 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
 
         return dataSource;
     }
-
+    public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());
+    }
     @NonNull
     @Override
     public Single<NextCloudServer> saveNextCloudServer(@NonNull NextCloudServer server) {
