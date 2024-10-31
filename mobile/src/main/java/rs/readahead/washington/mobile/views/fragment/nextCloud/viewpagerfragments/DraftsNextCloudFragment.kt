@@ -41,7 +41,7 @@ class DraftsNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        this.navManager().navigateFromGoogleDriveScreenToNewGoogleDriveScreen()
+        this.navManager().navigateFromNextCloudScreenToNewNextCloudScreen()
 
     }
 

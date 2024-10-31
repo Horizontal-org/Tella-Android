@@ -44,7 +44,7 @@ class SubmittedNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
 
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
-        navManager().navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen()
+        navManager().navigateFromNextCloudScreenToNextCloudSubmittedScreen()
     }
 
     @SuppressLint("StringFormatInvalid")

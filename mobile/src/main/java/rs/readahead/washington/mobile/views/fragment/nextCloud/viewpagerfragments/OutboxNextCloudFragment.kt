@@ -45,7 +45,7 @@ class OutboxNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
     override fun navigateToReportScreen(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_OUTBOX, true)
-        navManager().navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen()
+        navManager().navigateFromNextCloudMainScreenToNextCloudSendScreen()
     }
 
     @SuppressLint("StringFormatInvalid")

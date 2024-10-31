@@ -218,6 +218,34 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_NEXT_CLOUD_SERVER_NAME, D.TEXT, true) +
                 ");";
     }
+    private String createTableNextCloudFormInstance() {
+        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, false) + " , " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_NEXT_CLOUD) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE" +
+                ");";
+    }
+    private String createTableNextCloudInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPLOADED_SIZE, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
+                ");";
+    }
 
     private String alterTableMediaFileUploadsAddManual() {
         return "ALTER TABLE " + sq(D.T_MEDIA_FILE_UPLOAD) + " ADD COLUMN " +
@@ -542,7 +570,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
 
         //DBV15
         db.execSQL(createTableNextCloud());
-
+        db.execSQL(createTableNextCloudFormInstance());
+        db.execSQL(createTableNextCloudInstanceVaultFile());
     }
 
     @Override
@@ -611,7 +640,8 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableDropBoxInstanceVaultFile());
             case 15:
                 db.execSQL(createTableNextCloud());
-
+                db.execSQL(createTableNextCloudFormInstance());
+                db.execSQL(createTableNextCloudInstanceVaultFile());
         }
     }
 

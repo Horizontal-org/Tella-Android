@@ -16,7 +16,7 @@ class NextCloudEntryFragment :
     override fun submitReport(reportInstance: ReportInstance?) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         bundle.putBoolean(BUNDLE_IS_FROM_DRAFT, true)
-        navManager().navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen()
+        navManager().navigateFromNextCloudEntryScreenToNextCloudSendScreen()
     }
 }
 

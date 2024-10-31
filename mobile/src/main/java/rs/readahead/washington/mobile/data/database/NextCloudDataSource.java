@@ -20,6 +20,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import rs.readahead.washington.mobile.domain.entity.EntityStatus;
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer;
@@ -145,20 +146,18 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-//        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
-//                .compose(applySchedulers());
-        return null;
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());
     }
 
 
     @NonNull
     @Override
     public Completable deleteReportInstance(long id) {
-//        return Completable.fromCallable((Callable<Void>) () -> {
-//            dataBaseUtils.deleteReportFormInstance(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE);
-//            return null;
-//        }).compose(applyCompletableSchedulers());
-        return null;
+        return Completable.fromCallable((Callable<Void>) () -> {
+            dataBaseUtils.deleteReportFormInstance(id, D.T_NEXT_CLOUD_FORM_INSTANCE);
+            return null;
+        }).compose(applyCompletableSchedulers());
     }
 
     @NonNull
@@ -175,11 +174,10 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     }
 
     private List<ReportInstance> getDraftReportInstances() {
-//        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-//                EntityStatus.UNKNOWN,
-//                EntityStatus.DRAFT
-//        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
-        return null;
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.UNKNOWN,
+                EntityStatus.DRAFT
+        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     @NonNull
@@ -199,30 +197,27 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     @NonNull
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-//        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE))
-//                .compose(applySchedulers());
-        return null;
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
+                .compose(applySchedulers());
     }
 
     private List<ReportInstance> getOutboxReportInstances() {
-//        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-//                EntityStatus.FINALIZED,
-//                EntityStatus.SUBMISSION_ERROR,
-//                EntityStatus.SUBMISSION_PENDING,
-//                EntityStatus.SUBMISSION_PARTIAL_PARTS,
-//                EntityStatus.SUBMISSION_IN_PROGRESS,
-//                EntityStatus.SCHEDULED,
-//                EntityStatus.PAUSED
-//        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
-        return null;
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.FINALIZED,
+                EntityStatus.SUBMISSION_ERROR,
+                EntityStatus.SUBMISSION_PENDING,
+                EntityStatus.SUBMISSION_PARTIAL_PARTS,
+                EntityStatus.SUBMISSION_IN_PROGRESS,
+                EntityStatus.SCHEDULED,
+                EntityStatus.PAUSED
+        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     private List<ReportInstance> getSubmittedReportInstances() {
 
-//        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-//                EntityStatus.SUBMITTED
-//        }, D.T_GOOGLE_DRIVE_FORM_INSTANCE, D.T_GOOGLE_DRIVE);
-        return null;
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
+                EntityStatus.SUBMITTED
+        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     @NonNull

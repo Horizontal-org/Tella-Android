@@ -55,15 +55,23 @@ class NavigationManager(
     fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }
-
+    fun navigateFromNextCloudEntryScreenToNextCloudSendScreen() {
+        navigateToWithBundle(R.id.action_newNextCloudScreen_to_nextCloudSendScreen)
+    }
     fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
     }
 
+    fun navigateFromNextCloudMainScreenToNextCloudSendScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSendScreen)
+    }
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
 
+    fun navigateFromNextCloudScreenToNextCloudSubmittedScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSubmittedScreen)
+    }
     fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
         navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
     }
