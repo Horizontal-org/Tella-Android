@@ -69,7 +69,7 @@ class DraftsNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                draftNextCloudViewModel.listOutbox()
+                draftNextCloudViewModel.listDrafts()
             }
         }
     }
