@@ -56,7 +56,6 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
         if (dataSource == null) {
             dataSource = new NextCloudDataSource(context.getApplicationContext(), key);
         }
-
         return dataSource;
     }
     public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
