@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.domain.entity.collect;
 
 import androidx.annotation.NonNull;
 
-import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
 
