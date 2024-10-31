@@ -6,11 +6,16 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.usecases.nextcloud.GetReportsServersUseCase
+import rs.readahead.washington.mobile.domain.usecases.nextcloud.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NextCloudViewModel @Inject constructor() : BaseReportsViewModel() {
+class NextCloudViewModel @Inject constructor(
+    private val getReportsServersUseCase: GetReportsServersUseCase,
+    private val saveReportFormInstanceUseCase: SaveReportFormInstanceUseCase,
+) : BaseReportsViewModel() {
     override fun clearDisposable() {
     }
 
@@ -78,9 +83,27 @@ class NextCloudViewModel @Inject constructor() : BaseReportsViewModel() {
     }
 
     override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
+        _progress.postValue(true)
+        saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
+        saveReportFormInstanceUseCase.execute(onSuccess = { result ->
+            _reportInstance.postValue(result)
+            _exitAfterSave.postValue(exitAfterSave)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun listServers() {
+        _progress.postValue(true)
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            _serversList.postValue(result)
+        }, onError = {
+            _error.postValue(it)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
