@@ -1,5 +1,7 @@
 package rs.readahead.washington.mobile.data.database;
 
+import static rs.readahead.washington.mobile.data.database.D.C_PASSWORD;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -37,9 +39,7 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     private final DataBaseUtils dataBaseUtils;
     @Inject
     Config config;
-    final private CompletableTransformer schedulersCompletableTransformer =
-            observable -> observable.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+    final private CompletableTransformer schedulersCompletableTransformer = observable -> observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     private CompletableTransformer applyCompletableSchedulers() {
         return schedulersCompletableTransformer;
@@ -58,10 +58,11 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
         }
         return dataSource;
     }
+
     public Single<List<FormMediaFile>> getReportMediaFiles(ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
-                .compose(applySchedulers());
+        return Single.fromCallable(() -> dataBaseUtils.getReportMediaFilesDB(instance, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE)).compose(applySchedulers());
     }
+
     @NonNull
     @Override
     public Single<NextCloudServer> saveNextCloudServer(@NonNull NextCloudServer server) {
@@ -71,7 +72,8 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     private NextCloudServer updateNextCloudServer(NextCloudServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_USERNAME, server.getUsername());
-        values.put(D.C_PASSWORD, server.getPassword());
+        values.put(D.C_URL, server.getUrl());
+        values.put(C_PASSWORD, server.getPassword());
         values.put(D.C_NEXT_CLOUD_USER_ID, server.getUserId());
         values.put(D.C_NEXT_CLOUD_FOLDER_NAME, server.getFolderName());
         values.put(D.C_NEXT_CLOUD_SERVER_NAME, server.getName());
@@ -85,15 +87,12 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
         return (SingleTransformer<T, T>) schedulersTransformer;
     }
 
-    final private SingleTransformer schedulersTransformer =
-            observable -> observable.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
+    final private SingleTransformer schedulersTransformer = observable -> observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     @NonNull
     @Override
     public Single<List<NextCloudServer>> listNextCloudServers() {
-        return Single.fromCallable(() -> dataSource.getListNextCloudServers())
-                .compose(applySchedulers());
+        return Single.fromCallable(() -> dataSource.getListNextCloudServers()).compose(applySchedulers());
     }
 
     private List<NextCloudServer> getListNextCloudServers() {
@@ -101,16 +100,7 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
         List<NextCloudServer> servers = new ArrayList<>();
 
         try {
-            cursor = database.query(
-                    D.T_NEXT_CLOUD,
-                    new String[]{D.C_ID,
-                            D.C_USERNAME,D.C_NEXT_CLOUD_USER_ID,D.C_NEXT_CLOUD_FOLDER_NAME,D.C_NEXT_CLOUD_SERVER_NAME
-                    },
-                    null,
-                    null,
-                    null, null,
-                    D.C_ID + " ASC",
-                    null);
+            cursor = database.query(D.T_NEXT_CLOUD, new String[]{D.C_ID, D.C_USERNAME, D.C_NEXT_CLOUD_USER_ID, D.C_NEXT_CLOUD_FOLDER_NAME, D.C_NEXT_CLOUD_SERVER_NAME, D.C_URL, C_PASSWORD}, null, null, null, null, D.C_ID + " ASC", null);
 
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 NextCloudServer server = cursorToNextCloudServer(cursor);
@@ -136,17 +126,24 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
         long nextCloudId = cursor.getLong(cursor.getColumnIndexOrThrow(D.C_ID));
         String serverName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_NEXT_CLOUD_SERVER_NAME));
         String userName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_USERNAME));
+        String password = cursor.getString(cursor.getColumnIndexOrThrow(C_PASSWORD));
+        String userID = cursor.getString(cursor.getColumnIndexOrThrow(D.C_NEXT_CLOUD_USER_ID));
+        String urL = cursor.getString(cursor.getColumnIndexOrThrow(D.C_URL));
+        String folderName = cursor.getString(cursor.getColumnIndexOrThrow(D.C_NEXT_CLOUD_FOLDER_NAME));
         NextCloudServer server = new NextCloudServer(nextCloudId);
         server.setName(serverName);
         server.setUsername(userName);
+        server.setUserId(userID);
+        server.setUrl(urL);
+        server.setPassword(password);
+        server.setFolderName(folderName);
         return server;
     }
 
     @NonNull
     @Override
     public Single<ReportInstance> saveInstance(@NonNull ReportInstance instance) {
-        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
-                .compose(applySchedulers());
+        return Single.fromCallable(() -> dataBaseUtils.updateTellaReportsFormInstance(instance, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE)).compose(applySchedulers());
     }
 
 
@@ -168,55 +165,38 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
     @NonNull
     @Override
     public Single<List<ReportInstance>> listDraftReportInstances() {
-        return Single.fromCallable(this::getDraftReportInstances)
-                .compose(applySchedulers());
+        return Single.fromCallable(this::getDraftReportInstances).compose(applySchedulers());
     }
 
     private List<ReportInstance> getDraftReportInstances() {
-        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-                EntityStatus.UNKNOWN,
-                EntityStatus.DRAFT
-        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{EntityStatus.UNKNOWN, EntityStatus.DRAFT}, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     @NonNull
     @Override
     public Single<List<ReportInstance>> listOutboxReportInstances() {
-        return Single.fromCallable(this::getOutboxReportInstances)
-                .compose(applySchedulers());
+        return Single.fromCallable(this::getOutboxReportInstances).compose(applySchedulers());
     }
 
     @NonNull
     @Override
     public Single<List<ReportInstance>> listSubmittedReportInstances() {
-        return Single.fromCallable(this::getSubmittedReportInstances)
-                .compose(applySchedulers());
+        return Single.fromCallable(this::getSubmittedReportInstances).compose(applySchedulers());
     }
 
     @NonNull
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE))
-                .compose(applySchedulers());
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE)).compose(applySchedulers());
     }
 
     private List<ReportInstance> getOutboxReportInstances() {
-        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-                EntityStatus.FINALIZED,
-                EntityStatus.SUBMISSION_ERROR,
-                EntityStatus.SUBMISSION_PENDING,
-                EntityStatus.SUBMISSION_PARTIAL_PARTS,
-                EntityStatus.SUBMISSION_IN_PROGRESS,
-                EntityStatus.SCHEDULED,
-                EntityStatus.PAUSED
-        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{EntityStatus.FINALIZED, EntityStatus.SUBMISSION_ERROR, EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_IN_PROGRESS, EntityStatus.SCHEDULED, EntityStatus.PAUSED}, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     private List<ReportInstance> getSubmittedReportInstances() {
 
-        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{
-                EntityStatus.SUBMITTED
-        }, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
+        return dataBaseUtils.getReportFormInstances(new EntityStatus[]{EntityStatus.SUBMITTED}, D.T_NEXT_CLOUD_FORM_INSTANCE, D.T_NEXT_CLOUD);
     }
 
     @NonNull

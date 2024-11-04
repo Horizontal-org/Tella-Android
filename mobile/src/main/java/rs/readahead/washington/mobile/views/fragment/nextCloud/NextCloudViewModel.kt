@@ -1,10 +1,19 @@
 package rs.readahead.washington.mobile.views.fragment.nextCloud
 
+import android.content.Context
+import android.net.Credentials
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.dropbox.core.v2.DbxClientV2
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.OwnCloudClientFactory
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
@@ -14,6 +23,8 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.DeleteReportUseCase
@@ -39,6 +50,7 @@ class NextCloudViewModel @Inject constructor(
     private val nextCloudRepository: NextCloudRepository,
     private val nextCloudDataSource: NextCloudDataSource,
     private val statusProvider: StatusProvider,
+    @ApplicationContext private val context: Context,
 ) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
@@ -209,6 +221,7 @@ class NextCloudViewModel @Inject constructor(
             }
         )
     }
+
     override fun listDrafts() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
@@ -229,7 +242,139 @@ class NextCloudViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
+
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
+        getReportsServersUseCase.execute(onSuccess = { result ->
+            if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
+                updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+            }
+
+            if (!statusProvider.isOnline()) {
+                updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+            }
+
+            val serverInfo = result.first();
+            // Create OwnCloudClient with the server credentials
+            val ownCloudClient = OwnCloudClientFactory.createOwnCloudClient(
+                Uri.parse(serverInfo.url), // Server URL
+                context, // Application context
+                true // Use https (or false if http)
+            ).apply {
+                credentials = OwnCloudCredentialsFactory.newBasicCredentials(
+                    serverInfo.username,
+                    serverInfo.password
+                )
+                userId = serverInfo.userId
+            }
+
+            if (instance.reportApiId.isEmpty()) {
+                createFolderAndSubmitFiles(instance, result.first(), ownCloudClient)
+            } else if (instance.status != EntityStatus.SUBMITTED) {
+                // submitFiles(instance, result.first(), instance.reportApiId)
+            }
+        }, onError = { error ->
+            _error.postValue(error)
+        }, onFinished = {
+            _progress.postValue(false)
+        })
+
+    }
+
+    private fun createFolderAndSubmitFiles(
+        instance: ReportInstance,
+        server: NextCloudServer,
+        ownCloudClient: OwnCloudClient
+    ) {
+        disposables.add(
+            nextCloudRepository.uploadDescription(
+                ownCloudClient,
+                server.folderId,
+                instance.title,
+                instance.description
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ folderId ->
+                    instance.reportApiId = folderId
+                    updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+                    submitFiles(instance, folderId, ownCloudClient)
+                }, { error ->
+                    handleSubmissionError(instance, error)
+                })
+        )
+    }
+
+    private fun submitFiles(
+        instance: ReportInstance, folderPath: String, ownCloudClient: OwnCloudClient
+    ) {
+        if (instance.widgetMediaFiles.isEmpty()) {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
+            return
+        }
+
+        disposables.add(
+            Flowable.fromIterable(instance.widgetMediaFiles)
+                .flatMap { file ->
+                    nextCloudRepository.uploadFileWithProgress(
+                        ownCloudClient,
+                        instance.title,
+                        file
+                    )
+                }
+                .doOnEach {
+                    if (instance.status != EntityStatus.SUBMITTED) {
+                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    }
+                }
+                .doOnTerminate { handleInstanceOnTerminate(instance) }
+                .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
+                .doOnError {
+                    handleInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+                }
+                .doOnNext { progressInfo: UploadProgressInfo ->
+                    updateFileStatus(instance, progressInfo) // Ensure this block is efficient
+                }
+                .doAfterNext { progressInfo ->
+                    _reportProcess.postValue(Pair(progressInfo, instance)) // Post progress quickly
+                }
+                .observeOn(AndroidSchedulers.mainThread())  // Move results to main thread
+                .subscribeOn(Schedulers.io())  // Keep the upload process on IO thread
+                .subscribe()
+        )
+    }
+
+    private fun handleInstanceStatus(
+        instance: ReportInstance, status: EntityStatus
+    ) {
+        instance.status = status
+        nextCloudDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
+            .subscribe({
+            }, { throwable ->
+                throwable.printStackTrace()
+            })
+        _instanceProgress.postValue(instance)
+    }
+
+    private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
+        val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
+        file.apply {
+            status =
+                if (progressInfo.status == UploadProgressInfo.Status.FINISHED) FormMediaFileStatus.SUBMITTED else FormMediaFileStatus.NOT_SUBMITTED
+            uploadedSize = progressInfo.current
+        }
+        instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
+            status = file.status
+            uploadedSize = file.uploadedSize
+        }
+        nextCloudDataSource.saveInstance(instance).subscribe()
+    }
+
+    private fun handleInstanceOnTerminate(instance: ReportInstance) {
+        if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+        } else {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
+        }
     }
 
     override fun saveSubmitted(reportInstance: ReportInstance) {
@@ -281,6 +426,11 @@ class NextCloudViewModel @Inject constructor(
         })
     }
 
+    private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
+        _error.postValue(error)
+        updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+    }
+
     private fun updateInstanceStatus(instance: ReportInstance, status: EntityStatus) {
         instance.status = status
         disposables.add(
@@ -290,6 +440,7 @@ class NextCloudViewModel @Inject constructor(
                 .subscribe()
         )
     }
+
     override fun clearDisposable() {
         disposables.clear()
     }

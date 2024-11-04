@@ -126,7 +126,11 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
                 userId = userName
             }
         this.password = password
-        nextCloudServer.apply { name = userName; this.password = password }
+        nextCloudServer.apply {
+            name = userName
+            this.password = password
+            url = serverUrl
+        }
         startRefresh()
     }
 

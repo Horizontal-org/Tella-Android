@@ -102,11 +102,12 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
         binding.passwordLayout.error = getString(R.string.settings_docu_error_wrong_credentials)
     }
 
-    private fun updateServerDetails(credentials: NextCloudServer) {
+    private fun updateServerDetails(server: NextCloudServer) {
         serverNextCloud.apply {
-            username = credentials.username
-            password = credentials.password
-            userId = credentials.userId
+            username = server.username
+            password = server.password
+            userId = server.userId
+            url = server.url
         }
         bundle.putString(OBJECT_KEY, Gson().toJson(serverNextCloud))
     }

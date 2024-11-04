@@ -5,12 +5,16 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.hzontal.tella_vault.rx.RxVault
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.ChunkedFileUploadRemoteOperation
+import com.owncloud.android.lib.resources.files.CreateFolderRemoteOperation
+import com.owncloud.android.lib.resources.files.ReadFolderRemoteOperation
+import com.owncloud.android.lib.resources.files.RemoveFileRemoteOperation
 import com.owncloud.android.lib.resources.files.UploadFileRemoteOperation
 import com.owncloud.android.lib.resources.status.GetCapabilitiesRemoteOperation
 import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
@@ -20,6 +24,7 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
@@ -27,6 +32,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.util.UUID
 
 
 class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository {
@@ -101,23 +107,46 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     override fun uploadDescription(
         client: OwnCloudClient,
         folderPath: String,
+        newFolderPath: String,
         description: String
     ): Single<String> {
         return Single.create { emitter ->
             try {
+                val readFolderOperation = ReadFolderRemoteOperation(newFolderPath)
+                val readFolderResult = readFolderOperation.execute(client)
+
+                if (!readFolderResult.isSuccess) {
+
+                    val createFolderOperation = CreateFolderRemoteOperation(newFolderPath, true)
+                    val folderResult = createFolderOperation.execute(client)
+
+                    if (!folderResult.isSuccess) {
+                        emitter.onError(Exception("Failed to create folder: ${folderResult.logMessage}"))
+                        return@create
+                    }
+                }
+
                 val descriptionFile = File.createTempFile("description", ".txt").apply {
                     writeText(description)
                 }
 
-                // Path to upload description file
-                val descriptionFilePath = "$folderPath/description.txt"
+                val descriptionFilePath = "$newFolderPath/description.txt"
+
+                val checkFileOperation = ReadFolderRemoteOperation(descriptionFilePath)
+                val checkFileResult = checkFileOperation.execute(client)
+
+                if (checkFileResult.isSuccess) {
+                     val deleteOperation = RemoveFileRemoteOperation(descriptionFilePath)
+                     deleteOperation.execute(client)
+                }
 
                 val uploadOperation = UploadFileRemoteOperation(
                     descriptionFile.absolutePath,
                     descriptionFilePath,
                     "text/plain",
-                0
+                    0
                 )
+
                 val result = uploadOperation.execute(client)
 
                 if (result.isSuccess) {
@@ -127,15 +156,12 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 }
 
             } catch (e: Exception) {
-                emitter.onError(
-                    Exception(
-                        "Error uploading description to Nextcloud: ${e.message}",
-                        e
-                    )
-                )
+                emitter.onError(Exception("Error uploading description to Nextcloud: ${e.message}", e))
             }
         }
     }
+
+
 
     //TODO IS CREATING A TEMP FILE A SECURE SOLUTION?
     private fun createTempFileFromStream(inputStream: InputStream, mediaFile: FormMediaFile): File {
@@ -150,54 +176,73 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     override fun uploadFileWithProgress(
         client: OwnCloudClient,
         folderPath: String,
-        mediaFile: FormMediaFile,
-        inputStream: InputStream
+        mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
 
-                val tempFile = createTempFileFromStream(inputStream, mediaFile)
+
+                val file = MyApplication.rxVault.getFile(mediaFile.vaultFile)
 
                 val filePath = "$folderPath/${mediaFile.name}"
-                val tempUploadId = "unique-upload-id" // Generate unique ID for this upload session
-                val fileSize = tempFile.length()
+                val tempUploadId =
+                    UUID.randomUUID().toString()
+                val fileSize = file.length()
 
+                // Initialize the chunked upload operation
                 val uploadOperation = ChunkedFileUploadRemoteOperation(
-                    folderPath,
-                    mediaFile.name,
+                    file.absolutePath,
                     filePath,
-                    tempFile.absolutePath,
-                    fileSize,
-                    true, // Whether to create folders if they don’t exist
-                    tempUploadId
+                    mediaFile.mimeType,
+                    null,
+                    System.currentTimeMillis(),
+                    true
                 )
 
-                //todo think about a way to update the pregress?
                 // Set up progress listener
-                // uploadOperation.setOnProgressListener { currentBytes, totalBytes ->
-                //     emitter.onNext(UploadProgressInfo(mediaFile, currentBytes, totalBytes))
-                // }
+                /*   uploadOperation.setOnProgressListener { currentBytes, totalBytes ->
+                       // Emit the current progress to the Flowable
+                       emitter.onNext(
+                           UploadProgressInfo(
+                               mediaFile,
+                               currentBytes,
+                               totalBytes,
+                               UploadProgressInfo.Status.IN_PROGRESS
+                           )
+                       )
+                   }*/
 
-                // Execute upload operation
+                // Execute the upload operation
                 val result = uploadOperation.execute(client)
                 if (result.isSuccess) {
+                    // Upload is successful, emit finished status
                     emitter.onNext(
                         UploadProgressInfo(
                             mediaFile,
-                            mediaFile.size,
+                            fileSize,
                             UploadProgressInfo.Status.FINISHED
                         )
                     )
-                    emitter.onComplete()
+                    emitter.onComplete() // Complete the flowable
                 } else {
+                    // Handle error
                     emitter.onError(Exception("Chunked file upload failed: ${result.logMessage}"))
                 }
-
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file in chunks: ${mediaFile.name}")
-                emitter.onError(e)
+                emitter.onError(e) // Emit an error if something goes wrong
             }
         }, BackpressureStrategy.LATEST)
     }
+
+    //TODO NEXT STEPS
+
+    // 1 create an overwrite method to renamte files if exist
+    // 2 upload files we can get the files from rx but those files are encryoted ??
+    // 3 if we use chunck to send the files can we use ReadOperation to get the latest statu of the submitted file?
+    // NB : are we going to submit those files undert the created parent folder ? how ?
+    // We should find a way to tack the progress chuck operations doesnt seems to have one
+
+    // -> now we are able to sumbit the decription and create it's folder ? --- Ahlem
 
 }
