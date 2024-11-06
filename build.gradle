@@ -54,7 +54,7 @@ buildscript {
     versions.exoplayer = '2.18.2'
     versions.cameraview = '2.7.2'
     versions.exifinterface = '1.3.3'
-    versions.simplifyInk = '1.0.2'
+    versions.simplifyInk = '1.0.3'
     versions.circularimageview = '3.2.0'
     versions.ihsanbalLoggingInterceptor = '3.0.0'
     versions.cardview = '1.0.0'
@@ -73,6 +73,15 @@ buildscript {
     versions.googlePlayServices = "17.0.0"
     versions.pdf_viewer = "2.8.2"
     versions.divviup = "0.2.0"
+    versions.credentialsVersion = '1.2.2'
+    versions.googleIdVersion = '1.1.1'
+    versions.playServicesAuthVersion = '21.2.0'
+    versions.googleApiClientAndroidVersion = '1.33.0'
+    versions.googleApiServicesDriveV3Version = 'v3-rev136-1.25.0'
+    versions.googleHttpClientAndroidVersion = '1.41.2'
+    versions.gsonVersion = '2.11.0'
+    versions.googleApiClientGsonVersion = '1.34.0'
+    versions.dropboxVersion = '7.0.0'
 
     repositories {
         mavenCentral()
