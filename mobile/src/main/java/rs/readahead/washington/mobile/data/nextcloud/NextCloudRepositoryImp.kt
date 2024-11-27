@@ -41,8 +41,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
 
                 val getCapabilitiesOperation = GetCapabilitiesRemoteOperation()
                 getCapabilitiesOperation.execute(
-                    client,
-                    { _, result ->
+                    client, { _, result ->
 
                         result?.let {
                             if (it.isSuccess) {
@@ -62,9 +61,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     }
 
     override fun checkUserCredentials(
-        serverUrl: String,
-        username: String,
-        password: String
+        serverUrl: String, username: String, password: String
     ): Single<RemoteOperationResult<UserInfo?>> {
 
         return Single.create<RemoteOperationResult<UserInfo?>> { emitter ->
@@ -78,11 +75,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 }
 
                 val nextcloudClient = OwnCloudClientFactory.createNextcloudClient(
-                    baseUri,
-                    credentials.username,
-                    credentials.toOkHttpCredentials(),
-                    context,
-                    true
+                    baseUri, credentials.username, credentials.toOkHttpCredentials(), context, true
                 )
 
                 // Use a valid method to execute the operation
@@ -95,20 +88,14 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             } catch (e: Exception) {
                 emitter.onError(e)
             }
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 
     override fun uploadDescription(
-        client: OwnCloudClient,
-        folderPath: String,
-        newFolderPath: String,
-        description: String
+        client: OwnCloudClient, folderPath: String, newFolderPath: String, description: String
     ): Single<String> {
         return Single.create { emitter ->
             try {
-                // Validate client configuration
                 val capabilitiesOperation = GetCapabilitiesRemoteOperation()
                 val capabilitiesResult = capabilitiesOperation.execute(client)
                 if (!capabilitiesResult.isSuccess) {
@@ -116,66 +103,29 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     return@create
                 }
 
-                // Check if folder exists
-                val readFolderOperation =
-                    ReadFolderRemoteOperation("$folderPath/$newFolderPath")
-                val readFolderResult = readFolderOperation.execute(client)
+                val finalFolderPath = generateUniqueFolderName(client, folderPath, newFolderPath)
 
-                if (!readFolderResult.isSuccess) {
-                    // Create folder if it doesn't exist
-                    val createFolderOperation = CreateFolderRemoteOperation(
-                        "$folderPath/$newFolderPath",
-                        true
-                    )
-                    val folderResult = createFolderOperation.execute(client)
-
-                    if (!folderResult.isSuccess) {
-                        emitter.onError(Exception("Failed to create folder: ${folderResult.logMessage}"))
-                        return@create
-                    }
+                val createFolderOperation = CreateFolderRemoteOperation(finalFolderPath, true)
+                val folderResult = createFolderOperation.execute(client)
+                if (!folderResult.isSuccess) {
+                    emitter.onError(Exception("Failed to create folder: ${folderResult.logMessage}"))
+                    return@create
                 }
 
-                //ELSE RENAME
-
-                // Prepare the description file
                 val descriptionFile = File.createTempFile("description", ".txt").apply {
                     writeText(description)
                 }
 
-                val rootPath =
-                    "$folderPath/$newFolderPath"
-                val descriptionFilePath = "$rootPath/description.txt"
+                val descriptionFilePath = "$finalFolderPath/description.txt"
 
-                // Check if the file already exists and delete it
-                /*  val checkFileOperation = ReadFolderRemoteOperation(newFolderPath)
-                  val checkFileResult = checkFileOperation.execute(client)
-
-                  if (checkFileResult.isSuccess) {
-                      val existingFile = checkFileResult.data
-                          ?.firstOrNull { it == descriptionFilePath }
-                      if (existingFile != null) {
-                          val deleteOperation = RemoveFileRemoteOperation(descriptionFilePath)
-                          val deleteResult = deleteOperation.execute(client)
-                          if (!deleteResult.isSuccess) {
-                              emitter.onError(Exception("Failed to delete existing description file: ${deleteResult.logMessage}"))
-                              return@create
-                          }
-                      }
-                  }*/
-
-                // Upload the description file
                 val timeStamp: Long = System.currentTimeMillis()
                 val uploadOperation = UploadFileRemoteOperation(
-                    descriptionFile.absolutePath,
-                    descriptionFilePath,
-                    "text/plain",
-                    timeStamp
+                    descriptionFile.absolutePath, descriptionFilePath, "text/plain", timeStamp
                 )
                 val result = uploadOperation.execute(client)
-                // Get the last modification date of the file from the file system
 
                 if (result.isSuccess) {
-                    emitter.onSuccess(rootPath)
+                    emitter.onSuccess(finalFolderPath)
                 } else {
                     emitter.onError(Exception("Failed to upload description file: ${result.logMessage}"))
                 }
@@ -183,19 +133,40 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             } catch (e: Exception) {
                 emitter.onError(
                     Exception(
-                        "Error uploading description to Nextcloud: ${e.message}",
-                        e
+                        "Error uploading description to Nextcloud: ${e.message}", e
                     )
                 )
             }
         }
     }
 
+    private fun generateUniqueFolderName(
+        client: OwnCloudClient, folderPath: String, newFolderPath: String
+    ): String {
+        var resultFolderPath = "$folderPath/$newFolderPath"
+        var index = 1
+
+        while (true) {
+            // Check if the folder exists
+            val readFolderOperation = ReadFolderRemoteOperation(resultFolderPath)
+            val readFolderResult = readFolderOperation.execute(client)
+
+            if (!readFolderResult.isSuccess) {
+                // Folder does not exist; return the current path
+                break
+            }
+
+            // Folder exists; append or update the index to create a unique name
+            resultFolderPath = "$folderPath/${newFolderPath} $index"
+            index++
+        }
+
+        return resultFolderPath
+    }
+
 
     override fun uploadFileWithProgress(
-        client: OwnCloudClient,
-        folderPath: String,
-        mediaFile: FormMediaFile
+        client: OwnCloudClient, folderPath: String, mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
@@ -249,9 +220,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     // Emit success status
                     emitter.onNext(
                         UploadProgressInfo(
-                            mediaFile,
-                            fileSize,
-                            UploadProgressInfo.Status.FINISHED
+                            mediaFile, fileSize, UploadProgressInfo.Status.FINISHED
                         )
                     )
                     emitter.onComplete()
