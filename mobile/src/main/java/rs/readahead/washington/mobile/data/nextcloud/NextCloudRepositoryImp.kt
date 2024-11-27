@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.hzontal.tella_vault.rx.RxVault
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
@@ -14,7 +13,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.ChunkedFileUploadRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateFolderRemoteOperation
 import com.owncloud.android.lib.resources.files.ReadFolderRemoteOperation
-import com.owncloud.android.lib.resources.files.RemoveFileRemoteOperation
 import com.owncloud.android.lib.resources.files.UploadFileRemoteOperation
 import com.owncloud.android.lib.resources.status.GetCapabilitiesRemoteOperation
 import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
@@ -30,8 +28,6 @@ import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
 import timber.log.Timber
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import java.util.UUID
 
 
@@ -112,12 +108,25 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     ): Single<String> {
         return Single.create { emitter ->
             try {
-                val readFolderOperation = ReadFolderRemoteOperation(newFolderPath)
+                // Validate client configuration
+                val capabilitiesOperation = GetCapabilitiesRemoteOperation()
+                val capabilitiesResult = capabilitiesOperation.execute(client)
+                if (!capabilitiesResult.isSuccess) {
+                    emitter.onError(Exception("Server capabilities could not be fetched: ${capabilitiesResult.logMessage}"))
+                    return@create
+                }
+
+                // Check if folder exists
+                val readFolderOperation =
+                    ReadFolderRemoteOperation("$folderPath/$newFolderPath")
                 val readFolderResult = readFolderOperation.execute(client)
 
                 if (!readFolderResult.isSuccess) {
-
-                    val createFolderOperation = CreateFolderRemoteOperation(newFolderPath, true)
+                    // Create folder if it doesn't exist
+                    val createFolderOperation = CreateFolderRemoteOperation(
+                        "$folderPath/$newFolderPath",
+                        true
+                    )
                     val folderResult = createFolderOperation.execute(client)
 
                     if (!folderResult.isSuccess) {
@@ -126,52 +135,62 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     }
                 }
 
+                //ELSE RENAME
+
+                // Prepare the description file
                 val descriptionFile = File.createTempFile("description", ".txt").apply {
                     writeText(description)
                 }
 
-                val descriptionFilePath = "$newFolderPath/description.txt"
+                val rootPath =
+                    "$folderPath/$newFolderPath"
+                val descriptionFilePath = "$rootPath/description.txt"
 
-                val checkFileOperation = ReadFolderRemoteOperation(descriptionFilePath)
-                val checkFileResult = checkFileOperation.execute(client)
+                // Check if the file already exists and delete it
+                /*  val checkFileOperation = ReadFolderRemoteOperation(newFolderPath)
+                  val checkFileResult = checkFileOperation.execute(client)
 
-                if (checkFileResult.isSuccess) {
-                     val deleteOperation = RemoveFileRemoteOperation(descriptionFilePath)
-                     deleteOperation.execute(client)
-                }
+                  if (checkFileResult.isSuccess) {
+                      val existingFile = checkFileResult.data
+                          ?.firstOrNull { it == descriptionFilePath }
+                      if (existingFile != null) {
+                          val deleteOperation = RemoveFileRemoteOperation(descriptionFilePath)
+                          val deleteResult = deleteOperation.execute(client)
+                          if (!deleteResult.isSuccess) {
+                              emitter.onError(Exception("Failed to delete existing description file: ${deleteResult.logMessage}"))
+                              return@create
+                          }
+                      }
+                  }*/
 
+                // Upload the description file
+                val timeStamp: Long = System.currentTimeMillis()
                 val uploadOperation = UploadFileRemoteOperation(
                     descriptionFile.absolutePath,
                     descriptionFilePath,
                     "text/plain",
-                    0
+                    timeStamp
                 )
-
                 val result = uploadOperation.execute(client)
+                // Get the last modification date of the file from the file system
 
                 if (result.isSuccess) {
-                    emitter.onSuccess(descriptionFilePath)
+                    emitter.onSuccess(rootPath)
                 } else {
                     emitter.onError(Exception("Failed to upload description file: ${result.logMessage}"))
                 }
 
             } catch (e: Exception) {
-                emitter.onError(Exception("Error uploading description to Nextcloud: ${e.message}", e))
+                emitter.onError(
+                    Exception(
+                        "Error uploading description to Nextcloud: ${e.message}",
+                        e
+                    )
+                )
             }
         }
     }
 
-
-
-    //TODO IS CREATING A TEMP FILE A SECURE SOLUTION?
-    private fun createTempFileFromStream(inputStream: InputStream, mediaFile: FormMediaFile): File {
-        val tempFile = File.createTempFile(mediaFile.name, null)
-        tempFile.deleteOnExit()
-        FileOutputStream(tempFile).use { output ->
-            inputStream.copyTo(output)
-        }
-        return tempFile
-    }
 
     override fun uploadFileWithProgress(
         client: OwnCloudClient,
@@ -180,42 +199,54 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
-
-
                 val file = MyApplication.rxVault.getFile(mediaFile.vaultFile)
-
-                val filePath = "$folderPath/${mediaFile.name}"
-                val tempUploadId =
-                    UUID.randomUUID().toString()
                 val fileSize = file.length()
+                val filePath = "$folderPath/${mediaFile.name}"
+                val tempUploadId = UUID.randomUUID().toString()
+
+                // Check if file already exists and handle renaming
+                /*  val readFolderOperation = ReadFolderRemoteOperation(folderPath)
+                  val folderResult = readFolderOperation.execute(client)
+                  if (!folderResult.isSuccess) {
+                      emitter.onError(
+                          Exception("Failed to read folder: ${folderResult.logMessage}")
+                      )
+                      return@create
+                  }
+
+                  val existingFiles = folderResult.resultData
+                  val existingFile = existingFiles.find { it.remotePath == filePath }
+                  val finalFilePath = if (existingFile != null) {
+                      "$folderPath/${mediaFile.name}_${System.currentTimeMillis()}${mediaFile.mimeType}"
+                  } else {
+                      filePath
+                  }*/
 
                 // Initialize the chunked upload operation
                 val uploadOperation = ChunkedFileUploadRemoteOperation(
                     file.absolutePath,
                     filePath,
                     mediaFile.mimeType,
-                    null,
+                    tempUploadId,
                     System.currentTimeMillis(),
                     true
                 )
 
                 // Set up progress listener
-                /*   uploadOperation.setOnProgressListener { currentBytes, totalBytes ->
-                       // Emit the current progress to the Flowable
-                       emitter.onNext(
-                           UploadProgressInfo(
-                               mediaFile,
-                               currentBytes,
-                               totalBytes,
-                               UploadProgressInfo.Status.IN_PROGRESS
-                           )
-                       )
-                   }*/
+                /*    uploadOperation.on { currentBytes, totalBytes ->
+                        val progressInfo = UploadProgressInfo(
+                            mediaFile,
+                            currentBytes,
+                            totalBytes,
+                            UploadProgressInfo.Status.IN_PROGRESS
+                        )
+                        emitter.onNext(progressInfo)
+                    }*/
 
                 // Execute the upload operation
                 val result = uploadOperation.execute(client)
                 if (result.isSuccess) {
-                    // Upload is successful, emit finished status
+                    // Emit success status
                     emitter.onNext(
                         UploadProgressInfo(
                             mediaFile,
@@ -223,16 +254,60 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                             UploadProgressInfo.Status.FINISHED
                         )
                     )
-                    emitter.onComplete() // Complete the flowable
+                    emitter.onComplete()
                 } else {
-                    // Handle error
-                    emitter.onError(Exception("Chunked file upload failed: ${result.logMessage}"))
+                    emitter.onError(
+                        Exception("Chunked file upload failed: ${result.logMessage}")
+                    )
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file in chunks: ${mediaFile.name}")
                 emitter.onError(e) // Emit an error if something goes wrong
             }
         }, BackpressureStrategy.LATEST)
+    }
+
+
+    fun createFileName(fileNameBase: String): String {
+        var resultFileName = fileNameBase
+
+        fun generateNewFileName() {
+            val nameWithoutExtension = resultFileName.substringBeforeLast('.', resultFileName)
+            val extension = resultFileName.substringAfterLast('.', "")
+
+            val characters = nameWithoutExtension.toCharArray()
+            if (characters.size < 2) {
+                resultFileName = if (extension.isEmpty()) {
+                    "$nameWithoutExtension 1"
+                } else {
+                    "$nameWithoutExtension 1.$extension"
+                }
+            } else {
+                val secondLastChar = characters[characters.size - 2]
+                val lastChar = characters.last()
+
+                val num = lastChar.toString().toIntOrNull()
+                if (secondLastChar == ' ' && num != null) {
+                    val newName = nameWithoutExtension.dropLast(1) + (num + 1)
+                    resultFileName = if (extension.isEmpty()) {
+                        newName
+                    } else {
+                        "$newName.$extension"
+                    }
+                } else {
+                    resultFileName = if (extension.isEmpty()) {
+                        "$nameWithoutExtension 1"
+                    } else {
+                        "$nameWithoutExtension 1.$extension"
+                    }
+                }
+            }
+        }
+
+        // Rename the file as needed
+        generateNewFileName()
+
+        return resultFileName
     }
 
     //TODO NEXT STEPS

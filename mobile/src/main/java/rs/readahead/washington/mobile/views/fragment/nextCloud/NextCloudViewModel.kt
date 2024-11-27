@@ -288,7 +288,7 @@ class NextCloudViewModel @Inject constructor(
         disposables.add(
             nextCloudRepository.uploadDescription(
                 ownCloudClient,
-                server.folderId,
+                server.folderName,
                 instance.title,
                 instance.description
             )
@@ -317,7 +317,7 @@ class NextCloudViewModel @Inject constructor(
                 .flatMap { file ->
                     nextCloudRepository.uploadFileWithProgress(
                         ownCloudClient,
-                        instance.title,
+                        folderPath,
                         file
                     )
                 }
