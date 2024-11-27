@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.webkit.MimeTypeMap
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
@@ -171,33 +172,29 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
                 val file = MyApplication.rxVault.getFile(mediaFile.vaultFile)
+
+                // Determine the file name with extension
+                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType)
+                val fileNameWithExtension = if (extension != null) {
+                    if (mediaFile.name.endsWith(".$extension")) {
+                        mediaFile.name // Already has the correct extension
+                    } else {
+                        "${mediaFile.name}.$extension" // Append the extension
+                    }
+                } else {
+                    mediaFile.name // Fallback to the original name if extension cannot be determined
+                }
+
                 val fileSize = file.length()
-                val filePath = "$folderPath/${mediaFile.name}"
+                val filePath = "$folderPath/$fileNameWithExtension"
                 val tempUploadId = UUID.randomUUID().toString()
 
-                // Check if file already exists and handle renaming
-                /*  val readFolderOperation = ReadFolderRemoteOperation(folderPath)
-                  val folderResult = readFolderOperation.execute(client)
-                  if (!folderResult.isSuccess) {
-                      emitter.onError(
-                          Exception("Failed to read folder: ${folderResult.logMessage}")
-                      )
-                      return@create
-                  }
-
-                  val existingFiles = folderResult.resultData
-                  val existingFile = existingFiles.find { it.remotePath == filePath }
-                  val finalFilePath = if (existingFile != null) {
-                      "$folderPath/${mediaFile.name}_${System.currentTimeMillis()}${mediaFile.mimeType}"
-                  } else {
-                      filePath
-                  }*/
 
                 // Initialize the chunked upload operation
                 val uploadOperation = ChunkedFileUploadRemoteOperation(
                     file.absolutePath,
                     filePath,
-                    mediaFile.mimeType,
+                    extension,
                     tempUploadId,
                     System.currentTimeMillis(),
                     true
