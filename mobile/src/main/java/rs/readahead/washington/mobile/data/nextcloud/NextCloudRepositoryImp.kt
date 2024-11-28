@@ -10,6 +10,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.ChunkedFileUploadRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateFolderRemoteOperation
@@ -27,8 +28,10 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
+import rs.readahead.washington.mobile.media.MediaFileHandler
 import timber.log.Timber
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.UUID
 
 
@@ -167,57 +170,63 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
 
 
     override fun uploadFileWithProgress(
-        client: OwnCloudClient, folderPath: String, mediaFile: FormMediaFile
+        client: OwnCloudClient,
+        folderPath: String,
+        mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
-                val file = MyApplication.rxVault.getFile(mediaFile.vaultFile)
-
-                // Determine the file name with extension
-                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType)
-                val fileNameWithExtension = if (extension != null) {
-                    if (mediaFile.name.endsWith(".$extension")) {
-                        mediaFile.name // Already has the correct extension
-                    } else {
-                        "${mediaFile.name}.$extension" // Append the extension
-                    }
-                } else {
-                    mediaFile.name // Fallback to the original name if extension cannot be determined
+                // Fetch the local file from the vault
+                val file = MyApplication.rxVault.getFile(mediaFile)
+                if (!file.exists()) {
+                    throw FileNotFoundException("File does not exist: ${file.absolutePath}")
                 }
 
+                // Determine the file name with the correct extension
+                val extension = MimeTypeMap.getSingleton()
+                    .getExtensionFromMimeType(mediaFile.mimeType)
+                    ?: "bin" // Default fallback extension
+                val fileNameWithExtension = ensureFileHasExtension(mediaFile.name, extension)
+
+                // Define paths
+                val localFilePath = File(file.parentFile, fileNameWithExtension).absolutePath
+                val remoteFilePath = "$folderPath/$fileNameWithExtension"
                 val fileSize = file.length()
-                val filePath = "$folderPath/$fileNameWithExtension"
                 val tempUploadId = UUID.randomUUID().toString()
 
-
                 // Initialize the chunked upload operation
-                val uploadOperation = ChunkedFileUploadRemoteOperation(
-                    file.absolutePath,
-                    filePath,
-                    extension,
-                    tempUploadId,
+                val uploadOperation = UploadFileRemoteOperation(
+                    localFilePath,
+                    remoteFilePath,
+                    mediaFile.mimeType,
                     System.currentTimeMillis(),
-                    true
                 )
 
-                // Set up progress listener
-                /*    uploadOperation.on { currentBytes, totalBytes ->
-                        val progressInfo = UploadProgressInfo(
-                            mediaFile,
-                            currentBytes,
-                            totalBytes,
-                            UploadProgressInfo.Status.IN_PROGRESS
+                val progressListener =
+                    OnDatatransferProgressListener { current, total, speed, fileName ->
+                        val progress = (current.toFloat() / total.toFloat()) * 100
+                        // Emit progress to Flowable
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                progress.toLong(),
+                                UploadProgressInfo.Status.STARTED
+                            )
                         )
-                        emitter.onNext(progressInfo)
-                    }*/
+                    }
 
-                // Execute the upload operation
+                // Add the progress listener to the upload operation
+                uploadOperation.addDataTransferProgressListener(progressListener)
+
+                // Execute the upload operation and handle progress
                 val result = uploadOperation.execute(client)
                 if (result.isSuccess) {
-                    // Emit success status
+                    // Upload finished, emit final progress
                     emitter.onNext(
                         UploadProgressInfo(
-                            mediaFile, fileSize, UploadProgressInfo.Status.FINISHED
+                            mediaFile,
+                            fileSize,
+                            UploadProgressInfo.Status.FINISHED
                         )
                     )
                     emitter.onComplete()
@@ -228,52 +237,22 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 }
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file in chunks: ${mediaFile.name}")
-                emitter.onError(e) // Emit an error if something goes wrong
+                emitter.onError(e)
             }
         }, BackpressureStrategy.LATEST)
     }
 
 
-    fun createFileName(fileNameBase: String): String {
-        var resultFileName = fileNameBase
-
-        fun generateNewFileName() {
-            val nameWithoutExtension = resultFileName.substringBeforeLast('.', resultFileName)
-            val extension = resultFileName.substringAfterLast('.', "")
-
-            val characters = nameWithoutExtension.toCharArray()
-            if (characters.size < 2) {
-                resultFileName = if (extension.isEmpty()) {
-                    "$nameWithoutExtension 1"
-                } else {
-                    "$nameWithoutExtension 1.$extension"
-                }
-            } else {
-                val secondLastChar = characters[characters.size - 2]
-                val lastChar = characters.last()
-
-                val num = lastChar.toString().toIntOrNull()
-                if (secondLastChar == ' ' && num != null) {
-                    val newName = nameWithoutExtension.dropLast(1) + (num + 1)
-                    resultFileName = if (extension.isEmpty()) {
-                        newName
-                    } else {
-                        "$newName.$extension"
-                    }
-                } else {
-                    resultFileName = if (extension.isEmpty()) {
-                        "$nameWithoutExtension 1"
-                    } else {
-                        "$nameWithoutExtension 1.$extension"
-                    }
-                }
-            }
+    /**
+     * Ensures that the file name has the correct extension.
+     * Appends the given extension if it's not already present.
+     */
+    private fun ensureFileHasExtension(fileName: String, extension: String): String {
+        return if (fileName.endsWith(".$extension", ignoreCase = true)) {
+            fileName
+        } else {
+            "$fileName.$extension"
         }
-
-        // Rename the file as needed
-        generateNewFileName()
-
-        return resultFileName
     }
 
     //TODO NEXT STEPS

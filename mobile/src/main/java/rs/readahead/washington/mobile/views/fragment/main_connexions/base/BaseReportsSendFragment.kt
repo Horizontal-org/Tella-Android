@@ -33,8 +33,7 @@ abstract class BaseReportsSendFragment :
         checkAndSubmitEntity(MyApplication.isConnectedToInternet(baseActivity))
 
         with(viewModel) {
-
-                            baseActivity.divviupUtils.runReportSentEvent()
+            baseActivity.divviupUtils.runReportSentEvent()
             reportInstance.observe(viewLifecycleOwner) { instance ->
                 when (instance.status) {
                     EntityStatus.SUBMITTED -> {
