@@ -176,71 +176,107 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
-                // Fetch the local file from the vault
                 val file = MyApplication.rxVault.getFile(mediaFile)
-                if (!file.exists()) {
-                    throw FileNotFoundException("File does not exist: ${file.absolutePath}")
-                }
+                if (!file.exists()) throw FileNotFoundException("File does not exist: ${file.absolutePath}")
 
-                // Determine the file name with the correct extension
-                val extension = MimeTypeMap.getSingleton()
-                    .getExtensionFromMimeType(mediaFile.mimeType)
-                    ?: "bin" // Default fallback extension
+                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType) ?: "bin"
                 val fileNameWithExtension = ensureFileHasExtension(mediaFile.name, extension)
 
-                // Define paths
-                val localFilePath = File(file.parentFile, fileNameWithExtension).absolutePath
+                val localFilePath = file.absolutePath
                 val remoteFilePath = "$folderPath/$fileNameWithExtension"
-                val fileSize = file.length()
                 val tempUploadId = UUID.randomUUID().toString()
 
-                // Initialize the chunked upload operation
-                val uploadOperation = UploadFileRemoteOperation(
+                val uploadOperation = ChunkedFileUploadRemoteOperation(
                     localFilePath,
                     remoteFilePath,
                     mediaFile.mimeType,
+                    tempUploadId,
                     System.currentTimeMillis(),
+                    true
                 )
 
-                val progressListener =
-                    OnDatatransferProgressListener { current, total, speed, fileName ->
-                        val progress = (current.toFloat() / total.toFloat()) * 100
-                        // Emit progress to Flowable
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                progress.toLong(),
-                                UploadProgressInfo.Status.STARTED
-                            )
-                        )
-                    }
+                val progressListener = OnDatatransferProgressListener { current, total, _, _ ->
+                    val progress = (current.toFloat() / total.toFloat()) * 100
+                    val status = if (current == total) UploadProgressInfo.Status.FINISHED else UploadProgressInfo.Status.OK
 
-                // Add the progress listener to the upload operation
-                uploadOperation.addDataTransferProgressListener(progressListener)
-
-                // Execute the upload operation and handle progress
-                val result = uploadOperation.execute(client)
-                if (result.isSuccess) {
-                    // Upload finished, emit final progress
                     emitter.onNext(
                         UploadProgressInfo(
                             mediaFile,
-                            fileSize,
-                            UploadProgressInfo.Status.FINISHED
+                            progress.toLong(),
+                            status
                         )
                     )
-                    emitter.onComplete()
-                } else {
-                    emitter.onError(
-                        Exception("Chunked file upload failed: ${result.logMessage}")
-                    )
+                }
+
+                uploadOperation.addDataTransferProgressListener(progressListener)
+
+                val result = uploadOperation.execute(client)
+                when {
+                    result.isSuccess -> {
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                file.length(),
+                                UploadProgressInfo.Status.FINISHED
+                            )
+                        )
+                        emitter.onComplete()
+                    }
+                    result.httpCode == 401 -> {
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                0,
+                                UploadProgressInfo.Status.UNAUTHORIZED
+                            )
+                        )
+                        emitter.onError(Exception("Unauthorized: ${result.logMessage}"))
+                    }
+                    result.httpCode == 409 -> {
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                0,
+                                UploadProgressInfo.Status.CONFLICT
+                            )
+                        )
+                        emitter.onError(Exception("Conflict: ${result.logMessage}"))
+                    }
+                    result.httpCode == -1 -> {
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                0,
+                                UploadProgressInfo.Status.UNKNOWN_HOST
+                            )
+                        )
+                        emitter.onError(Exception("Unknown host: ${result.logMessage}"))
+                    }
+                    else -> {
+                        emitter.onNext(
+                            UploadProgressInfo(
+                                mediaFile,
+                                0,
+                                UploadProgressInfo.Status.ERROR
+                            )
+                        )
+                        emitter.onError(Exception("Upload failed: ${result.logMessage}, Code: ${result.httpCode}"))
+                    }
                 }
             } catch (e: Exception) {
-                Timber.e(e, "Error uploading file in chunks: ${mediaFile.name}")
+                Timber.e(e, "Error uploading file: ${mediaFile.name}")
+                emitter.onNext(
+                    UploadProgressInfo(
+                        mediaFile,
+                        0,
+                        UploadProgressInfo.Status.ERROR
+                    )
+                )
                 emitter.onError(e)
             }
-        }, BackpressureStrategy.LATEST)
+        }, BackpressureStrategy.BUFFER)
     }
+
 
 
     /**
@@ -255,14 +291,5 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         }
     }
 
-    //TODO NEXT STEPS
-
-    // 1 create an overwrite method to renamte files if exist
-    // 2 upload files we can get the files from rx but those files are encryoted ??
-    // 3 if we use chunck to send the files can we use ReadOperation to get the latest statu of the submitted file?
-    // NB : are we going to submit those files undert the created parent folder ? how ?
-    // We should find a way to tack the progress chuck operations doesnt seems to have one
-
-    // -> now we are able to sumbit the decription and create it's folder ? --- Ahlem
 
 }

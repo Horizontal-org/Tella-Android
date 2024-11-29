@@ -270,7 +270,7 @@ class NextCloudViewModel @Inject constructor(
             if (instance.reportApiId.isEmpty()) {
                 createFolderAndSubmitFiles(instance, result.first(), ownCloudClient)
             } else if (instance.status != EntityStatus.SUBMITTED) {
-                // submitFiles(instance, result.first(), instance.reportApiId)
+                submitFiles(instance, instance.reportApiId, ownCloudClient)
             }
         }, onError = { error ->
             _error.postValue(error)
