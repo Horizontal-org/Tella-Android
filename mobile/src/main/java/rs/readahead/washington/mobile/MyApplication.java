@@ -76,6 +76,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import rs.readahead.washington.mobile.bus.TellaBus;
 import rs.readahead.washington.mobile.data.database.KeyDataSource;
+import rs.readahead.washington.mobile.data.nextcloud.TempFileManager;
 import rs.readahead.washington.mobile.data.rest.BaseApi;
 import rs.readahead.washington.mobile.data.sharedpref.Preferences;
 import rs.readahead.washington.mobile.data.sharedpref.SharedPrefs;
@@ -93,8 +94,7 @@ import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowA
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider, Application.ActivityLifecycleCallbacks
-{
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider, Application.ActivityLifecycleCallbacks {
     public static Vault vault;
     public static RxVault rxVault;
     private static TellaBus bus;
@@ -376,6 +376,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             startTime = System.currentTimeMillis(); // Start tracking time
         }
     }
+
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
 
@@ -491,5 +492,10 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         return MyApplication.getAppContext();
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        TempFileManager.INSTANCE.deleteAllFiles();
+    }
 
 }

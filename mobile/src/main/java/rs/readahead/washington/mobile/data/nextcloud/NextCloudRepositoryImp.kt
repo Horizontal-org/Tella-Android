@@ -175,14 +175,27 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
+            var tempFile: File? = null
             try {
-                val file = MyApplication.rxVault.getFile(mediaFile)
-                if (!file.exists()) throw FileNotFoundException("File does not exist: ${file.absolutePath}")
+                // Fetch the file from the encrypted vault
+                val file = MyApplication.rxVault.getStream(mediaFile)
+              //  if (!file.exists()) throw FileNotFoundException("File does not exist: ${file.absolutePath}")
 
                 val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType) ?: "bin"
                 val fileNameWithExtension = ensureFileHasExtension(mediaFile.name, extension)
 
-                val localFilePath = file.absolutePath
+                // Create a temporary file
+                tempFile = File.createTempFile("upload_", null, context.cacheDir)
+                TempFileManager.addFile(tempFile)
+
+                // Copy the decrypted content to the temp file
+
+                    tempFile.outputStream().use { output ->
+                        file.copyTo(output)
+                    }
+
+
+                val localFilePath = tempFile.absolutePath
                 val remoteFilePath = "$folderPath/$fileNameWithExtension"
                 val tempUploadId = UUID.randomUUID().toString()
 
@@ -216,7 +229,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                         emitter.onNext(
                             UploadProgressInfo(
                                 mediaFile,
-                                file.length(),
+                                tempFile.length(),
                                 UploadProgressInfo.Status.FINISHED
                             )
                         )
@@ -273,8 +286,11 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     )
                 )
                 emitter.onError(e)
+            } finally {
+                // Ensure temp file is deleted after processing
+                tempFile?.delete()
             }
-        }, BackpressureStrategy.BUFFER)
+        }, BackpressureStrategy.LATEST)
     }
 
 
