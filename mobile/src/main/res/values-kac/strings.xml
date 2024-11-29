@@ -809,10 +809,10 @@ they are uploaded to this project as a report.</string>
   <string name="incorrect_pattern">Incorrect Pattern.
 
 </string>
-  <string name="incorrect_pin">Incorrect Pin.
+  <string name="incorrect_pin">Incorrect Pin. 
 
 </string>
-  <string name="incorrect_password">Incorrect Password.
+  <string name="incorrect_password">Incorrect Password. 
 
 </string>
   <string name="attempts_remaining_singular">You have 1 attempt remaining until
