@@ -28,10 +28,8 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
-import rs.readahead.washington.mobile.media.MediaFileHandler
 import timber.log.Timber
 import java.io.File
-import java.io.FileNotFoundException
 import java.util.UUID
 
 
