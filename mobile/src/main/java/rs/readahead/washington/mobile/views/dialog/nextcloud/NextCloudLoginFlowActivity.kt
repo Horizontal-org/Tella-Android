@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.owncloud.android.lib.common.*
@@ -141,9 +142,33 @@ class NextCloudLoginFlowActivity : BaseLockActivity(), OnSslUntrustedCertListene
     }
 
     private fun createRemoteFolder(folderPath: String) {
-        this.folderPath = folderPath
-        CreateFolderRemoteOperation(folderPath, true).execute(ownCloudClient, this, handler)
+        val parentFolderPath = folderPath.substringBeforeLast("/")
+
+        // Step 1: Check if the folder already exists
+        ReadFolderRemoteOperation(parentFolderPath).execute(ownCloudClient, { operation, result ->
+            if (result.isSuccess) {
+                viewModel.progress.postValue(false)
+                viewModel.errorFolderNameExist.postValue(getString(R.string.folder_exist_error))
+            } else {
+                // Step 2: Create the folder
+                CreateFolderRemoteOperation(folderPath, true).execute(
+                    ownCloudClient,
+                    { createOperation, createResult ->
+                        if (createResult.isSuccess) {
+                            onSuccessfulCreateFolderOperation()
+                        } else {
+                            viewModel.progress.postValue(false)
+                            viewModel.errorFolderCreation.postValue(
+                                createResult?.message
+                            )
+                        }
+                    },
+                    handler
+                )
+            }
+        }, handler)
     }
+
 
     companion object {
         private val TAG = NextCloudLoginFlowActivity::class.java.simpleName

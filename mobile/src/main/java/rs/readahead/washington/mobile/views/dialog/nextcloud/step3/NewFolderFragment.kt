@@ -61,6 +61,10 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
             showToast(message)
         }
 
+        viewModel.errorFolderNameExist.observe(viewLifecycleOwner) { message ->
+            binding.createFolderLayout.error = message
+        }
+
         viewModel.successFolderCreation.observe(viewLifecycleOwner) {
             navigateToSuccessScreen()
         }
