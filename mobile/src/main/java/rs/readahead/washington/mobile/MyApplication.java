@@ -396,6 +396,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             totalTimeSpent += spentTime; // Add to total time spent
             Preferences.setTimeSpent(totalTimeSpent); // Save the time to shared preferences
             divviupUtils.runTimeSpentEvent(totalTimeSpent); // Send analytics if needed
+            TempFileManager.INSTANCE.deleteAllFiles();
         }
     }
 
@@ -446,56 +447,5 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
     }
 
-    public static String getAccountType(Context context) {
-        return context.getResources().getString(R.string.anonymous_account_type);
-    }
-
-    private void initSecurityKeyManager() {
-        SecurityKeyManager securityKeyManager = SecurityKeyManager.getInstance();
-        final SecurityKeyManagerConfig.Builder configBuilder = new SecurityKeyManagerConfig.Builder()
-                .setEnableDebugLogging(BuildConfig.DEBUG);
-
-        try {
-            // exclude all activities except AuthenticatorActivity
-            final PackageManager pm = this.getPackageManager();
-            final PackageInfo info = pm.getPackageInfo(this.getPackageName(), PackageManager.GET_ACTIVITIES);
-            final ActivityInfo[] activities = info.activities;
-            for (ActivityInfo activityInfo : activities) {
-                try {
-                    final Class<? extends Activity> aClass = (Class<? extends Activity>) Class.forName(activityInfo.name);
-                    if (aClass != NextCloudLoginFlowActivity.class) {
-                        configBuilder.addExcludedActivityClass(aClass);
-                    }
-                } catch (ClassNotFoundException | ClassCastException e) {
-                    Log_OC.e(TAG, "Couldn't disable activity for security key listener", e);
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log_OC.e(TAG, "Couldn't disable activities for security key listener", e);
-        }
-
-
-        securityKeyManager.init(this, configBuilder.build());
-    }
-
-    public static String getUserAgent(Context context) {
-        // Mozilla/5.0 (Android) Nextcloud-android/2.1.0
-        return context.getString(R.string.nextcloud_user_agent);
-    }
-
-
-    private static void initGlobalContext(Context context) {
-        appContext = new WeakReference<>(context);
-    }
-
-    public static Context getAppContext() {
-        return MyApplication.getAppContext();
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        TempFileManager.INSTANCE.deleteAllFiles();
-    }
 
 }

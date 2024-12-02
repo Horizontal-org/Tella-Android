@@ -177,7 +177,6 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             try {
                 // Fetch the file from the encrypted vault
                 val file = MyApplication.rxVault.getStream(mediaFile)
-              //  if (!file.exists()) throw FileNotFoundException("File does not exist: ${file.absolutePath}")
 
                 val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType) ?: "bin"
                 val fileNameWithExtension = ensureFileHasExtension(mediaFile.name, extension)
