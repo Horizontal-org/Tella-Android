@@ -7,6 +7,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
+import java.io.File
 
 interface NextCloudRepository {
     fun validateServerUrl(serverUrl: String): Single<Boolean>
@@ -27,5 +28,6 @@ interface NextCloudRepository {
         client: OwnCloudClient,
         folderPath: String,
         mediaFile: FormMediaFile,
+        file: File
     ): Flowable<UploadProgressInfo>
 }

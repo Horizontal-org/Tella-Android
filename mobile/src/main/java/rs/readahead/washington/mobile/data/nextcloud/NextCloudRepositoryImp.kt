@@ -4,8 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.webkit.MimeTypeMap
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
@@ -24,7 +22,6 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
@@ -56,7 +53,6 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 )
 
             } catch (e: Exception) {
-                Log.e("ValidateServerUrl", "Exception occurred: ${e.localizedMessage}", e)
                 emitter.onError(e)
             }
         }.subscribeOn(Schedulers.io())
@@ -170,30 +166,15 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     override fun uploadFileWithProgress(
         client: OwnCloudClient,
         folderPath: String,
-        mediaFile: FormMediaFile
+        mediaFile: FormMediaFile,
+        file : File
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-            var tempFile: File? = null
             try {
-                // Fetch the file from the encrypted vault
-                val file = MyApplication.rxVault.getStream(mediaFile)
-
-                val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mediaFile.mimeType) ?: "bin"
-                val fileNameWithExtension = ensureFileHasExtension(mediaFile.name, extension)
-
-                // Create a temporary file
-                tempFile = File.createTempFile("upload_", null, context.cacheDir)
-                TempFileManager.addFile(tempFile)
-
-                // Copy the decrypted content to the temp file
-
-                    tempFile.outputStream().use { output ->
-                        file.copyTo(output)
-                    }
 
 
-                val localFilePath = tempFile.absolutePath
-                val remoteFilePath = "$folderPath/$fileNameWithExtension"
+                val localFilePath = file.absolutePath
+                val remoteFilePath = "$folderPath/${mediaFile.name}"
                 val tempUploadId = UUID.randomUUID().toString()
 
                 val uploadOperation = ChunkedFileUploadRemoteOperation(
@@ -226,7 +207,7 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                         emitter.onNext(
                             UploadProgressInfo(
                                 mediaFile,
-                                tempFile.length(),
+                                file.length(),
                                 UploadProgressInfo.Status.FINISHED
                             )
                         )
@@ -283,26 +264,8 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                     )
                 )
                 emitter.onError(e)
-            } finally {
-                // Ensure temp file is deleted after processing
-                tempFile?.delete()
             }
         }, BackpressureStrategy.LATEST)
     }
-
-
-
-    /**
-     * Ensures that the file name has the correct extension.
-     * Appends the given extension if it's not already present.
-     */
-    private fun ensureFileHasExtension(fileName: String, extension: String): String {
-        return if (fileName.endsWith(".$extension", ignoreCase = true)) {
-            fileName
-        } else {
-            "$fileName.$extension"
-        }
-    }
-
 
 }

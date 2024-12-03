@@ -1,11 +1,9 @@
 package rs.readahead.washington.mobile.views.fragment.nextCloud
 
 import android.content.Context
-import android.net.Credentials
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dropbox.core.v2.DbxClientV2
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -14,6 +12,7 @@ import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import rs.readahead.washington.mobile.MyApplication
@@ -23,21 +22,23 @@ import rs.readahead.washington.mobile.domain.entity.Server
 import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFileStatus
-import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.repository.nextcloud.NextCloudRepository
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.DeleteReportUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.GetReportBundleUseCase
-import rs.readahead.washington.mobile.domain.usecases.nextcloud.SaveReportFormInstanceUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.GetReportsServersUseCase
 import rs.readahead.washington.mobile.domain.usecases.nextcloud.GetReportsUseCase
+import rs.readahead.washington.mobile.domain.usecases.nextcloud.SaveReportFormInstanceUseCase
+import rs.readahead.washington.mobile.media.MediaFileHandler
 import rs.readahead.washington.mobile.util.StatusProvider
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportCounts
 import rs.readahead.washington.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 import rs.readahead.washington.mobile.views.fragment.reports.mappers.toViewEntityInstanceItem
 import timber.log.Timber
+import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -305,7 +306,9 @@ class NextCloudViewModel @Inject constructor(
     }
 
     private fun submitFiles(
-        instance: ReportInstance, folderPath: String, ownCloudClient: OwnCloudClient
+        instance: ReportInstance,
+        folderPath: String,
+        ownCloudClient: OwnCloudClient
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
@@ -315,16 +318,32 @@ class NextCloudViewModel @Inject constructor(
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    nextCloudRepository.uploadFileWithProgress(
-                        ownCloudClient,
-                        folderPath,
-                        file
-                    )
-                }
-                .doOnEach {
-                    if (instance.status != EntityStatus.SUBMITTED) {
-                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                    // Fetch the file stream first and create a temp file
+                    Single.fromCallable {
+                        val inputStream = MediaFileHandler.getStream(file)
+                        val tempFile =
+                            inputStream?.let { createTempFile(file, it) }  // Create the temp file
+                        tempFile // Return the temp file
                     }
+                        .toFlowable()  // Convert Single to Flowable so it works with flatMap
+                        .flatMap { tempFile ->
+                            // Proceed with upload using the temporary file
+                            nextCloudRepository.uploadFileWithProgress(
+                                ownCloudClient,
+                                folderPath,
+                                file,
+                                tempFile // Pass the temp file to the upload method
+                            )
+                                .doOnTerminate {
+                                    // Delete the temporary file after upload completes
+                                    tempFile.delete()
+                                }
+                                .doOnEach {
+                                    if (instance.status != EntityStatus.SUBMITTED) {
+                                        instance.status = EntityStatus.SUBMISSION_IN_PROGRESS
+                                    }
+                                }
+                        }
                 }
                 .doOnTerminate { handleInstanceOnTerminate(instance) }
                 .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
@@ -341,6 +360,19 @@ class NextCloudViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())  // Keep the upload process on IO thread
                 .subscribe()
         )
+    }
+
+    private fun createTempFile(file: FormMediaFile, inputStream: InputStream): File {
+        // Create a temp file to store the content
+        val tempFile = File.createTempFile(file.name, ".tmp") // You can also specify your own file extension
+        tempFile.deleteOnExit() // Ensure temp file is deleted when the JVM exits
+
+        // Copy content from the input stream to the temp file
+        tempFile.outputStream().use { output ->
+            inputStream.copyTo(output)
+        }
+
+        return tempFile
     }
 
     private fun handleInstanceStatus(
