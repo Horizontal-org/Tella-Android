@@ -1,8 +1,10 @@
 package org.hzontal.shared_ui.bottomsheet
 
 import android.app.Activity
+import android.content.Context
 import android.view.View
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import org.hzontal.shared_ui.R
@@ -227,9 +229,9 @@ object VaultSheetUtils {
 
                     renameEditText.onTextChanged { text ->
                         if (text.isEmpty()) {
-                            actionRename.setTextColor(context.getColor(R.color.wa_white_40))
+                            actionRename.setTextColor(ContextCompat.getColor(context,R.color.wa_white_40))
                         } else {
-                            actionRename.setTextColor(context.getColor(R.color.wa_white))
+                            actionRename.setTextColor(ContextCompat.getColor(context,R.color.wa_white))
                         }
                     }
                     //Cancel action
