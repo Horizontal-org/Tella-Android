@@ -43,7 +43,7 @@
     <fragment
         android:id="@+id/loginToReportsScreen"
         android:name="rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment"
-        tools:layout="@layout/fragment_login_reports_screen">
+        tools:layout="@layout/fragment_login_screen">
         <action
             android:id="@+id/action_loginToReportsScreen_to_editTellaServerFragment"
             app:destination="@id/editTellaServerFragment"

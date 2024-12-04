@@ -62,7 +62,7 @@ class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                draftDropBoxViewModel.listOutbox()
+                draftDropBoxViewModel.listDrafts()
             }
         }
     }

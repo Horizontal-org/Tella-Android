@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/newGoogleDriveScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.entry.GoogleDriveEntryFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.entry.NextCloudEntryFragment"
         android:label="@string/Reports_Title_Screen"
         tools:layout="@layout/fragment_reports_entry">
 
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/googleDriveSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.submitted.GoogleDriveSubmittedFragment"
+        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.submitted.NextCloudSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 </navigation>

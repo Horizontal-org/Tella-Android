@@ -41,4 +41,7 @@
 
     <string name="alpha_disabled" translatable="false">0.6f</string>
     <string name="alpha_enabled" translatable="false">1.0f</string>
+    <bool name="multiaccount_support">true</bool>
+    <string name="webview_login_url" translatable="false"></string>
+    <bool name="show_server_url_input">true</bool>
 </resources>

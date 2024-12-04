@@ -8,11 +8,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import rs.readahead.washington.mobile.BuildConfig
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService
 import rs.readahead.washington.mobile.data.reports.remote.ReportsApiService.Companion.BASE_URL
 import rs.readahead.washington.mobile.data.uwazi.UvCookieJar
@@ -28,7 +26,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providesApiService(retrofit: Retrofit): ReportsApiService =
-            retrofit.create(ReportsApiService::class.java)
+        retrofit.create(ReportsApiService::class.java)
 
     @Provides
     fun providesOkHttpClient(): OkHttpClient {
@@ -38,9 +36,7 @@ object NetworkModule {
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-        if (BuildConfig.DEBUG) {
-            client.addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-        }
+
         return client.build()
     }
 
@@ -77,8 +73,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesStatusProvider(@ApplicationContext context: Context) : StatusProvider {
-      return StatusProviderImpl(context)
+    fun providesStatusProvider(@ApplicationContext context: Context): StatusProvider {
+        return StatusProviderImpl(context)
     }
 
 }

@@ -13,7 +13,7 @@ import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.databinding.FragmentLoginReportsScreenBinding
+import rs.readahead.washington.mobile.databinding.FragmentLoginScreenBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.util.KeyboardLiveData
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -25,7 +25,7 @@ internal const val OBJECT_SLUG = "os"
 
 @AndroidEntryPoint
 class LoginReportsFragment :
-    BaseBindingFragment<FragmentLoginReportsScreenBinding>(FragmentLoginReportsScreenBinding::inflate) {
+    BaseBindingFragment<FragmentLoginScreenBinding>(FragmentLoginScreenBinding::inflate) {
     private var validated = true
     private lateinit var serverReports: TellaReportServer
     private val viewModel by viewModels<ReportsConnectFlowViewModel>()

@@ -27,6 +27,7 @@ import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -97,6 +98,10 @@ class HomeVaultPresenter(var view: IHomeVaultPresenter.IView?, val config: Confi
             .subscribeOn(Schedulers.io())
             .flatMapSingle { it.listUwaziServers() }
 
+        val nextCloudServerCount = keyDataSource.nextCloudDataSource
+            .subscribeOn(Schedulers.io())
+            .flatMapSingle { it.listNextCloudServers() }
+
         // Combine all server count results
         disposable.add(
             Single.zip(
@@ -104,15 +109,17 @@ class HomeVaultPresenter(var view: IHomeVaultPresenter.IView?, val config: Confi
                 googleDriveCount.firstOrError(),  // Convert Observable to Single
                 tellaUploadCount.firstOrError(),  // Convert Observable to Single
                 collectServersCount.firstOrError(),  // Convert Observable to Single
-                uwaziServersCount.firstOrError()
+                uwaziServersCount.firstOrError(),
+                nextCloudServerCount.firstOrError()
             )  // Convert Observable to Single
-            { dropboxServers: List<DropBoxServer>,googleDriveServers: List<GoogleDriveServer>, tellaUploadServers: List<TellaReportServer>, collectServers: List<CollectServer>, uwaziServers: List<UWaziUploadServer> ->
+            { dropboxServers: List<DropBoxServer>,googleDriveServers: List<GoogleDriveServer>, tellaUploadServers: List<TellaReportServer>, collectServers: List<CollectServer>, uwaziServers: List<UWaziUploadServer> , nextCloudServers: List<NextCloudServer> ->
                 ServerCounts(
                     dropBoxServers = dropboxServers,
                     googleDriveServers = googleDriveServers,
                     tellaUploadServers = tellaUploadServers,
                     collectServers = collectServers,
-                    uwaziServers = uwaziServers
+                    uwaziServers = uwaziServers,
+                    nextCloudServers = nextCloudServers
                 )
             }
                 .observeOn(AndroidSchedulers.mainThread())

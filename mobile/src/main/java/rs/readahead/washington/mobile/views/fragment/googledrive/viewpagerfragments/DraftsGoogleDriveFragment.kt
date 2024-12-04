@@ -69,7 +69,7 @@ class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
                         R.string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
-                draftGoogleDriveViewModel.listOutbox()
+                draftGoogleDriveViewModel.listDrafts()
             }
         }
     }

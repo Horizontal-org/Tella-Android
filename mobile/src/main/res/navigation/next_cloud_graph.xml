@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/next_cloud_graph"
+    app:startDestination="@id/nextCloudScreen">
+
+    <fragment
+        android:id="@+id/nextCloudScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.viewpagerfragments.NextCloudTabsFragment"
+        android:label="@string/NextCloud"
+        tools:layout="@layout/fragment_reports">
+        <action
+            android:id="@+id/action_nextCloudScreen_to_nextCloudSubmittedScreen"
+            app:destination="@id/nextCloudSubmittedScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nextCloudScreen_to_nextCloudSendScreen"
+            app:destination="@id/nextCloudSendScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_nextCloudScreen_to_newNextCloudScreen"
+            app:destination="@id/newNextCloudScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newNextCloudScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.entry.NextCloudEntryFragment"
+        android:label="@string/Reports_Title_Screen"
+        tools:layout="@layout/fragment_reports_entry">
+
+        <action
+            android:id="@+id/action_newNextCloudScreen_to_nextCloudSendScreen"
+            app:destination="@id/nextCloudSendScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nextCloudSendScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.send.NextCloudSenFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
+
+    <fragment
+        android:id="@+id/nextCloudSubmittedScreen"
+        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.submitted.NextCloudSubmittedFragment"
+        android:label="Send"
+        tools:layout="@layout/fragment_send_report" />
+</navigation>
