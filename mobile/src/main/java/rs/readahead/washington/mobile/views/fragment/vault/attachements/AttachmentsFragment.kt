@@ -224,9 +224,7 @@ class AttachmentsFragment :
 
             override fun onNavigateNewLocation(newItem: BreadcrumbItem?, changedPosition: Int) {
                 DialogUtils.showBottomMessage(
-                    baseActivity,
-                    changedPosition.toString(),
-                    false
+                    baseActivity, changedPosition.toString(), false
                 )
                 handleBreadcrumbNavigation(newItem, changedPosition)
             }
@@ -486,8 +484,7 @@ class AttachmentsFragment :
                 isAudioFileType(it) -> openActivity<AudioPlayActivity>(vaultFile.id)
                 isVideoFileType(it) -> openActivity<VideoViewerActivity>(VIEW_VIDEO, vaultFile)
                 isPDFFile(vaultFile.name, it) -> openActivity<PDFReaderActivity>(
-                    VIEW_PDF,
-                    vaultFile
+                    VIEW_PDF, vaultFile
                 )
 
                 else -> showBottomSheet(vaultFile)
@@ -503,9 +500,7 @@ class AttachmentsFragment :
     }
 
     private inline fun <reified T : Activity> openActivity(
-        VIEW_TYPE: String,
-        vaultFile: VaultFile,
-        currentParent: String? = null
+        VIEW_TYPE: String, vaultFile: VaultFile, currentParent: String? = null
     ) {
         val intent = Intent(baseActivity, T::class.java).apply {
             putExtra(VIEW_TYPE, vaultFile)
@@ -515,8 +510,7 @@ class AttachmentsFragment :
     }
 
     private fun showBottomSheet(vaultFile: VaultFile) {
-        BottomSheetUtils.showStandardSheet(
-            baseActivity.supportFragmentManager,
+        BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
             baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
             baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
             baseActivity.getString(R.string.Vault_Export_SheetAction),
@@ -524,8 +518,7 @@ class AttachmentsFragment :
             onConfirmClick = {
                 this.vaultFile = vaultFile
                 performFileSearch(false, vaultFile)
-            }
-        )
+            })
     }
 
 
@@ -642,10 +635,8 @@ class AttachmentsFragment :
                         consumer = object : ActionConfirmed {
                             override fun accept(isConfirmed: Boolean) {
                                 this@AttachmentsFragment.vaultFile = vaultFile
-                                if (isConfirmed)
-                                    exportVaultFilesWithMetadataCheck(vaultFile)
-                                else
-                                    return
+                                if (isConfirmed) exportVaultFilesWithMetadataCheck(vaultFile)
+                                else return
                             }
                         })
                 }
@@ -703,6 +694,13 @@ class AttachmentsFragment :
             viewModel.exportState.observe(this, ::onExportStarted)
             viewModel.mediaExported.observe(this, ::onMediaExported)
             viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
+            viewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+        }
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            showToast(getString(R.string.file_name_taken))
         }
     }
 
@@ -791,9 +789,7 @@ class AttachmentsFragment :
 
     private fun onMediaFilesDeleted(num: Int) {
         DialogUtils.showBottomMessage(
-            baseActivity,
-            getString(R.string.Snackbar_files_were_deleted),
-            false
+            baseActivity, getString(R.string.Snackbar_files_were_deleted), false
         )
         onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
@@ -802,9 +798,7 @@ class AttachmentsFragment :
 
     private fun onMediaFileDeleted() {
         DialogUtils.showBottomMessage(
-            baseActivity,
-            getString(R.string.Snackbar_file_was_deleted),
-            false
+            baseActivity, getString(R.string.Snackbar_file_was_deleted), false
         )
         onMediaFilesAdded()
         selectMode = SelectMode.SELECT_ALL
@@ -922,8 +916,7 @@ class AttachmentsFragment :
     }
 
     private fun onFileDeletedEventListener() {
-        disposables.wire(
-            MediaFileDeletedEvent::class.java,
+        disposables.wire(MediaFileDeletedEvent::class.java,
             object : EventObserver<MediaFileDeletedEvent?>() {
                 override fun onNext(event: MediaFileDeletedEvent) {
                     onMediaFileDeleted()
@@ -932,8 +925,7 @@ class AttachmentsFragment :
     }
 
     private fun onFileRenameEventListener() {
-        disposables.wire(
-            VaultFileRenameEvent::class.java,
+        disposables.wire(VaultFileRenameEvent::class.java,
             object : EventObserver<VaultFileRenameEvent?>() {
                 override fun onNext(event: VaultFileRenameEvent) {
                     onMediaFilesAdded()
@@ -951,8 +943,7 @@ class AttachmentsFragment :
     }
 
     private fun onEditMediaSavedListener() {
-        disposables.wire(
-            EditMediaSavedEvent::class.java,
+        disposables.wire(EditMediaSavedEvent::class.java,
             object : EventObserver<EditMediaSavedEvent?>() {
                 override fun onNext(event: EditMediaSavedEvent) {
                     DialogUtils.showBottomMessage(
@@ -1052,9 +1043,7 @@ class AttachmentsFragment :
             )
         }
         exportVaultFiles(
-            isMultipleFiles = attachmentsAdapter.selectedMediaFiles.isNotEmpty(),
-            vaultFile,
-            treeUri
+            isMultipleFiles = attachmentsAdapter.selectedMediaFiles.isNotEmpty(), vaultFile, treeUri
         )
     }
 
@@ -1099,8 +1088,7 @@ class AttachmentsFragment :
         binding.toolbar.backClickListener = {
             handleBackStack()
         }
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     handleBackStack()

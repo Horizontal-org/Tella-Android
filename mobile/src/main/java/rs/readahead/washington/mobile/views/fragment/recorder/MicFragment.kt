@@ -71,6 +71,7 @@ class MicFragment : MetadataBaseLockFragment(),
     private val bundle by lazy { Bundle() }
 
     private var callback: VerificationWorkStatusCallback? = null
+    private var currentRecordName = ""
 
     companion object {
         @JvmStatic
@@ -194,6 +195,13 @@ class MicFragment : MetadataBaseLockFragment(),
         )
         viewModel.addingInProgress.observe(viewLifecycleOwner) { isAdding ->
             callback?.setBackgroundWorkStatus(isAdding && !Preferences.isAnonymousMode())
+        }
+        viewModel.isFileNameUnique.observe(viewLifecycleOwner) { isUnique ->
+            if (isUnique) {
+                recordingName.text = currentRecordName
+            } else {
+                showToast(getString(R.string.file_name_taken))
+            }
         }
     }
 
@@ -536,7 +544,8 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun updateRecordingName(name: String) {
-        recordingName.text = name
+        currentRecordName = name
+        viewModel.checkFileName(fileName = name)
     }
 
     @SuppressLint("SetTextI18n")

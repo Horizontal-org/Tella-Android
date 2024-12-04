@@ -996,4 +996,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
   <string name="folder_name">Folder name</string>
   <string name="Folder_Empty_Error">Folder name cannot be empty</string>
+  <string name="file_name_taken">File name taken. Please use a different one.</string>
+  <string name="folder_exist_error">Folder name is already taken</string>
 </resources>
