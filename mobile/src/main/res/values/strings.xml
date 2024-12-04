@@ -992,40 +992,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="login_data_own_scheme" translatable="false">nc</string>
   <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
-  <string name="authenticator_activity_please_complete_login_process">Please complete login process in your browser</string>
-  <string name="authenticator_activity_cancel_login">Cancel Login</string>
-  <string name="account_type">nextcloud</string>     <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
-  <string name="webview_version_check_alert_dialog_title">Update Android System WebView</string>
-  <string name="webview_version_check_alert_dialog_message">Please update the Android System WebView app for a login</string>
-  <string name="webview_version_check_alert_dialog_positive_button_title">Update</string>
-  <string name="nextcloud_user_agent">Mozilla/5.0 (Android) Nextcloud-android/%1$s%2$s</string>
-  <string name="provider_registration_server">https://www.nextcloud.com/register</string>
-
-  <string name="refresh">Refresh</string>
-  <string name="upload">Upload</string>
-  <string name="delete_remote_file">Delete remote file</string>
-  <string name="download">Download</string>
-  <string name="delete_local_file">Delete local file</string>
-  <string name="youre_doing_it_wrong">You\'re doing it wrong</string>
-  <string name="todo_start_refresh">TODO: start refresh</string>
-  <string name="todo_start_upload">TODO: start upload</string>
-  <string name="todo_start_remote_deletion">TODO: start remote deletion</string>
-  <string name="todo_start_download">TODO: start download</string>
-  <string name="todo_start_local_deletion">TODO: start local deletion</string>
-  <string name="todo_operation_finished_in_success">TODO: operation finished in success</string>
-  <string name="todo_operation_finished_in_fail">TODO: operation finished in fail</string>
-  <string name="upload_folder_path">to_upload</string>
-  <string name="download_folder_path">downloaded</string>
-  <string name="error_copying_sample_file">Sample file could not be saved in temporal folder; upload will not work</string>
-  <string name="sample_file_name">nc_logo.png</string>
-  <string name="sample_file_mimetype">image/png</string>
-  <string name="error_deleting_local_file">Downloaded file could not be deleted</string>
-  <string name="username"></string>
-  <string name="password"></string>
-  <string name="server_base_url">https://cloud.wearehorizontal.org</string>
-  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
   <string name="go_to_nextcloud">Go to Nextcloud</string>
   <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
   <string name="folder_name">Folder name</string>
-  <string name="folder_exist_error">Folder name is already taken</string>
+  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
 </resources>
