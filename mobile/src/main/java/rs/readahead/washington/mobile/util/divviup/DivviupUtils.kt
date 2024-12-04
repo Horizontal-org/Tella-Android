@@ -27,7 +27,7 @@ class DivviupUtils @Inject constructor(private val context: Context) {
         ioScope.launch {
             try {
                 sendCountMeasurement(
-                    taskId = 1212,
+                    taskId = R.string.divviup_count_nextcloud_sent_id,
                     leader = R.string.divviup_leader,
                     helper = R.string.divviup_helper,
                     timePrecision = R.integer.divviup_count_unlocks_timePrecisionSeconds,

@@ -167,105 +167,106 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         client: OwnCloudClient,
         folderPath: String,
         mediaFile: FormMediaFile,
-        file : File
+        file: File
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
-
-
                 val localFilePath = file.absolutePath
                 val remoteFilePath = "$folderPath/${mediaFile.name}"
-                val tempUploadId = UUID.randomUUID().toString()
 
-                val uploadOperation = ChunkedFileUploadRemoteOperation(
+                val uploadOperation = createUploadOperation(
                     localFilePath,
                     remoteFilePath,
-                    mediaFile.mimeType,
-                    tempUploadId,
-                    System.currentTimeMillis(),
-                    true
+                    mediaFile.mimeType
                 )
 
-                val progressListener = OnDatatransferProgressListener { current, total, _, _ ->
-                    val progress = (current.toFloat() / total.toFloat()) * 100
-                    val status = if (current == total) UploadProgressInfo.Status.FINISHED else UploadProgressInfo.Status.OK
-
-                    emitter.onNext(
-                        UploadProgressInfo(
-                            mediaFile,
-                            progress.toLong(),
-                            status
-                        )
-                    )
-                }
-
+                val progressListener = createProgressListener(emitter, mediaFile)
                 uploadOperation.addDataTransferProgressListener(progressListener)
 
                 val result = uploadOperation.execute(client)
-                when {
-                    result.isSuccess -> {
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                file.length(),
-                                UploadProgressInfo.Status.FINISHED
-                            )
-                        )
-                        emitter.onComplete()
-                    }
-                    result.httpCode == 401 -> {
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                0,
-                                UploadProgressInfo.Status.UNAUTHORIZED
-                            )
-                        )
-                        emitter.onError(Exception("Unauthorized: ${result.logMessage}"))
-                    }
-                    result.httpCode == 409 -> {
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                0,
-                                UploadProgressInfo.Status.CONFLICT
-                            )
-                        )
-                        emitter.onError(Exception("Conflict: ${result.logMessage}"))
-                    }
-                    result.httpCode == -1 -> {
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                0,
-                                UploadProgressInfo.Status.UNKNOWN_HOST
-                            )
-                        )
-                        emitter.onError(Exception("Unknown host: ${result.logMessage}"))
-                    }
-                    else -> {
-                        emitter.onNext(
-                            UploadProgressInfo(
-                                mediaFile,
-                                0,
-                                UploadProgressInfo.Status.ERROR
-                            )
-                        )
-                        emitter.onError(Exception("Upload failed: ${result.logMessage}, Code: ${result.httpCode}"))
-                    }
-                }
+                handleUploadResult(result, emitter, mediaFile, file)
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file: ${mediaFile.name}")
-                emitter.onNext(
-                    UploadProgressInfo(
-                        mediaFile,
-                        0,
-                        UploadProgressInfo.Status.ERROR
-                    )
-                )
-                emitter.onError(e)
+                emitError(emitter, mediaFile, e.message ?: "Unknown error", UploadProgressInfo.Status.ERROR)
             }
         }, BackpressureStrategy.LATEST)
     }
+
+    private fun createUploadOperation(
+        localFilePath: String,
+        remoteFilePath: String,
+        mimeType: String
+    ): ChunkedFileUploadRemoteOperation {
+        val tempUploadId = UUID.randomUUID().toString()
+        return ChunkedFileUploadRemoteOperation(
+            localFilePath,
+            remoteFilePath,
+            mimeType,
+            tempUploadId,
+            System.currentTimeMillis(),
+            true
+        )
+    }
+
+    private fun handleUploadResult(
+        result: RemoteOperationResult<*>,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        mediaFile: FormMediaFile,
+        file: File
+    ) {
+        when {
+            result.isSuccess -> {
+                emitter.onNext(
+                    UploadProgressInfo(
+                        mediaFile,
+                        file.length(),
+                        UploadProgressInfo.Status.FINISHED
+                    )
+                )
+                emitter.onComplete()
+            }
+            result.httpCode == 401 -> emitError(emitter, mediaFile, "Unauthorized: ${result.logMessage}", UploadProgressInfo.Status.UNAUTHORIZED)
+            result.httpCode == 409 -> emitError(emitter, mediaFile, "Conflict: ${result.logMessage}", UploadProgressInfo.Status.CONFLICT)
+            result.httpCode == -1 -> emitError(emitter, mediaFile, "Unknown host: ${result.logMessage}", UploadProgressInfo.Status.UNKNOWN_HOST)
+            else -> emitError(emitter, mediaFile, "Upload failed: ${result.logMessage}, Code: ${result.httpCode}", UploadProgressInfo.Status.ERROR)
+        }
+    }
+
+    private fun emitError(
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        mediaFile: FormMediaFile,
+        message: String,
+        status: UploadProgressInfo.Status
+    ) {
+        emitter.onNext(
+            UploadProgressInfo(
+                mediaFile,
+                0,
+                status
+            )
+        )
+        emitter.onError(Exception(message))
+    }
+
+    private fun createProgressListener(
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        mediaFile: FormMediaFile
+    ): OnDatatransferProgressListener {
+        return OnDatatransferProgressListener { current, total, _, _ ->
+            val progress = (current.toFloat() / total.toFloat()) * 100
+            val status = if (current == total) UploadProgressInfo.Status.FINISHED else UploadProgressInfo.Status.OK
+
+            emitter.onNext(
+                UploadProgressInfo(
+                    mediaFile,
+                    progress.toLong(),
+                    status
+                )
+            )
+        }
+    }
+
+
+
 
 }
