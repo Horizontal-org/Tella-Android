@@ -17,11 +17,15 @@ import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.bus.event.RecentBackgroundActivitiesEvent
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
+import rs.readahead.washington.mobile.domain.usecases.shared.CheckFileNameUseCase
 import rs.readahead.washington.mobile.media.AudioRecorder
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReportFilesUseCase: ScheduleUploadReportFilesUseCase) :
+class AudioCaptureViewModel @Inject constructor(
+    private val scheduleUploadReportFilesUseCase: ScheduleUploadReportFilesUseCase,
+    private val checkFileNameUseCase: CheckFileNameUseCase
+) :
     ViewModel(),
     AudioRecorder.AudioRecordInterface {
     private val _availableStorageLiveData = SingleLiveEvent<Long>()
@@ -55,6 +59,24 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
     private var audioRecorder: AudioRecorder? = null
 
 
+    private val _isFileNameUnique = MutableLiveData<Boolean>()
+    val isFileNameUnique: LiveData<Boolean> = _isFileNameUnique
+
+    fun checkFileName(fileName: String) {
+        disposables.add(
+            checkFileNameUseCase.isFileNameUnique(fileName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ isUnique ->
+                    // Emit the result to LiveData
+                    _isFileNameUnique.postValue(isUnique)
+                }, { error ->
+                    // In case of error, emit false (or handle the error accordingly)
+                    _isFileNameUnique.postValue(false)
+                })
+        )
+    }
+
     fun checkAvailableStorage() {
         disposables.add(Single.fromCallable {
             val statFs = StatFs(Environment.getExternalStorageDirectory().absolutePath)
@@ -84,7 +106,7 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                         vaultFile,
                         BackgroundActivityStatus.IN_PROGRESS
                     )
-                }.doOnSubscribe{
+                }.doOnSubscribe {
                     _addingInProgress.postValue(true)
                     val backgroundAudioFile = BackgroundActivityModel(
                         id = filename,
@@ -93,7 +115,8 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
                         status = BackgroundActivityStatus.IN_PROGRESS,
                         thumb = null
                     )
-                    MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundAudioFile)))
+                    MyApplication.bus()
+                        .post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundAudioFile)))
                 }
                 .subscribe(
                     { vaultFile: VaultFile ->
@@ -159,7 +182,8 @@ class AudioCaptureViewModel @Inject constructor(private val scheduleUploadReport
             status = status,
             thumb = vaultFile.thumb
         )
-        MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundAudioFile)))
+        MyApplication.bus()
+            .post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundAudioFile)))
     }
 
 
