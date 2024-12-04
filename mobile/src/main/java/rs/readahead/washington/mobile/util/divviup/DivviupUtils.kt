@@ -21,7 +21,6 @@ class DivviupUtils @Inject constructor(private val context: Context) {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    //TODO REPLACE THIS AHLEM
     fun runNextCloudEvent() {
         if (!hasAcceptedAnalytics() || isDebugBuild()) return
         ioScope.launch {

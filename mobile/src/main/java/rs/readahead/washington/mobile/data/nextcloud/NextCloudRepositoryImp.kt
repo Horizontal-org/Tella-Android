@@ -265,8 +265,5 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             )
         }
     }
-
-
-
-
+    
 }
