@@ -24,7 +24,6 @@ import rs.readahead.washington.mobile.data.database.KeyDataSource
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityModel
 import rs.readahead.washington.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
-import rs.readahead.washington.mobile.domain.usecases.shared.CheckFileNameUseCase
 import rs.readahead.washington.mobile.media.MediaFileHandler
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,9 +58,6 @@ class AttachmentsViewModel @Inject constructor(
     private val _duplicateNameError = MutableLiveData<Boolean>()
     val duplicateNameError: LiveData<Boolean> = _duplicateNameError
     val counterData = MutableLiveData<Int>()
-    private val _isFileNameUnique = MutableLiveData<Boolean>()
-    val isFileNameUnique: LiveData<Boolean> get() = _isFileNameUnique
-
 
     //TODO AHLEM FIX THIS val counterData: LiveData<Int> = _counterData
     private val _progressPercent = MutableLiveData<Pair<Double, Int>>()
@@ -155,8 +151,9 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     fun createFolder(folderName: String, parent: String) {
-        MyApplication.rxVault.builder().setName(folderName).setType(VaultFile.Type.DIRECTORY).build(parent).subscribe({
-            vaultFile -> _folderCreated.postValue(vaultFile) }) { throwable: Throwable? ->
+        MyApplication.rxVault.builder().setName(folderName).setType(VaultFile.Type.DIRECTORY)
+            .build(parent)
+            .subscribe({ vaultFile -> _folderCreated.postValue(vaultFile) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
             }.dispose()
