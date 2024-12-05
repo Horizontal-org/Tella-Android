@@ -29,7 +29,6 @@ import timber.log.Timber
 import java.io.File
 import java.util.UUID
 
-
 class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository {
 
     override fun validateServerUrl(serverUrl: String): Single<Boolean> {
@@ -198,12 +197,15 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
         mimeType: String
     ): ChunkedFileUploadRemoteOperation {
         val tempUploadId = UUID.randomUUID().toString()
+
         return ChunkedFileUploadRemoteOperation(
             localFilePath,
             remoteFilePath,
             mimeType,
             tempUploadId,
             System.currentTimeMillis(),
+            System.currentTimeMillis(),
+            true,
             true
         )
     }
