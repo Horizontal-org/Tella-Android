@@ -11,6 +11,7 @@ import rs.readahead.washington.mobile.views.fragment.nextCloud.NextCloudViewMode
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 
 @AndroidEntryPoint
 class DraftsNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
@@ -50,6 +51,7 @@ class DraftsNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
         with(draftNextCloudViewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
+                updateDraftTitle.postValue(drafts.size)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->

@@ -184,33 +184,48 @@ class NextCloudViewModel @Inject constructor(
         })
     }
 
-    override fun listOutboxAndSubmitted() {
+    override fun listDraftsOutboxAndSubmitted() {
         _progress.postValue(true)
 
         // Initialize counters for lengths
-        var outboxLength: Int
-        var submittedLength: Int
+        var draftLength: Int = 0
+        var outboxLength: Int = 0
+        var submittedLength: Int = 0
 
-        // Execute the Outbox report retrieval
-        getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
+        // Execute the Draft report retrieval
+        getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
         getReportsUseCase.execute(
-            onSuccess = { outboxResult ->
-                outboxLength = outboxResult.size // Get the length of outbox
+            onSuccess = { draftResult ->
+                draftLength = draftResult.size // Get the length of drafts
 
-                // Now execute the Submitted report retrieval
-                getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+                // Now execute the Outbox report retrieval
+                getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
                 getReportsUseCase.execute(
-                    onSuccess = { submittedResult ->
-                        submittedLength = submittedResult.size // Get the length of submitted
+                    onSuccess = { outboxResult ->
+                        outboxLength = outboxResult.size // Get the length of outbox
 
-                        // Post the combined lengths to LiveData
-                        _reportCounts.postValue(ReportCounts(outboxLength, submittedLength))
+                        // Now execute the Submitted report retrieval
+                        getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
+                        getReportsUseCase.execute(
+                            onSuccess = { submittedResult ->
+                                submittedLength = submittedResult.size // Get the length of submitted
+
+                                // Post the combined lengths to LiveData
+                                _reportCounts.postValue(ReportCounts(outboxLength, submittedLength,draftLength))
+                            },
+                            onError = {
+                                _error.postValue(it)
+                            },
+                            onFinished = {
+                                _progress.postValue(false)
+                            }
+                        )
                     },
                     onError = {
                         _error.postValue(it)
                     },
                     onFinished = {
-                        _progress.postValue(false)
+                        // Handle progress here if needed
                     }
                 )
             },

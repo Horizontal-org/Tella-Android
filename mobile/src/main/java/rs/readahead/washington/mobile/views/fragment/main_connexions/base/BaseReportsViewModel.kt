@@ -88,7 +88,7 @@ abstract class BaseReportsViewModel : ViewModel() {
 
     abstract fun listSubmitted()
     abstract fun listOutbox()
-    abstract fun listOutboxAndSubmitted()
+    abstract fun listDraftsOutboxAndSubmitted()
     abstract fun listDrafts()
     abstract fun saveSubmitted(reportInstance: ReportInstance)
     abstract fun saveOutbox(reportInstance: ReportInstance)

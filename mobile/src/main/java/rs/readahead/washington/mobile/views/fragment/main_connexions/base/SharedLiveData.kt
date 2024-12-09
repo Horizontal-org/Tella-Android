@@ -7,5 +7,6 @@ object SharedLiveData {
     val updateViewPagerPosition = SingleLiveEvent<Int>()
     val updateOutboxTitle = SingleLiveEvent<Int>()
     val updateSubmittedTitle = SingleLiveEvent<Int>()
+    val updateDraftTitle = SingleLiveEvent<Int>()
     val refreshTokenServer = SingleLiveEvent<DropBoxServer>()
 }

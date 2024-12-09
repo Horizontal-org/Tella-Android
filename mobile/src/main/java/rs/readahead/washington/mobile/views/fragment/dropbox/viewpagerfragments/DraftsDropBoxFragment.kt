@@ -9,6 +9,7 @@ import rs.readahead.washington.mobile.views.fragment.dropbox.DropBoxViewModel
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 
 @AndroidEntryPoint
 class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
@@ -43,6 +44,7 @@ class DraftsDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
         with(draftDropBoxViewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
+                updateDraftTitle.postValue(drafts.size)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
