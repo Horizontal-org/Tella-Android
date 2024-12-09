@@ -44,12 +44,15 @@ class NextCloudLoginFlowViewModel @Inject constructor(
     val errorFolderCreation = MutableLiveData<String>()
 
     fun validateServerUrl(serverUrl: String) {
+        progress.postValue(true)
         val disposable = validateServerUrlUseCase(serverUrl)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 when (result) {
+
                     is ValidationResult.Success -> {
                         _isValidServer.postValue(result.data)
+                        progress.postValue(false)
                     }
 
                     is ValidationResult.Error -> {
@@ -60,9 +63,11 @@ class NextCloudLoginFlowViewModel @Inject constructor(
                                 result.exception
                             )
                         )
+                        progress.postValue(false)
                     }
                 }
             }, { throwable ->
+                progress.postValue(false)
                 _isValidServer.postValue(false)
                 _error.postValue(
                     ValidationError(
