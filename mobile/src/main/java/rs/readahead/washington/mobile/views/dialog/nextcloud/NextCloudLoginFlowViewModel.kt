@@ -26,7 +26,7 @@ class NextCloudLoginFlowViewModel @Inject constructor(
     val userInfoResult: LiveData<RemoteOperationResult<UserInfo?>> get() = _userInfoResult
 
     private val disposables = CompositeDisposable()
-    private val _isValidServer = MutableLiveData<Boolean>()
+    private val _isValidServer = SingleLiveEvent<Boolean>()
     val isValidServer: LiveData<Boolean> = _isValidServer
 
     private val _error = MutableLiveData<ValidationError>()
