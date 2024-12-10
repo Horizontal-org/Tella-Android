@@ -61,8 +61,8 @@ class SubmittedNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
                     title = instance.title,
                     viewText = getString(string.View_Report),
                     deleteText = getString(string.Delete_Report),
-                    deleteConfirmation = getString(string.action_delete) + " \"" + instance.title + "\"?",
-                    deleteActionText = getString(string.Delete_Submitted_Report_Confirmation),
+                    deleteConfirmation = getString(string.Delete_Report_Confirmation),
+                    deleteActionText = getString(string.delete_report)
                 )
             }
 

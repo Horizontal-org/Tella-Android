@@ -55,9 +55,8 @@ class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
                     title = instance.title,
                     viewText = getString(R.string.View_Report),
                     deleteText = getString(R.string.Delete_Report),
-                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-                    deleteActionText = getString(R.string.Delete_Submitted_Report_Confirmation),
-                )
+                    deleteConfirmation = getString(R.string.Delete_Report_Confirmation),
+                    deleteActionText = getString(R.string.delete_report)                )
             }
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
