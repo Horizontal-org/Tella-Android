@@ -990,4 +990,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="file_name_taken">File name taken. Please use a different one.</string>
   <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
   <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
+  <string name="invalid_url">Invalid URL</string>
+  <string name="delete_report">Delete report?</string>
+  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
 </resources>
