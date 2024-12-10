@@ -88,8 +88,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private List<DropBoxServer> dropBoxServers;
     private List<NextCloudServer> nextCloudServers;
     private ActivityDocumentationSettingsBinding binding;
-    /// Identifier of operation in progress which result shouldn't be lost
-    private static final String TAG = ServersSettingsActivity.class.getSimpleName();
+
     @Inject
     public Config config;
 
@@ -458,7 +457,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private void showChooseServerTypeDialog() {
 
         BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), this, getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.Connections_description_selection), getString(R.string.Connections_description), this::browseIntent, getString(R.string.action_cancel), //TODO CHECk THIS
-                getString(R.string.action_ok),//TODO CHECk THIS
+                getString(R.string.action_ok),
                 getString(R.string.settings_docu_add_server_dialog_select_odk), getString(R.string.settings_docu_add_server_dialog_select_tella_web), getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi), getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive), getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox), getString(R.string.settings_docu_add_server_dialog_select_next_cloud), getString(R.string.unavailable_connections), getString(R.string.unavailable_connections_desc), servers.stream().anyMatch(server -> server instanceof GoogleDriveServer), servers.stream().anyMatch(server -> server instanceof DropBoxServer), servers.stream().anyMatch(server -> server instanceof NextCloudServer), new BottomSheetUtils.IServerChoiceActions() {
 
                     @Override

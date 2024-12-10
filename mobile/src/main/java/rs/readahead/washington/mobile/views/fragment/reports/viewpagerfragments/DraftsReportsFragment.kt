@@ -8,6 +8,7 @@ import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.ReportsUtils
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 import rs.readahead.washington.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
@@ -41,6 +42,7 @@ class DraftsReportsFragment : BaseReportsFragment<ReportsViewModel>() {
         with(draftReportsDriveViewModel) {
             draftListReportFormInstance.observe(viewLifecycleOwner) { drafts ->
                 handleReportList(drafts)
+                updateDraftTitle.postValue(drafts.size)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
@@ -49,9 +51,8 @@ class DraftsReportsFragment : BaseReportsFragment<ReportsViewModel>() {
                     title = instance.title,
                     viewText = getString(R.string.Uwazi_Action_EditDraft),
                     deleteText = getString(R.string.Delete_Report),
-                    deleteConfirmation = getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-                    deleteActionText = getString(R.string.Delete_Report_Confirmation)
-                )
+                    deleteConfirmation = getString(R.string.Delete_Report_Confirmation),
+                    deleteActionText = getString(R.string.delete_report)                )
             }
 
             instanceDeleted.observe(viewLifecycleOwner) {

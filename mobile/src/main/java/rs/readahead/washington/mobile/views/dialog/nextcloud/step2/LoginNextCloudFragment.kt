@@ -46,7 +46,7 @@ class LoginNextCloudFragment : BaseBindingFragment<FragmentLoginScreenBinding>(
 
     private fun setupListeners() {
         binding.loginButton.setOnClickListener { handleLoginButtonClick() }
-        binding.backBtn.setOnClickListener { nav().popBackStack() }
+        binding.backBtn.setOnClickListener { baseActivity.onBackPressed()}
 
         KeyboardLiveData(binding.root).observe(viewLifecycleOwner) {
             binding.backBtn.isVisible = !it.first

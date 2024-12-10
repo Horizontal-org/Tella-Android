@@ -59,7 +59,7 @@ class AudioCaptureViewModel @Inject constructor(
     private var audioRecorder: AudioRecorder? = null
 
 
-    private val _isFileNameUnique = MutableLiveData<Boolean>()
+    private val _isFileNameUnique = SingleLiveEvent<Boolean>()
     val isFileNameUnique: LiveData<Boolean> = _isFileNameUnique
 
     fun checkFileName(fileName: String) {
