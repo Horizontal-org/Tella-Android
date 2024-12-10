@@ -135,8 +135,7 @@ abstract class MainReportFragment :
             )
         }
     }
-
-
+    
     override fun onBackPressed(): Boolean {
         back()
         return true
