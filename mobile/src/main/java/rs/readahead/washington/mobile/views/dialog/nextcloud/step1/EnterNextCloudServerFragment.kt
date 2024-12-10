@@ -1,8 +1,10 @@
 package rs.readahead.washington.mobile.views.dialog.nextcloud.step1
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -22,7 +24,6 @@ import java.net.URL
 class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBinding>(
     FragmentEnterServerBinding::inflate
 ) {
-
     private val untrustedCertDialogTag = "UNTRUSTED_CERT_DIALOG"
     private val viewModel: NextCloudLoginFlowViewModel by viewModels()
     private val serverNextCloud: NextCloudServer by lazy { NextCloudServer() }
@@ -69,6 +70,10 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
         viewModel.error.observe(viewLifecycleOwner) { validationError ->
             validationError?.exception?.let { handleCertificateError(it) }
         }
+
+        viewModel.progress.observe(viewLifecycleOwner) { isProgress ->
+            binding.progressBar.isVisible = isProgress
+        }
     }
 
     private fun navigateToNextScreen() {
@@ -83,9 +88,12 @@ class EnterNextCloudServerFragment : BaseBindingFragment<FragmentEnterServerBind
     private fun handleCertificateError(exception: Throwable) {
         if (exception is CertificateCombinedException) {
             showUntrustedCertDialog(exception)
+        } else {
+            binding.urlLayout.error = getString(R.string.invalid_url)
         }
     }
 
+    @SuppressLint("CommitTransaction")
     private fun showUntrustedCertDialog(exception: CertificateCombinedException) {
         SslUntrustedCertDialog.newInstanceForFullSslError(exception, serverNextCloud.url).apply {
             show(

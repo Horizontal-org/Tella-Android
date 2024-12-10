@@ -7,6 +7,7 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.MainReportConnexionBinding
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import rs.readahead.washington.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -43,7 +44,7 @@ abstract class MainReportFragment :
                     getString(R.string.collect_sent_tab_title)
                 )
             )
-            viewModel.listOutboxAndSubmitted()
+            viewModel.listDraftsOutboxAndSubmitted()
 
             binding.viewPagerComponent.initViewPager(childFragmentManager, lifecycle, 3)
             binding.viewPagerComponent.setupTabs(fragmentProvider, 3)
@@ -75,7 +76,18 @@ abstract class MainReportFragment :
                 )
             }
 
+            updateDraftTitle.observe(viewLifecycleOwner) { outBoxesSize ->
+                binding.viewPagerComponent.updateTabTitle(
+                    DRAFT_LIST_PAGE_INDEX, outBoxesSize
+                )
+            }
+
+
             viewModel.reportCounts.observe(viewLifecycleOwner) { reportCounts ->
+                binding.viewPagerComponent.updateTabTitle(
+                    DRAFT_LIST_PAGE_INDEX,
+                    reportCounts.draftCounts
+                )
                 binding.viewPagerComponent.updateTabTitle(
                     OUTBOX_LIST_PAGE_INDEX, reportCounts.outboxCount
                 )
@@ -123,8 +135,7 @@ abstract class MainReportFragment :
             )
         }
     }
-
-
+    
     override fun onBackPressed(): Boolean {
         back()
         return true
