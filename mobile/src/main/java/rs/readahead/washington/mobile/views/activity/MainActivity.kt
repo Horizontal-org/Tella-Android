@@ -54,7 +54,6 @@ import rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryPromp
 import rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment
-import rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
 import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
@@ -286,6 +285,7 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                         showBackgroundTasksExitPrompt()
                     } else {
                         if (fragment.onBackPressed()) {
+                            selectHome()
                             return true
                         }
                     }
