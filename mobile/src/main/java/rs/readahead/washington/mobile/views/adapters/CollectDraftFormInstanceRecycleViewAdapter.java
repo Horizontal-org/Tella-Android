@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
-import rs.readahead.washington.mobile.MyApplication;
 import rs.readahead.washington.mobile.R;
-import rs.readahead.washington.mobile.bus.event.ShowFormInstanceEntryEvent;
 import rs.readahead.washington.mobile.databinding.DraftCollectFormInstanceRowBinding;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance;
 import rs.readahead.washington.mobile.util.Util;

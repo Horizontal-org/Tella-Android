@@ -31,6 +31,7 @@ import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.bus.EventCompositeDisposable
 import rs.readahead.washington.mobile.bus.EventObserver
+import rs.readahead.washington.mobile.bus.event.AudioRecordEvent
 import rs.readahead.washington.mobile.bus.event.MediaFileBinaryWidgetCleared
 import rs.readahead.washington.mobile.databinding.ActivityCollectFormEntryBinding
 import rs.readahead.washington.mobile.domain.entity.collect.CollectFormInstance
@@ -48,26 +49,33 @@ import rs.readahead.washington.mobile.util.Util
 import rs.readahead.washington.mobile.util.hide
 import rs.readahead.washington.mobile.util.show
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
+import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.collect.CollectFormEndView
 import rs.readahead.washington.mobile.views.collect.CollectFormView
 import rs.readahead.washington.mobile.views.fragment.forms.QuestionAttachmentModel
 import rs.readahead.washington.mobile.views.fragment.forms.SubmitFormsViewModel
 import rs.readahead.washington.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import rs.readahead.washington.mobile.views.fragment.recorder.COLLECT_ENTRY
+import rs.readahead.washington.mobile.views.fragment.recorder.MicActivity
 import rs.readahead.washington.mobile.views.fragment.recorder.MicFragment
 import rs.readahead.washington.mobile.views.fragment.uwazi.SharedLiveData
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
+import rs.readahead.washington.mobile.views.interfaces.VerificationWorkStatusCallback
 import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMainNavigationInterface,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+    IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView{
+    IFormSaverContract.IView,
+    VerificationWorkStatusCallback {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
+
     //private int sectionIndex;
     private var formTitle: String? = null
     private var formParser: FormParser? = null
@@ -180,6 +188,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                         formParser!!.removeWidgetMediaFile(event.filename)
                     }
                     clearedFormIndex(event.formIndex)
+                }
+            })
+
+        disposables.wire(
+            AudioRecordEvent::class.java,
+            object : EventObserver<AudioRecordEvent?>() {
+                override fun onNext(event: AudioRecordEvent) {
+                    putVaultFileInForm(event.vaultFile)
                 }
             })
     }
@@ -985,8 +1001,10 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
 
     override fun openAudioRecorder() {
         binding.entryLayout.visibility = View.GONE
-        micFragment = MicFragment.newInstance(true, null)
-        addFragment(micFragment!!, R.id.rootCollectEntry)
+        val intent = Intent(this, MicActivity::class.java)
+        intent.putExtra(VAULT_CURRENT_ROOT_PARENT, "")
+        intent.putExtra(COLLECT_ENTRY, true)
+        startActivity(intent)
     }
 
     override fun returnFileToForm(file: VaultFile) {
@@ -1001,5 +1019,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         binding.entryLayout.visibility = View.VISIBLE
         formParser!!.stopWaitingBinaryData()
         saveCurrentScreen(false)
+    }
+
+    override fun isBackgroundWorkInProgress(): Boolean {
+        return false
+    }
+
+    override fun showBackgroundWorkAlert() {
+        //TODO SHOULD WE ALSO HANDLE BACKGROUD AUDIO CALLS WHEN WE ARE ABOUT TO RECORD FROM a form
+    }
+
+    override fun setBackgroundWorkStatus(inProgress: Boolean) {
+
     }
 }
