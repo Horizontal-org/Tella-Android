@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">বাতিল</string>
+  <string name="LockSelect_Action_Back">পেছনে</string>
+  <string name="LockSelect_Action_Confirm">পরবর্তী</string>
+  <string name="LockPatternConfirm_Action_Confirm">আপনার প্যাটার্ন নিশ্চিত করুন</string>
+  <string name="LockSelect_Action_Continue">পরবর্তী</string>
+  <string name="LockPatternSet_Draw_Pattern">একটি আনলক প্যাটার্ন আঁকুন</string>
+  <string name="UnlockPattern_DrawToUnlock">Tella আনলক করতে প্যাটার্ন আঁকুন</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">আপনার নতুন আনলক প্যাটার্ন</string>
+  <string name="LockPatternSet_Pattern_Recorded">প্যাটার্ন রেকর্ড করা হয়েছে</string>
+  <string name="UnlockPattern_PatternTooShort">অন্তত ছয়টি বিন্দু সংযোগ করে 
+আপনার প্যাটার্ন আঁকুন</string>
+  <string name="LockPatternSet_RecordingPattern">হয়ে গেলে আঙুল ছেড়ে দিন</string>
+  <string name="LockPatternSet_Action_Redraw">পরিষ্কার</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">ভুল প্যাটার্ন, 
+ অনুগ্রহ করে আবার চেষ্টা করুন</string>
+  <string name="LockPatternSet_Message_PatternStarted">প্যাটার্ন শুরু হয়েছে</string>
+  <string name="LockPatternSet_Message_PatternCleared">প্যাটার্ন সাফ করা হয়েছে</string>
+  <string name="LockPatternSet_Message_CellAdded">সেল যোগ করা হয়েছে</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">সেল <xliff:g example="3" id="cell_index"> %1$d </xliff:g> যোগ করা হয়েছে</string>
+  <string name="LockPatternSet_Message_PatternDetected">প্যাটার্ন সম্পন্ন হয়েছে</string>
+  <string name="UnLockPattern_PatternArea">প্যাটার্ন এলাকা।</string>
+  <string name="UnLockPattern_Message_DrawPattern">Tella আনলক করার জন্য 
+ আপনার প্যাটার্ন আঁকুন</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">অনুগ্রহ করে আবার চেষ্টা করুন। আপনার প্যাটার্নগুলি মিলছে না।</string>
+  <string name="LockPinSet_Message_EnterPin">আপনার পিন লিখুন</string>
+  <string name="UnlockPin_Message_EnterPin">Tella
+আনলক করতে আপনার পিন লিখুন</string>
+  <string name="LockPinSet_Message_Hint">কমপক্ষে ৬ সংখ্যা ব্যবহার করুন। 
+ আপনার জন্মদিনের মতো সহজে অনুমান করা যায় এমন নম্বর ব্যবহার করা এড়িয়ে চলুন।</string>
+  <string name="LockPinSet_Message_Confirm">আপনার পিন নিশ্চিত করুন</string>
+  <string name="LockPinConfirm_Message_Confirm">নিশ্চিত হতে,
+ অনুগ্রহ করে আপনার পিন আরও একবার লিখুন।</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">আবার চেষ্টা করুন। আপনার পিন মিলছে না।</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">ভুল পিন, 
+ অনুগ্রহ করে আবার চেষ্টা করুন</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">আপনার পাসওয়ার্ড লিখুন</string>
+  <string name="LockPasswordSet_Message_Hint">কমপক্ষে ৬টি অক্ষর ব্যবহার করুন এবং 
+ সহজেই অনুমান করা যায় এমন পাসওয়ার্ড ব্যবহার  
+ এড়িয়ে চলুন, যেমন \"১২৩৪৫৬\" আপনার পাসওয়ার্ড যত দীর্ঘ 
+ , এটি তত বেশি নিরাপদ।</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">আবার চেষ্টা করুন। আপনার পাসওয়ার্ড মিলছে না।</string>
+  <string name="LockSuccess_Message_AllDone">আপনি সব 
+ সম্পন্ন করেছেন!</string>
+  <string name="LockSuccess_Message_Hint">আপনি যেকোনো সময় আপনার লক 
+ পরিবর্তন করতে পারেন এবং সেটিংসে Tella কে আরও কাস্টমাইজ করতে পারেন৷</string>
+  <string name="LockSuccess_Action_GoToTella">Tella এ যান</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">ভুল পাসওয়ার্ড, 
+ অনুগ্রহ করে আবার চেষ্টা করুন</string>
+  <string name="UnlockPassword_Message_EnterPassword">Tella আনলক করতে 
+ আপনার পাসওয়ার্ড লিখুন</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">আপনার পাসওয়ার্ড নিশ্চিত করুন</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">নিশ্চিত হওয়ার জন্য, 
+অনুগ্রহ করে আপনার পাসওয়ার্ড আরও একবার লিখুন।</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">আপনার 
+ লক পরিবর্তন করতে আপনার বর্তমান 
+ পাসওয়ার্ড লিখুন</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">আপনার 
+ লক পরিবর্তন করতে আপনার বর্তমান 
+ প্যাটার্ন আঁকুন</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">আপনার লক পরিবর্তন করতে আপনার বর্তমান পিন লিখুন৷</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">আপনার 
+ ছদ্মবেশ পরিবর্তন করতে আপনার বর্তমান 
+ পাসওয়ার্ড লিখুন</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">আপনার 
+ছদ্মবেশ পরিবর্তন করতে আপনার বর্তমান 
+ প্যাটার্ন আঁকুন</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">আপনার ছদ্মবেশ পরিবর্তন করতে আপনার বর্তমান পিন লিখুন৷</string>
+  <string name="Settings_Action_SetLock">তালা</string>
+  <string name="Settings_Message_LockChanged">আপনার লক পরিবর্তন করা হয়েছে!</string>
+</resources>
