@@ -55,7 +55,7 @@ buildscript {
     versions.cameraview = '2.7.2'
     versions.exifinterface = '1.3.3'
     versions.simplifyInk = '1.0.3'
-    versions.circularimageview = '3.2.0'
+    versions.circularimageview = '4.3.0'
     versions.ihsanbalLoggingInterceptor = '3.0.0'
     versions.cardview = '1.0.0'
     versions.buildGradle = '4.1.3'
@@ -104,17 +104,17 @@ buildscript {
 
 allprojects {
     repositories {
+        google()  // Google's Maven repository
         mavenCentral()
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+//        maven {
+//            url 'https://maven.google.com/'
+//            name 'Google'
+//        }
         maven {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
         maven { url 'https://jitpack.io' }
-        google()  // Google's Maven repository
     }
 }
 
