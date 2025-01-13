@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.joda.time.DateTime;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,37 +55,5 @@ public class CommonPreferences {
 
     private static void setLong(@NonNull String name, long value) {
         sharedPrefs.setLong(name, value);
-    }
-
-    public static boolean isShowVaultAnalyticsSection() {
-        return getBoolean(CommonPrefs.SHOW_IMPROVEMENT_SECTION, true);
-    }
-
-    public static void setShowVaultAnalyticsSection(boolean value) {
-        setBoolean(CommonPrefs.SHOW_IMPROVEMENT_SECTION, value);
-    }
-
-    public static boolean hasAcceptedAnalytics() {
-        return getBoolean(CommonPrefs.HAS_IMPROVEMENT_ACCEPTED, false);
-    }
-
-    public static void setIsAcceptedAnalytics(boolean value) {
-        setBoolean(CommonPrefs.HAS_IMPROVEMENT_ACCEPTED, value);
-        setTimeAcceptedAnalytics(new Date().getTime());
-    }
-
-    public static Long getTimeAcceptedAnalytics() {
-        return getLong(CommonPrefs.TIME_IMPROVEMENT_ACCEPTED, 0L);
-    }
-
-    private static void setTimeAcceptedAnalytics(Long value) {
-        setLong(CommonPrefs.TIME_IMPROVEMENT_ACCEPTED, value);
-    }
-
-    public static boolean isTimeToShowReminderAnalytics() {
-        if (getTimeAcceptedAnalytics() == 0L || !hasAcceptedAnalytics()) return false;
-        Date currentDate = new Date();
-        Date acceptedDatePlusSixMonths = new DateTime(new Date(getTimeAcceptedAnalytics())).plusMonths(6).toDate();
-        return currentDate.getTime() > acceptedDatePlusSixMonths.getTime();
     }
 }

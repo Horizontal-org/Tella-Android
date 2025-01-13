@@ -2,7 +2,6 @@ package rs.readahead.washington.mobile.util
 
 import android.os.Bundle
 import rs.readahead.washington.mobile.R
-import rs.readahead.washington.mobile.util.navigateSafe
 import rs.readahead.washington.mobile.views.fragment.reports.di.NavControllerProvider
 
 class NavigationManager(
@@ -44,6 +43,21 @@ class NavigationManager(
     fun navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment() {
         navigateToWithBundle(R.id.action_serverAdvancedSettingsFragment_to_successfulSetServerFragment)
     }
+    fun navigateFromGoogleDriveScreenToNewGoogleDriveScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
+    }
+
+    fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
+        navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
+    }
+
+    fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
+    }
+
+    fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
+        navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
+    }
 
     fun navigateFromReportsScreenToReportSendScreen() {
         navigateToWithBundle(R.id.action_reportsScreen_to_reportSendScreen)
@@ -56,14 +70,9 @@ class NavigationManager(
     fun navigateFromNewReportsScreenToReportSendScreen() {
         navigateWithBundleAndClearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
-
     private fun navigateWithBundleAndClearBackStack(destinationId: Int) {
         navigateToWithBundle(destinationId)
         navControllerProvider.navController.clearBackStack(destinationId)
-    }
-
-    fun navigateToEnterUrlScreen() {
-        navControllerProvider.navController.navigateSafe(R.id.reports_settings)
     }
 
     fun navigateFromUwaziEntryToSelectEntities() {
@@ -89,4 +98,22 @@ class NavigationManager(
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
+    fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment(){
+        navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)
+    }
+    fun navigateFromSelectGoogleDriveToCreateFolderFragment(){
+        navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_createFolderFragment)
+    }
+    fun navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment(){
+        navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment)
+    }
+
+    fun navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment(){
+        navigateToWithBundle(R.id.action_createFolderFragment_to_googleDriveConnectedServerFragment)
+    }
+
+    fun navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment(){
+        navigateToWithBundle(R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment)
+    }
+
 }

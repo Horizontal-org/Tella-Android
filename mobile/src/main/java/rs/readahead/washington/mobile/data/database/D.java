@@ -10,13 +10,13 @@ class D {
     //static final String DATE = " DATE ";
 
     /* DATABASE */
-    public static final String CIPHER3_DATABASE_NAME    = "tella.db";
-    public static final String  DATABASE_NAME            = "tella-v4.db";
+    public static final String CIPHER3_DATABASE_NAME = "tella.db";
+    public static final String DATABASE_NAME = "tella-v4.db";
 
 
     // 1=start,2=form media file status,3=updated flag in xforms
     // 4=xml form part status,5=media file hash,6=tella upload server,7=file uploads table
-    static final int DATABASE_VERSION = 13;
+    static final int DATABASE_VERSION = 14;
     static final int MIN_DATABASE_VERSION = 1;
 
     /* DATABASE TABLES */
@@ -24,6 +24,7 @@ class D {
     static final String T_COLLECT_BLANK_FORM = "t_collect_blank_xform";
     static final String T_COLLECT_FORM_INSTANCE = "t_collect_xform_instance";
     static final String T_REPORT_FORM_INSTANCE = "t_report_form_instance";
+    static final String T_GOOGLE_DRIVE_FORM_INSTANCE = "t_google_drive_form_instance";
     static final String T_MEDIA_FILE = "t_media_file";
     static final String T_COLLECT_FORM_INSTANCE_MEDIA_FILE = "t_collect_xform_instance_media_file";
     static final String T_SETTINGS = "t_settings";
@@ -71,6 +72,7 @@ class D {
     static final String C_COLLECT_SERVER_ID = "c_collect_server_id";
     static final String C_REPORT_SERVER_ID = "c_report_server_id";
     static final String C_REPORT_API_ID = "c_report_api_id";
+
     static final String C_CURRENT_UPLOAD = "C_CURRENT_UPLOAD";
     static final String C_FORM_DEF = "c_form_def";
     static final String C_FORM_NAME = "c_form_name";
@@ -105,6 +107,7 @@ class D {
     static final String T_UWAZI_ENTITY_INSTANCE_VAULT_FILE = "t_uwazi_entity_instance_vault_file";
     static final String C_UWAZI_ENTITY_INSTANCE_ID = "c_uwazi_entity_instance_id";
     static final String T_REPORT_INSTANCE_VAULT_FILE = "t_report_instance_vault_file";
+    static final String T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE = "t_google_drive_instance_vault_file";
     static final String C_REPORT_INSTANCE_ID = "c_report_instance_id";
     static final String C_UPLOADED_SIZE = "c_uploaded_size";
 
@@ -112,7 +115,6 @@ class D {
     static final String C_UWAZI_SERVER_ID = "c_uwazi_server_id";
     static final String C_TEMPLATE_ENTITY = "c_template_entity";
     static final String A_SERVER_NAME = "a_server_name";
-
     static final String A_COLLECT_BLANK_FORM_ID = "a_collect_blank_xform_id";
     static final String A_COLLECT_FORM_INSTANCE_ID = "a_collect_form_instance_id";
     static final String A_MEDIA_FILE_ID = "a_media_file_id";
@@ -133,6 +135,12 @@ class D {
     static final String C_RESOURCES_SAVED = "c_resources_saved";
     static final String C_RESOURCES_PROJECT = "c_resources_project";
     static final String C_RESOURCES_FILE_ID = "c_resources_file_id";
+
+    /* GOOGLE DRIVE */
+    static final String T_GOOGLE_DRIVE = "t_google_drive";
+    static final String C_GOOGLE_DRIVE_FOLDER_ID = "c_google_drive_folder_id";
+    static final String C_GOOGLE_DRIVE_FOLDER_NAME = "c_google_drive_folder_name";
+    static final String C_GOOGLE_DRIVE_SERVER_NAME = "c_google_drive_server_name";
 
 
 }

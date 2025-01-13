@@ -12,13 +12,11 @@ import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hzontal.tella_locking_ui.common.util.DivviupUtils
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -38,12 +36,15 @@ import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isFreshInstall
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isShowFailedMigrationSheet
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setIsAcceptedAnalytics
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
-import rs.readahead.washington.mobile.databinding.FragmentVaultBinding
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.setShowVaultAnalyticsSection
 import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.googledrive.Config
+import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.domain.entity.uwazi.CollectTemplate
 import rs.readahead.washington.mobile.util.LockTimeoutManager
@@ -56,7 +57,6 @@ import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PDFReaderActivity
 import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
-import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 import rs.readahead.washington.mobile.views.base_ui.BaseFragment
 import rs.readahead.washington.mobile.views.custom.CountdownTextView
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
@@ -65,6 +65,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickLi
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import rs.readahead.washington.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
 import timber.log.Timber
+import javax.inject.Inject
 
 
 const val VAULT_FILTER = "vf"
@@ -89,15 +90,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var tuServers: ArrayList<TellaReportServer>? = null
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
+    private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
+    private var googleDriveServersCounted = false
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
 
-
+    @Inject
+    lateinit var config: Config
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -137,7 +141,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
         if (analyticsActions == AnalyticsActions.YES) {
-            CommonPreferences.setIsAcceptedAnalytics(true)
+            setIsAcceptedAnalytics(true)
+            baseActivity.divviupUtils.runInstallEvent()
             DialogUtils.showBottomMessage(
                 requireActivity(),
                 getString(R.string.Settings_Analytics_turn_on_dialog),
@@ -147,7 +152,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun initData() {
-        homeVaultPresenter = HomeVaultPresenter(this)
+        homeVaultPresenter = HomeVaultPresenter(this, config)
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
@@ -160,6 +165,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         tuServers = ArrayList()
         uwaziServers = ArrayList()
         collectServers = ArrayList()
+        googleDriveServers = ArrayList()
+
     }
 
     private fun initPermissions() {
@@ -210,12 +217,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * This function show connections when all the server types are counted.
      **/
     private fun maybeShowConnections() {
-        if (serversList?.isEmpty() == false && reportServersCounted && collectServersCounted && uwaziServersCounted) {
-            vaultAdapter.addConnectionServers(serversList!!)
+        // If the serversList is not empty, check if it has changed
+        if (serversList?.isEmpty() == false) {
+            // Use the vaultAdapter to check existing connections
+         vaultAdapter.addConnectionServers(serversList!!)
+
         } else {
             vaultAdapter.removeConnectionServers()
         }
     }
+
+
 
     private fun initListeners() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -381,6 +393,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 nav().navigate(R.id.action_homeScreen_to_resources_screen)
             }
 
+            ServerType.GOOGLE_DRIVE -> {
+                nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+            }
+
             else -> {}
         }
     }
@@ -397,14 +413,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
-                CommonPreferences.setIsAcceptedAnalytics(true)
+                setIsAcceptedAnalytics(true)
                 nav().navigate(R.id.main_settings)
             }
         }
     }
 
     private fun removeImprovementSection() {
-        CommonPreferences.setShowVaultAnalyticsSection(false)
+        setShowVaultAnalyticsSection(false)
         vaultAdapter.removeImprovementSection()
     }
 
@@ -454,23 +470,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         } else {
             maybeClosePanic()
         }
+        maybeCountServers()
         maybeGetFiles()
         maybeGetRecentForms()
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
         updateToolbarIcon()
+
     }
 
-    override fun onStart() {
-        super.onStart()
-        maybeCountServers()
-    }
+
 
     private fun maybeCountServers() {
         clearServerCount()
-        homeVaultPresenter.countCollectServers()
-        homeVaultPresenter.countTUServers()
-        homeVaultPresenter.countUwaziServers()
+        homeVaultPresenter.countAllServers()
     }
 
     /**
@@ -478,6 +491,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      * At the start, the list of servers and shown connections are cleared.
      **/
     private fun clearServerCount() {
+        googleDriveServersCounted = false
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false
@@ -525,6 +539,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     private fun executePanicMode() {
         try {
+            baseActivity.divviupUtils.runQuickDeleteEvent()
             homeVaultPresenter.executePanicMode()
         } catch (ignored: Throwable) {
             panicActivated = true
@@ -542,66 +557,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             disposables.dispose()
         }
         // descriptionLiveData.removeObservers(viewLifecycleOwner)
-    }
-
-
-    override fun onCountTUServersEnded(servers: List<TellaReportServer>?) {
-        reportServersCounted = true
-        tuServers?.clear()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            serversList?.removeIf { item -> item.type == ServerType.TELLA_UPLOAD }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            serversList?.removeIf { item -> item.type == ServerType.TELLA_RESORCES }
-        }
-        if (!servers.isNullOrEmpty()) {
-            tuServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
-            serversList?.add(ServerDataItem(servers, ServerType.TELLA_RESORCES))
-        }
-        maybeShowConnections()
-    }
-
-    override fun onCountTUServersFailed(throwable: Throwable?) {
-        reportServersCounted = true
-        Timber.d("***onCountTUServersFailed**$throwable")
-    }
-
-    override fun onCountCollectServersEnded(servers: List<CollectServer>?) {
-        collectServersCounted = true
-        collectServers?.clear()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            serversList?.removeIf { item -> item.type == ServerType.ODK_COLLECT }
-        }
-        if (!servers.isNullOrEmpty()) {
-            collectServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
-        }
-        maybeShowConnections()
-    }
-
-
-    override fun onCountCollectServersFailed(throwable: Throwable?) {
-        collectServersCounted = true
-        Timber.d("***onCountCollectServersFailed**$throwable")
-    }
-
-    override fun onCountUwaziServersEnded(servers: List<UWaziUploadServer>?) {
-        uwaziServersCounted = true
-        uwaziServers?.clear()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            serversList?.removeIf { item -> item.type == ServerType.UWAZI }
-        }
-        if (!servers.isNullOrEmpty()) {
-            uwaziServers?.addAll(servers)
-            serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
-        }
-        maybeShowConnections()
-    }
-
-    override fun onCountUwaziServersFailed(throwable: Throwable?) {
-        uwaziServersCounted = true
-        Timber.d("***onCountUwaziServersFailed**$throwable")
     }
 
     override fun onGetFilesSuccess(files: List<VaultFile?>) {
@@ -657,9 +612,100 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
+    private fun maybeHideFilesTitle() {
+        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms() && serversList?.isEmpty() == false) {
+            vaultAdapter.removeTitle()
+        } else {
+            vaultAdapter.addTitle()
+        }
+    }
+
+
     override fun onGetFavoriteCollectTemplateError(error: Throwable?) {
         Timber.d(error)
     }
+
+    override fun onAllServerCountsEnded(serverCounts: ServerCounts) {
+        // Handle Google Drive servers
+        handleGoogleDriveServers(serverCounts.googleDriveServers)
+
+        // Handle Tella upload servers
+        handleTellaUploadServers(serverCounts.tellaUploadServers)
+
+        // Handle Collect servers
+        handleCollectServers(serverCounts.collectServers)
+
+        // Handle Uwazi servers
+        handleUwaziServers(serverCounts.uwaziServers)
+
+        // Check if we need to show connections
+        maybeShowConnections()
+    }
+
+    override fun onServerCountFailed(error: Throwable?) {
+        Timber.d("***onServerCountFailed**$error")
+    }
+
+    // Handle Google Drive servers
+    private fun handleGoogleDriveServers(servers: List<GoogleDriveServer>?) {
+        googleDriveServersCounted = true
+        googleDriveServers?.clear()
+        removeOldServersFromList(ServerType.GOOGLE_DRIVE)
+
+        if (!servers.isNullOrEmpty()) {
+            googleDriveServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.GOOGLE_DRIVE))
+        }
+    }
+
+    // Handle Tella upload servers
+    private fun handleTellaUploadServers(servers: List<TellaReportServer>?) {
+        reportServersCounted = true
+        tuServers?.clear()
+        removeOldServersFromList(ServerType.TELLA_UPLOAD, ServerType.TELLA_RESORCES)
+
+        if (!servers.isNullOrEmpty()) {
+            tuServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_UPLOAD))
+            serversList?.add(ServerDataItem(servers, ServerType.TELLA_RESORCES))
+        }
+    }
+
+    // Handle Collect servers
+    private fun handleCollectServers(servers: List<CollectServer>?) {
+        collectServersCounted = true
+        collectServers?.clear()
+        removeOldServersFromList(ServerType.ODK_COLLECT)
+
+        if (!servers.isNullOrEmpty()) {
+            collectServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.ODK_COLLECT))
+        }
+    }
+
+    // Handle Uwazi servers
+    private fun handleUwaziServers(servers: List<UWaziUploadServer>?) {
+        uwaziServersCounted = true
+        uwaziServers?.clear()
+        removeOldServersFromList(ServerType.UWAZI)
+
+        if (!servers.isNullOrEmpty()) {
+            uwaziServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.UWAZI))
+        }
+    }
+
+    private fun removeOldServersFromList(vararg serverTypes: ServerType) {
+        serverTypes.forEach { type ->
+            val iterator = serversList?.iterator()
+            while (iterator?.hasNext() == true) {
+                if (iterator.next().type == type) {
+                    iterator.remove()
+                }
+            }
+        }
+    }
+
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
         findNavController().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
@@ -694,13 +740,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun maybeHideFilesTitle() {
-        if (!Preferences.isShowRecentFiles() && !Preferences.isShowFavoriteForms() && serversList?.isEmpty() == false) {
-            vaultAdapter.removeTitle()
-        } else {
-            vaultAdapter.addTitle()
-        }
-    }
 
     private fun fixAppBarShadow(view: View) {
         val appBar = view.findViewById<View>(R.id.appbar)

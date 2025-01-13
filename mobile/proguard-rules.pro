@@ -240,3 +240,8 @@
 
 # Android-Image-Cropper
 -keep class androidx.appcompat.widget.** { *; }
+
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}

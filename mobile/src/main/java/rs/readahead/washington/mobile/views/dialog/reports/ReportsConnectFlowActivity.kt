@@ -30,7 +30,6 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
                     R.id.container
                 )
             }
-
         }
     }
 }

@@ -52,10 +52,25 @@ class SettingsCalculatorActivity : BaseActivity() {
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    CALCULATOR_GREEN_SKIN_INDEX -> showButtons(isNextButtonVisible = true, isBackButtonVisible = false)
-                    CALCULATOR_ORANGE_SKIN_INDEX -> showButtons(isNextButtonVisible = true, isBackButtonVisible = true)
-                    CALCULATOR_BLUE_SKIN_INDEX -> showButtons(isNextButtonVisible = true, isBackButtonVisible = true)
-                    CALCULATOR_YELLOW_SKIN_INDEX -> showButtons(isNextButtonVisible = false, isBackButtonVisible = true)
+                    CALCULATOR_GREEN_SKIN_INDEX -> showButtons(
+                        isNextButtonVisible = true,
+                        isBackButtonVisible = false
+                    )
+
+                    CALCULATOR_ORANGE_SKIN_INDEX -> showButtons(
+                        isNextButtonVisible = true,
+                        isBackButtonVisible = true
+                    )
+
+                    CALCULATOR_BLUE_SKIN_INDEX -> showButtons(
+                        isNextButtonVisible = true,
+                        isBackButtonVisible = true
+                    )
+
+                    CALCULATOR_YELLOW_SKIN_INDEX -> showButtons(
+                        isNextButtonVisible = false,
+                        isBackButtonVisible = true
+                    )
                 }
                 super.onPageSelected(position)
             }
@@ -65,27 +80,35 @@ class SettingsCalculatorActivity : BaseActivity() {
 
     private fun confirmHideBehindCalculator() {
         BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-                this.supportFragmentManager,
-                getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
-                getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
-                getString(R.string.settings_sec_confirm_camouflage_title),
-                getString(R.string.settings_sec_confirm_calc_camouflage_desc),
-                getString(R.string.settings_sec_confirm_exit_tella),
-                getString(R.string.action_cancel),
-                ContextCompat.getDrawable(this, cm.getCalculatorOptionByTheme(calculatorTheme.name).drawableResId),
-                consumer = object : BottomSheetUtils.ActionConfirmed {
-                    override fun accept(isConfirmed: Boolean) {
-                        hideTellaBehindCalculator()
-                    }
+            this.supportFragmentManager,
+            getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
+            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
+            getString(R.string.settings_sec_confirm_camouflage_title),
+            getString(R.string.settings_sec_confirm_calc_camouflage_desc),
+            getString(R.string.settings_sec_confirm_exit_tella),
+            getString(R.string.action_cancel),
+            ContextCompat.getDrawable(
+                this,
+                cm.getCalculatorOptionByTheme(calculatorTheme.name).drawableResId
+            ),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    hideTellaBehindCalculator()
                 }
+            }
         )
     }
 
     private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias(this, cm.getCalculatorOptionByTheme(calculatorTheme.name).alias))
-            MyApplication.bus()
-                    .post(CamouflageAliasChangedEvent())
-        }
+        if (cm.setLauncherActivityAlias(
+                this,
+                cm.getCalculatorOptionByTheme(calculatorTheme.name).alias
+            )
+        )
+            divviupUtils.runCamouflageEnabledEvent()
+        MyApplication.bus()
+            .post(CamouflageAliasChangedEvent())
+    }
 
 
     private fun setTheme() {
@@ -93,12 +116,15 @@ class SettingsCalculatorActivity : BaseActivity() {
             CALCULATOR_GREEN_SKIN_INDEX -> {
                 calculatorTheme = CalculatorTheme.GREEN_SKIN
             }
+
             CALCULATOR_ORANGE_SKIN_INDEX -> {
                 calculatorTheme = CalculatorTheme.ORANGE_SKIN
             }
+
             CALCULATOR_BLUE_SKIN_INDEX -> {
                 calculatorTheme = CalculatorTheme.BLUE_SKIN
             }
+
             CALCULATOR_YELLOW_SKIN_INDEX -> {
                 calculatorTheme = CalculatorTheme.YELLOW_SKIN
             }

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/space_cadet"
+        app:behavior_hideable="true">
+
+        <!-- Toolbar without padding -->
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:arrowBackIconContentDescription="@string/action_go_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Container with padding applied to the rest of the views -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <ImageView
+                android:id="@+id/server_icon"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_server"
+                android:textColor="@color/wa_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/standard_sheet_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/open_sans"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:textColor="@color/wa_white"
+                android:textSize="21sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/server_icon"
+                tools:ignore="RtlSymmetry"
+                tools:text="Add Server" />
+
+            <TextView
+                android:id="@+id/standard_sheet_content_description"
+                style="@style/Tella_Main_White_Text.Meduim"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content"
+                tools:ignore="RtlSymmetry"
+                tools:text="Add Server ServerServerServerServerServerServerServer" />
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_one_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                app:check_state="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content_description"
+                app:text="knjkenkk" />
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_two_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                app:check_state="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_one_btn" />
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_three_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                app:check_state="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn" />
+
+            <!-- New Unavailable Connection Text -->
+            <TextView
+                android:id="@+id/unavailable_connection_text"
+                style="@style/Tella_Main_White_Text.MeduimbBold"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sheet_three_btn"
+                tools:ignore="RtlSymmetry"
+                tools:text="Unavailable connections" />
+
+            <!-- New Unavailable Connection Description -->
+            <TextView
+                android:id="@+id/unavailable_connection_desc_text"
+                style="@style/Tella_Main_White_Text.Small"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/unavailable_connection_text"
+                tools:ignore="RtlSymmetry"
+                tools:text="For the following categories, only one connection can be enabled at a time. \nTo add a new connection, please delete the current one by going to Connections Settings." />
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/sheet_four_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                app:check_state="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/unavailable_connection_desc_text" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/back_btn"
+            style="@style/Tella_Main_White_Text"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:padding="24dp"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Back" />
+
+        <TextView
+            android:id="@+id/next_btn"
+            style="@style/Tella_Main_White_Text"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"
+            android:padding="24dp"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Next" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

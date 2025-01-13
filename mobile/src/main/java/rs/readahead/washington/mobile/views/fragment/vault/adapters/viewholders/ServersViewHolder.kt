@@ -10,7 +10,7 @@ import rs.readahead.washington.mobile.views.fragment.vault.adapters.connections.
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.inflate
 
-class ServersViewHolder constructor(val view: View) : BaseViewHolder<List<ServerDataItem>>(view) {
+class ServersViewHolder(val view: View) : BaseViewHolder<List<ServerDataItem>>(view) {
 
     private lateinit var serversRecyclerView: RecyclerView
 

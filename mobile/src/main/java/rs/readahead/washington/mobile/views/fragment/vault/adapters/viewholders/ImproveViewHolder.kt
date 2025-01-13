@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.R
+import rs.readahead.washington.mobile.data.sharedpref.Preferences.isTimeToShowReminderAnalytics
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.VaultClickListener
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
@@ -22,7 +23,7 @@ class ImproveViewHolder(val view: View) : BaseViewHolder<String?>(view) {
             val tvYesIn = findViewById<TextView>(R.id.tv_yes_in)
             val tvLearnMore = findViewById<TextView>(R.id.tv_learn_more)
 
-            if (CommonPreferences.isTimeToShowReminderAnalytics()) {
+            if (isTimeToShowReminderAnalytics()) {
                 tvImprove.text = tvImprove.context.getString(R.string.Analytics_contribute_reminder_title)
                 tvDescription.text = tvDescription.context.getString(R.string.Analytics_contribute_reminder_description)
                 //imgImprove.setImageResource(R.drawable.ic_insights_share_data)

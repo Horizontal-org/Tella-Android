@@ -1,4 +1,4 @@
-![Tella](docs/Tella2.0-feature.png?raw=true "Tella")
+<img src="docs/Tella2.0-feature.png" alt="Tella" width="350"/>
 
 ## Table of Contents
 
@@ -22,19 +22,18 @@
 
 In challenging environments, with limited or no internet connectivity or in the face of repression, Tella is an app that makes it easier and safer to document human rights violations and collect data. Tella is available Android and iOS. 
 
-More information about how to get Tella --including user guides-- can be found on our [documentation platform](https://docs.tella-app.org/).
-
-| [![Camouflage](docs/camouflage.gif)](https://tella-app.org/features#encryption/)  | [![Encrypting](docs/encrypting.gif)](https://tella-app.org/) | [![Server Connections](docs/data_collection.gif)](https://tella-app.org/for-organizations) |
+| ![Camouflage](docs/Camouflage.gif) | ![Encrypting](docs/Encrypting.gif) | ![Connection](docs/Server.gif) |
 |:---:|:---:|:---:|
-| Tella camouflaged as a calculator | Taking and encrypting a photo | Collecting data |
+| [Tella camouflaged as a calculator](https://tella-app.org/features#camouflage) | [Taking and encrypting a video](https://tella-app.org/features#encryption) | [Sending data to a server](https://tella-app.org/for-organizations) |
 
 Tella:
-- encrypts photo, video, and audio files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer.
-- hides itself by changing its name and icon in the list of apps.
+- encrypts photo, video, audio and PDF files in a separate gallery so it cannot be accessed from the phone's regular gallery or file explorer.
+- hides itself by changing its name and icon in the list of apps or behind a working calculator.
 - captures metadata when taking photos, videos, and audio recordings to verify the origin of the files.
-- allows users to quickly delete all files in Tella's encrypted Gallery.
+- allows users to quickly delete all files in Tella's encrypted vault.
 - enables users working with a group or organization to collect and send data to a server without relying on third-party apps or servers.
 
+You can watch a [short video demonstrating Tella's main features here](https://www.youtube.com/watch?v=aJIyWESxM_o&t=1s)
 
 
 ## Why Tella? <a id="why-tella"></a>
@@ -50,36 +49,22 @@ Tella has three main objectives:
 - Empowering individuals and groups to easily, quickly, and effectively collect data and produce high quality documentation that can be used for research, advocacy, or transitional justice
 
 Tella is used by:
-
 - Activists, organizers and human rights defenders to safely document events in their communities, produce reliable and verifiable evidence, and store data encrypted on their mobile devices.
 - Media, professional reporters and citizen journalists to store sensitive media files encrypted as they travel, particularly as they cross borders.
 - Civil society professionals and humanitarian workers to conduct interviews and collect data in poorly connected environments or in conflict areas.
 - Electoral observation and monitoring organizations to monitor elections from inside and outside polling stations in real time and expose electoral fraud.
 - Research institutions and international organizations to conduct research, interviews or surveys in challenging environments, particularly in conflict areas.
 
-You can read [user stories](https://tella-app.org/user-stories) here.
-
-
+You can read usage stories [here](https://tella-app.org/user-stories).
 
 ## Detailed list of features <a id="features"></a>
 
-A detailed list of features for both Tella Android and iOS can be found [on the documentation](https://tella-app.org/features).
+A detailed list of all Tella features can be found here: https://tella-app.org/features. 
+
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
-### Tella for Android
-Tella for Android can be downloaded:
-- directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella).
-- from [this folder](https://web.tresorit.com/l/JgMjK#FV9IoIZdDxwAUPqtupJzsQ) or from our [Telegram channel](https://t.me/tellaapp), as an APK, to be installed manually.
-
-### Tella FOSS (F-droid)
-We also maintain a version of Tella in the [F-droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/). And the code for it can be found here: https://github.com/Horizontal-org/Tella-Android-FOSS
-
-
-### Get started on Tella Android
-A get started guide for Tella Android is available [here](https://tella-app.org/get-started-android).
-
-
+Tella is currently available on Android, iOS and the F-Droid store. We also share the Tella .apk to be installed manually. [Here there is more information](https://tella-app.org/faq#general). A step-by-step guide on how to use Tella can be found [here](https://tella-app.org/get-started-android).
 
 ## Tech & frameworks used <a id="tech-used"></a>
 
@@ -104,8 +89,9 @@ This software uses the following open source packages:
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
 
 ## Translating the app <a id="translating"></a>
+Tella is currently available in [17 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
 
-Tella is currently available in [17 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages.
+If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator). 
 
 If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator).
 
@@ -114,7 +100,7 @@ If you are interested in adding a new language, or if you noticed a mistake or a
 ## Contact us <a id="contact"></a>
 We love hearing from users, designers, and developers!
 
-We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us).
+We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us). 
 
-If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
+ If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
 

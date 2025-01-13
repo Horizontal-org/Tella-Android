@@ -13,7 +13,8 @@ import rs.readahead.washington.mobile.databinding.OnboardCalculatorFragmentBindi
 import rs.readahead.washington.mobile.util.CamouflageManager
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
 
-class OnBoardCalculatorFragment : BaseBindingFragment<OnboardCalculatorFragmentBinding>(OnboardCalculatorFragmentBinding::inflate)  {
+class OnBoardCalculatorFragment :
+    BaseBindingFragment<OnboardCalculatorFragmentBinding>(OnboardCalculatorFragmentBinding::inflate) {
 
     private val cm by lazy { CamouflageManager.getInstance() }
 
@@ -22,16 +23,16 @@ class OnBoardCalculatorFragment : BaseBindingFragment<OnboardCalculatorFragmentB
         initView(view)
     }
 
-     fun initView(view: View) {
+    fun initView(view: View) {
         (activity as OnBoardActivityInterface).hideProgress()
 
         val calcButton = view.findViewById<TextView>(R.id.calculatorBtn)
         calcButton.setOnClickListener {
             confirmHideBehindCalculator()
             (activity as OnBoardingActivity).addFragment(
-                    this,
-                    OnBoardHideTellaSet(),
-                    R.id.rootOnboard
+                this,
+                OnBoardHideTellaSet(),
+                R.id.rootOnboard
             )
         }
 
@@ -43,26 +44,34 @@ class OnBoardCalculatorFragment : BaseBindingFragment<OnboardCalculatorFragmentB
 
     private fun confirmHideBehindCalculator() {
         BottomSheetUtils.showConfirmSheetWithImageAndTimeout(
-                (activity as OnBoardingActivity).supportFragmentManager,
-                getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
-                getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
-                getString(R.string.settings_sec_confirm_camouflage_title),
-                getString(R.string.settings_sec_confirm_calc_camouflage_desc),
-                getString(R.string.settings_sec_confirm_exit_tella),
-                getString(R.string.action_cancel),
-                ContextCompat.getDrawable( (activity as OnBoardingActivity), cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId),
-                consumer = object : BottomSheetUtils.ActionConfirmed {
-                    override fun accept(isConfirmed: Boolean) {
-                        hideTellaBehindCalculator()
-                    }
+            (activity as OnBoardingActivity).supportFragmentManager,
+            getString(R.string.SettingsCamo_Dialog_TimeoutTitle),
+            getString(R.string.SettingsCamo_Dialog_TimeoutDesc),
+            getString(R.string.settings_sec_confirm_camouflage_title),
+            getString(R.string.settings_sec_confirm_calc_camouflage_desc),
+            getString(R.string.settings_sec_confirm_exit_tella),
+            getString(R.string.action_cancel),
+            ContextCompat.getDrawable(
+                (activity as OnBoardingActivity),
+                cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).drawableResId
+            ),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    hideTellaBehindCalculator()
                 }
+            }
         )
     }
 
     private fun hideTellaBehindCalculator() {
-        if (cm.setLauncherActivityAlias((activity as OnBoardingActivity), cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias))
-            MyApplication.bus()
-                    .post(CamouflageAliasChangedEvent())
-        }
+        if (cm.setLauncherActivityAlias(
+                (activity as OnBoardingActivity),
+                cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias
+            )
+        )
+            baseActivity.divviupUtils.runCamouflageEnabledEvent()
+        MyApplication.bus()
+            .post(CamouflageAliasChangedEvent())
+    }
 
 }

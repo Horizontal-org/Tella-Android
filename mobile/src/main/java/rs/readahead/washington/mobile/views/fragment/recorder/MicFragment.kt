@@ -34,8 +34,8 @@ import rs.readahead.washington.mobile.util.StringUtils
 import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.base_ui.MetadataBaseLockFragment
-import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_AUDIO
-import rs.readahead.washington.mobile.views.fragment.reports.entry.BUNDLE_REPORT_VAULT_FILE
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
+import rs.readahead.washington.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.interfaces.ICollectEntryInterface
 import rs.readahead.washington.mobile.views.interfaces.IMainNavigationInterface
@@ -285,6 +285,7 @@ class MicFragment : MetadataBaseLockFragment(),
     }
 
     private fun onAddSuccess(vaultFile: VaultFile) {
+        metadataActivity.divviupUtils.runAudioTakenEvent()
         if (!isCollect) {
             DialogUtils.showBottomMessage(
                 metadataActivity,

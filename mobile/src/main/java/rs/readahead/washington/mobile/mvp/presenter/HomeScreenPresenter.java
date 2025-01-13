@@ -53,7 +53,6 @@ public class HomeScreenPresenter implements IHomeScreenPresenterContract.IPresen
                         if (Preferences.isEraseForms()) {
                             dataSource.deleteFormsAndRelatedTables();
                         }
-
                     }
 
                     clearSharedPreferences();

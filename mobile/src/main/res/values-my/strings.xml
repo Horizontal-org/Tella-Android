@@ -79,7 +79,7 @@
   <string name="collect.end_toast_notification.form.not.sent.no.connection">အင်တာနက် ချိတ်ဆက်မှုမရှိပါ။ ချိတ်ဆက်ပြီးနောက် ထပ်စမ်းကြည့်ပါ</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">အစိတ်အပိုင်းများ သို့မဟုတ် ဖောင်အားလုံးကို မပို့ခဲ့ပါ။ ၎င်းကို စွန့်ပစ်လိုသည်မှာ သေချာပါသလား။</string>
   <string name="action_discard">စွန့်လွှတ်ပယ်ဖျက်မည်</string>
-  <string name="collect.end_action_submit">ပို့မည်</string>
+  <string name="collect.end_action_submit">ပေးပို့သည်။</string>
   <string name="gallery_toast_fail.exporting.to.device">ဖိုင်များကို ထုတ်ယူရာတွင် အမှားအယွင်းရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
   <string name="permission_dialog.expl_device.storage">ဖိုင်များကို ထုတ်ယူရန်အတွက် Tella သည် စက်၏ သိုလှောင်မှုတွင် ရေးသားရန် ခွင့်ပြုချက် လိုအပ်ပါသည်။</string>
   <string name="gallery_toast_fail.deleting.files">ဖိုင်များကို ဖျက်ရာတွင် အမှားအယွင်း ရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ။</string>
@@ -207,7 +207,7 @@
   <string name="collect.help_expl_odk">သင့်ကိုယ်ပိုင်ပုံစံများကို ဖန်တီးလိုပါက <a href="https://hzontal.org/contact/"> ကျွန်ုပ်တို့ထံ ဆက်သွယ်ပါ </a> သို့မဟုတ် အသုံးပြုပါ <a href="https://opendatakit.org/help/help-for-hire/"> Open Data Kit (ODK) ကို အခြေခံပြီး မည်သည့် ဝန်ဆောင်မှုကိုမဆို</a></string>
   <string name="collect.help_expl_no.internet">အကယ်၍ သင်သည် အင်တာနက်နှင့် မချိတ်ဆက်ပါက၊ သင်သည် ဖောင်များကို ဖြည့်စွက်နိုင်သေးသည်။ သင်အွန်လိုင်းရောက်သည်နှင့် ဒေတာကို ပေးပို့ပါမည်။</string>
   <string name="collect_toast_fail.data.too.large">ပူးတွဲထားဖိုင်များသည် ကြီးလွန်းသောကြောင့် သင့်ဖောင်ကို မတင်သွင်းနိုင်ပါ။ ကျေးဇူးပြု၍ သေးငယ်သောဖိုင်များကို ပူးတွဲပါ</string>
-  <string name="collect.end_heading_submitting">တင်သွင်းခြင်း</string>
+  <string name="collect.end_heading_submitting">ပေးပို့နေသည်။ </string>
   <string name="collect.end_exit_dialog.expl">ယခုထွက်ပါက၊ တင်သွင်းမှုကို ရပ်သွားမည်ဖြစ်ပြီး ကျန်ဖိုင်များကို နောက်ပိုင်းတွင် တင်သွင်းနိုင်မည် ဖြစ်သည်။</string>
   <string name="collect.end_subheading.expl_unchecked.items">အမှတ်ခြစ်မထားသော အရာများကို နောက်ပိုင်းတွင် ပေးပို့ရန်အတွက် သိမ်းဆည်းပါမည်။</string>
   <string name="collect_toast_form.saved.for.later.submission">နောက်ပိုင်းတင်ပြမှုအတွက် ဖောင်ကို သိမ်းဆည်းထားသည်</string>
@@ -869,7 +869,7 @@
   <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
 • We will <b>never</b> share your data or sell it to anyone.</string>
   <string name="Analytics_banner_title">Share analytics to improve Tella</string>
-  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you. 
+  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
 
 Would you like to share analytics with the Tella team?</string>
   <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
@@ -890,4 +890,21 @@ Would you like to share analytics with the Tella team?</string>
  to your organization.</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
+  <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
+  <string name="create_new_folder">CREATE NEW FOLDER</string>
+  <string name="use_shared_drive">USE SHARED DRIVE</string>
+  <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
+  <string name="select_google_drive">Select Google drive</string>
+  <string name="google_drive" translatable="false">Google Drive
+</string>
+  <string name="learn_more_about_the_types_of_drives">Learn more about the types of drives.</string>
+  <string name="description_google_drive">You can either connect to an organizational Shared Drive or create a new folder in your personal Drive.</string>
+  <string name="select_a_drive_to_connect">Select a Drive to connect to</string>
+  <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
+  <string name="settings_add.server.selection_dialog.title">မည်သည့်ဆာဗာအမျိုးအစားကို သင်ချိတ်ဆက်လိုသနည်း။</string>
+  <string name="unavailable_connections">Unavailable connections</string>
+  <string name="unavailable_connections_desc">For the following categories, only one connection can be
+ enabled at a time. To add a new connection, please delete
+ the current one by going to Connections Settings. </string>
+  <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
 </resources>
