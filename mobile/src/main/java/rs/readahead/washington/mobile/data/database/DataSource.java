@@ -2515,50 +2515,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
-        Cursor cursor = null;
-        List<ReportInstance> instances = new ArrayList<>();
-
-        try {
-
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_FORM_INSTANCE +
-                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
-                    new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
-                            D.C_REPORT_SERVER_ID,
-                            D.C_STATUS,
-                            D.C_CURRENT_UPLOAD,
-                            D.C_UPDATED,
-                            D.C_METADATA,
-                            D.C_DESCRIPTION_TEXT,
-                            D.C_TITLE,
-                            //  D.C_FORM_PART_STATUS,
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_CURRENT_UPLOAD + " = " + current,
-                    null, null,
-                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
-                    null
-            );
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportInstance instance = cursorToReportFormInstance(cursor);
-                instances.add(instance);
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return instances;
-    }
 
     private ReportInstance cursorToReportFormInstance(Cursor cursor) {
         ReportInstance instance = new ReportInstance();

@@ -18,9 +18,6 @@ public class CommonPrefs {
     public static final String NONE = "";
     private static final String SHARED_PREFERENCES_NAME = "tella_shared_preferences";
 
-
-
-
     private static CommonPrefs instance;
     private SharedPreferences commonPref;
     private SharedPreferences.Editor commonEditor;

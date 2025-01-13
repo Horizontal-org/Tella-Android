@@ -50,10 +50,10 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/tella_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
         tools:targetApi="n">

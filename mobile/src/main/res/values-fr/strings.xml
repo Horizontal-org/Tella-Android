@@ -33,12 +33,12 @@
   <string name="lock_dialog.expl_save.pattern">Enregistrement de votre schéma de verrouillage</string>
   <string name="lock_dialog.expl_unlock.app">Déverrouillage de Tella</string>
   <string name="action_skip">Ignorer</string>
-  <string name="settings.docu_delete.server_dialog.expl">Si vous supprimez ce serveur, tous les brouillons et formulaires envoyés seront supprimés de votre appareil. Le supprimer quand même ?</string>
+  <string name="settings.docu_delete.server_dialog.expl">Si vous supprimez ce serveur, tous les brouillons et les formulaires soumis seront supprimés de votre appareil.</string>
   <string name="settings.docu_toast_server.deleted">Le serveur a été supprimé</string>
   <string name="settings.docu_toast_server.created">Le serveur a été créé</string>
   <string name="settings.docu_toast_server.updated">Le serveur a été mis à jour</string>
   <string name="settings.docu_dialog.title_server.settings">Paramètres du serveur</string>
-  <string name="settings.docu_field_server.name">Nom du serveur</string>
+  <string name="settings.docu_field_server.name">Nommez votre serveur</string>
   <string name="settings.docu_field_server.url">URL du serveur</string>
   <string name="collect.sent_tab.title">Envoyés</string>
   <string name="home_expl_cancel.quick.delete">Toucher n’importe où pour annuler</string>
@@ -91,7 +91,7 @@
   <string name="gallery_delete.files_dialog.expl">Les fichiers sélectionnés seront irrémédiablement supprimés de votre galerie.</string>
   <string name="gallery_save.to.device_dialog.title">Enregistrer dans la galerie de l’appareil ?</string>
   <string name="gallery_save.to.device_dialog.expl">Votre fichier deviendra accessible en dehors de Tella, dans la galerie de votre appareil et par d’autres applis.</string>
-  <string name="gallery_dialog.expl_encrypting">Chiffrement</string>
+  <string name="gallery_dialog.expl_encrypting">Chiffrement du fichier...</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Déchiffrement</string>
   <string name="gallery_toast_fail.import">Erreur d’ouverture de la galerie pour importer les fichiers. Veuillez réessayer</string>
   <string name="gallery_toast_fail.saving.file">Erreur d’enregistrement du fichier. Veuillez réessayer</string>
@@ -260,9 +260,9 @@
   <string name="play.audio_action.expl_minus15s">-15 s</string>
   <string name="recorder_meta_space.available.days">Il reste %1$d jours et %2$d heures (%3$s)</string>
   <string name="recorder_meta_space.available.hours">Il reste %1$d heures et %2$d min (%3$s)</string>
-  <string name="camera_video.resolution_dialog.title">Sélectionner la résolution de la vidéo</string>
-  <string name="camera_video.resolution_dialog.expl">Une résolution plus haute signifie que la vidéo sera d’une meilleure qualité, mais le fichier sera aussi plus gros.</string>
-  <string name="camera_video.resolution_select_highest">La plus haute possible.</string>
+  <string name="camera_video.resolution_dialog.title">Qualité vidéo</string>
+  <string name="camera_video.resolution_dialog.expl">Plus la qualité est élevée, plus le fichier vidéo sera volumineux.</string>
+  <string name="camera_video.resolution_select_highest">Très élevé</string>
   <string name="camera_video.resolution_select_1080p">Haute (1080 p)</string>
   <string name="camera_video.resolution_select_720p">Moyenne (720 p)</string>
   <string name="camera_video.resolution_select_480p">Basse (480 p)</string>

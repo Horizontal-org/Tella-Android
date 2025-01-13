@@ -1,0 +1,17 @@
+{
+    "server": "https://analytics.wearehorizontal.org/ci/cleaninsights.php",
+    "siteId": 2,
+    "timeout": 5,
+    "debug": true,
+    "campaigns": {
+        "test": {
+            "start": "2022-03-24 00:00:00",
+            "end": "2022-03-31 23:59:59",
+            "aggregationPeriodLength": 600,
+            "numberOfPeriods": 432,
+            "onlyRecordOnce": false,
+            "eventAggregationRule": "avg",
+            "strengthenAnonymity": false
+        }
+    }
+}
