@@ -99,7 +99,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }

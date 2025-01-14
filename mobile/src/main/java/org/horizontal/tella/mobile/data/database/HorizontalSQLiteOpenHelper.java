@@ -6,7 +6,7 @@ import static org.horizontal.tella.mobile.data.sharedpref.Preferences.isAlreadyM
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
-class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
+class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
 
     @Override
@@ -18,7 +18,7 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         }
     }
 
-    WashingtonSQLiteOpenHelper(Context context, byte[] password) {
+    HorizontalSQLiteOpenHelper(Context context, byte[] password) {
         super(context, password);
         if (!isAlreadyMigratedMainDB()) {
             migrateSqlCipher3To4IfNeeded(context, password);

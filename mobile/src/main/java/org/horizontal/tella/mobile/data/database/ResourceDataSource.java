@@ -41,7 +41,7 @@ public class ResourceDataSource implements ITellaResourcesRepository {
 
     private ResourceDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context, key);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context, key);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 
