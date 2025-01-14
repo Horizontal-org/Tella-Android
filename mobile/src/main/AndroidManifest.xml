@@ -53,6 +53,7 @@
         android:roundIcon="@mipmap/tella_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
@@ -655,6 +656,11 @@
 
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".views.dialog.nextcloud.NextCloudLoginFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
 

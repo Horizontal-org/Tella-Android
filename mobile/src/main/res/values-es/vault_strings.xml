@@ -59,7 +59,7 @@
     <item quantity="one">Archivo desplazado exitosamente</item>
     <item quantity="other">Archivos desplazados exitosamente</item>
   </plurals>
-  <string name="Vault_Confirm_delete_Description">Algunos de los archivos son actualmente utilizados en tu conexión. Borrarlos puede impactar en formas y reportes que no han sido enviados aún.</string>
+  <string name="Vault_Confirm_delete_Description">Algunos de los archivos son actualmente utilizados en tu conexión. Borrarlos puede impactar en formas y informes que no han sido enviados aún.</string>
   <string name="Vault_Warning_Title">Advertencia</string>
   <string name="Vault_Delete_anyway">Borrar de todos modos</string>
   <string name="Vault_Keep_Original">MANTENER ORIGINAL</string>

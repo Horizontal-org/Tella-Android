@@ -4,6 +4,7 @@ import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 
 object SharedLiveData {
@@ -21,4 +22,7 @@ object SharedLiveData {
     //DropBox live data
     val createDropBoxServer = SingleLiveEvent<DropBoxServer>()
     val updateDropBoxServer = SingleLiveEvent<DropBoxServer>()
+
+    //NextCloud server created
+    val createNextCloudServer = SingleLiveEvent<NextCloudServer>()
 }

@@ -48,18 +48,30 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
     }
 
+    fun navigateFromNextCloudScreenToNewNextCloudScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_newNextCloudScreen)
+    }
+
     fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }
-
+    fun navigateFromNextCloudEntryScreenToNextCloudSendScreen() {
+        navigateToWithBundle(R.id.action_newNextCloudScreen_to_nextCloudSendScreen)
+    }
     fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
     }
 
+    fun navigateFromNextCloudMainScreenToNextCloudSendScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSendScreen)
+    }
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
 
+    fun navigateFromNextCloudScreenToNextCloudSubmittedScreen() {
+        navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSubmittedScreen)
+    }
     fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
         navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
     }
@@ -115,6 +127,17 @@ class NavigationManager(
 
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
+    }
+
+    fun navigateToEnterNextCloudLoginScreen() {
+        navigateToWithBundle(R.id.action_enterNextCloudUrlScreen_to_loginNextCloudScreen)
+    }
+
+    fun navigateToNextCloudCreateFolderScreen() {
+        navigateToWithBundle(R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen)
+    }
+    fun actionNextCloudNewFolderScreenToSuccessfulScreen(){
+        navigateToWithBundle(R.id.action_nextCloudNewFolderScreen_to_successfulSetServerFragment)
     }
 
     fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment() {

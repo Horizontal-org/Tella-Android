@@ -19,7 +19,7 @@
   <string name="settings.docu_toast_fail.create.server">ဆာဗာဆက်တင်များကို ဖန်တီးရာတွင် အမှားအယွင်း ရှိခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
   <string name="settings.docu_toast_fail.update.server">ဆာဗာဆက်တင်များကို အပ်ဒိတ်လုပ်ရာတွင် အမှားအယွင်းရှိခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
   <string name="settings.docu_toast_fail.delete.server">ဆာဗာဆက်တင်များကို ဖျက်ရာတွင် အမှားအယွင်း ရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
-  <string name="settings.about_list.item_faq">မေးလေ့ရှိသော မေးခွန်းများ</string>
+  <string name="settings.about_list.item_faq">အမြဲမေးလေ့ရှိသောမေးခွန်းများ</string>
   <string name="action_ok">အိုကေ</string>
   <string name="collect.form_toast_validation.error">ဤတုံ့ပြန်မှုသည် မမှန်ကန်ပါ</string>
   <string name="collect.form_error_response.mandatory">ဤတုံ့ပြန်မှုသည် မဖြစ်မနေ လိုအပ်ပါသည်။</string>
@@ -115,7 +115,7 @@
   <string name="settings.docu_error_unknown.connection.error">ဆာဗာသို့ ချိတ်ဆက်ရန် ကြိုးစားရာတွင် အမှားအယွင်းတစ်ခု ရှိခဲ့သည်။</string>
   <string name="settings.docu_error_no.internet">သင်သည် အင်တာနက်နှင့် ချိတ်ဆက်မထားပါ။ ချိတ်ဆက်သည့်အခါ ထပ်စမ်းကြည့်ပါ။</string>
   <string name="settings.docu_dialog.action_try.again.connecting">ထပ်မံကြိုးစားပါ</string>
-  <string name="settings.about_select_tutorial">ကျူတိုရီရယ်</string>
+  <string name="settings.about_select_tutorial">သင်ခန်းစာ</string>
   <string name="settings.camo_expl">စိတ်ကြိုက်အိုင်ကွန်နှင့် အမည် ရွေးချယ်ပြီး Tella ကို သင့်စက်ပစ္စည်းတွင် ဝှက်နိုင်ပါသည်။ Tella အိုင်ကွန်ကို Android ဆက်တင်များတွင် မြင်နိုင်သေးကြောင်း သတိပြုပါ။</string>
   <string name="gallery_action.desc_save.to.device">စက်ထဲ၌ သိမ်းမည်</string>
   <string name="settings.docu_verification_action">အတည်ပြုခြင်းမုဒ်</string>
@@ -608,7 +608,7 @@
   <string name="gallery_list.items_show.only.audio">အသံမှတ်တမ်းများ</string>
   <string name="onboard.camo_heading">အခြားအက်ပ် အသွင်ယူခြင်း</string>
   <string name="settings.camo_calculator1">အလွယ်တကူ တွက်ချက်နည်း</string>
-  <string name="settings.docu_dialog.action_hide">ဝှက်မည်</string>
+  <string name="settings.docu_dialog.action_hide">ဝှက်ရန်</string>
   <string name="settings.docu_auto.upload.server.selection_select">ဆာဗာ</string>
   <string name="upload_dialog.title_select.server">ဆာဗာ ရွေးချယ်မှု</string>
   <string name="settings.docu_connect.to.servers_enable_action">ဆာဗာများနှင့် ချိတ်ဆက်မည်</string>
@@ -921,4 +921,52 @@ Would you like to share analytics with the Tella team?</string>
  work with an organization, you can ask them
  about which connection to use.</string>
   <string name="Connections_description_selection">Learn more about connections here.</string>
+  <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
+  <string name="NextCloud">Nextcloud</string>
+  <string name="NextCloud_Create_New_Folder">Create new folder</string>
+  <string name="NextCloud_Create_New_Folder_Description">Your reports will be uploaded to a new
+ folder on your Nextcloud. Choose a name
+ for this folder here.</string>
+  <string name="NextCloud_Folder_Name">Folder name</string>
+  <string name="Error_Connecting_To_Server_Msg">Error connecting to server. Please try again.</string>
+  <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
+  <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
+  <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
+  <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
+  <string name="ssl_validator_question">Do you want to trust this certificate anyway?</string>
+  <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
+  <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
+  <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
+  <string name="ssl_validator_label_subject" translatable="false">Issued to:</string>
+  <string name="ssl_validator_label_issuer" translatable="false">Issued by:</string>
+  <string name="ssl_validator_label_CN" translatable="false">Common name:</string>
+  <string name="ssl_validator_label_O" translatable="false">Organization:</string>
+  <string name="ssl_validator_label_OU" translatable="false">Organizational unit:</string>
+  <string name="ssl_validator_label_C" translatable="false">Country:</string>
+  <string name="ssl_validator_label_ST" translatable="false">State:</string>
+  <string name="ssl_validator_label_L" translatable="false">Location:</string>
+  <string name="ssl_validator_label_validity" translatable="false">Validity:</string>
+  <string name="ssl_validator_label_validity_from" translatable="false">From:</string>
+  <string name="ssl_validator_label_validity_to" translatable="false">To:</string>
+  <string name="ssl_validator_label_signature" translatable="false">Signature:</string>
+  <string name="ssl_validator_label_signature_algorithm" translatable="false">Algorithm:</string>
+  <string name="digest_algorithm_not_available" translatable="false">This digest algorithm is not available on your phone.</string>
+  <string name="ssl_validator_label_certificate_fingerprint" translatable="false">Fingerprint:</string>
+  <string name="certificate_load_problem" translatable="false">There is a problem loading the certificate.</string>
+  <string name="ssl_validator_null_cert" translatable="false">The certificate could not be shown.</string>
+  <string name="ssl_validator_no_info_about_error" translatable="false">- No information about the error</string>
+  <string name="ssl_validator_header" translatable="false">The identity of the server could not be verified</string>
+  <string name="login_data_own_scheme" translatable="false">nc</string>
+  <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
+  <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
+  <string name="go_to_nextcloud">Go to Nextcloud</string>
+  <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
+  <string name="folder_name">Folder name</string>
+  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
+  <string name="file_name_taken">File name taken. Please use a different one.</string>
+  <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
+  <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
+  <string name="invalid_url">Invalid URL</string>
+  <string name="delete_report">Delete report?</string>
+  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
 </resources>

@@ -38,6 +38,7 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer;
 import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
@@ -46,6 +47,7 @@ import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshP
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IDropBoxServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.INextCloudServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
@@ -53,12 +55,14 @@ import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshP
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.DropBoxServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.GoogleDriveServersPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.NextCloudServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.nextcloud.NextCloudLoginFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
@@ -66,16 +70,8 @@ import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivit
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements
-        IServersPresenterContract.IView,
-        ICollectServersPresenterContract.IView,
-        ITellaUploadServersPresenterContract.IView,
-        ICollectBlankFormListRefreshPresenterContract.IView,
-        CollectServerDialogFragment.CollectServerDialogHandler,
-        UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
-        IUWAZIServersPresenterContract.IView,
-        IGoogleDriveServersPresenterContract.IView,
-        IDropBoxServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IGoogleDriveServersPresenterContract.IView, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
+
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
@@ -84,12 +80,15 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private DropBoxServersPresenter dropBoxServersPresenter;
+    private NextCloudServersPresenter nextCloudServersPresenter;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
     private List<GoogleDriveServer> googleDriveServers;
     private List<DropBoxServer> dropBoxServers;
+    private List<NextCloudServer> nextCloudServers;
     private ActivityDocumentationSettingsBinding binding;
+
     @Inject
     public Config config;
 
@@ -100,7 +99,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding = ActivityDocumentationSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings2));
+        binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
 
         binding.toolbar.setOnRightClickListener(() -> {
@@ -125,6 +124,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         uwaziServers = new ArrayList<>();
         googleDriveServers = new ArrayList<>();
         dropBoxServers = new ArrayList<>();
+        nextCloudServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
         collectServersPresenter.getCollectServers();
@@ -139,11 +139,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
         dropBoxServersPresenter = new DropBoxServersPresenter(this);
         dropBoxServersPresenter.getDropBoxServers();
+
+        //NextCloud server
+        nextCloudServersPresenter = new NextCloudServersPresenter(this);
+        nextCloudServersPresenter.getNextCloudServers();
         createRefreshPresenter();
         initUwaziEvents();
         initReportsEvents();
         initGoogleDriveEvents();
         initDropBoxEvents();
+        initNextCloudEvents();
         initListeners();
     }
 
@@ -193,6 +198,14 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
             if (server != null) {
                 googleDriveServersPresenter.create(server);
+            }
+        });
+    }
+
+    private void initNextCloudEvents() {
+        INSTANCE.getCreateNextCloudServer().observe(this, server -> {
+            if (server != null) {
+                nextCloudServersPresenter.create(server);
             }
         });
     }
@@ -345,19 +358,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             Preferences.setAutoUpload(isAutoUploadEnabled(servers));
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
-            DialogUtils.showBottomMessage(
-                    this,
-                    getString(R.string.settings_docu_toast_server_updated),
-                    false
-            );
+            DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_updated), false);
         }
     }
 
     private boolean isAutoUploadEnabled(List<Server> servers) {
-        return servers.stream()
-                .filter(server -> server instanceof TellaReportServer)
-                .map(server -> (TellaReportServer) server)
-                .anyMatch(TellaReportServer::isAutoUpload);
+        return servers.stream().filter(server -> server instanceof TellaReportServer).map(server -> (TellaReportServer) server).anyMatch(TellaReportServer::isAutoUpload);
     }
 
     @Override
@@ -450,26 +456,10 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private void showChooseServerTypeDialog() {
 
-        BottomSheetUtils.showBinaryTypeSheet(
-                this.getSupportFragmentManager(),
-                this,
-                getString(R.string.settings_add_server_selection_dialog_title),
-                getString(R.string.settings_add_server_selection_dialog_title),
-                getString(R.string.Connections_description_selection),
-                getString(R.string.Connections_description),
-                this::browseIntent,
-                getString(R.string.action_cancel), //TODO CHECk THIS
-                getString(R.string.action_ok),//TODO CHECk THIS
-                getString(R.string.settings_docu_add_server_dialog_select_odk),
-                getString(R.string.settings_docu_add_server_dialog_select_tella_web),
-                getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
-                getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
-                getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox),
-                getString(R.string.unavailable_connections),
-                getString(R.string.unavailable_connections_desc),
-                servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
-                servers.stream().anyMatch(server -> server instanceof DropBoxServer),
-                new BottomSheetUtils.IServerChoiceActions() {
+        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), this, getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.Connections_description_selection), getString(R.string.Connections_description), this::browseIntent, getString(R.string.action_cancel), //TODO CHECk THIS
+                getString(R.string.action_ok),
+                getString(R.string.settings_docu_add_server_dialog_select_odk), getString(R.string.settings_docu_add_server_dialog_select_tella_web), getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi), getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive), getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox), getString(R.string.settings_docu_add_server_dialog_select_next_cloud), getString(R.string.unavailable_connections), getString(R.string.unavailable_connections_desc), servers.stream().anyMatch(server -> server instanceof GoogleDriveServer), servers.stream().anyMatch(server -> server instanceof DropBoxServer), servers.stream().anyMatch(server -> server instanceof NextCloudServer), new BottomSheetUtils.IServerChoiceActions() {
+
                     @Override
                     public void addDropBoxServer() {
                         showDropBoxServerDialog(null);
@@ -494,8 +484,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     public void addODKServer() {
                         showCollectServerDialog(null);
                     }
-                }
-        );
+
+                    @Override
+                    public void addNextCloudServer() {
+                        showNexCloudDialog(null);
+                    }
+
+                });
     }
 
     private void showChooseAutoUploadServerDialog(List<TellaReportServer> tellaReportServers) {
@@ -505,15 +500,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             options.put(server.getId(), server.getName());
         }
 
-        BottomSheetUtils.showChooseAutoUploadServerSheet(this.getSupportFragmentManager(),
-                getString(R.string.settings_servers_choose_auto_upload_server_dialog_title),
-                getString(R.string.settings_docu_auto_upload_server_selection_dialog_expl),
-                getString(R.string.action_save),
-                getString(R.string.action_cancel),
-                options,
-                Preferences.getAutoUploadServerId(),
-                this,
-                serverId -> setAutoUploadServer(serverId, (String) options.get(serverId)));
+        BottomSheetUtils.showChooseAutoUploadServerSheet(this.getSupportFragmentManager(), getString(R.string.settings_servers_choose_auto_upload_server_dialog_title), getString(R.string.settings_docu_auto_upload_server_selection_dialog_expl), getString(R.string.action_save), getString(R.string.action_cancel), options, Preferences.getAutoUploadServerId(), this, serverId -> setAutoUploadServer(serverId, (String) options.get(serverId)));
     }
 
     /*private void setAutoUploadServer(TellaUploadServer server) {
@@ -560,8 +547,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showCollectServerDialog(@Nullable CollectServer server) {
-        CollectServerDialogFragment.newInstance(server)
-                .show(getSupportFragmentManager(), CollectServerDialogFragment.TAG);
+        CollectServerDialogFragment.newInstance(server).show(getSupportFragmentManager(), CollectServerDialogFragment.TAG);
     }
 
     private void showTellaUploadServerDialog(@Nullable TellaReportServer server) {
@@ -585,6 +571,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             startActivity(intent);
         }
     }
+
+    private void showNexCloudDialog(@Nullable NextCloudServer server) {
+        if (server == null) {
+            startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
+        }
+    }
+
 
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
@@ -622,14 +615,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             if (isChecked) {
                 Preferences.setAutoDelete(true);
             } else {
-                BottomSheetUtils.showStandardSheet(
-                        this.getSupportFragmentManager(),
-                        getString(R.string.settings_servers_disable_auto_delete_dialog_title),
-                        getString(R.string.settings_servers_disable_auto_delete_dialog_expl),
-                        getString(R.string.action_disable),
-                        getString(R.string.action_cancel),
-                        this::disableAutoDelete,
-                        this::turnOnAutoDeleteSwitch);
+                BottomSheetUtils.showStandardSheet(this.getSupportFragmentManager(), getString(R.string.settings_servers_disable_auto_delete_dialog_title), getString(R.string.settings_servers_disable_auto_delete_dialog_expl), getString(R.string.action_disable), getString(R.string.action_cancel), this::disableAutoDelete, this::turnOnAutoDeleteSwitch);
             }
         });
         //metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
@@ -670,34 +656,21 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     private View getServerItem(Server server) {
         LayoutInflater inflater = LayoutInflater.from(this);
-        @SuppressLint("InflateParams")
-        LinearLayout item = (LinearLayout) inflater.inflate(R.layout.servers_list_item, null);
+        @SuppressLint("InflateParams") LinearLayout item = (LinearLayout) inflater.inflate(R.layout.servers_list_item, null);
 
         ViewGroup row = item.findViewById(R.id.server_row);
         TextView name = item.findViewById(R.id.server_title);
 
         if (server != null) {
             name.setText(server.getName());
-            row.setOnClickListener(view -> BottomSheetUtils.showEditDeleteMenuSheet(
-                    this.getSupportFragmentManager(),
-                    server.getName(),
-                    getString(R.string.action_edit),
-                    getString(R.string.action_delete),
-                    action -> {
-                        if (action == BottomSheetUtils.Action.EDIT) {
-                            editServer(server);
-                        }
-                        if (action == BottomSheetUtils.Action.DELETE) {
-                            removeServer(server);
-                        }
-                    },
-                    String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()),
-                    getString(R.string.settings_docu_delete_server_dialog_expl),
-                    getString(R.string.action_delete),
-                    getString(R.string.action_cancel),
-                    -1,
-                    !(server instanceof GoogleDriveServer || server instanceof DropBoxServer)
-            ));
+            row.setOnClickListener(view -> BottomSheetUtils.showEditDeleteMenuSheet(this.getSupportFragmentManager(), server.getName(), getString(R.string.action_edit), getString(R.string.action_delete), action -> {
+                if (action == BottomSheetUtils.Action.EDIT) {
+                    editServer(server);
+                }
+                if (action == BottomSheetUtils.Action.DELETE) {
+                    removeServer(server);
+                }
+            }, String.format(getResources().getString(R.string.settings_servers_delete_server_dialog_title), server.getName()), getString(R.string.settings_docu_delete_server_dialog_expl), getString(R.string.action_delete), getString(R.string.action_cancel), -1, !(server instanceof GoogleDriveServer || server instanceof DropBoxServer || server instanceof NextCloudServer)));
         }
         item.setTag(servers.indexOf(server));
         return item;
@@ -715,6 +688,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 // editGoogleDriveServer((GoogleDriveServer) server);
             case DROP_BOX:
                 // editGoogleDriveServer((GoogleDriveServer) server);
+            case NEXTCLOUD:
             default:
                 editTUServer((TellaReportServer) server);
                 break;
@@ -735,6 +709,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
             case DROP_BOX:
                 dropBoxServersPresenter.remove((DropBoxServer) server);
                 break;
+            case NEXTCLOUD:
+                nextCloudServersPresenter.remove((NextCloudServer) server);
+                break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
                 break;
@@ -745,21 +722,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding.autoUploadSwitch.setChecked(Preferences.isAutoUploadEnabled());
         binding.autoUploadSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                BottomSheetUtils.showStandardSheet(
-                        this.getSupportFragmentManager(),
-                        getString(R.string.settings_servers_enable_auto_upload_dialog_title),
-                        getString(R.string.settings_servers_enable_auto_upload_dialog_expl),
-                        getString(R.string.action_enable),
-                        getString(R.string.action_cancel),
-                        this::enableAutoUpload, this::turnOffAutoUploadSwitch);
+                BottomSheetUtils.showStandardSheet(this.getSupportFragmentManager(), getString(R.string.settings_servers_enable_auto_upload_dialog_title), getString(R.string.settings_servers_enable_auto_upload_dialog_expl), getString(R.string.action_enable), getString(R.string.action_cancel), this::enableAutoUpload, this::turnOffAutoUploadSwitch);
             } else {
-                BottomSheetUtils.showStandardSheet(
-                        this.getSupportFragmentManager(),
-                        getString(R.string.settings_servers_disable_auto_upload_dialog_title),
-                        getString(R.string.settings_servers_disable_auto_upload_dialog_expl),
-                        getString(R.string.action_disable),
-                        getString(R.string.action_cancel),
-                        this::disableAutoUpload, this::turnOnAutoUploadSwitch);
+                BottomSheetUtils.showStandardSheet(this.getSupportFragmentManager(), getString(R.string.settings_servers_disable_auto_upload_dialog_title), getString(R.string.settings_servers_disable_auto_upload_dialog_expl), getString(R.string.action_disable), getString(R.string.action_cancel), this::disableAutoUpload, this::turnOnAutoUploadSwitch);
             }
         });
     }
@@ -965,6 +930,47 @@ public class ServersSettingsActivity extends BaseLockActivity implements
 
     @Override
     public void onRemoveDropBoxServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onNextCloudServersLoaded(@NonNull List<NextCloudServer> nextCloudServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(nextCloudServers);
+        createServerViews(servers);
+
+        this.nextCloudServers = nextCloudServers;
+    }
+
+    @Override
+    public void onLoadNextCloudServersError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCreatedNextCloudServer(@NonNull NextCloudServer server) {
+        servers.add(server);
+        nextCloudServers.add(server);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
+    }
+
+    @Override
+    public void onCreateNextCloudServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onRemovedNextCloudServer(@NonNull NextCloudServer server) {
+        servers.remove(server);
+        nextCloudServers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+    }
+
+    @Override
+    public void onRemoveNextCloudServerError(@NonNull Throwable throwable) {
 
     }
 }

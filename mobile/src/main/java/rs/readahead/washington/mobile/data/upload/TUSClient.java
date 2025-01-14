@@ -128,7 +128,7 @@ public class TUSClient {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         if (BuildConfig.DEBUG) {
-            builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
+           builder.addNetworkInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
         }
 
 

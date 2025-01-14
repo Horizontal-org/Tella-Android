@@ -3,6 +3,7 @@ package rs.readahead.washington.mobile.views.dialog.reports.step6
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
+import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSuccessfulSetServerBinding
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
@@ -18,6 +19,7 @@ class SuccessfulSetServerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        binding.okBtn.setText(getString(R.string.Settings_Reports_Go_To_Reports))
         initListeners()
     }
 

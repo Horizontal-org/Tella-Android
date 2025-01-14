@@ -27,6 +27,7 @@
         <item>ru</item>
         <item>ta</item>
         <item>vi</item>
+        <item>bn</item>
     </string-array>
     <string name="ra_server_prefix" translatable="false">https://</string>
     <integer name="ra_config_short_fling">300</integer>
@@ -41,4 +42,7 @@
 
     <string name="alpha_disabled" translatable="false">0.6f</string>
     <string name="alpha_enabled" translatable="false">1.0f</string>
+    <bool name="multiaccount_support">true</bool>
+    <string name="webview_login_url" translatable="false"></string>
+    <bool name="show_server_url_input">true</bool>
 </resources>

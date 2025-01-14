@@ -1,8 +1,8 @@
 package rs.readahead.washington.mobile.data.database;
 
-import static rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
-
 import android.content.Context;
+
+import static rs.readahead.washington.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
@@ -203,6 +203,47 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 cddl(D.C_NAME, D.TEXT) + " , " +
                 cddl(D.C_USERNAME, D.TEXT, true) + " , " +
                 cddl(D.C_GOOGLE_DRIVE_SERVER_NAME, D.TEXT, true) +
+                ");";
+    }
+
+    private String createTableNextCloud() {
+        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_NEXT_CLOUD_FOLDER_NAME, D.TEXT, true) + " UNIQUE, " +
+                cddl(D.C_URL, D.TEXT) + " , " +
+                cddl(D.C_NEXT_CLOUD_USER_ID, D.TEXT, true) + " , " +
+                cddl(D.C_PASSWORD, D.TEXT, true) + " , " +
+                cddl(D.C_NAME, D.TEXT) + " , " +
+                cddl(D.C_USERNAME, D.TEXT, true) + " , " +
+                cddl(D.C_NEXT_CLOUD_SERVER_NAME, D.TEXT, true) +
+                ");";
+    }
+    private String createTableNextCloudFormInstance() {
+        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_SERVER_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_REPORT_API_ID, D.TEXT, true) + " , " +
+                cddl(D.C_METADATA, D.TEXT, false) + " , " +
+                cddl(D.C_CURRENT_UPLOAD, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_UPDATED, D.INTEGER, true) + " DEFAULT 0 , " +
+                cddl(D.C_TITLE, D.TEXT, true) + " , " +
+                cddl(D.C_DESCRIPTION_TEXT, D.TEXT, true) + " , " +
+                cddl(D.C_FORM_PART_STATUS, D.INTEGER, true) + " DEFAULT 0 , " +
+                "FOREIGN KEY(" + sq(D.C_REPORT_SERVER_ID) + ") REFERENCES " +
+                sq(D.T_NEXT_CLOUD) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE" +
+                ");";
+    }
+    private String createTableNextCloudInstanceVaultFile() {
+        return "CREATE TABLE " + sq(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE) + " (" +
+                cddl(D.C_ID, D.INTEGER) + " PRIMARY KEY AUTOINCREMENT, " +
+                cddl(D.C_REPORT_INSTANCE_ID, D.INTEGER, true) + " , " +
+                cddl(D.C_VAULT_FILE_ID, D.TEXT, true) + " , " +
+                cddl(D.C_STATUS, D.INTEGER, true) + " DEFAULT 0," +
+                cddl(D.C_UPLOADED_SIZE, D.INTEGER, true) + " DEFAULT 0," +
+                "FOREIGN KEY(" + sq(D.C_REPORT_INSTANCE_ID) + ") REFERENCES " +
+                sq(D.T_NEXT_CLOUD_FORM_INSTANCE) + "(" + sq(D.C_ID) + ") ON DELETE CASCADE," +
+                "UNIQUE(" + sq(D.C_REPORT_INSTANCE_ID) + ", " + sq(D.C_VAULT_FILE_ID) + ") ON CONFLICT IGNORE" +
                 ");";
     }
 
@@ -526,6 +567,11 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
         db.execSQL(createTableDropBox());
         db.execSQL(createTableDropBoxFormInstance());
         db.execSQL(createTableDropBoxInstanceVaultFile());
+
+        //DBV15
+        db.execSQL(createTableNextCloud());
+        db.execSQL(createTableNextCloudFormInstance());
+        db.execSQL(createTableNextCloudInstanceVaultFile());
     }
 
     @Override
@@ -592,6 +638,10 @@ class WashingtonSQLiteOpenHelper extends CipherOpenHelper {
                 db.execSQL(createTableDropBox());
                 db.execSQL(createTableDropBoxFormInstance());
                 db.execSQL(createTableDropBoxInstanceVaultFile());
+            case 15:
+                db.execSQL(createTableNextCloud());
+                db.execSQL(createTableNextCloudFormInstance());
+                db.execSQL(createTableNextCloudInstanceVaultFile());
         }
     }
 

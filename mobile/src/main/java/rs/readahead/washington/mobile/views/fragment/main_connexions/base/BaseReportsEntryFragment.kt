@@ -24,6 +24,7 @@ import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentReportsEntryBinding
 import rs.readahead.washington.mobile.domain.entity.EntityStatus
 import rs.readahead.washington.mobile.domain.entity.Server
+import rs.readahead.washington.mobile.domain.entity.nextcloud.NextCloudServer
 import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 import rs.readahead.washington.mobile.media.MediaFileHandler
@@ -454,11 +455,36 @@ abstract class BaseReportsEntryFragment :
     }
 
     private fun putFiles(vaultFileList: List<VaultFile>) {
-        for (file in vaultFileList) {
+        // Check if selectedServer is initialized
+        val filteredFiles = if (this::selectedServer.isInitialized) {
+            // Filter out files larger than 20MB if the server is Nextcloud
+            vaultFileList.filter { file ->
+                isValidFile(file)
+            }.also {
+                if (it.size != vaultFileList.size) {
+                    showToast(getString(R.string.nextcloud_file_size_limit))
+                }
+            }
+        } else {
+            // If server is not initialized, use all files
+            vaultFileList
+        }
+
+        // Insert the filtered or all files
+        filteredFiles.forEach { file ->
             filesRecyclerViewAdapter.insertAttachment(file)
         }
+
+        // Ensure visibility and highlight buttons
         binding.filesRecyclerView.visibility = View.VISIBLE
         highLightButtons()
+    }
+
+    // Helper function to check if the file is valid (less than or equal to 20MB)
+    private fun isValidFile(file: VaultFile): Boolean {
+        val isFileSizeValid = file.size <= 20 * 1024 * 1024 // 20MB in bytes
+        val isNextcloudServer = selectedServer is NextCloudServer
+        return isFileSizeValid || !isNextcloudServer
     }
 
     override fun playMedia(mediaFile: VaultFile?) {

@@ -7,7 +7,6 @@ import rs.readahead.washington.mobile.data.entity.reports.*
 import rs.readahead.washington.mobile.data.reports.utils.ParamsNetwork.AUTHORIZATION_HEADER
 import rs.readahead.washington.mobile.data.repository.SkippableMediaFileRequestBody
 
-@JvmSuppressWildcards
 interface ReportsApiService {
 
     companion object {

@@ -6,7 +6,6 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.databinding.FragmentSendReportBinding

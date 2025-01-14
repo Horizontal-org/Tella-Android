@@ -40,7 +40,7 @@ public class BaseApi {
         @SuppressWarnings("UnusedReturnValue")
         public Builder setLogLevelFull() {
             okClientBuilder.addNetworkInterceptor(
-                    new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
+                 new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
             return this;
         }
 

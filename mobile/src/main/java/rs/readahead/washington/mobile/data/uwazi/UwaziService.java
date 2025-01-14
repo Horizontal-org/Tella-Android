@@ -125,7 +125,7 @@ public class UwaziService {
 
             if (BuildConfig.DEBUG) {
                 okClientBuilder.addNetworkInterceptor(
-                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+                       new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
                 .addInterceptor(logger);
                 // or BODY
             }

@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 191
-        versionName "2.13.1"
+        versionCode 196
+        versionName "2.14.0"
         multiDexEnabled true
 
         ndk {
@@ -47,9 +47,8 @@ android {
     }
 
     configurations.all {
-        // resolutionStrategy.force "com.android.support:exifinterface:${supportLibVersion}"
-        // resolutionStrategy.force "com.android.support:animated-vector-drawble:${supportLibVersion}"
-        // resolutionStrategy.force "com.android.support:support-v13:${supportLibVersion}"
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+        exclude group: "log4j", module: "log4j"
     }
 
     buildTypes {
@@ -85,6 +84,10 @@ android {
     hilt {
         enableExperimentalClasspathAggregation = true
         enableAggregatingTask = true
+
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
 
     }
     namespace 'rs.readahead.washington.mobile'
@@ -216,6 +219,20 @@ dependencies {
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
+
+    //Next cloud
+    implementation ("com.github.nextcloud:android-library:$versions.nextcloud") {
+        exclude group: 'org.ogce', module: 'xpp3'
+        exclude group: 'commons-logging', module: 'commons-logging' // Exclude commons-logging
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j' // Optionally exclude jcl-over-slf4j
+
+    }
+    implementation "commons-httpclient:commons-httpclient:3.1@jar" // remove after entire switch to lib v2
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
+
+    implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
+    implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
 }
 
 def getLocalProperties() {
