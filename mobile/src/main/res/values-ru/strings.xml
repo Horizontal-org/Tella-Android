@@ -59,7 +59,7 @@
   <string name="collect.end_action.desc_save.send.later">При обработке данной формы произошла ошибка</string>
   <string name="action.desc_confirm">Подтвердить</string>
   <string name="collect.form_action_previous.section">Предыдущий раздел</string>
-  <string name="collect.form_action_next.section">Продолжить</string>
+  <string name="collect.form_action_next.section">Следующий</string>
   <string name="action_stop">Остановить</string>
   <string name="action_play">Воспроизвести</string>
   <string name="action_record">Записать</string>
@@ -272,7 +272,7 @@
   <string name="camera_tab.title_photo">Фото</string>
   <string name="action_upload">Загрузить</string>
   <string name="collect.blank_action.desc_more.options">Больше вариантов</string>
-  <string name="action_next">Продолжить</string>
+  <string name="action_next">Следующий</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f м/с</string>
   <string name="tella">Tella</string>
@@ -546,7 +546,7 @@ connecting to a server</string>
   <string name="Util_ellapsedTime_Seconds">Несколько секунд назад</string>
   <string name="Donwload_Templates_Title_Description">Это шаблоны, доступные на серверах Uwazi, к которым вы подключены.</string>
   <string name="Uwazi_Templates_HeaderMessage">Это шаблоны Uwazi, которые вы можете заполнить.</string>
-  <string name="Vault_Filter_Name">Название</string>
+  <string name="Vault_Filter_Name">Имя</string>
   <string name="Server_Url_Screen_Title">Введите URL-адрес сервера</string>
   <string name="Login_Type_Screen_Title">Войдите в систему, если у вас есть имя пользователя и пароль, или воспользуйтесь открытым доступом к серверу.</string>
   <string name="Login_Text">Войти в систему</string>
@@ -759,7 +759,7 @@ connecting to a server</string>
   <string name="yellow_theme">Желтая тема</string>
   <string name="settings.sec_keep.exif_switch">Сохранение метаданных при импорте</string>
   <string name="settings.sec_keep.exif_expl">Сохраняйте метаданные EXIF при импорте фотографий и видео в Tella. Они включают данные о времени создания изображения, настройках камеры, местоположении и вашем устройстве.</string>
-  <string name="Rename_name_Hint">Название</string>
+  <string name="Rename_name_Hint">Имя</string>
   <string name="action_go_to_homescreen">перейти на Главный экран</string>
   <string name="action_show_password">показать пароль</string>
   <string name="action_hide_password">скрыть пароль</string>
@@ -893,7 +893,7 @@ connecting to a server</string>
   <string name="Analytics_contribute_title">Would you like to contribute?</string>
   <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
   <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
-  <string name="Analytics_how_works_title">How it works</string>
+  <string name="Analytics_how_works_title">Как это работает</string>
   <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
 • We collect as little data as possible.
 • All data is anonymous and can never be linked to you.</string>
@@ -948,4 +948,18 @@ Would you like to share analytics with the Tella team?</string>
  enabled at a time. To add a new connection, please delete
  the current one by going to Connections Settings. </string>
   <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+  <string name="settings.servers.title_server.settings2">Соединения</string>
+  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
+ server to send files and data. Your organization
+ should provide you with the server details. </string>
+  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
+  <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="dropbox" translatable="false">Dropbox</string>
+  <string name="Drafts_Header_Message">These are reports you are working on.</string>
+  <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
+  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
+  <string name="Connections_description">Learn more about connections here. If you
+ work with an organization, you can ask them
+ about which connection to use.</string>
+  <string name="Connections_description_selection">Learn more about connections here.</string>
 </resources>

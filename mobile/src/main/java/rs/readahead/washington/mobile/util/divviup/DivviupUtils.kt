@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.divviup.android.Client
 import org.divviup.android.TaskId
-import org.hzontal.shared_ui.data.CommonPreferences
 import rs.readahead.washington.mobile.R
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
 import rs.readahead.washington.mobile.data.sharedpref.Preferences.isInstallMetricSent
@@ -36,6 +35,24 @@ class DivviupUtils @Inject constructor(private val context: Context) {
                 Timber.d("Divviup runGoogleDriveEvent measurement sent")
             } catch (e: Exception) {
                 Timber.e(e, "Divviup sending runGoogleDriveEvent failed")
+            }
+        }
+    }
+
+    fun runDropBoxEvent() {
+        if (!hasAcceptedAnalytics() || isDebugBuild()) return
+        ioScope.launch {
+            try {
+                sendCountMeasurement(
+                    taskId = R.string.divviup_count_drop_box_sent_id,
+                    leader = R.string.divviup_leader,
+                    helper = R.string.divviup_helper,
+                    timePrecision = R.integer.divviup_count_unlocks_timePrecisionSeconds,
+                    isCount = true
+                )
+                Timber.d("Divviup runDropBoxEvent measurement sent")
+            } catch (e: Exception) {
+                Timber.e(e, "Divviup sending runDropBoxEvent failed")
             }
         }
     }

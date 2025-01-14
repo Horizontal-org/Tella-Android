@@ -80,7 +80,8 @@ public class UwaziRelationShipWidget extends UwaziQuestionWidget {
                     } else {
                         String label = Objects.requireNonNull(((LinkedTreeMap<?, ?>) o).get("label")).toString();
                         String value = Objects.requireNonNull(((LinkedTreeMap<?, ?>) o).get("value")).toString();
-                        result.add(new UwaziRelationShipEntity(value, label, "entity"));
+                        String type = Objects.requireNonNull(((LinkedTreeMap<?, ?>) o).get("type")).toString();
+                        result.add(new UwaziRelationShipEntity(value, label, type));
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package rs.readahead.washington.mobile.domain.repository.googledrive
+package rs.readahead.washington.mobile.data.googledrive
 
 import android.content.Context
 import androidx.credentials.CredentialManager
@@ -18,7 +18,7 @@ import rs.readahead.washington.mobile.domain.entity.UploadProgressInfo
 import rs.readahead.washington.mobile.domain.entity.collect.FormMediaFile
 import rs.readahead.washington.mobile.domain.entity.googledrive.Folder
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
-import rs.readahead.washington.mobile.domain.entity.reports.ReportInstance
+import rs.readahead.washington.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
 import rs.readahead.washington.mobile.views.fragment.googledrive.di.DriveServiceProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -106,7 +106,7 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    fun uploadFilesWithProgress(
+    fun uploadFileWithProgress(
         folderParentId: String, email: String, mediaFile: FormMediaFile
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->

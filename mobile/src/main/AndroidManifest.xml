@@ -50,7 +50,6 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/tella_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -590,6 +589,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CameraTheme" />
+
+        <activity
+            android:name=".views.fragment.recorder.MicActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.activity.ExitActivity"
             android:autoRemoveFromRecents="true"
@@ -639,6 +644,15 @@
             android:name=".views.dialog.googledrive.GoogleDriveConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"> <!-- Added launchMode -->
+
+        </activity>
+
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -659,6 +673,25 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <!-- Your activity starting authorization flow should also configured with android:launchMode="singleTask".
+                 If that activity is configured with android:taskAffinity, this AuthActivity should also configured
+                 with the same android:taskAffinity so the auth result can be correctly passed back. -->
+            <intent-filter>
+                <data android:scheme="db-${dropboxKey}" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

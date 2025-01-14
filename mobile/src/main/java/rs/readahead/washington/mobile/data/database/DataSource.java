@@ -2236,6 +2236,14 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_REPORT_FILES_UPLOAD);
         deleteTable(D.T_REPORT_INSTANCE_VAULT_FILE);
         deleteTable(D.T_RESOURCES);
+
+        deleteTable(D.T_GOOGLE_DRIVE);
+        deleteTable(D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+        deleteTable(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+
+        deleteTable(D.T_DROPBOX);
+        deleteTable(D.T_DROPBOX_FORM_INSTANCE);
+        deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
     }
 
     public void deleteFormsAndRelatedTables() {
@@ -2255,6 +2263,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
         // Delete resources table
         deleteTable(D.T_RESOURCES);
+
+        // Delete tables related to Google Drive instances
+        deleteTable(D.T_GOOGLE_DRIVE_FORM_INSTANCE);
+        deleteTable(D.T_GOOGLE_DRIVE_INSTANCE_VAULT_FILE);
+
+        // Delete tables related to DropBox instances
+        deleteTable(D.T_DROPBOX_FORM_INSTANCE);
+        deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
+
     }
 
     private void deleteAllServersDB() {
@@ -2266,6 +2283,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_TELLA_UPLOAD_SERVER);
         deleteTable(D.T_RESOURCES);
         deleteTable(D.T_MEDIA_FILE_UPLOAD);
+        deleteTable(D.T_GOOGLE_DRIVE);
+        deleteTable(D.T_DROPBOX);
+
     }
 
     public void deleteMediaFiles() {
@@ -2495,50 +2515,6 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         }).compose(applyCompletableSchedulers());
     }
 
-    private List<ReportInstance> getCurrentUploadReportFormInstance(int current) {
-        Cursor cursor = null;
-        List<ReportInstance> instances = new ArrayList<>();
-
-        try {
-
-            final String query = SQLiteQueryBuilder.buildQueryString(
-                    false,
-                    D.T_REPORT_FORM_INSTANCE +
-                            " JOIN " + D.T_TELLA_UPLOAD_SERVER + " ON " +
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_REPORT_SERVER_ID) + " = " + cn(D.T_TELLA_UPLOAD_SERVER, D.C_ID),
-                    new String[]{
-                            cn(D.T_REPORT_FORM_INSTANCE, D.C_ID, D.A_TELLA_UPLOAD_INSTANCE_ID),
-                            D.C_REPORT_SERVER_ID,
-                            D.C_STATUS,
-                            D.C_CURRENT_UPLOAD,
-                            D.C_UPDATED,
-                            D.C_METADATA,
-                            D.C_DESCRIPTION_TEXT,
-                            D.C_TITLE,
-                            //  D.C_FORM_PART_STATUS,
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_NAME, D.A_SERVER_NAME),
-                            cn(D.T_TELLA_UPLOAD_SERVER, D.C_USERNAME, D.A_SERVER_USERNAME)},
-                    D.C_CURRENT_UPLOAD + " = " + current,
-                    null, null,
-                    cn(D.T_REPORT_FORM_INSTANCE, D.C_ID) + " DESC",
-                    null
-            );
-            cursor = database.rawQuery(query, null);
-
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                ReportInstance instance = cursorToReportFormInstance(cursor);
-                instances.add(instance);
-            }
-        } catch (Exception e) {
-            Timber.e(e, getClass().getName());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return instances;
-    }
 
     private ReportInstance cursorToReportFormInstance(Cursor cursor) {
         ReportInstance instance = new ReportInstance();
@@ -2712,7 +2688,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     @Nullable
     @Override
     public Single<ReportInstanceBundle> getReportBundle(long id) {
-        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE,D.T_REPORT_INSTANCE_VAULT_FILE))
+        return Single.fromCallable(() -> dataBaseUtils.getReportInstanceBundle(id, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE))
                 .compose(applySchedulers());
     }
 

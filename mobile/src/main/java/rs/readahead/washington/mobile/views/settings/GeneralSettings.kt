@@ -11,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.switches.TellaSwitchWithMessage
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.R

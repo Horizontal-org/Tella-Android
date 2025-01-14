@@ -1,15 +1,19 @@
 package rs.readahead.washington.mobile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 //import androidx.hilt.work.HiltWorkerFactory;
@@ -20,6 +24,7 @@ import androidx.work.Configuration;
 //import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
@@ -70,7 +75,8 @@ import rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivi
 import timber.log.Timber;
 
 @HiltAndroidApp
-public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider {
+public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider, Application.ActivityLifecycleCallbacks
+{
     public static Vault vault;
     public static RxVault rxVault;
     private static TellaBus bus;
@@ -84,6 +90,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Inject
     DivviupUtils divviupUtils;
     Vault.Config vaultConfig;
+    private long startTime;
+    private long totalTimeSpent = 0; // Store total time spent in the app
+    private int activityReferences = 0;
+    private boolean isActivityChangingConfigurations = false;
+
 
     public static void startMainActivity(@NonNull Context context) {
         Intent intent;
@@ -171,6 +182,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         configureCrashlytics();
         System.loadLibrary("sqlcipher");
 
+        registerActivityLifecycleCallbacks(this);
 
         // provide custom configuration
      /*   Configuration myConfig = new Configuration.Builder()
@@ -324,5 +336,49 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @Override
     public Configuration getWorkManagerConfiguration() {
         return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
+    }
+
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+        if (++activityReferences == 1 && !isActivityChangingConfigurations) {
+            // App enters foreground
+            startTime = System.currentTimeMillis(); // Start tracking time
+        }
+    }
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        isActivityChangingConfigurations = activity.isChangingConfigurations();
+        if (--activityReferences == 0 && !isActivityChangingConfigurations) {
+            // App enters background
+            long spentTime = System.currentTimeMillis() - startTime;
+            totalTimeSpent += spentTime; // Add to total time spent
+            Preferences.setTimeSpent(totalTimeSpent); // Save the time to shared preferences
+            divviupUtils.runTimeSpentEvent(totalTimeSpent); // Send analytics if needed
+        }
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {
+
     }
 }

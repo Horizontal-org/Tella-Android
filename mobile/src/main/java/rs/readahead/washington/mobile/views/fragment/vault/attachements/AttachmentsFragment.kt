@@ -10,13 +10,14 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.provider.Settings
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
@@ -52,8 +53,12 @@ import rs.readahead.washington.mobile.bus.event.VaultFileRenameEvent
 import rs.readahead.washington.mobile.data.sharedpref.Preferences
 import rs.readahead.washington.mobile.databinding.FragmentVaultAttachmentsBinding
 import rs.readahead.washington.mobile.media.MediaFileHandler
-import rs.readahead.washington.mobile.util.*
-import rs.readahead.washington.mobile.views.activity.*
+import rs.readahead.washington.mobile.util.C
+import rs.readahead.washington.mobile.util.DialogsUtil
+import rs.readahead.washington.mobile.util.LockTimeoutManager
+import rs.readahead.washington.mobile.util.setCheckDrawable
+import rs.readahead.washington.mobile.util.setMargins
+import rs.readahead.washington.mobile.views.activity.MainActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity
 import rs.readahead.washington.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity
@@ -66,14 +71,19 @@ import rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity.
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity
 import rs.readahead.washington.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import rs.readahead.washington.mobile.views.base_ui.BaseBindingFragment
+import rs.readahead.washington.mobile.views.fragment.recorder.MicActivity
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import rs.readahead.washington.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
-import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.*
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.getCurrentType
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.hasStoragePermissions
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.setToolbarLabel
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.PICKER_FILE_REQUEST_CODE
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.SelectMode
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
+import rs.readahead.washington.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
 import rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment
 import rs.readahead.washington.mobile.views.fragment.vault.home.VAULT_FILTER
 import rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
@@ -320,8 +330,9 @@ class AttachmentsFragment :
             }
 
             override fun goToRecorder() {
-                bundle.putString(VAULT_CURRENT_ROOT_PARENT, currentRootID)
-                navManager().navigateToMicro()
+                val intent = Intent(activity, MicActivity::class.java)
+                intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
+                baseActivity.startActivity(intent)
             }
 
             override fun chooseImportAndDelete() {

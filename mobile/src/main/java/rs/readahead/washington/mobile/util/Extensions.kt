@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
+import androidx.navigation.NavOptions
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
@@ -131,7 +132,7 @@ fun FragmentManager.setupForAccessibility(context: Context) {
 fun Context.isScreenReaderOn(): Boolean {
     val accessibilityManager =
         getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
-    if (accessibilityManager != null && accessibilityManager.isEnabled) {
+    if (accessibilityManager.isEnabled) {
         val serviceInfoList =
             accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN)
         if (serviceInfoList.isNotEmpty())
@@ -141,6 +142,6 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle)
+    navigate(destinationId, bundle,)
 }
 

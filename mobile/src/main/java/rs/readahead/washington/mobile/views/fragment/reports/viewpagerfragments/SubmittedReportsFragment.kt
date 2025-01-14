@@ -32,6 +32,10 @@ class SubmittedReportsFragment : BaseReportsFragment<ReportsViewModel>() {
         return string.Submitted_Reports_Empty_Message
     }
 
+    override fun getHeaderRecyclerViewMessage(): Int {
+        return string.Submitted_Header_Message
+    }
+
     override fun getEmptyMessageIcon(): Int {
         return R.drawable.ic_reports
     }

@@ -34,7 +34,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setThemeStyle()
         supportFragmentManager.setupForAccessibility(this)
-
         // start with preventing showing screen in tasks?
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
         //        WindowManager.LayoutParams.FLAG_SECURE);
@@ -128,6 +127,16 @@ abstract class BaseActivity : AppCompatActivity() {
             .add(container, fragment, className)
             .addToBackStack(null)
             .commitAllowingStateLoss()
+    }
+
+    fun addFragment(container : Int, fragment: Fragment, tag : String ){
+        val existingFragment = supportFragmentManager.findFragmentByTag(tag)
+        if (existingFragment == null) {
+            supportFragmentManager.beginTransaction()
+                .add(container, fragment, tag)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     fun addFragmentWithAnimation(fragment: Fragment, container: Int) {

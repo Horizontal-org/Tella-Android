@@ -43,6 +43,7 @@ class NavigationManager(
     fun navigateFromServerAdvancedSettingsFragmentToSuccessfulSetServerFragment() {
         navigateToWithBundle(R.id.action_serverAdvancedSettingsFragment_to_successfulSetServerFragment)
     }
+
     fun navigateFromGoogleDriveScreenToNewGoogleDriveScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_newGoogleDriveScreen)
     }
@@ -59,6 +60,22 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
 
+    fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
+        navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
+    }
+
+    fun navigateFromDropBoxScreenToNewDropBoxScreen() {
+        navigateToWithBundle(R.id.action_dropBoxScreen_to_newdropBoxScreen)
+    }
+
+    fun navigateFromDropBoxEntryScreenToDropBoxSendScreen() {
+        navigateToWithBundle(R.id.action_newDropBoxScreen_to_dropBoxSendScreen)
+    }
+
+    fun navigateFromDropBoxMainScreenToDropBoxSendScreen() {
+        navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSendScreen)
+    }
+
     fun navigateFromReportsScreenToReportSendScreen() {
         navigateToWithBundle(R.id.action_reportsScreen_to_reportSendScreen)
     }
@@ -70,6 +87,7 @@ class NavigationManager(
     fun navigateFromNewReportsScreenToReportSendScreen() {
         navigateWithBundleAndClearBackStack(R.id.action_newReport_to_reportSendScreen)
     }
+
     private fun navigateWithBundleAndClearBackStack(destinationId: Int) {
         navigateToWithBundle(destinationId)
         navControllerProvider.navController.clearBackStack(destinationId)
@@ -98,21 +116,24 @@ class NavigationManager(
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
     }
-    fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment(){
+
+    fun navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment() {
         navigateToWithBundle(R.id.action_googleDriveConnectFragment_to_selectGoogleDriveFragment)
     }
-    fun navigateFromSelectGoogleDriveToCreateFolderFragment(){
+
+    fun navigateFromSelectGoogleDriveToCreateFolderFragment() {
         navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_createFolderFragment)
     }
-    fun navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment(){
+
+    fun navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment() {
         navigateToWithBundle(R.id.action_selectGoogleDriveFragment_to_selectSharedDriveFragment)
     }
 
-    fun navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment(){
+    fun navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment() {
         navigateToWithBundle(R.id.action_createFolderFragment_to_googleDriveConnectedServerFragment)
     }
 
-    fun navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment(){
+    fun navigateFromSelectSharedDriveFragmentToGoogleDriveConnectedServerFragment() {
         navigateToWithBundle(R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment)
     }
 

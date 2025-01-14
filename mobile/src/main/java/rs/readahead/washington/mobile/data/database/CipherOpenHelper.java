@@ -189,7 +189,6 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         } else {
             Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
             return super.getWritableDatabase(); // or handle appropriately
-
         }
 
     }

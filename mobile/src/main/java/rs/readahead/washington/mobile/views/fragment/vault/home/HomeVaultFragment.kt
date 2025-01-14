@@ -25,7 +25,6 @@ import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.data.CommonPreferences
 import org.hzontal.shared_ui.utils.DialogUtils
 import rs.readahead.washington.mobile.MyApplication
 import rs.readahead.washington.mobile.R
@@ -43,6 +42,7 @@ import rs.readahead.washington.mobile.domain.entity.ServerType
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
 import rs.readahead.washington.mobile.domain.entity.collect.CollectForm
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer
+import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
@@ -91,11 +91,13 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var uwaziServers: ArrayList<UWaziUploadServer>? = null
     private var collectServers: ArrayList<CollectServer>? = null
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
+    private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
     private var uwaziServersCounted = false
     private var googleDriveServersCounted = false
+    private var dropBoxServersCounted = false
     private var isBackgroundEncryptionEnabled = false;
     private var descriptionLiveData = MutableLiveData<String>()
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
@@ -166,6 +168,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         uwaziServers = ArrayList()
         collectServers = ArrayList()
         googleDriveServers = ArrayList()
+        dropBoxServers = ArrayList()
 
     }
 
@@ -258,7 +261,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun startCleanInsightActivity() {
+    private fun startAnalyticsActivity() {
         val intent = Intent(context, AnalyticsIntroActivity::class.java)
         startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }
@@ -397,6 +400,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
             }
 
+            ServerType.DROP_BOX -> {
+                nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+            }
             else -> {}
         }
     }
@@ -410,7 +416,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 showMessageForCleanInsightsApprove(AnalyticsActions.YES)
             }
 
-            ImproveClickOptions.LEARN_MORE -> startCleanInsightActivity()
+            ImproveClickOptions.LEARN_MORE -> startAnalyticsActivity()
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
                 setIsAcceptedAnalytics(true)
@@ -492,6 +498,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
      **/
     private fun clearServerCount() {
         googleDriveServersCounted = false
+        dropBoxServersCounted = false
         reportServersCounted = false
         collectServersCounted = false
         uwaziServersCounted = false
@@ -629,6 +636,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         // Handle Google Drive servers
         handleGoogleDriveServers(serverCounts.googleDriveServers)
 
+        // Handle DropBox servers
+        handleDropBoxServers(serverCounts.dropBoxServers)
+
         // Handle Tella upload servers
         handleTellaUploadServers(serverCounts.tellaUploadServers)
 
@@ -657,7 +667,17 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             serversList?.add(ServerDataItem(servers, ServerType.GOOGLE_DRIVE))
         }
     }
+    // Handle Dropbox servers
+    private fun handleDropBoxServers(servers: List<DropBoxServer>?) {
+        dropBoxServersCounted = true
+        dropBoxServers?.clear()
+        removeOldServersFromList(ServerType.DROP_BOX)
 
+        if (!servers.isNullOrEmpty()) {
+            dropBoxServers?.addAll(servers)
+            serversList?.add(ServerDataItem(servers, ServerType.DROP_BOX))
+        }
+    }
     // Handle Tella upload servers
     private fun handleTellaUploadServers(servers: List<TellaReportServer>?) {
         reportServersCounted = true

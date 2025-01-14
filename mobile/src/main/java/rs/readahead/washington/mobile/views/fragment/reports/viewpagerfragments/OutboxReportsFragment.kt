@@ -32,6 +32,10 @@ class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
         return R.string.Outbox_Reports_Empty_Message
     }
 
+    override fun getHeaderRecyclerViewMessage(): Int {
+       return R.string.Outboxes_Header_Message
+    }
+
     override fun getEmptyMessageIcon(): Int {
         return R.drawable.ic_reports
     }

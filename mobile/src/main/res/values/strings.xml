@@ -940,4 +940,18 @@ Would you like to share analytics with the Tella team?</string>
  enabled at a time. To add a new connection, please delete
  the current one by going to Connections Settings. </string>
   <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+  <string name="settings.servers.title_server.settings2">Connections</string>
+  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
+ server to send files and data. Your organization
+ should provide you with the server details. </string>
+  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
+  <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="dropbox" translatable="false">Dropbox</string>
+  <string name="Drafts_Header_Message">These are reports you are working on.</string>
+  <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
+  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
+  <string name="Connections_description">Learn more about connections here. If you
+ work with an organization, you can ask them
+ about which connection to use.</string>
+  <string name="Connections_description_selection">Learn more about connections here.</string>
 </resources>

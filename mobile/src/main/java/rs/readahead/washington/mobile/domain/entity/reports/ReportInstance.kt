@@ -8,6 +8,7 @@ import java.io.Serializable
 data class ReportInstance(
     var id: Long = -1,
     var serverId: Long = -1,
+    //TODO REPLACEMENT
     var reportApiId: String = "",
     var updated: Long = 0,
     var metadata: Map<String, List<Any>> = mutableMapOf(),

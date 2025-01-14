@@ -1,6 +1,7 @@
 package rs.readahead.washington.mobile.views.fragment.main_connexions.base
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,10 +24,13 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     // Child classes provide the specific ViewModel through this method
     protected abstract fun getViewModel(): VM
     protected abstract fun getEmptyMessage(): Int // Child classes define specific empty messages
+    protected abstract fun getHeaderRecyclerViewMessage(): Int
     protected abstract fun getEmptyMessageIcon(): Int
     protected abstract fun navigateToReportScreen(reportInstance: ReportInstance) // Navigation method to be implemented by subclasses
     protected abstract fun initData()
     private val entityAdapter: EntityAdapter by lazy { EntityAdapter() }
+
+    private var visibilityHandler: EmptyMessageVisibilityHandler? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +40,18 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         observeViewModel()
         setUpRecyclerView()
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Ensure the parent fragment implements the EmptyMessageVisibilityHandler interface
+        visibilityHandler = parentFragment as? EmptyMessageVisibilityHandler
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        visibilityHandler = null
+    }
+
 
     private fun setUpRecyclerView() {
         binding.draftsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -79,9 +95,13 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
         if (reports.isEmpty()) {
             showEmptyMessage()
         } else {
-            entityAdapter.setEntities(reports)
+            entityAdapter.setEntities(
+                reports, if (getHeaderRecyclerViewMessage() != -1) {
+                    getString(getHeaderRecyclerViewMessage())
+                } else ""
+            )
             binding.draftsRecyclerView.show()
-            binding.textViewEmpty.hide()
+            visibilityHandler?.setEmptyTextViewMessageVisibility(false)
         }
     }
 
@@ -99,9 +119,7 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     }
 
     private fun showEmptyMessage() {
-        binding.textViewEmpty.setText(getString(getEmptyMessage()))
-        binding.textViewEmpty.setTopIcon(getEmptyMessageIcon())
-        binding.textViewEmpty.visibility = View.VISIBLE
+        visibilityHandler?.setEmptyTextViewMessageVisibility(true)
         binding.draftsRecyclerView.visibility = View.GONE
     }
 
@@ -138,18 +156,13 @@ abstract class BaseReportsFragment<VM : BaseReportsViewModel> :
     }
 
     // Method to be used by subclasses to define how the navigation is handled
-    protected fun openEntityInstance(reportInstance: ReportInstance) {
+    private fun openEntityInstance(reportInstance: ReportInstance) {
         bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
         navigateToReportScreen(reportInstance)
     }
 
     protected fun loadEntityInstance(reportInstance: ReportInstance) {
         getViewModel().getReportBundle(reportInstance)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getViewModel().listOutbox()
     }
 
 }

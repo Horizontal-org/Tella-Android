@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:src="@drawable/checked_circle"
+        android:textColor="@color/wa_white"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/sheet_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/hide_tella_big_margin"
+        android:layout_marginBottom="@dimen/hide_tella_big_margin"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:padding="6dp"
+        android:text="@string/onboard.title_connected_server"
+        android:textColor="@color/wa_white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/sheet_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans"
+        android:paddingHorizontal="21dp"
+        android:gravity="center"
+        android:paddingVertical="@dimen/hide_tella_small_margin"
+        android:text="@string/onboard.expl_connected_server"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
+        tools:ignore="RtlSymmetry" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/go_to_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/bg_round_orange_btn"
+        app:text_color="@color/btn_dark_letter"
+        app:text="@string/go_to_dropbox"
+        app:check_state="false"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        style="@style/Unlock_White_Text_Back"
+        android:id="@+id/back_btn"
+        android:visibility="gone"
+        android:text="@string/LockSelect_Action_Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

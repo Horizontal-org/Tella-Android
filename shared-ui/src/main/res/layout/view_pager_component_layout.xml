@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_black"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/dark_purple">
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -43,15 +43,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:textStyle="bold"
-                    app:arrowBackIcon="@drawable/ic_back_white"/>
+                    app:arrowBackIcon="@drawable/ic_back_white" />
 
                 <TextView
                     android:id="@+id/toolbar_textView"
                     style="@style/Tella_Main_White_Text.Bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                     />
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="@dimen/activity_horizontal_margin" />
             </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -65,5 +64,13 @@
             app:tabTextColor="@color/bottom_nav_item_color" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <org.hzontal.shared_ui.textviews.CenterMessageTextView
+        android:id="@+id/textView_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+       />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.hzontal.utils.Util;
 
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -37,17 +38,20 @@ import rs.readahead.washington.mobile.databinding.ActivityDocumentationSettingsB
 import rs.readahead.washington.mobile.domain.entity.Server;
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer;
 import rs.readahead.washington.mobile.domain.entity.collect.CollectServer;
+import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer;
 import rs.readahead.washington.mobile.domain.entity.googledrive.Config;
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer;
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer;
 import rs.readahead.washington.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ICollectServersPresenterContract;
+import rs.readahead.washington.mobile.mvp.contract.IDropBoxServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import rs.readahead.washington.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.CollectServersPresenter;
+import rs.readahead.washington.mobile.mvp.presenter.DropBoxServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.GoogleDriveServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.ServersPresenter;
 import rs.readahead.washington.mobile.mvp.presenter.TellaUploadServersPresenter;
@@ -55,6 +59,7 @@ import rs.readahead.washington.mobile.mvp.presenter.UwaziServersPresenter;
 import rs.readahead.washington.mobile.views.base_ui.BaseLockActivity;
 import rs.readahead.washington.mobile.views.dialog.CollectServerDialogFragment;
 import rs.readahead.washington.mobile.views.dialog.UwaziServerLanguageDialogFragment;
+import rs.readahead.washington.mobile.views.dialog.dropbox.DropBoxConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import rs.readahead.washington.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
@@ -69,7 +74,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         CollectServerDialogFragment.CollectServerDialogHandler,
         UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler,
         IUWAZIServersPresenterContract.IView,
-        IGoogleDriveServersPresenterContract.IView {
+        IGoogleDriveServersPresenterContract.IView,
+        IDropBoxServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
@@ -77,10 +83,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     private GoogleDriveServersPresenter googleDriveServersPresenter;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
+    private DropBoxServersPresenter dropBoxServersPresenter;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
     private List<GoogleDriveServer> googleDriveServers;
+    private List<DropBoxServer> dropBoxServers;
     private ActivityDocumentationSettingsBinding binding;
     @Inject
     public Config config;
@@ -92,8 +100,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         binding = ActivityDocumentationSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings));
+        binding.toolbar.setStartTextTitle(getContext().getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setOnRightClickListener(() -> {
+            maybeChangeTemporaryTimeout(() -> {
+                Util.startBrowserIntent(this, getString(R.string.config_connections_url));
+                return null;
+            });
+            return null;
+        });
 
         binding.toolbar.setBackClickListener(() -> {
             onBackPressed();
@@ -108,6 +124,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         tuServers = new ArrayList<>();
         uwaziServers = new ArrayList<>();
         googleDriveServers = new ArrayList<>();
+        dropBoxServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersPresenter = new CollectServersPresenter(this);
         collectServersPresenter.getCollectServers();
@@ -120,11 +137,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         googleDriveServersPresenter = new GoogleDriveServersPresenter(this);
         googleDriveServersPresenter.getGoogleDriveServers(config.getGoogleClientId());
 
+        dropBoxServersPresenter = new DropBoxServersPresenter(this);
+        dropBoxServersPresenter.getDropBoxServers();
         createRefreshPresenter();
         initUwaziEvents();
         initReportsEvents();
         initGoogleDriveEvents();
+        initDropBoxEvents();
         initListeners();
+    }
+
+    private void initDropBoxEvents() {
+        INSTANCE.getCreateDropBoxServer().observe(this, server -> {
+            if (server != null) {
+                dropBoxServersPresenter.create(server);
+            }
+        });
     }
 
     private void initUwaziEvents() {
@@ -421,20 +449,32 @@ public class ServersSettingsActivity extends BaseLockActivity implements
     }
 
     private void showChooseServerTypeDialog() {
-        BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), getContext(),
-                getString(R.string.settings_servers_add_server_dialog_title),
+
+        BottomSheetUtils.showBinaryTypeSheet(
+                this.getSupportFragmentManager(),
+                this,
                 getString(R.string.settings_add_server_selection_dialog_title),
-                getString(R.string.settings_serv_add_server_selection_dialog_description),
+                getString(R.string.settings_add_server_selection_dialog_title),
+                getString(R.string.Connections_description_selection),
+                getString(R.string.Connections_description),
+                this::browseIntent,
                 getString(R.string.action_cancel), //TODO CHECk THIS
                 getString(R.string.action_ok),//TODO CHECk THIS
                 getString(R.string.settings_docu_add_server_dialog_select_odk),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_web),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi),
                 getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive),
+                getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox),
                 getString(R.string.unavailable_connections),
                 getString(R.string.unavailable_connections_desc),
                 servers.stream().anyMatch(server -> server instanceof GoogleDriveServer),
+                servers.stream().anyMatch(server -> server instanceof DropBoxServer),
                 new BottomSheetUtils.IServerChoiceActions() {
+                    @Override
+                    public void addDropBoxServer() {
+                        showDropBoxServerDialog(null);
+                    }
+
                     @Override
                     public void addGoogleDriveServer() {
                         showGoogleDriveServerDialog(null);
@@ -552,6 +592,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         }
     }
 
+    private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
+        if (dropBoxServer == null) {
+            Intent intent = new Intent(this, DropBoxConnectFlowActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private void stopPresenting() {
         if (collectServersPresenter != null) {
             collectServersPresenter.destroy();
@@ -581,11 +628,20 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                         getString(R.string.settings_servers_disable_auto_delete_dialog_expl),
                         getString(R.string.action_disable),
                         getString(R.string.action_cancel),
-                        this::disableAutoDelete, this::turnOnAutoDeleteSwitch);
+                        this::disableAutoDelete,
+                        this::turnOnAutoDeleteSwitch);
             }
         });
         //metadataCheck.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setMetadataAutoUpload(isChecked));
         //metadataCheck.setChecked(Preferences.isMetadataAutoUpload());
+    }
+
+    private Unit browseIntent() {
+        maybeChangeTemporaryTimeout(() -> {
+            Util.startBrowserIntent(this, getString(R.string.config_organizations_url));
+            return null;
+        });
+        return Unit.INSTANCE;
     }
 
     private Unit disableAutoDelete() {
@@ -640,7 +696,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                     getString(R.string.action_delete),
                     getString(R.string.action_cancel),
                     -1,
-                    !(server instanceof GoogleDriveServer)
+                    !(server instanceof GoogleDriveServer || server instanceof DropBoxServer)
             ));
         }
         item.setTag(servers.indexOf(server));
@@ -656,6 +712,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 editUwaziServer((UWaziUploadServer) server);
                 break;
             case GOOGLE_DRIVE:
+                // editGoogleDriveServer((GoogleDriveServer) server);
+            case DROP_BOX:
                 // editGoogleDriveServer((GoogleDriveServer) server);
             default:
                 editTUServer((TellaReportServer) server);
@@ -673,6 +731,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements
                 break;
             case GOOGLE_DRIVE:
                 googleDriveServersPresenter.remove((GoogleDriveServer) server);
+                break;
+            case DROP_BOX:
+                dropBoxServersPresenter.remove((DropBoxServer) server);
                 break;
             default:
                 tellaUploadServersPresenter.remove((TellaReportServer) server);
@@ -867,4 +928,43 @@ public class ServersSettingsActivity extends BaseLockActivity implements
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
     }
 
+    @Override
+    public void onDropBoxServersLoaded(@NonNull List<DropBoxServer> dropBoxServerServers) {
+        binding.collectServersList.removeAllViews();
+        this.servers.addAll(dropBoxServerServers);
+        createServerViews(servers);
+        this.dropBoxServers = dropBoxServerServers;
+    }
+
+    @Override
+    public void onLoadDropBoxServersError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCreatedDropBoxServer(@NonNull DropBoxServer server) {
+        servers.add(server);
+        dropBoxServers.add(server);
+        binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
+    }
+
+    @Override
+    public void onCreateDropBoxServerError(@NonNull Throwable throwable) {
+
+    }
+
+    @Override
+    public void onRemovedDropBoxServer(@NonNull DropBoxServer server) {
+        servers.remove(server);
+        dropBoxServers.remove(server);
+        binding.collectServersList.removeAllViews();
+        createServerViews(servers);
+        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
+    }
+
+    @Override
+    public void onRemoveDropBoxServerError(@NonNull Throwable throwable) {
+
+    }
 }

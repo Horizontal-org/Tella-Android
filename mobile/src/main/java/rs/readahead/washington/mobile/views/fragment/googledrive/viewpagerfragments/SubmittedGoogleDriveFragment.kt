@@ -33,6 +33,10 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
         return string.Submitted_Reports_Empty_Message
     }
 
+    override fun getHeaderRecyclerViewMessage(): Int {
+        return string.Submitted_Header_Message
+    }
+
     override fun getEmptyMessageIcon(): Int {
         return R.drawable.ic_google_drive
     }
@@ -64,7 +68,7 @@ class SubmittedGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>()
             instanceDeleted.observe(viewLifecycleOwner) {
                 ReportsUtils.showReportDeletedSnackBar(
                     getString(
-                        R.string.Report_Deleted_Confirmation, it
+                        string.Report_Deleted_Confirmation, it
                     ), baseActivity
                 )
                 submittedGoogleDriveViewModel.listSubmitted()

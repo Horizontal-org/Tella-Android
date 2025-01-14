@@ -72,6 +72,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun removeConnectionServers() {
+        connections.clear()
         adapterScope.launch {
             items.removeAll(connections)
             updateItems()

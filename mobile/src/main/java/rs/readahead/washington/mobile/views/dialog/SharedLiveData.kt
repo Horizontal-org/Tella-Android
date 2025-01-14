@@ -2,6 +2,7 @@ package rs.readahead.washington.mobile.views.dialog
 
 import rs.readahead.washington.mobile.bus.SingleLiveEvent
 import rs.readahead.washington.mobile.domain.entity.UWaziUploadServer
+import rs.readahead.washington.mobile.domain.entity.dropbox.DropBoxServer
 import rs.readahead.washington.mobile.domain.entity.googledrive.GoogleDriveServer
 import rs.readahead.washington.mobile.domain.entity.reports.TellaReportServer
 
@@ -16,4 +17,8 @@ object SharedLiveData {
     //Google Drive live data
     val createGoogleDriveServer = SingleLiveEvent<GoogleDriveServer>()
     val updateGoogleDriveServer = SingleLiveEvent<GoogleDriveServer>()
+
+    //DropBox live data
+    val createDropBoxServer = SingleLiveEvent<DropBoxServer>()
+    val updateDropBoxServer = SingleLiveEvent<DropBoxServer>()
 }

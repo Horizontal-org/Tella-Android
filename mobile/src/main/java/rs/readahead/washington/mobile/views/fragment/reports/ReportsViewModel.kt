@@ -186,15 +186,6 @@ class ReportsViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
-
-    private fun openInstance(reportInstance: ReportInstance) {
-        getReportBundle(reportInstance)
-    }
-
-    private fun onMoreClicked(reportInstance: ReportInstance) {
-        _onMoreClickedFormInstance.postValue(reportInstance)
-    }
-
     override fun deleteReport(instance: ReportInstance) {
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
