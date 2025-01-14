@@ -186,7 +186,7 @@ public class CamouflageManager {
     }
 
     private String getOptionAlias(String alias) {
-        return "rs.readahead.washington.mobile.views.activity.Alias" + alias;
+        return "org.horizontal.tella.mobile.views.activity.Alias" + alias;
     }
 
     private int getOptionDrawable(String alias) {
