@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dropBoxScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.viewpagerfragments.DropBoxTabsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.dropbox.viewpagerfragments.DropBoxTabsFragment"
         android:label="@string/dropbox"
         tools:layout="@layout/fragment_reports">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/newdropBoxScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.entry.DropBoxEntryFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.dropbox.entry.DropBoxEntryFragment"
         android:label="@string/Reports_Title_Screen"
         tools:layout="@layout/fragment_reports_entry">
 
@@ -42,13 +42,13 @@
 
     <fragment
         android:id="@+id/dropBoxSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.send.DropBoxSendFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.dropbox.send.DropBoxSendFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 
     <fragment
         android:id="@+id/dropBoxSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.dropbox.submitted.DropboxSubmittedFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.dropbox.submitted.DropboxSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 </navigation>

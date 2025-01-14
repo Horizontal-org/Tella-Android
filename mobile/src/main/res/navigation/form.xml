@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/formScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.forms.CollectMainFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.forms.CollectMainFragment"
         android:label="@string/Home_BottomNav_Forms"
         tools:layout="@layout/activity_collect_main"/>
 </navigation>

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/micScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.recorder.MicFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.recorder.MicFragment"
         android:label="@string/fragment_mic"
         tools:layout="@layout/fragment_mic">
 
@@ -19,6 +19,6 @@
     </fragment>
     <fragment
         android:id="@+id/attachments_screen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.vault.attachements.AttachmentsFragment"
         tools:layout="@layout/fragment_vault_attachments"/>
 </navigation>

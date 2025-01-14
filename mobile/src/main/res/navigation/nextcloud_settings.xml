@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/enterNextCloudUrlScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step1.EnterNextCloudServerFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.nextcloud.step1.EnterNextCloudServerFragment"
         tools:layout="@layout/fragment_enter_server">
 
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/loginNextCloudScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step2.LoginNextCloudFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.nextcloud.step2.LoginNextCloudFragment"
         tools:layout="@layout/fragment_login_screen">
 
         <action
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/nextCloudNewFolderScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step3.NewFolderFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.nextcloud.step3.NewFolderFragment"
         tools:layout="@layout/new_folder_fragment">
 
         <action
@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/successfulSetServerFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.nextcloud.step4.SuccessfulSetServerFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.nextcloud.step4.SuccessfulSetServerFragment"
         android:label="SuccessfulSetServerFragment"
         tools:layout="@layout/fragment_successful_set_server" />
 

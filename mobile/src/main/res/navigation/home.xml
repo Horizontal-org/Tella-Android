@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/homeScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.home.HomeVaultFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.vault.home.HomeVaultFragment"
         android:label="@string/Home_BottomNav_Home"
         tools:layout="@layout/fragment_vault">
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/attachments_screen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.attachements.AttachmentsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.vault.attachements.AttachmentsFragment"
         tools:layout="@layout/fragment_vault_attachments">
         <action
             android:id="@+id/action_attachments_screen_to_edit_screen"
@@ -88,31 +88,31 @@
 
     <fragment
         android:id="@+id/edit_screen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.edit.VaultEditFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.vault.edit.VaultEditFragment"
         android:label="@string/Vault_FileEdit_SheetAction"
         tools:layout="@layout/fragment_vault_info" />
 
     <fragment
         android:id="@+id/info_screen"
-        android:name="rs.readahead.washington.mobile.views.fragment.vault.info.VaultInfoFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment"
         android:label="@string/Vault_FileInfo"
         tools:layout="@layout/fragment_vault_info" />
 
     <activity
         android:id="@+id/main_settings"
-        android:name="rs.readahead.washington.mobile.views.activity.SettingsActivity"
+        android:name="org.horizontal.tella.mobile.views.activity.SettingsActivity"
         android:label="@string/settings_app.bar"
         tools:layout="@layout/activity_settings" />
 
     <fragment
         android:id="@+id/formScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.forms.CollectMainFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.forms.CollectMainFragment"
         android:label="@string/Home_BottomNav_Forms"
         tools:layout="@layout/activity_collect_main" />
 
     <fragment
         android:id="@+id/resourcesScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.resources.ResourcesListFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.resources.ResourcesListFragment"
         android:label="@string/Home_BottomNav_Resources"
         tools:layout="@layout/fragment_resources_list" />
 </navigation>

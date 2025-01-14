@@ -7,7 +7,7 @@
 
     <fragment
             android:id="@+id/reportsScreen"
-            android:name="rs.readahead.washington.mobile.views.fragment.reports.viewpagerfragments.ReportTabsFragment"
+            android:name="org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments.ReportTabsFragment"
             android:label="@string/Home_BottomNav_Reports"
             tools:layout="@layout/fragment_reports">
 
@@ -31,7 +31,7 @@
         </fragment>
         <fragment
             android:id="@+id/newReportScreen"
-            android:name="rs.readahead.washington.mobile.views.fragment.reports.entry.ReportsEntryFragment"
+            android:name="org.horizontal.tella.mobile.views.fragment.reports.entry.ReportsEntryFragment"
             android:label="@string/Reports_Title_Screen"
             tools:layout="@layout/fragment_reports_entry">
             <action
@@ -43,12 +43,12 @@
         </fragment>
     <fragment
         android:id="@+id/reportSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.send.ReportsSendFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.reports.send.ReportsSendFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
     <fragment
         android:id="@+id/reportSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.reports.submitted.ReportSubmittedFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.reports.submitted.ReportSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 
