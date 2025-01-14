@@ -131,7 +131,7 @@ dependencies {
     implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragment"
     implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
-    kapt("org.permissionsdispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
+    kapt("com.github.permissions-dispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
@@ -171,8 +171,7 @@ dependencies {
     // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
     kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
     //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
-
-    implementation "com.simplify:ink:$versions.simplifyInk"
+    implementation "com.github.nak5ive:ink-android:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
