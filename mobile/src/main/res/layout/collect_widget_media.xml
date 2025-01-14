@@ -20,7 +20,7 @@
         tools:text="@string/Uwazi_WidgetMultiDate_AddDate"
         style="@style/Tella2_Select_Button" />
 
-    <rs.readahead.washington.mobile.views.custom.CollectAttachmentPreviewView
+    <org.horizontal.tella.mobile.views.custom.CollectAttachmentPreviewView
         android:gravity="start"
         android:id="@+id/attachedMedia"
         android:layout_width="match_parent"

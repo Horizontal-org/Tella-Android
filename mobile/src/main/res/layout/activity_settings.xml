@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:textDirection="locale"
     android:background="@color/dark_purple"
-    tools:context="rs.readahead.washington.mobile.views.activity.SettingsActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.SettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

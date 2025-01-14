@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/reportsScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.ReportsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.ReportsFragment"
         android:label="@string/Home_BottomNav_Reports"
         tools:layout="@layout/fragment_reports">
     </fragment>

@@ -6,7 +6,7 @@
     android:background="@color/dark_purple"
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
-    tools:context="rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

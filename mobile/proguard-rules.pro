@@ -18,7 +18,7 @@
 
 
 # tella
--keep class rs.readahead.washington.mobile.data.entity.** { *; }
+-keep class org.horizontal.tella.mobile.data.entity.** { *; }
 
 
 # evernote android-job

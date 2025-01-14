@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:textDirection="locale"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="rs.readahead.washington.mobile.views.activity.QuestionAttachmentActivity"
+    tools:context="org.horizontal.tella.mobile.views.activity.QuestionAttachmentActivity"
     tools:showIn="@layout/activity_question_attachment"
     android:padding="@dimen/gallery_card_padding"
     android:animateLayoutChanges="true">
@@ -43,7 +43,7 @@
             tools:ignore="ContentDescription" />
     </RelativeLayout>
 
-    <rs.readahead.washington.mobile.views.custom.GalleryRecyclerView
+    <org.horizontal.tella.mobile.views.custom.GalleryRecyclerView
         android:id="@+id/galleryRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

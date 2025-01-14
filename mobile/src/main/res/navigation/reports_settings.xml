@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/enterUrlScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step1.EnterUploadServerFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step1.EnterUploadServerFragment"
         tools:layout="@layout/fragment_enter_server">
 
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/chooseCredentialsScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step2.ChooseUserNamePasswordFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step2.ChooseUserNamePasswordFragment"
         tools:layout="@layout/fragment_choose_username_password">
         <action
             android:id="@+id/action_choose_credentials_to_enter_login"
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/loginToReportsScreen"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step3.LoginReportsFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step3.LoginReportsFragment"
         tools:layout="@layout/fragment_login_reports_screen">
         <action
             android:id="@+id/action_loginToReportsScreen_to_editTellaServerFragment"
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/editTellaServerFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.edit.EditTellaServerFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.edit.EditTellaServerFragment"
         android:label="EditTellaServerFragment"
         tools:layout="@layout/fragment_edit_server">
 
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/successfulLoginFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step4.SuccessfulLoginFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step4.SuccessfulLoginFragment"
         android:label="SuccessfulLoginFragment"
         tools:layout="@layout/fragment_successful_login">
         <action
@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/serverAdvancedSettingsFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step5.ServerAdvancedSettingsFragment"
         android:label="ServerAdvancedSettingsFragment"
         tools:layout="@layout/fragment_advanced_settings_success">
         <action
@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/successfulSetServerFragment"
-        android:name="rs.readahead.washington.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.reports.step6.SuccessfulSetServerFragment"
         tools:layout="@layout/fragment_successful_set_server"
         android:label="SuccessfulSetServerFragment" />
 
