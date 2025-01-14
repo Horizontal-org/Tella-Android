@@ -80,7 +80,6 @@ import org.horizontal.tella.mobile.views.activity.ExitActivity;
 import org.horizontal.tella.mobile.views.activity.MainActivity;
 import org.horizontal.tella.mobile.views.activity.onboarding.OnBoardingActivity;
 
-import rs.readahead.washington.mobile.R;
 import timber.log.Timber;
 
 @HiltAndroidApp

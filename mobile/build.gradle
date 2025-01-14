@@ -90,7 +90,7 @@ android {
         exclude 'META-INF/DEPENDENCIES'
 
     }
-    namespace 'rs.readahead.washington.mobile'
+    namespace 'org.horizontal.tella.mobile'
 }
 
 dependencies {
