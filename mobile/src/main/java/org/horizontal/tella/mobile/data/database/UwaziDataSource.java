@@ -61,7 +61,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private UwaziDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        WashingtonSQLiteOpenHelper sqLiteOpenHelper = new WashingtonSQLiteOpenHelper(context,key);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context,key);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

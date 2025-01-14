@@ -16,7 +16,7 @@ object ThemeStyleManager {
     fun getThemeStyle(activity: Activity): Int {
         //This should be more elegant
         when (activity.localClassName) {
-            "rs.readahead.washington.mobile.views.activity.camera.CameraActivity" -> {
+            "org.horizontal.tella.mobile.views.activity.camera.CameraActivity" -> {
                 return getThemeStyleBasedOnPreferences(
                     R.style.CameraTheme,
                     R.style.CameraTheme_LineSpacing,
@@ -25,7 +25,7 @@ object ThemeStyleManager {
                 )
             }
 
-            "rs.readahead.washington.mobile.views.activity.viewer.AudioPlayActivity" -> {
+            "org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity" -> {
                 return getThemeStyleBasedOnPreferences(
                     R.style.PlayerTheme,
                     R.style.PlayerTheme_LineSpacing,
