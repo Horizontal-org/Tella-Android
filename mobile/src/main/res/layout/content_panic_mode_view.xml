@@ -8,7 +8,7 @@
     android:gravity="center"
     android:visibility="gone">
 
-    <rs.readahead.washington.mobile.views.custom.CountdownTextView
+    <org.horizontal.tella.mobile.views.custom.CountdownTextView
         android:id="@+id/countdown_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

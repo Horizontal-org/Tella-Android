@@ -1,0 +1,33 @@
+package org.horizontal.tella.mobile.util
+
+object CamouflageConstant {
+        const val I_CAMERA_ALIAS = "iCamera"
+        const val SELFIE_CAM_ALIAS = "SelfieCam"
+        const val SNAP_CAMERA_ALIAS = "SnapCamera"
+        const val MI_CAMERA_ALIAS = "MiCamera"
+        const val CALCULATE_ALIAS = "Calculate"
+        const val CALCULATOR_PLUS_ALIAS = "CalculatorPlus"
+        const val I_CALCULATOR_ALIAS = "iCalculator"
+        const val CALCULATOR_ALIAS = "Calculator"
+        const val WEATHER_ALIAS = "Weather"
+        const val EASY_WEATHER_ALIAS = "EasyWeather"
+        const val SUNNY_DAY_ALIAS = "SunnyDay"
+        const val FORECAST_ALIAS = "Forecast"
+        const val GAME_STATION_ALIAS = "GameStation"
+        const val PLAY_NOW_ALIAS = "PlayNow"
+        const val GAME_LAUNCHER_ALIAS = "GameLauncher"
+        const val CLOCK_ALIAS = "Clock"
+        const val JEWEL_DASH_ALIAS = "JewelDash"
+        const val TIME_ALIAS = "Time"
+        const val STOP_WATCH_ALIAS = "StopWatch"
+        const val WATCH_ALIAS = "Watch"
+        const val WORKOUT_ALIAS = "Workout"
+        const val FITNESS_LIFE_ALIAS = "FitnessLife"
+        const val HEALTH_ALIAS = "Health"
+        const val PERIOD_TRACKER_ALIAS = "PeriodTracker"
+        const val MUSIC_ALIAS = "Music"
+        const val DICTIONARY_ALIAS = "Dictionary"
+        const  val PLANT_CARE_ALIAS = "PlantCare"
+        const val ASTROLOGY_ALIAS = "Astrology"
+
+}

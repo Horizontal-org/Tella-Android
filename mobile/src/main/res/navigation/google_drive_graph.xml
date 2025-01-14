@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/googleDriveScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.viewpagerfragments.GoogleDriveTabsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.googledrive.viewpagerfragments.GoogleDriveTabsFragment"
         android:label="@string/google_drive"
         tools:layout="@layout/fragment_reports">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/newGoogleDriveScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.entry.GoogleDriveEntryFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.googledrive.entry.GoogleDriveEntryFragment"
         android:label="@string/Reports_Title_Screen"
         tools:layout="@layout/fragment_reports_entry">
 
@@ -42,13 +42,13 @@
 
     <fragment
         android:id="@+id/googleDriveSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.send.GoogleDriveSendFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.googledrive.send.GoogleDriveSendFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 
     <fragment
         android:id="@+id/googleDriveSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.googledrive.submitted.GoogleDriveSubmittedFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.googledrive.submitted.GoogleDriveSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 </navigation>

@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-1. [Overview](#overview)
+1. [Overview](#about)
 
 2. [Why Tella?](#why-tella)
 
@@ -18,9 +18,9 @@
 
 8. [Contact us](#contact)
 
-## Overview <a id="overview"></a>
+## About Tella <a id="about"></a>
 
-Tella is a documentation app for Android. In challenging environments--with limited or no internet connectivity or in the face of repression--Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
+In challenging environments, with limited or no internet connectivity or in the face of repression, Tella is an app that makes it easier and safer to document human rights violations and collect data. Tella is available Android and iOS. 
 
 | ![Camouflage](docs/Camouflage.gif) | ![Encrypting](docs/Encrypting.gif) | ![Connection](docs/Server.gif) |
 |:---:|:---:|:---:|
@@ -35,13 +35,15 @@ Tella:
 
 You can watch a [short video demonstrating Tella's main features here](https://www.youtube.com/watch?v=aJIyWESxM_o&t=1s)
 
+
 ## Why Tella? <a id="why-tella"></a>
 
-Across the world, journalists and human rights defenders are facing increasing levels of physical repression, with mobile devices searched or seized at border crossings and airports, checkpoints, in the street, or in targeted raids. At the same time, digital surveillance and censorship threaten the flow of information out of repressive areas, particularly on violence, human rights abuse, or corruption. 
+Across the world, journalists and human rights defenders are facing increasing levels of physical repression, with mobile devices searched or seized at border crossings and airports, checkpoints, in the street, or in targeted raids. At the same time, digital surveillance and censorship threaten the flow of information out of repressive areas, particularly on violence, human rights abuse, or corruption.
 
-Tella's goal is to protect at-risk individuals and groups--advocates, journalists, human rights defenders--from repressive surveillance, whether physical or digital. Tella aims to provide a highly usable solution, accessible to all with minimal or no training, to collect, safeguard, and communicate sensitive information in highly repressive environments. 
+Tella's goal is to protect at-risk individuals and groups--advocates, journalists, human rights defenders--from repressive surveillance, whether physical or digital. Tella aims to provide a highly usable solution, accessible to all with minimal or no training, to collect, safeguard, and communicate sensitive information in highly repressive environments.
 
 Tella has three main objectives:
+
 - Protecting users who engage in documentation from physical and digital repression
 - Protecting the data they collect from censorship, tampering, interception, and destruction
 - Empowering individuals and groups to easily, quickly, and effectively collect data and produce high quality documentation that can be used for research, advocacy, or transitional justice
@@ -90,6 +92,10 @@ This software uses the following open source packages:
 Tella is currently available in [17 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
 
 If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator). 
+
+If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator).
+
+
 
 ## Contact us <a id="contact"></a>
 We love hearing from users, designers, and developers!

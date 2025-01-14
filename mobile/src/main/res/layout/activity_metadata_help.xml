@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/wa_white"
     android:fitsSystemWindows="true"
-    tools:context="rs.readahead.washington.mobile.views.activity.MetadataHelpActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.MetadataHelpActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="rs.readahead.washington.mobile.views.activity.viewer.PhotoViewerActivity"
+    tools:context="org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity"
     android:background="@color/wa_black">
 
         <androidx.appcompat.widget.Toolbar

@@ -1,0 +1,31 @@
+package org.horizontal.tella.mobile.views.fragment.vault.home.background_activities
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import org.horizontal.tella.mobile.databinding.ItemBackgroundActivityBinding
+import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityModel
+
+class BackgroundActivitiesAdapter(private var dataList: List<BackgroundActivityModel>) :
+    RecyclerView.Adapter<ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemBackgroundActivityBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = dataList[position]
+        holder.bind(item)
+    }
+
+    override fun getItemCount(): Int {
+        return dataList.size
+    }
+
+    fun updateData(newDataList: List<BackgroundActivityModel>) {
+        dataList = newDataList
+        notifyDataSetChanged()
+    }
+}
