@@ -61,6 +61,16 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
             }
         }
 
+        if (getIntent().hasExtra(IS_CAMOUFLAGE)) {
+            addFragment(new MainSettings(),R.id.my_nav_host_fragment);
+            addFragment(new SecuritySettings(),R.id.my_nav_host_fragment);
+            if (cm.isDefaultLauncherActivityAlias()) {
+                addFragment(new HideTella(),R.id.my_nav_host_fragment);
+            } else {
+                addFragment(new ChangeRemoveCamouflage(),R.id.my_nav_host_fragment);
+            }
+        }
+
         disposables = MyApplication.bus().createCompositeDisposable();
         disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
             @Override

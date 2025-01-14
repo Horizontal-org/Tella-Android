@@ -138,6 +138,6 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle)
+    navigate(destinationId, bundle,)
 }
 

@@ -1,5 +1,8 @@
 package rs.readahead.washington.mobile.media;
 
+import static rs.readahead.washington.mobile.util.C.IMPORT_MULTIPLE_FILES;
+import static rs.readahead.washington.mobile.util.C.RESOURCE_PDF;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -563,7 +566,6 @@ public class MediaFileHandler {
         try {
             OutputStream os = getMetadataOutputStream(mmf);
 
-            if (os == null) throw new NullPointerException();
 
             createMetadataFile(os, vaultFile);
         } catch (Exception e) {
