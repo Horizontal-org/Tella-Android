@@ -16,10 +16,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.hzontal.utils.Util;
 
+import org.horizontal.tella.mobile.mvvm.settings.GoogleDriveServersViewModel;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -31,6 +33,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import kotlin.Unit;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
@@ -46,7 +49,6 @@ import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer;
 import org.horizontal.tella.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.ICollectServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.IDropBoxServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.contract.IGoogleDriveServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.INextCloudServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.IServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.ITellaUploadServersPresenterContract;
@@ -54,7 +56,6 @@ import org.horizontal.tella.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.CollectServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.DropBoxServersPresenter;
-import org.horizontal.tella.mobile.mvp.presenter.GoogleDriveServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.NextCloudServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.ServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.TellaUploadServersPresenter;
@@ -67,16 +68,16 @@ import org.horizontal.tella.mobile.views.dialog.dropbox.DropBoxConnectFlowActivi
 import org.horizontal.tella.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import org.horizontal.tella.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
+
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IGoogleDriveServersPresenterContract.IView, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
-
+public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
     private UwaziServersPresenter uwaziServersPresenter;
-    private GoogleDriveServersPresenter googleDriveServersPresenter;
+    private GoogleDriveServersViewModel googleDriveViewModel ;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private DropBoxServersPresenter dropBoxServersPresenter;
@@ -101,6 +102,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
         binding.toolbar.setStartTextTitle(getResources().getString(R.string.settings_servers_title_server_settings2));
         setSupportActionBar(binding.toolbar);
+
+        googleDriveViewModel = new ViewModelProvider(this).get(GoogleDriveServersViewModel.class);
 
         binding.toolbar.setOnRightClickListener(() -> {
             maybeChangeTemporaryTimeout(() -> {
@@ -134,8 +137,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         uwaziServersPresenter = new UwaziServersPresenter(this);
         uwaziServersPresenter.getUwaziServers();
 
-        googleDriveServersPresenter = new GoogleDriveServersPresenter(this);
-        googleDriveServersPresenter.getGoogleDriveServers(config.getGoogleClientId());
+        googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
 
         dropBoxServersPresenter = new DropBoxServersPresenter(this);
         dropBoxServersPresenter.getDropBoxServers();
@@ -144,12 +146,23 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         nextCloudServersPresenter = new NextCloudServersPresenter(this);
         nextCloudServersPresenter.getNextCloudServers();
         createRefreshPresenter();
+        initObservers();
         initUwaziEvents();
         initReportsEvents();
         initGoogleDriveEvents();
         initDropBoxEvents();
         initNextCloudEvents();
         initListeners();
+    }
+
+    private void initObservers() {
+        googleDriveViewModel.getGoogleDriveServers().observe(this, this::onGoogleDriveServersLoaded);
+
+        googleDriveViewModel.getLoading().observe(this, isLoading -> {
+        });
+        googleDriveViewModel.getError().observe(this, this::showGoogleDriveError);
+        googleDriveViewModel.getCreatedServer().observe(this, this::onCreatedGoogleDriveServer);
+        googleDriveViewModel.getRemovedServer().observe(this, this::onRemovedGoogleDriveServer);
     }
 
     private void initDropBoxEvents() {
@@ -197,7 +210,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private void initGoogleDriveEvents() {
         INSTANCE.getCreateGoogleDriveServer().observe(this, server -> {
             if (server != null) {
-                googleDriveServersPresenter.create(server);
+                googleDriveViewModel.create(server);
             }
         });
     }
@@ -704,7 +717,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 uwaziServersPresenter.remove((UWaziUploadServer) server);
                 break;
             case GOOGLE_DRIVE:
-                googleDriveServersPresenter.remove((GoogleDriveServer) server);
+                googleDriveViewModel.remove((GoogleDriveServer) server);
                 break;
             case DROP_BOX:
                 dropBoxServersPresenter.remove((DropBoxServer) server);
@@ -851,7 +864,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         }
     }
 
-    @Override
     public void onGoogleDriveServersLoaded(@NonNull List<GoogleDriveServer> googleDriveServers) {
         binding.collectServersList.removeAllViews();
         this.servers.addAll(googleDriveServers);
@@ -859,12 +871,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         this.googleDriveServers = googleDriveServers;
     }
 
-    @Override
-    public void onLoadGoogleDriveServersError(@NonNull Throwable throwable) {
-
-    }
-
-    @Override
     public void onCreatedGoogleDriveServer(@NonNull GoogleDriveServer server) {
         servers.add(server);
         googleDriveServers.add(server);
@@ -872,25 +878,16 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
-    @Override
-    public void onCreateGoogleDriveServerError(@NonNull Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
-
-    }
-
-    @Override
     public void onRemovedGoogleDriveServer(@NonNull GoogleDriveServer server) {
         servers.remove(server);
         googleDriveServers.remove(server);
         binding.collectServersList.removeAllViews();
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
-
     }
 
-    @Override
-    public void onRemoveGoogleDriveServerError(@NonNull Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
+    private void showGoogleDriveError(int error){
+        DialogUtils.showBottomMessage(this, getString(error), true);
     }
 
     @Override
