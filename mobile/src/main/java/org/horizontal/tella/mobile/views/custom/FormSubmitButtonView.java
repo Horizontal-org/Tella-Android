@@ -1,0 +1,39 @@
+package org.horizontal.tella.mobile.views.custom;
+
+import android.content.Context;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import android.util.AttributeSet;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.horizontal.tella.mobile.R;
+
+
+public class FormSubmitButtonView extends FrameLayout {
+    public FormSubmitButtonView(@NonNull Context context) {
+        this(context, null);
+    }
+
+    public FormSubmitButtonView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public FormSubmitButtonView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        inflateView();
+    }
+
+    private void inflateView() {
+        inflate(getContext(), R.layout.form_submit_end_button, this);
+    }
+
+    public void setOffline(boolean offline) {
+        TextView textView = findViewById(R.id.submit_button_text);
+        ImageView imageView = findViewById(R.id.submit_button_image);
+
+        textView.setText(offline ? R.string.collect_end_action_save_send_later : R.string.collect_end_action_submit);
+        imageView.setImageResource(offline ? R.drawable.ic_watch_later_orange_24dp : R.drawable.ic_send_black_24dp);
+    }
+}

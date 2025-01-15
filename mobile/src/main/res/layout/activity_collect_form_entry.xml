@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
     android:background="@color/wa_purple"
-    tools:context="rs.readahead.washington.mobile.views.activity.CollectMainActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.CollectMainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

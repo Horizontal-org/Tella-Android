@@ -1,8 +1,8 @@
 package com.hzontal.tella_locking_ui
 
 enum class ReturnActivity (val order: Int,  val activityName: String) {
-    SETTINGS(1, "rs.readahead.washington.mobile.views.activity.onboarding.OnBoardingActivity"),
-    CAMOUFLAGE(2,"rs.readahead.washington.mobile.views.activity.SettingsActivity");
+    SETTINGS(1, "org.horizontal.tella.mobile.views.activity.onboarding.OnBoardingActivity"),
+    CAMOUFLAGE(2,"org.horizontal.tella.mobile.views.activity.SettingsActivity");
 
     open fun getActivity(): String {
         return activityName
@@ -21,10 +21,10 @@ const val IS_ONBOARD_LOCK_SET = "IS_ONBOARD_LOCK_SET"
 
 const val IS_CAMOUFLAGE = "IS_CAMOUFLAGE"
 
-const val CALCULATOR_ALIAS = "rs.readahead.washington.mobile.views.activity.AliasCalculator"
-const val CALCULATOR_ALIAS_BLUE_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorBlueSkin"
-const val CALCULATOR_ALIAS_ORANGE_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorOrangeSkin"
-const val CALCULATOR_ALIAS_YELLOW_SKIN = "rs.readahead.washington.mobile.views.activity.AliasCalculatorYellowSkin"
+const val CALCULATOR_ALIAS = "org.horizontal.tella.mobile.views.activity.AliasCalculator"
+const val CALCULATOR_ALIAS_BLUE_SKIN = "org.horizontal.tella.mobile.views.activity.AliasCalculatorBlueSkin"
+const val CALCULATOR_ALIAS_ORANGE_SKIN = "org.horizontal.tella.mobile.views.activity.AliasCalculatorOrangeSkin"
+const val CALCULATOR_ALIAS_YELLOW_SKIN = "org.horizontal.tella.mobile.views.activity.AliasCalculatorYellowSkin"
 
 const val CALCULATOR_YELLOW_SKIN = "YELLOW_SKIN"
 const val CALCULATOR_ORANGE_SKIN = "ORANGE_SKIN"

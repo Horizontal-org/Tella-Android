@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="rs.readahead.washington.mobile.views.activity.FormSubmitActivity"
+    tools:context="org.horizontal.tella.mobile.views.activity.FormSubmitActivity"
     tools:showIn="@layout/activity_form_submit">
 
     <LinearLayout

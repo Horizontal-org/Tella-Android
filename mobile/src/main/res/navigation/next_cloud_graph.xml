@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nextCloudScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.viewpagerfragments.NextCloudTabsFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.nextCloud.viewpagerfragments.NextCloudTabsFragment"
         android:label="@string/NextCloud"
         tools:layout="@layout/fragment_reports">
         <action
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/newNextCloudScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.entry.NextCloudEntryFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.nextCloud.entry.NextCloudEntryFragment"
         android:label="@string/Reports_Title_Screen"
         tools:layout="@layout/fragment_reports_entry">
 
@@ -42,13 +42,13 @@
 
     <fragment
         android:id="@+id/nextCloudSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.send.NextCloudSenFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.nextCloud.send.NextCloudSenFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 
     <fragment
         android:id="@+id/nextCloudSubmittedScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.nextCloud.submitted.NextCloudSubmittedFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.nextCloud.submitted.NextCloudSubmittedFragment"
         android:label="Send"
         tools:layout="@layout/fragment_send_report" />
 </navigation>

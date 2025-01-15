@@ -7,7 +7,7 @@
     android:background="@color/wa_purple"
     android:paddingTop="@dimen/navigation_tab_bar_padding"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity"
+    tools:context="org.horizontal.tella.mobile.views.activity.ServersSettingsActivity"
     tools:showIn="@layout/activity_documentation_settings">
 
     <androidx.core.widget.NestedScrollView
