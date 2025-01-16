@@ -23,6 +23,7 @@ import com.hzontal.utils.Util;
 
 import org.horizontal.tella.mobile.mvvm.settings.CollectServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.GoogleDriveServersViewModel;
+import org.horizontal.tella.mobile.mvvm.settings.TellaUploadServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.UwaziServersViewModel;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
@@ -52,12 +53,10 @@ import org.horizontal.tella.mobile.mvp.contract.ICollectBlankFormListRefreshPres
 import org.horizontal.tella.mobile.mvp.contract.IDropBoxServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.INextCloudServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.IServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.contract.ITellaUploadServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.DropBoxServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.NextCloudServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.ServersPresenter;
-import org.horizontal.tella.mobile.mvp.presenter.TellaUploadServersPresenter;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment;
 import org.horizontal.tella.mobile.views.dialog.UwaziServerLanguageDialogFragment;
@@ -70,13 +69,13 @@ import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersViewModel collectServersViewModel;
     private UwaziServersViewModel uwaziServersViewModel;
     private GoogleDriveServersViewModel googleDriveViewModel;
-    private TellaUploadServersPresenter tellaUploadServersPresenter;
+    private TellaUploadServersViewModel tellaUploadServersViewModel;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private DropBoxServersPresenter dropBoxServersPresenter;
     private NextCloudServersPresenter nextCloudServersPresenter;
@@ -104,6 +103,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         googleDriveViewModel = new ViewModelProvider(this).get(GoogleDriveServersViewModel.class);
         uwaziServersViewModel = new ViewModelProvider(this).get(UwaziServersViewModel.class);
         collectServersViewModel = new ViewModelProvider(this).get(CollectServersViewModel.class);
+        tellaUploadServersViewModel = new ViewModelProvider(this).get(TellaUploadServersViewModel.class);
 
         binding.toolbar.setOnRightClickListener(() -> {
             maybeChangeTemporaryTimeout(() -> {
@@ -130,8 +130,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         nextCloudServers = new ArrayList<>();
         serversPresenter = new ServersPresenter(this);
         collectServersViewModel.getCollectServers();
-        tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
-        tellaUploadServersPresenter.getTUServers();
+        tellaUploadServersViewModel.getTellaUploadServers();
 
         uwaziServersViewModel.getUwaziServers();
 
@@ -173,6 +172,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         collectServersViewModel.getCreatedServer().observe(this, this::onCreatedServer);
         collectServersViewModel.getRemovedServer().observe(this, this::onRemovedServer);
         collectServersViewModel.getUpdatedServer().observe(this, this::onUpdatedServer);
+
+        //Tella upload server
+        tellaUploadServersViewModel.getListTellaReportServers().observe(this, this::onTUServersLoaded);
+        tellaUploadServersViewModel.getError().observe(this, this::showConnectionsError);
+        tellaUploadServersViewModel.getCreatedServer().observe(this, this::onCreatedTUServer);
+        tellaUploadServersViewModel.getRemovedServer().observe(this, this::onRemovedTUServer);
+        tellaUploadServersViewModel.getUpdatedServer().observe(this, this::onUpdatedTUServer);
     }
 
     private void initDropBoxEvents() {
@@ -200,19 +206,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private void initReportsEvents() {
         INSTANCE.getCreateReportsServer().observe(this, server -> {
             if (server != null) {
-                tellaUploadServersPresenter.create(server);
+                tellaUploadServersViewModel.create(server);
             }
         });
 
         INSTANCE.getCreateReportsServerAndCloseActivity().observe(this, server -> {
             if (server != null) {
-                tellaUploadServersPresenter.create(server);
+                tellaUploadServersViewModel.create(server);
             }
         });
 
         INSTANCE.getUpdateReportsServer().observe(this, server -> {
             if (server != null) {
-                tellaUploadServersPresenter.update(server);
+                tellaUploadServersViewModel.update(server);
             }
         });
     }
@@ -261,7 +267,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         uwaziServers = uzServers;
     }
 
-    @Override
     public void onTUServersLoaded(List<TellaReportServer> tellaReportServers) {
         binding.collectServersList.removeAllViews();
         this.servers.addAll(tellaReportServers);
@@ -277,12 +282,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         }*/
     }
 
-    @Override
-    public void onLoadTUServersError(Throwable throwable) {
-        Timber.d(throwable);
-    }
-
-    @Override
     public void onCreatedTUServer(TellaReportServer server) {
         servers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
@@ -290,11 +289,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         saveAutoUploadServer(server);
         Preferences.setAutoUpload(isAutoUploadEnabled(servers));
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
-    }
-
-    @Override
-    public void onCreateTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
     private void onCreatedUwaziServer(UWaziUploadServer server) {
@@ -319,7 +313,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         }
     }
 
-    @Override
     public void onRemovedTUServer(TellaReportServer server) {
         servers.remove(server);
         binding.collectServersList.removeAllViews();
@@ -343,12 +336,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
     }
 
-    @Override
-    public void onRemoveTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_delete_server), true);
-    }
-
-    @Override
     public void onUpdatedTUServer(TellaReportServer server) {
         int i = servers.indexOf(server);
         saveAutoUploadServer(server);
@@ -367,11 +354,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
     private boolean isAutoUploadEnabled(List<Server> servers) {
         return servers.stream().filter(server -> server instanceof TellaReportServer).map(server -> (TellaReportServer) server).anyMatch(TellaReportServer::isAutoUpload);
-    }
-
-    @Override
-    public void onUpdateTUServerError(Throwable throwable) {
-        DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_update_server), true);
     }
 
     public void onServersLoaded(List<CollectServer> collectServers) {
@@ -573,11 +555,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
     private void stopPresenting() {
 
-        if (tellaUploadServersPresenter != null) {
-            tellaUploadServersPresenter.destroy();
-            tellaUploadServersPresenter = null;
-        }
-
         if (serversPresenter != null) {
             serversPresenter.destroy();
             serversPresenter = null;
@@ -688,7 +665,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 nextCloudServersPresenter.remove((NextCloudServer) server);
                 break;
             default:
-                tellaUploadServersPresenter.remove((TellaReportServer) server);
+                tellaUploadServersViewModel.remove((TellaReportServer) server);
                 break;
         }
     }
