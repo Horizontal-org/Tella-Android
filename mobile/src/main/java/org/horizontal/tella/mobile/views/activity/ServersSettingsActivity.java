@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.hzontal.utils.Util;
 
 import org.horizontal.tella.mobile.mvvm.settings.GoogleDriveServersViewModel;
+import org.horizontal.tella.mobile.mvvm.settings.UwaziServersViewModel;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
@@ -52,14 +53,12 @@ import org.horizontal.tella.mobile.mvp.contract.IDropBoxServersPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.INextCloudServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.IServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.ITellaUploadServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.contract.IUWAZIServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.CollectServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.DropBoxServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.NextCloudServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.ServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.TellaUploadServersPresenter;
-import org.horizontal.tella.mobile.mvp.presenter.UwaziServersPresenter;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment;
 import org.horizontal.tella.mobile.views.dialog.UwaziServerLanguageDialogFragment;
@@ -72,12 +71,12 @@ import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IUWAZIServersPresenterContract.IView, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectServersPresenterContract.IView, ITellaUploadServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
 
     private ServersPresenter serversPresenter;
     private CollectServersPresenter collectServersPresenter;
-    private UwaziServersPresenter uwaziServersPresenter;
-    private GoogleDriveServersViewModel googleDriveViewModel ;
+    private UwaziServersViewModel uwaziServersViewModel;
+    private GoogleDriveServersViewModel googleDriveViewModel;
     private TellaUploadServersPresenter tellaUploadServersPresenter;
     private CollectBlankFormListRefreshPresenter refreshPresenter;
     private DropBoxServersPresenter dropBoxServersPresenter;
@@ -104,6 +103,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         setSupportActionBar(binding.toolbar);
 
         googleDriveViewModel = new ViewModelProvider(this).get(GoogleDriveServersViewModel.class);
+        uwaziServersViewModel = new ViewModelProvider(this).get(UwaziServersViewModel.class);
 
         binding.toolbar.setOnRightClickListener(() -> {
             maybeChangeTemporaryTimeout(() -> {
@@ -134,8 +134,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         tellaUploadServersPresenter = new TellaUploadServersPresenter(this);
         tellaUploadServersPresenter.getTUServers();
 
-        uwaziServersPresenter = new UwaziServersPresenter(this);
-        uwaziServersPresenter.getUwaziServers();
+        uwaziServersViewModel.getUwaziServers();
 
         googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
 
@@ -156,13 +155,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     }
 
     private void initObservers() {
+        //Google drive connection
         googleDriveViewModel.getGoogleDriveServers().observe(this, this::onGoogleDriveServersLoaded);
-
-        googleDriveViewModel.getLoading().observe(this, isLoading -> {
-        });
-        googleDriveViewModel.getError().observe(this, this::showGoogleDriveError);
+        googleDriveViewModel.getError().observe(this, this::showConnectionsError);
         googleDriveViewModel.getCreatedServer().observe(this, this::onCreatedGoogleDriveServer);
         googleDriveViewModel.getRemovedServer().observe(this, this::onRemovedGoogleDriveServer);
+
+        //Uwazi connection
+        uwaziServersViewModel.getListUwaziServers().observe(this, this::onUwaziServersLoaded);
+        uwaziServersViewModel.getError().observe(this, this::showConnectionsError);
+        uwaziServersViewModel.getCreatedServer().observe(this, this::onCreatedUwaziServer);
+        uwaziServersViewModel.getRemovedServer().observe(this, this::onRemovedUwaziServer);
+        uwaziServersViewModel.getUpdatedServer().observe(this, this::onUpdatedUwaziServer);
     }
 
     private void initDropBoxEvents() {
@@ -176,13 +180,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     private void initUwaziEvents() {
         INSTANCE.getCreateServer().observe(this, server -> {
             if (server != null) {
-                uwaziServersPresenter.create(server);
+                uwaziServersViewModel.create(server);
             }
         });
 
         INSTANCE.getUpdateServer().observe(this, server -> {
             if (server != null) {
-                uwaziServersPresenter.update(server);
+                uwaziServersViewModel.update(server);
             }
         });
     }
@@ -243,7 +247,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     public void hideLoading() {
     }
 
-    @Override
     public void onUwaziServersLoaded(List<UWaziUploadServer> uzServers) {
         binding.collectServersList.removeAllViews();
         this.servers.addAll(uzServers);
@@ -288,33 +291,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_fail_create_server), true);
     }
 
-    @Override
-    public void onCreatedUwaziServer(UWaziUploadServer server) {
+    private void onCreatedUwaziServer(UWaziUploadServer server) {
         servers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
         uwaziServers.add(server);
     }
 
-    @Override
-    public void onCreateUwaziServerError(Throwable throwable) {
-
-    }
-
-    @Override
     public void onRemovedUwaziServer(UWaziUploadServer server) {
         servers.remove(server);
         binding.collectServersList.removeAllViews();
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
-
     }
 
-    @Override
-    public void onRemoveUwaziServerError(Throwable throwable) {
-        Timber.d(throwable);
-    }
-
-    @Override
     public void onUpdatedUwaziServer(UWaziUploadServer server) {
         int i = servers.indexOf(server);
         if (i != -1) {
@@ -322,11 +311,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
             binding.collectServersList.removeViewAt(i);
             binding.collectServersList.addView(getServerItem(server), i);
         }
-    }
-
-    @Override
-    public void onUpdateUwaziServerError(Throwable throwable) {
-        Timber.d(throwable);
     }
 
     @Override
@@ -714,7 +698,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 collectServersPresenter.remove((CollectServer) server);
                 break;
             case UWAZI:
-                uwaziServersPresenter.remove((UWaziUploadServer) server);
+                uwaziServersViewModel.remove((UWaziUploadServer) server);
                 break;
             case GOOGLE_DRIVE:
                 googleDriveViewModel.remove((GoogleDriveServer) server);
@@ -824,11 +808,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     }*/
 
     @Override
-    public void onLoadUwaziServersError(@NonNull Throwable throwable) {
-        Timber.d(throwable);
-    }
-
-    @Override
     public void onUwaziServerLanguageDialog(@NonNull UWaziUploadServer server) {
         servers.add(server);
         binding.collectServersList.addView(getServerItem(server), servers.indexOf(server));
@@ -886,7 +865,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
-    private void showGoogleDriveError(int error){
+    private void showConnectionsError(int error) {
         DialogUtils.showBottomMessage(this, getString(error), true);
     }
 

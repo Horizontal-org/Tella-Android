@@ -36,7 +36,6 @@ class GoogleDriveServersViewModel @Inject constructor(
     private val _removedServer = SingleLiveEvent<GoogleDriveServer>()
     val removedServer: LiveData<GoogleDriveServer> = _removedServer
 
-
     fun getGoogleDriveServers(googleDriveId: String) {
         disposables.add(
             keyDataSource.googleDriveDataSource
@@ -81,9 +80,6 @@ class GoogleDriveServersViewModel @Inject constructor(
         )
     }
 
-    /**
-     * Remove a Google Drive server.
-     */
     fun remove(server: GoogleDriveServer) {
         disposables.add(
             keyDataSource.googleDriveDataSource
