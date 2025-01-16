@@ -34,7 +34,6 @@ import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
 import org.horizontal.tella.mobile.mvp.contract.IHomeScreenPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.IMediaImportPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
-import org.horizontal.tella.mobile.mvp.presenter.HomeScreenPresenter
 import org.horizontal.tella.mobile.mvp.presenter.MediaImportPresenter
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
@@ -96,7 +95,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         Handler(Looper.getMainLooper())
     }
     private lateinit var disposables: EventCompositeDisposable
-    private lateinit var homeScreenPresenter: HomeScreenPresenter
     private lateinit var mediaImportPresenter: MediaImportPresenter
     private var progressBar: ProgressBar? = null
     private var mOrientationEventListener: OrientationEventListener? = null
@@ -119,7 +117,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setupNavigation()
-        homeScreenPresenter = HomeScreenPresenter(this)
         mediaImportPresenter = MediaImportPresenter(this)
         initializeListeners()
         // todo: check this..
@@ -417,7 +414,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     override fun onCountUwaziServersFailed(throwable: Throwable?) {}
 
     private fun stopPresenter() {
-        homeScreenPresenter.destroy()
         mediaImportPresenter.destroy()
         // mediaImportPresenter = null
     }

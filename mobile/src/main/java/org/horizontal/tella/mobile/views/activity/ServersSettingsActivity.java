@@ -21,8 +21,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.gson.Gson;
 import com.hzontal.utils.Util;
 
+import org.horizontal.tella.mobile.mvvm.settings.CollectBlankFormListRefreshViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.CollectServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.GoogleDriveServersViewModel;
+import org.horizontal.tella.mobile.mvvm.settings.ServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.TellaUploadServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.UwaziServersViewModel;
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
@@ -49,14 +51,10 @@ import org.horizontal.tella.mobile.domain.entity.dropbox.DropBoxServer;
 import org.horizontal.tella.mobile.domain.entity.googledrive.Config;
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer;
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer;
-import org.horizontal.tella.mobile.mvp.contract.ICollectBlankFormListRefreshPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.IDropBoxServersPresenterContract;
 import org.horizontal.tella.mobile.mvp.contract.INextCloudServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.contract.IServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.presenter.CollectBlankFormListRefreshPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.DropBoxServersPresenter;
 import org.horizontal.tella.mobile.mvp.presenter.NextCloudServersPresenter;
-import org.horizontal.tella.mobile.mvp.presenter.ServersPresenter;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment;
 import org.horizontal.tella.mobile.views.dialog.UwaziServerLanguageDialogFragment;
@@ -69,14 +67,14 @@ import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements IServersPresenterContract.IView, ICollectBlankFormListRefreshPresenterContract.IView, CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, IDropBoxServersPresenterContract.IView, INextCloudServersPresenterContract.IView {
 
-    private ServersPresenter serversPresenter;
+    private ServersViewModel serversViewModel;
     private CollectServersViewModel collectServersViewModel;
     private UwaziServersViewModel uwaziServersViewModel;
     private GoogleDriveServersViewModel googleDriveViewModel;
     private TellaUploadServersViewModel tellaUploadServersViewModel;
-    private CollectBlankFormListRefreshPresenter refreshPresenter;
+    private CollectBlankFormListRefreshViewModel refreshViewModel;
     private DropBoxServersPresenter dropBoxServersPresenter;
     private NextCloudServersPresenter nextCloudServersPresenter;
     private List<Server> servers;
@@ -104,6 +102,8 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         uwaziServersViewModel = new ViewModelProvider(this).get(UwaziServersViewModel.class);
         collectServersViewModel = new ViewModelProvider(this).get(CollectServersViewModel.class);
         tellaUploadServersViewModel = new ViewModelProvider(this).get(TellaUploadServersViewModel.class);
+        serversViewModel = new ViewModelProvider(this).get(ServersViewModel.class);
+        refreshViewModel = new ViewModelProvider(this).get(CollectBlankFormListRefreshViewModel.class);
 
         binding.toolbar.setOnRightClickListener(() -> {
             maybeChangeTemporaryTimeout(() -> {
@@ -128,21 +128,18 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         googleDriveServers = new ArrayList<>();
         dropBoxServers = new ArrayList<>();
         nextCloudServers = new ArrayList<>();
-        serversPresenter = new ServersPresenter(this);
         collectServersViewModel.getCollectServers();
         tellaUploadServersViewModel.getTellaUploadServers();
 
         uwaziServersViewModel.getUwaziServers();
 
         googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
-
         dropBoxServersPresenter = new DropBoxServersPresenter(this);
         dropBoxServersPresenter.getDropBoxServers();
 
         //NextCloud server
         nextCloudServersPresenter = new NextCloudServersPresenter(this);
         nextCloudServersPresenter.getNextCloudServers();
-        createRefreshPresenter();
         initObservers();
         initUwaziEvents();
         initReportsEvents();
@@ -179,6 +176,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         tellaUploadServersViewModel.getCreatedServer().observe(this, this::onCreatedTUServer);
         tellaUploadServersViewModel.getRemovedServer().observe(this, this::onRemovedTUServer);
         tellaUploadServersViewModel.getUpdatedServer().observe(this, this::onUpdatedTUServer);
+
+        //Servers manager
+        serversViewModel.getServersDeleted().observe(this, deleted -> onServersDeleted());
     }
 
     private void initDropBoxEvents() {
@@ -237,13 +237,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
                 nextCloudServersPresenter.create(server);
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopPresenting();
-        stopRefreshPresenter();
     }
 
     private void initListeners() {
@@ -369,7 +362,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
 
         if (MyApplication.isConnectedToInternet(this)) {
-            refreshPresenter.refreshBlankForms();
+            refreshViewModel.refreshBlankForms();
         }
     }
 
@@ -384,7 +377,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         }
     }
 
-    @Override
     public void onServersDeleted() {
         //Preferences.setCollectServersLayout(false);
         servers.clear();
@@ -394,10 +386,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_disconnect_servers_delete), false);
     }
 
-    @Override
-    public void onServersDeletedError(Throwable throwable) {
-    }
-
     public void onRemovedServer(CollectServer server) {
         servers.remove(server);
         binding.collectServersList.removeAllViews();
@@ -405,7 +393,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
-    @Override
     public void onRefreshBlankFormsError(Throwable error) {
         Timber.d(error, getClass().getName());
     }
@@ -470,7 +457,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
     }*/
 
     private void setAutoUploadServer(Long id, String name) {
-        serversPresenter.setAutoUploadServerId(id);
+        serversViewModel.setAutoUploadServerId(id);
         binding.serverName.setText(name);
     }
 
@@ -488,7 +475,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
     private void turnOffAutoUpload() {
         binding.autoUploadSwitch.setChecked(false);
-        serversPresenter.removeAutoUploadServersSettings();
+        serversViewModel.removeAutoUploadServersSettings();
         binding.uploadLayout.setVisibility(View.GONE);
     }
 
@@ -550,14 +537,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         if (dropBoxServer == null) {
             Intent intent = new Intent(this, DropBoxConnectFlowActivity.class);
             startActivity(intent);
-        }
-    }
-
-    private void stopPresenting() {
-
-        if (serversPresenter != null) {
-            serversPresenter.destroy();
-            serversPresenter = null;
         }
     }
 
@@ -714,7 +693,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
 
         binding.uploadLayout.setVisibility(View.VISIBLE);
 
-        if (serversPresenter.getAutoUploadServerId() == -1) {  // check if auto upload server is set
+        if (serversViewModel.getAutoUploadServerId() == -1) {  // check if auto upload server is set
             if (tuServers.size() == 1) {
                 setAutoUploadServer(tuServers.get(0).getId(), tuServers.get(0).getName());
             } else {
@@ -722,7 +701,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
             }
         } else {
             for (int i = 0; i < tuServers.size(); i++) {
-                if (tuServers.get(i).getId() == serversPresenter.getAutoUploadServerId()) {
+                if (tuServers.get(i).getId() == serversViewModel.getAutoUploadServerId()) {
                     setAutoUploadServer(tuServers.get(i).getId(), tuServers.get(i).getName());
                     break;
                 }
@@ -734,19 +713,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements IServer
         } else {
             binding.selectedUploadServerLayout.setVisibility(View.GONE);
         }*/
-    }
-
-    private void stopRefreshPresenter() {
-        if (refreshPresenter != null) {
-            refreshPresenter.destroy();
-            refreshPresenter = null;
-        }
-    }
-
-    private void createRefreshPresenter() {
-        if (refreshPresenter == null) {
-            refreshPresenter = new CollectBlankFormListRefreshPresenter(this);
-        }
     }
 
 

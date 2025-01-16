@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,6 +17,7 @@ import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import javax.inject.Inject
 
+@HiltViewModel
 class TellaUploadServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
 ) : ViewModel() {
@@ -60,15 +62,15 @@ class TellaUploadServersViewModel @Inject constructor(
 
     fun create(server: TellaReportServer) {
         disposables.add(
-            keyDataSource.getDataSource()
+            keyDataSource.dataSource
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { _loading.postValue(true) }
-                .flatMapSingle(Function<DataSource, SingleSource<TellaReportServer>> {
+                .flatMapSingle {
                     it.createTellaUploadServer(
                         server
                     )
-                })
+                }
                 .doFinally { _loading.postValue(false) }
                 .subscribe(
                     { createdServer -> _createdServer.postValue(createdServer) },
@@ -107,7 +109,7 @@ class TellaUploadServersViewModel @Inject constructor(
 
     fun remove(server: TellaReportServer) {
         disposables.add(
-            keyDataSource.getDataSource()
+            keyDataSource.dataSource
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { _loading.postValue(true) }
