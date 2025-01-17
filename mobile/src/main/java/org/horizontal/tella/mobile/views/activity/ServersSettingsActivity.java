@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.mvvm.settings.CollectBlankFormListRefreshView
 import org.horizontal.tella.mobile.mvvm.settings.CollectServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.DropBoxServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.GoogleDriveServersViewModel;
+import org.horizontal.tella.mobile.mvvm.settings.NextCloudServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.ServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.TellaUploadServersViewModel;
 import org.horizontal.tella.mobile.mvvm.settings.UwaziServersViewModel;
@@ -52,8 +53,6 @@ import org.horizontal.tella.mobile.domain.entity.dropbox.DropBoxServer;
 import org.horizontal.tella.mobile.domain.entity.googledrive.Config;
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer;
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer;
-import org.horizontal.tella.mobile.mvp.contract.INextCloudServersPresenterContract;
-import org.horizontal.tella.mobile.mvp.presenter.NextCloudServersPresenter;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment;
 import org.horizontal.tella.mobile.views.dialog.UwaziServerLanguageDialogFragment;
@@ -66,7 +65,7 @@ import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class ServersSettingsActivity extends BaseLockActivity implements CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler, INextCloudServersPresenterContract.IView {
+public class ServersSettingsActivity extends BaseLockActivity implements CollectServerDialogFragment.CollectServerDialogHandler, UwaziServerLanguageDialogFragment.UwaziServerLanguageDialogHandler {
 
     private ServersViewModel serversViewModel;
     private CollectServersViewModel collectServersViewModel;
@@ -75,7 +74,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
     private TellaUploadServersViewModel tellaUploadServersViewModel;
     private CollectBlankFormListRefreshViewModel collectBlankFormListRefreshViewModel;
     private DropBoxServersViewModel dropBoxServersViewModel;
-    private NextCloudServersPresenter nextCloudServersPresenter;
+    private NextCloudServersViewModel nextCloudServersViewModel;
     private List<Server> servers;
     private List<TellaReportServer> tuServers;
     private List<UWaziUploadServer> uwaziServers;
@@ -104,6 +103,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         serversViewModel = new ViewModelProvider(this).get(ServersViewModel.class);
         collectBlankFormListRefreshViewModel = new ViewModelProvider(this).get(CollectBlankFormListRefreshViewModel.class);
         dropBoxServersViewModel = new ViewModelProvider(this).get(DropBoxServersViewModel.class);
+        nextCloudServersViewModel = new ViewModelProvider(this).get(NextCloudServersViewModel.class);
 
         binding.toolbar.setOnRightClickListener(() -> {
             maybeChangeTemporaryTimeout(() -> {
@@ -132,13 +132,9 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         tellaUploadServersViewModel.getTellaUploadServers();
 
         uwaziServersViewModel.getUwaziServers();
-
         googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
         dropBoxServersViewModel.getDropBoxServers();
-
-        //NextCloud server
-        nextCloudServersPresenter = new NextCloudServersPresenter(this);
-        nextCloudServersPresenter.getNextCloudServers();
+        nextCloudServersViewModel.getNextCloudServers();
         initObservers();
         initUwaziEvents();
         initReportsEvents();
@@ -185,6 +181,12 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         dropBoxServersViewModel.getError().observe(this, this::showConnectionsError);
         dropBoxServersViewModel.getServerCreated().observe(this, this::onCreatedDropBoxServer);
         dropBoxServersViewModel.getServerRemoved().observe(this, this::onRemovedDropBoxServer);
+
+        //NextCloud connection
+        nextCloudServersViewModel.getListNextCloudServers().observe(this, this::onNextCloudServersLoaded);
+        nextCloudServersViewModel.getError().observe(this, this::showConnectionsError);
+        nextCloudServersViewModel.getServerCreated().observe(this, this::onCreatedNextCloudServer);
+        nextCloudServersViewModel.getServerRemoved().observe(this, this::onRemovedNextCloudServer);
     }
 
     private void initDropBoxEvents() {
@@ -240,7 +242,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
     private void initNextCloudEvents() {
         INSTANCE.getCreateNextCloudServer().observe(this, server -> {
             if (server != null) {
-                nextCloudServersPresenter.create(server);
+                nextCloudServersViewModel.create(server);
             }
         });
     }
@@ -248,14 +250,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
     private void initListeners() {
         binding.addServer.setOnClickListener((view) -> showChooseServerTypeDialog());
         binding.selectedUploadServerLayout.setOnClickListener((view) -> showChooseAutoUploadServerDialog(tuServers));
-    }
-
-    @Override
-    public void showLoading() {
-    }
-
-    @Override
-    public void hideLoading() {
     }
 
     public void onUwaziServersLoaded(List<UWaziUploadServer> uzServers) {
@@ -401,11 +395,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
 
     public void onRefreshBlankFormsError(Throwable error) {
         Timber.d(error, getClass().getName());
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
     }
 
     private void showChooseServerTypeDialog() {
@@ -647,7 +636,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
                 dropBoxServersViewModel.remove((DropBoxServer) server);
                 break;
             case NEXTCLOUD:
-                nextCloudServersPresenter.remove((NextCloudServer) server);
+                nextCloudServersViewModel.remove((NextCloudServer) server);
                 break;
             default:
                 tellaUploadServersViewModel.remove((TellaReportServer) server);
@@ -818,7 +807,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
-    @Override
+
     public void onNextCloudServersLoaded(@NonNull List<NextCloudServer> nextCloudServers) {
         binding.collectServersList.removeAllViews();
         this.servers.addAll(nextCloudServers);
@@ -827,12 +816,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         this.nextCloudServers = nextCloudServers;
     }
 
-    @Override
-    public void onLoadNextCloudServersError(@NonNull Throwable throwable) {
-
-    }
-
-    @Override
     public void onCreatedNextCloudServer(@NonNull NextCloudServer server) {
         servers.add(server);
         nextCloudServers.add(server);
@@ -840,12 +823,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_created), false);
     }
 
-    @Override
-    public void onCreateNextCloudServerError(@NonNull Throwable throwable) {
-
-    }
-
-    @Override
     public void onRemovedNextCloudServer(@NonNull NextCloudServer server) {
         servers.remove(server);
         nextCloudServers.remove(server);
@@ -854,8 +831,4 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
 
-    @Override
-    public void onRemoveNextCloudServerError(@NonNull Throwable throwable) {
-
-    }
 }
