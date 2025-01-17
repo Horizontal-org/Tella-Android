@@ -5,7 +5,6 @@ import static org.horizontal.tella.mobile.views.dialog.SharedLiveData.INSTANCE;
 import static org.horizontal.tella.mobile.views.dialog.UwaziServerLanguageViewModelKt.OBJECT_KEY;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -520,8 +519,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
             startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
         }
     }
-
-
+    
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
             startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
@@ -565,12 +563,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
     private Unit turnOnAutoDeleteSwitch() {
         binding.autoDeleteSwitch.setChecked(true);
         return Unit.INSTANCE;
-    }
-
-    private void setupCollectSettingsView() {
-        if (!Preferences.isCollectServersLayout()) {
-            binding.autoUploadSwitchView.setVisibility(View.GONE);
-        }
     }
 
     private void createServerViews(List<Server> servers) {
@@ -710,7 +702,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         }*/
     }
 
-
   /*  @Override
     public void onUwaziServerDialogCreate(@Nullable UWaziUploadServer server) {
         assert server != null;
@@ -806,7 +797,6 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         createServerViews(servers);
         DialogUtils.showBottomMessage(this, getString(R.string.settings_docu_toast_server_deleted), false);
     }
-
 
     public void onNextCloudServersLoaded(@NonNull List<NextCloudServer> nextCloudServers) {
         binding.collectServersList.removeAllViews();
