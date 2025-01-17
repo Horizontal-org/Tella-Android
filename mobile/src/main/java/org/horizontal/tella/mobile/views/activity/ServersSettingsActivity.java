@@ -519,7 +519,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
             startActivity(new Intent(this, NextCloudLoginFlowActivity.class));
         }
     }
-    
+
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
             startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
