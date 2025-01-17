@@ -11,9 +11,10 @@ import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
+import javax.inject.Inject
 
 @HiltViewModel
-class ServersViewModel (
+class ServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
 ) : ViewModel() {
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -13,15 +14,16 @@ import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle
 import org.horizontal.tella.mobile.domain.entity.collect.ListFormResult
 import org.horizontal.tella.mobile.domain.repository.IOpenRosaRepository
+import javax.inject.Inject
 
-class CollectBlankFormListRefreshViewModel (
-    private val keyDataSource: KeyDataSource,
-    private val odkRepository: IOpenRosaRepository = OpenRosaRepository()
+@HiltViewModel
+class CollectBlankFormListRefreshViewModel @Inject constructor(
+    private val keyDataSource: KeyDataSource
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
+    private val odkRepository: IOpenRosaRepository = OpenRosaRepository()
 
-    // LiveData for UI updates
     private val _refreshSuccess = MutableLiveData<Unit>()
     val refreshSuccess: LiveData<Unit> get() = _refreshSuccess
 
