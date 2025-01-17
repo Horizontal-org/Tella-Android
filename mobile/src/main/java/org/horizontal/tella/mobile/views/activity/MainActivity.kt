@@ -31,7 +31,6 @@ import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.CamouflageAliasChangedEvent
 import org.horizontal.tella.mobile.bus.event.LocaleChangedEvent
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
-import org.horizontal.tella.mobile.mvp.contract.IHomeScreenPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.IMediaImportPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvp.presenter.MediaImportPresenter
@@ -59,7 +58,7 @@ import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallba
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
+class MainActivity : MetadataActivity(),
     IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
     IMainNavigationInterface, VerificationWorkStatusCallback, OnSelectEntitiesClickListener {
     companion object {
@@ -391,27 +390,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     override fun getContext(): Context {
         return this
     }
-
-    override fun onCountTUServersEnded(num: Long) {
-        //if (num > 0) {
-        //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
-        //  maybeShowTUserver(num);
-        //   }
-    }
-
-    override fun onCountTUServersFailed(throwable: Throwable?) {
-        Timber.d(throwable)
-    }
-
-    override fun onCountCollectServersEnded(num: Long) {
-    }
-
-    override fun onCountCollectServersFailed(throwable: Throwable?) {}
-
-    override fun onCountUwaziServersEnded(num: Long) {
-    }
-
-    override fun onCountUwaziServersFailed(throwable: Throwable?) {}
 
     private fun stopPresenter() {
         mediaImportPresenter.destroy()
