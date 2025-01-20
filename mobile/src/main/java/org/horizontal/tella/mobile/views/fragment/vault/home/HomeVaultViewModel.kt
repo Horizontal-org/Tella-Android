@@ -12,6 +12,8 @@ import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.tella_vault.rx.RxVault
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,6 +24,7 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
+import org.horizontal.tella.mobile.data.googledrive.GoogleDriveRepository
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
@@ -33,28 +36,20 @@ import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import javax.inject.Inject
 
-class HomeVaultViewModel(
-    private val appContext: Context,
+
+@HiltViewModel
+class HomeVaultViewModel @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource(),
-    private val rxVault: RxVault? = MyApplication.rxVault,
     private val config: Config
 ) : ViewModel() {
-
     private val disposables = CompositeDisposable()
-
-    private val _exportStatus = MutableLiveData<Int>()
-    val exportStatus: LiveData<Int> get() = _exportStatus
+    private val rxVault: RxVault? = MyApplication.rxVault
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
-
-    // To track if export has started or ended
-    private val _exportStarted = MutableLiveData<Boolean>()
-    val exportStarted: LiveData<Boolean> get() = _exportStarted
-
-    private val _exportEnded = MutableLiveData<Boolean>()
-    val exportEnded: LiveData<Boolean> get() = _exportEnded
 
     private val _recentFiles = MutableLiveData<List<VaultFile?>>()
     val recentFiles: LiveData<List<VaultFile?>> get() = _recentFiles
@@ -241,7 +236,6 @@ class HomeVaultViewModel(
                 )
         )
     }
-
 
     // Fetch favorite collect templates
     fun getFavoriteCollectTemplates() {

@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -97,7 +96,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServersCounted = false
     private var dropBoxServersCounted = false
     private var nextCloudServersCounted = false
-    private var isBackgroundEncryptionEnabled = false;
+    private var isBackgroundEncryptionEnabled = false
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
     private lateinit var vaultRecyclerView: RecyclerView
     private lateinit var panicModeView: RelativeLayout
@@ -158,14 +157,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 handleServerCountsError(error)
             }
 
-            mediaExportStatus.observe(viewLifecycleOwner, Observer { status ->
+            mediaExportStatus.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     HomeVaultViewModel.ExportStatus.STARTED -> onMediaExportStarted()
                     HomeVaultViewModel.ExportStatus.ENDED -> onMediaExportEnded()
                     HomeVaultViewModel.ExportStatus.SUCCESS -> onMediaExported()
                     HomeVaultViewModel.ExportStatus.ERROR -> onExportError()
                 }
-            })
+            }
             recentFiles.observe(viewLifecycleOwner) { files ->
                 handleRecentFilesSuccess(files)
             }
