@@ -8,12 +8,10 @@ import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.mvp.contract.IMediaFileViewerPresenterContract
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 
-class WebViewerActivity : BaseLockActivity(),
-    IMediaFileViewerPresenterContract.IView {
+class WebViewerActivity : BaseLockActivity(){
 
     private lateinit var webView: WebView
     private var vaultFile: VaultFile? = null
@@ -56,44 +54,5 @@ class WebViewerActivity : BaseLockActivity(),
     }
     private fun showData(){
         webView.loadData(vaultFile?.thumb.toString(),vaultFile?.mimeType,"utf-8")
-    }
-
-    override fun onMediaExported() {
-    }
-
-    override fun onExportError(error: Throwable?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onExportStarted() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onExportEnded() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onMediaFileDeleteConfirmation(vaultFile: VaultFile?, showConfirmDelete: Boolean?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onMediaFileDeleted() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onMediaFileDeletionError(throwable: Throwable?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onMediaFileRename(vaultFile: VaultFile?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onMediaFileRenameError(throwable: Throwable?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getContext(): Context {
-        TODO("Not yet implemented")
     }
 }
