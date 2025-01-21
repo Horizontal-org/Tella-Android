@@ -21,6 +21,10 @@ import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.fragment.app.viewModels
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.security.ProviderInstaller
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -103,13 +107,13 @@ class CollectServerDialogFragment : AppCompatDialogFragment() {
 
         initView()
         observeLiveData()
-        if (server != null) {
-            name.setText(server.name)
-            url.setText(server.url)
-            if (server.name.isNotEmpty() && server.password.isNotEmpty()) {
+        server?.let {
+            name.setText(it.name)
+            url.setText(it.url)
+            if (it.name.isNotEmpty() && it.password.isNotEmpty()) {
                 advancedToggle.setOpen()
-                username.setText(server.username)
-                password.setText(server.password)
+                username.setText(it.username)
+                password.setText(it.password)
             }
         }
 
@@ -234,8 +238,13 @@ class CollectServerDialogFragment : AppCompatDialogFragment() {
     private fun checkServer(server: CollectServer, connectionRequired: Boolean) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1 && !securityProviderUpgradeAttempted) {
             try {
-                // Handle security provider installation if needed
-            } catch (e: Exception) {
+                ProviderInstaller.installIfNeeded(requireContext())
+            } catch (e: GooglePlayServicesRepairableException) {
+                GoogleApiAvailability.getInstance()
+                    .showErrorNotification(requireContext(), e.connectionStatusCode)
+                securityProviderUpgradeAttempted = true
+                return
+            } catch (e: GooglePlayServicesNotAvailableException) {
                 Timber.d(e)
             }
         }

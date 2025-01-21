@@ -42,7 +42,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeVaultViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
-    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource(),
+    private val keyDataSource: KeyDataSource,
     private val config: Config
 ) : ViewModel() {
     private val disposables = CompositeDisposable()
