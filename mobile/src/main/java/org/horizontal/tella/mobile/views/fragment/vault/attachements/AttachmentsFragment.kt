@@ -161,11 +161,7 @@ class AttachmentsFragment :
 
     private fun initView() {
 
-        if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            binding.appbar.outlineProvider = null
-        } else {
-            binding.appbar.bringToFront()
-        }
+        binding.appbar.outlineProvider = null
         gridLayoutManager = GridLayoutManager(activity, 1)
         binding.attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter

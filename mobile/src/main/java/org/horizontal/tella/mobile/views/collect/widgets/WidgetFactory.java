@@ -113,6 +113,10 @@ public class WidgetFactory {
                 questionWidget = new TriggerWidget(context, fep);
                 break;
 
+            case Constants.CONTROL_FILE_CAPTURE:
+                questionWidget = new DocMediaWidget(context, fep);
+                break;
+
             default:
                 questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;
