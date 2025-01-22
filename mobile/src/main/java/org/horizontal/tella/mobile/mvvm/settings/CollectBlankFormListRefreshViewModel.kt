@@ -5,14 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle
-import org.horizontal.tella.mobile.domain.entity.Server
 import org.horizontal.tella.mobile.domain.entity.collect.CollectServer
 import org.horizontal.tella.mobile.domain.entity.collect.ListFormResult
 import org.horizontal.tella.mobile.domain.repository.IOpenRosaRepository
