@@ -21,6 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.BuildConfig
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
@@ -48,37 +49,37 @@ class HomeVaultViewModel @Inject constructor(
     private val disposables = CompositeDisposable()
     private val rxVault: RxVault? = MyApplication.rxVault
 
-    private val _errorMessage = MutableLiveData<String>()
+    private val _errorMessage = SingleLiveEvent<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
-    private val _recentFiles = MutableLiveData<List<VaultFile?>>()
+    private val _recentFiles = SingleLiveEvent<List<VaultFile?>>()
     val recentFiles: LiveData<List<VaultFile?>> get() = _recentFiles
 
-    private val _recentFilesError = MutableLiveData<Throwable>()
+    private val _recentFilesError = SingleLiveEvent<Throwable>()
     val recentFilesError: LiveData<Throwable> get() = _recentFilesError
 
-    private val _favoriteCollectForms = MutableLiveData<List<CollectForm>>()
+    private val _favoriteCollectForms = SingleLiveEvent<List<CollectForm>>()
     val favoriteCollectForms: LiveData<List<CollectForm>> get() = _favoriteCollectForms
 
-    private val _favoriteCollectFormsError = MutableLiveData<Throwable>()
+    private val _favoriteCollectFormsError = SingleLiveEvent<Throwable>()
     val favoriteCollectFormsError: LiveData<Throwable> get() = _favoriteCollectFormsError
 
-    // LiveData properties for favorite collect templates
-    private val _favoriteCollectTemplates = MutableLiveData<List<CollectTemplate>>()
+    // SingleLiveEvent properties for favorite collect templates
+    private val _favoriteCollectTemplates = SingleLiveEvent<List<CollectTemplate>>()
     val favoriteCollectTemplates: LiveData<List<CollectTemplate>> get() = _favoriteCollectTemplates
 
-    private val _favoriteCollectTemplatesError = MutableLiveData<Throwable?>()
+    private val _favoriteCollectTemplatesError = SingleLiveEvent<Throwable?>()
     val favoriteCollectTemplatesError: LiveData<Throwable?> get() = _favoriteCollectTemplatesError
 
-    // LiveData for server counts
-    private val _serverCounts = MutableLiveData<ServerCounts>()
+    // SingleLiveEvent for server counts
+    private val _serverCounts = SingleLiveEvent<ServerCounts>()
     val serverCounts: LiveData<ServerCounts> get() = _serverCounts
 
-    // LiveData for server counts errors
-    private val _serverCountError = MutableLiveData<Throwable?>()
+    // SingleLiveEvent for server counts errors
+    private val _serverCountError = SingleLiveEvent<Throwable?>()
     val serverCountError: LiveData<Throwable?> get() = _serverCountError
 
-    private val _mediaExportStatus = MutableLiveData<ExportStatus>()
+    private val _mediaExportStatus = SingleLiveEvent<ExportStatus>()
     val mediaExportStatus: LiveData<ExportStatus> get() = _mediaExportStatus
 
     // Enum class to represent the export status

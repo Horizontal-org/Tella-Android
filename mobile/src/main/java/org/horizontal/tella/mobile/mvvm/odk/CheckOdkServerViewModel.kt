@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
 import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle
@@ -27,20 +28,21 @@ class CheckOdkServerViewModel @Inject constructor(
     private val disposables = CompositeDisposable()
 
     // LiveData for server check states
-    private val _loading = MutableLiveData<Boolean>()
+    private val _loading = SingleLiveEvent<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    private val _serverCheckSuccess = MutableLiveData<CollectServer>()
+    private val _serverCheckSuccess = SingleLiveEvent<CollectServer>()
     val serverCheckSuccess: LiveData<CollectServer> = _serverCheckSuccess
 
-    private val _serverCheckFailure = MutableLiveData<IErrorBundle>()
+    private val _serverCheckFailure = SingleLiveEvent<IErrorBundle>()
     val serverCheckFailure: LiveData<IErrorBundle> = _serverCheckFailure
 
-    private val _serverCheckError = MutableLiveData<Throwable>()
+    private val _serverCheckError = SingleLiveEvent<Throwable>()
     val serverCheckError: LiveData<Throwable> = _serverCheckError
 
-    private val _noConnectionAvailable = MutableLiveData<Boolean>()
-    val noConnectionAvailable: LiveData<Boolean> get() = _noConnectionAvailable
+    private val _noConnectionAvailable = SingleLiveEvent<Boolean>()
+    val noConnectionAvailable: LiveData<Boolean> = _noConnectionAvailable
+
 
     private var saveAnyway = false
 
