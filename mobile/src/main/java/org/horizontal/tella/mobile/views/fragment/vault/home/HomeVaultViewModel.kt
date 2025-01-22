@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
@@ -25,7 +24,6 @@ import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
-import org.horizontal.tella.mobile.data.googledrive.GoogleDriveRepository
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
@@ -89,6 +87,7 @@ class HomeVaultViewModel @Inject constructor(
         SUCCESS,
         ERROR
     }
+
     // Execute Panic Mode
     fun executePanicMode() {
         keyDataSource.dataSource
@@ -257,6 +256,7 @@ class HomeVaultViewModel @Inject constructor(
                 )
         )
     }
+
     // Clear Shared Preferences
     private fun clearSharedPreferences() {
         Preferences.setPanicMessage(null)
