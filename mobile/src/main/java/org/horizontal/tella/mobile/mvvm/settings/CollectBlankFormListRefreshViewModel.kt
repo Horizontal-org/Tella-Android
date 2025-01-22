@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle
+import org.horizontal.tella.mobile.domain.entity.Server
+import org.horizontal.tella.mobile.domain.entity.collect.CollectServer
 import org.horizontal.tella.mobile.domain.entity.collect.ListFormResult
 import org.horizontal.tella.mobile.domain.repository.IOpenRosaRepository
 import org.horizontal.tella.mobile.mvvm.base.BaseSettingsViewModel
@@ -36,24 +40,8 @@ class CollectBlankFormListRefreshViewModel @Inject constructor(
             keyDataSource.dataSource
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { dataSource ->
-                    dataSource.listCollectServers().toObservable()
-                }
-                .flatMap { servers ->
-                    if (servers.isEmpty()) {
-                        Single.just(ListFormResult()).toObservable()
-                    } else {
-                        val singles = servers.map { odkRepository.formList(it) }
-                        Single.zip(singles) { results ->
-                            val allResults = ListFormResult()
-                            results.filterIsInstance<ListFormResult>().forEach {
-                                allResults.forms.addAll(it.forms)
-                                allResults.errors.addAll(it.errors)
-                            }
-                            allResults
-                        }.toObservable()
-                    }
-                }
+                .flatMap(::fetchCollectServers)
+                .flatMap(::handleServerResults)
                 .flatMap { listFormResult ->
                     keyDataSource.dataSource.flatMap { dataSource ->
                         dataSource.updateBlankForms(listFormResult).toObservable()
@@ -76,6 +64,26 @@ class CollectBlankFormListRefreshViewModel @Inject constructor(
                     _refreshError.postValue(throwable)
                 })
         )
+    }
+
+    private fun fetchCollectServers(dataSource: DataSource): Observable<List<CollectServer>> {
+        return dataSource.listCollectServers().toObservable()
+    }
+
+    private fun handleServerResults(servers: List<CollectServer>): Observable<ListFormResult> {
+        return if (servers.isEmpty()) {
+            Observable.just(ListFormResult())
+        } else {
+            val singles = servers.map { odkRepository.formList(it).toObservable() }
+            Observable.zip(singles) { results ->
+                val allResults = ListFormResult()
+                results.filterIsInstance<ListFormResult>().forEach {
+                    allResults.forms.addAll(it.forms)
+                    allResults.errors.addAll(it.errors)
+                }
+                allResults
+            }
+        }
     }
 
 }
