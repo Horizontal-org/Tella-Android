@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DropBoxDataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -19,13 +20,13 @@ class DropBoxServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource,
 ) : BaseSettingsViewModel() {
 
-    private val _listDropBoxServers = MutableLiveData<List<DropBoxServer>>()
+    private val _listDropBoxServers = SingleLiveEvent<List<DropBoxServer>>()
     val listDropBoxServers: LiveData<List<DropBoxServer>> get() = _listDropBoxServers
 
-    private val _serverCreated = MutableLiveData<DropBoxServer>()
+    private val _serverCreated = SingleLiveEvent<DropBoxServer>()
     val serverCreated: LiveData<DropBoxServer> get() = _serverCreated
 
-    private val _serverRemoved = MutableLiveData<DropBoxServer>()
+    private val _serverRemoved = SingleLiveEvent<DropBoxServer>()
     val serverRemoved: LiveData<DropBoxServer> get() = _serverRemoved
 
     fun getDropBoxServers() {

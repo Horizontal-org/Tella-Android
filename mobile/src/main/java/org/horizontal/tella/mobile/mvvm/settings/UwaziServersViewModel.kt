@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -18,16 +19,16 @@ class UwaziServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
 ) : BaseSettingsViewModel() {
 
-    private val _listUwaziServers = MutableLiveData<List<UWaziUploadServer>>()
+    private val _listUwaziServers = SingleLiveEvent<List<UWaziUploadServer>>()
     val listUwaziServers: LiveData<List<UWaziUploadServer>> get() = _listUwaziServers
 
-    private val _createdServer = MutableLiveData<UWaziUploadServer>()
+    private val _createdServer = SingleLiveEvent<UWaziUploadServer>()
     val createdServer: LiveData<UWaziUploadServer> get() = _createdServer
 
-    private val _updatedServer = MutableLiveData<UWaziUploadServer>()
+    private val _updatedServer = SingleLiveEvent<UWaziUploadServer>()
     val updatedServer: LiveData<UWaziUploadServer> get() = _updatedServer
 
-    private val _removedServer = MutableLiveData<UWaziUploadServer>()
+    private val _removedServer = SingleLiveEvent<UWaziUploadServer>()
     val removedServer: LiveData<UWaziUploadServer> get() = _removedServer
 
     fun getUwaziServers() {

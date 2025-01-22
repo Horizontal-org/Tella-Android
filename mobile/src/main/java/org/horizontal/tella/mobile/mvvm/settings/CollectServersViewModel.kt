@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -19,16 +20,16 @@ class CollectServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
 ) : BaseSettingsViewModel() {
 
-    private val _listCollectServers = MutableLiveData<List<CollectServer>>()
+    private val _listCollectServers = SingleLiveEvent<List<CollectServer>>()
     val listCollectServers: LiveData<List<CollectServer>> get() = _listCollectServers
 
-    private val _createdServer = MutableLiveData<CollectServer>()
+    private val _createdServer = SingleLiveEvent<CollectServer>()
     val createdServer: LiveData<CollectServer> get() = _createdServer
 
-    private val _updatedServer = MutableLiveData<CollectServer>()
+    private val _updatedServer = SingleLiveEvent<CollectServer>()
     val updatedServer: LiveData<CollectServer> get() = _updatedServer
 
-    private val _removedServer = MutableLiveData<CollectServer>()
+    private val _removedServer = SingleLiveEvent<CollectServer>()
     val removedServer: LiveData<CollectServer> get() = _removedServer
 
 

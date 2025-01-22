@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.NextCloudDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -17,13 +18,13 @@ import javax.inject.Inject
 class NextCloudServersViewModel @Inject constructor(private val keyDataSource: KeyDataSource) :
     BaseSettingsViewModel() {
 
-    private val _listNextCloudServers = MutableLiveData<List<NextCloudServer>>()
+    private val _listNextCloudServers = SingleLiveEvent<List<NextCloudServer>>()
     val listNextCloudServers: LiveData<List<NextCloudServer>> get() = _listNextCloudServers
 
-    private val _serverCreated = MutableLiveData<NextCloudServer>()
+    private val _serverCreated = SingleLiveEvent<NextCloudServer>()
     val serverCreated: LiveData<NextCloudServer> get() = _serverCreated
 
-    private val _serverRemoved = MutableLiveData<NextCloudServer>()
+    private val _serverRemoved = SingleLiveEvent<NextCloudServer>()
     val serverRemoved: LiveData<NextCloudServer> get() = _serverRemoved
 
 

@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
@@ -20,10 +21,10 @@ class ServersViewModel @Inject constructor(
 
     private val disposables = CompositeDisposable()
 
-    private val _serversDeleted = MutableLiveData<Boolean>()
+    private val _serversDeleted = SingleLiveEvent<Boolean>()
     val serversDeleted: LiveData<Boolean> get() = _serversDeleted
 
-    private val _error = MutableLiveData<Throwable>()
+    private val _error = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable> get() = _error
 
     fun deleteServers() {

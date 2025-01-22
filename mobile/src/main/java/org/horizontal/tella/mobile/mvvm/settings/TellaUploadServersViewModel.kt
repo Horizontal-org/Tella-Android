@@ -11,6 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -23,16 +24,16 @@ class TellaUploadServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
 ) : BaseSettingsViewModel() {
 
-    private val _listTellaReportServers = MutableLiveData<List<TellaReportServer>>()
+    private val _listTellaReportServers = SingleLiveEvent<List<TellaReportServer>>()
     val listTellaReportServers: LiveData<List<TellaReportServer>> = _listTellaReportServers
 
-    private val _createdServer = MutableLiveData<TellaReportServer>()
+    private val _createdServer = SingleLiveEvent<TellaReportServer>()
     val createdServer: LiveData<TellaReportServer> = _createdServer
 
-    private val _updatedServer = MutableLiveData<TellaReportServer>()
+    private val _updatedServer = SingleLiveEvent<TellaReportServer>()
     val updatedServer: LiveData<TellaReportServer> = _updatedServer
 
-    private val _removedServer = MutableLiveData<TellaReportServer>()
+    private val _removedServer = SingleLiveEvent<TellaReportServer>()
     val removedServer: LiveData<TellaReportServer> = _removedServer
 
 
