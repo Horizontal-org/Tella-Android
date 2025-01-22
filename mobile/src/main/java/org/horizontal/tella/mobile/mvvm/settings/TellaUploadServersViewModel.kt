@@ -15,17 +15,13 @@ import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
+import org.horizontal.tella.mobile.mvvm.base.BaseSettingsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TellaUploadServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
-) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> = _loading
+) : BaseSettingsViewModel() {
 
     private val _listTellaReportServers = MutableLiveData<List<TellaReportServer>>()
     val listTellaReportServers: LiveData<List<TellaReportServer>> = _listTellaReportServers
@@ -39,8 +35,6 @@ class TellaUploadServersViewModel @Inject constructor(
     private val _removedServer = MutableLiveData<TellaReportServer>()
     val removedServer: LiveData<TellaReportServer> = _removedServer
 
-    private val _error = MutableLiveData<Int>()
-    val error: LiveData<Int> = _error
 
     fun getTellaUploadServers() {
         disposables.add(
@@ -53,8 +47,7 @@ class TellaUploadServersViewModel @Inject constructor(
                 .subscribe(
                     { servers -> _listTellaReportServers.postValue(servers) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                       // _error.postValue(throwable)
+                        handleError(throwable)
                     }
                 )
         )
@@ -75,8 +68,7 @@ class TellaUploadServersViewModel @Inject constructor(
                 .subscribe(
                     { createdServer -> _createdServer.postValue(createdServer) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.settings_docu_toast_fail_create_server)
+                        handleError(throwable, R.string.settings_docu_toast_fail_create_server)
                     }
                 )
         )
@@ -100,8 +92,7 @@ class TellaUploadServersViewModel @Inject constructor(
                         _updatedServer.postValue(updatedServer)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.settings_docu_toast_fail_update_server)
+                        handleError(throwable, R.string.settings_docu_toast_fail_update_server)
                     }
                 )
         )
@@ -121,8 +112,7 @@ class TellaUploadServersViewModel @Inject constructor(
                         _removedServer.postValue(server)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.settings_docu_toast_fail_delete_server)
+                        handleError(throwable, R.string.settings_docu_toast_fail_delete_server)
                     }
                 )
         )

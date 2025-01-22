@@ -1,10 +1,8 @@
 package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.openrosa.OpenRosaService
@@ -12,23 +10,16 @@ import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
+import org.horizontal.tella.mobile.mvvm.base.BaseSettingsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class GoogleDriveServersViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
-) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
+) : BaseSettingsViewModel() {
 
     private val _googleDriveServers = SingleLiveEvent<List<GoogleDriveServer>>()
     val googleDriveServers: LiveData<List<GoogleDriveServer>> = _googleDriveServers
-
-    private val _loading = SingleLiveEvent<Boolean>()
-    val loading: LiveData<Boolean> = _loading
-
-    private val _error = SingleLiveEvent<Int>()
-    val error: LiveData<Int> = _error
 
     private val _createdServer = SingleLiveEvent<GoogleDriveServer>()
     val createdServer: LiveData<GoogleDriveServer> = _createdServer
@@ -73,8 +64,7 @@ class GoogleDriveServersViewModel @Inject constructor(
                         _createdServer.postValue(googleDriveServer)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.settings_docu_toast_fail_create_server)
+                        handleError(throwable, R.string.settings_docu_toast_fail_create_server)
                     }
                 )
         )
@@ -96,15 +86,10 @@ class GoogleDriveServersViewModel @Inject constructor(
                         _removedServer.postValue(server)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.settings_docu_toast_fail_delete_server)
+                        handleError(throwable, R.string.settings_docu_toast_fail_delete_server)
                     }
                 )
         )
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposables.clear()
-    }
 }

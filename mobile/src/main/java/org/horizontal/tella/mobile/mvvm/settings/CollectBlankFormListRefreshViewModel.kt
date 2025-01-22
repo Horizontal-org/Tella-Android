@@ -2,26 +2,24 @@ package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
 import org.horizontal.tella.mobile.domain.entity.IErrorBundle
 import org.horizontal.tella.mobile.domain.entity.collect.ListFormResult
 import org.horizontal.tella.mobile.domain.repository.IOpenRosaRepository
+import org.horizontal.tella.mobile.mvvm.base.BaseSettingsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class CollectBlankFormListRefreshViewModel @Inject constructor(
     private val keyDataSource: KeyDataSource
-) : ViewModel() {
+) : BaseSettingsViewModel() {
 
-    private val disposables = CompositeDisposable()
     private val odkRepository: IOpenRosaRepository = OpenRosaRepository()
 
     private val _refreshSuccess = MutableLiveData<Unit>()
@@ -80,8 +78,4 @@ class CollectBlankFormListRefreshViewModel @Inject constructor(
         )
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose() // Clean up Rx subscriptions
-    }
 }
