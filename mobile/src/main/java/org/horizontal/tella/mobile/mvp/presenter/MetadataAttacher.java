@@ -10,11 +10,9 @@ import io.reactivex.schedulers.Schedulers;
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract;
 
-
 public class MetadataAttacher implements IMetadataAttachPresenterContract.IPresenter {
     private IMetadataAttachPresenterContract.IView view;
     private final CompositeDisposable disposables = new CompositeDisposable();
-
 
     public MetadataAttacher(IMetadataAttachPresenterContract.IView view) {
         this.view = view;
