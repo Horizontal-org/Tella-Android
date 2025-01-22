@@ -13,7 +13,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.simplify.ink.InkView
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ActivitySignatureBinding
 import org.horizontal.tella.mobile.mvvm.signature.SignatureViewModel
@@ -145,9 +144,11 @@ class SignatureActivity : BaseLockActivity() {
     }
 
     private fun setupSignaturePad() {
-        ink.setColor(resources.getColor(android.R.color.black))
-        ink.setMinStrokeWidth(1.5f)
-        ink.setMaxStrokeWidth(6f)
+        ink.apply {
+            setColor(resources.getColor(android.R.color.black))
+            setMinStrokeWidth(1.5f)
+            setMaxStrokeWidth(6f)
+        }
     }
 
     private fun hideProgressDialog() {
