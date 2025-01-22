@@ -152,7 +152,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     private fun initForm() {
         formSaver = FormSaver(this)
         formParser = FormParser(this)
-        formParser!!.parseForm()
+        formParser?.parseForm()
     }
 
     private fun initView() {
@@ -306,7 +306,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                         cfv.clearBinaryData()
                     }
                 }
-                formParser!!.stopWaitingBinaryData()
+                formParser?.stopWaitingBinaryData()
                 saveCurrentScreen(false)
             }
 
@@ -323,6 +323,13 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                     attachmentModel.importVideo(video)
                 }
             }
+
+            C.IMPORT_FILE -> {
+                val video = data?.data
+                if (video != null) {
+                    attachmentModel.importFile(video)
+                }
+            }
         }
     }
 
@@ -332,17 +339,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             if (vaultFile != null) {
                 val filename = cfv.setBinaryData(vaultFile)
                 if (filename != null) {
-                    formParser!!.setWidgetMediaFile(filename, vaultFile)
-                    formParser!!.setTellaMetadataFields(cfv, vaultFile.metadata)
+                    formParser?.setWidgetMediaFile(filename, vaultFile)
+                    formParser?.setTellaMetadataFields(cfv, vaultFile.metadata)
                 } else {
                     Timber.e("Binary data not set on waiting widget")
                 }
             } else {
-                formParser!!.removeWidgetMediaFile(cfv.clearBinaryData())
-                formParser!!.clearTellaMetadataFields(cfv)
+                formParser?.removeWidgetMediaFile(cfv.clearBinaryData())
+                formParser?.clearTellaMetadataFields(cfv)
             }
         }
-        formParser!!.stopWaitingBinaryData()
+        formParser?.stopWaitingBinaryData()
         saveCurrentScreen(false)
     }
 

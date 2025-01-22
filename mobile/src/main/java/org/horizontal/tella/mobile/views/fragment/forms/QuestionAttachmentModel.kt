@@ -138,4 +138,29 @@ class QuestionAttachmentModel @Inject constructor(private val mApplication: Appl
         )
     }
 
+    fun importFile(uri: Uri?) {
+        disposables.add(Observable.fromCallable<Single<VaultFile>> {
+            MediaFileHandler.importVaultFileUri(
+                mApplication.baseContext,
+                uri,
+                null
+            )
+        }
+            .subscribeOn(Schedulers.computation())
+            .doOnSubscribe { _onImportStarted.postValue(true) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { _onImportEnded.postValue(true) }
+            .subscribe(
+                { mediaHolder: Single<VaultFile> ->
+                    _onMediaFileImported.postValue(
+                        mediaHolder.blockingGet()
+                    )
+                }
+            ) { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                _onImportError.postValue(throwable)
+            }
+        )
+    }
+
 }

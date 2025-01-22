@@ -19,6 +19,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 
+import org.horizontal.tella.mobile.odk.FormController;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 
 @SuppressLint("ViewConstructor")
-public class DocMediaWidget  extends MediaFileBinaryWidget {
+public class DocMediaWidget extends MediaFileBinaryWidget {
     AppCompatButton selectButton;
     ImageButton clearButton;
 
@@ -127,19 +128,19 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
         attachmentPreview.setVisibility(GONE);
     }
 
-    private void showSelectFilesSheet(){
+    private void showSelectFilesSheet() {
         VaultSheetUtils.showVaultSelectFilesSheet(
                 ((BaseActivity) getContext()).getSupportFragmentManager(),
                 null,
-                null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
+                null,
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
                 null,
-                 getContext().getString(R.string.Collect_MediaWidget_Attach_File),
-                new  VaultSheetUtils.IVaultFilesSelector() {
+                getContext().getString(R.string.Collect_MediaWidget_Attach_File),
+                new VaultSheetUtils.IVaultFilesSelector() {
 
                     @Override
-                    public void  importFromVault(){
+                    public void importFromVault() {
                         showAttachmentsFragment();
                     }
 
@@ -149,7 +150,6 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
 
                     @Override
                     public void goToCamera() {
-                     //   showCameraActivity();
                     }
 
                     @Override
@@ -166,6 +166,7 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
         try {
 
             Activity activity = (Activity) getContext();
+            FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
             List<VaultFile> files = new ArrayList<>();
 
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
@@ -177,8 +178,8 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             //    .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
-                            .putExtra(VAULT_FILES_FILTER, FilterType.AUDIO_VIDEO)
-                            .putExtra(VAULT_PICKER_SINGLE,true),
+                            .putExtra(VAULT_FILES_FILTER, FilterType.DOCUMENTS)
+                            .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
@@ -189,7 +190,6 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
     public void importMedia() {
         BaseActivity activity = (BaseActivity) getContext();
         activity.maybeChangeTemporaryTimeout(() -> {
-            // Define supported MIME types for document files
             String[] mimeTypes = {
                     "text/plain",    // txt
                     "application/pdf",    // pdf
@@ -200,6 +200,7 @@ public class DocMediaWidget  extends MediaFileBinaryWidget {
                     "application/rtf",    // rtf
                     "application/zip"     // zip
             };
+            FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
             // Use MediaFileHandler to start the media selection activity with filters
             MediaFileHandler.startSelectMediaActivity(
