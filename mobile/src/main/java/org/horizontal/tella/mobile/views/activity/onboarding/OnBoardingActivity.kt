@@ -18,8 +18,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.databinding.ActivityOnboardingBinding
@@ -28,12 +26,13 @@ import org.horizontal.tella.mobile.domain.entity.collect.CollectServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment
-import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment.CollectServerDialogHandler
 import org.horizontal.tella.mobile.views.dialog.SharedLiveData.createReportsServer
 import org.horizontal.tella.mobile.views.dialog.SharedLiveData.createServer
 import org.horizontal.tella.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
 import org.horizontal.tella.mobile.views.dialog.reports.ReportsConnectFlowActivity
 import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 
 private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
 private const val ONBOARDING_CAMERA_VIEW_INDEX = 1
@@ -44,7 +43,7 @@ private const val ONBOARDING_LOCK_VIEW_INDEX = 5
 
 @AndroidEntryPoint
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
-    IOnBoardPresenterContract.IView, CollectServerDialogHandler, TellaUploadServerDialogHandler {
+    IOnBoardPresenterContract.IView, TellaUploadServerDialogHandler {
 
     private var viewpagerItemsCount = 0
     private val isFromSettings by lazy { intent.getBooleanExtra(IS_FROM_SETTINGS, false) }
@@ -279,14 +278,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun onCreatedUwaziServer(server: UWaziUploadServer?) {
         addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
-    }
-
-    override fun onCollectServerDialogCreate(server: CollectServer?) {
-        presenter.create(server)
-        addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
-    }
-
-    override fun onCollectServerDialogUpdate(server: CollectServer?) {
     }
 
     override fun onTellaUploadServerDialogCreate(server: TellaReportServer?) {

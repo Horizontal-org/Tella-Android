@@ -1,3 +1,4 @@
+    fun setAutoUploadServerId(id: Long) {
 package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
