@@ -11,7 +11,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.bus.event.MediaFileBinaryWidgetCleared;
 
-
 public abstract class MediaFileBinaryWidget extends QuestionWidget {
     private String filename;
     private String fileId;

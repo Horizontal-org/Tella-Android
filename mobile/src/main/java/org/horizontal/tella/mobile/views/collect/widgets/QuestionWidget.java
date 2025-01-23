@@ -68,7 +68,7 @@ public abstract class QuestionWidget extends RelativeLayout {
     private LinearLayout questionHeader;
     private TextView helpTextView;
     private TextView constraintValidationView;
-
+    
     public QuestionWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context);
 
