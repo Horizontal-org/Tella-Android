@@ -233,25 +233,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         }
 
         with(attachmentModel) {
-            onGetFilesStart.observe(this@CollectFormEntryActivity) {
-                onGetFilesStart()
-            }
-
-            onGetFilesEnd.observe(this@CollectFormEntryActivity) {
-                onGetFilesEnd()
-            }
-
-            onGetFilesSuccess.observe(this@CollectFormEntryActivity) { vaultFiles: List<VaultFile?>? ->
-                vaultFiles?.let {
-                    onGetFilesSuccess(vaultFiles)
-                }
-            }
-
-            onGetFilesError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
-                throwable?.let {
-                    onGetFilesError(throwable)
-                }
-            }
 
             onMediaFileAdded.observe(this@CollectFormEntryActivity) { vaultFile: VaultFile? ->
                 vaultFile?.let {
@@ -311,14 +292,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             }
 
             C.IMPORT_IMAGE -> {
-                val image = data!!.data
+                val image = data?.data
                 if (image != null) {
                     attachmentModel.importImage(image)
                 }
             }
 
             C.IMPORT_VIDEO -> {
-                val video = data!!.data
+                val video = data?.data
                 if (video != null) {
                     attachmentModel.importVideo(video)
                 }
@@ -706,10 +687,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         }
     }
 
-    private fun onGetFilesStart() {}
-    private fun onGetFilesEnd() {}
-    private fun onGetFilesSuccess(files: List<VaultFile?>) {}
-    private fun onGetFilesError(error: Throwable) {}
     private fun onMediaFileAdded(vaultFile: VaultFile) {
         onActivityResult(
             C.MEDIA_FILE_ID,

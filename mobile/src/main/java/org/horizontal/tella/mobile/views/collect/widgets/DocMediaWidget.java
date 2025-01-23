@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.collect.widgets;
 
+import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.RETURN_ODK;
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
@@ -167,8 +168,8 @@ public class DocMediaWidget extends MediaFileBinaryWidget {
 
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-            List<VaultFile> files = new ArrayList<>();
 
+            List<VaultFile> files = new ArrayList<>();
             VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
                     .get(getFileId())
                     .subscribeOn(Schedulers.io())
@@ -177,7 +178,7 @@ public class DocMediaWidget extends MediaFileBinaryWidget {
             files.add(vaultFile);
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            //    .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
+                            .putExtra(RETURN_ODK, true)
                             .putExtra(VAULT_FILES_FILTER, FilterType.DOCUMENTS)
                             .putExtra(VAULT_PICKER_SINGLE, true),
                     C.MEDIA_FILE_ID);
