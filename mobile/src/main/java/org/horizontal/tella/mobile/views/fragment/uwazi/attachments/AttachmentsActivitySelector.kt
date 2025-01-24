@@ -17,12 +17,14 @@ import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentAttachmentsSelectorBinding
+import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 
 const val RETURN_ODK = "rodk"
 const val VAULT_FILE_KEY = "vfk"
@@ -39,6 +41,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private var isOdkSelect = false
     private var filterType = FilterType.ALL
     private lateinit var attachmentsAdapter: AttachmentsSelectorAdapter
+    private var selectMode = SelectMode.DESELECT_ALL
+    private var isListCheckOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +76,50 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
             listCheck.setOnClickListener(this@AttachmentsActivitySelector)
             toolbar.onRightClickListener = { setResultAndFinish() }
-
+            checkBoxList.setOnClickListener { handleSelectMode() }
         }
         updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+    }
+
+    private fun handleSelectMode() {
+        changeSelectMode()
+
+        attachmentsAdapter.enableSelectMode(isListCheckOn)
+
+        when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                attachmentsAdapter.clearSelected()
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check, this)
+            }
+
+            SelectMode.ONE_SELECTION -> {
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, this)
+            }
+
+            SelectMode.SELECT_ALL -> {
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_on, this)
+                attachmentsAdapter.selectAll()
+            }
+        }
+    }
+
+    private fun changeSelectMode() {
+        selectMode = when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                isListCheckOn = true
+                SelectMode.ONE_SELECTION
+            }
+
+            SelectMode.ONE_SELECTION -> {
+                isListCheckOn = true
+                SelectMode.SELECT_ALL
+            }
+
+            SelectMode.SELECT_ALL -> {
+                isListCheckOn = false
+                SelectMode.DESELECT_ALL
+            }
+        }
     }
 
     private fun initObservers() {
@@ -124,6 +169,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.clearSelected()
                 openDirectory(vaultFile)
             }
+
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
                     when {
@@ -132,11 +178,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                             intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                             startActivity(intent)
                         }
+
                         MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, AudioPlayActivity::class.java)
                             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                             startActivity(intent)
                         }
+
                         MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, VideoViewerActivity::class.java)
                             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
@@ -145,6 +193,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     }
                 }
             }
+
             else -> {
             }
         }
@@ -286,6 +335,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
                 viewModel.getFiles(currentRootID, filterType, null)
             }
+
             else -> {
                 finish()
             }

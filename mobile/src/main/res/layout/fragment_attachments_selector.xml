@@ -76,7 +76,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
                 android:padding="5dp"
-                android:src="@drawable/gallery_checkbox_selector"
+                android:src="@drawable/ic_check"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />
