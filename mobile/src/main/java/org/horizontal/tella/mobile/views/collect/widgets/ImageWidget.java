@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
@@ -85,6 +87,7 @@ public class ImageWidget extends MediaFileBinaryWidget {
         return getFilename();
     }
 
+    @SuppressLint("WrongViewCast")
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -128,9 +131,12 @@ public class ImageWidget extends MediaFileBinaryWidget {
     }
 
     public void importPhoto() {
-        Activity activity = (Activity) getContext();
+        BaseActivity activity = (BaseActivity) getContext();
         FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-        MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+        activity.maybeChangeTemporaryTimeout(() -> {
+            MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+            return Unit.INSTANCE;
+        });
     }
 
     private void showPreview() {

@@ -5,7 +5,6 @@ import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.Attac
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -27,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
@@ -84,6 +85,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         return getFilename();
     }
 
+    @SuppressLint("WrongViewCast")
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -117,10 +119,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
             activity.openAudioRecorder();
-            /*activity.startActivityForResult(new Intent(getContext(), AudioRecordActivity2.class)
-                            .putExtra(AudioRecordActivity2.RECORDER_MODE, AudioRecordActivity2.Mode.COLLECT.name()),
-                    C.MEDIA_FILE_ID
-            );*/
+
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
@@ -128,9 +127,13 @@ public class AudioWidget extends MediaFileBinaryWidget {
     }
 
     public void importAudio() {
-        Activity activity = (Activity) getContext();
+        BaseActivity activity = (BaseActivity) getContext();
         FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-        MediaFileHandler.startSelectMediaActivity(activity, "audio/*", null, C.IMPORT_VIDEO);
+        activity.maybeChangeTemporaryTimeout(() -> {
+            MediaFileHandler.startSelectMediaActivity(activity, "audio/*", null, C.IMPORT_VIDEO);
+            return Unit.INSTANCE;
+        });
+
     }
 
     private void showPreview() {
@@ -150,7 +153,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         attachmentPreview.setVisibility(GONE);
     }
 
-    private void showSelectFilesSheet(){
+    private void showSelectFilesSheet() {
         VaultSheetUtils.showVaultSelectFilesSheet(
                 ((BaseActivity) getContext()).getSupportFragmentManager(),
                 null,
@@ -159,10 +162,10 @@ public class AudioWidget extends MediaFileBinaryWidget {
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Tella),
                 getContext().getString(R.string.Uwazi_Widget_Sheet_Description),
                 getContext().getString(R.string.Collect_WidgetAudio_Select_Text),
-                new  VaultSheetUtils.IVaultFilesSelector() {
+                new VaultSheetUtils.IVaultFilesSelector() {
 
                     @Override
-                    public void  importFromVault(){
+                    public void importFromVault() {
                         showAttachmentsFragment();
                     }
 
@@ -187,7 +190,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
 
     private void showAttachmentsFragment() {
         try {
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = (BaseActivity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
             List<VaultFile> files = new ArrayList<>();
 
@@ -197,6 +200,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
                     .blockingGet() : null;
 
             files.add(vaultFile);
+
 
             activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
                             .putExtra(RETURN_ODK, true)
