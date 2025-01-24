@@ -82,7 +82,7 @@ class BlankFormsListFragment :
         }
         alertDialog = DialogsUtil.showFormUpdatingDialog(
             context,
-            { _: DialogInterface?, which: Int -> model.userCancel() }, progressText
+            { _: DialogInterface?, _: Int -> model.userCancel() }, progressText
         )
     }
 
@@ -129,7 +129,7 @@ class BlankFormsListFragment :
                 if (!silentFormUpdates) {
                     alertDialog = DialogsUtil.showCollectRefreshProgressDialog(
                         context
-                    ) { dialog: DialogInterface?, which: Int -> model.userCancel() }
+                    ) { _: DialogInterface?, _: Int -> model.userCancel() }
                 }
             }
         }
@@ -175,7 +175,7 @@ class BlankFormsListFragment :
                 second
             )
         }
-        model.onUserCancel.observe(viewLifecycleOwner) { cancel: Boolean? ->
+        model.onUserCancel.observe(viewLifecycleOwner) {
             hideAlertDialog()
             DialogUtils.showBottomMessage(
                 baseActivity,
@@ -190,7 +190,7 @@ class BlankFormsListFragment :
                 error!!
             )
         }
-        model.onFormCacheCleared.observe(viewLifecycleOwner) { cleared: Boolean? ->
+        model.onFormCacheCleared.observe(viewLifecycleOwner) {
             refreshBlankForms()
             //model.showFab.postValue(true)
             showFab(true)
@@ -355,24 +355,24 @@ class BlankFormsListFragment :
                 )
                 dlOpenButton.contentDescription =
                     getString(R.string.collect_blank_action_desc_more_options)
-                dlOpenButton.setOnClickListener { view: View? ->
+                dlOpenButton.setOnClickListener {
                     showDownloadedMenu(
                         collectForm
                     )
                 }
-                rowLayout.setOnClickListener { view: View? ->
+                rowLayout.setOnClickListener {
                     model.getBlankFormDef(
                         collectForm
                     )
                 }
-                pinnedIcon.setOnClickListener { view: View? ->
+                pinnedIcon.setOnClickListener {
                     model.toggleFavorite(collectForm)
                     updateFormViews()
                 }
                 if (collectForm.isUpdated) {
                     pinnedIcon.visibility = View.VISIBLE
                     updateButton.visibility = View.VISIBLE
-                    updateButton.setOnClickListener { view: View? ->
+                    updateButton.setOnClickListener {
                         if (MyApplication.isConnectedToInternet(requireContext())) {
                             model.updateBlankFormDef(collectForm)
                         } else {
@@ -397,7 +397,7 @@ class BlankFormsListFragment :
                 )
                 dlOpenButton.contentDescription =
                     getString(R.string.collect_blank_action_download_form)
-                dlOpenButton.setOnClickListener { view: View? ->
+                dlOpenButton.setOnClickListener {
                     if (MyApplication.isConnectedToInternet(requireContext())) {
                         model.downloadBlankFormDef(collectForm)
                     } else {
@@ -516,23 +516,7 @@ class BlankFormsListFragment :
         }
     }
 
-    private fun showJavarosa2UpgradeSheet() {
-        BottomSheetUtils.showConfirmSheet(
-            requireActivity().supportFragmentManager,
-            null,
-            getString(R.string.Javarosa_Upgrade_Warning_Description),
-            getString(R.string.action_continue),
-            getString(R.string.action_cancel),
-            object : ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    if (isConfirmed) {
-                        upgradeJavarosa2()
-                    } else {
-                        goHome()
-                    }
-                }
-            })
-    }
+
 
     private fun upgradeJavarosa2() {
         try {

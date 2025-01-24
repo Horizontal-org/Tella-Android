@@ -109,6 +109,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         return getFilename();
     }
 
+    @SuppressLint("WrongViewCast")
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
