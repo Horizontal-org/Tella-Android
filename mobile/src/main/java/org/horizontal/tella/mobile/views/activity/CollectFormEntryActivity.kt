@@ -19,6 +19,7 @@ import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.EventCompositeDisposable
 import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.MediaFileBinaryWidgetCleared
 import org.horizontal.tella.mobile.databinding.ActivityCollectFormEntryBinding
@@ -37,7 +38,6 @@ import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
-import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
 import org.horizontal.tella.mobile.views.collect.CollectFormView
 import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
@@ -74,7 +74,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-    private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
+    private var disposables: EventCompositeDisposable = MyApplication.bus().createCompositeDisposable()
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
@@ -82,7 +82,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var draftAutoSaved = false
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
-    protected lateinit var baseActivity: BaseActivity
 
     private val viewModel: SubmitFormsViewModel by viewModels()
     private val attachmentModel: QuestionAttachmentModel by viewModels()
