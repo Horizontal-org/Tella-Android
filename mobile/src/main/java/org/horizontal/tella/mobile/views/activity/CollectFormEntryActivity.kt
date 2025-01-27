@@ -17,16 +17,6 @@ import androidx.fragment.app.Fragment
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.hzontal.shared_ui.utils.DialogUtils
-import org.javarosa.core.model.FormIndex
-import org.javarosa.form.api.FormEntryCaption
-import org.javarosa.form.api.FormEntryPrompt
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
-import permissions.dispatcher.OnShowRationale
-import permissions.dispatcher.PermissionRequest
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -59,21 +49,32 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAG
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
+import org.javarosa.core.model.FormIndex
+import org.javarosa.form.api.FormEntryCaption
+import org.javarosa.form.api.FormEntryPrompt
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.OnShowRationale
+import permissions.dispatcher.PermissionRequest
 import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMainNavigationInterface,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+    IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView{
+    IFormSaverContract.IView {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
+
     //private int sectionIndex;
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-    private var disposables: EventCompositeDisposable =
-        MyApplication.bus().createCompositeDisposable()
+    private var disposables: EventCompositeDisposable = MyApplication.bus().createCompositeDisposable()
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
@@ -170,8 +171,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                 hideFormCancelButton()
             }
         }
-        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
 
+        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
         disposables.wire(
             MediaFileBinaryWidgetCleared::class.java,
             object : EventObserver<MediaFileBinaryWidgetCleared?>() {
@@ -182,6 +183,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                     clearedFormIndex(event.formIndex)
                 }
             })
+
     }
 
     private fun initObservers() {
@@ -986,4 +988,5 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         formParser!!.stopWaitingBinaryData()
         saveCurrentScreen(false)
     }
+
 }

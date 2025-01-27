@@ -4,7 +4,6 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/main_navigation_bar_height"
     android:background="@color/space_cadet"
     android:fitsSystemWindows="true">
 

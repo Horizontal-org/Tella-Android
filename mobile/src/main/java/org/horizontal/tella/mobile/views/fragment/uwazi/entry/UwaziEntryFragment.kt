@@ -61,8 +61,6 @@ class UwaziEntryFragment :
     private lateinit var uwaziFormView: UwaziFormView
     private var result: List<CollectTemplate> = ArrayList()
 
-    private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.refreshEntitiesList()
@@ -121,8 +119,6 @@ class UwaziEntryFragment :
             nextBtn.setOnClickListener { sendEntity() }
             screenView = screenFormView
         }
-
-        onGpsPermissionsListener()
 
         if (arguments?.getString(UWAZI_INSTANCE) != null) {
             arguments?.getString(UWAZI_INSTANCE)?.let { parseUwaziInstance(it) }
@@ -239,35 +235,6 @@ class UwaziEntryFragment :
             getString(R.string.Uwazi_Entry_Validation_MandatoryTitle),
             false
         )
-    }
-
-    private fun hasGpsPermissions(context: Context): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestGpsPermissions(requestCode: Int) {
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ), requestCode
-        )
-    }
-
-    private fun onGpsPermissionsListener() {
-        disposables.wire(
-            LocationPermissionRequiredEvent::class.java,
-            object : EventObserver<LocationPermissionRequiredEvent?>() {
-                override fun onNext(event: LocationPermissionRequiredEvent) {
-                    if (!hasGpsPermissions(requireContext())) {
-                        baseActivity.maybeChangeTemporaryTimeout {
-                            requestGpsPermissions(C.GPS_PROVIDER)
-                        }
-                    }
-                }
-            })
     }
 
     override fun onBackPressed(): Boolean {
