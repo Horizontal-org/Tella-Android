@@ -18,9 +18,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.MyApplication
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -31,7 +33,6 @@ import org.horizontal.tella.mobile.views.activity.MetadataActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.activity.viewer.toolBar
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
-import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
