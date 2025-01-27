@@ -25,7 +25,7 @@
             android:contentDescription="@string/action_cancel"
             />
 
-        <rs.readahead.washington.mobile.views.custom.CameraResolutionButton
+        <org.horizontal.tella.mobile.views.custom.CameraResolutionButton
             android:id="@+id/resolutionButton"
             android:background="@color/wa_black"
             android:visibility="gone"
@@ -34,19 +34,19 @@
             android:layout_toStartOf="@id/gridButton"
             android:layout_marginStart="32dp"/>
 
-        <rs.readahead.washington.mobile.views.custom.CameraGridButton
+        <org.horizontal.tella.mobile.views.custom.CameraGridButton
             android:id="@+id/gridButton"
             style="@style/CameraTopImageStyle"
             android:layout_marginStart="32dp"
             android:layout_toStartOf="@id/switchButton" />
 
-        <rs.readahead.washington.mobile.views.custom.CameraSwitchButton
+        <org.horizontal.tella.mobile.views.custom.CameraSwitchButton
             android:id="@+id/switchButton"
             style="@style/CameraTopImageStyle"
             android:layout_toStartOf="@id/flashButton"
             android:layout_marginStart="32dp"/>
 
-        <rs.readahead.washington.mobile.views.custom.CameraFlashButton
+        <org.horizontal.tella.mobile.views.custom.CameraFlashButton
             android:id="@+id/flashButton"
             style="@style/CameraTopImageStyle"
             android:layout_alignParentEnd="true"
@@ -65,7 +65,7 @@
             android:layout_height="match_parent"
             android:keepScreenOn="true" />
 
-        <rs.readahead.washington.mobile.views.custom.CameraDurationTextView
+        <org.horizontal.tella.mobile.views.custom.CameraDurationTextView
             android:id="@+id/durationView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <rs.readahead.washington.mobile.views.custom.CameraCaptureButton
+        <org.horizontal.tella.mobile.views.custom.CameraCaptureButton
             android:id="@+id/captureButton"
             android:layout_width="@dimen/camera_capture_button"
             android:layout_height="@dimen/camera_capture_button"

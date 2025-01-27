@@ -6,7 +6,7 @@
     app:startDestination="@+id/uwaziScreen">
     <fragment
         android:id="@+id/uwaziScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.UwaziFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.UwaziFragment"
         android:label="Uwazi"
         tools:layout="@layout/fragment_uwazi">
         <action
@@ -28,13 +28,13 @@
 
     <fragment
         android:id="@+id/uwaziDownloadScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment"
         android:label="Uwazi"
         tools:layout="@layout/fragment_downloaded_templates" />
 
     <fragment
         android:id="@+id/uwaziEntryScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
         android:label="Entry"
         tools:layout="@layout/uwazi_entry_fragment">
         <action
@@ -47,19 +47,19 @@
     </fragment>
     <dialog
         android:id="@+id/uwaziSelectEntitiesScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.entry.UwaziSelectEntitiesFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziSelectEntitiesFragment"
         android:label="Select"
         tools:layout="@layout/uwazi_select_entities_fragment">
     </dialog>
     <fragment
         android:id="@+id/uwaziSendScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.send.UwaziSendFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
         tools:layout="@layout/uwazi_send_fragment" />
 
     <fragment
         android:id="@+id/uwaziSubmittedPreviewScreen"
-        android:name="rs.readahead.washington.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.SubmittedPreviewFragment"
         android:label="Send"
         tools:layout="@layout/fragment_sumbitted_preview" />
 

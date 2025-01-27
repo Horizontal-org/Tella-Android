@@ -1,69 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/wa_purple"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="rs.readahead.washington.mobile.views.activity.FormSubmitActivity"
+    tools:context="org.horizontal.tella.mobile.views.activity.FormSubmitActivity"
     tools:showIn="@layout/activity_form_submit">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/button_bottom_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
         android:background="@color/wa_purple"
-        android:orientation="horizontal"
-        android:paddingTop="0.5dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancel_button"
             style="@style/Submit_Text_Button"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_margin="5dp"
             android:background="@drawable/action_button_background"
-            android:text="@string/Uwazi_Submit_Later" />
+            android:text="@string/Uwazi_Submit_Later"
+            app:layout_constraintEnd_toStartOf="@id/submit_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/submit_button"
             style="@style/Submit_Text_Button"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
+            android:layout_margin="5dp"
             android:background="@drawable/action_button_background"
-            android:text="@string/collect.end_action_submit" />
+            android:text="@string/collect.end_action_submit"
+            app:layout_constraintEnd_toStartOf="@id/stop_button"
+            app:layout_constraintStart_toEndOf="@id/cancel_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/stop_button"
             style="@style/Submit_Text_Button"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_margin="5dp"
             android:background="@drawable/action_button_background"
-            android:backgroundTint="@color/btn_dark_letter"
             android:visibility="gone"
-            android:text="@string/action_stop" />
-    </LinearLayout>
+            android:text="@string/action_stop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/submit_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- ScrollView Container -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/formDetailsContainer"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/button_bottom_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_bottom_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

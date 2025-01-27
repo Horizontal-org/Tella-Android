@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">সমস্ত ফাইল</string>
+  <string name="Vault_Images_Title">ছবি</string>
+  <string name="Vault_Files_Title">Tella ফাইল</string>
+  <string name="Vault_Documents_Title">নথিপত্র</string>
+  <string name="Vault_Audios_Title">অডিও</string>
+  <string name="Vault_Videos_Title">ভিডিও</string>
+  <string name="Vault_Others_Title">অন্যান্য</string>
+  <string name="Vault_Select_Title">ফাইল নির্বাচন করুন</string>
+  <string name="Vault_RecentFiles">সাম্প্রতিক ফাইলসমূহ</string>
+  <string name="Vault_PhotosAndVideos_Title">ফটো এবং ভিডিও</string>
+  <string name="Vault_FavoriteForms_Title">প্রিয় ফর্ম</string>
+  <string name="Vault_Empty_Msg">আপনার Tella তে এখনও কোনো ফাইল নেই। আপনার প্রথম ফাইল ইমপোর্ট করতে নীচের \"+\" বোতামে চাপ দিন, অথবা একটি ফাইল তৈরি করতে ক্যামেরা বা মাইক্রোফোনে যান৷ আপনার ফাইলগুলিকে সংগঠিত রাখতে আপনি ফোল্ডারও তৈরি করতে পারেন।</string>
+  <string name="Vault_Move_SheetDesc">অন্য ফোল্ডারে সরান</string>
+  <string name="Vault_Rename_SheetAction">নাম পরিবর্তন করুন</string>
+  <string name="Vault_Save_SheetAction">সংরক্ষণ করুন</string>
+  <string name="Vault_Delete_SheetAction">মুছুন</string>
+  <string name="Vault_Share_SheetAction">শেয়ার করুন</string>
+  <string name="Vault_Upload_SheetAction">আপলোড</string>
+  <string name="Vault_File_SheetAction">ফাইলের তথ্য</string>
+  <string name="Vault_FileInfo">ফাইলের তথ্য</string>
+  <string name="Vault_FileSize">আকার</string>
+  <string name="Vault_FileFormat">ফরম্যাট</string>
+  <string name="Vault_FileCreated">তৈরি হয়েছে</string>
+  <string name="Vault_FileResolution">রেজোলিউশন</string>
+  <string name="Vault_FileLength">দৈর্ঘ্য</string>
+  <string name="Vault_FilePath">ফাইলের পথ</string>
+  <string name="Vault_RenameFile_SheetTitle">ফাইলের নাম পরিবর্তন করুন</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">ফাইলটি মুছবেন?</item>
+    <item quantity="other">ফাইলগুলি মুছবেন?</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">নির্বাচিত ফাইল Tella থেকে স্থায়ীভাবে মুছে ফেলা হবে।</item>
+    <item quantity="other">নির্বাচিত ফাইলগুলি Tella থেকে স্থায়ীভাবে মুছে ফেলা হবে।</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">নাম A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">নাম Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">নতুন থেকে পুরাতন</string>
+  <string name="Vault_SortDateDesc_SheetAction">পুরনো থেকে নতুন</string>
+  <string name="Vault_ManageFiles_SheetTitle">ফাইল ব্যবস্থাপনা করুন</string>
+  <string name="Vault_DeleteFile_SheetDesc">Tella তে ফাইলটি ইমপোর্ট করার পরে, মূল ফাইলটি আপনার ডিভাইস থেকে মুছে ফেলা হবে। ফাইলটি একমাত্র Tella তে অবশিষ্ট থাকবে।</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">ছবি/ভিডিও তুলুন</string>
+  <string name="Vault_RecordAudio_SheetAction">অডিও রেকর্ড করুন</string>
+  <string name="Vault_Import_SheetAction">ডিভাইস থেকে ইমপোর্ট করুন</string>
+  <string name="Vault_ImportDelete_SheetAction">মূল ফাইল ইমপোর্ট করুন এবং মুছুন</string>
+  <string name="Vault_CreateFolder_SheetTitle">একটি নতুন ফোল্ডার তৈরি করুন</string>
+  <string name="Vault_MoveHere">এখানে নিয়ে যান</string>
+  <string name="Vault_ViewerOther_SheetDesc">এই ফাইল ফর্ম্যাটটি Tella দিয়ে খোলা যাবে না। আপনি কি ফাইলটি একটি ভিন্ন অ্যাপের মাধ্যমে খুলতে আপনার ডিভাইসে এক্সপোর্ট করতে চান? এটি ফাইলের বিষয়বস্তু প্রকাশ করতে পারে।</string>
+  <string name="Vault_Export_SheetAction">এক্সপোর্ট</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">আইটেম</item>
+    <item quantity="other">আইটেম</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Tella তে আপনার কাছে এখনও কোনও ফাইল নেই।</string>
+  <string name="Vault_FavoriteTemplates_Title">প্রিয় টেমপ্লেট</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">ফাইল সফলভাবে সরানো হয়েছে</item>
+    <item quantity="other">ফাইলগুলি সফলভাবে সরানো হয়েছে</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">নির্বাচিত কিছু ফাইল বর্তমানে আপনার সংযোগে ব্যবহৃত হচ্ছে। মোছা হলে তা এখনও পাঠানো হয়নি এমন ফর্ম ও রিপোর্টগুলিকে প্রভাবিত করতে পারে।</string>
+  <string name="Vault_Warning_Title">সতর্কতা</string>
+  <string name="Vault_Delete_anyway">যেভাবেই হোক মুছে ফেলুন</string>
+  <string name="Vault_Keep_Original">অরিজিনাল কপি রাখুন</string>
+  <string name="Vault_Delete_Original">অরিজিনাল কপি মুছুন</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Tella তে ফাইলটি ইমপোর্ট করার পরে, আপনি কি আপনার ডিভাইসে আসল ফাইলটি রাখতে চান নাকি মুছতে চান? 
+ 
+আপনি এটি মুছে ফেললে, Tella-এ ইমপোর্ট করা ফাইলটিই একমাত্র কপি অবশিষ্ট থাকবে৷</string>
+  <string name="Vault_FileEdit_SheetAction">সম্পাদনা করুন</string>
+</resources>

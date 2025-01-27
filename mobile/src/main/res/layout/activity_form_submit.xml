@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="rs.readahead.washington.mobile.views.activity.FormSubmitActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.FormSubmitActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

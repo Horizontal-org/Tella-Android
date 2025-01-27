@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:textDirection="locale"
-    tools:context="rs.readahead.washington.mobile.views.activity.ServersSettingsActivity">
+    tools:context="org.horizontal.tella.mobile.views.activity.ServersSettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

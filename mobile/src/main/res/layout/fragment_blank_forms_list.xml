@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     android:background="@color/space_cadet"
     android:visibility="gone"
-    tools:context="rs.readahead.washington.mobile.views.fragment.forms.BlankFormsListFragment">
+    tools:context="org.horizontal.tella.mobile.views.fragment.forms.BlankFormsListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/main_navigation_bar_height"
             android:fillViewport="true"
             android:scrollbars="vertical">
 

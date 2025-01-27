@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textDirection="locale"
-    tools:context="rs.readahead.washington.mobile.views.fragment.forms.OutboxFormListFragment">
+    tools:context="org.horizontal.tella.mobile.views.fragment.forms.OutboxFormListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/submittFormInstances"
