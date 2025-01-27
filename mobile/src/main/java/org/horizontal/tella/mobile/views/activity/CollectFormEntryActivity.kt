@@ -154,7 +154,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private fun initForm() {
         formSaver = FormSaver(this)
         formParser = FormParser(this)
-        formParser!!.parseForm()
+        formParser?.parseForm()
     }
 
     private fun initView() {
@@ -236,25 +236,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
 
         with(attachmentModel) {
-            onGetFilesStart.observe(this@CollectFormEntryActivity) {
-                onGetFilesStart()
-            }
-
-            onGetFilesEnd.observe(this@CollectFormEntryActivity) {
-                onGetFilesEnd()
-            }
-
-            onGetFilesSuccess.observe(this@CollectFormEntryActivity) { vaultFiles: List<VaultFile?>? ->
-                vaultFiles?.let {
-                    onGetFilesSuccess(vaultFiles)
-                }
-            }
-
-            onGetFilesError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
-                throwable?.let {
-                    onGetFilesError(throwable)
-                }
-            }
 
             onMediaFileAdded.observe(this@CollectFormEntryActivity) { vaultFile: VaultFile? ->
                 vaultFile?.let {
@@ -309,21 +290,28 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                         cfv.clearBinaryData()
                     }
                 }
-                formParser!!.stopWaitingBinaryData()
+                formParser?.stopWaitingBinaryData()
                 saveCurrentScreen(false)
             }
 
             C.IMPORT_IMAGE -> {
-                val image = data!!.data
+                val image = data?.data
                 if (image != null) {
                     attachmentModel.importImage(image)
                 }
             }
 
             C.IMPORT_VIDEO -> {
-                val video = data!!.data
+                val video = data?.data
                 if (video != null) {
                     attachmentModel.importVideo(video)
+                }
+            }
+
+            C.IMPORT_FILE -> {
+                val video = data?.data
+                if (video != null) {
+                    attachmentModel.importFile(video)
                 }
             }
         }
@@ -335,17 +323,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             if (vaultFile != null) {
                 val filename = cfv.setBinaryData(vaultFile)
                 if (filename != null) {
-                    formParser!!.setWidgetMediaFile(filename, vaultFile)
-                    formParser!!.setTellaMetadataFields(cfv, vaultFile.metadata)
+                    formParser?.setWidgetMediaFile(filename, vaultFile)
+                    formParser?.setTellaMetadataFields(cfv, vaultFile.metadata)
                 } else {
                     Timber.e("Binary data not set on waiting widget")
                 }
             } else {
-                formParser!!.removeWidgetMediaFile(cfv.clearBinaryData())
-                formParser!!.clearTellaMetadataFields(cfv)
+                formParser?.removeWidgetMediaFile(cfv.clearBinaryData())
+                formParser?.clearTellaMetadataFields(cfv)
             }
         }
-        formParser!!.stopWaitingBinaryData()
+        formParser?.stopWaitingBinaryData()
         saveCurrentScreen(false)
     }
 
@@ -702,10 +690,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    private fun onGetFilesStart() {}
-    private fun onGetFilesEnd() {}
-    private fun onGetFilesSuccess(files: List<VaultFile?>) {}
-    private fun onGetFilesError(error: Throwable) {}
     private fun onMediaFileAdded(vaultFile: VaultFile) {
         onActivityResult(
             C.MEDIA_FILE_ID,
