@@ -119,7 +119,7 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
-        answer.requestFocus();
+      //  answer.requestFocus();
 
         InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputManager == null) {
