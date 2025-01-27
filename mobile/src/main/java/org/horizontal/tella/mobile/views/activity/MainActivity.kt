@@ -285,6 +285,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
                         showBackgroundTasksExitPrompt()
                     } else {
                         if (fragment.onBackPressed()) {
+                            selectHome()
                             return true
                         }
                     }

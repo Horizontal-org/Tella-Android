@@ -18,9 +18,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.MyApplication
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
@@ -31,7 +33,6 @@ import org.horizontal.tella.mobile.views.activity.MetadataActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.activity.viewer.toolBar
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
-import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
@@ -40,7 +41,6 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class MicActivity : MetadataActivity(),
     IMetadataAttachPresenterContract.IView {
-
     private var animator: ObjectAnimator? = null
     private var isCollect: Boolean = false
     private var isReport: Boolean = false
@@ -66,7 +66,7 @@ class MicActivity : MetadataActivity(),
     private lateinit var redDot: ImageView
     private lateinit var recordingName: TextView
     private var currentRootParent: String? = null
-
+    private var currentRecordName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +97,7 @@ class MicActivity : MetadataActivity(),
             mPlay.visibility = View.GONE
         }
 
-        if (currentRootParent?.isNotEmpty() == true) {
+        if (isCollect || currentRootParent?.isNotEmpty() == true) {
             toolBar.navigationIcon =
                 ContextCompat.getDrawable(this, R.drawable.ic_close_white)
 
@@ -125,7 +125,7 @@ class MicActivity : MetadataActivity(),
         updateRecordingName()
         recordingName.setOnClickListener {
             BottomSheetUtils.showFileRenameSheet(
-               supportFragmentManager,
+                supportFragmentManager,
                 getString(R.string.mic_rename_recording),
                 getString(R.string.action_cancel),
                 getString(R.string.action_ok),
@@ -164,6 +164,13 @@ class MicActivity : MetadataActivity(),
         viewModel.addingInProgress.observe(this) { isAdding ->
             callback?.setBackgroundWorkStatus(isAdding && !Preferences.isAnonymousMode())
         }
+        viewModel.isFileNameUnique.observe(this) { isUnique ->
+            if (isUnique) {
+                recordingName.text = currentRecordName
+            } else {
+                showToast(getString(R.string.file_name_taken))
+            }
+        }
     }
 
     private fun handleBackStack() {
@@ -199,10 +206,6 @@ class MicActivity : MetadataActivity(),
     }
 
     override fun onDestroy() {
-        if (isCollect) {
-            val activity = context as ICollectEntryInterface
-            activity.stopWaitingForData()
-        }
         animator?.end()
         animator = null
         cancelRecorder()
@@ -302,14 +305,13 @@ class MicActivity : MetadataActivity(),
 
     private fun maybeReturnCollectRecording(vaultFile: VaultFile?) {
         if (isCollect) {
-            val activity = context as ICollectEntryInterface
-            activity.returnFileToForm(vaultFile)
+            MyApplication.bus().post(AudioRecordEvent(vaultFile))
         }
         if (isReport) {
             val bundle = Bundle()
             bundle.putSerializable(BUNDLE_REPORT_VAULT_FILE, vaultFile)
             //setFragmentResult(BUNDLE_REPORT_AUDIO, bundle)
-           /// nav().navigateUp()
+            /// nav().navigateUp()
         }
     }
 
@@ -444,8 +446,8 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun openRecordings() {
-       // bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
-       // nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
+        // bundle.putString(VAULT_FILTER, FilterType.AUDIO.name)
+        // nav().navigate(R.id.action_micScreen_to_attachments_screen, bundle)
     }
 
     private fun stopRecorder() {
@@ -494,12 +496,13 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun updateRecordingName(name: String) {
-        recordingName.text = name
+        currentRecordName = name
+        viewModel.checkFileName(fileName = name)
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateRecordingName() {
         recordingName.text = UUID.randomUUID().toString() + ".aac"
     }
-    
-    }
+
+}

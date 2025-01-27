@@ -38,17 +38,21 @@ import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
+import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
 import org.horizontal.tella.mobile.views.collect.CollectFormView
 import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
 import org.horizontal.tella.mobile.views.fragment.forms.SubmitFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.recorder.COLLECT_ENTRY
+import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.MicFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
+import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormIndex
@@ -66,7 +70,8 @@ import timber.log.Timber
 class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView {
+    IFormSaverContract.IView,
+    VerificationWorkStatusCallback {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
 
@@ -183,7 +188,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                     clearedFormIndex(event.formIndex)
                 }
             })
-
     }
 
     private fun initObservers() {
@@ -971,8 +975,10 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     override fun openAudioRecorder() {
         binding.entryLayout.visibility = View.GONE
-        micFragment = MicFragment.newInstance(true, null)
-        addFragment(micFragment!!, R.id.rootCollectEntry)
+        val intent = Intent(this, MicActivity::class.java)
+        intent.putExtra(VAULT_CURRENT_ROOT_PARENT, "")
+        intent.putExtra(COLLECT_ENTRY, true)
+        startActivity(intent)
     }
 
     override fun returnFileToForm(file: VaultFile) {
@@ -989,4 +995,15 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         saveCurrentScreen(false)
     }
 
+    override fun isBackgroundWorkInProgress(): Boolean {
+        return false
+    }
+
+    override fun showBackgroundWorkAlert() {
+        //TODO SHOULD WE ALSO HANDLE BACKGROUD AUDIO CALLS WHEN WE ARE ABOUT TO RECORD FROM a form
+    }
+
+    override fun setBackgroundWorkStatus(inProgress: Boolean) {
+
+    }
 }
