@@ -34,6 +34,8 @@ import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContrac
 import org.horizontal.tella.mobile.mvp.presenter.LocationGettingPresenter;
 import org.horizontal.tella.mobile.util.C;
 
+import kotlin.Unit;
+
 
 public class LocationMapActivity extends MetadataActivity implements
         OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnCameraMoveStartedListener,
@@ -85,7 +87,10 @@ public class LocationMapActivity extends MetadataActivity implements
                     if (locationGettingPresenter.isGPSProviderEnabled()) {
                         startGettingLocation();
                     } else {
-                        manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+                       maybeChangeTemporaryTimeout(() -> {
+                            manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+                            return null;
+                       });
                     }
                 }
         );

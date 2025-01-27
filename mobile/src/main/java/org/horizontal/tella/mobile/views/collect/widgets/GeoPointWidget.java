@@ -61,12 +61,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
 
     public GeoPointWidget(Context context, @NonNull FormEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
-
-        appearance = formEntryPrompt.getAppearanceHint();
-        if (TextUtils.isEmpty(appearance)) {
-            appearance = APPEARANCE_NONE;
-        }
-
+        appearance = APPEARANCE_PLACEMENT_MAP;
         locationString = formEntryPrompt.getAnswerText();
         locationGettingPresenter = new LocationGettingPresenter(this, true);
 
@@ -212,12 +207,6 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
                 onNoLocationPermissions();
                 return;
             }
-
-            if (!locationGettingPresenter.isGPSProviderEnabled()) {
-                onGPSProviderDisabled();
-                return;
-            }
-
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
