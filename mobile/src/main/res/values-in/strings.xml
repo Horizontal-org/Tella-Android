@@ -900,49 +900,41 @@ Would you like to share analytics with the Tella team?</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
-  <string name="create_new_folder">CREATE NEW FOLDER</string>
-  <string name="use_shared_drive">USE SHARED DRIVE</string>
-  <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
-  <string name="select_google_drive">Select Google drive</string>
+  <string name="create_new_folder">BUAT FOLDER BARU</string>
+  <string name="use_shared_drive">GUNAKAN DRIVE BERSAMA</string>
+  <string name="go_to_google_drive">BUKA GOOGLE DRIVE</string>
+  <string name="select_google_drive">Pilih Google drive</string>
   <string name="google_drive" translatable="false">Google Drive
 </string>
-  <string name="learn_more_about_the_types_of_drives">Learn more about the types of drives.</string>
-  <string name="description_google_drive">You can either connect to an organizational Shared Drive or create a new folder in your personal Drive.</string>
-  <string name="select_a_drive_to_connect">Select a Drive to connect to</string>
+  <string name="learn_more_about_the_types_of_drives">Pelajari lebih lanjut tentang jenis-jenis drive.</string>
+  <string name="description_google_drive">Anda bisa menyambungkan ke Drive Bersama atau membuat sebuah folder baru di Drive personal Anda.</string>
+  <string name="select_a_drive_to_connect">Pilih sebuah Drive untuk disambungkan</string>
   <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
-  <string name="settings_add.server.selection_dialog.title">What type of server would you like to connect to?</string>
-  <string name="unavailable_connections">Unavailable connections</string>
-  <string name="unavailable_connections_desc">For the following categories, only one connection can be
- enabled at a time. To add a new connection, please delete
- the current one by going to Connections Settings. </string>
-  <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+  <string name="settings_add.server.selection_dialog.title">Peladen tipe apa yang ingin Anda sambungkan?</string>
+  <string name="unavailable_connections">Koneksi tidak tersedia</string>
+  <string name="unavailable_connections_desc">Untuk kategori berikut, hanya satu koneksi yang bisa diaktifkan pada satu waktu. Untuk menambahkan koneksi, mohon hapus yang ada dengan cara membuka Pengaturan Koneksi.</string>
+  <string name="no_permission_to_folder_google_drive">Anda tidak memiliki izin untuk mengunggah ke folder ini.</string>
   <string name="settings.servers.title_server.settings2">Koneksi</string>
-  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
- server to send files and data. Your organization
- should provide you with the server details. </string>
+  <string name="settings.servers.add_server.expl2">Jika Anda bekerja dengan organisasi, sambungkan ke peladen mereka untuk mengirim dan menerima data. Organisasi Anda seharusnya memberikan Anda detail dari peladen.</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
-  <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="go_to_dropbox">KE DROPBOX</string>
   <string name="dropbox" translatable="false">Dropbox</string>
-  <string name="Drafts_Header_Message">These are reports you are working on.</string>
-  <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
-  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
-  <string name="Connections_description">Learn more about connections here. If you
- work with an organization, you can ask them
- about which connection to use.</string>
-  <string name="Connections_description_selection">Learn more about connections here.</string>
+  <string name="Drafts_Header_Message">Berikut adalah laporan yang sedang Anda kerjakan.</string>
+  <string name="Outboxes_Header_Message">Laporan berikut siap untuk dikirim</string>
+  <string name="Submitted_Header_Message">Berikut adalah laporan yang telah berhasil Anda kirimkan.</string>
+  <string name="Connections_description">Pelajari lebih lanjut tentang koneksi di sini. Jika Anda bekerja dengan organisasi, Anda bisa menanyakan ke mereka tentang koneksi mana yang bisa digunakan.</string>
+  <string name="Connections_description_selection">Pelajari lebih lanjut tentang sambungan di sini.</string>
   <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="NextCloud">Nextcloud</string>
-  <string name="NextCloud_Create_New_Folder">Create new folder</string>
-  <string name="NextCloud_Create_New_Folder_Description">Your reports will be uploaded to a new
- folder on your Nextcloud. Choose a name
- for this folder here.</string>
-  <string name="NextCloud_Folder_Name">Folder name</string>
-  <string name="Error_Connecting_To_Server_Msg">Error connecting to server. Please try again.</string>
+  <string name="NextCloud_Create_New_Folder">Buat folder baru</string>
+  <string name="NextCloud_Create_New_Folder_Description">Laporan Anda akan diunggah ke folder baru di dalam Nextcloud Anda. Pilih sebuah nama untuk folder ini.</string>
+  <string name="NextCloud_Folder_Name">Nama folder</string>
+  <string name="Error_Connecting_To_Server_Msg">Gagal menyambungkan ke peladen. Mohon coba lagi.</string>
   <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
   <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
   <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
   <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
-  <string name="ssl_validator_question">Do you want to trust this certificate anyway?</string>
+  <string name="ssl_validator_question">Apakah Anda ingin memercayai sertifikat ini?</string>
   <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
   <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
   <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
@@ -968,14 +960,15 @@ Would you like to share analytics with the Tella team?</string>
   <string name="login_data_own_scheme" translatable="false">nc</string>
   <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
-  <string name="go_to_nextcloud">Go to Nextcloud</string>
-  <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
-  <string name="folder_name">Folder name</string>
-  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
-  <string name="file_name_taken">File name taken. Please use a different one.</string>
-  <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
-  <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
-  <string name="invalid_url">Invalid URL</string>
-  <string name="delete_report">Delete report?</string>
-  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="go_to_nextcloud">Buka Nextcloud</string>
+  <string name="google_drive_create_folder_description">Laporan Anda akan diunggah ke folder baru di dalam Google Drive Anda. Pilih sebuah nama untuk folder ini di sini.</string>
+  <string name="folder_name">Nama folder</string>
+  <string name="Folder_Empty_Error">Nama folder tidak boleh kosong</string>
+  <string name="file_name_taken">Nama berkas sudah dipakai. Mohon gunakan yang lain.</string>
+  <string name="folder_exist_error">Nama folder sudah dipakai. Mohon gunakan yang lain.</string>
+  <string name="nextcloud_file_size_limit">Untuk saat ini, hanya berkas berukuran lebih kecil dari 20MB yang dapat dikirimkan ke peladen Nextcloud;</string>
+  <string name="invalid_url">URL tidak valid</string>
+  <string name="delete_report">Hapus laporan?</string>
+  <string name="report_submitted_msg">Laporan Anda berhasil dikirimkan.</string>
+  <string name="Collect_MediaWidget_Attach_File">Lampirkan berkas</string>
 </resources>

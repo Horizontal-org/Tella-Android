@@ -565,7 +565,6 @@ button to add a new template.</string>
   <string name="Collect_WidgetAudio_Select_Text">Select audio file</string>
   <string name="Collect_MediaWidget_Attach_Photo">Attach photo</string>
   <string name="Collect_MediaWidget_Attach_Video">Attach video</string>
-  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="Collect_MediaWidget_AttachAudioRecording">Attach audio recording</string>
   <string name="Uwazi_Templates_TabTitle">Templates</string>
   <string name="action_no">no</string>
@@ -1003,4 +1002,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="invalid_url">Invalid URL</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
 </resources>

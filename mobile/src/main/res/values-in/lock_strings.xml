@@ -16,7 +16,7 @@
   <string name="LockPatternSet_Message_PatternStarted">Pola dimulai</string>
   <string name="LockPatternSet_Message_PatternCleared">Pola dihapus</string>
   <string name="LockPatternSet_Message_CellAdded">Sel ditambahkan</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g id="cell_index" example="3">%1$d</xliff:g> added</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">Pola selesai</string>
   <string name="UnLockPattern_PatternArea">Pattern area</string>
   <string name="UnLockPattern_Message_DrawPattern">Gambar pola Anda untuk membuka kunci Tella</string>
