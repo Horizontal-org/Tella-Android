@@ -1,7 +1,6 @@
 package org.horizontal.tella.mobile.views.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -42,7 +41,6 @@ import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
-import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
 import org.horizontal.tella.mobile.views.collect.CollectFormView
 import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
@@ -92,7 +90,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var draftAutoSaved = false
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
-    protected lateinit var baseActivity: BaseActivity
 
     private val viewModel: SubmitFormsViewModel by viewModels()
     private val attachmentModel: QuestionAttachmentModel by viewModels()
