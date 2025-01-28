@@ -1,10 +1,12 @@
 package org.horizontal.tella.mobile.views.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
@@ -13,14 +15,15 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.bus.EventCompositeDisposable
 import org.horizontal.tella.mobile.bus.EventObserver
+import org.horizontal.tella.mobile.bus.event.LocationPermissionRequiredEvent
 import org.horizontal.tella.mobile.bus.event.MediaFileBinaryWidgetCleared
 import org.horizontal.tella.mobile.databinding.ActivityCollectFormEntryBinding
 import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstance
@@ -39,6 +42,7 @@ import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
+import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
 import org.horizontal.tella.mobile.views.collect.CollectFormView
 import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
@@ -79,7 +83,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-    private var disposables: EventCompositeDisposable = MyApplication.bus().createCompositeDisposable()
+    private var disposables =
+        MyApplication.bus().createCompositeDisposable()
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
@@ -87,6 +92,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     private var draftAutoSaved = false
     private var micFragment: MicFragment? = null
     private lateinit var binding: ActivityCollectFormEntryBinding
+    protected lateinit var baseActivity: BaseActivity
 
     private val viewModel: SubmitFormsViewModel by viewModels()
     private val attachmentModel: QuestionAttachmentModel by viewModels()
@@ -162,6 +168,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun initView() {
+        onGpsPermissionsListener()
+
         binding.appbar.outlineProvider = null
         binding.prevSection.setOnClickListener { v -> showPrevScreen() }
         binding.nextSection.setOnClickListener { v -> showNextScreen() }
@@ -188,6 +196,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                     clearedFormIndex(event.formIndex)
                 }
             })
+
     }
 
     private fun initObservers() {
@@ -995,12 +1004,41 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         saveCurrentScreen(false)
     }
 
+    private fun hasGpsPermissions(context: Context): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestGpsPermissions(requestCode: Int) {
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), requestCode
+        )
+    }
+
+    private fun onGpsPermissionsListener() {
+        disposables.wire(
+            LocationPermissionRequiredEvent::class.java,
+            object : EventObserver<LocationPermissionRequiredEvent?>() {
+                override fun onNext(event: LocationPermissionRequiredEvent) {
+                    if (!hasGpsPermissions(context)) {
+                        maybeChangeTemporaryTimeout {
+                            requestGpsPermissions(C.GPS_PROVIDER)
+                        }
+                    }
+                }
+            })
+    }
+
     override fun isBackgroundWorkInProgress(): Boolean {
         return false
     }
 
     override fun showBackgroundWorkAlert() {
-        //TODO SHOULD WE ALSO HANDLE BACKGROUD AUDIO CALLS WHEN WE ARE ABOUT TO RECORD FROM a form
+        //TODO WAFA HANDLE BACKGROUND PROCESS IN COLLECT
     }
 
     override fun setBackgroundWorkStatus(inProgress: Boolean) {
