@@ -34,7 +34,7 @@ ativação do modo</string>
   <string name="lock_dialog.expl_save.pattern">Salvando seus padrões de bloqueio</string>
   <string name="lock_dialog.expl_unlock.app">Desbloqueando Tella</string>
   <string name="action_skip">Pular</string>
-  <string name="settings.docu_delete.server_dialog.expl">Se excluir este servidor, todos os esboços e formulários submetidos serão apagados do seu dispositivo. Excluir mesmo assim?</string>
+  <string name="settings.docu_delete.server_dialog.expl">Se você excluir este servidor, todos os rascunhos e formulários enviados serão excluídos do seu aparelho celular. Você deseja excluí-lo mesmo assim?</string>
   <string name="settings.docu_toast_server.deleted">Servidor excluído</string>
   <string name="settings.docu_toast_server.created">O servidor foi criado</string>
   <string name="settings.docu_toast_server.updated">O servidor foi atualizado</string>
@@ -62,7 +62,7 @@ ativação do modo</string>
   <string name="collect.end_action.desc_save.send.later">Salvar formulário</string>
   <string name="action.desc_confirm">Confirmar</string>
   <string name="collect.form_action_previous.section">Anterior</string>
-  <string name="collect.form_action_next.section">Continuar</string>
+  <string name="collect.form_action_next.section">Próximo</string>
   <string name="action_stop">Parar</string>
   <string name="action_play">Tocar</string>
   <string name="action_record">Registrar</string>
@@ -261,9 +261,9 @@ ativação do modo</string>
   <string name="play.audio_action.expl_minus15s">-15s</string>
   <string name="recorder_meta_space.available.days">%1$d dias %2$d horas (%3$s) restantes</string>
   <string name="recorder_meta_space.available.hours">%1$d horas %2$d min (%3$s) restantes</string>
-  <string name="camera_video.resolution_dialog.title">Seleccionar resolução de vídeo</string>
-  <string name="camera_video.resolution_dialog.expl">Uma resolução mais alta significa que o vídeo será de maior qualidade, mas o tamanho do arquivo também será maior.</string>
-  <string name="camera_video.resolution_select_highest">O mais alto possível</string>
+  <string name="camera_video.resolution_dialog.title">Selecione a resolução de vídeo</string>
+  <string name="camera_video.resolution_dialog.expl">Resoluções mais altas significam que o vídeo terá uma qualidade superior, mas o tamanho do arquivo também será maior.</string>
+  <string name="camera_video.resolution_select_highest">A mais alta possível</string>
   <string name="camera_video.resolution_select_1080p">Alta (1080p)</string>
   <string name="camera_video.resolution_select_720p">Média (720p)</string>
   <string name="camera_video.resolution_select_480p">Baixa (480p)</string>
@@ -998,4 +998,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="invalid_url">Invalid URL</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
 </resources>

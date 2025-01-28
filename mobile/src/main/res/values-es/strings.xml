@@ -906,56 +906,50 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Desbloquear</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
+  <string name="Onboard_Collect_Data">Recolecta datos</string>
   <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
  forms, reports, and files directly from Tella
  to your organization.</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
-  <string name="create_new_folder">CREATE NEW FOLDER</string>
-  <string name="use_shared_drive">USE SHARED DRIVE</string>
-  <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
-  <string name="select_google_drive">Select Google drive</string>
+  <string name="create_new_folder">CREAR UNA NUEVA CARPETA</string>
+  <string name="use_shared_drive">USAR UNIDADES COMPARTIDAS (SHARED DRIVE)</string>
+  <string name="go_to_google_drive">IR A GOOGLE DRIVE</string>
+  <string name="select_google_drive">Selecciona Google Drive</string>
   <string name="google_drive" translatable="false">Google Drive
 </string>
-  <string name="learn_more_about_the_types_of_drives">Learn more about the types of drives.</string>
-  <string name="description_google_drive">You can either connect to an organizational Shared Drive or create a new folder in your personal Drive.</string>
-  <string name="select_a_drive_to_connect">Select a Drive to connect to</string>
+  <string name="learn_more_about_the_types_of_drives">Aprende más sobre los tipos de drives</string>
+  <string name="description_google_drive">Puedes conectarte a una unidad compartida de tu organización (Shared Drive) o crear una carpeta en tu Google Drive personal</string>
+  <string name="select_a_drive_to_connect">Selecciona el Drive al que quieres conectarte</string>
   <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
   <string name="settings_add.server.selection_dialog.title">¿A qué tipo de servidor deseas conectarte?</string>
-  <string name="unavailable_connections">Unavailable connections</string>
-  <string name="unavailable_connections_desc">For the following categories, only one connection can be
- enabled at a time. To add a new connection, please delete
- the current one by going to Connections Settings. </string>
-  <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
+  <string name="unavailable_connections">Conexiones no disponibles</string>
+  <string name="unavailable_connections_desc">Para las siguientes categorías, solo se puede habilitar una conexión a la vez. Para agregar una nueva conexión, borra la actual.</string>
+  <string name="no_permission_to_folder_google_drive">No tienes permisos para conectarte a esta carpeta.</string>
   <string name="settings.servers.title_server.settings2">Conexiones</string>
   <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
  server to send files and data. Your organization
  should provide you with the server details. </string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
-  <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="go_to_dropbox">IR A DROPBOX</string>
   <string name="dropbox" translatable="false">Dropbox</string>
-  <string name="Drafts_Header_Message">These are reports you are working on.</string>
-  <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
-  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
-  <string name="Connections_description">Learn more about connections here. If you
- work with an organization, you can ask them
- about which connection to use.</string>
-  <string name="Connections_description_selection">Learn more about connections here.</string>
+  <string name="Drafts_Header_Message">Estos son reportes en los que estás trabajando.</string>
+  <string name="Outboxes_Header_Message">Estos reportes están listos para ser enviados</string>
+  <string name="Submitted_Header_Message">Estos son reportes que has enviado exitosamente.</string>
+  <string name="Connections_description">Aprende más sobre las conexiones disponibles aquí. Si trabajas con una organización, puedes preguntarles cuál conexión usar.</string>
+  <string name="Connections_description_selection">Aprende más sobre las conexiones disponibles aquí</string>
   <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="NextCloud">Nextcloud</string>
-  <string name="NextCloud_Create_New_Folder">Create new folder</string>
-  <string name="NextCloud_Create_New_Folder_Description">Your reports will be uploaded to a new
- folder on your Nextcloud. Choose a name
- for this folder here.</string>
-  <string name="NextCloud_Folder_Name">Folder name</string>
-  <string name="Error_Connecting_To_Server_Msg">Error connecting to server. Please try again.</string>
+  <string name="NextCloud_Create_New_Folder">Crear nueva carpeta</string>
+  <string name="NextCloud_Create_New_Folder_Description">Tus reportes se enviarán a una nueva carpeta en Nextcloud. Elige un nombre para esa carpeta aquí.</string>
+  <string name="NextCloud_Folder_Name">Nombre de la carpeta</string>
+  <string name="Error_Connecting_To_Server_Msg">Error al conectarse al servidor. Por favor intenta de nuevo.</string>
   <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
   <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
   <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
   <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
-  <string name="ssl_validator_question">Do you want to trust this certificate anyway?</string>
+  <string name="ssl_validator_question">¿Quieres confiar en este certificado?</string>
   <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
   <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
   <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
@@ -981,14 +975,15 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="login_data_own_scheme" translatable="false">nc</string>
   <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
-  <string name="go_to_nextcloud">Go to Nextcloud</string>
-  <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
-  <string name="folder_name">Folder name</string>
-  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
-  <string name="file_name_taken">File name taken. Please use a different one.</string>
-  <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
-  <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
-  <string name="invalid_url">Invalid URL</string>
-  <string name="delete_report">Delete report?</string>
-  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="go_to_nextcloud">Ir a Nextcloud</string>
+  <string name="google_drive_create_folder_description">Sus informes se cargarán en una nueva carpeta en su Google Drive. Elija un nombre para esta carpeta aquí.</string>
+  <string name="folder_name">Nombre de la carpeta</string>
+  <string name="Folder_Empty_Error">El nombre de la carpeta no puede estar vacío</string>
+  <string name="file_name_taken">El nombre del archivo ya está en uso. Utilice uno diferente.</string>
+  <string name="folder_exist_error">El nombre de la carpeta ya está en uso. Utilice uno diferente.</string>
+  <string name="nextcloud_file_size_limit">Por el momento, solo se pueden enviar al servidor de Nextcloud archivos inferiores a 20 MB.</string>
+  <string name="invalid_url">URL Invalida</string>
+  <string name="delete_report">¿Borrar reporte?</string>
+  <string name="report_submitted_msg">Su reporte ha sido enviado exitosamente.</string>
+  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
 </resources>

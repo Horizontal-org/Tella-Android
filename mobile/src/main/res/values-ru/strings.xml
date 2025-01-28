@@ -33,10 +33,12 @@
   <string name="lock_dialog.expl_save.pattern">Настройка данных в процессе…</string>
   <string name="lock_dialog.expl_unlock.app">Разблокировка Tella</string>
   <string name="action_skip">Пропустить</string>
+  <string name="settings.docu_delete.server_dialog.expl">Если Вы удалите данный сервер, то все черновики и отправленные формы также будут удалены с Вашего устройства. Удалить в любом случае?</string>
   <string name="settings.docu_toast_server.deleted">Сервер удален</string>
   <string name="settings.docu_toast_server.created">Сервер успешно создан</string>
   <string name="settings.docu_toast_server.updated">Сервер успешно обновлен</string>
   <string name="settings.docu_dialog.title_server.settings">Настройки сервера</string>
+  <string name="settings.docu_field_server.name">Имя сервера</string>
   <string name="settings.docu_field_server.url">URL сервера</string>
   <string name="collect.sent_tab.title">Отправлено</string>
   <string name="home_expl_cancel.quick.delete">Нажмите в любом месте, чтобы отменить</string>
@@ -1010,4 +1012,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="invalid_url">Invalid URL</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
 </resources>
