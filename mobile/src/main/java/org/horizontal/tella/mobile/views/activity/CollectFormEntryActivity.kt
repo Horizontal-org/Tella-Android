@@ -22,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventObserver
+import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
 import org.horizontal.tella.mobile.bus.event.LocationPermissionRequiredEvent
 import org.horizontal.tella.mobile.bus.event.MediaFileBinaryWidgetCleared
 import org.horizontal.tella.mobile.databinding.ActivityCollectFormEntryBinding
@@ -166,7 +167,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun initView() {
         onGpsPermissionsListener()
-
+        onAudioRecordingListener()
         binding.appbar.outlineProvider = null
         binding.prevSection.setOnClickListener { v -> showPrevScreen() }
         binding.nextSection.setOnClickListener { v -> showNextScreen() }
@@ -980,8 +981,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun openAudioRecorder() {
-        binding.entryLayout.visibility = View.GONE
         val intent = Intent(this, MicActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.putExtra(VAULT_CURRENT_ROOT_PARENT, "")
         intent.putExtra(COLLECT_ENTRY, true)
         startActivity(intent)
@@ -1026,6 +1027,16 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                             requestGpsPermissions(C.GPS_PROVIDER)
                         }
                     }
+                }
+            })
+    }
+
+    private fun onAudioRecordingListener() {
+        disposables.wire(
+            AudioRecordEvent::class.java,
+            object : EventObserver<AudioRecordEvent?>() {
+                override fun onNext(event: AudioRecordEvent) {
+                    putVaultFileInForm(event.vaultFile)
                 }
             })
     }
