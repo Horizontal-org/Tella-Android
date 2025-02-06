@@ -284,10 +284,6 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
         }
     }
 
-    public void showAudioRecorderActivity() {
-
-    }
-
     public void importMedia() {
         BaseActivity activity = (BaseActivity) getContext();
         activity.maybeChangeTemporaryTimeout(() -> {

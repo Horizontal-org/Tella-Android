@@ -85,6 +85,7 @@ public class VideoWidget extends MediaFileBinaryWidget {
         return getFilename();
     }
 
+    @SuppressLint("WrongViewCast")
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 

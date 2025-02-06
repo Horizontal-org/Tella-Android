@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,9 +25,6 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.appbar.ToolbarComponent
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -38,6 +37,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences.isShowFailedMigra
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.setIsAcceptedAnalytics
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.setShowFailedMigrationSheet
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.setShowVaultAnalyticsSection
+import org.horizontal.tella.mobile.databinding.FragmentVaultBinding
 import org.horizontal.tella.mobile.domain.entity.ServerType
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
@@ -65,25 +65,20 @@ import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultAdapter
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import org.horizontal.tella.mobile.views.fragment.vault.home.background_activities.BackgroundActivitiesAdapter
+import org.hzontal.shared_ui.appbar.ToolbarComponent
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import javax.inject.Inject
 
 
 const val VAULT_FILTER = "vf"
 
-//TODO REFACTOR THIS TO MVVM
 @AndroidEntryPoint
-class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresenter.IView {
+class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private lateinit var toolbar: ToolbarComponent
-    private lateinit var vaultRecyclerView: RecyclerView
-    private lateinit var panicModeView: RelativeLayout
-    private lateinit var countDownTextView: CountdownTextView
-    private lateinit var seekBar: SeekBar
-    private lateinit var seekBarContainer: View
     private var timerDuration = 0
     private var panicActivated = false
-    private val vaultAdapter by lazy { VaultAdapter(this) }
-    private lateinit var homeVaultPresenter: HomeVaultPresenter
     private lateinit var permissionsLauncher: ActivityResultLauncher<Array<String>>
     private var writePermissionGranted = false
     private var vaultFile: VaultFile? = null
@@ -101,79 +96,102 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private var googleDriveServersCounted = false
     private var dropBoxServersCounted = false
     private var nextCloudServersCounted = false
-    private var isBackgroundEncryptionEnabled = false;
-    private var descriptionLiveData = MutableLiveData<String>()
+    private var isBackgroundEncryptionEnabled = false
     private val backgroundActivitiesAdapter by lazy { BackgroundActivitiesAdapter(mutableListOf()) }
+    private lateinit var vaultRecyclerView: RecyclerView
+    private lateinit var panicModeView: RelativeLayout
+    private lateinit var countDownTextView: CountdownTextView
+    private lateinit var seekBar: SeekBar
+    private lateinit var seekBarContainer: View
+    private val vaultAdapter by lazy { VaultAdapter(this) }
+    private val homeVaultViewModel: HomeVaultViewModel by viewModels()
+    private lateinit var binding: FragmentVaultBinding
+    private var descriptionLiveData = MutableLiveData<String>()
 
     @Inject
     lateinit var config: Config
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vault, container, false)
+    ): View {
+        binding = FragmentVaultBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObservers()
+        initView(binding.root)
     }
 
     override fun initView(view: View) {
-        toolbar = view.findViewById(R.id.toolbar)
-        vaultRecyclerView = view.findViewById(R.id.vaultRecyclerView)
+        // Use binding to access views
+        with(binding) {
+            this@HomeVaultFragment.toolbar = toolbar
+            this@HomeVaultFragment.vaultRecyclerView = vaultRecyclerView
+            seekBar = panicSeek
+            seekBarContainer = panicSeekContainer
+        }
         panicModeView = view.findViewById(R.id.panic_mode_view)
         countDownTextView = view.findViewById(R.id.countdown_timer)
-        seekBar = view.findViewById(R.id.panic_seek)
-        seekBarContainer = view.findViewById(R.id.panicSeekContainer)
         disposables = MyApplication.bus().createCompositeDisposable()
 
+        // Initialize other components
         setUpToolbar()
         initData()
         initListeners()
         initPermissions()
-        fixAppBarShadow(view)
+        fixAppBarShadow(binding.root)
         showUpdateMigrationBottomSheet()
     }
 
+    private fun initObservers() {
+        homeVaultViewModel.apply {
+            // Observe server counts
+            serverCounts.observe(viewLifecycleOwner) { serverCounts ->
+                handleServerCountsSuccess(serverCounts)
+            }
 
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE) {
-            removeImprovementSection()
-            val analyticsActions =
-                data?.extras?.getSerializable(AnalyticsIntroActivity.RESULT_FOR_ACTIVITY) as AnalyticsActions
-            showMessageForCleanInsightsApprove(analyticsActions)
+            serverCountError.observe(viewLifecycleOwner) { error ->
+                handleServerCountsError(error)
+            }
+
+            mediaExportStatus.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    HomeVaultViewModel.ExportStatus.STARTED -> onMediaExportStarted()
+                    HomeVaultViewModel.ExportStatus.ENDED -> onMediaExportEnded()
+                    HomeVaultViewModel.ExportStatus.SUCCESS -> onMediaExported()
+                    HomeVaultViewModel.ExportStatus.ERROR -> onExportError()
+                }
+            }
+            recentFiles.observe(viewLifecycleOwner) { files ->
+                handleRecentFilesSuccess(files)
+            }
+
+            recentFilesError.observe(viewLifecycleOwner) { error ->
+                handleRecentFilesError(error)
+            }
+
+            // Observe favorite collect forms
+            favoriteCollectForms.observe(viewLifecycleOwner) { files ->
+                handleFavoriteCollectFormsSuccess(files)
+            }
+
+            // Observe errors
+            favoriteCollectFormsError.observe(viewLifecycleOwner) { error ->
+                handleFavoriteCollectFormsError(error)
+            }
+            // Observe favorite collect templates
+            favoriteCollectTemplates.observe(viewLifecycleOwner) { templates ->
+                handleFavoriteCollectTemplatesSuccess(templates)
+            }
+
+            // Observe errors for collect templates
+            favoriteCollectTemplatesError.observe(viewLifecycleOwner) { error ->
+                handleFavoriteCollectTemplatesError(error)
+            }
         }
-    }
-
-    private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
-        if (analyticsActions == AnalyticsActions.YES) {
-            setIsAcceptedAnalytics(true)
-            baseActivity.divviupUtils.runInstallEvent()
-            DialogUtils.showBottomMessage(
-                requireActivity(),
-                getString(R.string.Settings_Analytics_turn_on_dialog),
-                false
-            )
-        }
-    }
-
-    private fun initData() {
-        homeVaultPresenter = HomeVaultPresenter(this, config)
-        vaultRecyclerView.apply {
-            adapter = vaultAdapter
-            layoutManager = LinearLayoutManager(baseActivity)
-        }
-        //Uncomment to add improvement section
-        vaultAdapter.addAnalyticsBanner()
-        timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
-
-        serversList = ArrayList()
-        tuServers = ArrayList()
-        uwaziServers = ArrayList()
-        collectServers = ArrayList()
-        googleDriveServers = ArrayList()
-        dropBoxServers = ArrayList()
-        nextCloudServers = ArrayList()
-
     }
 
     private fun initPermissions() {
@@ -188,53 +206,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 }
             }
     }
-
-    private fun maybeGetFiles() {
-        if (Preferences.isShowRecentFiles()) {
-            val sort = Sort().apply {
-                direction = Sort.Direction.DESC
-                type = Sort.Type.DATE
-            }
-            val limits = Limits().apply {
-                limit = 10
-            }
-            homeVaultPresenter.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
-        } else {
-            vaultAdapter.removeRecentFiles()
-        }
-    }
-
-    private fun maybeGetRecentForms() {
-        if (Preferences.isShowFavoriteForms()) {
-            homeVaultPresenter.getFavoriteCollectForms()
-        } else {
-            vaultAdapter.removeFavoriteForms()
-        }
-    }
-
-    private fun maybeGetRecentTemplates() {
-        if (Preferences.isShowFavoriteTemplates()) {
-            homeVaultPresenter.getFavoriteCollectTemplates()
-        } else {
-            vaultAdapter.removeFavoriteTemplates()
-        }
-    }
-
-    /**
-     * This function show connections when all the server types are counted.
-     **/
-    private fun maybeShowConnections() {
-        // If the serversList is not empty, check if it has changed
-        if (serversList?.isEmpty() == false) {
-            // Use the vaultAdapter to check existing connections
-         vaultAdapter.addConnectionServers(serversList!!)
-
-        } else {
-            vaultAdapter.removeConnectionServers()
-        }
-    }
-
-
 
     private fun initListeners() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -265,9 +236,23 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    private fun startAnalyticsActivity() {
-        val intent = Intent(context, AnalyticsIntroActivity::class.java)
-        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+    private fun initData() {
+        vaultRecyclerView.apply {
+            adapter = vaultAdapter
+            layoutManager = LinearLayoutManager(baseActivity)
+        }
+        //Uncomment to add improvement section
+        vaultAdapter.addAnalyticsBanner()
+        timerDuration = resources.getInteger(R.integer.panic_countdown_duration)
+
+        serversList = ArrayList()
+        tuServers = ArrayList()
+        uwaziServers = ArrayList()
+        collectServers = ArrayList()
+        googleDriveServers = ArrayList()
+        dropBoxServers = ArrayList()
+        nextCloudServers = ArrayList()
+
     }
 
     private fun setUpToolbar() {
@@ -375,11 +360,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     override fun onFavoriteItemClickListener(form: CollectForm) {
-
+        // Handle favorite item click
     }
 
     override fun onFavoriteTemplateClickListener(template: CollectTemplate) {
-
+        // Handle favorite template click
     }
 
     override fun onServerItemClickListener(item: ServerDataItem) {
@@ -411,10 +396,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             ServerType.NEXTCLOUD -> {
                 nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
             }
+
             else -> {}
         }
     }
-
 
     override fun onImproveItemClickListener(improveClickOptions: ImproveClickOptions) {
         when (improveClickOptions) {
@@ -430,6 +415,23 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
                 setIsAcceptedAnalytics(true)
                 nav().navigate(R.id.main_settings)
             }
+        }
+    }
+
+    private fun startAnalyticsActivity() {
+        val intent = Intent(context, AnalyticsIntroActivity::class.java)
+        startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
+    }
+
+    private fun showMessageForCleanInsightsApprove(analyticsActions: AnalyticsActions) {
+        if (analyticsActions == AnalyticsActions.YES) {
+            setIsAcceptedAnalytics(true)
+            baseActivity.divviupUtils.runInstallEvent()
+            DialogUtils.showBottomMessage(
+                requireActivity(),
+                getString(R.string.Settings_Analytics_turn_on_dialog),
+                false
+            )
         }
     }
 
@@ -493,17 +495,42 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
 
     }
 
+    private fun maybeGetFiles() {
+        if (Preferences.isShowRecentFiles()) {
+            val sort = Sort().apply {
+                direction = Sort.Direction.DESC
+                type = Sort.Type.DATE
+            }
+            val limits = Limits().apply {
+                limit = 10
+            }
+            homeVaultViewModel.getRecentFiles(FilterType.ALL_WITHOUT_DIRECTORY, sort, limits)
+        } else {
+            vaultAdapter.removeRecentFiles()
+        }
+    }
 
+    private fun maybeGetRecentForms() {
+        if (Preferences.isShowFavoriteForms()) {
+            homeVaultViewModel.getFavoriteCollectForms()
+        } else {
+            vaultAdapter.removeFavoriteForms()
+        }
+    }
+
+    private fun maybeGetRecentTemplates() {
+        if (Preferences.isShowFavoriteTemplates()) {
+            homeVaultViewModel.getFavoriteCollectTemplates()
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
 
     private fun maybeCountServers() {
         clearServerCount()
-        homeVaultPresenter.countAllServers()
+        homeVaultViewModel.countAllServers()
     }
 
-    /**
-     * This is used to start counting different connections (servers) to be shown on the home fragment.
-     * At the start, the list of servers and shown connections are cleared.
-     **/
     private fun clearServerCount() {
         googleDriveServersCounted = false
         dropBoxServersCounted = false
@@ -520,7 +547,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             stopPanicking()
             hidePanicScreens()
         }
-        return false // todo: check panic state here
+        return false
     }
 
     private fun hidePanicScreens() {
@@ -531,14 +558,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     }
 
     private fun showPanicScreens() {
-        // really show panic screen
         (baseActivity as MainActivity).hideBottomNavigation()
         toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
-        countDownTextView.start(
-            timerDuration
-        ) {
+        countDownTextView.start(timerDuration) {
             executePanicMode()
         }
     }
@@ -556,7 +580,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun executePanicMode() {
         try {
             baseActivity.divviupUtils.runQuickDeleteEvent()
-            homeVaultPresenter.executePanicMode()
+            homeVaultViewModel.executePanicMode()
         } catch (ignored: Throwable) {
             panicActivated = true
         }
@@ -575,7 +599,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         // descriptionLiveData.removeObservers(viewLifecycleOwner)
     }
 
-    override fun onGetFilesSuccess(files: List<VaultFile?>) {
+    private fun handleRecentFilesSuccess(files: List<VaultFile?>) {
         if (files.isNotEmpty()) {
             vaultAdapter.addRecentFiles(files)
         } else {
@@ -583,49 +607,36 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-    override fun onGetFilesError(error: Throwable?) {
-        Timber.d(error, javaClass.name)
-
+    private fun handleRecentFilesError(error: Throwable?) {
+        error?.let {
+            Timber.e(it, "Error fetching recent files in HomeFragment")
+            Toast.makeText(
+                requireContext(),
+                "Error fetching recent files: ${it.message}",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
-    override fun onMediaExported(num: Int) {
+    private fun onMediaExportStarted() {
+        baseActivity.toggleLoading(true) // Show loading indicator
+    }
+
+    private fun onMediaExportEnded() {
+        baseActivity.toggleLoading(false) // Hide loading indicator
+    }
+
+    private fun onMediaExported() {
         baseActivity.toggleLoading(false)
     }
 
-    override fun onExportError(error: Throwable?) {
+    private fun onExportError() {
+        // Handle export error, e.g., show a failure message
         DialogUtils.showBottomMessage(
             baseActivity,
             getString(R.string.gallery_toast_fail_exporting_to_device),
             false
         )
-    }
-
-    override fun onExportStarted() {
-        baseActivity.toggleLoading(true)
-    }
-
-    override fun onExportEnded() {
-        baseActivity.toggleLoading(false)
-    }
-
-    override fun onGetFavoriteCollectFormsSuccess(files: List<CollectForm>) {
-        if (files.isNotEmpty()) {
-            vaultAdapter.addFavoriteForms(files)
-        } else {
-            vaultAdapter.removeFavoriteForms()
-        }
-    }
-
-    override fun onGetFavoriteCollectFormsError(error: Throwable?) {
-        Timber.d(error)
-    }
-
-    override fun onGetFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>?) {
-        if (!files.isNullOrEmpty()) {
-            vaultAdapter.addFavoriteTemplates(files)
-        } else {
-            vaultAdapter.removeFavoriteTemplates()
-        }
     }
 
     private fun maybeHideFilesTitle() {
@@ -636,36 +647,65 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
         }
     }
 
-
-    override fun onGetFavoriteCollectTemplateError(error: Throwable?) {
-        Timber.d(error)
+    private fun handleFavoriteCollectFormsSuccess(files: List<CollectForm>) {
+        if (files.isNotEmpty()) {
+            vaultAdapter.addFavoriteForms(files)
+        } else {
+            vaultAdapter.removeFavoriteForms()
+        }
     }
 
-    override fun onAllServerCountsEnded(serverCounts: ServerCounts) {
-        // Handle Google Drive servers
+    private fun handleFavoriteCollectFormsError(error: Throwable?) {
+        error?.let {
+            Timber.d(it, "Error fetching favorite collect forms")
+        }
+    }
+
+    private fun handleFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>) {
+        if (files.isNotEmpty()) {
+            vaultAdapter.addFavoriteTemplates(files)
+        } else {
+            vaultAdapter.removeFavoriteTemplates()
+        }
+    }
+
+    private fun handleFavoriteCollectTemplatesError(error: Throwable?) {
+        error?.let {
+            Timber.d(it, "Error fetching favorite collect templates")
+        }
+    }
+
+    /**
+     * This function show connections when all the server types are counted.
+     **/
+    private fun maybeShowConnections() {
+        // If the serversList is not empty, check if it has changed
+        if (serversList?.isEmpty() == false) {
+            // Use the vaultAdapter to check existing connections
+            vaultAdapter.addConnectionServers(serversList!!)
+
+        } else {
+            vaultAdapter.removeConnectionServers()
+        }
+    }
+
+    private fun handleServerCountsSuccess(serverCounts: ServerCounts) {
+        // Handle each server type
         handleGoogleDriveServers(serverCounts.googleDriveServers)
-
-        // Handle DropBox servers
         handleDropBoxServers(serverCounts.dropBoxServers)
-
-        // Handle nextCloud servers
         handleNextCloudServers(serverCounts.nextCloudServers)
-
-        // Handle Tella upload servers
         handleTellaUploadServers(serverCounts.tellaUploadServers)
-
-        // Handle Collect servers
         handleCollectServers(serverCounts.collectServers)
-
-        // Handle Uwazi servers
         handleUwaziServers(serverCounts.uwaziServers)
 
         // Check if we need to show connections
         maybeShowConnections()
     }
 
-    override fun onServerCountFailed(error: Throwable?) {
-        Timber.d("***onServerCountFailed**$error")
+    private fun handleServerCountsError(error: Throwable?) {
+        error?.let {
+            Timber.d("***onServerCountFailed**$it")
+        }
     }
 
     // Handle Google Drive servers
@@ -679,6 +719,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             serversList?.add(ServerDataItem(servers, ServerType.GOOGLE_DRIVE))
         }
     }
+
     // Handle Dropbox servers
     private fun handleDropBoxServers(servers: List<DropBoxServer>?) {
         dropBoxServersCounted = true
@@ -690,6 +731,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             serversList?.add(ServerDataItem(servers, ServerType.DROP_BOX))
         }
     }
+
     // Handle Tella upload servers
     private fun handleTellaUploadServers(servers: List<TellaReportServer>?) {
         reportServersCounted = true
@@ -737,6 +779,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
             serversList?.add(ServerDataItem(servers, ServerType.NEXTCLOUD))
         }
     }
+
     private fun removeOldServersFromList(vararg serverTypes: ServerType) {
         serverTypes.forEach { type ->
             val iterator = serversList?.iterator()
@@ -756,7 +799,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener, IHomeVaultPresente
     private fun exportVaultFiles(vaultFile: VaultFile) {
         this.vaultFile = vaultFile
         if (writePermissionGranted) {
-            vaultFile.let { homeVaultPresenter.exportMediaFiles(arrayListOf(vaultFile)) }
+            vaultFile.let { homeVaultViewModel.exportMediaFiles(arrayListOf(vaultFile)) }
         } else {
             updateOrRequestPermissions()
         }

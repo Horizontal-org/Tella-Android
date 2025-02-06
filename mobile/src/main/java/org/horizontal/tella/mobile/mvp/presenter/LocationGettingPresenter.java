@@ -7,16 +7,13 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import androidx.core.content.ContextCompat;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.lang.ref.WeakReference;
-
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContract;
 import org.horizontal.tella.mobile.util.LocationUtil;
@@ -24,7 +21,6 @@ import org.horizontal.tella.mobile.util.LocationUtil;
 
 public class LocationGettingPresenter implements ILocationGettingPresenterContract.IPresenter {
     private static final long LOCATION_REQUEST_INTERVAL = 100; // very aggressive
-
     private ILocationGettingPresenterContract.IView view;
     private LocationManager locationManager;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -101,7 +97,12 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
     private void sendLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
-             return;
+            return;
+        }
+
+        if (location == null) {
+            startGettingLocation(false);
+            return;
         }
 
         currentBestLocation = location;

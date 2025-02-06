@@ -20,8 +20,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.gson.internal.LinkedTreeMap;
 import com.hzontal.tella_vault.MyLocation;
 
-import java.util.Locale;
-
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.bus.event.GPSProviderRequiredEvent;
@@ -35,6 +33,8 @@ import org.horizontal.tella.mobile.util.LocationUtil;
 import org.horizontal.tella.mobile.views.activity.LocationMapActivity;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
+
+import java.util.Locale;
 
 /**
  * Based on ODK GeoPointWidget.
@@ -61,14 +61,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
 
     public UwaziGeoPointWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
         super(context, formEntryPrompt);
-
-        /*appearance = formEntryPrompt.getAppearanceHint();
-        if (TextUtils.isEmpty(appearance)) {
-            appearance = APPEARANCE_NONE;
-        }*/
-        //appearance = APPEARANCE_NONE;
         appearance = APPEARANCE_PLACEMENT_MAP;
-
         locationString = formEntryPrompt.getAnswerText();
         locationGettingPresenter = new LocationGettingPresenter(this, true);
 
@@ -219,11 +212,6 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
                 onNoLocationPermissions();
                 return;
             }
-
-            /*if (!locationGettingPresenter.isGPSProviderEnabled()) {
-                onGPSProviderDisabled();
-                return;
-            }*/
 
             Activity activity = (Activity) getContext();
             waitingForAData = true;

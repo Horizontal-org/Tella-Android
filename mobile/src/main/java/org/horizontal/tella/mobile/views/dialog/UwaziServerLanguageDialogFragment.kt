@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -82,6 +83,7 @@ class UwaziServerLanguageDialogFragment : AppCompatDialogFragment() {
         super.onStart()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // the content

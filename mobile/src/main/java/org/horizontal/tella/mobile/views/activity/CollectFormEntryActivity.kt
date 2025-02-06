@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
@@ -13,24 +14,16 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.hzontal.tella_vault.MyLocation
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.hzontal.shared_ui.utils.DialogUtils
-import org.javarosa.core.model.FormIndex
-import org.javarosa.form.api.FormEntryCaption
-import org.javarosa.form.api.FormEntryPrompt
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnNeverAskAgain
-import permissions.dispatcher.OnPermissionDenied
-import permissions.dispatcher.OnShowRationale
-import permissions.dispatcher.PermissionRequest
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.bus.EventCompositeDisposable
 import org.horizontal.tella.mobile.bus.EventObserver
+import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
+import org.horizontal.tella.mobile.bus.event.LocationPermissionRequiredEvent
 import org.horizontal.tella.mobile.bus.event.MediaFileBinaryWidgetCleared
 import org.horizontal.tella.mobile.databinding.ActivityCollectFormEntryBinding
 import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstance
@@ -48,31 +41,48 @@ import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
+import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
 import org.horizontal.tella.mobile.views.collect.CollectFormView
 import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
 import org.horizontal.tella.mobile.views.fragment.forms.SubmitFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.recorder.COLLECT_ENTRY
+import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.MicFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
+import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
+import org.javarosa.core.model.FormIndex
+import org.javarosa.form.api.FormEntryCaption
+import org.javarosa.form.api.FormEntryPrompt
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.OnShowRationale
+import permissions.dispatcher.PermissionRequest
 import timber.log.Timber
 
 //@RuntimePermission
 @AndroidEntryPoint
-class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMainNavigationInterface,
+class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
+    IMainNavigationInterface,
     IFormParserContract.IView,
-    IFormSaverContract.IView{
+    IFormSaverContract.IView,
+    VerificationWorkStatusCallback {
     private var upNavigationIcon: Drawable? = null
     private var currentScreenView: View? = null
+
     //private int sectionIndex;
     private var formTitle: String? = null
     private var formParser: FormParser? = null
     private var formSaver: FormSaver? = null
-    private var disposables: EventCompositeDisposable =
+    private var disposables =
         MyApplication.bus().createCompositeDisposable()
     private var endView: CollectFormEndView? = null
     private var alertDialog: AlertDialog? = null
@@ -152,10 +162,12 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     private fun initForm() {
         formSaver = FormSaver(this)
         formParser = FormParser(this)
-        formParser!!.parseForm()
+        formParser?.parseForm()
     }
 
     private fun initView() {
+        onGpsPermissionsListener()
+        onAudioRecordingListener()
         binding.appbar.outlineProvider = null
         binding.prevSection.setOnClickListener { v -> showPrevScreen() }
         binding.nextSection.setOnClickListener { v -> showNextScreen() }
@@ -170,8 +182,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                 hideFormCancelButton()
             }
         }
-        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
 
+        endView = CollectFormEndView(this, R.string.Uwazi_Submitted_Entity_Header_Title)
         disposables.wire(
             MediaFileBinaryWidgetCleared::class.java,
             object : EventObserver<MediaFileBinaryWidgetCleared?>() {
@@ -182,6 +194,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                     clearedFormIndex(event.formIndex)
                 }
             })
+
     }
 
     private fun initObservers() {
@@ -233,25 +246,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         }
 
         with(attachmentModel) {
-            onGetFilesStart.observe(this@CollectFormEntryActivity) {
-                onGetFilesStart()
-            }
-
-            onGetFilesEnd.observe(this@CollectFormEntryActivity) {
-                onGetFilesEnd()
-            }
-
-            onGetFilesSuccess.observe(this@CollectFormEntryActivity) { vaultFiles: List<VaultFile?>? ->
-                vaultFiles?.let {
-                    onGetFilesSuccess(vaultFiles)
-                }
-            }
-
-            onGetFilesError.observe(this@CollectFormEntryActivity) { throwable: Throwable? ->
-                throwable?.let {
-                    onGetFilesError(throwable)
-                }
-            }
 
             onMediaFileAdded.observe(this@CollectFormEntryActivity) { vaultFile: VaultFile? ->
                 vaultFile?.let {
@@ -306,21 +300,28 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
                         cfv.clearBinaryData()
                     }
                 }
-                formParser!!.stopWaitingBinaryData()
+                formParser?.stopWaitingBinaryData()
                 saveCurrentScreen(false)
             }
 
             C.IMPORT_IMAGE -> {
-                val image = data!!.data
+                val image = data?.data
                 if (image != null) {
                     attachmentModel.importImage(image)
                 }
             }
 
             C.IMPORT_VIDEO -> {
-                val video = data!!.data
+                val video = data?.data
                 if (video != null) {
                     attachmentModel.importVideo(video)
+                }
+            }
+
+            C.IMPORT_FILE -> {
+                val video = data?.data
+                if (video != null) {
+                    attachmentModel.importFile(video)
                 }
             }
         }
@@ -332,17 +333,17 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
             if (vaultFile != null) {
                 val filename = cfv.setBinaryData(vaultFile)
                 if (filename != null) {
-                    formParser!!.setWidgetMediaFile(filename, vaultFile)
-                    formParser!!.setTellaMetadataFields(cfv, vaultFile.metadata)
+                    formParser?.setWidgetMediaFile(filename, vaultFile)
+                    formParser?.setTellaMetadataFields(cfv, vaultFile.metadata)
                 } else {
                     Timber.e("Binary data not set on waiting widget")
                 }
             } else {
-                formParser!!.removeWidgetMediaFile(cfv.clearBinaryData())
-                formParser!!.clearTellaMetadataFields(cfv)
+                formParser?.removeWidgetMediaFile(cfv.clearBinaryData())
+                formParser?.clearTellaMetadataFields(cfv)
             }
         }
-        formParser!!.stopWaitingBinaryData()
+        formParser?.stopWaitingBinaryData()
         saveCurrentScreen(false)
     }
 
@@ -699,10 +700,6 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         }
     }
 
-    private fun onGetFilesStart() {}
-    private fun onGetFilesEnd() {}
-    private fun onGetFilesSuccess(files: List<VaultFile?>) {}
-    private fun onGetFilesError(error: Throwable) {}
     private fun onMediaFileAdded(vaultFile: VaultFile) {
         onActivityResult(
             C.MEDIA_FILE_ID,
@@ -984,9 +981,11 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
     }
 
     override fun openAudioRecorder() {
-        binding.entryLayout.visibility = View.GONE
-        micFragment = MicFragment.newInstance(true, null)
-        addFragment(micFragment!!, R.id.rootCollectEntry)
+        val intent = Intent(this, MicActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        intent.putExtra(VAULT_CURRENT_ROOT_PARENT, "")
+        intent.putExtra(COLLECT_ENTRY, true)
+        startActivity(intent)
     }
 
     override fun returnFileToForm(file: VaultFile) {
@@ -1001,5 +1000,56 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,IMai
         binding.entryLayout.visibility = View.VISIBLE
         formParser!!.stopWaitingBinaryData()
         saveCurrentScreen(false)
+    }
+
+    private fun hasGpsPermissions(context: Context): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestGpsPermissions(requestCode: Int) {
+        requestPermissions(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), requestCode
+        )
+    }
+
+    private fun onGpsPermissionsListener() {
+        disposables.wire(
+            LocationPermissionRequiredEvent::class.java,
+            object : EventObserver<LocationPermissionRequiredEvent?>() {
+                override fun onNext(event: LocationPermissionRequiredEvent) {
+                    if (!hasGpsPermissions(context)) {
+                        maybeChangeTemporaryTimeout {
+                            requestGpsPermissions(C.GPS_PROVIDER)
+                        }
+                    }
+                }
+            })
+    }
+
+    private fun onAudioRecordingListener() {
+        disposables.wire(
+            AudioRecordEvent::class.java,
+            object : EventObserver<AudioRecordEvent?>() {
+                override fun onNext(event: AudioRecordEvent) {
+                    putVaultFileInForm(event.vaultFile)
+                }
+            })
+    }
+
+    override fun isBackgroundWorkInProgress(): Boolean {
+        return false
+    }
+
+    override fun showBackgroundWorkAlert() {
+        //TODO WAFA HANDLE BACKGROUND PROCESS IN COLLECT
+    }
+
+    override fun setBackgroundWorkStatus(inProgress: Boolean) {
+
     }
 }

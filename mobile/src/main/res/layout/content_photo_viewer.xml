@@ -9,13 +9,14 @@
     tools:context="org.horizontal.tella.mobile.views.activity.PhotoViewerActivity"
     tools:showIn="@layout/activity_photo_viewer">
 
-    <ImageView
+    <org.horizontal.tella.mobile.views.custom.ZoomImageView
         android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/photoImageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="matrix"
         android:contentDescription="@null"
-        android:scaleType="centerInside" />
+       />
 
     <ProgressBar
         android:id="@+id/progressBar"

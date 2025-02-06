@@ -12,6 +12,7 @@ import android.view.OrientationEventListener
 import android.view.View
 import android.widget.ProgressBar
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -22,8 +23,6 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import permissions.dispatcher.NeedsPermission
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -31,11 +30,8 @@ import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.CamouflageAliasChangedEvent
 import org.horizontal.tella.mobile.bus.event.LocaleChangedEvent
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
-import org.horizontal.tella.mobile.mvp.contract.IHomeScreenPresenterContract
-import org.horizontal.tella.mobile.mvp.contract.IMediaImportPresenterContract
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
-import org.horizontal.tella.mobile.mvp.presenter.HomeScreenPresenter
-import org.horizontal.tella.mobile.mvp.presenter.MediaImportPresenter
+import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.hide
@@ -57,11 +53,12 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.Attachments
 import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
-    IMediaImportPresenterContract.IView, IMetadataAttachPresenterContract.IView,
+class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     IMainNavigationInterface, VerificationWorkStatusCallback, OnSelectEntitiesClickListener {
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
@@ -91,13 +88,12 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     }
 
     private var mExit = false
-    private var isBackgroundEncryptionEnabled = false;
+    private var isBackgroundEncryptionEnabled = false
     private val handler: Handler by lazy {
         Handler(Looper.getMainLooper())
     }
     private lateinit var disposables: EventCompositeDisposable
-    private lateinit var homeScreenPresenter: HomeScreenPresenter
-    private lateinit var mediaImportPresenter: MediaImportPresenter
+    private val mediaImportViewModel : MediaImportViewModel by viewModels()
     private var progressBar: ProgressBar? = null
     private var mOrientationEventListener: OrientationEventListener? = null
     private lateinit var btmNavMain: BottomNavigationView
@@ -119,8 +115,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
         setupNavigation()
-        homeScreenPresenter = HomeScreenPresenter(this)
-        mediaImportPresenter = MediaImportPresenter(this)
         initializeListeners()
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
@@ -130,6 +124,12 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
             navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        initObservers()
+    }
+
+    private fun initObservers() {
+        mediaImportViewModel.mediaFileLiveData.observe(this,::onMediaFileImported)
+        mediaImportViewModel.importError.observe(this, ::onImportError)
     }
 
     private fun initializeListeners() {
@@ -202,9 +202,9 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                 if (uri != null) {
                     divviupUtils.runFileImportEvent()
                     when (requestCode) {
-                        C.IMPORT_VIDEO -> mediaImportPresenter.importVideo(uri)
-                        C.IMPORT_IMAGE -> mediaImportPresenter.importImage(uri)
-                        C.IMPORT_FILE -> mediaImportPresenter.importFile(uri)
+                        C.IMPORT_VIDEO -> mediaImportViewModel.importVideo(uri)
+                        C.IMPORT_IMAGE -> mediaImportViewModel.importImage(uri)
+                        C.IMPORT_FILE -> mediaImportViewModel.importFile(uri)
                     }
                 }
             }
@@ -285,6 +285,7 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
                         showBackgroundTasksExitPrompt()
                     } else {
                         if (fragment.onBackPressed()) {
+                            selectHome()
                             return true
                         }
                     }
@@ -346,7 +347,6 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
     override fun onDestroy() {
         super.onDestroy()
         disposables.dispose()
-        stopPresenter()
         hideProgressBar()
     }
 
@@ -372,12 +372,16 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         // onAddError(throwable);
     }
 
+    private fun onImportError(throwable: Throwable?){
+       Timber.d(throwable)
+    }
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startCollectFormEntryActivity() {
         startActivity(Intent(this, CollectFormEntryActivity::class.java))
     }
 
-    override fun onMediaFileImported(vaultFile: VaultFile) {
+    private fun onMediaFileImported(vaultFile: VaultFile) {
         val list: MutableList<String> = ArrayList()
         list.add(vaultFile.id)
         onActivityResult(
@@ -385,41 +389,8 @@ class MainActivity : MetadataActivity(), IHomeScreenPresenterContract.IView,
         )
     }
 
-    override fun onImportError(error: Throwable?) {}
-
-    override fun onImportStarted() {}
-
-    override fun onImportEnded() {}
-
     override fun getContext(): Context {
         return this
-    }
-
-    override fun onCountTUServersEnded(num: Long) {
-        //if (num > 0) {
-        //  CleanInsightUtils.INSTANCE.measureEvent(CleanInsightUtils.ServerType.SERVER_TELLA);
-        //  maybeShowTUserver(num);
-        //   }
-    }
-
-    override fun onCountTUServersFailed(throwable: Throwable?) {
-        Timber.d(throwable)
-    }
-
-    override fun onCountCollectServersEnded(num: Long) {
-    }
-
-    override fun onCountCollectServersFailed(throwable: Throwable?) {}
-
-    override fun onCountUwaziServersEnded(num: Long) {
-    }
-
-    override fun onCountUwaziServersFailed(throwable: Throwable?) {}
-
-    private fun stopPresenter() {
-        homeScreenPresenter.destroy()
-        mediaImportPresenter.destroy()
-        // mediaImportPresenter = null
     }
 
     private fun hideProgressBar() {

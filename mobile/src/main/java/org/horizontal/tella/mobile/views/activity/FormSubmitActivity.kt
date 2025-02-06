@@ -317,7 +317,7 @@ class FormSubmitActivity : BaseLockActivity() {
     }
 
     private fun hideFormSubmitButton() {
-        content.submitButton.visibility = View.INVISIBLE
+        content.submitButton.visibility = View.GONE
         content.submitButton.isClickable = false
     }
 
