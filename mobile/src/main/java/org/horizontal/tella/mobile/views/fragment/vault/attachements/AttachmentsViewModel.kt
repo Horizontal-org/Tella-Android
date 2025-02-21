@@ -74,6 +74,7 @@ class AttachmentsViewModel @Inject constructor(
     val mediaExported: LiveData<Int> = _mediaExported
     private val _onConfirmDeleteFiles = MutableLiveData<Pair<List<VaultFile?>, Boolean>>()
     val onConfirmDeleteFiles: LiveData<Pair<List<VaultFile?>, Boolean>> = _onConfirmDeleteFiles
+    var spanCount = 1
 
     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
         rxVault.get(parent).subscribe({ vaultFile: VaultFile? ->
