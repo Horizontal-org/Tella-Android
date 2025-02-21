@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Maarkivho hinkwawu</string>
+  <string name="Vault_Images_Title">Svifaniso</string>
+  <string name="Vault_Files_Title">Maarkivho ya Tella</string>
+  <string name="Vault_Documents_Title">Madocumento</string>
+  <string name="Vault_Audios_Title">Audiyo</string>
+  <string name="Vault_Videos_Title">Mavhidiyo</string>
+  <string name="Vault_Others_Title">Svin\'wana</string>
+  <string name="Vault_Select_Title">Kheta maarkivho</string>
+  <string name="Vault_RecentFiles">Maarkivho ya svesvinyana</string>
+  <string name="Vault_PhotosAndVideos_Title">Mafoto ni Mavhidiyo</string>
+  <string name="Vault_FavoriteForms_Title">Maformulariyo lawa usvirhandzaka</string>
+  <string name="Vault_Empty_Msg">A wu se va na arkivho ka Tella ya wena. Deketa botawu “+” kuva unghenisa arkivho ya wena yo sungula, kumbe uya eka Kamera kumbe Mikrofoni kuva utumbuluxa yin\'wana. U nga tlhela u tumbuluxa mapaxta kuva uhlayisa maarkivho ya wena hi kuhleleka.</string>
+  <string name="Vault_Move_SheetDesc">Rurhisa uyisa ka paxta lin\'wana</string>
+  <string name="Vault_Rename_SheetAction">Cinca vito</string>
+  <string name="Vault_Save_SheetAction">Grvahara</string>
+  <string name="Vault_Delete_SheetAction">Tima</string>
+  <string name="Vault_Share_SheetAction">Partilhara</string>
+  <string name="Vault_Upload_SheetAction">Rhumela</string>
+  <string name="Vault_File_SheetAction">Mahungu ya arkivho</string>
+  <string name="Vault_FileInfo">Mahungu ya arkivho</string>
+  <string name="Vault_FileSize">Wukulu</string>
+  <string name="Vault_FileFormat">Matshamelo</string>
+  <string name="Vault_FileCreated">Kutumbuluxiwa</string>
+  <string name="Vault_FileResolution">Rezulusawu</string>
+  <string name="Vault_FileLength">Kuleha</string>
+  <string name="Vault_FilePath">Ndlela ya arkivho</string>
+  <string name="Vault_RenameFile_SheetTitle">Cinca vito la arkivho</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Tima arkivho?</item>
+    <item quantity="other">Akuna nchumo</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">Arkivho leli hlawuliweke li ta timiwa hilaha kungaheliki ka Tella.</item>
+    <item quantity="other">Akuna nchumo</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Name A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Vito Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Kusukela ka lesva nyiwani ku ya ka svakhale</string>
+  <string name="Vault_SortDateDesc_SheetAction">Kusukela ka svakhale ku ya ka lesva nyiwani</string>
+  <string name="Vault_ManageFiles_SheetTitle">Fambisa maarkivho</string>
+  <string name="Vault_DeleteFile_SheetDesc">Andzhaku ka kunghenisa arkivho ka Tella, arkivho ya kusungula yi ta susiwa ka xitirhisiwa xa wena. Kopiya leyi salaka yi tava ntsena leyi nga ka Tella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Endla mufoto/vidiyo</string>
+  <string name="Vault_RecordAudio_SheetAction">Gravhara audiyo</string>
+  <string name="Vault_Import_SheetAction">Tisa ku suka ka xitirhisiwa</string>
+  <string name="Vault_ImportDelete_SheetAction">Nghenisa u tlhela utima arkivho ya kusungula</string>
+  <string name="Vault_CreateFolder_SheetTitle">Endla paxta leyimpshwa</string>
+  <string name="Vault_MoveHere">tisa laha</string>
+  <string name="Vault_ViewerOther_SheetDesc">Matshamelo ya arkivho leyi a ma pfumeleli kupfuleka ndzeni ka Tella. Xana u lava ku humesa  arkivho ka xitirhisiwa xa wena leswaku u yi pfula hi aplikativho lin\'wana? Lesvi svi nga ha paluxa lesvi nga ka arkivho.</string>
+  <string name="Vault_Export_SheetAction">Kuhumesa</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">svilo</item>
+    <item quantity="other">Akuna nchumo</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">A wu se na vani maarkivho ka Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Swikombiso lesvi usvirhandzaka</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">Arkivho li rhurhisiwe kahle</item>
+    <item quantity="other">Maarkivho ma rhurhisiwe kahle</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Maarkivho man\'wana lawa mahlawuliweke matirhisiwa ka makonekinsawu ya wena. Kutima svinga khumba maforma ni  marelatoriyo lawa makalaka ma nga si rhumeliwa.</string>
+  <string name="Vault_Warning_Title">Xibasopiso</string>
+  <string name="Vault_Delete_anyway">Tima, akuna mhaka</string>
+  <string name="Vault_Keep_Original">TIRHISA ORIGINAL</string>
+  <string name="Vault_Delete_Original">TIMA ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Andzhaku ka kunghenisa arkivho ka Tella, xana u lava ku hlayisa arkivho ya ksungula eka xitirhisiwa xa wena kumbe ku yi tima?
+
+Loko u yi tima, arkivho leli nghenisiweke ka Tella hi lona ntsena leyi nga ta sala.</string>
+  <string name="Vault_FileEdit_SheetAction">Editara</string>
+</resources>
