@@ -17,12 +17,15 @@ import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentAttachmentsSelectorBinding
+import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 
 const val RETURN_ODK = "rodk"
 const val VAULT_FILE_KEY = "vfk"
@@ -39,6 +42,9 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private var isOdkSelect = false
     private var filterType = FilterType.ALL
     private lateinit var attachmentsAdapter: AttachmentsSelectorAdapter
+    private var selectMode = SelectMode.DESELECT_ALL
+    private var isListCheckOn = false
+    private var isMoveModeEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +77,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             toolbar.backClickListener = { handleBackStack() }
             gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
             listCheck.setOnClickListener(this@AttachmentsActivitySelector)
+            checkBoxList.setOnClickListener(this@AttachmentsActivitySelector)
             toolbar.onRightClickListener = { setResultAndFinish() }
 
         }
@@ -124,6 +131,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.clearSelected()
                 openDirectory(vaultFile)
             }
+
             VaultFile.Type.FILE -> {
                 if (vaultFile.mimeType != null) {
                     when {
@@ -132,11 +140,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                             intent.putExtra(PhotoViewerActivity.VIEW_PHOTO, vaultFile)
                             startActivity(intent)
                         }
+
                         MediaFile.isAudioFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, AudioPlayActivity::class.java)
                             intent.putExtra(AudioPlayActivity.PLAY_MEDIA_FILE_ID_KEY, vaultFile.id)
                             startActivity(intent)
                         }
+
                         MediaFile.isVideoFileType(vaultFile.mimeType) -> {
                             val intent = Intent(this, VideoViewerActivity::class.java)
                             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
@@ -145,6 +155,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     }
                 }
             }
+
             else -> {
             }
         }
@@ -152,12 +163,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
     override fun onSelectionNumChange(num: Int) {
         updateAttachmentsToolbar(num)
-    }
-
-    override fun onMediaSelected(vaultFile: VaultFile?) {
-        vaultFile?.let {
-            updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
-        }
     }
 
     private fun updateAttachmentsToolbar(itemsSize: Int) {
@@ -170,12 +175,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             )
             binding.toolbar.setRightIcon(R.drawable.ic_check_white)
             binding.toolbar.rightIconContentDescription = R.string.action_check
-        }
-    }
-
-    override fun onMediaDeselected(vaultFile: VaultFile?) {
-        vaultFile?.let {
-            updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
         }
     }
 
@@ -202,9 +201,76 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
                 binding.attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
             }
+
+            R.id.checkBoxList -> handleSelectMode()
         }
     }
 
+    private fun changeSelectMode() {
+        when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                isListCheckOn = true
+                selectMode = SelectMode.ONE_SELECTION
+
+            }
+
+            SelectMode.ONE_SELECTION -> {
+                isListCheckOn = true
+                selectMode = SelectMode.SELECT_ALL
+
+            }
+
+            SelectMode.SELECT_ALL -> {
+                isListCheckOn = false
+                selectMode = SelectMode.DESELECT_ALL
+            }
+        }
+    }
+
+    override fun onMediaSelected(vaultFile: VaultFile) {
+        handleSelectionModeWhenMediSelected()
+    }
+
+    override fun onMediaDeselected(vaultFile: VaultFile) {
+        handleSelectionModeWhenMediSelected()
+    }
+
+    private fun handleSelectionModeWhenMediSelected() {
+        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+        if (attachmentsAdapter.selectedMediaFiles.isNullOrEmpty() && selectMode == SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.DESELECT_ALL
+            handleSelectMode()
+        } else if (attachmentsAdapter.selectedMediaFiles.size == attachmentsAdapter.itemCount && selectMode != SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.ONE_SELECTION
+            handleSelectMode()
+        } else if (attachmentsAdapter.selectedMediaFiles.size < attachmentsAdapter.itemCount && selectMode == SelectMode.SELECT_ALL) {
+            selectMode = SelectMode.DESELECT_ALL
+            handleSelectMode()
+        }
+    }
+
+    private fun handleSelectMode() {
+        changeSelectMode()
+        attachmentsAdapter.enableSelectMode(isListCheckOn)
+        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+        this.invalidateOptionsMenu()
+
+        when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                attachmentsAdapter.clearSelected()
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check, this)
+            }
+
+            SelectMode.ONE_SELECTION -> {
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, this)
+            }
+
+            SelectMode.SELECT_ALL -> {
+                binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_on, this)
+                attachmentsAdapter.selectAll()
+            }
+        }
+    }
 
     private fun openDirectory(vaultFile: VaultFile) {
         if (currentRootID != vaultFile.id) {
@@ -286,6 +352,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                     binding.breadcrumbsView.getCurrentItem<BreadcrumbItem>().selectedItem.id
                 viewModel.getFiles(currentRootID, filterType, null)
             }
+
             else -> {
                 finish()
             }
