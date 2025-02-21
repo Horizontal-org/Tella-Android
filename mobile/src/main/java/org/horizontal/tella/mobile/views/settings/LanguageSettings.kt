@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.views.settings
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -65,36 +66,65 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
         val inflater = LayoutInflater.from(requireContext())
         @SuppressLint("InflateParams") val item: FrameLayout =
             inflater.inflate(R.layout.language_item_layout, null) as FrameLayout
+
         val langName: TextView = item.findViewById(R.id.lang)
         val langInfo: TextView = item.findViewById(R.id.lang_info)
         val imageView: ImageView = item.findViewById(R.id.language_check)
-        item.setTag(language)
+
+        item.tag = language
+
         if (language == null) {
             langName.setText(R.string.settings_lang_select_default)
             langInfo.setText(R.string.settings_lang_select_expl_default)
         } else {
-            val locale = Locale(language)
+            // Properly handle locales with language-region codes
+            val locale = if (language.contains("-")) {
+                val parts = language.split("-")
+                Locale(parts[0], parts[1]) // Example: "pt-MZ" → Locale("pt", "MZ")
+            } else {
+                Locale(language) // Example: "fr" → Locale("fr")
+            }
+
             langName.text = StringUtils.capitalize(locale.displayName, locale)
             langInfo.text = StringUtils.capitalize(locale.getDisplayName(locale), locale)
         }
+
         imageView.visibility = if (selected) View.VISIBLE else View.GONE
         item.setBackgroundColor(
-            if (selected) ContextCompat.getColor(
-                requireContext(),
-                R.color.light_purple
-            ) else ContextCompat.getColor(requireContext(), R.color.dark_purple)
+            if (selected) ContextCompat.getColor(requireContext(), R.color.light_purple)
+            else ContextCompat.getColor(requireContext(), R.color.dark_purple)
         )
+
         return item
     }
+
 
     override fun onClick(v: View) {
         setAppLanguage(v.tag as String?)
     }
 
-    fun setAppLanguage(language: String?) {
-        val locale = if (language != null) Locale(language) else null
+    private fun setAppLanguage(language: String?) {
+        val locale = if (!language.isNullOrEmpty()) {
+            if (language.contains("-")) {
+                // Split the language code into parts (e.g., "pt-MZ" → "pt" and "MZ")
+                val parts = language.split("-")
+                Locale(parts[0], parts[1]) // Create a Locale with language and region
+            } else {
+                Locale(language) // Create a Locale with just the language (e.g., "pt")
+            }
+        } else {
+            null // Handle the default language case
+        }
+
+        locale?.let {
+            Locale.setDefault(it) // Set globally
+            val config = Configuration()
+            config.setLocale(it) // Apply to config
+            config.setLayoutDirection(it)
+        }
+
         LocaleManager.getInstance().setLocale(locale)
         MyApplication.bus().post(LocaleChangedEvent(locale))
-        //recreate()
     }
+
 }
