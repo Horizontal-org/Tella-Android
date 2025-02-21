@@ -87,8 +87,13 @@ class BlankFormsListFragment :
     }
 
     private fun initObservers() {
+
         binding.fab.setOnClickListener {
             refreshBlankForms()
+        }
+
+        model.onToggleFavoriteSuccess.observe(viewLifecycleOwner) { updatedForm ->
+            updatedForm?.let { updateFormList(it) } // Update only changed item
         }
         model.onError.observe(viewLifecycleOwner) { error ->
             Timber.d(error, javaClass.name)
@@ -367,7 +372,6 @@ class BlankFormsListFragment :
                 }
                 pinnedIcon.setOnClickListener {
                     model.toggleFavorite(collectForm)
-                    updateFormViews()
                 }
                 if (collectForm.isUpdated) {
                     pinnedIcon.visibility = View.VISIBLE
@@ -430,6 +434,19 @@ class BlankFormsListFragment :
             }
         }
         return itemBinding.root
+    }
+
+    private fun updateFormList(updatedForm: CollectForm) {
+        val indexInDownloaded = downloadedForms?.indexOfFirst { it.id == updatedForm.id }
+        val indexInAvailable = availableForms?.indexOfFirst { it.id == updatedForm.id }
+
+        if (indexInDownloaded != null && indexInDownloaded != -1) {
+            downloadedForms?.set(indexInDownloaded, updatedForm)
+        } else if (indexInAvailable != null && indexInAvailable != -1) {
+            availableForms?.set(indexInAvailable, updatedForm)
+        }
+
+        updateFormViews() // Refresh UI properly
     }
 
     private fun hasLocationPermissions(context: Context): Boolean {
@@ -515,7 +532,6 @@ class BlankFormsListFragment :
             binding.fab.visibility = View.GONE
         }
     }
-
 
 
     private fun upgradeJavarosa2() {
