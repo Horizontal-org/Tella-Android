@@ -47,8 +47,8 @@ object VaultActionsHelper {
         vaultFile: VaultFile,
         viewModel: SharedMediaFileViewModel,
         unitFunction: () -> Unit,
-        toolbar: Toolbar
-    ) {
+        toolbar: Toolbar) {
+
         chosenVaultFile = vaultFile
         sharedViewModel = viewModel
         toolBar = toolbar
@@ -184,10 +184,7 @@ object VaultActionsHelper {
     }
 
     fun BaseActivity.shareMediaFile() {
-        if (chosenVaultFile == null) {
-            return
-        }
-        if (chosenVaultFile?.metadata != null) {
+        if (chosenVaultFile.metadata != null) {
             showShareWithMetadataDialog()
         } else {
             startShareActivity(false)
