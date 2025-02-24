@@ -115,10 +115,11 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
 
                 val descriptionFilePath = "$finalFolderPath/description.txt"
 
-                val timeStamp: Long = System.currentTimeMillis()
+                val timeStamp: Long = System.currentTimeMillis() / 1000 // Convert to seconds if required
                 val uploadOperation = UploadFileRemoteOperation(
                     descriptionFile.absolutePath, descriptionFilePath, "text/plain", timeStamp
                 )
+
                 val result = uploadOperation.execute(client)
 
                 if (result.isSuccess) {
@@ -203,8 +204,8 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             remoteFilePath,
             mimeType,
             tempUploadId,
-            System.currentTimeMillis(),
-            System.currentTimeMillis(),
+            System.currentTimeMillis() / 1000,
+            System.currentTimeMillis() / 1000,
             true,
             true
         )
@@ -267,5 +268,5 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
             )
         }
     }
-    
+
 }
