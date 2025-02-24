@@ -123,10 +123,10 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="30dp"
             android:clickable="true"
+            android:contentDescription="@string/action_open_gallery"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/white"
-            android:contentDescription="@string/action_open_gallery"
             app:civ_border_color="@color/wa_gray"
             app:civ_border_width="2dp" />
     </RelativeLayout>
