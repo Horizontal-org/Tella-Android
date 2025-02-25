@@ -43,11 +43,11 @@ class SharedFormsViewModel @Inject constructor(private val mApplication: Applica
     var onBlankFormDefRemoved = SingleLiveEvent<Boolean?>()
     var onDownloadBlankFormDefStart = SingleLiveEvent<Boolean?>()
     var onUpdateBlankFormDefStart = SingleLiveEvent<Boolean>()
-    var onUpdateBlankFormDefSuccess = MutableLiveData<Pair<CollectForm, FormDef?>>()
-    var onDownloadBlankFormDefSuccess = MutableLiveData<CollectForm?>()
-    var onToggleFavoriteSuccess = MutableLiveData<CollectForm?>()
+    var onUpdateBlankFormDefSuccess = SingleLiveEvent<Pair<CollectForm, FormDef?>>()
+    var onDownloadBlankFormDefSuccess = SingleLiveEvent<CollectForm?>()
+    var onToggleFavoriteSuccess = SingleLiveEvent<CollectForm?>()
     var onFormInstanceDeleteSuccess = SingleLiveEvent<Boolean>()
-    var onCountCollectServersEnded = MutableLiveData<Long>()
+    var onCountCollectServersEnded = SingleLiveEvent<Long>()
     var onUserCancel = SingleLiveEvent<Boolean>()
     var onFormCacheCleared = SingleLiveEvent<Boolean>()
     var showFab = MutableLiveData<Boolean>()
@@ -183,15 +183,13 @@ class SharedFormsViewModel @Inject constructor(private val mApplication: Applica
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { dataSource: DataSource ->
-                dataSource.toggleFavorite(
-                    collectForm
-                )
+                dataSource.toggleFavorite(collectForm)
             }
             .subscribe(
-                { form: CollectForm? ->
-                    onToggleFavoriteSuccess.postValue(
-                        form
-                    )
+                { updatedForm: CollectForm? ->
+                    updatedForm?.let { form ->
+                        onToggleFavoriteSuccess.postValue(form) // Notify UI
+                    }
                 }
             ) { throwable: Throwable ->
                 FirebaseCrashlytics.getInstance().recordException(throwable)

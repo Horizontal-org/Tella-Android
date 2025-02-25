@@ -53,9 +53,11 @@
     <TextView
         android:id="@+id/selectTellaFilesActionTV"
         style="@style/Tella2_BottomSheet_Text"
+        app:drawableLeftCompat="@drawable/ic_menu_gallery"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recordActionTV"
         android:drawableStart="@drawable/ic_menu_gallery"
+        android:tint="@null"
         tools:text="Select from Tella files"
         android:gravity="center|start"
         />

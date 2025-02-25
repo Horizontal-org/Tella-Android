@@ -93,7 +93,6 @@ import org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment.C
 class AttachmentsFragment :
     BaseBindingFragment<FragmentVaultAttachmentsBinding>(FragmentVaultAttachmentsBinding::inflate),
     View.OnClickListener, IGalleryVaultHandler, OnNavBckListener {
-    private var gridLayoutManager = GridLayoutManager(activity, 1)
     private val attachmentsAdapter by lazy {
         AttachmentsRecycleViewAdapter(activity, this, MediaFileHandler(), gridLayoutManager)
     }
@@ -112,6 +111,8 @@ class AttachmentsFragment :
     private var uriToDelete: Uri? = null
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
+    private lateinit var gridLayoutManager: GridLayoutManager
+
 
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -162,7 +163,7 @@ class AttachmentsFragment :
     private fun initView() {
 
         binding.appbar.outlineProvider = null
-        gridLayoutManager = GridLayoutManager(activity, 1)
+        gridLayoutManager = GridLayoutManager(activity, viewModel.spanCount)
         binding.attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
             layoutManager = gridLayoutManager
@@ -242,7 +243,8 @@ class AttachmentsFragment :
     private fun setGridView() {
         binding.gridCheck.toggleVisibility(false)
         binding.listCheck.toggleVisibility(true)
-        gridLayoutManager.spanCount = 4
+        viewModel.spanCount = 4
+        gridLayoutManager.spanCount = viewModel.spanCount
         attachmentsAdapter.setLayoutManager(gridLayoutManager)
         attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
         binding.attachmentsRecyclerView.setMargins(leftMarginDp = 13, rightMarginDp = 13)
@@ -264,7 +266,8 @@ class AttachmentsFragment :
     private fun setListView() {
         binding.gridCheck.toggleVisibility(true)
         binding.listCheck.toggleVisibility(false)
-        gridLayoutManager.spanCount = 1
+        viewModel.spanCount = 1
+        gridLayoutManager.spanCount = viewModel.spanCount
         attachmentsAdapter.setLayoutManager(gridLayoutManager)
         attachmentsAdapter.notifyItemRangeChanged(0, attachmentsAdapter.itemCount)
         binding.attachmentsRecyclerView.setMargins(leftMarginDp = 0, rightMarginDp = 0)
@@ -912,7 +915,8 @@ class AttachmentsFragment :
     }
 
     private fun onFileDeletedEventListener() {
-        disposables.wire(MediaFileDeletedEvent::class.java,
+        disposables.wire(
+            MediaFileDeletedEvent::class.java,
             object : EventObserver<MediaFileDeletedEvent?>() {
                 override fun onNext(event: MediaFileDeletedEvent) {
                     onMediaFileDeleted()
@@ -921,7 +925,8 @@ class AttachmentsFragment :
     }
 
     private fun onFileRenameEventListener() {
-        disposables.wire(VaultFileRenameEvent::class.java,
+        disposables.wire(
+            VaultFileRenameEvent::class.java,
             object : EventObserver<VaultFileRenameEvent?>() {
                 override fun onNext(event: VaultFileRenameEvent) {
                     onMediaFilesAdded()
@@ -939,7 +944,8 @@ class AttachmentsFragment :
     }
 
     private fun onEditMediaSavedListener() {
-        disposables.wire(EditMediaSavedEvent::class.java,
+        disposables.wire(
+            EditMediaSavedEvent::class.java,
             object : EventObserver<EditMediaSavedEvent?>() {
                 override fun onNext(event: EditMediaSavedEvent) {
                     DialogUtils.showBottomMessage(
@@ -1084,7 +1090,8 @@ class AttachmentsFragment :
         binding.toolbar.backClickListener = {
             handleBackStack()
         }
-        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     handleBackStack()
