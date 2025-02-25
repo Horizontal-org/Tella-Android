@@ -86,9 +86,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginHorizontal="@dimen/tella_main_vertical"
+                android:contentDescription="@string/action_select"
                 android:padding="5dp"
                 android:src="@drawable/ic_check"
-                android:contentDescription="@string/action_select"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/gridCheck"
                 app:layout_constraintTop_toTopOf="parent" />

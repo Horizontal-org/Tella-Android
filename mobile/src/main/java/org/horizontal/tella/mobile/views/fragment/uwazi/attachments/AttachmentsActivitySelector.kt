@@ -12,9 +12,6 @@ import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.utils.MediaFile
-import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
-import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
-import org.hzontal.shared_ui.breadcrumb.model.Item
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentAttachmentsSelectorBinding
 import org.horizontal.tella.mobile.util.setCheckDrawable
@@ -24,8 +21,10 @@ import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
-import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
+import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
+import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
+import org.hzontal.shared_ui.breadcrumb.model.Item
 
 const val RETURN_ODK = "rodk"
 const val VAULT_FILE_KEY = "vfk"
@@ -42,9 +41,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private var isOdkSelect = false
     private var filterType = FilterType.ALL
     private lateinit var attachmentsAdapter: AttachmentsSelectorAdapter
-    private var selectMode = SelectMode.DESELECT_ALL
+    private var selectMode = SelectMode.SELECT_ALL
     private var isListCheckOn = false
-    private var isMoveModeEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -206,27 +204,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         }
     }
 
-    private fun changeSelectMode() {
-        when (selectMode) {
-            SelectMode.DESELECT_ALL -> {
-                isListCheckOn = true
-                selectMode = SelectMode.ONE_SELECTION
-
-            }
-
-            SelectMode.ONE_SELECTION -> {
-                isListCheckOn = true
-                selectMode = SelectMode.SELECT_ALL
-
-            }
-
-            SelectMode.SELECT_ALL -> {
-                isListCheckOn = false
-                selectMode = SelectMode.DESELECT_ALL
-            }
-        }
-    }
-
     override fun onMediaSelected(vaultFile: VaultFile) {
         handleSelectionModeWhenMediSelected()
     }
@@ -252,8 +229,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private fun handleSelectMode() {
         changeSelectMode()
         attachmentsAdapter.enableSelectMode(isListCheckOn)
-        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
-        this.invalidateOptionsMenu()
 
         when (selectMode) {
             SelectMode.DESELECT_ALL -> {
@@ -268,6 +243,25 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             SelectMode.SELECT_ALL -> {
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_on, this)
                 attachmentsAdapter.selectAll()
+            }
+        }
+    }
+
+    private fun changeSelectMode() {
+        selectMode = when (selectMode) {
+            SelectMode.DESELECT_ALL -> {
+                isListCheckOn = true
+                SelectMode.ONE_SELECTION
+            }
+
+            SelectMode.ONE_SELECTION -> {
+                isListCheckOn = true
+                SelectMode.SELECT_ALL
+            }
+
+            SelectMode.SELECT_ALL -> {
+                isListCheckOn = false
+                SelectMode.DESELECT_ALL
             }
         }
     }
