@@ -10,6 +10,8 @@ import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUtils
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import org.horizontal.tella.mobile.views.fragment.reports.ReportsViewModel
 
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
@@ -49,6 +51,11 @@ class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
     @SuppressLint("StringFormatInvalid")
     override fun initData() {
         with(outboxReportsViewModel) {
+            outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
+                updateOutboxTitle.postValue(outboxes.size)
+                handleReportList(outboxes)
+            }
+
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->
                 showMenu(
                     instance = instance,
@@ -67,5 +74,10 @@ class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
                 outboxReportsViewModel.listOutbox()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        outboxReportsViewModel.listOutbox()
     }
 }
