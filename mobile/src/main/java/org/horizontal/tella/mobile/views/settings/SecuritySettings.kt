@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.views.settings
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
@@ -33,7 +34,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
 
 
-class SecuritySettings :
+class baseActivitySecuritySettings :
     BaseBindingFragment<FragmentSecuritySettingsBinding>(FragmentSecuritySettingsBinding::inflate) {
 
     private val lockTimeoutManager by lazy { LockTimeoutManager() }
@@ -237,6 +238,7 @@ class SecuritySettings :
     }
 
     private fun onLockTimeoutChoosen(option: Long) {
+        Log.d("LockTimeout", "Setting lock timeout to: $option")
         lockTimeoutManager.lockTimeout = option
         setUpLockTimeoutText()
     }

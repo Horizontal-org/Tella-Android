@@ -368,7 +368,7 @@ class AttachmentsFragment :
                 importAndDelete = false
                 baseActivity.maybeChangeTemporaryTimeout {
                     MediaFileHandler.startImportFiles(
-                        activity, false, getCurrentType(filterType)
+                        baseActivity, false, getCurrentType(filterType)
                     )
                 }
             }
@@ -381,7 +381,7 @@ class AttachmentsFragment :
                 importAndDelete = true
                 baseActivity.maybeChangeTemporaryTimeout {
                     MediaFileHandler.startImportFiles(
-                        activity, true, getCurrentType(filterType)
+                        baseActivity, true, getCurrentType(filterType)
                     )
                 }
             }
