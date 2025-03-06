@@ -34,7 +34,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import timber.log.Timber
 
 
-class baseActivitySecuritySettings :
+class SecuritySettings :
     BaseBindingFragment<FragmentSecuritySettingsBinding>(FragmentSecuritySettingsBinding::inflate) {
 
     private val lockTimeoutManager by lazy { LockTimeoutManager() }
