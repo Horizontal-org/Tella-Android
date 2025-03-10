@@ -96,6 +96,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private var nextCloudServers: ArrayList<NextCloudServer>? = null
+    private var favoriteForms: ArrayList<CollectForm>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
@@ -182,8 +183,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             // Observe favorite collect forms
-            favoriteCollectForms.observe(viewLifecycleOwner) { files ->
-                handleFavoriteCollectFormsSuccess(files)
+            favoriteCollectForms.observe(viewLifecycleOwner) { forms ->
+                if (forms.isNullOrEmpty()) {
+                    vaultAdapter.removeFavoriteForms()
+                    return@observe
+                }
+                handleFavoriteCollectFormsSuccess(forms)
             }
 
             // Observe errors
