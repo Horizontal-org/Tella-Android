@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.views.fragment.vault.home
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -13,6 +14,7 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -51,6 +53,7 @@ import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import org.horizontal.tella.mobile.util.setMargins
+import org.horizontal.tella.mobile.views.activity.CollectFormEntryActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsActions
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsIntroActivity
@@ -60,6 +63,8 @@ import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 import org.horizontal.tella.mobile.views.custom.CountdownTextView
+import org.horizontal.tella.mobile.views.fragment.forms.LOCATION_REQUEST_CODE
+import org.horizontal.tella.mobile.views.fragment.forms.SharedFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultAdapter
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -68,6 +73,8 @@ import org.horizontal.tella.mobile.views.fragment.vault.home.background_activiti
 import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
+import org.javarosa.core.model.FormDef
+import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -105,6 +112,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private lateinit var seekBarContainer: View
     private val vaultAdapter by lazy { VaultAdapter(this) }
     private val homeVaultViewModel: HomeVaultViewModel by viewModels()
+    private val sharedFormsViewModel: SharedFormsViewModel by viewModels()
     private lateinit var binding: FragmentVaultBinding
     private var descriptionLiveData = MutableLiveData<String>()
 
@@ -192,6 +200,54 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 handleFavoriteCollectTemplatesError(error)
             }
         }
+
+        sharedFormsViewModel.onGetBlankFormDefSuccess.observe(viewLifecycleOwner) { result ->
+            result.let {
+                startCreateFormControllerPresenter(it.form, it.formDef)
+            }
+        }
+
+        sharedFormsViewModel.onCreateFormController.observe(viewLifecycleOwner) {
+            if (Preferences.isAnonymousMode()) {
+                startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+            } else {
+                if (!hasLocationPermissions(baseActivity)) {
+                    requestLocationPermissions()
+                } else {
+                    startCollectFormEntryActivity() // no need to check for permissions, as location won't be turned on
+                }
+            }
+        }
+    }
+
+    private fun startCreateFormControllerPresenter(form: CollectForm, formDef: FormDef) {
+        sharedFormsViewModel.createFormController(form, formDef)
+    }
+
+    private fun hasLocationPermissions(context: Context): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermissions() {
+        baseActivity.maybeChangeTemporaryTimeout()
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        ActivityCompat.requestPermissions(
+            //1
+            baseActivity,
+            //2
+            permissions,
+            //3
+            LOCATION_REQUEST_CODE
+        )
     }
 
     private fun initPermissions() {
@@ -360,7 +416,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     }
 
     override fun onFavoriteItemClickListener(form: CollectForm) {
-        // Handle favorite item click
+        sharedFormsViewModel.getBlankFormDef(form)
+    }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    private fun startCollectFormEntryActivity() {
+        startActivity(Intent(activity, CollectFormEntryActivity::class.java))
     }
 
     override fun onFavoriteTemplateClickListener(template: CollectTemplate) {
