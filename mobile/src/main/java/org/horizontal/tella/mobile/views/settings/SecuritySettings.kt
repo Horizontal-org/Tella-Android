@@ -238,7 +238,6 @@ class SecuritySettings :
     }
 
     private fun onLockTimeoutChoosen(option: Long) {
-        Log.d("LockTimeout", "Setting lock timeout to: $option")
         lockTimeoutManager.lockTimeout = option
         setUpLockTimeoutText()
     }
