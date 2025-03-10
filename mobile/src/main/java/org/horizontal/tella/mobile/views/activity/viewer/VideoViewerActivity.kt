@@ -383,4 +383,15 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (isInfoShown) {
+            toolbar.menu.findItem(R.id.menu_item_more).isVisible = true
+            if (withMetadata){
+                toolbar.menu.findItem(R.id.menu_item_metadata).isVisible = true
+            }
+            toolbar.title = vaultFile?.name
+        }
+    }
+
 }

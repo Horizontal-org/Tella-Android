@@ -51,6 +51,7 @@
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
         android:roundIcon="@mipmap/tella_icon_round"
+        android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"

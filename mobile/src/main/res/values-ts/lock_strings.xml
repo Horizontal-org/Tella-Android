@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">Kanselara</string>
+  <string name="LockSelect_Action_Back">Tlhelela ndzhaku</string>
+  <string name="LockSelect_Action_Confirm">Mahlweni</string>
+  <string name="LockPatternConfirm_Action_Confirm">Tiyisisa xifaniso xa wena</string>
+  <string name="LockSelect_Action_Continue">Mahlweni</string>
+  <string name="LockPatternSet_Draw_Pattern">Dezenyara xifaniso xa kupfula</string>
+  <string name="UnlockPattern_DrawToUnlock">Dezenyara xifaniso kuva upfula Tella</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Xifaniso xa wena leximpsha xa kupfula</string>
+  <string name="LockPatternSet_Pattern_Recorded">Xifaniso xi vekisiwile</string>
+  <string name="UnlockPattern_PatternTooShort">Dezenyara xifaniso xa wena hi ku
+ligara 6 wa tiponto kumbe ku tlula</string>
+  <string name="LockPatternSet_RecordingPattern">Susa litiho loko uhetile</string>
+  <string name="LockPatternSet_Action_Redraw">Tima</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Xifaniso lexi hoxeke, thlela usungula</string>
+  <string name="LockPatternSet_Message_PatternStarted">Xifaniso xi sunguliwile</string>
+  <string name="LockPatternSet_Message_PatternCleared">Xifaniso xi timiwile</string>
+  <string name="LockPatternSet_Message_CellAdded">Selulari yi engeteliwile</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Selulari <xliff:g example="3" id="cell_index">%1$d</xliff:g> yi engeteliwile</string>
+  <string name="LockPatternSet_Message_PatternDetected">Xifaniso xi helelile</string>
+  <string name="UnLockPattern_PatternArea">Ndhawu ya kutsala xifaniso</string>
+  <string name="UnLockPattern_Message_DrawPattern">Dezenyara xifaniso xa wena kuva upfula Tella</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">Thlela usungula. Svifaniso sva wena svi fambelani.</string>
+  <string name="LockPinSet_Message_EnterPin">Nghenisa PIN ya wena</string>
+  <string name="UnlockPin_Message_EnterPin">Nghenisa PIN ya wena kuva upfula Tella</string>
+  <string name="LockPinSet_Message_Hint">Tirhisa tinomboro ta 6. Ungatirhisi tinomboro leti tingativiwaka hi kuolova, kufana ni siku la wena la kupsaliwa.</string>
+  <string name="LockPinSet_Message_Confirm">Tiyisisa PIN ya wena</string>
+  <string name="LockPinConfirm_Message_Confirm">Thlela unghenisa PIN ya wena, kuva utiyisisa ntsena.</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">Thlela usungula. MaPIN ya wena a ma fambelani.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN ya wena li hoxile, thlela usungula</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">Nghenisa kodiko la wena</string>
+  <string name="LockPasswordSet_Message_Hint">Tirhisa maletra ya 6 kumbe kutlula nasvona ungatirhisi makodiko lawa mangativiwaka hi kuolova, kufana ni rhito “kodiko.” Loko kodiko la wena li lehile, li va li sirhelelekile svinene.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Thlela usungula. Makodiko ya wena a ma fambelani.</string>
+  <string name="LockSuccess_Message_AllDone">Uhetile!</string>
+  <string name="LockSuccess_Message_Hint">U nga cinca kurhandza ka wena ka kukhiya ni kuendla hi ndlela ya wena kun\'wana ka Tella hi kuya ka Kulungisa.</string>
+  <string name="LockSuccess_Action_GoToTella">Yana ka Tella</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Kodiko la wena li hoxile, thlela usungula</string>
+  <string name="UnlockPassword_Message_EnterPassword">Nghenisa kodiko la wena kuva upfula Tella</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">Tiyisa kodiko la wena</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Nnghenisa kodiko ya wena nakambe, kuva utiyisisa ntsena.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Nghenisa kodiko ya wena ya svosvi kuva ucinca khiya la wena</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">Dezenyara xifaniso xa wena xa svosvi kuva ucinca khiya la wena</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">Nghenisa PIN ya wena ya svosvi kuva ucinca khiya la wena</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Nghenisa kodiko ya wena ya svosvi kuva ucinca ndlela ya kufihla</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Dezenyara xifaniso xa wena xa svosvi kuva ucinca ndlela ya kufihla</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Nghenisa PIN ya wena ya svosvi kuva ucinca ndlela ya kufihla</string>
+  <string name="Settings_Action_SetLock">Khiya</string>
+  <string name="Settings_Message_LockChanged">Khiya la wena li cinciwile!</string>
+</resources>

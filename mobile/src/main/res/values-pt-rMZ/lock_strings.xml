@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">Cancelar</string>
+  <string name="LockSelect_Action_Back">Voltar</string>
+  <string name="LockSelect_Action_Confirm">Próximo</string>
+  <string name="LockPatternConfirm_Action_Confirm">Confirme o seu padrão</string>
+  <string name="LockSelect_Action_Continue">Próximo</string>
+  <string name="LockPatternSet_Draw_Pattern">Desenhe um padrão de desbloqueio</string>
+  <string name="UnlockPattern_DrawToUnlock">Desenhe um padrão para desbloquear o Tella</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">O seu novo padrão de desbloqueio</string>
+  <string name="LockPatternSet_Pattern_Recorded">Padrão registado</string>
+  <string name="UnlockPattern_PatternTooShort">Desenhe o seu padrão ligando
+ pelo menos seis pontos</string>
+  <string name="LockPatternSet_RecordingPattern">Soltar o dedo quando estiver pronto</string>
+  <string name="LockPatternSet_Action_Redraw">Limpar</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Padrão incorrecto,
+ tente novamente.</string>
+  <string name="LockPatternSet_Message_PatternStarted">Padrão iniciado</string>
+  <string name="LockPatternSet_Message_PatternCleared">Padrão apagado</string>
+  <string name="LockPatternSet_Message_CellAdded">Célula adicionada</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Célula <xliff:g example="3" id="cell_index">%1$d</xliff:g> adicionada.</string>
+  <string name="LockPatternSet_Message_PatternDetected">Padrão concluído</string>
+  <string name="UnLockPattern_PatternArea">Área do padrão.</string>
+  <string name="UnLockPattern_Message_DrawPattern">Desenhe o seu padrão para
+desbloquear o Tella</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">Por favor, tente novamente. Os seus padrões não coincidem.</string>
+  <string name="LockPinSet_Message_EnterPin">Introduza o seu PIN</string>
+  <string name="UnlockPin_Message_EnterPin">Introduza o seu PIN para desbloquear
+o Tella</string>
+  <string name="LockPinSet_Message_Hint">Utilize pelo menos 6 dígitos.
+Evite utilizar números que possam ser facilmente adivinhados, como o seu aniversário.</string>
+  <string name="LockPinSet_Message_Confirm">Confirmar o seu PIN</string>
+  <string name="LockPinConfirm_Message_Confirm">Por favor, introduza o seu PIN mais uma vez,
+ só para certificar.</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">Por favor, tente novamente. Os seus PINs não coincidem.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN incorrecto,
+ tente novamente</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">Introduza a sua palavra-passe.</string>
+  <string name="LockPasswordSet_Message_Hint">Utilize pelo menos 6 caracteres e evite
+ utilizar palavras-passe que possam ser
+ facilmente adivinhadas, como “palavra-passe”. Quanto mais longa
+ for a palavra-passe, mais segura é.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Por favor, tente novamente. As suas palavras-passe não coincidem.</string>
+  <string name="LockSuccess_Message_AllDone">Já está tudo
+feito!</string>
+  <string name="LockSuccess_Message_Hint">Pode sempre alterar a sua opção de bloqueio
+ e personalizar ainda mais o Tella nas Definições.</string>
+  <string name="LockSuccess_Action_GoToTella">Aceder o tella</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Palavra-passe incorrecta,
+ tente novamente.</string>
+  <string name="UnlockPassword_Message_EnterPassword">Introduza a sua palavra-passe para
+desbloquear o Tella</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirmar a sua palavra-passe</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Introduza a sua palavra-passe mais uma vez, só para certificar.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Introduza a sua
+ palavra-passe actual
+ para alterar o seu
+ bloqueio</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">Desenhe o seu
+ padrão actual
+ para alterar o seu
+ bloqueio</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">Introduza o seu PIN actual para
+ alterar o seu bloqueio</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Introduza a sua
+ palavra-passe actual
+ para alterar a sua
+ camuflagem</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Desenhe o seu
+ padrão actual
+ para alterar a sua
+ camuflagem</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Introduza o seu PIN actual para
+ alterar a sua camuflagem</string>
+  <string name="Settings_Action_SetLock">Bloquear</string>
+  <string name="Settings_Message_LockChanged">O seu bloqueio foi alterado!</string>
+</resources>
