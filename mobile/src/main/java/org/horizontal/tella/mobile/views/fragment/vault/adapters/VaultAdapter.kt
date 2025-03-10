@@ -100,14 +100,10 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun removeFavoriteForms() {
+        favoriteForms.clear()
         adapterScope.launch {
-            if (favoriteForms.isNotEmpty()) {
-                items.removeAll(favoriteForms.toList())
-                favoriteForms.clear()
-                withContext(Dispatchers.Main) {
-                    submitList(items.toList())
-                }
-            }
+            items.removeAll(favoriteForms)
+            updateItems()
         }
     }
 
