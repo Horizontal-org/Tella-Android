@@ -18,6 +18,7 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.util.LockTimeoutManager
+import org.horizontal.tella.mobile.util.LockTimeoutManager.IMMEDIATE_SHUTDOWN
 import org.horizontal.tella.mobile.views.activity.PatternUpgradeActivity
 
 abstract class BaseLockActivity : BaseActivity() {
@@ -87,8 +88,8 @@ abstract class BaseLockActivity : BaseActivity() {
 
     private fun maybeRestoreTimeout() {
         if (Preferences.isTempTimeout()) {
-            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setTempTimeout(false)
+            LockTimeoutManager().lockTimeout = IMMEDIATE_SHUTDOWN
         }
     }
 

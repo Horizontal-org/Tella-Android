@@ -9,7 +9,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 
 
 public class LockTimeoutManager {
-    public static long IMMEDIATE_SHUTDOWN = -1L;
+    public static long IMMEDIATE_SHUTDOWN = 0L;
     public static long FIVE_MINUTES_SHUTDOWN = 300000L;
     public static long THREE_MINUTES_SHUTDOWN = 180000L;
     public static long ONE_MINUTES_SHUTDOWN = 60000L;

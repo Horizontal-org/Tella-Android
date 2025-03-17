@@ -239,6 +239,7 @@ class SecuritySettings :
 
     private fun onLockTimeoutChoosen(option: Long) {
         lockTimeoutManager.lockTimeout = option
+        Preferences.setTempTimeout(false)
         setUpLockTimeoutText()
     }
 
