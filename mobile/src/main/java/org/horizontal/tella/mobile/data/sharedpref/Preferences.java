@@ -298,7 +298,7 @@ public class Preferences {
 
     @Nullable
     public static long getLockTimeout() {
-        return getLong(SharedPrefs.LOCK_TIMEOUT, -1);
+        return getLong(SharedPrefs.LOCK_TIMEOUT, 0);
     }
 
     public static void setLockTimeout(@Nullable long value) {
@@ -306,7 +306,7 @@ public class Preferences {
     }
 
     public static Long getFailedUnlockOption() {
-        return getLong(FAILED_UNLOCK_OPTION, -1);
+        return getLong(FAILED_UNLOCK_OPTION, 0);
     }
 
     public static void setFailedUnlockOption(Long option) {
