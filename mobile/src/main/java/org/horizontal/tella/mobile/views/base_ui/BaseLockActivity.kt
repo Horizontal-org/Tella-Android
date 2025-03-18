@@ -87,8 +87,11 @@ abstract class BaseLockActivity : BaseActivity() {
     }
 
     private fun maybeRestoreTimeout() {
+        // Check if a temporary timeout is currently set in preferences
         if (Preferences.isTempTimeout()) {
+            // Reset the temporary timeout flag in preferences
             Preferences.setTempTimeout(false)
+            // Immediately set the lock timeout to shut down the application
             LockTimeoutManager().lockTimeout = IMMEDIATE_SHUTDOWN
         }
     }
@@ -107,7 +110,10 @@ abstract class BaseLockActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
+        // Attempt to restore the timeout setting if it was temporarily changed
         maybeRestoreTimeout()
+        // Note: onDestroy() is not always reliable, as its execution depends on system behavior
+        // and can vary across devices.
         super.onDestroy()
     }
 }
