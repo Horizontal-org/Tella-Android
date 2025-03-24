@@ -16,7 +16,6 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:startTitle="@string/connect_to_device" />
 
-    <!-- QR Code Title -->
     <TextView
         android:id="@+id/titleTextView"
         style="@style/Tella_Main_White_TextExtraLargeBold"
