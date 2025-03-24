@@ -745,6 +745,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
      * This function show connections when all the server types are counted.
      **/
     private fun maybeShowConnections() {
+        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
         // If the serversList is not empty, check if it has changed
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections

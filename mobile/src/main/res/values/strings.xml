@@ -1003,4 +1003,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report have successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+    <string name="NearBySharing">Nearby sharing</string>
 </resources>
