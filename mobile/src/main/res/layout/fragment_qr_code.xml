@@ -38,6 +38,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/qr_scan_border"
         android:keepScreenOn="true"
+        android:padding="8dp"
         app:cameraAudio="off"
         app:cameraFacing="back"
         app:cameraFlash="auto"
@@ -45,7 +46,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
-
 
     <!-- Troubleshooting Text -->
     <TextView
