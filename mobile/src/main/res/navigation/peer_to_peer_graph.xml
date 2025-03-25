@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/peer_to_peer_graph"
+    app:startDestination="@id/startNearBySharingFragment">
+
+    <fragment
+        android:id="@+id/startNearBySharingFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.StartNearBySharingFragment"
+        tools:layout="@layout/start_near_by_sharing_fragment"
+        android:label="StartNearBySharingFragment" />
+</navigation>
