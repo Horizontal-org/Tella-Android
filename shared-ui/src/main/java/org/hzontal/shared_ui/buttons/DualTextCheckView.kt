@@ -73,4 +73,10 @@ class DualTextCheckView @JvmOverloads constructor(
         }
     }
 
+    fun setRightText(text : String?){
+        if (text != null){
+            binding.rightTextView.text = text
+        }
+    }
+
 }

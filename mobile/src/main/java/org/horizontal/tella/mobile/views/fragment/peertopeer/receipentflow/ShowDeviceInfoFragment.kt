@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View

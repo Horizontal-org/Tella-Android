@@ -1017,4 +1017,12 @@ Would you like to share analytics with the Tella team?</string>
   <string name="sequence_mismatch_warning">If the sequence on your device does not match the sequence on the sender’s device, the connection may not be secure and should be discarded.</string>
   <string name="confirm_and_connect">Confirm and connect</string>
   <string name="discard_and_start_over">Discard and start over</string>
+  <string name="wifi">Wi-Fi</string>
+  <string name="get_connected">Get connected</string>
+  <string name="wifi_connection_instruction">Make sure both devices are connected to the same Wi-Fi network</string>
+  <string name="tips_to_connect">Tips to connect\n1. The Wi-Fi network does not need to be \nconnected to the internet.\n2.
+You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
+3. Disable any VPN connections.</string>
+  <string name="current_wifi_network">Current Wifi network</string>
+  <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
 </resources>

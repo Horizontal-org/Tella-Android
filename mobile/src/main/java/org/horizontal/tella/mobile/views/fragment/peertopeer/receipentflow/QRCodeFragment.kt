@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -11,6 +11,15 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 
 class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCodeBinding::inflate) {
 
+    companion object {
+        @JvmStatic
+        fun newInstance(): QRCodeFragment {
+            val frag = QRCodeFragment()
+            val args = Bundle()
+            frag.arguments = args
+            return frag
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,12 +28,12 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun initListeners() {
         generateQrCode()
-        binding.connectManuallyButton.setOnClickListener { }
+        binding.connectManuallyButton.setOnClickListener { generateQrCode() }
     }
 
 
     private fun generateQrCode() {
-        val textToEncode = "https://www.instagram.com/" // Change to your actual data
+        val textToEncode = "https://www.facebook.com/" // Change to your actual data
 
         try {
             val barcodeEncoder = BarcodeEncoder()
