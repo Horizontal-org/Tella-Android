@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
+import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ConnectHotspotLayoutBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
@@ -31,6 +33,7 @@ class ConnectHotspotFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObservers()
+        initListeners()
         viewModel.fetchCurrentNetworkInfo()
     }
 
@@ -40,16 +43,39 @@ class ConnectHotspotFragment :
             when (info.type) {
                 ConnectionType.WIFI -> {
                     binding.currentWifiText.setRightText(info.networkName)
+                    enableNextButton(ConnectionType.WIFI)
                 }
 
                 ConnectionType.CELLULAR -> {
                     binding.currentWifiText.setRightText(info.networkName)
+                    enableNextButton(ConnectionType.CELLULAR)
                 }
 
                 ConnectionType.NONE -> {
                     binding.currentWifiText.setRightText("No network connected")
+                    enableNextButton(ConnectionType.NONE)
                 }
             }
+        }
+    }
+
+    private fun initListeners() {
+        binding.toolbar.onLeftClickListener = { baseActivity.onBackPressed() }
+
+        binding.nextBtn.setOnClickListener { }
+
+        binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
+    }
+
+    private fun enableNextButton(connectionType: ConnectionType) {
+        if (connectionType == ConnectionType.NONE) {
+            binding.nextBtn.setOnClickListener { }
+            binding.nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white_40))
+            binding.currentWifi.setCheckboxEnabled(false)
+        } else {
+            binding.nextBtn.setOnClickListener { }
+            binding.nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white))
+            binding.currentWifi.setCheckboxEnabled(true)
         }
     }
 }

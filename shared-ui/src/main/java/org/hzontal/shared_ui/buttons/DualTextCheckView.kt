@@ -79,4 +79,12 @@ class DualTextCheckView @JvmOverloads constructor(
         }
     }
 
+    // New method: Enable/Disable Checkbox
+    fun setCheckboxEnabled(isEnabled: Boolean) {
+        binding.checkBox.isEnabled = isEnabled
+        binding.rightTextView.isEnabled = isEnabled
+        binding.leftTextView.isEnabled = isEnabled
+        alpha = if (isEnabled) 1f else 0.5f // visually indicate disabled state
+    }
+
 }
