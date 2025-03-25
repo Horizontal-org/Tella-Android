@@ -9,38 +9,48 @@ import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 
-class StartNearBySharingFragment  : BaseBindingFragment<StartNearBySharingFragmentBinding>(
-    StartNearBySharingFragmentBinding::inflate), View.OnClickListener {
+class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmentBinding>(
+    StartNearBySharingFragmentBinding::inflate
+) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.learnMoreTextView?.setOnClickListener {
-            Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
-        }
-
-        binding.nextBtn.hide()
-        binding.sendFilesBtn.setOnClickListener {
-            onSendFilesSelected()
-        }
-        binding.receiveFilesBtn.setOnClickListener {
-            onReceiveFilesSelected()
-        }
-        binding.nextBtn.setOnClickListener(this)
+        initViews()
     }
 
-    private fun onReceiveFilesSelected() {
-        binding.receiveFilesBtn.isChecked = true
-        binding.sendFilesBtn.isChecked = false
-        binding.nextBtn.isVisible = true
+    private fun initViews() {
+        binding?.apply {
+            nextBtn.hide()
+
+            learnMoreTextView.setOnClickListener {
+                baseActivity.maybeChangeTemporaryTimeout()
+                Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
+            }
+
+            sendFilesBtn.setOnClickListener { selectSendOption() }
+            receiveFilesBtn.setOnClickListener { selectReceiveOption() }
+            nextBtn.setOnClickListener { onNextClicked() }
+        }
     }
 
-    private fun onSendFilesSelected() {
-        binding.sendFilesBtn.isChecked = true
-        binding.receiveFilesBtn.isChecked = false
-        binding.nextBtn.isVisible = true
+    private fun selectSendOption() {
+        binding?.apply {
+            sendFilesBtn.isChecked = true
+            receiveFilesBtn.isChecked = false
+            nextBtn.isVisible = true
+        }
     }
 
-    override fun onClick(v: View?) {
+    private fun selectReceiveOption() {
+        binding?.apply {
+            receiveFilesBtn.isChecked = true
+            sendFilesBtn.isChecked = false
+            nextBtn.isVisible = true
+        }
+    }
+
+    private fun onNextClicked() {
+        // TODO: Implement navigation on "Next"
     }
 
 }
