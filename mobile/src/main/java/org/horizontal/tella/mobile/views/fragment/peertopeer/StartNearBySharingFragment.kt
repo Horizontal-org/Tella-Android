@@ -27,24 +27,15 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
                 Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
             }
 
-            sendFilesBtn.setOnClickListener { selectSendOption() }
-            receiveFilesBtn.setOnClickListener { selectReceiveOption() }
+            sendFilesBtn.setOnClickListener { selectOption(true) }
+            receiveFilesBtn.setOnClickListener { selectOption(false) }
             nextBtn.setOnClickListener { onNextClicked() }
         }
     }
-
-    private fun selectSendOption() {
+    private fun selectOption(isSend: Boolean) {
         binding?.apply {
-            sendFilesBtn.isChecked = true
-            receiveFilesBtn.isChecked = false
-            nextBtn.isVisible = true
-        }
-    }
-
-    private fun selectReceiveOption() {
-        binding?.apply {
-            receiveFilesBtn.isChecked = true
-            sendFilesBtn.isChecked = false
+            sendFilesBtn.isChecked = isSend
+            receiveFilesBtn.isChecked = !isSend
             nextBtn.isVisible = true
         }
     }
