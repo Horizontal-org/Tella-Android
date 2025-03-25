@@ -25,6 +25,7 @@
         <attr name="check_state" format="boolean" />
         <attr name="tint_color" format="color|reference" />
         <attr name="text_color" format="color|reference" />
+        <attr name="text_all_caps" format="boolean"/>
     </declare-styleable>
 
 

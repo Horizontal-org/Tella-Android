@@ -1006,10 +1006,15 @@ Would you like to share analytics with the Tella team?</string>
     <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
-  <string name="connect_manually">CONNECT MANUALLY</string>
+  <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information </string>
   <string name="device_connection_instructions">The sender needs to input the following to\n connect to your device.</string>
   <string name="connect_code">Connect code</string>
   <string name="pin">PIN</string>
   <string name="port">Port</string>
+  <string name="verification">Verification</string>
+  <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
+  <string name="sequence_mismatch_warning">If the sequence on your device does not match the sequence on the sender’s device, the connection may not be secure and should be discarded.</string>
+  <string name="confirm_and_connect">Confirm and connect</string>
+  <string name="discard_and_start_over">Discard and start over</string>
 </resources>
