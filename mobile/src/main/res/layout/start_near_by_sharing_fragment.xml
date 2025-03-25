@@ -6,24 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/dark_purple">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.DarkNoActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <org.hzontal.shared_ui.appbar.ToolbarComponent
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-            app:startTitle="@string/nearby_sharing" />
-    </com.google.android.material.appbar.AppBarLayout>
-
 
     <ImageView
         android:id="@+id/setupImgV"
@@ -36,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -68,13 +50,11 @@
         android:layout_height="54dp"
         android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
         android:layout_marginTop="50dp"
-        android:background="@drawable/bg_round_orange_btn"
         app:check_state="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shareFilesDescriptionTv"
-        app:text="@string/send_files"
-        app:text_color="@color/btn_dark_letter" />
+        app:text="@string/send_files" />
 
     <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/receiveFilesBtn"

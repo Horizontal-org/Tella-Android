@@ -463,6 +463,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
             }
 
+            ServerType.PEERTOPEER -> {
+                nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
+            }
+
             else -> {}
         }
     }

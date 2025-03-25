@@ -1005,11 +1005,13 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
     <string name="NearBySharing">Nearby sharing</string>
   <string name="share_files_description">
-    Share files with nearby devices without an Internet connection\n1- Both devices must be connected to the same Wifi network\n2- Make sure you trust the person you are sharing files with
+    Share files with nearby devices without an Internet connection\n  1. Both devices must be connected to the same Wifi network\n  2. Make sure you trust the person you are sharing files with
 </string>
   <string name="send_files">Send files</string>
   <string name="receive_files">Receive files</string>
   <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
   <string name="nearby_sharing">Nearby sharing</string>
   <string name="how_it_works">How it works</string>
+  <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
+
 </resources>
