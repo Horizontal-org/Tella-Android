@@ -60,7 +60,9 @@ class ConnectHotspotFragment :
     }
 
     private fun initListeners() {
-        binding.toolbar.onLeftClickListener = { baseActivity.onBackPressed() }
+        //binding.toolbar.onLeftClickListener = { baseActivity.onBackPressed() }
+
+        binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
 
         binding.nextBtn.setOnClickListener { }
 

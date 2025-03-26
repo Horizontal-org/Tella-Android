@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.StartNearBySharingFragmentBinding
 import org.horizontal.tella.mobile.util.Util
@@ -20,8 +21,8 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
 
     private fun initViews() {
         binding?.apply {
-            nextBtn.hide()
-
+            nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white_40))
+            toolbar.backClickListener = { baseActivity.onBackPressed() }
             learnMoreTextView.setOnClickListener {
                 baseActivity.maybeChangeTemporaryTimeout()
                 Util.startBrowserIntent(context, getString(R.string.peerToPeer_documentation_url))
@@ -37,6 +38,7 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
             sendFilesBtn.isChecked = isSend
             receiveFilesBtn.isChecked = !isSend
             nextBtn.isVisible = true
+            nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white))
         }
     }
 
