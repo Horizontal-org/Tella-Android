@@ -30,14 +30,14 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
 
             sendFilesBtn.setOnClickListener { selectOption(true) }
             receiveFilesBtn.setOnClickListener { selectOption(false) }
-            nextBtn.setOnClickListener { onNextClicked() }
+            nextBtn.setOnClickListener { }
         }
     }
     private fun selectOption(isSend: Boolean) {
         binding?.apply {
             sendFilesBtn.isChecked = isSend
             receiveFilesBtn.isChecked = !isSend
-            nextBtn.isVisible = true
+            nextBtn.setOnClickListener { onNextClicked() }
             nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white))
         }
     }
