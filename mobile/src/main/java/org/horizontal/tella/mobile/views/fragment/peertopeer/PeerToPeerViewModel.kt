@@ -39,38 +39,34 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             }
 
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                val wifiManager =
-                    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                // Device is connected to WiFi network
+                val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
 
-                val ssid =
-                    if (!wifiInfo.ssid.isNullOrEmpty() && wifiInfo.ssid != WifiManager.UNKNOWN_SSID) {
-                        wifiInfo.ssid.trim('"')
-                    } else {
-                        getWifiSsidFromCapabilities(capabilities) ?: "Hotspot"
-                    }
+                val ssid = if (!wifiInfo.ssid.isNullOrEmpty() && wifiInfo.ssid != WifiManager.UNKNOWN_SSID) {
+                    wifiInfo.ssid.trim('"')
+                } else {
+                    getWifiSsidFromCapabilities(capabilities) ?: "Hotspot"
+                }
 
                 val ipAddress = Formatter.formatIpAddress(wifiInfo.ipAddress)
                 _networkInfo.value = NetworkInfo(ConnectionType.WIFI, ssid, ipAddress)
             }
 
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+            isDeviceHotspotEnabled(context) -> {
+                // Device is hosting a hotspot
                 val hotspotSSID = getDeviceHotspotSSID(context) ?: "Hotspot"
-                _networkInfo.value = NetworkInfo(ConnectionType.CELLULAR, hotspotSSID, null)
+                _networkInfo.value = NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, null)
+            }
+
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                // Cellular connection
+                _networkInfo.value = NetworkInfo(ConnectionType.CELLULAR, null, null)
             }
 
             else -> {
                 _networkInfo.value = NetworkInfo(ConnectionType.NONE, null, null)
             }
-        }
-    }
-
-
-    private fun getWifiSsidFromCapabilities(capabilities: NetworkCapabilities): String? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            (capabilities.transportInfo as? WifiInfo)?.ssid?.trim('"')
-        } else {
-            null
         }
     }
 
@@ -88,6 +84,27 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
                 (ssidField.get(it) as? String)?.trim('"')
             }
         } catch (e: Exception) {
+            null
+        }
+    }
+
+    @SuppressLint("DiscouragedPrivateApi")
+    private fun isDeviceHotspotEnabled(context: Context): Boolean {
+        return try {
+            val wifiManager =
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
+            method.isAccessible = true
+            method.invoke(wifiManager) as Boolean
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun getWifiSsidFromCapabilities(capabilities: NetworkCapabilities): String? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            (capabilities.transportInfo as? WifiInfo)?.ssid?.trim('"')
+        } else {
             null
         }
     }

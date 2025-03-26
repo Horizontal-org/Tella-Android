@@ -1,5 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.data
 
 enum class ConnectionType {
-    WIFI, CELLULAR, NONE
+    WIFI, CELLULAR, HOTSPOT, NONE
 }

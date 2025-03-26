@@ -41,6 +41,11 @@ class ConnectHotspotFragment :
 
         viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
             when (info.type) {
+                ConnectionType.HOTSPOT -> {
+                    binding.currentWifiText.setRightText(info.networkName)
+                    enableNextButton(ConnectionType.HOTSPOT)
+                }
+
                 ConnectionType.WIFI -> {
                     binding.currentWifiText.setRightText(info.networkName)
                     enableNextButton(ConnectionType.WIFI)
@@ -60,7 +65,6 @@ class ConnectHotspotFragment :
     }
 
     private fun initListeners() {
-        //binding.toolbar.onLeftClickListener = { baseActivity.onBackPressed() }
 
         binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
 
