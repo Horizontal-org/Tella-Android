@@ -65,6 +65,11 @@
             app:destination="@id/next_cloud_graph"
             app:enterAnim="@anim/slide_in_start"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_homeScreen_to_peerToPeer_screen"
+            app:destination="@id/peerToPeerScreen"
+            app:enterAnim="@anim/slide_in_start"
+            app:exitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -115,4 +120,10 @@
         android:name="org.horizontal.tella.mobile.views.fragment.resources.ResourcesListFragment"
         android:label="@string/Home_BottomNav_Resources"
         tools:layout="@layout/fragment_resources_list" />
+
+    <activity
+        android:id="@+id/peerToPeerScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.activity.PeerToPeerActivity"
+        android:label="PeerToPeer"
+        tools:layout="@layout/activity_peer_to_peer"/>
 </navigation>

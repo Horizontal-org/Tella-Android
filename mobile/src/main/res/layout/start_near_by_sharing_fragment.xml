@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/ic_share_big"
+        app:layout_constraintBottom_toTopOf="@+id/shareFilesTitleTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/shareFilesTitleTv"
+        style="@style/Tella_Main_White_Text.Bold"
+        android:layout_marginBottom="12dp"
+        android:text="@string/how_it_works"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/shareFilesDescriptionTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/shareFilesDescriptionTv"
+        style="@style/Tella_Main_White_Text.Bold"
+        android:layout_marginTop="@dimen/lock_subtitle_desc_margin_top"
+        android:padding="24dp"
+        android:text="@string/share_files_description"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/sendFilesBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/sendFilesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginTop="50dp"
+        app:check_state="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shareFilesDescriptionTv"
+        app:text="@string/send_files" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/receiveFilesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        app:check_state="false"
+        app:layout_constraintTop_toBottomOf="@+id/sendFilesBtn"
+        app:text="@string/receive_files" />
+
+    <TextView
+        android:id="@+id/learn_more_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:text="@string/learn_more_about_nearby_sharing"
+        android:textColor="@color/wa_yellow"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/receiveFilesBtn" />
+
+    <TextView
+        android:id="@+id/next_btn"
+        style="@style/Unlock_White_Text_Back"
+        android:layout_marginEnd="34dp"
+        android:text="@string/action_next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

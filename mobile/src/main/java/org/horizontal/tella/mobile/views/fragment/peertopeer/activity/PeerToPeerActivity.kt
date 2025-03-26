@@ -1,17 +1,17 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.activity
 
 import android.os.Bundle
-import dagger.hilt.android.AndroidEntryPoint
-import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.databinding.ActivityPeerToPeerBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
-import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectHotspotFragment
 
-@AndroidEntryPoint
 class PeerToPeerActivity  : BaseLockActivity() {
+    private lateinit var binding: ActivityPeerToPeerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.peer_to_peer_layout)
-        addFragment(ConnectHotspotFragment.newInstance(), R.id.root)
+        binding = ActivityPeerToPeerBinding.inflate(layoutInflater)
+        setContentView(binding.getRoot())
+        binding.toolbar.backClickListener = { this.onBackPressed() }
+
     }
 }

@@ -1025,4 +1025,15 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
 3. Disable any VPN connections.</string>
   <string name="current_wifi_network">Current Wifi network</string>
   <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
+    <string name="NearBySharing">Nearby sharing</string>
+  <string name="share_files_description">
+    Share files with nearby devices without an Internet connection\n  1. Both devices must be connected to the same Wifi network\n  2. Make sure you trust the person you are sharing files with
+</string>
+  <string name="send_files">Send files</string>
+  <string name="receive_files">Receive files</string>
+  <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
+  <string name="nearby_sharing">Nearby sharing</string>
+  <string name="how_it_works">How it works</string>
+  <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
+
 </resources>
