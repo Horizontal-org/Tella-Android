@@ -41,7 +41,7 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
     }
 
     private fun onNextClicked() {
-        // TODO: Implement navigation on "Next"
+        navManager().navigateFromStartNearBySharingFragmentToGoogleDriveConnectHotspotFragment()
     }
 
 }

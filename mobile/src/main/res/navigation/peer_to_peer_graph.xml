@@ -9,5 +9,14 @@
         android:id="@+id/startNearBySharingFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.StartNearBySharingFragment"
         tools:layout="@layout/start_near_by_sharing_fragment"
-        android:label="StartNearBySharingFragment" />
+        android:label="StartNearBySharingFragment" >
+        <action
+            android:id="@+id/action_startNearBySharingFragment_to_connectHotspotFragment"
+            app:destination="@id/connectHotspotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/connectHotspotFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectHotspotFragment"
+        tools:layout="@layout/connect_hotspot_layout"
+        android:label="ConnectHotspotFragment" />
 </navigation>

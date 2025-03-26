@@ -160,4 +160,8 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment)
     }
 
+    fun navigateFromStartNearBySharingFragmentToGoogleDriveConnectHotspotFragment() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_connectHotspotFragment)
+    }
+
 }
