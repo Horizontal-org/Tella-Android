@@ -8,7 +8,6 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.text.format.Formatter
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -108,6 +107,5 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             null
         }
     }
-
 
 }

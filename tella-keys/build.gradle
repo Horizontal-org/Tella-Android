@@ -37,6 +37,11 @@ dependencies {
     api "androidx.core:core-ktx:$versions.ktx"
     api "androidx.biometric:biometric:$versions.biometric"
 
+    //bouncycastle
+    api 'org.bouncycastle:bcprov-jdk18on:1.78'
+    api 'org.bouncycastle:bcpkix-jdk18on:1.78'
+
+
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"

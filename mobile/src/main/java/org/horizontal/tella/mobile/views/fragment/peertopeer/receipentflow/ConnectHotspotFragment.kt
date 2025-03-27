@@ -8,10 +8,12 @@ import androidx.fragment.app.viewModels
 import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.databinding.ConnectHotspotLayoutBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ConnectHotspotFragment :
@@ -44,11 +46,13 @@ class ConnectHotspotFragment :
                 ConnectionType.HOTSPOT -> {
                     binding.currentWifiText.setRightText(info.networkName)
                     enableNextButton(ConnectionType.HOTSPOT)
+                    info.ipAddress?.let { generateCertificate(it) }
                 }
 
                 ConnectionType.WIFI -> {
                     binding.currentWifiText.setRightText(info.networkName)
                     enableNextButton(ConnectionType.WIFI)
+                    info.ipAddress?.let { generateCertificate(it) }
                 }
 
                 ConnectionType.CELLULAR -> {
@@ -83,5 +87,16 @@ class ConnectHotspotFragment :
             binding.nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white))
             binding.currentWifi.setCheckboxEnabled(true)
         }
+    }
+
+    private fun generateCertificate(ipAddress: String) {
+        val (keyPair, certificate) = CertificateGenerator.generateCertificate(
+            ipAddress = ipAddress
+        )
+
+        Timber.i(
+            "KeyPair generated: Algorithm=%s, PublicFormat=%s",
+            keyPair.public.algorithm, keyPair.public.format
+        )
     }
 }
