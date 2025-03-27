@@ -4,7 +4,6 @@ import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder
 import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.operator.OperatorCreationException
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
 import java.security.KeyPair
 import java.security.KeyPairGenerator
@@ -15,17 +14,9 @@ import java.util.Date
 object CertificateGenerator {
 
     init {
-        // Add BC provider only if not already registered
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(BouncyCastleProvider())
-            println("Bouncy Castle provider registered successfully")
-        } else {
-            println("Bouncy Castle provider already registered")
         }
-
-        // Debug: Print available signature algorithms
-        val algorithms = Security.getAlgorithms("Signature")
-        println("Available signature algorithms: ${algorithms.joinToString()}")
     }
 
     fun generateCertificate(
@@ -34,8 +25,7 @@ object CertificateGenerator {
         validityDays: Int = 365,
         ipAddress: String
     ): Pair<KeyPair, X509Certificate> {
-        // Generate key pair
-        val keyGen = KeyPairGenerator.getInstance("RSA", BouncyCastleProvider.PROVIDER_NAME)
+        val keyGen = KeyPairGenerator.getInstance("RSA")
         keyGen.initialize(2048)
         val keyPair = keyGen.generateKeyPair()
 
@@ -64,28 +54,15 @@ object CertificateGenerator {
             )
         }
 
-        // Try both uppercase and lowercase variants of the algorithm name
-        val signer = try {
-            JcaContentSignerBuilder("SHA256WITHRSA")  // First try uppercase
-                .setProvider(BouncyCastleProvider.PROVIDER_NAME)
-                .build(keyPair.private)
-        } catch (e: OperatorCreationException) {
-            try {
-                JcaContentSignerBuilder("SHA256withRSA")  // Fallback to lowercase
-                    .setProvider(BouncyCastleProvider.PROVIDER_NAME)
-                    .build(keyPair.private)
-            } catch (e2: OperatorCreationException) {
-                throw IllegalStateException("Failed to create signer. Available algorithms: " +
-                        Security.getAlgorithms("Signature").joinToString(), e2)
-            }
-        }
+        val signer = JcaContentSignerBuilder("SHA256withRSA")
+            .build(keyPair.private)
 
         val holder = certBuilder.build(signer)
 
         val certificate = JcaX509CertificateConverter()
-            .setProvider(BouncyCastleProvider.PROVIDER_NAME)
             .getCertificate(holder)
 
         return Pair(keyPair, certificate)
     }
+
 }
