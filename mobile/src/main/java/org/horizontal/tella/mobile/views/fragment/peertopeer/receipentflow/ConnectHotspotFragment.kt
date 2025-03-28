@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,8 @@ import timber.log.Timber
 class ConnectHotspotFragment :
     BaseBindingFragment<ConnectHotspotLayoutBinding>(ConnectHotspotLayoutBinding::inflate) {
 
-    private val viewModel: PeerToPeerViewModel by viewModels()
+    private val viewModel: PeerToPeerViewModel by activityViewModels()
+    private var isCheckboxChecked = false
 
     companion object {
         @JvmStatic
@@ -45,30 +47,33 @@ class ConnectHotspotFragment :
             when (info.type) {
                 ConnectionType.HOTSPOT -> {
                     binding.currentWifiText.setRightText(info.networkName)
-                    enableNextButton(ConnectionType.HOTSPOT)
-                    info.ipAddress?.let { generateCertificate(it) }
+                    updateNextButtonState(ConnectionType.HOTSPOT)
                 }
 
                 ConnectionType.WIFI -> {
                     binding.currentWifiText.setRightText(info.networkName)
-                    enableNextButton(ConnectionType.WIFI)
-                    info.ipAddress?.let { generateCertificate(it) }
+                    updateNextButtonState(ConnectionType.WIFI)
                 }
 
                 ConnectionType.CELLULAR -> {
                     binding.currentWifiText.setRightText(info.networkName)
-                    enableNextButton(ConnectionType.CELLULAR)
+                    updateNextButtonState(ConnectionType.CELLULAR)
                 }
 
                 ConnectionType.NONE -> {
                     binding.currentWifiText.setRightText("No network connected")
-                    enableNextButton(ConnectionType.NONE)
+                    updateNextButtonState(ConnectionType.NONE)
                 }
             }
         }
     }
 
     private fun initListeners() {
+
+        binding.currentWifi.setOnCheckedChangeListener { isChecked ->
+            isCheckboxChecked = isChecked
+            updateNextButtonState(viewModel.currentNetworkInfo?.type)
+        }
 
         binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
 
@@ -77,26 +82,24 @@ class ConnectHotspotFragment :
         binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
     }
 
-    private fun enableNextButton(connectionType: ConnectionType) {
-        if (connectionType == ConnectionType.NONE) {
-            binding.nextBtn.setOnClickListener { }
-            binding.nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white_40))
-            binding.currentWifi.setCheckboxEnabled(false)
+    private fun updateNextButtonState(connectionType: ConnectionType?) {
+        val isEligibleConnection =
+            connectionType != ConnectionType.NONE && connectionType != ConnectionType.CELLULAR
+        val shouldEnable = isEligibleConnection && isCheckboxChecked
+
+        binding.nextBtn.setOnClickListener(if (shouldEnable) {
+            { onNextClicked() }
         } else {
-            binding.nextBtn.setOnClickListener { }
-            binding.nextBtn.setTextColor(getColor(baseActivity, R.color.wa_white))
-            binding.currentWifi.setCheckboxEnabled(true)
-        }
+            { }
+        })
+        binding.nextBtn.setTextColor(
+            getColor(baseActivity, if (shouldEnable) R.color.wa_white else R.color.wa_white_40)
+        )
+        binding.currentWifi.setCheckboxEnabled(isEligibleConnection)
     }
 
-    private fun generateCertificate(ipAddress: String) {
-        val (keyPair, certificate) = CertificateGenerator.generateCertificate(
-            ipAddress = ipAddress
-        )
-
-        Timber.i(
-            "KeyPair generated: Algorithm=%s, PublicFormat=%s",
-            keyPair.public.algorithm, keyPair.public.format
-        )
+    private fun onNextClicked() {
+        navManager().navigateFromActionConnectHotspotScreenToQrCodeScreen()
     }
+
 }

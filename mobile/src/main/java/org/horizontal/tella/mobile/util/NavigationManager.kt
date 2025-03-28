@@ -55,9 +55,11 @@ class NavigationManager(
     fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }
+
     fun navigateFromNextCloudEntryScreenToNextCloudSendScreen() {
         navigateToWithBundle(R.id.action_newNextCloudScreen_to_nextCloudSendScreen)
     }
+
     fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
     }
@@ -65,6 +67,7 @@ class NavigationManager(
     fun navigateFromNextCloudMainScreenToNextCloudSendScreen() {
         navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSendScreen)
     }
+
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
@@ -72,6 +75,7 @@ class NavigationManager(
     fun navigateFromNextCloudScreenToNextCloudSubmittedScreen() {
         navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSubmittedScreen)
     }
+
     fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
         navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
     }
@@ -136,7 +140,8 @@ class NavigationManager(
     fun navigateToNextCloudCreateFolderScreen() {
         navigateToWithBundle(R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen)
     }
-    fun actionNextCloudNewFolderScreenToSuccessfulScreen(){
+
+    fun actionNextCloudNewFolderScreenToSuccessfulScreen() {
         navigateToWithBundle(R.id.action_nextCloudNewFolderScreen_to_successfulSetServerFragment)
     }
 
@@ -160,8 +165,12 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment)
     }
 
-    fun navigateFromStartNearBySharingFragmentToGoogleDriveConnectHotspotFragment() {
+    fun navigateFromStartNearBySharingFragmentToConnectHotspotFragment() {
         navigateToWithBundle(R.id.action_startNearBySharingFragment_to_connectHotspotFragment)
+    }
+
+    fun navigateFromActionConnectHotspotScreenToQrCodeScreen() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_qrCodeScreen)
     }
 
 }

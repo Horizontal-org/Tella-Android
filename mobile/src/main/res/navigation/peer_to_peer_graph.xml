@@ -8,15 +8,29 @@
     <fragment
         android:id="@+id/startNearBySharingFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.StartNearBySharingFragment"
-        tools:layout="@layout/start_near_by_sharing_fragment"
-        android:label="StartNearBySharingFragment" >
+        android:label="StartNearBySharingFragment"
+        tools:layout="@layout/start_near_by_sharing_fragment">
         <action
             android:id="@+id/action_startNearBySharingFragment_to_connectHotspotFragment"
-            app:destination="@id/connectHotspotFragment" />
+            app:destination="@id/connectHotspotScreen" />
     </fragment>
+
     <fragment
-        android:id="@+id/connectHotspotFragment"
+        android:id="@+id/connectHotspotScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectHotspotFragment"
-        tools:layout="@layout/connect_hotspot_layout"
-        android:label="ConnectHotspotFragment" />
+        android:label="ConnectHotspotFragment"
+        tools:layout="@layout/connect_hotspot_layout" >
+
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_qrCodeScreen"
+            app:destination="@id/qrCodeScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrCodeScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.QRCodeFragment"
+        android:label="ConnectHotspotFragment"
+        tools:layout="@layout/fragment_qr_code" >
+
+    </fragment>
 </navigation>

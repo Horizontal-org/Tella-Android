@@ -8,6 +8,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.text.format.Formatter
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +25,10 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
 
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
+    var currentNetworkInfo: NetworkInfo? = null
+        private set
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
     fun fetchCurrentNetworkInfo() {
         val connectivityManager =
@@ -67,6 +71,8 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
                 _networkInfo.value = NetworkInfo(ConnectionType.NONE, null, null)
             }
         }
+
+        currentNetworkInfo = _networkInfo.value
     }
 
     @SuppressLint("DiscouragedPrivateApi")
