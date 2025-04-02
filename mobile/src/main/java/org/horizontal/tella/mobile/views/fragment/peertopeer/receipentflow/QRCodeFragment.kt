@@ -29,6 +29,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         if (!ip.isNullOrEmpty()) {
             setupServerAndQr(ip)
         }
+        handleBack()
     }
 
     private fun setupServerAndQr(ip: String) {
@@ -69,6 +70,11 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         } catch (e: WriterException) {
             e.printStackTrace()
         }
+    }
+
+    private fun handleBack() {
+        binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.backBtn.setOnClickListener { nav().popBackStack() }
     }
 
 }

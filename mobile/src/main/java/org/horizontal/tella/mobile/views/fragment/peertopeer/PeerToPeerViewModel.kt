@@ -17,6 +17,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
+import java.net.Inet4Address
+import java.net.NetworkInterface
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +44,6 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             }
 
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                // Device is connected to WiFi network
                 val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
 
@@ -57,13 +58,12 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             }
 
             isDeviceHotspotEnabled(context) -> {
-                // Device is hosting a hotspot
                 val hotspotSSID = getDeviceHotspotSSID(context) ?: "Hotspot"
-                _networkInfo.value = NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, null)
+                val hotspotIpAddress = getDeviceHotspotIpAddress()
+                _networkInfo.value = NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, hotspotIpAddress)
             }
 
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                // Cellular connection
                 _networkInfo.value = NetworkInfo(ConnectionType.CELLULAR, null, null)
             }
 
@@ -71,6 +71,7 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
                 _networkInfo.value = NetworkInfo(ConnectionType.NONE, null, null)
             }
         }
+
 
         currentNetworkInfo = _networkInfo.value
     }
@@ -113,5 +114,25 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             null
         }
     }
+
+    @SuppressLint("DiscouragedPrivateApi")
+    private fun getDeviceHotspotIpAddress(): String? {
+        return try {
+            val networkInterfaces = NetworkInterface.getNetworkInterfaces()
+            networkInterfaces.iterator().forEach { networkInterface ->
+                networkInterface.inetAddresses.iterator().forEach { inetAddress ->
+                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
+                        if (networkInterface.displayName.contains("wlan") || networkInterface.displayName.contains("ap")) {
+                            return inetAddress.hostAddress
+                        }
+                    }
+                }
+            }
+            null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 
 }
