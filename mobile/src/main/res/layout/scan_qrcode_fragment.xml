@@ -23,37 +23,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:gravity="center"
-        android:text="@string/qr_code_sender_instruction"
+        android:text="@string/qr_code_scan_instruction"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 
-    <ImageView
-        android:id="@+id/qrCodeImageView"
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
+        android:id="@+id/qrCodeScanView"
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/qr_scan_border"
         android:keepScreenOn="true"
         android:padding="8dp"
-        app:cameraAudio="off"
-        app:cameraFacing="back"
-        app:cameraFlash="auto"
-        app:cameraMode="picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
 
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
         style="@style/Tella_Progress_Circular"
-        app:layout_constraintBottom_toBottomOf="@id/qrCodeImageView"
-        app:layout_constraintEnd_toEndOf="@id/qrCodeImageView"
-        app:layout_constraintStart_toStartOf="@id/qrCodeImageView"
-        app:layout_constraintTop_toTopOf="@id/qrCodeImageView" />
+        app:layout_constraintBottom_toBottomOf="@id/qrCodeScanView"
+        app:layout_constraintEnd_toEndOf="@id/qrCodeScanView"
+        app:layout_constraintStart_toStartOf="@id/qrCodeScanView"
+        app:layout_constraintTop_toTopOf="@id/qrCodeScanView" />
 
     <!-- Troubleshooting Text -->
     <TextView
@@ -65,7 +62,7 @@
         android:text="@string/qr_code_issue_prompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/qrCodeImageView" />
+        app:layout_constraintTop_toBottomOf="@id/qrCodeScanView" />
 
     <!-- Manual Connection Button -->
     <org.hzontal.shared_ui.buttons.RoundButton

@@ -173,4 +173,8 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_connectHotspotScreen_to_qrCodeScreen)
     }
 
+    fun navigateFromActionConnectHotspotScreenToScanQrCodeScreen() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_scanQrCodeScreen)
+    }
+
 }

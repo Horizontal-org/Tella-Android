@@ -4,11 +4,13 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.data.peertopeer.TellaHttpServer
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
@@ -34,7 +36,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun setupServerAndQr(ip: String) {
         val (keyPair, certificate) = CertificateGenerator.generateCertificate(ipAddress = ip)
-
         val config = KeyStoreConfig()
 
         server = TellaHttpServer(
@@ -46,16 +47,20 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         server?.start()
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
-        val qrPayload = """
-        {
-            "ip": "$ip",
-            "port": "$port",
-            "hash": "$certHash"
-        }
-    """.trimIndent()
+        val pin = "111111"
+        val port = port
 
+        val payload = PeerConnectionPayload(
+            connectCode = ip,
+            port = port,
+            certificateHash = certHash,
+            pin = pin
+        )
+
+        val qrPayload = Gson().toJson(payload)
         generateQrCode(qrPayload)
     }
+
 
     private fun generateQrCode(content: String) {
         try {
@@ -76,5 +81,9 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         binding.toolbar.backClickListener = { nav().popBackStack() }
         binding.backBtn.setOnClickListener { nav().popBackStack() }
     }
+
+    // TODO NEXT STEPS
+    //TODO  WORK ON THE SENDER RESPONER
+    // TODO PREAPRE REGISTER RESPONE
 
 }

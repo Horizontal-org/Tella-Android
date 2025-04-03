@@ -31,6 +31,7 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
             nextBtn.setOnClickListener { }
         }
     }
+
     private fun selectOption(isSend: Boolean) {
         binding.apply {
             sendFilesBtn.isChecked = isSend
@@ -41,9 +42,14 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
     }
 
     private fun onNextClicked() {
-        navManager().navigateFromStartNearBySharingFragmentToConnectHotspotFragment()
+        with(binding) {
+            when {
+                sendFilesBtn.isChecked -> navManager().navigateFromActionConnectHotspotScreenToScanQrCodeScreen()
+                receiveFilesBtn.isChecked -> navManager().navigateFromStartNearBySharingFragmentToConnectHotspotFragment()
+                else -> {}
+            }
+        }
     }
-
 }
 
 

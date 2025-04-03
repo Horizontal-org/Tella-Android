@@ -8,6 +8,7 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.text.format.Formatter
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
@@ -44,14 +45,16 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             }
 
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val wifiManager =
+                    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
 
-                val ssid = if (!wifiInfo.ssid.isNullOrEmpty() && wifiInfo.ssid != WifiManager.UNKNOWN_SSID) {
-                    wifiInfo.ssid.trim('"')
-                } else {
-                    getWifiSsidFromCapabilities(capabilities) ?: "Hotspot"
-                }
+                val ssid =
+                    if (!wifiInfo.ssid.isNullOrEmpty() && wifiInfo.ssid != WifiManager.UNKNOWN_SSID) {
+                        wifiInfo.ssid.trim('"')
+                    } else {
+                        getWifiSsidFromCapabilities(capabilities) ?: "Hotspot"
+                    }
 
                 val ipAddress = Formatter.formatIpAddress(wifiInfo.ipAddress)
                 _networkInfo.value = NetworkInfo(ConnectionType.WIFI, ssid, ipAddress)
@@ -60,7 +63,8 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             isDeviceHotspotEnabled(context) -> {
                 val hotspotSSID = getDeviceHotspotSSID(context) ?: "Hotspot"
                 val hotspotIpAddress = getDeviceHotspotIpAddress()
-                _networkInfo.value = NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, hotspotIpAddress)
+                _networkInfo.value =
+                    NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, hotspotIpAddress)
             }
 
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
@@ -122,7 +126,10 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             networkInterfaces.iterator().forEach { networkInterface ->
                 networkInterface.inetAddresses.iterator().forEach { inetAddress ->
                     if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
-                        if (networkInterface.displayName.contains("wlan") || networkInterface.displayName.contains("ap")) {
+                        if (networkInterface.displayName.contains("wlan") || networkInterface.displayName.contains(
+                                "ap"
+                            )
+                        ) {
                             return inetAddress.hostAddress
                         }
                     }
@@ -134,5 +141,8 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
         }
     }
 
+    fun onQrCodeParsed(ip: String, port: String, hash: String, pin: String) {
+        Log.d("QRCode", "Connecting to $ip:$port with hash $hash")
+    }
 
 }

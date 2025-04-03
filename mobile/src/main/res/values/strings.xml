@@ -1005,6 +1005,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
     <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
+  <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information </string>
