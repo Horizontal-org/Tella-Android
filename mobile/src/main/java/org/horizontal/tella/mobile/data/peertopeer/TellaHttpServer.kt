@@ -66,7 +66,7 @@ class TellaHttpServer(
                     }
 
                     // POST endpoint to handle device registration from peers
-                    post("/api/localsend/v2/register") {
+                    post("/api/register") {
                         try {
                             // Build a JSON response with device metadata
                             val response = buildJsonObject {
