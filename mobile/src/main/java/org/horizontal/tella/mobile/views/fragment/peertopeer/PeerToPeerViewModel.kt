@@ -14,13 +14,27 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
 import java.net.Inet4Address
 import java.net.NetworkInterface
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import java.util.UUID
 import javax.inject.Inject
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 @HiltViewModel
 class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val context: Context) :
@@ -143,6 +157,88 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
 
     fun onQrCodeParsed(ip: String, port: String, hash: String, pin: String) {
         Log.d("QRCode", "Connecting to $ip:$port with hash $hash")
+        viewModelScope.launch {
+            register(ip, port, hash, pin)
+        }
     }
+
+    private fun getClientWithFingerprintValidation(
+        expectedFingerprint: String
+    ): OkHttpClient {
+        val trustManager = object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+
+            override fun checkClientTrusted(chain: Array<out X509Certificate>, authType: String?) {}
+
+            override fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String?) {
+                val serverCert = chain[0]
+                val actualFingerprint = CertificateUtils.getPublicKeyHash(serverCert)
+
+                if (!actualFingerprint.equals(expectedFingerprint, ignoreCase = true)) {
+                    throw CertificateException("❌ Server certificate fingerprint mismatch.\nExpected: $expectedFingerprint\nGot: $actualFingerprint")
+                }
+            }
+        }
+
+        val sslContext = SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
+        }
+
+        return OkHttpClient.Builder()
+            .sslSocketFactory(sslContext.socketFactory, trustManager)
+            .build()
+    }
+
+
+    // Function to send a registration POST request to a peer device over HTTPS
+    private  fun register(ip: String, port: String, expectedFingerprint: String, pin: String) {
+        val url = "https://$ip:$port/api/register"
+
+        val alias = "Device_${Build.MODEL.replace(" ", "_")}"
+        val version = "2.0"
+        val deviceModel = Build.MODEL
+        val deviceType = "mobile"
+        val protocol = "https"
+        val download = true
+        val localPort = 53317
+
+        val jsonPayload = """
+        {
+            "alias": "$alias",
+            "version": "$version",
+            "deviceModel": "$deviceModel",
+            "deviceType": "$deviceType",
+            "fingerprint": "$expectedFingerprint",
+            "port": $localPort,
+            "protocol": "$protocol",
+            "download": $download,
+            "pin": "$pin",
+            "nonce": "${UUID.randomUUID()}"
+        }
+    """.trimIndent()
+
+        val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+        val client = getClientWithFingerprintValidation(expectedFingerprint)
+
+        viewModelScope.launch {
+            try {
+                val request = Request.Builder()
+                    .url(url)
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Log.d("Register", "✅ Success: ${response.body?.string()}")
+                } else {
+                    Log.e("Register", "❌ Failed: ${response.code} - ${response.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("Register", "❌ Error: ${e.message}", e)
+            }
+        }
+    }
+
 
 }
