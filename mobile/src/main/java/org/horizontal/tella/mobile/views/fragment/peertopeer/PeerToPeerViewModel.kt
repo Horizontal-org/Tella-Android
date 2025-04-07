@@ -31,6 +31,7 @@ import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -175,7 +176,7 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
                 val actualFingerprint = CertificateUtils.getPublicKeyHash(serverCert)
 
                 if (!actualFingerprint.equals(expectedFingerprint, ignoreCase = true)) {
-                    throw CertificateException("❌ Server certificate fingerprint mismatch.\nExpected: $expectedFingerprint\nGot: $actualFingerprint")
+                    throw CertificateException("Server certificate fingerprint mismatch.\nExpected: $expectedFingerprint\nGot: $actualFingerprint")
                 }
             }
         }
@@ -185,13 +186,17 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
         }
 
         return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)  // Set connect timeout
+            .readTimeout(30, TimeUnit.SECONDS)     // Set read timeout
+            .writeTimeout(30, TimeUnit.SECONDS)    // Set write timeout
             .sslSocketFactory(sslContext.socketFactory, trustManager)
             .build()
     }
 
 
     // Function to send a registration POST request to a peer device over HTTPS
-    private  fun register(ip: String, port: String, expectedFingerprint: String, pin: String) {
+    private  fun register(ip: String, port: String, expectedFingerprint: String, pin: String)
+    {
         val url = "https://$ip:$port/api/register"
 
         val alias = "Device_${Build.MODEL.replace(" ", "_")}"
@@ -218,6 +223,7 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
     """.trimIndent()
 
         val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+
         val client = getClientWithFingerprintValidation(expectedFingerprint)
 
         viewModelScope.launch {
@@ -230,12 +236,12 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
 
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
-                    Log.d("Register", "✅ Success: ${response.body?.string()}")
+                    Log.d("Register", "Success: ${response.body?.string()}")
                 } else {
-                    Log.e("Register", "❌ Failed: ${response.code} - ${response.message}")
+                    Log.e("Register", "Failed: ${response.code} - ${response.message}")
                 }
             } catch (e: Exception) {
-                Log.e("Register", "❌ Error: ${e.message}", e)
+                Log.e("Register", "Error: ${e.message}", e)
             }
         }
     }

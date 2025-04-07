@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
+import android.util.Log
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
@@ -8,6 +9,7 @@ import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
+import io.ktor.server.request.receiveText
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
@@ -68,32 +70,31 @@ class TellaHttpServer(
                     // POST endpoint to handle device registration from peers
                     post("/api/register") {
                         try {
-                            // Build a JSON response with device metadata
+                            val requestBody = call.receiveText() // or use call.receive<JsonType>() if you want to deserialize it
+                            Log.d("","Received register request: $requestBody")
+
                             val response = buildJsonObject {
-                                put("deviceType", "mobile") // Type of device (mobile/desktop)
-                                put("version", "2.0")       // Protocol version
-                                put("fingerprint", CertificateUtils.getPublicKeyHash(certificate)) // Unique cert fingerprint
-                                put("port", serverPort)     // Port the server is listening on
-                                put("protocol", "https")    // Connection protocol
-                                put("download", true)       // Indicates if the device can receive files
-                                put("deviceModel", android.os.Build.MODEL ?: "Android") // Device model name
-                                put("alias", "AndroidDevice") // Friendly device name (can be customized later)
+                                put("deviceType", "mobile")
+                                put("version", "2.0")
+                                put("fingerprint", CertificateUtils.getPublicKeyHash(certificate))
+                                put("port", serverPort)
+                                put("protocol", "https")
+                                put("download", true)
+                                put("deviceModel", android.os.Build.MODEL ?: "Android")
+                                put("alias", "AndroidDevice")
                             }
 
-                            // Respond with the device info as JSON
                             call.respondText(response.toString(), ContentType.Application.Json)
-
                         } catch (e: Exception) {
-                            // Catch and return any unexpected errors as JSON
                             call.respondText(
                                 "Error occurred: ${e.localizedMessage}",
                                 contentType = ContentType.Application.Json,
                                 status = HttpStatusCode.InternalServerError
                             )
                         }
-                    }
+                    } }
+
                 }
-            }
         }).start(wait = false)
     }
 
