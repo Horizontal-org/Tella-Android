@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.applicationEngineEnvironment
@@ -8,7 +10,10 @@ import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
@@ -55,8 +60,37 @@ class TellaHttpServer(
 
             module {
                 routing {
+                    // Root route to confirm the server is running
                     get("/") {
                         call.respondText("The server is running securely over HTTPS.")
+                    }
+
+                    // POST endpoint to handle device registration from peers
+                    post("/api/localsend/v2/register") {
+                        try {
+                            // Build a JSON response with device metadata
+                            val response = buildJsonObject {
+                                put("deviceType", "mobile") // Type of device (mobile/desktop)
+                                put("version", "2.0")       // Protocol version
+                                put("fingerprint", CertificateUtils.getPublicKeyHash(certificate)) // Unique cert fingerprint
+                                put("port", serverPort)     // Port the server is listening on
+                                put("protocol", "https")    // Connection protocol
+                                put("download", true)       // Indicates if the device can receive files
+                                put("deviceModel", android.os.Build.MODEL ?: "Android") // Device model name
+                                put("alias", "AndroidDevice") // Friendly device name (can be customized later)
+                            }
+
+                            // Respond with the device info as JSON
+                            call.respondText(response.toString(), ContentType.Application.Json)
+
+                        } catch (e: Exception) {
+                            // Catch and return any unexpected errors as JSON
+                            call.respondText(
+                                "Error occurred: ${e.localizedMessage}",
+                                contentType = ContentType.Application.Json,
+                                status = HttpStatusCode.InternalServerError
+                            )
+                        }
                     }
                 }
             }
