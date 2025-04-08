@@ -10,8 +10,8 @@ import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.PeerConnectionPayload
-import org.horizontal.tella.mobile.data.peertopeer.TellaHttpServer
+import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
+import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
@@ -38,7 +38,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val (keyPair, certificate) = CertificateGenerator.generateCertificate(ipAddress = ip)
         val config = KeyStoreConfig()
 
-        server = TellaHttpServer(
+        server = TellaPeerToPeerServer(
             ip = ip,
             keyPair = keyPair,
             certificate = certificate,

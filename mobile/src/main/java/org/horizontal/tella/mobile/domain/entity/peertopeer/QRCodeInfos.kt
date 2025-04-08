@@ -5,7 +5,6 @@ data class QRCodeInfos(
     val pin: String,
     val hash: String
 ) {
-    // Custom equality based only on ipAddress
     override fun equals(other: Any?): Boolean {
         return (other as? QRCodeInfos)?.ipAddress == ipAddress
     }

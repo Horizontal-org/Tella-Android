@@ -9,7 +9,9 @@ import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
+import io.ktor.server.request.receive
 import io.ktor.server.request.receiveText
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
@@ -17,7 +19,9 @@ import io.ktor.server.routing.routing
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.mapper.PeerDeviceInfoMapper
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.PeerDeviceInfo
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import java.security.KeyPair
 import java.security.KeyStore
@@ -25,7 +29,7 @@ import java.security.cert.X509Certificate
 
 const val port = 53317
 
-class TellaHttpServer(
+class TellaPeerToPeerServer(
     private val ip: String,
     private val serverPort: Int = port,
     private val keyPair: KeyPair,
@@ -70,19 +74,13 @@ class TellaHttpServer(
                     // POST endpoint to handle device registration from peers
                     post("/api/register") {
                         try {
-                            val requestBody = call.receiveText() // or use call.receive<JsonType>() if you want to deserialize it
-                            Log.d("","Received register request: $requestBody")
+                            val peerInfo = call.receive<PeerDeviceInfo>()
 
-                            val response = buildJsonObject {
-                                put("deviceType", "mobile")
-                                put("version", "2.0")
-                                put("fingerprint", CertificateUtils.getPublicKeyHash(certificate))
-                                put("port", serverPort)
-                                put("protocol", "https")
-                                put("download", true)
-                                put("deviceModel", android.os.Build.MODEL ?: "Android")
-                                put("alias", "AndroidDevice")
-                            }
+                            val response = PeerDeviceInfoMapper.enrichWithServerInfo(
+                                request = peerInfo,
+                                certificate = certificate,
+                                port = serverPort
+                            )
 
                             call.respondText(response.toString(), ContentType.Application.Json)
                         } catch (e: Exception) {
@@ -92,9 +90,10 @@ class TellaHttpServer(
                                 status = HttpStatusCode.InternalServerError
                             )
                         }
-                    } }
-
+                    }
                 }
+
+            }
         }).start(wait = false)
     }
 
