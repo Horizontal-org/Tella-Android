@@ -180,7 +180,6 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
                 }
             }
         }
-
         val sslContext = SSLContext.getInstance("TLS").apply {
             init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
         }
@@ -245,6 +244,4 @@ class PeerToPeerViewModel @Inject constructor(@ApplicationContext private val co
             }
         }
     }
-
-
 }

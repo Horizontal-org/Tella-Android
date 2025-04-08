@@ -45,6 +45,7 @@ class ScanQrCodeFragment :
                 requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
             }
         }
+        handleBack()
     }
 
     private fun startScanning() {
@@ -101,5 +102,10 @@ class ScanQrCodeFragment :
         if (requestCode == CAMERA_REQUEST_CODE && grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
             startScanning()
         }
+    }
+
+    private fun handleBack() {
+        binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.backBtn.setOnClickListener { nav().popBackStack() }
     }
 }
