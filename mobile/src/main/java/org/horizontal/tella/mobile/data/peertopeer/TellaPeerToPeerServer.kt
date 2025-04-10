@@ -13,6 +13,8 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
@@ -20,6 +22,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
+import java.util.UUID
 
 const val port = 53317
 
@@ -66,10 +69,9 @@ class TellaPeerToPeerServer(
                     }
 
                     // POST endpoint to handle device registration from peers
-                    post("/api/register") {
+                    post("/api/v1/register") {
                         try {
                             val peerInfo = call.receive<PeerResponse>()
-
                             val response = peerInfo.sessionId
                             call.respondText(response, ContentType.Application.Json)
                         } catch (e: Exception) {
@@ -80,6 +82,33 @@ class TellaPeerToPeerServer(
                             )
                         }
                     }
+                    post("/api/v1/prepare-upload") {
+                        val request = try {
+                            call.receive<PrepareUploadRequest>()
+                        } catch (e: Exception) {
+                            call.respondText("Invalid body", status = HttpStatusCode.BadRequest)
+                            return@post
+                        }
+
+                        // Optionally validate fields
+                        if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
+                            call.respondText("Missing required fields", status = HttpStatusCode.BadRequest)
+                            return@post
+                        }
+
+                        // You can process the files or store metadata here
+
+                        val transmissionId = UUID.randomUUID().toString()
+                        val response = buildJsonObject {
+                            put("transmissionId", transmissionId)
+                        }
+
+                        call.respondText(
+                            response.toString(),
+                            contentType = ContentType.Application.Json
+                        )
+                    }
+
                 }
 
             }
