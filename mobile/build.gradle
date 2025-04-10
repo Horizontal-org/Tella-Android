@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -242,6 +243,9 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:2.3.9")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.9")
     implementation("io.ktor:ktor-server-cio:2.3.9")
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3' // Use the latest version
+
 
 }
 

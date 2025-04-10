@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
 import android.util.Log
+import com.google.gson.Gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
@@ -26,6 +27,7 @@ import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 const val port = 53317
 
@@ -72,23 +74,26 @@ class TellaPeerToPeerServer(
                         call.respondText("The server is running securely over HTTPS.")
                     }
 
-                    // POST endpoint to handle device registration from peers
                     post("/api/v1/register") {
                         val request = try {
                             call.receive<PeerRegisterPayload>()
                         } catch (e: Exception) {
-                            call.respondText("Invalid body", status = HttpStatusCode.BadRequest)
-                            return@post
-                        }
-                        if (request.pin.isBlank()|| request.nonce.isBlank()) {
-                            call.respondText("Missing required fields", status = HttpStatusCode.BadRequest)
+                            call.respondText(
+                                """{"error": "Invalid request body"}""",
+                                ContentType.Application.Json,
+                                HttpStatusCode.BadRequest
+                            )
                             return@post
                         }
 
                         val sessionId = UUID.randomUUID().toString()
-                        val response = PeerResponse(sessionId)
-                        call.respond(response)
+                        call.respondText(
+                            Gson().toJson(PeerResponse(sessionId)),
+                            ContentType.Application.Json,
+                            HttpStatusCode.OK
+                        )
                     }
+
 
                     post("/api/v1/prepare-upload") {
                         val request = try {

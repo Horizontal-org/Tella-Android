@@ -1,12 +1,8 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
-import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -14,11 +10,8 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import java.io.FileOutputStream
-import java.security.MessageDigest
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -65,42 +58,54 @@ class TellaPeerToPeerClient {
         port: String,
         expectedFingerprint: String,
         pin: String
-    ): Result<String> {
-        return withContext(Dispatchers.IO) {
+    ): Result<String> = withContext(Dispatchers.IO) {
+        val url = "https://$ip:$port/api/v1/register"
+        Log.d("PeerClient", "Connecting to: $url")
 
-            val url = "https://$ip:$port/api/v1/register"
-
+        try {
             val payload = PeerRegisterPayload(
-                pin = pin
+                pin = pin,
+                nonce = UUID.randomUUID().toString()
             )
-
             val jsonPayload = Gson().toJson(payload)
+            Log.d("PeerClient", "Request payload: $jsonPayload")
 
-            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
             val client = getClientWithFingerprintValidation(expectedFingerprint)
+            val request = Request.Builder()
+                .url(url)
+                .post(jsonPayload.toRequestBody("application/json; charset=utf-8".toMediaType()))
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .addHeader("Accept", "application/json, */*; q=0.8") // More flexible Accept header
+                .build()
 
-            try {
-                val request = Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .addHeader("Content-Type", "application/json")
-                    .build()
-
-                client.newCall(request).execute().use { response ->
-                    if (response.isSuccessful) {
-                        val responseBody = response.body.string()
-                        Log.d("PeerClient", "Success: $responseBody")
-                        Result.success(responseBody)
-                    } else {
-                        val errorMsg = "Failed: ${response.code} - ${response.message}"
-                        Log.e("PeerClient", errorMsg)
-                        Result.failure(Exception(errorMsg))
-                    }
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) {
+                    val errorBody = response.body?.string() ?: "No error message"
+                    Log.e("PeerClient", """
+                    HTTP ${response.code} Error
+                    URL: $url
+                    Headers: ${response.headers}
+                    Body: $errorBody
+                """.trimIndent())
+                    return@use Result.failure(Exception("HTTP ${response.code}: $errorBody"))
                 }
-            } catch (e: Exception) {
-                Log.e("PeerClient", "Error: ${e.message}", e)
-                Result.failure(e)
+
+                val contentType = response.header("Content-Type") ?: ""
+                if (!contentType.contains("application/json")) {
+                    Log.w("PeerClient", "Unexpected Content-Type: $contentType")
+                }
+
+                val body = response.body?.string() ?: ""
+                return@use try {
+                    val json = JSONObject(body)
+                    Result.success(json.getString("sessionId"))
+                } catch (e: Exception) {
+                    Result.failure(Exception("Invalid JSON response: ${e.message}"))
+                }
             }
+        } catch (e: Exception) {
+            Log.e("PeerClient", "Request failed", e)
+            Result.failure(e)
         }
     }
 
@@ -145,6 +150,7 @@ class TellaPeerToPeerClient {
                     .url(url)
                     .post(requestBody)
                     .addHeader("Content-Type", "application/json")
+                    .addHeader("Accept", "application/json")
                     .build()
 
                 client.newCall(request).execute().use { response ->
