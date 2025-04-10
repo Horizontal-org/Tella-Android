@@ -10,6 +10,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.request.receive
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
@@ -73,18 +74,22 @@ class TellaPeerToPeerServer(
 
                     // POST endpoint to handle device registration from peers
                     post("/api/v1/register") {
-                        try {
-                            val peerInfo = call.receive<PeerRegisterPayload>()
-                            //val response = peerInfo.sessionId
-                          //  call.respondText(response, ContentType.Application.Json)
+                        val request = try {
+                            call.receive<PeerRegisterPayload>()
                         } catch (e: Exception) {
-                            call.respondText(
-                                "Error occurred: ${e.localizedMessage}",
-                                contentType = ContentType.Application.Json,
-                                status = HttpStatusCode.InternalServerError
-                            )
+                            call.respondText("Invalid body", status = HttpStatusCode.BadRequest)
+                            return@post
                         }
+                        if (request.pin.isBlank()|| request.nonce.isBlank()) {
+                            call.respondText("Missing required fields", status = HttpStatusCode.BadRequest)
+                            return@post
+                        }
+
+                        val sessionId = UUID.randomUUID().toString()
+                        val response = PeerResponse(sessionId)
+                        call.respond(response)
                     }
+
                     post("/api/v1/prepare-upload") {
                         val request = try {
                             call.receive<PrepareUploadRequest>()
@@ -93,7 +98,6 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        // Optionally validate fields
                         if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
                             call.respondText("Missing required fields", status = HttpStatusCode.BadRequest)
                             return@post
