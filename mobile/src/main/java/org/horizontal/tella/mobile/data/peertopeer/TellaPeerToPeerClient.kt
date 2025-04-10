@@ -14,6 +14,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -58,16 +59,37 @@ class TellaPeerToPeerClient {
         pin: String
     ): Result<String> {
         return withContext(Dispatchers.IO) {
+
             val url = "https://$ip:$port/api/register"
 
             val payload = PeerRegisterPayload(
-                alias = "Device_${Build.MODEL.replace(" ", "_")}",
-                deviceModel = Build.MODEL,
-                fingerprint = expectedFingerprint,
                 pin = pin
             )
 
-            val jsonPayload = Gson().toJson(payload)
+           // val jsonPayload = Gson().toJson(payload)
+
+            val alias = "Device_${Build.MODEL.replace(" ", "_")}"
+            val version = "2.0"
+            val deviceModel = Build.MODEL
+            val deviceType = "mobile"
+            val protocol = "https"
+            val download = true
+            val localPort = 53317
+
+            val jsonPayload = """
+        {
+            "alias": "$alias",
+            "version": "$version",
+            "deviceModel": "$deviceModel",
+            "deviceType": "$deviceType",
+            "fingerprint": "$expectedFingerprint",
+            "port": $localPort,
+            "protocol": "$protocol",
+            "download": $download,
+            "pin": "$pin",
+            "nonce": "${UUID.randomUUID()}"
+        }
+    """.trimIndent()
 
             val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
             val client = getClientWithFingerprintValidation(expectedFingerprint)

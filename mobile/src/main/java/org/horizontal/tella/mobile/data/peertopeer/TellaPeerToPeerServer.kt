@@ -1,6 +1,5 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
-import android.util.Log
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
@@ -10,18 +9,13 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.request.receive
-import io.ktor.server.request.receiveText
-import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.mapper.PeerDeviceInfoMapper
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
-import org.horizontal.tella.mobile.domain.peertopeer.PeerDeviceInfo
+import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import java.security.KeyPair
 import java.security.KeyStore
@@ -74,15 +68,10 @@ class TellaPeerToPeerServer(
                     // POST endpoint to handle device registration from peers
                     post("/api/register") {
                         try {
-                            val peerInfo = call.receive<PeerDeviceInfo>()
+                            val peerInfo = call.receive<PeerResponse>()
 
-                            val response = PeerDeviceInfoMapper.enrichWithServerInfo(
-                                request = peerInfo,
-                                certificate = certificate,
-                                port = serverPort
-                            )
-
-                            call.respondText(response.toString(), ContentType.Application.Json)
+                            val response = peerInfo.sessionId
+                            call.respondText(response, ContentType.Application.Json)
                         } catch (e: Exception) {
                             call.respondText(
                                 "Error occurred: ${e.localizedMessage}",
