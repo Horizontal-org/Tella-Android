@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
+import android.util.Log
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
@@ -17,6 +18,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import java.security.KeyPair
@@ -65,15 +67,16 @@ class TellaPeerToPeerServer(
                 routing {
                     // Root route to confirm the server is running
                     get("/") {
+                        Log.i("Test","Server started")
                         call.respondText("The server is running securely over HTTPS.")
                     }
 
                     // POST endpoint to handle device registration from peers
                     post("/api/v1/register") {
                         try {
-                            val peerInfo = call.receive<PeerResponse>()
-                            val response = peerInfo.sessionId
-                            call.respondText(response, ContentType.Application.Json)
+                            val peerInfo = call.receive<PeerRegisterPayload>()
+                            //val response = peerInfo.sessionId
+                          //  call.respondText(response, ContentType.Application.Json)
                         } catch (e: Exception) {
                             call.respondText(
                                 "Error occurred: ${e.localizedMessage}",

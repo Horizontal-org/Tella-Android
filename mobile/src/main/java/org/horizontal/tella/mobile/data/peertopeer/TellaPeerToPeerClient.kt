@@ -76,29 +76,6 @@ class TellaPeerToPeerClient {
 
             val jsonPayload = Gson().toJson(payload)
 
-//            val alias = "Device_${Build.MODEL.replace(" ", "_")}"
-//            val version = "2.0"
-//            val deviceModel = Build.MODEL
-//            val deviceType = "mobile"
-//            val protocol = "https"
-//            val download = true
-//            val localPort = 53317
-//
-//            val jsonPayload = """
-//        {
-//            "alias": "$alias",
-//            "version": "$version",
-//            "deviceModel": "$deviceModel",
-//            "deviceType": "$deviceType",
-//            "fingerprint": "$expectedFingerprint",
-//            "port": $localPort,
-//            "protocol": "$protocol",
-//            "download": $download,
-//            "pin": "$pin",
-//            "nonce": "${UUID.randomUUID()}"
-//        }
-//    """.trimIndent()
-
             val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
             val client = getClientWithFingerprintValidation(expectedFingerprint)
 
