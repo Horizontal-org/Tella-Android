@@ -1,9 +1,10 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
 import android.util.Log
-import com.google.gson.Gson
+import kotlinx.serialization.encodeToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -67,15 +68,19 @@ class TellaPeerToPeerClient {
                 pin = pin,
                 nonce = UUID.randomUUID().toString()
             )
-            val jsonPayload = Gson().toJson(payload)
-            Log.d("PeerClient", "Request payload: $jsonPayload")
+//            val jsonPayload = Gson().toJson(payload).trimIndent()
+//            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+
+            val jsonPayload = Json.encodeToString(payload)
+            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+            Log.d("PeerClient", "Request payload: $requestBody")
 
             val client = getClientWithFingerprintValidation(expectedFingerprint)
             val request = Request.Builder()
                 .url(url)
-                .post(jsonPayload.toRequestBody("application/json; charset=utf-8".toMediaType()))
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .addHeader("Accept", "application/json, */*; q=0.8") // More flexible Accept header
+                .post(requestBody)
+                .addHeader("Content-Type", "application/json")
+               // .addHeader("Accept", "application/json, */*; q=0.8") // More flexible Accept header
                 .build()
 
             client.newCall(request).execute().use { response ->
