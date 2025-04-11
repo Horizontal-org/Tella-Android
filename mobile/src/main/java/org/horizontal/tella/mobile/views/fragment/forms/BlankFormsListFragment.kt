@@ -8,18 +8,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
-import org.hzontal.shared_ui.utils.DialogUtils
-import org.javarosa.core.model.FormDef
-import permissions.dispatcher.NeedsPermission
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
@@ -33,6 +27,11 @@ import org.horizontal.tella.mobile.util.DialogsUtil
 import org.horizontal.tella.mobile.views.activity.CollectFormEntryActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
+import org.hzontal.shared_ui.utils.DialogUtils
+import org.javarosa.core.model.FormDef
+import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
 
 @AndroidEntryPoint

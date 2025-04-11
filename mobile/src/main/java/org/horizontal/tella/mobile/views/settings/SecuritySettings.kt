@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.views.settings
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
@@ -237,7 +238,11 @@ class SecuritySettings :
     }
 
     private fun onLockTimeoutChoosen(option: Long) {
+        // Set the lock timeout to the chosen option
         lockTimeoutManager.lockTimeout = option
+        // Ensure the temporary timeout flag is reset
+        Preferences.setTempTimeout(false)
+        // Update the UI or any related components with the new lock timeout value
         setUpLockTimeoutText()
     }
 
