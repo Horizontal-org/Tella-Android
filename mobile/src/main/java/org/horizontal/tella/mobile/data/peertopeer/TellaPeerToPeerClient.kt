@@ -80,12 +80,11 @@ class TellaPeerToPeerClient {
                 .url(url)
                 .post(requestBody)
                 .addHeader("Content-Type", "application/json")
-               // .addHeader("Accept", "application/json, */*; q=0.8") // More flexible Accept header
                 .build()
 
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
-                    val errorBody = response.body?.string() ?: "No error message"
+                    val errorBody = response.body.string()
                     Log.e("PeerClient", """
                     HTTP ${response.code} Error
                     URL: $url

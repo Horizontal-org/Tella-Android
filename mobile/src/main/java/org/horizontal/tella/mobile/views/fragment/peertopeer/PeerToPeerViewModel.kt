@@ -167,8 +167,6 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     fun onQrCodeParsed(ip: String, port: String, hash: String, pin: String) {
-        Log.d("QRCode", "Connecting to $ip:$port with hash $hash")
-        Log.d("QRCode", "Connecting to $ip:$port with hash $hash")
         viewModelScope.launch {
             val result = peerClient.registerPeerDevice(ip, port, hash, pin)
             result.onSuccess {
