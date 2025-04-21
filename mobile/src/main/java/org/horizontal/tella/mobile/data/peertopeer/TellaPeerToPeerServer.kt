@@ -23,6 +23,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
@@ -76,7 +77,7 @@ class TellaPeerToPeerServer(
                 routing {
                     // Root route to confirm the server is running
                     get("/") {
-                        Log.i("Test","Server started")
+                        Log.i("Test", "Server started")
                         call.respondText("The server is running securely over HTTPS.")
                     }
 
@@ -110,23 +111,21 @@ class TellaPeerToPeerServer(
                         }
 
                         if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
-                            call.respondText("Missing required fields", status = HttpStatusCode.BadRequest)
+                            call.respondText(
+                                "Missing required fields",
+                                status = HttpStatusCode.BadRequest
+                            )
                             return@post
                         }
 
-                        // You can process the files or store metadata here
-
+                        // we can process the files or store metadata here
                         val transmissionId = UUID.randomUUID().toString()
-                        val response = buildJsonObject {
-                            put("transmissionId", transmissionId)
-                        }
-
                         call.respondText(
-                            response.toString(),
-                            contentType = ContentType.Application.Json
+                            Gson().toJson(PeerPrepareUploadResponse(transmissionId)),
+                            ContentType.Application.Json,
+                            HttpStatusCode.OK
                         )
                     }
-
                 }
 
             }

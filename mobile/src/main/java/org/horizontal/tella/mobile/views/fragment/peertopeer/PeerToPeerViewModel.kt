@@ -172,7 +172,7 @@ class PeerToPeerViewModel @Inject constructor(
             result.onSuccess {
                 Log.d("QRCode", "Registered successfully: $it")
                 val file = createFileFromAsset(context, "testDemo.txt")
-                peerClient.prepareUpload(ip,port,hash,"",file,UUID.randomUUID().toString(),calculateSha256(file),UUID.randomUUID().toString())
+                peerClient.prepareUpload(ip,port,hash,"test report",file,UUID.randomUUID().toString(),calculateSha256(file),UUID.randomUUID().toString())
                 // update UI state
             }.onFailure {
                 Log.e("QRCode", "Registration failed: ${it.message}")

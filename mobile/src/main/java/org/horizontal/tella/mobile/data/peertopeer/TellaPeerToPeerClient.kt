@@ -68,8 +68,6 @@ class TellaPeerToPeerClient {
                 pin = pin,
                 nonce = UUID.randomUUID().toString()
             )
-//            val jsonPayload = Gson().toJson(payload).trimIndent()
-//            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
 
             val jsonPayload = Json.encodeToString(payload)
             val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
@@ -85,12 +83,14 @@ class TellaPeerToPeerClient {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     val errorBody = response.body.string()
-                    Log.e("PeerClient", """
+                    Log.e(
+                        "PeerClient", """
                     HTTP ${response.code} Error
                     URL: $url
                     Headers: ${response.headers}
                     Body: $errorBody
-                """.trimIndent())
+                """.trimIndent()
+                    )
                     return@use Result.failure(Exception("HTTP ${response.code}: $errorBody"))
                 }
 
@@ -118,35 +118,31 @@ class TellaPeerToPeerClient {
         port: String,
         expectedFingerprint: String,
         title: String = "Title of the report",
-        file: File, // file passed as argument
-        fileId: String, // fileId passed as argument
-        sha256: String, // sha256 passed as argument
-        sessionId: String // sessionId passed as argument
+        file: File,
+        fileId: String,
+        sha256: String,
+        sessionId: String
     ): Result<String> {
         return withContext(Dispatchers.IO) {
             val url = "https://$ip:$port/api/v1/prepare-upload"
 
-            val filePayload = """
-            {
-                "id": "$fileId",
-                "fileName": "${file.name}",
-                "size": ${file.length()},
-                "fileType": "application/octet-stream",
-                "sha256": "$sha256"
-            }
-        """.trimIndent()
+            val fileItem = FileItem(
+                id = fileId,
+                fileName = file.name,
+                size = file.length(),
+                fileType = "application/octet-stream",
+                sha256 = sha256
+            )
 
-            val jsonPayload = """
-            {
-                "title": "$title",
-                "sessionId": "$sessionId",
-                "files": [
-                    $filePayload
-                ]
-            }
-        """.trimIndent()
+            val requestPayload = PrepareUploadRequest(
+                title = title,
+                sessionId = sessionId,
+                files = listOf(fileItem)
+            )
 
+            val jsonPayload = Json.encodeToString(requestPayload)
             val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+            Log.d("PeerClient", "Request payload: $requestBody")
             val client = getClientWithFingerprintValidation(expectedFingerprint)
 
             try {
@@ -154,7 +150,6 @@ class TellaPeerToPeerClient {
                     .url(url)
                     .post(requestBody)
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("Accept", "application/json")
                     .build()
 
                 client.newCall(request).execute().use { response ->
@@ -164,6 +159,7 @@ class TellaPeerToPeerClient {
                             val jsonObject = JSONObject(it)
                             val transmissionId = jsonObject.getString("transmissionId")
                             Log.d("PrepareUpload", "Transmission ID: $transmissionId")
+                            return@use Result.success(transmissionId)
                         }
                     } else {
                         Log.e("PrepareUpload", "Error ${response.code}: ${response.message}")
@@ -171,10 +167,12 @@ class TellaPeerToPeerClient {
                             409 -> {
                                 Log.e("PrepareUpload", "Conflict: Try canceling active sessions.")
                             }
+
                             else -> {}
                         }
                     }
-                } as Result<String>
+                }
+                Result.failure(Exception("Unsuccessful response"))
             } catch (e: Exception) {
                 Log.e("PrepareUpload", "Exception: ${e.message}", e)
                 Result.failure(e)
