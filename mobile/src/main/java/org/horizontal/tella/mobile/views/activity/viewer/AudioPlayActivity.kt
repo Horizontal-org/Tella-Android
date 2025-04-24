@@ -15,9 +15,6 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.hzontal.tella_vault.Metadata
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.event.MediaFileDeletedEvent
@@ -30,6 +27,9 @@ import org.horizontal.tella.mobile.views.activity.MetadataViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.initContracts
 import org.horizontal.tella.mobile.views.activity.viewer.VaultActionsHelper.showVaultActionsDialog
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -233,6 +233,8 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
             showActions = true
             invalidateOptionsMenu()
         }
+        // Setup the metadata menu item based on the availability of metadata when the file is captured
+        setupMetadataMenuItem(vaultFile.metadata != null)
     }
 
     fun onMediaExported() {
