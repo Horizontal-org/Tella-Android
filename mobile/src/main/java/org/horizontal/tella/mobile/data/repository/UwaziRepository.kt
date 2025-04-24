@@ -14,7 +14,7 @@ import org.horizontal.tella.mobile.data.entity.uwazi.mapper.mapToDomainModel
 import org.horizontal.tella.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_TEMPLATE
 import org.horizontal.tella.mobile.data.uwazi.UwaziService
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.ListTemplateResult
 import org.horizontal.tella.mobile.domain.entity.uwazi.RelationShipRow
 import org.horizontal.tella.mobile.domain.entity.uwazi.RowDictionary
@@ -120,7 +120,7 @@ class UwaziRepository : IUwaziUserRepository {
                     }
             }
 
-            val listTemplates = mutableListOf<CollectTemplate>()
+            val listTemplates = mutableListOf<UwaziTemplate>()
             resultTemplates.forEach { template ->
                 val relationShipEntity: List<RelationShipRow> =
                     relationShipEntities.filter { row -> row.type == UWAZI_DATATYPE_TEMPLATE }
@@ -129,7 +129,7 @@ class UwaziRepository : IUwaziUserRepository {
                         relationShipEntity.find { (property.content == it.id) }
                     listRelationShipEntities.also { property.entities = it?.values }
                 }
-                val collectTemplate = CollectTemplate(
+                val collectTemplate = UwaziTemplate(
                     serverId = server.id,
                     entityRow = template,
                     serverName = server.name

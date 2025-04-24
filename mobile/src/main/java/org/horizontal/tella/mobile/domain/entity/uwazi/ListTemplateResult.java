@@ -7,13 +7,13 @@ import org.horizontal.tella.mobile.domain.entity.IErrorBundle;
 
 public class ListTemplateResult {
     private List<IErrorBundle> errors = new ArrayList<>();
-    private List<CollectTemplate> templates = new ArrayList<>();
+    private List<UwaziTemplate> templates = new ArrayList<>();
 
 
     public ListTemplateResult() {
     }
 
-    public ListTemplateResult(List<CollectTemplate> templates) {
+    public ListTemplateResult(List<UwaziTemplate> templates) {
         this.templates = templates;
     }
 
@@ -25,11 +25,11 @@ public class ListTemplateResult {
         this.errors = errors;
     }
 
-    public List<CollectTemplate> getTemplates() {
+    public List<UwaziTemplate> getTemplates() {
         return templates;
     }
 
-    public void setTemplates(List<CollectTemplate> templates) {
+    public void setTemplates(List<UwaziTemplate> templates) {
         this.templates = templates;
     }
 }

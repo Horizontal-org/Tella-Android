@@ -11,7 +11,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentTemplatesUwaziBinding
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
@@ -68,7 +68,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
         viewModel.listTemplates()
     }
 
-    private fun showDownloadedMenu(template: CollectTemplate) {
+    private fun showDownloadedMenu(template: UwaziTemplate) {
         showEditDeleteMenuSheet(
             requireActivity().supportFragmentManager,
             template.entityRow.name,
@@ -91,7 +91,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
         )
     }
 
-    private fun openEntity(template: CollectTemplate) {
+    private fun openEntity(template: UwaziTemplate) {
         val gsonTemplate = Gson().toJson(template)
         bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
         navManager().navigateFromUwaziScreenToUwaziEntryScreen()

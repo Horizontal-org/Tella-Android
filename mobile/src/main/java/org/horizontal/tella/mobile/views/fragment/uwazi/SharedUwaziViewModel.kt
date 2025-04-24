@@ -14,7 +14,7 @@ import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.EntityInstanceBundle
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
@@ -30,10 +30,10 @@ class SharedUwaziViewModel : ViewModel() {
     val progress: LiveData<Boolean> get() = _progress
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
-    private var _showSheetMore = SingleLiveEvent<CollectTemplate>()
-    val showSheetMore: LiveData<CollectTemplate> get() = _showSheetMore
-    private var _openEntity = SingleLiveEvent<CollectTemplate>()
-    val openEntity: LiveData<CollectTemplate> get() = _openEntity
+    private var _showSheetMore = SingleLiveEvent<UwaziTemplate>()
+    val showSheetMore: LiveData<UwaziTemplate> get() = _showSheetMore
+    private var _openEntity = SingleLiveEvent<UwaziTemplate>()
+    val openEntity: LiveData<UwaziTemplate> get() = _openEntity
     private var _openEntityInstance = SingleLiveEvent<UwaziEntityInstance>()
     val openEntityInstance: LiveData<UwaziEntityInstance> get() = _openEntityInstance
     private var _showInstanceSheetMore = SingleLiveEvent<UwaziEntityInstance>()
@@ -65,7 +65,7 @@ class SharedUwaziViewModel : ViewModel() {
             }
             .doFinally { _progress.postValue(false) }
             .subscribe(
-                { templates: List<CollectTemplate> ->
+                { templates: List<UwaziTemplate> ->
                     val resultList = mutableListOf<Any>()
                     resultList.add(0, R.string.Uwazi_Templates_HeaderMessage)
                     templates.map {
@@ -178,7 +178,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    private fun onMoreClicked(template: CollectTemplate) {
+    private fun onMoreClicked(template: UwaziTemplate) {
         _showSheetMore.postValue(template)
     }
 
@@ -186,7 +186,7 @@ class SharedUwaziViewModel : ViewModel() {
         _showInstanceSheetMore.postValue(instance)
     }
 
-    private fun toggleFavorite(template: CollectTemplate) {
+    private fun toggleFavorite(template: UwaziTemplate) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -199,7 +199,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    fun confirmDelete(template: CollectTemplate) {
+    fun confirmDelete(template: UwaziTemplate) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -241,7 +241,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    private fun openEntity(template: CollectTemplate) {
+    private fun openEntity(template: UwaziTemplate) {
         _openEntity.postValue(template)
     }
 

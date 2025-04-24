@@ -2,7 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.da
 
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.ID_CONNECTIONS
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 
@@ -21,7 +21,7 @@ sealed class DataItem {
         override val id: String = forms[0].id.toString()
     }
 
-    data class FavoriteTemplates(val templates: List<CollectTemplate>) : DataItem() {
+    data class FavoriteTemplates(val templates: List<UwaziTemplate>) : DataItem() {
         override val id: String = templates[0].id.toString()
     }
 

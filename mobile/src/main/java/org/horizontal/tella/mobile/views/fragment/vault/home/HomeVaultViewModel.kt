@@ -33,7 +33,7 @@ import org.horizontal.tella.mobile.domain.entity.googledrive.Config
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import javax.inject.Inject
 
@@ -63,8 +63,8 @@ class HomeVaultViewModel @Inject constructor(
     val favoriteCollectFormsError: LiveData<Throwable> get() = _favoriteCollectFormsError
 
     // SingleLiveEvent properties for favorite collect templates
-    private val _favoriteCollectTemplates = SingleLiveEvent<List<CollectTemplate>>()
-    val favoriteCollectTemplates: LiveData<List<CollectTemplate>> get() = _favoriteCollectTemplates
+    private val _favoriteCollectTemplates = SingleLiveEvent<List<UwaziTemplate>>()
+    val favoriteCollectTemplates: LiveData<List<UwaziTemplate>> get() = _favoriteCollectTemplates
 
     private val _favoriteCollectTemplatesError = SingleLiveEvent<Throwable?>()
     val favoriteCollectTemplatesError: LiveData<Throwable?> get() = _favoriteCollectTemplatesError
@@ -247,7 +247,7 @@ class HomeVaultViewModel @Inject constructor(
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { templates: List<CollectTemplate>? ->
+                    { templates: List<UwaziTemplate>? ->
                         _favoriteCollectTemplates.value = templates ?: emptyList()
                     },
                     { throwable: Throwable? ->

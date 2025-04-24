@@ -2,10 +2,10 @@ package org.horizontal.tella.mobile.views.fragment.vault.adapters.templates
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
 
-class FavoriteTemplatesAdapter(val list: List<CollectTemplate>, private val vaultClickListener: VaultClickListener)  :  RecyclerView.Adapter<FavoriteTemplateViewHolder>(){
+class FavoriteTemplatesAdapter(val list: List<UwaziTemplate>, private val vaultClickListener: VaultClickListener)  :  RecyclerView.Adapter<FavoriteTemplateViewHolder>(){
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int) = FavoriteTemplateViewHolder.from(p0)
 
