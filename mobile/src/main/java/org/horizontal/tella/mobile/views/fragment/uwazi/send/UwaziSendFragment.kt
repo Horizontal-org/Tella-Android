@@ -23,7 +23,7 @@ const val SEND_ENTITY = "send_entity"
 class UwaziSendFragment :
     BaseBindingFragment<UwaziSendFragmentBinding>(UwaziSendFragmentBinding::inflate),
     OnNavBckListener {
-    private val viewModel by viewModels<SharedUwaziSubmissionViewModel>()
+    private val viewModel : SharedUwaziSubmissionViewModel by viewModels()
 
     private var entityInstance: UwaziEntityInstance? = null
     private var uwaziServer: UWaziUploadServer? = null
@@ -81,6 +81,11 @@ class UwaziSendFragment :
                     EntityStatus.SUBMITTED -> {
                         baseActivity.divviupUtils.runUwaziSentEvent()
                         handleBackButton()
+                        DialogUtils.showBottomMessage(
+                            baseActivity,
+                            getString(R.string.form_successfully_submitted, entityInstance?.title),
+                            false
+                        )
                     }
 
                     EntityStatus.SUBMISSION_ERROR -> {
