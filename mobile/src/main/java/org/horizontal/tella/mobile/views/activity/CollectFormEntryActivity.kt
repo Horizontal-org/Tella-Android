@@ -99,6 +99,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         super.onCreate(savedInstanceState)
         binding = ActivityCollectFormEntryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
+
         currentScreenView = null
         //sectionIndex = 0;
         setSupportActionBar(binding.toolbar)

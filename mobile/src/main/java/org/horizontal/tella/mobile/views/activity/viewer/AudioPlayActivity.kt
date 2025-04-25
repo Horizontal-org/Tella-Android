@@ -60,6 +60,7 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
         super.onCreate(savedInstanceState)
         binding = ActivityAudioPlayBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         actionsDisabled = intent.hasExtra(VideoViewerActivity.NO_ACTIONS)
 
         initListeners()

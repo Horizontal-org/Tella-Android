@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet.*
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
+import com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import com.hzontal.tella_locking_ui.common.BaseActivity
 import com.hzontal.tella_locking_ui.databinding.ActivityCalculatorBinding
 import com.hzontal.tella_locking_ui.ui.pin.base.BasePinActivity
 import org.hzontal.shared_ui.pinview.ResultListener
@@ -28,6 +30,7 @@ class CalculatorActivity : BasePinActivity(), ResultListener {
         binding = ActivityCalculatorBinding.inflate(layoutInflater)
         calculatorTheme = intent.extras?.getString(CALCULATOR_THEME)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         initView()
         setTheme()
         pinEditText.transformationMethod = null

@@ -48,6 +48,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         super.onCreate(savedInstanceState)
         binding = FragmentAttachmentsSelectorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         initView()
         getSelectedMediaFromIntent()
         initObservers()

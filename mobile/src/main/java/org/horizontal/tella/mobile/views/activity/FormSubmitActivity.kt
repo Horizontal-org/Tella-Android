@@ -39,6 +39,7 @@ class FormSubmitActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFormSubmitBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
 
         init()
 

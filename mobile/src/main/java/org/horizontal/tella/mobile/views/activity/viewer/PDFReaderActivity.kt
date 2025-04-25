@@ -40,6 +40,8 @@ class PDFReaderActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPdfReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
+
         initVaultMediaFile()
         initObservers()
         initContracts()
