@@ -79,18 +79,16 @@ public class FormUtils {
 
             switch (errorBundle.getCode()) {
                 case IErrorCode.UNAUTHORIZED:
-                    errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                            context.getString(R.string.collect_toast_fail_submission_unauthorized));
+                    errorMessage = context.getString(R.string.collect_toast_fail_submission_unauthorized);
                     break;
 
                 case IErrorCode.PAYLOAD_TOO_LARGE_413:
-                    errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                            context.getString(R.string.collect_toast_fail_data_too_large));
+                    errorMessage = context.getString(R.string.collect_toast_fail_data_too_large);
                     break;
             }
         } else if (error instanceof SocketTimeoutException) {
-            errorMessage = String.format(context.getString(R.string.collect_toast_fail_form_submission_generic),
-                    context.getString(R.string.collect_toast_fail_connection_too_weak));
+            errorMessage =
+                    context.getString(R.string.collect_toast_fail_connection_too_weak);
         }
 
         return errorMessage;
