@@ -247,19 +247,19 @@
   <string name="verification.info_ipv6.expl">Xivumbeko xa svosvinyana xa konekinsawu la xitirhisiwa ni internet.</string>
   <string name="verification.info_location.expl">Ndhawu leyi kongomeke ya xitirhisiwa, yi patsa latitude ni longitude, ku tlakuka hi mametro, kutshembeka ka mpimo hi mametro, ni nkarhi wa mpimo.</string>
   <string name="verification.info_location.provider.expl">Ndlela leyi ndhawu yi kumekaka ha yona. \"Kupatsana\" svivula lesvaku kutirhisiwa tindlela ta kuhambana-hambana, kupatsa na GPS ni makonekinsawu ya redi.</string>
-  <string name="verification.info_location.speed.expl">Vhelosidadi leli a xitirhisiwa xifambaka ha lona mametro pur segundu.</string>
+  <string name="verification.info_location.speed.expl">Vhelosidadi leli a xitirhisiwa xifambaka ha lona mametro hi segundu lin\'we.</string>
   <string name="verification.info_cell.towers.expl">Tinomboro leti tikombaka amaantena hinkwawo ya maselfoni lawa  a xitirhisiwa xi konetariweki na wona.</string>
   <string name="verification.info_wifi.expl">Vito lamaredi hinkwawo ya Wi-Fi ka ndhawu ya xitirhisiwa.</string>
   <string name="collect.blank_banner_forms.updated">Maformulariyo man\'wana mapfuxetiwile. Deketa butawu ya kupfuxeta kusuhi ni maformulariyo kuva ukuma vuhundzuluxeri la svosvinyana.</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Hi lihi servhidori leli ulavaka ku litirhisa kuva maarkivho marhumeliwa?</string>
   <string name="settings.serv_add.server.selection_dialog.title">I servhidor la muxaka muni?</string>
-  <string name="settings.docu_add.server_dialog.select_odk">Kit de Dados Abertos (ODK)</string>
+  <string name="settings.docu_add.server_dialog.select_odk">Kit la Rungula leli Pfulekeke (ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Kheta muxaka wa servhidor leyi u lavaka ku yi konektara. Loko u nga tiyiseki, vutisa nhlangano wa wena.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Kurumela Hi Kukongoma</string>
   <string name="play.audio_action.expl_plus15s">+15s</string>
   <string name="play.audio_action.expl_minus15s">-15s</string>
   <string name="recorder_meta_space.available.days">%1$d masiku %2$d mawora (%3$s) svisaleke</string>
-  <string name="recorder_meta_space.available.hours">%1$d mawora %2$d timin (%3$s) svisaleke</string>
+  <string name="recorder_meta_space.available.hours">%1$d mawora  %2$dmamin (%3$s) svisaleke</string>
   <string name="camera_video.resolution_dialog.title">Kheta rezulusawu ya video</string>
   <string name="camera_video.resolution_dialog.expl">Rezulusawu la henhla ngopfu svi vula lesvaku vhidiyo yi ta va ya xiyimo xa le henhla kambe a arkivho yi ta va yikulu swinene hi tamanyo.</string>
   <string name="camera_video.resolution_select_highest">Henhla ngopfu</string>
@@ -312,12 +312,12 @@
   <string name="action_disable">Dixligara</string>
   <string name="settings.servers_delete.server_dialog.title">Tima servhidori \"%1$s\"?</string>
   <string name="action_edit">Editara</string>
-  <string name="settings.server_add.server_dialog_advanced">Svalemawhleni</string>
+  <string name="settings.server_add.server_dialog_advanced">Svale mawhleni</string>
   <string name="settings.docu_error_auth.required">Kulaveka kunghenisa kodiko</string>
   <string name="settings.sec_lock_timeout_immediately">Hi kuhatlisa</string>
-  <string name="settings.sec_lock_timeout_1min">1 mineti</string>
-  <string name="settings.sec_lock_timeout_5min">5 watiminete</string>
-  <string name="settings.sec_lock_timeout_30min">30 watiminete</string>
+  <string name="settings.sec_lock_timeout_1min">1 minuto</string>
+  <string name="settings.sec_lock_timeout_5min">5 wa maminuto</string>
+  <string name="settings.sec_lock_timeout_30min">30 wa maminuto</string>
   <string name="settings.sec_lock_timeout_1hour">1 wora</string>
   <string name="settings.sec_lock_timeout_desc">Tihlawule svaku svi teka nkarhi wo tanihi kwihi kuva Tella yi khiya</string>
   <string name="settings.prot_select_delete.vault">Tima maarkivho</string>
@@ -365,7 +365,7 @@
   <string name="recorder_toast_recording.saved">Gravhasawu li hlayisiwile ka maarkiivho ya wena ya Tella</string>
   <string name="onboard.intro_title">Hoyohoyo ka Tella</string>
   <string name="onboard.intro_get_started">Sungula</string>
-  <string name="onboard.title_camera">Khamera</string>
+  <string name="onboard.title_camera">Kamera</string>
   <string name="onboard.expl_camera">Teka svifaniso ni mavhidiyo hi ku kongoma ka Tella. Maarkivho lawa motihlayisiwa hihoxe nasvona ma tihlayisa ka Tella, naswona a ma nge voneki ka ndhawu ya svifaniso sva wena ya ntolovelo.</string>
   <string name="onboard.title_recorder">Gravhador</string>
   <string name="onboard.expl_recorder">Gravhara maentrevixta kumbe mpfumawulo wa ndhawu hi gravhadori ya rito ya Tella. Maarkivho ya audiyo matipfala ni kutihlayisa ka paxta ya kufilheka ya Tella.</string>
@@ -402,8 +402,8 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Kutlhela upfula Tella, lavisisa xifaniso xa aplikativho xa Kalkuladora xikarhi ka maaplikativho ya wena. Pfulela Tella hi kunghenisa PIN ya wena eka Kalkuladora ugama utsala \"=\".</string>
   <string name="settings.sec_confirm_exit_tella">Huma ka Tella</string>
   <string name="Home_BottomNav_Home">Kaya</string>
-  <string name="Home_BottomNav_Rec">Gravh</string>
-  <string name="Home_BottomNav_Camera">Khamera</string>
+  <string name="Home_BottomNav_Rec">Gravhara</string>
+  <string name="Home_BottomNav_Camera">Kamera</string>
   <string name="Home_BottomNav_Forms">Maformulariyo</string>
   <string name="Home_BottomNav_Reports">Marelatoriyo</string>
   <string name="Vault_Move_AppBar">Rhurhisa \"%s\"</string>
@@ -429,7 +429,7 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="settings.gen_select_about">Mayelana ni Xipfuno</string>
   <string name="settings.gen_select_language">Lirimi</string>
   <string name="home_action.desc_quick.exit">Huma</string>
-  <string name="settings.camo_camera4">Camera</string>
+  <string name="settings.camo_camera4">Kamera</string>
   <string name="settings.camo_camera3">CameraPro</string>
   <string name="settings.camo_camera2">SuperCam</string>
   <string name="settings.camo_camera1">EasyCam</string>
@@ -445,9 +445,9 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="Uwazi_RemoveTemplate_SheetTitle">Susa eka xitirhisiwa</string>
   <string name="Uwazi_Action_FillEntity">Endla xirho</string>
   <string name="Uwazi_Action_RemoveTemplate">Tima Xikombiso</string>
-  <string name="Uwazi_Subtitle_RemoveTemplate">Utiyisile lesvaku ulava lava kususa xikombiso lexi? </string>
+  <string name="Uwazi_Subtitle_RemoveTemplate">Utiyisile lesvaku ulava lava kususa xikombiso lexi?</string>
   <string name="UWAZI_Language_Header_Title">Lirimi la Uwazi</string>
-  <string name="Uwazi_Language_Screen_Description">Kolesawu leli la Uwazi likumeka hi tindzimi to hambana-hambana. Hlawula lirimi leli u lavaka ku baxara svikombiso ka lona. </string>
+  <string name="Uwazi_Language_Screen_Description">Kolesawu leli la Uwazi likumeka hi tindzimi to hambana-hambana. Hlawula lirimi leli u lavaka ku baxara svikombiso ka lona.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Kombisa svipfuno sva svikombiso lesvi usvirhandzaka ka tela la Tella.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Swikombiso lesvi usvirhandzaka</string>
   <string name="Uwazi_Templates_Empty_Description">A wu na swikombiso leswi hlayiweke. Deketa botawu ya “+” ku engetela xifaniso leximpshwa.</string>
@@ -519,7 +519,7 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
     <item>Frances</item>
   </string-array>
   <string name="Collect_Action_FillForm">Preyenxera a formulariyo</string>
-  <string name="Collect_Subtitle_RemoveForm">Utiyisile lesvaku u lava ku susa \"%1$s\"? </string>
+  <string name="Collect_Subtitle_RemoveForm">Utiyisile lesvaku u lava ku susa \"%1$s\"?</string>
   <string name="Util_ellapsedTime_Year">Kutlula lembe lin\'we lelihundzeke</string>
   <plurals name="Util_ellapsedTime_Months">
     <item quantity="one">N\'hweti leyihundzeke</item>
@@ -572,7 +572,7 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="Collect_DialogTitle_StopExit">Yima uhuma?</string>
   <string name="Collect_DialogAction_KeepSubmitting">Yana mahlweni urhumela</string>
   <string name="Collect_DialogAction_StopAndExit">Yima uhuma?</string>
-  <string name="Collect_DialogInfo_FormSubmissionStopped">Kurhumela ka wena formulariyo ku yimisiwile. Ungathlelela ku suka ka Kaxa de Sayida.</string>
+  <string name="Collect_DialogInfo_FormSubmissionStopped">Kurhumela ka wena formulariyo ku yimisiwile. Ungathlelela ku suka ka Caixa de Saida.</string>
   <string name="action_view">Vona</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella yi le kutitimeni</string>
   <string name="SettingsCamo_Dialog_TimeoutDesc">Nyima. U ta tlhelela ka tela la xitiriwa xa wena ndzeni ka timinete ti nga li tingani.</string>
@@ -647,8 +647,7 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="Uwazi_Send_Entity_Title">Magamu ya xirho</string>
   <string name="action_yes_in">YES, I’M IN!</string>
   <string name="clean_insights.signed_for_days">You have signed up to share your data.</string>
-  <string name="Javarosa_Upgrade_Warning_Description">Hi atualizara Biblioteka ya Tella nasvona hi ta lava kutlhela hi baxara maformulariyo hinkwawo.
-</string>
+  <string name="Javarosa_Upgrade_Warning_Description">Hi atualizara Biblioteka ya Tella nasvona hi ta lava kutlhela hi baxara maformulariyo hinkwawo.</string>
   <string name="Javarosa_Upgrade_Toast">Nyimela loko hi ri karhi hi pfuxeta maformulariyo.</string>
   <string name="Settings_Reports_Choose_Credentials">Xana u ni vito la mutirhisi ni kodiko?</string>
   <string name="Server_Connect_Icon">xifaniso xa kukonektara a servhidor</string>
@@ -664,22 +663,21 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="Setting_Reports_Background_Upload_Description">Yana mahlweni urhumela marelatoriyo loko u ri karhi u endla mintirho yin\'wana kumbe loko u huma eka Tella.
 XIBASOPISO: Loko yi pfaliwile, Tella yi ta tshama yi pfulekile ku fikela loko marelatorio hinkwawo marhumelewi hi kuhelela.</string>
   <string name="Setting_Reports_Settings_Completed">Kulunghisa ka le mahlweni kuhelile</string>
-  <string name="Setting_Reports_Settings_Completed_Description">U nga cinca kurhandza ka ka
-marelatoriyo ka Kulungisa ka Tella. </string>
+  <string name="Setting_Reports_Settings_Completed_Description">U nga cinca kurhandza ka ka marelatoriyo ka Kulungisa ka Tella.</string>
   <string name="Drafts_Reports_Empty_Message">Maraxkunyo ya wena a ma na nchumu svosvi. Marelatoriyo lawa unga siki marhumela mata humelela laha.</string>
   <string name="Outbox_Reports_Empty_Message">Kaxa de Sayida la wena a li na nchumu svosvi. Marelatoriyo lawa malunghekele ku rhumeliwa mata humelela laha.</string>
   <string name="Submitted_Reports_Empty_Message">A wu na marelatoriyo lawa marhumeliweke.</string>
-  <string name="New_Reports_Text">RELATORIYO LANYIWANA</string>
+  <string name="New_Reports_Text">RELATORIYO LA NYIWANA</string>
   <string name="Reports_Title_Screen">RELATORIYO</string>
   <string name="Reports_Send_To_Text">Rhumela relatoriyo</string>
-  <string name="Reports_Select_Your_Project">Hlawula proxjecto ya wena</string>
+  <string name="Reports_Select_Your_Project">Hlawula proxjeto ya wena</string>
   <string name="Reports_Select_Title">Nhlokomhaka</string>
-  <string name="Reports_Select_Description">Thlamuselo</string>
+  <string name="Reports_Select_Description">Tlhamuselo</string>
   <string name="Reports_Attach_files_Here">Nghenisa maarkivho laha</string>
   <string name="Connection_Title">Makonekinsawu</string>
   <string name="Reports_Saved_Draft">Relatoriyo yi gravhariwe na yile raxkunyo</string>
   <string name="Reports_Pause">Nyimisa</string>
-  <string name="Reports_Resume">Thlelela</string>
+  <string name="Reports_Resume">Tlhelela</string>
   <string name="File_Uploaded_on">Kurhurheriwa ka</string>
   <string name="File_Uploaded">kurhumela</string>
   <string name="Delete_Report_Confirmation">Xana u tiyisile svaku u lava kutima relatoriyo leyi?</string>
@@ -714,7 +712,7 @@ marelatoriyo ka Kulungisa ka Tella. </string>
   <string name="Setting_Reports_Auto_Delete_Description">Tekela kutima maarkivho ka xitirhisiwa xa wena loko marhumeliwe ka proxjeto leyi tanihi relatoriyo.</string>
   <string name="Send_Action_Label">RHUMELA</string>
   <string name="Modified_Label">Kucinciwa</string>
-  <string name="Snackbar_Submit_Report_Error">Kuva u rhumela relatoriyo, tsala nhlokomhaka ivi u engetela thlamuselo kumbe u nghenisa arkivho.</string>
+  <string name="Snackbar_Submit_Report_Error">Kuva u rhumela relatoriyo, tsala nhlokomhaka ivi u engetela tlhamuselo kumbe u nghenisa arkivho.</string>
   <string name="action_open_settings">pfula kulunghisa</string>
   <string name="action_refresh">atualizara</string>
   <string name="action_check">kambela</string>
@@ -751,7 +749,7 @@ marelatoriyo ka Kulungisa ka Tella. </string>
   <string name="action_quick_delete">kutima hi kuhatlisa</string>
   <string name="orange_theme">muhlovo wa laranja</string>
   <string name="blue_theme">muhlovo wa azul</string>
-  <string name="green_theme">muhlovo wa verdi</string>
+  <string name="green_theme">muhlovo wa vherdi</string>
   <string name="yellow_theme">muhlovo wa amarelo</string>
   <string name="settings.sec_keep.exif_switch">Tshama na wutshokoko la  wutshokoko loko u nghenisa</string>
   <string name="settings.sec_keep.exif_expl">Tshama ni EXIF metadata loko u nghenisa svifaniso ni mavhidiyo ka Tella. Lesvi svipatsa wutshokotshoko hi nkarhi lowu xifaniso xi tumbuluxiweke ha wona, kulunghisa ka khamera, ndhawu ni xitirhisiwa xa wena.</string>
@@ -805,21 +803,20 @@ marelatoriyo ka Kulungisa ka Tella. </string>
   <string name="Settings_General_BottomSheetRefreshWarningText">U ta thlelela ka tela la le ndzhaku hi timinete ti nga ri tingani.</string>
   <string name="settings.feedback_enable_sharing">Pfumelela ku avelana mavonele</string>
   <string name="settings.feedback_warning">TIVONELI: ku tirhisa xiyenge lexi swi nga ha paluxa eka munhu lweyi a langutaka redi lesvaku u tirhisa Tella. Tirhisa ntsena loko u titwa u ntshunxekile mayelana ni khombo leri.</string>
-  <string name="feedback_msg">Hibyele loko utlhlangana ni falha, uli ni xikombelo xa ntirho lowumpshwa, kumbe u li ni mavonelo man\'wana.
- Mavonelo lawa a ma tiviwi, himhakaleyo, tiyiseka kupatsa makontakto ya wena loko u lava nhlamulo ya hina.</string>
+  <string name="feedback_msg">Hibyele loko utlhlangana ni falha, uli ni xikombelo xa ntirho lowumpshwa, kumbe uli ni mavonelo man\'wana.
+Mavonelo lawa a ma tiviwi, himhakaleyo, tiyiseka kupatsa makontakto ya wena loko u lava nhlamulo ya hina.</string>
   <string name="thanks_for_your_feedback">Khanimambu kuhinyika mavonelo ya wena!</string>
-  <string name="save_draft">Grvahara raxkunyo?</string>
+  <string name="save_draft">Gravhara raxkunyu?</string>
   <string name="description_submit_feedback">U nga vuya nkarhi wun\'wana ni wun\'wana ku humesa mavonelo ya wena.</string>
   <string name="feedback">Mavonelo</string>
-  <string name="not_internet_msg">A wukonekitariwanga ni internet. Mavonelo ya wena mata tekela kurhumeliwa a loko uni internet.
-</string>
+  <string name="not_internet_msg">A wukonekitariwanga ni internet. Mavonelo ya wena mata tekela kurhumeliwa a loko uni internet.</string>
   <string name="feedback_title">Mavonelo</string>
   <string name="feedback_sent_msg">Mavonelo ya wena ma rhumeliwile</string>
   <string name="share_feedback_action">partilhara mavonelo</string>
   <string name="Forms_NoOutboxForms">Kaixa de Sayida lawena li phanga. Maformulariyo lawa malunghekeleke ku rhumeliwa ma ta humelela laha.</string>
   <string name="Forms_NoDraftForms">A wu na maraxkunyu ya maformulariyo.</string>
   <string name="Forms_BlankSubheadingFormsOnServers">Maformulariyo lawa nga kona ka servhidor</string>
-  <string name="Forms_BlankSubheadingDownloadedForms">Lawa i maformulariyo lawa nga  kalaka manga na nchumu lawa u nga matataka.</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">Lawa i maformulariyo lawa ma kalaka manga na nchumu lawa u nga matataka.</string>
   <string name="background_activities">Mintirho leyi fambaka ndzhaku</string>
   <string name="current_background_activities">Leyi i mintirho leyi fambaka ndzhaku svosvi.</string>
   <string name="file_encryption_in_progress">Arkivho li le kupfaliweni</string>
@@ -838,7 +835,7 @@ marelatoriyo ka Kulungisa ka Tella. </string>
   <string name="Resources_AvailableEmptyMessage">A ku na svitirhisiwa leswi kumekaka kuva svibaxariwa ka proxjeto la wena la Tella Web.</string>
   <string name="Resources_RemoveFromDownloads">Susa lesvi ungabaxara</string>
   <string name="Resources_RemovedResource">\"%s\" yi susiwile ka lesvi ungabaxara.</string>
-  <string name="Resources_DialogTitle_StopDownload">Tshika ku dawuniloda u tlhela u huma?</string>
+  <string name="Resources_DialogTitle_StopDownload">Tshika kubaxara utlhela uhuma?</string>
   <string name="Resources_DialogMsg_StopDownload">Mfambu wa wena wa kubaxara uta lahleka. U nga ha tlhela u vuya ndzhaku kuva uta baxara svilo.</string>
   <string name="Resources_KeepDownloading">YANA MAHLWENI U BAXARA</string>
   <string name="Resources_Exit">HUMA</string>
@@ -848,10 +845,10 @@ marelatoriyo ka Kulungisa ka Tella. </string>
   <string name="exit_and_discard_info">HUMA U TSHIKA MAHUNGU</string>
   <string name="back">THLELA</string>
   <string name="encrypting">Kupfalela</string>
-  <string name="Sensitive_Chnage_Title">⚠️ Ku cinca loku ngani ni wuxokoxoko la lisima ngopfu ni xihundla ka versawu la nyuwana</string>
-  <string name="Sensitive_Chnage_Description">Versawu leli landzelaka la Tella (leli nga ta humesiwa hi 15 ka Julho 2024) li ta patsa ku ampswisiwa lokukulu ka tekinoloxjia. Ku cinca loku ku tisa khombo lelitsongo la lesvaku maarkivho man\'wana ma lahleka loko u li karhi atualizara kuya ya ka versaw la nyiwani.
+  <string name="Sensitive_Chnage_Title">⚠️ Ku cinca loku ngani ni wuxokoxoko la lisima ngopfu ni xihundla ka versawu la nyiwani</string>
+  <string name="Sensitive_Chnage_Description">Versawu leli landzelaka la Tella (leli nga ta humesiwa hi 15 ka Julho 2024) li ta patsa ku ampsisiwa lokukulu ka tekinoloxjiya. Ku cinca loku ku tisa khombo lelitsongo la lesvaku maarkivho man\'wana ma lahleka loko u li karhi uatualizara kuya ya ka versawu la nyiwani.
 
- Loko u hlayisa maarkivho lawa manga ni vuxokoxoko la lisima ngopfu ni xihundla ka Tella, hi ku tsundzuxa lesvaku u tikopiyara u tiveka ndhawini leyi sirhelelekeke handle ka Tella na ungese atualizara.
+Loko uhlayisa maarkivho lawa manga ni wuxokoxoko la lisima ngopfu ni xihundla ka Tella, hi ku tsundzuxa lesvaku u tikopiyara u tiveka ndhawini leyi sirhelelekeke handle ka Tella na ungesi na atualizara.
 
 Deketa ‘Tiva Svin\'wana’ laha hansi kuva u kuma mahungu man\'wana hi ku cinca loku ku taka ni nkongomiso wa ndlela ya kuhumesa maarkivho hinkwawo ka Tella.</string>
   <string name="Learn_More">TIVA SVIN\'WANA</string>
@@ -861,8 +858,8 @@ Deketa ‘Tiva Svin\'wana’ laha hansi kuva u kuma mahungu man\'wana hi ku cinc
     <item quantity="other">%1$d svirho lesvi hlawuliweke</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">Kheta svirho lesvi u lavaka ku svikukonekitara ka ndhawu leyi.</string>
-  <string name="Analytics_contribute_reminder_title">U le kupartilhareni ka wuxopoxopo</string>
-  <string name="Analytics_contribute_reminder_description">Xitsundzuxo: U le kupartilhareni ka wuxopoxopo la aplikativho la wena ku ampswisa Tella. Nyima  ku partilhara nkarhi wun\'wana na wun\'wana hi ku ya eka Kulunghisa.</string>
+  <string name="Analytics_contribute_reminder_title">U le kupartilhareni ka wuxokoxoko</string>
+  <string name="Analytics_contribute_reminder_description">Xitsundzuxo: U le kupartilhareni ka wuxokoxoko la aplikativho la wena ku ampsisa Tella. Nyima  ku partilhara nkarhi wun\'wana na wun\'wana hi ku ya eka Kulunghisa.</string>
   <string name="Analytics_contribute_more_info">Lesvaku u kuma mahungu lawa maengetelekeke hi ndlela leyi hi hlengeletaka rungula.</string>
   <string name="Analytics_contribute_more_info2">nghena ka paxjina leli.</string>
   <string name="Analytics_contribute_title">U nga rhandza ku hoxa xandla?</string>

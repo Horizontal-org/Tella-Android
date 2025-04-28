@@ -825,80 +825,77 @@ Anda akan dikirim secara otomatis saat Anda terhubung.</string>
   <string name="Home_BottomNav_Resources">Resources</string>
   <string name="Resources_DownloadedTitle">Downloaded</string>
   <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
-  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
-  <string name="Resources_AvailableTitle">Available for download</string>
-  <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
-  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
-  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
-  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
-  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
-  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
-  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
-  <string name="Resources_Exit">EXIT</string>
-  <string name="Error_DownloadFailed">Error: Download failed</string>
-  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
-  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
-  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
-  <string name="back">BACK</string>
-  <string name="encrypting">Encrypting </string>
-  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
-
- If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
-
- Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
-  <string name="Learn_More">LEARN MORE</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">Anda tidak </string>
+  <string name="Resources_AvailableTitle">Tersedia untuk diunduh</string>
+  <string name="Resources_AvailableInfoMessage">Berikut adalah sumber daya yang tersedia untuk diunduh dari proyek Tella Web Anda. </string>
+  <string name="Resources_AvailableEmptyMessage">Tidak ada sumber daya yang tersedia untuk diunduh dari proyek Tella Web Anda.</string>
+  <string name="Resources_RemoveFromDownloads">Hapus dari unduhan</string>
+  <string name="Resources_RemovedResource">\"%s\" telah dihapus dari unduhan Anda.</string>
+  <string name="Resources_DialogTitle_StopDownload">Berhenti mengunduh dan keluar?</string>
+  <string name="Resources_DialogMsg_StopDownload">Progres unduhan Anda akan hilang. Anda selalu dapat kembali nanti untuk melanjutkan mengunduh sumber dayanya lagi.</string>
+  <string name="Resources_KeepDownloading">TETAP MENGUNDUH</string>
+  <string name="Resources_Exit">KELUAR</string>
+  <string name="Error_DownloadFailed">Galat: Unduhan gagal</string>
+  <string name="exit_and_discard_verification_info">Keluar dan buang informasi verifikasi</string>
+  <string name="recording_in_progress_exit_warning">Tella masih merekam informasi tentang perangkat dan lokasi Anda. Jika Anda keluar, berkas Anda tidak akan bisa diverifikasi.</string>
+  <string name="exit_and_discard_info">KELUAR DAN BUANG INFORMASI</string>
+  <string name="back">KEMBALI</string>
+  <string name="encrypting">Mengenkripsi </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Perubahan sensitif pada rilis berikutnya</string>
+  <string name="Sensitive_Chnage_Description">Versi Tella berikutnya (akan dirilis pada 15 Juli 2024) akan mencakup berbagai perbaikan teknis besar. Perubahan ini membawa risiko kecil bahwa beberapa berkas akan hilang saat melakukan pembaruan ke versi baru.
+ 
+ Jika Anda menyimpan berkas sensitif di Tella, kami sarankan Anda menyalinnya ke tempat yang aman di luar Tella sebelum pembaruan. 
+ 
+ Ketuk \'Pelajari Lebih Lanjut\' di bawah untuk informasi lebih lanjut tentang perubahan yang akan datang dan panduan tentang cara mengekspor semua berkas dari Tella.</string>
+  <string name="Learn_More">PELAJARI LEBIH LANJUT</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="one">%1$d entity selected</item>
-    <item quantity="other">%1$d entities selected</item>
+    <item quantity="other">%1$d entitas dipilih</item>
   </plurals>
-  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
-  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
-  <string name="Analytics_contribute_more_info2"> visit this page.</string>
-  <string name="Analytics_contribute_title">Would you like to contribute?</string>
-  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Pilih entitas yang Anda ingin sambungkan ke properti ini.</string>
+  <string name="Analytics_contribute_reminder_title">Anda sedang membagikan data</string>
+  <string name="Analytics_contribute_reminder_description">Pengingat: Saat ini Anda sedang membagikan analitik aplikasi untuk meningkatkan Tella. Berhenti berbagi kapanpun dengan membuka Pengaturan.</string>
+  <string name="Analytics_contribute_more_info">Untuk informasi lebih lanjut tentang bagaimana kami mengumpulkan data,  </string>
+  <string name="Analytics_contribute_more_info2">kunjungi halaman ini.</string>
+  <string name="Analytics_contribute_title">Apakah Anda ingin berkontribusi?</string>
+  <string name="Analytics_contribute_description">Anda bisa keluar kapan saja dengan membuka Pengaturan.</string>
+  <string name="Analytics_contribute_info_link">Untuk informasi tentang bagaimana kami mengumpulkan data, kunjungi halaman ini.</string>
   <string name="Analytics_how_works_title">Bagaimana ia bekerja</string>
-  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
-• We collect as little data as possible.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Specific questions</string>
-  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected
-😎 Calculator camouflage enabled</string>
-  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
-  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will <b>never</b> share your data or sell it to anyone.</string>
-  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
-  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
+  <string name="Analytics_how_works_description">• Kami menggunakan DivviUp, sistem analitik yang menghargai privasi.
+• Kami mengumpulkan sesedikit mungkin.
+• Semua data bersifat anonim dan tidak akan pernah bisa dikaitkan dengan Anda.</string>
+  <string name="Analytics_questions_title">Pertanyaan spesifik</string>
+  <string name="Analytics_questions_description">Setiap studi mengumpulkan data tentang pertanyaan tertentu. Berikut contohnya:</string>
+  <string name="Analytics_questions_examples">🔓 Membuka Tella 4 kali dalam seminggu
+💾  32 berkas disimpan di Tella
+📖  Bahasa Spanyol dipilih
+⚡  1 peladen terhubung
+😎 Kamuflase kalkulator diaktifkan</string>
+  <string name="Analytics_share_data_title">Bagikan data Anda untuk meningkatkan Tella</string>
+  <string name="Analytics_share_data_description">Dengan bergabung dalam studi ini, Anda akan membantu kami memahami fitur mana yang penting bagi Anda dan bagaimana Anda menggunakan aplikasinya.</string>
+  <string name="Analytics_respect_privacy_title">Kami menghormati privasi Anda</string>
+  <string name="Analytics_respect_privacy_description">•  Kami tidak akan mengakses berkas apa pun yang Anda simpan di Tella atau yang dibagikan dengan organisasi Anda.
+•  Kami tidak <b>pernah</b> membagikan data atau menjualnya ke siapa pun.</string>
+  <string name="Analytics_banner_title">Bagikan analitik untuk meningkatkan Tella</string>
+  <string name="Analytics_banner_improve_description">Bantu kami memahami bagaimana Anda menggunakan Tella. Semua data bersifat anonim dan tidak akan pernah bisa dikaitkan dengan Anda.
 
-Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
-  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
-  <string name="select_entities">Select entities</string>
-  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-  <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
-  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
-  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
+Apakah Anda ingin membagikan analitik kepada tim Tella?</string>
+  <string name="Settings_Analytics_switch_title">Bagikan data untuk meningkatkan Tella</string>
+  <string name="Settings_Analytics_switch_expl">Bantu kami memahami bagaimana Anda menggunakan Tella.Data Anda tidak akan pernah dapat dikaitkan dengan Anda.</string>
+  <string name="select_entities">Pilih entitas</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Cari atau pilih entitas yang ingin Anda sambungkan ke properti ini.</string>
+  <string name="add_more_entities">Tambahkan lebih banyak entitas</string>
+  <string name="on_select_entities_clicked_tag">padaPilihanEntitasDiKlik</string>
+  <string name="could_not_find_uwazientryfragment">Tidak dapat menemukan Uwazientryfragment</string>
+  <string name="Settings_Analytics_turn_on_dialog"> Anda telah mendaftar untuk membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
+  <string name="Settings_Analytics_turn_off_dialog">Anda tidak lagi bisa membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
-  <string name="unlock">Unlock</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
-  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
- forms, reports, and files directly from Tella
- to your organization.</string>
-  <string name="action_flip_vertically">Flip vertically</string>
-  <string name="action_flip_horizontally">Flip horizontally</string>
+  <string name="unlock">Buka kunci</string>
+  <string name="Onboard_Collect_Data">Kumpulkan data</string>
+  <string name="Onboard_Collect_Data_Exp">Jika Anda bekerja dengan organisasi, kirimkan formulir, laporan, dan berkas langsung dari Tella ke organisasi Anda.</string>
+  <string name="action_flip_vertically">Balik secara vertikal</string>
+  <string name="action_flip_horizontally">Balik secara horizontal</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
   <string name="create_new_folder">BUAT FOLDER BARU</string>
   <string name="use_shared_drive">GUNAKAN DRIVE BERSAMA</string>
