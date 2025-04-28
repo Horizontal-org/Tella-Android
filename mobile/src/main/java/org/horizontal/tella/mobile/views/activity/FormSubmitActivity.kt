@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.views.fragment.forms.SubmitFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import org.hzontal.shared_ui.utils.DialogUtils
 
 @AndroidEntryPoint
 class FormSubmitActivity : BaseLockActivity() {
@@ -196,7 +197,11 @@ class FormSubmitActivity : BaseLockActivity() {
 
     private fun formReSubmitError(error: Throwable) {
         val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+        DialogUtils.showBottomMessage(
+            this,
+            errorMessage,
+            true
+        )
         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
