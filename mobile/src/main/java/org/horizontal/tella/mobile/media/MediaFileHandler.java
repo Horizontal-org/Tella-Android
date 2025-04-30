@@ -696,6 +696,9 @@ public class MediaFileHandler {
     }
 
     public static Observable<List<VaultFile>> getLastVaultFileFromDb() {
+        if (MyApplication.rxVault == null) {
+            return Observable.error(new NullPointerException("rxVault is null"));
+        }
         Limits limits = new Limits();
         limits.limit = 1;
         Sort sort = new Sort();
