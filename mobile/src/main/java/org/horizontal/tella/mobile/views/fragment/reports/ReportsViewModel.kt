@@ -34,8 +34,7 @@ class ReportsViewModel @Inject constructor(
     private val deleteReportUseCase: DeleteReportUseCase,
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val reportsRepository: ReportsRepository,
-    private val dataSource: DataSource
-) : BaseReportsViewModel() {
+    private val dataSource: DataSource) : BaseReportsViewModel() {
 
     val reportProcess = reportsRepository.getReportProgress()
     val instanceProgress = reportsRepository.geInstanceProgress()
@@ -217,41 +216,63 @@ class ReportsViewModel @Inject constructor(
     override fun getReportBundle(instance: ReportInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
-        getReportBundleUseCase.execute(onSuccess = { result ->
-            val resultInstance = result.instance
-            disposables.add(dataSource.getReportMediaFiles(result.instance)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ files ->
-                    val vaultFiles: MutableList<VaultFile?> =
-                        MyApplication.rxVault.get(result.fileIds).blockingGet()
-                            ?: return@subscribe
-                    val filesResult = arrayListOf<FormMediaFile>()
 
-                    files.forEach { formMediaFile ->
-                        val vaultFile =
-                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
-                        if (vaultFile != null) {
-                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-                            fileResult.status = formMediaFile.status
-                            fileResult.uploadedSize = formMediaFile.uploadedSize
-                            filesResult.add(fileResult)
-
+        getReportBundleUseCase.execute(
+            onSuccess = { result ->
+                disposables.add(
+                    dataSource.getReportMediaFiles(result.instance)
+                        .flatMap { files ->
+                            MyApplication.keyRxVault.getRxVault()
+                                .firstOrError()
+                                .flatMap { rxVault ->
+                                    rxVault.get(result.fileIds)
+                                        .map { vaultFiles ->
+                                            ProcessedFiles(result.instance, files, vaultFiles ?: emptyList())
+                                        }
+                                }
                         }
-                    }
-                    resultInstance.widgetMediaFiles = filesResult
-                    _reportInstance.postValue(resultInstance)
-                }) { throwable: Throwable? ->
-                    Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                }
-            )
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ (instance, files, vaultFiles) ->
+                            instance.widgetMediaFiles = processFiles(files, vaultFiles)
+                            _reportInstance.postValue(instance)
+                        }, { throwable ->
+                            Timber.e(throwable, "Error getting report bundle")
+                            FirebaseCrashlytics.getInstance().apply {
+                                recordException(throwable)
+                                log("Failed to get report bundle for instance ${instance.id}")
+                            }
+                            _error.postValue(throwable)
+                        })
+                )
+            },
+            onError = { error ->
+                _error.postValue(error)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
 
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+    private data class ProcessedFiles(
+        val instance: ReportInstance,
+        val formFiles: List<FormMediaFile>,
+        val vaultFiles: List<VaultFile>
+    )
+
+    private fun processFiles(
+        formFiles: List<FormMediaFile>,
+        vaultFiles: List<VaultFile>
+    ): List<FormMediaFile> {
+        return formFiles.mapNotNull { formFile ->
+            vaultFiles.firstOrNull { it.id == formFile.id }?.let { vaultFile ->
+                FormMediaFile.fromMediaFile(vaultFile).apply {
+                    status = formFile.status
+                    uploadedSize = formFile.uploadedSize
+                }
+            }
+        }
     }
 
     override fun getFormInstance(

@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 
@@ -88,7 +89,9 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
         ArrayList<String> files = new Gson().fromJson((String) data, new TypeToken<List<String>>() {
         }.getType());
         if (!files.isEmpty() && !files.get(0).isEmpty()) {
-            VaultFile vaultFile = MyApplication.rxVault
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            VaultFile vaultFile = rxVault
                     .get(files.get(0))
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
@@ -143,8 +146,9 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
             Activity activity = (Activity) getContext();
             waitingForAData = true;
             List<VaultFile> files = new ArrayList<>();
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
+            VaultFile vaultFile = getFilename() != null ? rxVault
                     .get(getFileId())
                     .subscribeOn(Schedulers.io())
                     .blockingGet() : null;

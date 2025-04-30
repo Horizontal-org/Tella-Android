@@ -810,10 +810,10 @@ class AttachmentsFragment :
         )
     }
 
-    private fun onMediaExported(num: Int) {
+    private fun onMediaExported(num: Int?) {
         DialogUtils.showBottomMessage(
             baseActivity,
-            resources.getQuantityString(R.plurals.gallery_toast_files_exported, num, num),
+            resources.getQuantityString(R.plurals.gallery_toast_files_exported, num!!, num),
             false
         )
     }

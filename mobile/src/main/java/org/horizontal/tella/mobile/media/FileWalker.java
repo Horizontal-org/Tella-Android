@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.media;
 
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,9 @@ public class FileWalker {
 
     public List<VaultFile> walk(VaultFile root) {
 
-        List<VaultFile> files = MyApplication.rxVault.list(root).blockingGet();
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+        List<VaultFile> files = rxVault.list(root).blockingGet();
 
         for (VaultFile f : files) {
             if (f.type == VaultFile.Type.DIRECTORY) {
@@ -32,8 +35,9 @@ public class FileWalker {
     }
 
     public List<VaultFile> walkWithDirectories(VaultFile root) {
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
-        List<VaultFile> files = MyApplication.rxVault.list(root).blockingGet();
+        List<VaultFile> files = rxVault.list(root).blockingGet();
 
         for (VaultFile f : files) {
             if (f.type == VaultFile.Type.DIRECTORY) {

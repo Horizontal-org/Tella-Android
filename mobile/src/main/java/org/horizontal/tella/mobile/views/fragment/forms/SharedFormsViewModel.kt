@@ -5,30 +5,38 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.javarosa.core.model.FormDef
-import org.javarosa.core.model.instance.InstanceInitializationFactory
-import org.javarosa.core.reference.ReferenceManager
-import org.javarosa.form.api.FormEntryController
-import org.javarosa.form.api.FormEntryModel
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.repository.OpenRosaRepository
-import org.horizontal.tella.mobile.domain.entity.collect.*
+import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
+import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstance
+import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstanceStatus
+import org.horizontal.tella.mobile.domain.entity.collect.CollectServer
+import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
+import org.horizontal.tella.mobile.domain.entity.collect.FormPair
+import org.horizontal.tella.mobile.domain.entity.collect.ListFormResult
 import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
 import org.horizontal.tella.mobile.domain.repository.IOpenRosaRepository
 import org.horizontal.tella.mobile.odk.FormController
+import org.javarosa.core.model.FormDef
+import org.javarosa.core.model.instance.InstanceInitializationFactory
+import org.javarosa.core.reference.ReferenceManager
+import org.javarosa.form.api.FormEntryController
+import org.javarosa.form.api.FormEntryModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SharedFormsViewModel @Inject constructor(private val mApplication: Application) : AndroidViewModel(mApplication) {
+class SharedFormsViewModel @Inject constructor(
+    private val mApplication: Application
+) : AndroidViewModel(mApplication) {
     var onCreateFormController = SingleLiveEvent<FormController>()
     var onGetBlankFormDefSuccess = SingleLiveEvent<FormPair>()
     var onInstanceFormDefSuccess = SingleLiveEvent<CollectFormInstance>()
@@ -103,7 +111,7 @@ class SharedFormsViewModel @Inject constructor(private val mApplication: Applica
         formDef.initialize(true, InstanceInitializationFactory())
 
         // Remove previous forms
-       // ReferenceManager.`__`().clearSession()
+        // ReferenceManager.`__`().clearSession()
         ReferenceManager.instance().clearSession()
         fc.initFormChangeTracking() // set clear form to track changes
         return fc
@@ -134,33 +142,40 @@ class SharedFormsViewModel @Inject constructor(private val mApplication: Applica
     }
 
     fun getInstanceFormDef(instanceId: Long) {
-        var collectFormInstance: CollectFormInstance? = null
-        disposables.add(keyDataSource.dataSource
-            .flatMapSingle { dataSource: DataSource ->
-                dataSource.getInstance(
-                    instanceId
-                )
-            }
-            .flatMapSingle { instance: CollectFormInstance ->
-                collectFormInstance = instance
-                MyApplication.rxVault[instance.widgetMediaFilesIds]
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ vaultFiles: List<VaultFile> ->
-                for (file in vaultFiles) {
-                    collectFormInstance?.setWidgetMediaFile(
-                        file.name,
-                        FormMediaFile.fromMediaFile(file)
-                    )
+        disposables.add(
+            keyDataSource.dataSource
+                .flatMapSingle { dataSource: DataSource ->
+                    dataSource.getInstance(instanceId)
                 }
-                onInstanceFormDefSuccess.postValue(
-                    collectFormInstance?.let { maybeCloneInstance(it) }
+                .flatMap { instance: CollectFormInstance ->
+                    MyApplication.keyRxVault.rxVault
+                        .firstOrError()
+                        .flatMapObservable { rxVault ->
+                            rxVault[instance.widgetMediaFilesIds]
+                                .toObservable()
+                                .map { vaultFiles ->
+                                    instance to vaultFiles
+                                }
+                        }
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ (instance, vaultFiles) ->
+                    // Process vault files
+                    vaultFiles.forEach { file ->
+                        instance.setWidgetMediaFile(
+                            file.name,
+                            FormMediaFile.fromMediaFile(file)
+                        )
+                    }
+                    // Post success value
+                    onInstanceFormDefSuccess.postValue(maybeCloneInstance(instance))
+                }, { throwable ->
+                    // Error handling
+                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    onFormDefError.postValue(throwable)
+                }
                 )
-            }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                onFormDefError.postValue(throwable)
-            }
         )
     }
 
@@ -504,27 +519,32 @@ class SharedFormsViewModel @Inject constructor(private val mApplication: Applica
     }
 
     fun getFormInstance(instanceId: Long) {
-        var collectFormInstance : CollectFormInstance? = null
-        disposables.add(keyDataSource.dataSource
-            .flatMapSingle { dataSource: DataSource ->
-                dataSource.getInstance(
-                    instanceId
-                )
-            }
-            .flatMapSingle { instance: CollectFormInstance ->
-                collectFormInstance = instance
-                MyApplication.rxVault[instance.widgetMediaFilesIds]
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ vaultFiles: List<VaultFile>? ->
-                collectFormInstance.let {
-                    collectFormInstance?.setCollectInstanceAttachments(vaultFiles)
-                _collectFormInstance.postValue(collectFormInstance)}
-            }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                onError.postValue(throwable)
-            }
+        disposables.add(
+            keyDataSource.dataSource
+                .flatMapSingle { dataSource: DataSource ->
+                    dataSource.getInstance(instanceId)
+                }
+                .flatMap { instance: CollectFormInstance ->
+                    // Convert the Single to Observable
+                    MyApplication.keyRxVault.rxVault
+                        .firstOrError()
+                        .flatMapObservable { rxVault ->  // Use flatMapObservable instead
+                            rxVault[instance.widgetMediaFilesIds]
+                                .toObservable()  // Convert List to Observable
+                                .map { vaultFiles ->
+                                    instance to vaultFiles
+                                }
+                        }
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ (instance, vaultFiles) ->
+                    instance.setCollectInstanceAttachments(vaultFiles)
+                    _collectFormInstance.postValue(instance)
+                }, { throwable ->
+                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    onError.postValue(throwable)
+                })
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
@@ -16,7 +17,7 @@ import org.horizontal.tella.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
 
-
+@AndroidEntryPoint
 class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding>(
     FragmentTemplatesUwaziBinding::inflate
 ) {

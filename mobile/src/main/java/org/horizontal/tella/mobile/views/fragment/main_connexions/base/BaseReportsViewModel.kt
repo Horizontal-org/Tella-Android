@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
@@ -60,7 +63,7 @@ abstract class BaseReportsViewModel : ViewModel() {
     val serversList: LiveData<List<Server>> get() = _serversList
 
     //TODO CHECK FOR LATER AHLEM + WAFA
-   // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
+    // val reportProcess: SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>
     // val instanceProgress: SingleLiveEvent<ReportInstance>
 
 
@@ -142,16 +145,25 @@ abstract class BaseReportsViewModel : ViewModel() {
         return vaultFiles
     }
 
-    fun putVaultFilesInForm(vaultFileList: String): List<VaultFile> {
-        val vaultFormFiles = mutableListOf<VaultFile>()
-        val files = vaultFileList.fromJsonToObjectList(String::class.java)
-        files?.map { file ->
-            //TODO WE NEED TO INJECT RX VAULT WITH DAGGER
-            val vaultFile = MyApplication.rxVault[file].subscribeOn(Schedulers.io()).blockingGet()
-            val mappedFile = FormMediaFile.fromMediaFile(vaultFile)
-            vaultFormFiles.add(mappedFile)
+    fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
+        return Single.fromCallable {
+            vaultFileList.fromJsonToObjectList(String::class.java) ?: emptyList()
         }
-        return vaultFormFiles
+            .flatMap { fileIds ->
+                MyApplication.keyRxVault.rxVault
+                    .firstOrError()
+                    .flatMap { rxVault ->
+                        Observable.fromIterable(fileIds)
+                            .flatMapSingle { fileId ->
+                                rxVault[fileId]
+                                    .subscribeOn(Schedulers.io())
+                                    .onErrorReturnItem(null) // Handle potential errors
+                            }
+                            .filter { true } // Filter out null values
+                            .toList()
+                    }
+            }
+            .subscribeOn(Schedulers.io())
     }
 
     override fun onCleared() {

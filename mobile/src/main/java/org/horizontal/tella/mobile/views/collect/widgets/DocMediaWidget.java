@@ -19,6 +19,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.horizontal.tella.mobile.odk.FormController;
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
@@ -170,7 +171,9 @@ public class DocMediaWidget extends MediaFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
             List<VaultFile> files = new ArrayList<>();
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            VaultFile vaultFile = getFilename() != null ? rxVault
                     .get(getFileId())
                     .subscribeOn(Schedulers.io())
                     .blockingGet() : null;

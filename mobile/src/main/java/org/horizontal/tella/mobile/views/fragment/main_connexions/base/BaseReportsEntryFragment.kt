@@ -450,7 +450,7 @@ abstract class BaseReportsEntryFragment :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == C.MEDIA_FILE_ID && resultCode == Activity.RESULT_OK) {
             val vaultFile = data?.getStringExtra(VAULT_FILE_KEY) ?: ""
-            putFiles(viewModel.putVaultFilesInForm(vaultFile))
+            putFiles(viewModel.putVaultFilesInForm(vaultFile).blockingGet())
         }
     }
 

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -84,6 +85,7 @@ public class AudioWidget extends MediaFileBinaryWidget {
         return getFilename();
     }
 
+    @SuppressLint("WrongViewCast")
     private void addImageWidgetViews(LinearLayout linearLayout) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -191,22 +193,26 @@ public class AudioWidget extends MediaFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
             List<VaultFile> files = new ArrayList<>();
 
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFileId())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
+            if (getFilename() != null) {
+                RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                VaultFile vaultFile = rxVault.get(getFileId())
+                        .subscribeOn(Schedulers.io())
+                        .blockingGet();
 
-            files.add(vaultFile);
+                files.add(vaultFile);
+            }
 
-            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            .putExtra(RETURN_ODK, true)
-                            .putExtra(VAULT_FILES_FILTER, FilterType.AUDIO)
-                            .putExtra(VAULT_PICKER_SINGLE, true),
-                    C.MEDIA_FILE_ID);
+            Intent intent = new Intent(getContext(), AttachmentsActivitySelector.class)
+                    .putExtra(RETURN_ODK, true)
+                    .putExtra(VAULT_FILES_FILTER, FilterType.AUDIO) // ✅ audio filter
+                    .putExtra(VAULT_PICKER_SINGLE, true);
+
+            activity.startActivityForResult(intent, C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
+
 }

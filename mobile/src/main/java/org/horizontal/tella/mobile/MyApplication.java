@@ -32,10 +32,10 @@ import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
-import com.hzontal.tella_vault.rx.RxVault;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import org.horizontal.tella.mobile.data.KeyRxVault;
 import org.hzontal.shared_ui.data.CommonPrefs;
 
 import org.conscrypt.Conscrypt;
@@ -85,7 +85,8 @@ import timber.log.Timber;
 @HiltAndroidApp
 public class MyApplication extends MultiDexApplication implements IUnlockRegistryHolder, CredentialsCallback, Configuration.Provider, Application.ActivityLifecycleCallbacks {
     public static Vault vault;
-    public static RxVault rxVault;
+    public static KeyRxVault keyRxVault;
+
     private static TellaBus bus;
     private static LifecycleMainKey mainKeyHolder;
     @SuppressLint("StaticFieldLeak")
@@ -225,13 +226,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         JavaRosa.initializeJavaRosa(mgr);
         vaultConfig = new Vault.Config();
         vaultConfig.root = new File(this.getFilesDir(), C.MEDIA_DIR);
+
+        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
         //Tella keys
         TellaKeys.initialize();
         initializeLockConfigRegistry();
         mainKeyStore = new MainKeyStore(getApplicationContext());
         //mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), LifecycleMainKey.NO_TIMEOUT);
-        mainKeyHolder = new LifecycleMainKey(ProcessLifecycleOwner.get().getLifecycle(), Preferences.getLockTimeout());
+
         keyDataSource = new KeyDataSource(getApplicationContext());
+        keyRxVault = new KeyRxVault(getApplicationContext(), mainKeyHolder, vaultConfig);
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         insertConscrypt();
         enableStrictMode();
@@ -281,14 +285,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onSuccessfulUnlock(Context context) {
-        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
-        mainKeyStore = TellaKeysUI.getMainKeyStore();
-        unlockRegistry = TellaKeysUI.getUnlockRegistry();
-        keyDataSource.initKeyDataSource();
+       // mainKeyHolder = TellaKeysUI.getMainKeyHolder();
+        //mainKeyStore = TellaKeysUI.getMainKeyStore();
+        //unlockRegistry = TellaKeysUI.getUnlockRegistry();
+
 
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
-            rxVault = new RxVault(this, vault);
+            //rxVault = new RxVault(this, vault);
+            keyDataSource.initKeyDataSource();
+            keyRxVault.initKeyRxVault();
             if (Preferences.isUpgradeTella2()) {
                 Toast.makeText(context, "Hold tight while we transferring your files to the Vault!", Toast.LENGTH_LONG).show();
                 upgradeTella2(context);

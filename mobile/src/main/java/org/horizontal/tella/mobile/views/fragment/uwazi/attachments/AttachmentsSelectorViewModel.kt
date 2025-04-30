@@ -12,18 +12,23 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
+import javax.inject.Inject
 
-class AttachmentsSelectorViewModel : ViewModel() {
-    private val disposables by lazy { CompositeDisposable() }
-    private var _error = MutableLiveData<Throwable>()
+class AttachmentsSelectorViewModel @Inject constructor(
+) : ViewModel() {
+
+    private val disposables = CompositeDisposable()
+
+    private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable> get() = _error
-    private var _vaultFiles = MutableLiveData<List<VaultFile>>()
+
+    private val _vaultFiles = MutableLiveData<List<VaultFile>>()
     val vaultFiles: LiveData<List<VaultFile>> get() = _vaultFiles
 
-    private var _selectVaultFiles = MutableLiveData<List<VaultFile>>()
+    private val _selectVaultFiles = MutableLiveData<List<VaultFile>>()
     val selectVaultFiles: LiveData<List<VaultFile>> get() = _selectVaultFiles
 
-    private var _rootVaultFile = SingleLiveEvent<VaultFile>()
+    private val _rootVaultFile = SingleLiveEvent<VaultFile>()
     val rootVaultFile: LiveData<VaultFile> get() = _rootVaultFile
 
     init {
@@ -31,51 +36,71 @@ class AttachmentsSelectorViewModel : ViewModel() {
     }
 
     fun getFiles(parent: String?, filterType: FilterType?, sort: Sort?) {
-        MyApplication.rxVault.get(parent)
-            .subscribe(
-                { vaultFile: VaultFile? ->
-                    disposables.add(MyApplication.rxVault.list(vaultFile, filterType, sort, null)
-                        .subscribeOn(Schedulers.io())
-                        .doOnSubscribe { }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doFinally { }
-                        .subscribe(
-                            { result: List<VaultFile>? ->
-                                _vaultFiles.postValue(result ?: emptyList())
-                            }
-                        ) { throwable: Throwable? ->
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                            _error.postValue(throwable)
-                        })
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { rxVault ->
+                    rxVault.get(parent)
                 }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
-            }.dispose()
+                .flatMap { vaultFile ->
+                    MyApplication.keyRxVault.getRxVault()
+                        .firstOrError()
+                        .flatMap { rxVault -> rxVault.list(vaultFile, filterType, sort, null) }
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result: List<VaultFile> ->
+                        _vaultFiles.postValue(result)
+                    },
+                    { throwable: Throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        _error.postValue(throwable)
+                    }
+                )
+        )
     }
 
     fun getRootId() {
-        MyApplication.rxVault?.root
-            ?.subscribe(
-                { vaultFile: VaultFile? -> _rootVaultFile.postValue(vaultFile) }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
-            }?.dispose()
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { rxVault -> rxVault.root }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { vaultFile: VaultFile ->
+                        _rootVaultFile.postValue(vaultFile)
+                    },
+                    { throwable: Throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        _error.postValue(throwable)
+                    }
+                )
+        )
     }
-
 
     fun getFiles(ids: Array<String>) {
-        MyApplication.rxVault.get(ids)
-            .subscribe(
-                { vaultFiles: List<VaultFile>? ->
-                    _selectVaultFiles.postValue(vaultFiles)
-                }
-            ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
-            }.dispose()
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { rxVault -> rxVault.get(ids) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { vaultFiles: List<VaultFile> ->
+                        _selectVaultFiles.postValue(vaultFiles)
+                    },
+                    { throwable: Throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        _error.postValue(throwable)
+                    }
+                )
+        )
     }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
+    }
 }

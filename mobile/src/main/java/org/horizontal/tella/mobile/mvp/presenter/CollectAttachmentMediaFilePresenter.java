@@ -20,15 +20,21 @@ public class CollectAttachmentMediaFilePresenter implements ICollectAttachmentMe
     public void getMediaFile(String vaultFileNameId) {
         String vaultFileId = FileUtil.getBaseName(vaultFileNameId);
 
-        disposables.add(MyApplication.rxVault.get(vaultFileId)
+        disposables.add(
+                MyApplication.keyRxVault.getRxVault()
+                        .firstOrError()
+                        .flatMap(rxVault -> rxVault.get(vaultFileId))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(disposable -> view.onGetMediaFileStart())
                         .doFinally(() -> view.onGetMediaFileEnd())
-                        .subscribe(vaultFile -> view.onGetMediaFileSuccess(vaultFile),
-                                throwable -> view.onGetMediaFileError(throwable))
+                        .subscribe(
+                                vaultFile -> view.onGetMediaFileSuccess(vaultFile),
+                                throwable -> view.onGetMediaFileError(throwable)
+                        )
         );
     }
+
 
     @Override
     public void destroy() {
