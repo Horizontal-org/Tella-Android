@@ -3,8 +3,8 @@
   <string name="Vault_AllFiles_Title">Maarkivho hinkwawu</string>
   <string name="Vault_Images_Title">Svifaniso</string>
   <string name="Vault_Files_Title">Maarkivho ya Tella</string>
-  <string name="Vault_Documents_Title">Madocumento</string>
-  <string name="Vault_Audios_Title">Audiyo</string>
+  <string name="Vault_Documents_Title">Madokumento</string>
+  <string name="Vault_Audios_Title">Awudiyo</string>
   <string name="Vault_Videos_Title">Mavhidiyo</string>
   <string name="Vault_Others_Title">Svin\'wana</string>
   <string name="Vault_Select_Title">Kheta maarkivho</string>
@@ -41,8 +41,8 @@
   <string name="Vault_SortDateDesc_SheetAction">Kusukela ka svakhale ku ya ka lesva nyiwani</string>
   <string name="Vault_ManageFiles_SheetTitle">Fambisa maarkivho</string>
   <string name="Vault_DeleteFile_SheetDesc">Andzhaku ka kunghenisa arkivho ka Tella, arkivho ya kusungula yi ta susiwa ka xitirhisiwa xa wena. Kopiya leyi salaka yi tava ntsena leyi nga ka Tella.</string>
-  <string name="Vault_TakePhotoVideo_SheetAction">Endla mufoto/vidiyo</string>
-  <string name="Vault_RecordAudio_SheetAction">Gravhara audiyo</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Endla mufoto/vhidiyo</string>
+  <string name="Vault_RecordAudio_SheetAction">Gravhara awudiyo</string>
   <string name="Vault_Import_SheetAction">Tisa ku suka ka xitirhisiwa</string>
   <string name="Vault_ImportDelete_SheetAction">Nghenisa u tlhela utima arkivho ya kusungula</string>
   <string name="Vault_CreateFolder_SheetTitle">Endla paxta leyimpshwa</string>

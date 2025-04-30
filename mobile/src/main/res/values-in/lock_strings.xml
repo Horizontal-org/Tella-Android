@@ -9,10 +9,10 @@
   <string name="UnlockPattern_DrawToUnlock">Gambar pola untuk mebuka Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">Pola buka kunci baru Anda</string>
   <string name="LockPatternSet_Pattern_Recorded">Pola direkam</string>
-  <string name="UnlockPattern_PatternTooShort">Connect at least %d dots, please redraw</string>
+  <string name="UnlockPattern_PatternTooShort">Gambar pola Anda dengan menghubungkan setidaknya enam titik</string>
   <string name="LockPatternSet_RecordingPattern">Angkat jari ketika selesai</string>
   <string name="LockPatternSet_Action_Redraw">Bersihkan</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Wrong pattern, please try again</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Pola salah, mohon coba lagi</string>
   <string name="LockPatternSet_Message_PatternStarted">Pola dimulai</string>
   <string name="LockPatternSet_Message_PatternCleared">Pola dihapus</string>
   <string name="LockPatternSet_Message_CellAdded">Sel ditambahkan</string>
