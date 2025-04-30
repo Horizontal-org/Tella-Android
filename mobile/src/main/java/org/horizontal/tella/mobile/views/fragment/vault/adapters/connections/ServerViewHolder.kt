@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.vault.adapters.connections
 
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,9 +15,12 @@ import org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.bas
 class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
     private lateinit var reportTypeTextView: TextView
     private lateinit var reportTypeImg: ImageView
+    private lateinit var twoLinesReportTypeTextView: TextView
+
 
     override fun bind(item: ServerDataItem, vaultClickListener: VaultClickListener) {
         reportTypeTextView = view.findViewById(R.id.server_name_textView)
+        twoLinesReportTypeTextView = view.findViewById(R.id.two_line_server_name_textView)
         reportTypeImg = view.findViewById(R.id.server_img)
 
         // Set the default padding
@@ -90,6 +94,16 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     ResourcesCompat.getDrawable(
                         view.resources,
                         R.drawable.ic_nextcloud_small,
+                        null
+                    )
+                )
+            }
+            ServerType.PEERTOPEER -> {
+                twoLinesReportTypeTextView.text = view.context.getText(R.string.NearBySharing)
+                reportTypeImg.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                        view.resources,
+                        R.drawable.ic_share,
                         null
                     )
                 )

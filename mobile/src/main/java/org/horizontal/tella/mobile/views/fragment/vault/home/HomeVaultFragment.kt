@@ -463,6 +463,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
             }
 
+            ServerType.PEERTOPEER -> {
+                nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
+            }
+
             else -> {}
         }
     }
@@ -745,6 +749,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
      * This function show connections when all the server types are counted.
      **/
     private fun maybeShowConnections() {
+        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
         // If the serversList is not empty, check if it has changed
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections

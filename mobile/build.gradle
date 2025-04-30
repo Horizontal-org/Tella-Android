@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -88,7 +89,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
-
+        exclude 'META-INF/versions/9/OSGI-INF/MANIFEST.MF'
     }
     namespace 'org.horizontal.tella.mobile'
 }
@@ -232,6 +233,19 @@ dependencies {
 
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
+    //QR CODE SCAN/GENERATE LIBRARY
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    //ktor imp
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
+    implementation("io.ktor:ktor-server-core:2.3.9")
+    implementation("io.ktor:ktor-server-netty:2.3.9")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.9")
+    implementation("io.ktor:ktor-server-cio:2.3.9")
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3' // Use the latest version
+
 
 }
 

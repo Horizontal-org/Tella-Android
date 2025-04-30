@@ -1,7 +1,5 @@
 package org.hzontal.tella.keys.key;
 
-import android.content.Context;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -10,8 +8,6 @@ import java.util.concurrent.TimeUnit;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
-
-import org.hzontal.tella.keys.util.Preferences;
 
 import timber.log.Timber;
 

@@ -247,3 +247,6 @@
 -keep class androidx.credentials.playservices.** {
   *;
 }
+
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**
