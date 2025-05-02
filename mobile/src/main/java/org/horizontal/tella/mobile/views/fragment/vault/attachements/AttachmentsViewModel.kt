@@ -68,8 +68,8 @@ class AttachmentsViewModel @Inject constructor(
     val renameFileSuccess: LiveData<VaultFile> = _renameFileSuccess
     private val _exportState = MutableLiveData<Boolean>()
     val exportState: LiveData<Boolean> = _exportState
-    private val _mediaExported = MutableLiveData<Int?>()
-    val mediaExported: LiveData<Int?> = _mediaExported
+    private val _mediaExported = MutableLiveData<Int>()
+    val mediaExported: LiveData<Int> = _mediaExported
     private val _onConfirmDeleteFiles = MutableLiveData<Pair<List<VaultFile?>, Boolean>>()
     val onConfirmDeleteFiles: LiveData<Pair<List<VaultFile?>, Boolean>> = _onConfirmDeleteFiles
     var spanCount = 1
@@ -313,8 +313,8 @@ class AttachmentsViewModel @Inject constructor(
         }.subscribeOn(Schedulers.computation()).doOnSubscribe { _exportState.postValue(true) }
             .observeOn(AndroidSchedulers.mainThread()).doFinally { _exportState.postValue(false) }
             .subscribe({ num: Int? ->
-                if (num != null) {
-                    _mediaExported.postValue(num)
+                num?.let { count ->
+                    _mediaExported.postValue(count)
                 }
             }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
