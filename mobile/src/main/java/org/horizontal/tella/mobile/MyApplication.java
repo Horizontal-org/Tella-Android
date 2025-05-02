@@ -63,6 +63,7 @@ import javax.net.ssl.SSLEngine;
 import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
+
 import org.horizontal.tella.mobile.bus.TellaBus;
 import org.horizontal.tella.mobile.data.database.KeyDataSource;
 import org.horizontal.tella.mobile.data.nextcloud.TempFileManager;
@@ -285,14 +286,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onSuccessfulUnlock(Context context) {
-       // mainKeyHolder = TellaKeysUI.getMainKeyHolder();
-        //mainKeyStore = TellaKeysUI.getMainKeyStore();
-        //unlockRegistry = TellaKeysUI.getUnlockRegistry();
+        mainKeyHolder = TellaKeysUI.getMainKeyHolder();
+        mainKeyStore = TellaKeysUI.getMainKeyStore();
+        unlockRegistry = TellaKeysUI.getUnlockRegistry();
 
 
         try {
             vault = new Vault(this, mainKeyHolder, vaultConfig);
-            //rxVault = new RxVault(this, vault);
             keyDataSource.initKeyDataSource();
             keyRxVault.initKeyRxVault();
             if (Preferences.isUpgradeTella2()) {
