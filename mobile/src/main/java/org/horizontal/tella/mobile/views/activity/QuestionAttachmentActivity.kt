@@ -61,7 +61,6 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
         binding = ActivityQuestionAttachmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         applyEdgeToEdge(binding.root)
-
         initView()
         binding.content.popupMenu.setOnClickListener { view: View? ->
             showPopupSort(

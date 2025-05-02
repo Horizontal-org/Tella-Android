@@ -41,9 +41,7 @@ class FormSubmitActivity : BaseLockActivity() {
         binding = ActivityFormSubmitBinding.inflate(layoutInflater)
         setContentView(binding.root)
         applyEdgeToEdge(binding.root)
-
         init()
-
         binding.appbar.configureAppBar()
 
         if (intent.hasExtra(FORM_INSTANCE_ID_KEY)) {

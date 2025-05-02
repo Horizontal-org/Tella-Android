@@ -61,7 +61,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         )
         setContentView(binding.root)
         applyEdgeToEdge(binding.root)
-
         // Instantiate a ViewPager and a Tablayout
         if (!isOnboardLockSet && !isFromSettings) initViewPager(6)
 
