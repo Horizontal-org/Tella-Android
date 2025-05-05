@@ -243,7 +243,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddingStart() {
         if (Preferences.isShutterMute()) {
-            setSystemSoundMuted(true)
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
         }
     }
 
@@ -381,7 +382,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
-            setSystemSoundMuted(true)
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
