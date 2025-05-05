@@ -1,14 +1,12 @@
 package org.horizontal.tella.mobile.views.activity.camera
 
 import android.Manifest
-import android.app.NotificationManager
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.SensorManager
 import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.view.OrientationEventListener
 import android.view.View
@@ -243,7 +241,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddingStart() {
         if (Preferences.isShutterMute()) {
-            setSystemSoundMuted(true)
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
         }
     }
 
@@ -381,7 +380,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
-            setSystemSoundMuted(true)
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
@@ -410,27 +410,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 switchButton.visibility = View.GONE
                 resolutionButton.visibility = View.GONE
             }
-        }
-    }
-
-    private fun setSystemSoundMuted(mute: Boolean) {
-        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!notificationManager.isNotificationPolicyAccessGranted) {
-                val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
-                startActivity(intent)
-                return
-            }
-            audioManager.adjustStreamVolume(
-                AudioManager.STREAM_SYSTEM,
-                if (mute) AudioManager.ADJUST_MUTE else AudioManager.ADJUST_UNMUTE,
-                0
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, mute)
         }
     }
 
