@@ -40,6 +40,10 @@
             app:exitAnim="@anim/fade_out" />
 
         <action
+            android:id="@+id/action_homeScreen_to_uwaziEntryScreen"
+            app:destination="@id/uwaziEntryScreen" />
+
+        <action
             android:id="@+id/action_homeScreen_to_forms_screen"
             app:destination="@id/formScreen"
             app:enterAnim="@anim/slide_in_start"
@@ -115,4 +119,24 @@
         android:name="org.horizontal.tella.mobile.views.fragment.resources.ResourcesListFragment"
         android:label="@string/Home_BottomNav_Resources"
         tools:layout="@layout/fragment_resources_list" />
+
+    <fragment
+        android:id="@+id/uwaziEntryScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryFragment"
+        android:label="Entry"
+        tools:layout="@layout/uwazi_entry_fragment">
+        <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSendScreen"
+            app:destination="@id/uwaziSendScreen">
+        </action>
+        <action
+            android:id="@+id/action_uwaziEntryScreen_to_uwaziSelectEntitiesScreen"
+            app:destination="@id/uwaziSelectEntitiesScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/uwaziSendScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.send.UwaziSendFragment"
+        android:label="Send"
+        tools:layout="@layout/uwazi_send_fragment" />
 </navigation>

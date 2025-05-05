@@ -20,14 +20,22 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
 
     @Override
     public void attachMetadata(VaultFile vaultFile, Metadata metadata) {
-        disposables.add(MyApplication.rxVault.updateMetadata(vaultFile, metadata)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(updatedVaultFile -> view.onMetadataAttached(updatedVaultFile), throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
-                    view.onMetadataAttachError(throwable);
-                }));
+        disposables.add(
+                MyApplication.keyRxVault.getRxVault()
+                        .firstOrError()
+                        .flatMap(rxVault -> rxVault.updateMetadata(vaultFile, metadata))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                updatedVaultFile -> view.onMetadataAttached(updatedVaultFile),
+                                throwable -> {
+                                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                                    view.onMetadataAttachError(throwable);
+                                }
+                        )
+        );
     }
+
 
     @Override
     public void destroy() {

@@ -32,6 +32,7 @@ import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
+import com.hzontal.tella_vault.rx.RxVault;
 import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 import com.hzontal.utils.MediaFile;
 
@@ -59,6 +60,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.provider.EncryptedFileProvider;
@@ -66,6 +68,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 import org.horizontal.tella.mobile.presentation.entity.mapper.PublicMetadataMapper;
 import org.horizontal.tella.mobile.util.C;
 import org.horizontal.tella.mobile.util.FileUtil;
+
 import timber.log.Timber;
 
 
@@ -175,7 +178,7 @@ public class MediaFileHandler {
         }
         File file = null;
         if (path != null) {
-            file = new File(path.getAbsolutePath(), MyApplication.rxVault.getFile(vaultFile).getName());
+            file = new File(path.getAbsolutePath(), MyApplication.keyRxVault.getRxVault().blockingFirst().getFile(vaultFile).getName());
         }
 
         try {
@@ -205,25 +208,25 @@ public class MediaFileHandler {
     }
 
     public static Single<VaultFile> saveBitmapAsJpeg(Bitmap bitmap, @Nullable String parent) {
-
         String uid = UUID.randomUUID().toString();
-        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
-                .builder(new ByteArrayInputStream(getJpegBytes(bitmap)))
-                .setMimeType("image/jpeg")
-                .setName(uid + ".jpg")
-                .setType(VaultFile.Type.FILE)
-                .setThumb(getThumbBytes(bitmap));
 
-        if (parent == null) {
-            return rxVaultFileBuilder
-                    .build()
-                    .subscribeOn(Schedulers.io());
-        } else {
-            return rxVaultFileBuilder
-                    .build(parent)
-                    .subscribeOn(Schedulers.io());
-        }
+        return MyApplication.keyRxVault.getRxVault()
+                .firstOrError()
+                .flatMap(rxVault -> {
+                    RxVaultFileBuilder builder = rxVault
+                            .builder(new ByteArrayInputStream(getJpegBytes(bitmap)))
+                            .setMimeType("image/jpeg")
+                            .setName(uid + ".jpg")
+                            .setType(VaultFile.Type.FILE)
+                            .setThumb(getThumbBytes(bitmap));
+
+                    return (parent == null)
+                            ? builder.build()
+                            : builder.build(parent);
+                })
+                .subscribeOn(Schedulers.io());
     }
+
 
     private static byte[] getJpegBytes(Bitmap bitmap) {
         if (bitmap != null) {
@@ -246,36 +249,40 @@ public class MediaFileHandler {
         return null;
     }
 
-    public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) throws Exception {
-        // Vault replacement methods
-        boolean keepExif = Preferences.isKeepExif();
-        ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
-        ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
+    public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) {
+        return Single.fromCallable(() -> {
+            boolean keepExif = Preferences.isKeepExif();
+            ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
+            ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
 
-        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream); // bitmap of photo
-            Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10); // bitmap of thumb
-            thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbJpegStream);
+            try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+                Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream);
+                Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10);
+                thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbJpegStream);
 
-            if (keepExif) {
-                try (InputStream inputS = context.getContentResolver().openInputStream(uri)) {
-                    copyStream(inputS, imageJpegStream);
-                }
-            } else {
-                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
-                    throw new Exception("JPEG compression failed");
+                if (keepExif) {
+                    try (InputStream inputS = context.getContentResolver().openInputStream(uri)) {
+                        copyStream(inputS, imageJpegStream);
+                    }
+                } else {
+                    if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, imageJpegStream)) {
+                        throw new Exception("JPEG compression failed");
+                    }
                 }
             }
-        }
 
-        return MyApplication.rxVault
-                .builder(new ByteArrayInputStream(imageJpegStream.toByteArray()))
-                .setMimeType("image/jpeg")
-                .setType(VaultFile.Type.FILE)
-                .setThumb(thumbJpegStream.toByteArray())
-                .build(parentId)
-                .subscribeOn(Schedulers.io());
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            return rxVault.builder(new ByteArrayInputStream(imageJpegStream.toByteArray()))
+                    .setMimeType("image/jpeg")
+                    .setType(VaultFile.Type.FILE)
+                    .setThumb(thumbJpegStream.toByteArray())
+                    .build(parentId)
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+        });
     }
+
 
     public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
         // create thumb
@@ -300,7 +307,9 @@ public class MediaFileHandler {
         input.reset();
 
         String uid = UUID.randomUUID().toString();
-        RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+        RxVaultFileBuilder rxVaultFileBuilder = rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
                 .setName(uid + ".jpg")
@@ -338,8 +347,9 @@ public class MediaFileHandler {
         // encode png
         InputStream input = new ByteArrayInputStream(pngImage);
         String uid = UUID.randomUUID().toString();
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
-        return MyApplication.rxVault
+        return rxVault
                 .builder(input)
                 .setId(uid)
                 .setMimeType("image/png")
@@ -353,7 +363,9 @@ public class MediaFileHandler {
     }
 
     public static Single<VaultFile> downloadResourcePdfInputstream(InputStream inputStream, String fileName, @Nullable String parentId) {
-        return MyApplication.rxVault
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+        return rxVault
                 .builder(inputStream)
                 .setMimeType(C.RESOURCE_PDF)
                 .setAnonymous(true)
@@ -377,8 +389,9 @@ public class MediaFileHandler {
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
             InputStream is = context.getContentResolver().openInputStream(uri);
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
-            return MyApplication.rxVault
+            return rxVault
                     .builder(is)
                     .setMimeType(mimeType)
                     .setAnonymous(true)
@@ -408,7 +421,9 @@ public class MediaFileHandler {
             InputStream is = context.getContentResolver().openInputStream(uri);
 
             assert DocumentFile.fromSingleUri(context, uri) != null;
-            return MyApplication.rxVault
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            return rxVault
                     .builder(is)
                     .setMimeType(mimeType)
                     .setAnonymous(true)
@@ -441,7 +456,9 @@ public class MediaFileHandler {
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
             String uid = UUID.randomUUID().toString();
-            RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            RxVaultFileBuilder rxVaultFileBuilder = rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
                     .setId(uid)
@@ -505,7 +522,9 @@ public class MediaFileHandler {
     @SuppressWarnings("UnusedReturnValue")
     static boolean deleteFile(@NonNull VaultFile vaultFile) {
         try {
-            return MyApplication.rxVault.delete(vaultFile)
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            return rxVault.delete(vaultFile)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Throwable ignored) {
@@ -516,7 +535,8 @@ public class MediaFileHandler {
     @SuppressWarnings("UnusedReturnValue")
     public static VaultFile renameFile(@NonNull VaultFile vaultFile, String fileName) {
         try {
-            return MyApplication.rxVault.rename(vaultFile.id, fileName)
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+            return rxVault.rename(vaultFile.id, fileName)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
         } catch (Throwable ignored) {
@@ -527,7 +547,9 @@ public class MediaFileHandler {
     @Nullable
     public static InputStream getStream(VaultFile vaultFile) {
         try {
-            return MyApplication.rxVault.getStream(vaultFile);
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            return rxVault.getStream(vaultFile);
         } catch (VaultException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
@@ -601,7 +623,8 @@ public class MediaFileHandler {
     @Nullable
     private static OutputStream getMetadataOutputStream(VaultFile file) {
         try {
-            return MyApplication.rxVault.getOutStream(file);
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+            return rxVault.getOutStream(file);
         } catch (VaultException e) {
             Timber.d(e, MediaFileHandler.class.getName());
         }
@@ -655,7 +678,8 @@ public class MediaFileHandler {
     }
 
     private static File getFile(VaultFile vaultFile) {
-        return MyApplication.rxVault.getFile(vaultFile);
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+        return rxVault.getFile(vaultFile);
     }
 
     private static Bitmap modifyOrientation(Bitmap bitmap, InputStream inputStream) throws IOException {
@@ -701,7 +725,9 @@ public class MediaFileHandler {
         Sort sort = new Sort();
         sort.type = Sort.Type.DATE;
         sort.direction = Sort.Direction.DESC;
-        return MyApplication.rxVault.list(null, FilterType.PHOTO_VIDEO, sort, limits)
+        RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+        return rxVault.list(null, FilterType.PHOTO_VIDEO, sort, limits)
                 .toObservable();
     }
 

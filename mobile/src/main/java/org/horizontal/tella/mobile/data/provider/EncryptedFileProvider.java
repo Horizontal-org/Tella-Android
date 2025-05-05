@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.hzontal.tella_vault.VaultException;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.OutputStream;
 
 import org.horizontal.tella.mobile.BuildConfig;
 import org.horizontal.tella.mobile.MyApplication;
+
 import timber.log.Timber;
 
 
@@ -73,12 +75,14 @@ public class EncryptedFileProvider extends FileProvider {
             byte[] buf = new byte[8192];
             int len;
             InputStream cipherInputStream = null;
-            try {
 
+            try {
                 try {
-                    cipherInputStream = MyApplication.rxVault.getStream(filename); // todo: move to limited variant
-                } catch (VaultException e) {
+                    RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst(); // ✅ blocking for sync use
+                    cipherInputStream = rxVault.getStream(filename); // ✅ safe call with initialized vault
+                } catch (VaultException | RuntimeException e) {
                     e.printStackTrace();
+                    return;
                 }
 
                 while ((len = cipherInputStream.read(buf)) >= 0) {
@@ -86,18 +90,20 @@ public class EncryptedFileProvider extends FileProvider {
                 }
 
                 out.flush();
+
             } catch (IOException e) {
                 Timber.e(e, getClass().getSimpleName());
                 //FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 try {
                     if (cipherInputStream != null) cipherInputStream.close();
-                    out.close();
+                    if (out != null) out.close();
                 } catch (IOException e) {
                     Timber.e(e, getClass().getSimpleName());
                 }
             }
         }
+
     }
 
     private static class WriteThread extends Thread {
@@ -117,25 +123,29 @@ public class EncryptedFileProvider extends FileProvider {
             byte[] buf = new byte[1024];
             int len;
             OutputStream cos = null;
-            try {
 
-               cos = MyApplication.rxVault.getOutStream(filename);
+            try {
+                // Get RxVault synchronously
+                RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+                cos = rxVault.getOutStream(filename);
 
                 while ((len = in.read(buf)) >= 0) {
                     cos.write(buf, 0, len);
                 }
-            } catch (IOException | VaultException e) {
+
+            } catch (IOException | VaultException | RuntimeException e) {
                 Timber.e(e, getClass().getSimpleName());
-                //FirebaseCrashlytics.getInstance().recordException(e);
+                // FirebaseCrashlytics.getInstance().recordException(e);
             } finally {
                 try {
-                    in.close();
+                    if (in != null) in.close();
                     if (cos != null) cos.close();
                 } catch (IOException e) {
                     Timber.e(e, getClass().getSimpleName());
                 }
             }
         }
+
     }
 
 }

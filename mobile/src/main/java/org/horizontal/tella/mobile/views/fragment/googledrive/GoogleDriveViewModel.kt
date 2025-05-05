@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.GoogleDriveDataSource
+import org.horizontal.tella.mobile.data.googledrive.GoogleDriveRepository
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
 import org.horizontal.tella.mobile.domain.entity.Server
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
@@ -17,7 +18,6 @@ import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
-import org.horizontal.tella.mobile.data.googledrive.GoogleDriveRepository
 import org.horizontal.tella.mobile.domain.usecases.googledrive.DeleteReportUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportBundleUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsServersUseCase
@@ -40,7 +40,7 @@ class GoogleDriveViewModel @Inject constructor(
     private val getReportBundleUseCase: GetReportBundleUseCase,
     private val googleDriveRepository: GoogleDriveRepository,
     private val googleDriveDataSource: GoogleDriveDataSource,
-    private val statusProvider: StatusProvider,
+    private val statusProvider: StatusProvider
 ) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
@@ -143,9 +143,9 @@ class GoogleDriveViewModel @Inject constructor(
         _progress.postValue(true)
 
         // Initialize counters for lengths
-        var draftLength: Int = 0
-        var outboxLength: Int = 0
-        var submittedLength: Int = 0
+        var draftLength: Int
+        var outboxLength: Int
+        var submittedLength: Int
 
         // Execute the Draft report retrieval
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
@@ -163,10 +163,17 @@ class GoogleDriveViewModel @Inject constructor(
                         getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
                         getReportsUseCase.execute(
                             onSuccess = { submittedResult ->
-                                submittedLength = submittedResult.size // Get the length of submitted
+                                submittedLength =
+                                    submittedResult.size // Get the length of submitted
 
                                 // Post the combined lengths to LiveData
-                                _reportCounts.postValue(ReportCounts(outboxLength, submittedLength,draftLength))
+                                _reportCounts.postValue(
+                                    ReportCounts(
+                                        outboxLength,
+                                        submittedLength,
+                                        draftLength
+                                    )
+                                )
                             },
                             onError = {
                                 _error.postValue(it)
@@ -228,38 +235,50 @@ class GoogleDriveViewModel @Inject constructor(
     override fun getReportBundle(instance: ReportInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
-        getReportBundleUseCase.execute(onSuccess = { result ->
-            val resultInstance = result.instance
-            disposables.add(googleDriveDataSource.getReportMediaFiles(result.instance)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ files ->
-                    val vaultFiles: MutableList<VaultFile?> =
-                        MyApplication.rxVault.get(result.fileIds).blockingGet() ?: return@subscribe
-                    val filesResult = arrayListOf<FormMediaFile>()
 
-                    files.forEach { formMediaFile ->
-                        val vaultFile =
-                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
-                        if (vaultFile != null) {
-                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-                            fileResult.status = formMediaFile.status
-                            fileResult.uploadedSize = formMediaFile.uploadedSize
-                            filesResult.add(fileResult)
-
+        getReportBundleUseCase.execute(
+            onSuccess = { result ->
+                disposables.add(
+                    googleDriveDataSource.getReportMediaFiles(result.instance)
+                        .flatMap { files ->  // files: List<FormMediaFile>
+                            MyApplication.keyRxVault.getRxVault()
+                                .firstOrError()
+                                .flatMap { rxVault ->  // rxVault: RxVault
+                                    rxVault.get(result.fileIds)
+                                        .map { vaultFiles ->  // vaultFiles: List<VaultFile>?
+                                            Triple(result.instance, files, vaultFiles)
+                                        }
+                                }
                         }
-                    }
-                    resultInstance.widgetMediaFiles = filesResult
-                    _reportInstance.postValue(resultInstance)
-                }) { throwable: Throwable? ->
-                    Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ (instance, files, vaultFiles) ->
+                            val filesResult = processMediaFiles(files, vaultFiles)
+                            instance.widgetMediaFiles = filesResult
+                            _reportInstance.postValue(instance)
+                        }, { throwable ->
+                            Timber.d(throwable)
+                            FirebaseCrashlytics.getInstance().recordException(throwable)
+                        })
+                )
+            },
+            onError = { _error.postValue(it) },
+            onFinished = { _progress.postValue(false) }
+        )
+    }
 
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+    private fun processMediaFiles(
+        files: List<FormMediaFile>,
+        vaultFiles: List<VaultFile>
+    ): ArrayList<FormMediaFile> {
+        return files.mapNotNull { formMediaFile ->
+            vaultFiles.firstOrNull { it.id == formMediaFile.id }?.let { vaultFile ->
+                FormMediaFile.fromMediaFile(vaultFile).apply {
+                    status = formMediaFile.status
+                    uploadedSize = formMediaFile.uploadedSize
+                }
+            }
+        }.toCollection(ArrayList())
     }
 
     override fun getFormInstance(

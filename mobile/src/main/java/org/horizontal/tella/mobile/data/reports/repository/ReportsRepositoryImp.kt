@@ -14,7 +14,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Response
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.DataSource
@@ -38,6 +37,7 @@ import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.util.Util
+import retrofit2.Response
 import timber.log.Timber
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -46,8 +46,7 @@ import javax.inject.Inject
 class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
     private val dataSource: DataSource,
-    private val statusProvider: StatusProvider
-) : ReportsRepository {
+    private val statusProvider: StatusProvider) : ReportsRepository {
 
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = SingleLiveEvent<ReportInstance>()
@@ -194,19 +193,24 @@ class ReportsRepositoryImp @Inject internal constructor(
     private fun handleAutoDeleteAndFinalStatus(instance: ReportInstance) {
         if (Preferences.isAutoDeleteEnabled() && instance.current == 1L) {
             instance.current = 0
-            Observable.fromIterable(instance.widgetMediaFiles)
-                .flatMapCompletable { formMediaFile ->
-                    MyApplication.rxVault.delete(formMediaFile.vaultFile)
-                        .subscribeOn(Schedulers.io())
-                        .ignoreElement() // converts Single to Completable by ignoring the result
-                }
-                .andThen(dataSource.deleteReportInstance(instance.id).subscribeOn(Schedulers.io()))
-                .subscribe({
 
+            MyApplication.keyRxVault.rxVault
+                .firstOrError() // Wait until RxVault is ready
+                .flatMapCompletable { rxVault ->
+                    Observable.fromIterable(instance.widgetMediaFiles)
+                        .flatMapCompletable { formMediaFile ->
+                            rxVault.delete(formMediaFile.vaultFile)
+                                .subscribeOn(Schedulers.io())
+                                .ignoreElement()
+                        }
+                        .andThen(dataSource.deleteReportInstance(instance.id).subscribeOn(Schedulers.io()))
+                }
+                .subscribe({
+                    handleInstanceStatus(instance, EntityStatus.DELETED)
                 }, { throwable ->
                     throwable.printStackTrace()
                 })
-            handleInstanceStatus(instance, EntityStatus.DELETED)
+
         } else {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
         }

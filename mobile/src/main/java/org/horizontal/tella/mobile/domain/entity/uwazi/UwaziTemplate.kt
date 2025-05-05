@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.domain.entity.uwazi
 
-data class CollectTemplate(
+data class UwaziTemplate(
     var id: Long = 0,
     var serverId: Long,
     var serverName: String? = "",

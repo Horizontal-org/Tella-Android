@@ -8,7 +8,6 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.reactivex.Single
-import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
@@ -18,17 +17,17 @@ import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.StatusProvider
+import org.hzontal.tella.keys.key.LifecycleMainKey
 import timber.log.Timber
 
 const val TAG = "WorkerUploadReport"
 
 @HiltWorker
-class WorkerUploadReport
-@AssistedInject constructor(
-    @Assisted val context: Context,
+class WorkerUploadReport @AssistedInject constructor(
+    @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
     private val reportsRepository: ReportsRepository,
-    private val statusProvider: StatusProvider
+    private val statusProvider: StatusProvider,
 ) : RxWorker(context, workerParams) {
 
     @SuppressLint("RestrictedApi")
@@ -76,9 +75,7 @@ class WorkerUploadReport
                     )
                 }
 
-                Timber.d(
-                    "*** Test worker *** widgetMediaFiles? %s", reportWithFiles.widgetMediaFiles
-                )
+                Timber.d("*** Test worker *** widgetMediaFiles? %s", reportWithFiles.widgetMediaFiles)
             }
 
             setNoTimeOut(false)
@@ -95,13 +92,13 @@ class WorkerUploadReport
     }
 
     private fun getAutoBackgroundServers(dataSource: DataSource): Single<List<TellaReportServer>> {
-        return dataSource.listTellaUploadServers().map { servers ->
-                servers.filter { server -> server.isActivatedBackgroundUpload || server.isAutoUpload }
-            }
+        return dataSource.listTellaUploadServers()
+            .map { servers -> servers.filter { it.isActivatedBackgroundUpload || it.isAutoUpload } }
     }
 
     private fun filterInstancesByAutoBackgroundServers(
-        instances: List<ReportInstance>, autoBackgroundServers: List<TellaReportServer>
+        instances: List<ReportInstance>,
+        autoBackgroundServers: List<TellaReportServer>
     ): List<ReportInstance> {
         return instances.filter { instance ->
             autoBackgroundServers.any { server -> server.id == instance.serverId }
@@ -119,25 +116,31 @@ class WorkerUploadReport
     }
 
     private fun getReportBundle(
-        dataSource: DataSource, reportInstance: ReportInstance
+        dataSource: DataSource,
+        reportInstance: ReportInstance
     ): Single<ReportInstance> {
+
         return dataSource.getReportMediaFiles(reportInstance).flatMap { files ->
-                MyApplication.rxVault.get(files.mapNotNull { it.id }.toTypedArray())
-                    .map { vaultFiles ->
-                        val vaultFileMap = vaultFiles.associateBy { it?.id }
-                        val filesResult = files.mapNotNull { formMediaFile ->
-                            val vaultFile = vaultFileMap[formMediaFile.id]
-                            vaultFile?.let { file ->
-                                FormMediaFile.fromMediaFile(file).apply {
-                                    status = formMediaFile.status
-                                    uploadedSize = formMediaFile.uploadedSize
-                                }
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { rxVault ->
+                    rxVault.get(files.mapNotNull { it.id }.toTypedArray())
+                }
+                .map { vaultFiles ->
+                    val vaultFileMap = vaultFiles.associateBy { it?.id }
+                    val filesResult = files.mapNotNull { formMediaFile ->
+                        val vaultFile = vaultFileMap[formMediaFile.id]
+                        vaultFile?.let { file ->
+                            FormMediaFile.fromMediaFile(file).apply {
+                                status = formMediaFile.status
+                                uploadedSize = formMediaFile.uploadedSize
                             }
-                        }.toMutableList()
-                        reportInstance.widgetMediaFiles = filesResult
-                        reportInstance
-                    }
-            }
+                        }
+                    }.toMutableList()
+                    reportInstance.widgetMediaFiles = filesResult
+                    reportInstance
+                }
+        }
     }
 
     private fun setNoTimeOut(enableNoTimeout: Boolean) {

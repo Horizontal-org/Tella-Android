@@ -23,7 +23,7 @@ import org.horizontal.tella.mobile.data.uwazi.UwaziConstants
 import org.horizontal.tella.mobile.data.uwazi.UwaziConstants.UWAZI_RELATION_SHIP_ENTITIES
 import org.horizontal.tella.mobile.databinding.UwaziEntryFragmentBinding
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziGeoData
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
@@ -59,7 +59,7 @@ class UwaziEntryFragment :
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
     private var screenView: ViewGroup? = null
     private lateinit var uwaziFormView: UwaziFormView
-    private var result: List<CollectTemplate> = ArrayList()
+    private var result: List<UwaziTemplate> = ArrayList()
 
     private val disposables by lazy { MyApplication.bus().createCompositeDisposable() }
 

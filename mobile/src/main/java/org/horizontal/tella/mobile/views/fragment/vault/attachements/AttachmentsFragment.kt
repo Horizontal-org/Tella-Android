@@ -1006,7 +1006,7 @@ class AttachmentsFragment :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK) {
+        if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK && requestCode != WRITE_REQUEST_CODE) {
             return  // user canceled evidence acquiring
         }
         when (requestCode) {

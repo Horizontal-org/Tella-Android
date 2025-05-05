@@ -794,7 +794,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_rotate">Rotate</string>
   <string name="Snackbar_file_was_deleted">The file was deleted.</string>
   <string name="Snackbar_files_were_deleted">The files were deleted.</string>
-  <string name="Snackbar_changes_were_saved">Your changes have been saved.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
   <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
@@ -1003,4 +1003,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

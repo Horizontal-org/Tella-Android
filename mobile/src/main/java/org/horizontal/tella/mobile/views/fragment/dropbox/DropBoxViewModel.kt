@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dropbox.core.v2.DbxClientV2
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -78,30 +77,41 @@ class DropBoxViewModel @Inject constructor(
         getReportBundleUseCase.setId(instance.id)
         getReportBundleUseCase.execute(onSuccess = { result ->
             val resultInstance = result.instance
-            disposables.add(dropBoxDataSource.getReportMediaFiles(result.instance)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ files ->
-                    val vaultFiles: MutableList<VaultFile?> =
-                        MyApplication.rxVault.get(result.fileIds).blockingGet() ?: return@subscribe
-                    val filesResult = arrayListOf<FormMediaFile>()
 
-                    files.forEach { formMediaFile ->
-                        val vaultFile =
-                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
-                        if (vaultFile != null) {
-                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-                            fileResult.status = formMediaFile.status
-                            fileResult.uploadedSize = formMediaFile.uploadedSize
-                            filesResult.add(fileResult)
-
-                        }
+            disposables.add(
+                MyApplication.keyRxVault.rxVault
+                    .firstOrError()
+                    .flatMap { rxVault ->
+                        dropBoxDataSource.getReportMediaFiles(result.instance)
+                            .flatMap { files ->
+                                rxVault.get(result.fileIds).map { vaultFiles ->
+                                    files to vaultFiles
+                                }
+                            }
                     }
-                    resultInstance.widgetMediaFiles = filesResult
-                    _reportInstance.postValue(resultInstance)
-                }) { throwable: Throwable? ->
-                    Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ (files, vaultFiles) ->
+                        val filesResult = arrayListOf<FormMediaFile>()
+
+                        files.forEach { formMediaFile ->
+                            val vaultFile = vaultFiles.firstOrNull { it?.id == formMediaFile.id }
+                            if (vaultFile != null) {
+                                val fileResult = FormMediaFile.fromMediaFile(vaultFile)
+                                fileResult.status = formMediaFile.status
+                                fileResult.uploadedSize = formMediaFile.uploadedSize
+                                filesResult.add(fileResult)
+                            }
+                        }
+
+                        resultInstance.widgetMediaFiles = filesResult
+                        _reportInstance.postValue(resultInstance)
+                    }, { throwable ->
+                        Timber.d(throwable)
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                      //  _error.postValue(R.string.default_error_msg)
+                    })
+            )
 
         }, onError = {
             _error.postValue(it)
@@ -109,6 +119,7 @@ class DropBoxViewModel @Inject constructor(
             _progress.postValue(false)
         })
     }
+
 
     override fun getFormInstance(
         title: String,
@@ -191,7 +202,7 @@ class DropBoxViewModel @Inject constructor(
         _progress.postValue(true)
 
         // Initialize counters for lengths
-        var draftLength: Int = 0
+        var draftLength = 0
         var outboxLength: Int = 0
         var submittedLength: Int = 0
 

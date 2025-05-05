@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.mappers
 
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.Language
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.adapters.uwazi.ViewLanguageItem
@@ -8,7 +8,7 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityInsta
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
 
-fun CollectTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicked: () -> Unit) =
+fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicked: () -> Unit) =
     ViewTemplateItem(
         id = entityRow._id,
         isDownloaded = isDownloaded,
@@ -21,7 +21,7 @@ fun CollectTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClic
         onMoreClicked = onMoreClicked
     )
 
-fun CollectTemplate.toViewEntityTemplateItem(
+fun UwaziTemplate.toViewEntityTemplateItem(
     onFavoriteClicked: () -> Unit,
     onMoreClicked: () -> Unit,
     onOpenEntityClicked: () -> Unit
