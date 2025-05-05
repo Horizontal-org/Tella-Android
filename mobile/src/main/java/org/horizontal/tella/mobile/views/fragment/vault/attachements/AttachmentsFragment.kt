@@ -71,6 +71,7 @@ import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity.Com
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.custom.SpaceAtEndDecoration
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
@@ -164,6 +165,10 @@ class AttachmentsFragment :
 
         binding.appbar.outlineProvider = null
         gridLayoutManager = GridLayoutManager(activity, viewModel.spanCount)
+        // Add item decoration for space at the end
+        val spacing = resources.getDimensionPixelSize(org.horizontal.tella.mobile.R.dimen.recycler_view_item_spacing)
+        binding.attachmentsRecyclerView.addItemDecoration(SpaceAtEndDecoration(spacing))
+
         binding.attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
             layoutManager = gridLayoutManager

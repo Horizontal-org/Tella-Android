@@ -4,8 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.hzontal.tella_locking_ui.*
 import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
 import org.hzontal.tella.keys.config.UnlockConfig
@@ -34,6 +38,18 @@ open class BaseActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
         )
         overridePendingTransition(R.anim.`in`, R.anim.out)
+    }
+
+    fun applyEdgeToEdge(view: View) {
+        // remove default system window fitting
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Apply insets manually
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
     }
 
     override fun onResume() {
