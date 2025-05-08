@@ -157,9 +157,10 @@ abstract class BaseReportsViewModel : ViewModel() {
                             .flatMapSingle { fileId ->
                                 rxVault[fileId]
                                     .subscribeOn(Schedulers.io())
-                                    .onErrorReturnItem(null) // Handle potential errors
+                                    .onErrorReturn { null } // safe, allows null
                             }
-                            .filter { true } // Filter out null values
+                            .filter { it != null } // filter out nulls
+                            .map { it!! } // safe to force unwrap if you're sure it's not null now
                             .toList()
                     }
             }
