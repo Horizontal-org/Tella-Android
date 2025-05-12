@@ -989,4 +989,5 @@ Gostaria de partilhar dados com a equipa do Tella?</string>
   <string name="delete_report">Apagar o relatório?</string>
   <string name="report_submitted_msg">O seu relatório foi submetido com sucesso.</string>
   <string name="Collect_MediaWidget_Attach_File">Anexar arquivo</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

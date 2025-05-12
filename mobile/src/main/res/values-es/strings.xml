@@ -986,4 +986,5 @@ Seleccione \"Más información\" a continuación para obtener más información 
   <string name="delete_report">¿Borrar reporte?</string>
   <string name="report_submitted_msg">Su reporte ha sido enviado exitosamente.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

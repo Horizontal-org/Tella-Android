@@ -968,4 +968,5 @@ Apakah Anda ingin membagikan analitik kepada tim Tella?</string>
   <string name="delete_report">Hapus laporan?</string>
   <string name="report_submitted_msg">Laporan Anda berhasil dikirimkan.</string>
   <string name="Collect_MediaWidget_Attach_File">Lampirkan berkas</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

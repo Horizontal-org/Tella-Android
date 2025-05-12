@@ -982,4 +982,5 @@
   <string name="delete_report">রিপোর্ট মুছবেন?</string>
   <string name="report_submitted_msg">আপনার রিপোর্ট সফলভাবে জমা দেওয়া হয়েছে।</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

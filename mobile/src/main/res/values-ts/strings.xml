@@ -972,4 +972,5 @@ yi fanele ku ku nyika vutshokotshoko bya servhidor.</string>
   <string name="delete_report">Tima relatoriyo</string>
   <string name="report_submitted_msg">Svikotekile kurhumela relatoriyo la wena.</string>
   <string name="Collect_MediaWidget_Attach_File">Nghenisa arkivho</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>
