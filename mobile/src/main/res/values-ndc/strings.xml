@@ -2,7 +2,7 @@
 <resources>
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">Kuvhissa swispwa.</string>
-  <string name="settings.about_app.bar">Ribatsiro</string>
+  <string name="settings.about_app.bar">Maererano no kumbessua</string>
   <string name="collect.form_exit.unsaved_dialog.title">Ndau djo mashoko ho kumbhunda.</string>
   <string name="verification_prompt_dialog_title">Kuvhula GPS</string>
   <string name="collect_tab.title_blank">Pa chena</string>
@@ -61,7 +61,7 @@
   <string name="collect.end_action.desc_save.send.later">Kuvhiga ndau djo mashoko</string>
   <string name="action.desc_confirm">Kulambha weendha</string>
   <string name="collect.form_action_previous.section">Cho surre</string>
-  <string name="collect.form_action_next.section">Cho pambheri</string>
+  <string name="collect.form_action_next.section">Pambheri</string>
   <string name="action_stop">Kuema</string>
   <string name="action_play">Kutamba</string>
   <string name="action_record">Swanhorwa</string>
@@ -84,8 +84,8 @@
   <string name="permission_dialog.expl_device.storage">Kuti uvhisse swikwama pa Tella unodhiwa kutetessa kuti hithepe mazwi no kumalonguedja pa foni.</string>
   <string name="gallery_toast_fail.deleting.files">Pane swaitika pakulassa swikwama. Ndapota mbidhaswe.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="one">Swikwama swavhigwa pa foni</item>
-    <item quantity="other">Swikwama swavhigwa pa foni</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Kulassa chikwama?</string>
   <string name="gallery_delete.files_dialog.expl">Chikwama swaketwa swinozolaswa swachosse pa albamu ho foni hako.</string>
@@ -105,10 +105,10 @@
   <string name="collect.form_exit_dialog.action_save.exit">Kuvhigha no kubhundha</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">Kuphindha ngopamueni no pamueni.</string>
   <string name="settings.docu_error_not.valid.URL">Arissi lona gwandja iri.</string>
-  <string name="home_action.label_quick.delete">Kulassa</string>
+  <string name="home_action.label_quick.delete">Kulassa/Bvisa</string>
   <string name="gallery_subheading_sort.by">Kundanidja  ngokupi</string>
   <string name="gallery_list.item_newest.to.oldest">Rispwa kuenda lo kare</string>
-  <string name="gallery_list.item_oldest.to.newest">Lo kare kuenda rispwa</string>
+  <string name="gallery_list.item_oldest.to.newest">Lo khare kuenda rispwa</string>
   <string name="action_exit">Kuphinda</string>
   <string name="settings.prot_select_camouflage">Kuvhiga</string>
   <string name="settings.docu_error_wrong.credentials">Zina lo mushandisse ho foni kana kuti codi lakashata.</string>
@@ -127,7 +127,7 @@
   <string name="collect.blank_expl_no.forms">Aphana ndau ndjokukobhidja. Keta bathani lo kuona muti ndjiripo here ndau pa mudjeke dja wakabhathana nadjo.</string>
   <string name="settings.camo_heading">Keta zina lakassiana</string>
   <string name="gallery_expl_empty">Aphana ndau ndjokukombidja. Keta bathani lo kuana muti ndjiripo here ndau pa mudjeke dja wakabhathana nadjo.</string>
-  <string name="collect.blank_toast_not.connected">Auto kubhathana no mudjeke. Mbindaswe kana wabhathana no mudjeke</string>
+  <string name="collect.blank_toast_not.connected">Auto kubhathana no mujeke ho intaneti. Mbindaswe kana wabhata nomudjeke.</string>
   <string name="settings.gen_crash.reports_action">Kutumira chipanguidjiro cho mashoko ho mbepa.</string>
   <string name="settings.gen_crash.reports_action.expl">Mishumo yekukanganisa inotibatsira kunatsiridza Tella. Inotumirwa otomatiki uye inosanganisira data yakadai semhando yemudziyo nevesheni yeAndroid.</string>
   <string name="collect.form_dialog.action_add.group">Kuenguedjera</string>
@@ -157,7 +157,7 @@
   <string name="verification.info_field_hardware">Muviri wo foni</string>
   <string name="verification.info_field_device.id">Kokombidjira madjeke</string>
   <string name="verification.info_field_screen.size">Saizi yo scrimu.</string>
-  <string name="verification.info_field_language">Ndimu</string>
+  <string name="verification.info_field_language">Ndhimu</string>
   <string name="verification.info_field_locale">Chindalaunda</string>
   <string name="verification.info_field_connection.status">Chiemo cho kubhathana no mudjeke</string>
   <string name="verification.info_field_network.type">Kaindi lo mudjeke</string>
@@ -187,8 +187,8 @@
   <string name="collect.form_signature_toast_fail.saving">Paneswaitika pa kuvhiga. Ndapota mbindaswe</string>
   <string name="collect.form_acknowledge_select.expl">Ndiswona. Ndapota enda mberi</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">Chikwama</item>
-    <item quantity="other">swikwama</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">Kuziva swimueni.</string>
   <string name="settings.servers_add.server_dialog.title">Kuengedjera mudjeke.</string>
@@ -274,7 +274,7 @@
   <string name="camera_tab.title_photo">Mupikija.</string>
   <string name="action_upload">Kuthwala</string>
   <string name="collect.blank_action.desc_more.options">Swimueni swikaketwa</string>
-  <string name="action_next">Phamberi</string>
+  <string name="action_next">Pambheri</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
@@ -311,7 +311,7 @@
   <string name="action_enable">Kuendhessa mberi</string>
   <string name="action_disable">Kuemessa</string>
   <string name="settings.servers_delete.server_dialog.title">Kulassa \"%1$s\" mudjeke umue?</string>
-  <string name="action_edit">Kunhoressa.</string>
+  <string name="action_edit">Kunhoressa</string>
   <string name="settings.server_add.server_dialog_advanced">Kuenda mberi.</string>
   <string name="settings.docu_error_auth.required">Kuvha no chokwandi kuti codi ndiona.</string>
   <string name="settings.sec_lock_timeout_immediately">Pakarepo/Papopapo</string>
@@ -367,9 +367,9 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="recorder_toast_recording.saved">Mazwi a thepwa a vigwa pa swikwama pa Tella</string>
   <string name="onboard.intro_title">Wavia swakanaka pa Tella</string>
   <string name="onboard.intro_get_started">Kuthanga</string>
-  <string name="onboard.title_camera">Camera lo vissa mupikija.</string>
+  <string name="onboard.title_camera">Camera lo vhissa pikija</string>
   <string name="onboard.expl_camera">Vissa mupikija no bassikopo pa Tella streti. Swikwama iswi swinozo vigwa chiriporipocho pa Tella aswizooneki pa albamu yo foni.</string>
-  <string name="onboard.title_recorder">Chokuthepa mazwi</string>
+  <string name="onboard.title_recorder">Kuthepa</string>
   <string name="onboard.expl_recorder">Thepa mazwi paunegue uri  ngomucrofoni pa Tella. Swikwama swo mazwi swinogwarissiswa chiriporipocho no vigwa pa Tella.</string>
   <string name="onboard.title_files">Swikwama no mukwaka ndja gwatissiswa</string>
   <string name="onboard.expl_files">Chengetedzai nekunatsa kuronga mafaira enyu ese. Chero bedzi Tella yakakiyiwa, mafaira enyu nemaforodha acharamba asingasvikike kumunhu angatora kana kutsvaga mudziyo.</string>
@@ -394,9 +394,9 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="onboard.hide_behind_calculator_not_possible">Kuvhiguika ka chokutaka maconta kunoitika kana vaswandissa cod hako.</string>
   <string name="onboard.calculator_button">Keta chokutaka maconta.</string>
   <string name="onboard.calculator_expl">Tella ichavanzwa kuseri kweapp yeKarukuleita inoshanda. Vhura Tella nekupinda PIN yako pakarukuleita woisa = mushure.</string>
-  <string name="settings.general_recent_files_switch_title">Swikwama swispwa.</string>
+  <string name="settings.general_recent_files_switch_title">Swikhama swispwa.</string>
   <string name="settings.general_recent_files_switch_expl">Kombidja gwandja pa swikwama swispwa pa Tella yo kutanga.</string>
-  <string name="settings.general_favorite_forms_switch_title">Ndau njaunodhississa.</string>
+  <string name="settings.general_favorite_forms_switch_title">Mafomu anodiwa</string>
   <string name="settings.general_favorite_forms_switch_expl">Ratidza nzira pfupi kuenda kumafomu ako aunofarira pachidzitiro chemusha cheTella.</string>
   <string name="settings.sec_confirm_camouflage_title">Kubhudha pa Tella kuti swiviguique?</string>
   <string name="settings.sec_confirm_camouflage_desc">Kuti uvhula Tella swaga %s pa foni hako.</string>
@@ -404,15 +404,15 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="settings.sec_confirm_exit_tella">Kubhudha pa Tella.</string>
   <string name="Home_BottomNav_Home">Nhumba</string>
   <string name="Home_BottomNav_Rec">Rec</string>
-  <string name="Home_BottomNav_Camera">Camera lo vissa mupikija</string>
+  <string name="Home_BottomNav_Camera">Camera lo vhissa pikija</string>
   <string name="Home_BottomNav_Forms">Chiemo</string>
   <string name="Home_BottomNav_Reports">Chipanguidjiro</string>
   <string name="Vault_Move_AppBar">kuvhissa \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Kuvhaka</string>
   <string name="ServerSettings_ServerName_ToolTip">Ipa sevha yako zita kuti uizive kana ukawedzera masevha akawanda gare gare. Rinogona kunge riri zita resangano, zita reprojekti, zvichingodaro.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">% Swikama swaviswa swimueni</item>
-    <item quantity="other">Swikwama swaviswa</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Kuvhissa no kuvhiguississa</string>
   <string name="Rec_Exit_SheetTitle">Kuvhiga swatepwa/rekhodingi?</string>
@@ -425,18 +425,18 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Delete">Kulassa swikwama</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Kutchinja mavhurire no kuvhissa kuviga muvhudjo?</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Kuvanda kwako kweKarukuleita kwazvino kunongowirirana nekukiya nePIN chete. Kana ukachinja maitiro ako ekukiya, Tella haichazovandika uye ichaonekwa pachidzitiro chemusha cherunhare rwako.</string>
-  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">Kuvhissa kuvhiga</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">Kuvhissa kuvhiga.</string>
   <string name="SettingsCamo_EnterLock_Password">Issa codhi hako kuti uchinje mavhiguire</string>
   <string name="settings.gen_select_about">Maererano no kumbessua</string>
-  <string name="settings.gen_select_language">Ndimu</string>
-  <string name="home_action.desc_quick.exit">Kubhinda</string>
+  <string name="settings.gen_select_language">Ndhimu</string>
+  <string name="home_action.desc_quick.exit">Kuphinda</string>
   <string name="settings.camo_camera4">Camera lo vhissa pikija</string>
   <string name="settings.camo_camera3">Camera lomberimberi</string>
   <string name="settings.camo_camera2">Camera lo lomberimberi</string>
   <string name="settings.camo_camera1">Camera lo mumesso</string>
   <string name="settings.camo_weather3">Kuvha swino</string>
   <string name="settings.camo_weather2">Kuvha swino</string>
-  <string name="settings.camo_weather1">Swapo</string>
+  <string name="settings.camo_weather1">Nguvha</string>
   <string name="settings.docu_add.server_dialog.select_tella_web">Panotorwa mashoko pa Tella Web</string>
   <string name="settings.docu_add.server_dialog.select_tella_uwazi">Panovhigwa mashoko nokumagwarira</string>
   <string name="collect.outbox_tab.title">Kubhudha</string>
@@ -494,10 +494,10 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="Uwazi_Server_Title">Mudjeke</string>
   <string name="Uwazi_Template_Title">Mufananidjo</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="one">Chikwama chaenguendjerwa</item>
-    <item quantity="other">Swimueni swikama swaenguendjerwa</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
-  <string name="Uwazi_MiltiFileWidget_SelectFiles">Keta swikwama</string>
+  <string name="Uwazi_MiltiFileWidget_SelectFiles">Kugeta swikwama.</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Keta mashoko ho Pdf</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Mapepa akutanga</string>
   <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">Enguedjera swikama swaunodha</string>
@@ -508,7 +508,7 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
 Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="Uwazi_Outbox_Header_Text">Iswi indiswo swa naka kuti utumire kana kuti swambopera</string>
   <string name="Uwazi_Submitted_Header_Text">Iswi ndiswo swa watumira</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Keta kuti unodha kuenguedjera sei swikwama</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Keta mandire aunodha kuenguedjera swikwama</string>
   <string-array name="Uwazi_Language_Array">
     <item>Chi ngesi</item>
     <item>Chi arabe</item>
@@ -523,24 +523,24 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="Collect_Subtitle_RemoveForm">Unochokwadhi kuti unodha kulassa \"%1$s\" ?</string>
   <string name="Util_ellapsedTime_Year">Kore rimueni swe ladharika</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">Muedji wandarika</item>
-    <item quantity="other">Muedji</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">Viki rimue la ndarika</item>
-    <item quantity="other">Viki rimue</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">Zuva rimue la ndarika</item>
-    <item quantity="other">Zuva rimue</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one">Kuwa imue la ndarika</item>
-    <item quantity="other">Kuwa handarika</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one">Minits chindhoko</item>
-    <item quantity="other">Minits njandarika</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">Chiguva chindhoko chandharika</string>
   <string name="Donwload_Templates_Title_Description">Swi swakafanana ni swinoshandiswa kakukwarira maskoko paya pawakabhathana napo.</string>
@@ -565,7 +565,7 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="Uwazi_Templates_TabTitle">Sifananijo</string>
   <string name="action_no">Haiwa</string>
   <string name="Vault_Items">Swissenenguejo</string>
-  <string name="Vault_DeleteFile_SheetTitle">Kulassa chikwama</string>
+  <string name="Vault_DeleteFile_SheetTitle">Kulassa chikwama?</string>
   <string name="Vault_deleteFile_SheetDesc">Chikwama cha ketuwa chinozolassua swachosse pa Tella.</string>
   <string name="Uwazi_Info_UrlLabelEmpty">Chikombidjiro cho URL achina chiro</string>
   <string name="Collect_EndSubtitleExpl_UncheckedItems">Usatarise zvakabhathana kuti uzvitumire gare gare. Unokwanisa kupedzisa kutumira kubva mu Bhokisi Rinobhudha.</string>
@@ -583,14 +583,14 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="Collect_DeleteDraftForm_SheetExpl">Unochokwadhi kuti inodha kulassa ndau jassala kunhorwa?</string>
   <string name="Collect_DeleteForm_SheetExpl">Unochokwadhi kuti inodha kulassa ndau igi?</string>
   <string name="Uwazi_Dialog_Draft_Title">Pokubhudha?</string>
-  <string name="Verification_Label_meter">Mita imuwe</string>
-  <string name="Verification_Label_MeterPerSecond">Mita imuwe</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
   <string name="settings_sec_security_screen">Kudzivirirwa kwechidzitiro</string>
   <string name="settings_sec_security_screen_expl">Vala kutola ko tela mukhati mo Tella, ona swispwa swaguma swino</string>
   <string name="settings.serv_add.server.selection_dialog.description">Kana usina chokwadi, ndapota bvunza sangano renyu.</string>
   <string name="Timeout_Warning_Title">Chizivisso/Nyevero</string>
   <string name="Timeout_Warning_Description">Kuti uite ichi chiito, Tella ichagara yakavhurika kwemaminitsi matatu.</string>
-  <string name="Home_BottomNav_Uwazi">Panovigwa mashoko nokumagwarira</string>
+  <string name="Home_BottomNav_Uwazi">Panovhigwa mashoko nokumagwarira</string>
   <string name="onboard_setup_text">Munodha kumisa Tella sei?</string>
   <string name="onboard_full_setup">Kuseta kapera</string>
   <string name="onboard_quick_setup">Seti hokukassika</string>
@@ -615,9 +615,9 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="gallery_subheading_show">Chirogwa</string>
   <string name="gallery_list.item_show.all.files">Swesse</string>
   <string name="gallery_list.items_show.only.photos">Mupikija</string>
-  <string name="gallery_list.items_show.only.videos">Bassikopo</string>
-  <string name="gallery_list.items_show.only.audio">Kutola mazuwi</string>
-  <string name="onboard.camo_heading">Kujifukidza/Kuvhiga</string>
+  <string name="gallery_list.items_show.only.videos">Bassikopo.</string>
+  <string name="gallery_list.items_show.only.audio">Kurekodha kwemazwi.</string>
+  <string name="onboard.camo_heading">Kuvhiga</string>
   <string name="settings.camo_calculator1">Kota njakachipa</string>
   <string name="settings.docu_dialog.action_hide">Kuvhiga</string>
   <string name="settings.docu_auto.upload.server.selection_select">Mudjeke</string>
@@ -631,19 +631,19 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="settings.docu_auto.delete_action.expl">Tella inozolassa chiriporipocho swikwama pa foni yako pa chinotwarwa pa mudjeke</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">Aungaiti kuti utole swikama swimueni ma mudjeke uhu</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">Kikwama </item>
-    <item quantity="other">Noswimueni swikwama%</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%dNdau jo pa mueya jirikudwarwa</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">Kikwama%</item>
-    <item quantity="other">Noswimueni swikwama%</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">Kassala musseswa umwe</item>
-    <item quantity="other">Ndjimueni jassala</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
-  <string name="settings.select_customization">Swinomaererano naewe</string>
+  <string name="settings.select_customization">Maitiro ekugadzirisa</string>
   <string name="Uwazi_Send_Header_Title">Kupera kaswo</string>
   <string name="Uwazi_Send_Entity_Title">Kupera kaswo</string>
   <string name="action_yes_in">YES, I’M IN!</string>
@@ -654,10 +654,10 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="Server_Connect_Icon">Mufananidjo ho mudjeke</string>
   <string name="Login_To_Access_Project_Text">Enda magwanja lokubhatana no chirogwa</string>
   <string name="Settings_Reports_Connected_To_Project">Kubhathana no chirogwa</string>
-  <string name="Settings_Reports_Advanced_Success_Title">Seti homberimberi yanaka</string>
+  <string name="Settings_Reports_Advanced_Success_Title">Seti hopamberimberi yanaka.</string>
   <string name="Settings_Reports_Advanced_Success_Description">Unokanissa kutchinja maviere o mashoko pa seti yo Tella</string>
   <string name="Settings_Reports_Go_To_Reports">Kuenda kune mashoko</string>
-  <string name="Settings_reports_Go_To_Advanced_Settings">Kuceta kopamberimberi</string>
+  <string name="Settings_reports_Go_To_Advanced_Settings">Seti homberimberi.</string>
   <string name="Setting_Reports_Share_Information_Title">Kuthumira swirimaererano nokuonessessa</string>
   <string name="Setting_Reports_Share_Information_Description">Pedjessa swiri maererano no foni hako kugombidja ndau pa kuthumira mashoko hako, kuti mashoko ako aoneke swakanaka.</string>
   <string name="Setting_Reports_Background_Upload">Kutumira kuri kuitika seri kwechidzitiro</string>
@@ -683,7 +683,7 @@ KUZIVISSA: kana ya twarwa Tella unolamba wakadjima kuswikira mashoko ako esse ha
   <string name="File_Uploaded">Kuthala.</string>
   <string name="Delete_Report_Confirmation">Unochokwadhi kuti unodha kuvhissa mashoko aya?</string>
   <string name="Delete_Submitted_Report_Confirmation">Unochokwadhi kuti unodha kulassa mashoko aya atumirwa pauri?</string>
-  <string name="View_Report">Maonero</string>
+  <string name="View_Report">Swaoneka/Maonero</string>
   <string name="Delete_Report">Kulassa/Bvisa</string>
   <string name="Paused_Report">Kuema</string>
   <string name="Report_Waiting_For_Connection">Kuemera kubhathana ko mudjeke</string>
@@ -709,7 +709,7 @@ KUZIVISSA: kana ya twarwa Tella unolamba wakadjima kuswikira mashoko ako esse ha
   <string name="Setting_Reports_Connection_Name">Zina lo kubhathana</string>
   <string name="Setting_Reports_Auto_Report">Mashoko/Mushumo unozviita</string>
   <string name="Setting_Reports_Auto_Report_Description">Pesse paunovissa mupikija kana kuti baissikopo/no izuwi/kuthepa pa Tella, pa noumbwa mashoko chipiporipocho panegue pane chirogwa ichi.</string>
-  <string name="Setting_Reports_Auto_Delete">Kulassa chiriporipojo.</string>
+  <string name="Setting_Reports_Auto_Delete">Kulassa Chiroporipocho</string>
   <string name="Setting_Reports_Auto_Delete_Description">Kulassa swikwama chiriporipojo pachinotumirwa se mashoko.</string>
   <string name="Send_Action_Label">Kuthumira.</string>
   <string name="Modified_Label">Kutchindja.</string>
@@ -772,7 +772,7 @@ KUZIVISSA: kana ya twarwa Tella unolamba wakadjima kuswikira mashoko ako esse ha
   <string name="Settings_Off">Kujimika</string>
   <string name="Settings_On">Pane</string>
   <string name="Settings_Disabled">Swavarika</string>
-  <string name="Settings_remaining_attempts_before_deletion">Pa skrini rekuvhura, komba nhamba yasara yekuedza kusavhura kusina kubudirira kusati kwese kuri mukati meTella kwabviswa.</string>
+  <string name="Settings_remaining_attempts_before_deletion">Pa chidzitiro chekuvhura, ratidza nhamba yasara yemiedzo yekukundika kuvhura kusati zvinhu zvese zviri muTella zvabviswa​.</string>
   <string name="Settings_failed_unlock_message_template">Mashoko ako pa Tella anozo lassua kukandarika kumbinda %1$dkamue kakashata.</string>
   <string name="Settings_feature_not_available_camouflage">Chinhu chino achishandi ne kamufuraji ye kalkuleta. Shandura kamufuraji yako kuti ugone kushandisa chinhu chino.</string>
   <string name="Auto_Upload_Report">Swikwama Swatorwa chiriporipocho sengue mashoko.</string>
@@ -786,7 +786,7 @@ KUZIVISSA: kana ya twarwa Tella unolamba wakadjima kuswikira mashoko ako esse ha
   <string name="action_rotate">Kutenderera</string>
   <string name="Snackbar_file_was_deleted">Chikwama rakabviswa.</string>
   <string name="Snackbar_files_were_deleted">Swikwama akabviswa.</string>
-  <string name="Snackbar_changes_were_saved">Shanduko dzako dzarerwa.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Shanduko dzisina kurerwa</string>
   <string name="Edit_Dialog_confirm_exit">Shanduko dzako azina kurerwa. Unoda kurerera usati wabuda here?</string>
   <string name="action_exit_without_saving">KUBUDHA USSITO KUVHIGA</string>
@@ -825,8 +825,8 @@ Mphindhuro ihi wakafishikana, iva no chokwandhi kuti wakanda mashoko esse maerer
   <string name="encryption_in_progress">Thiri kuvhiguississa chikwana.</string>
   <string name="encryption_exit_prompt">Chiripo chikwama chirigwarirwa pa chikamu cho chipiri. Unodha kubhudha chilassike chikwama?</string>
   <string name="exit_discard_files">Bhudhai wolassa chikwama</string>
-  <string name="exit_and_discard_files">Bhudhai wolassa chikwama.</string>
-  <string name="files_being_encrypted_message">Chiripo chikwama chiri gwarirwa pa chikamu cho chipiri. Unodha kubhudha uluze chikwama jo mashoko?</string>
+  <string name="exit_and_discard_files">Bhudhai wolassa chikwama</string>
+  <string name="files_being_encrypted_message">Chiripo chikwama chirigwarirwa pa chikamu cho chipiri. Unodha kubhudha chilassike chikwama?</string>
   <string name="Home_BottomNav_Resources">Magwaro anobatsira</string>
   <string name="Resources_DownloadedTitle">Arikutorwa mashoko.</string>
   <string name="Resources_DownloadedEmptyMessage">Aphana cha watola.  Taka pakazwi \"kutola \"
@@ -856,8 +856,8 @@ Dzvanya ‘Jijira zhinji’ pazasi kuti uwane mamwe mashoko pamusoro pe shanduko
   <string name="Learn_More">Ziva swimueni/Jijira zhinji</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="one">Chikwatha chaketwa</item>
-    <item quantity="other">Swikwatha swimueni swaketwa</item>
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">Keta chikwatha chaunodha kubathana.</string>
   <string name="Analytics_contribute_reminder_title">Uri kugovana mashoko/dhato.</string>
@@ -893,8 +893,8 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="select_entities">Keta chindau</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Keta chindau chaunodha kubathana natcho.</string>
   <string name="add_more_entities">Pakuketa swe paneswamboketwa</string>
-  <string name="on_select_entities_clicked_tag">Pakuketa pane swambo ketwa</string>
-  <string name="could_not_find_uwazientryfragment">aswito kuita kuti uwane gwanja lo uwazi</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Hewe wa swinhoressa kuti u paurerane maonero. Unokwanissa kuswijinja pa maitiro eku shandisa.</string>
   <string name="Settings_Analytics_turn_off_dialog">Ussa paurira maonero unokuanissa kuswichinja pa maitiro eku shandisa.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -919,7 +919,7 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="unavailable_connections">Kubhata komujeke ukatiza.</string>
   <string name="unavailable_connections_desc">Pane vakatenderwa umwe bassi nganotenderwa kuvata mujeke. Kana unodha kungwina mujeke, ndapota fhudjura mujeke uho pa mujeke unotongwa.</string>
   <string name="no_permission_to_folder_google_drive">Hautenderwi kuti unga ngena pa mukwama uhu.</string>
-  <string name="settings.servers.title_server.settings2">Kubatana ko mujeke.</string>
+  <string name="settings.servers.title_server.settings2">Kubhata mudjeke.</string>
   <string name="settings.servers.add_server.expl2">Kana weshanda no batho batha mujeke kuti utumire chikwama cho mashoko. Batho lako ngarikupe mabatire ho mujeke.</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="go_to_dropbox">Henda pa bokissi lo kuviga.</string>
@@ -967,7 +967,7 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
   <string name="go_to_nextcloud">Endai pa Nextcloud</string>
   <string name="google_drive_create_folder_description">Mashoko hako anozotumirwa pa cont yako pa Google Drive. Keta zina launodha kichipa chikwama echi.</string>
-  <string name="folder_name">Zina lo mukwama.</string>
+  <string name="folder_name">Zina lo mukhama.</string>
   <string name="Folder_Empty_Error">Zina lo mu kwama rissa gala rissipo.</string>
   <string name="file_name_taken">Zina lo chi kwama la chandissua ndapota keta rimueni.</string>
   <string name="folder_exist_error">Zina lo mu kwama la chandissua kare ndapota keta rimueni.</string>

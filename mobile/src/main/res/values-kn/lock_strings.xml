@@ -16,14 +16,14 @@
   <string name="LockPatternSet_Message_PatternStarted">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
   <string name="LockPatternSet_Message_PatternCleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
   <string name="LockPatternSet_Message_CellAdded">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">ಸೆಲ್ <xliff:g id="cell_index" example="3"> %1$d </xliff:g> ಸೇರಿಸಲಾಗಿದೆ</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
   <string name="UnLockPattern_PatternArea">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
-  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to 
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
 unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
-  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
 Tella</string>
   <string name="LockPinSet_Message_Hint">Use at least 6 digits.
 Avoid using numbers that can be guessed easily, such as your birthday.</string>
@@ -46,7 +46,7 @@ done!</string>
   <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
-  <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more

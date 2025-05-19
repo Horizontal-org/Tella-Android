@@ -18,15 +18,17 @@
   <string name="LockPatternSet_Message_PatternStarted">တၢ်စးထီၣ်တ့ထီၣ် တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤက့ၢ်ဂီၤအံၤလံ</string>
   <string name="LockPatternSet_Message_PatternCleared">တၢ်မၤဆှဲမၤပျီကွံာ် တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤ ဝံၤဝဲလံ</string>
   <string name="LockPatternSet_Message_CellAdded">တၢ်မၤအါထီၣ် (Cell) ဝံၤဝဲလံ</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Cell)  <xliff:g id="cell_index" example="3">%1$d</xliff:g> တၢ်ထၢနုာ်လီၤအီၤဝံၤလံ</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအံၤတၢ်တ့ထီၣ်အီၤဝံၤဝဲဒၣ်လံ</string>
   <string name="UnLockPattern_PatternArea">တၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအလီၢ်.</string>
-  <string name="UnLockPattern_Message_DrawPattern">ဆွဲလီၤနတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤ လၢတၢ်ကဝံာ်အိးထီၣ်ဝဲTella အဂီၢ်</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">ဝံသးစူၤမၤကဒီးအသီတဘျီတက့ၢ်. နတၢ်ဒဲးကံၣ်ဒဲးဝ့ၤအက့ၢ်အဂီၤအံၤတဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်န့ၣ်လီၤ.</string>
   <string name="LockPinSet_Message_EnterPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်</string>
-  <string name="UnlockPin_Message_EnterPin">ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်လၢတၢ်ကဝံာ်အိးထီၣ်ဝဲ Tella အဂီၢ်</string>
-  <string name="LockPinSet_Message_Hint">စူးကါနီၣ်ဂံၢ်ဖျၢၣ်အစှၤကတၢၢ် ၆ ဖျၢၣ်
-ဟးဆှဲးသူဘၣ်နီၣ်ဂံၢ်လၢတၢ်တယးဘၣ်အီၤညီတဖၣ်, ဒ်အမ့ၢ်နံၤအိၣ်ဖျဲၣ်မုၢ်နံၤ.</string>
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
+Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">ပာ်ဂၢၢ်ပာ်ကျၢၤဘၣ်န PIN နီၣ်ဂံၢ်တက့ၢ်</string>
   <string name="LockPinConfirm_Message_Confirm">ဝံသးစူၤထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်အသီကဒီးတဘျီ, 
 ထဲဒၣ်တၢ်မၤလီၤတံၢ်ဒိၣ်ထီၣ်အဂီၢ်.</string>
@@ -44,8 +46,8 @@
   <string name="LockSuccess_Action_GoToTella">လဲဆူ Tella အအိၣ်</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">လံာ်ဖျၢၣ်ခူသူၣ်အံၤတဘၣ်ဝဲဘၣ်,
  ဝံသးစူၤကျဲးစၢးမၤကဒီးအသီတဘျီ</string>
-  <string name="UnlockPassword_Message_EnterPassword">ထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်လၢ
-တၢ်ဝံာ်အိးထီၣ်ဝဲ Tella အဂီၢ်</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">ပာ်ဂၢၢ်ပာ်ကျၢၤနလံာ်ဖျၢၣ်ခူသူၣ်အံၤန့ၣ်တက့ၢ်</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">ဝံသးစူၤထၢနုာ်လီၤနလံာ်ဖျၢၣ်ခူသူၣ်အသီကဒီးတဘျီန့ၣ်တက့ၢ်. 
 ထဲဒၣ်တၢ်မၤလီၤတံၢ်ဒိၣ်ထီၣ်အဂီၢ်.</string>

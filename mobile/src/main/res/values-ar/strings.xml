@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">هل ترغب في الخروج من الاستمارة؟</string>
   <string name="verification_prompt_dialog_title">هل أُفعِّل GPS؟</string>
   <string name="collect_tab.title_blank">الفارغة</string>
-  <string name="action_cancel">إلغاء</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">الاتصال بنا</string>
   <string name="collect_dialog.text_download.progress">تنزيل الاستمارة</string>
   <string name="collect_toast_download.completed">لقد اكتمل التنزيل</string>
-  <string name="action_delete">حذف</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">المُسوَّدات</string>
   <string name="collect.blank_action_download.form">تنزيل</string>
   <string name="settings_text_empty.field">لا يمكن ترك هذا الحقل فارغا.</string>
@@ -85,12 +85,8 @@
   <string name="permission_dialog.expl_device.storage">لأجل تصدير الملفات، يحتاج Tella إلى الحصول على إذن الكتابة على وحدة التخزين للجهاز.</string>
   <string name="gallery_toast_fail.deleting.files">لقد حدث خطأ أثناء حذف الملفات. يُرجى المحاولة مرة أخرى.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="zero">تم حفظ %1$d ملف في الجهاز</item>
-    <item quantity="one">تم حفظ %1$d ملف في الجهاز</item>
-    <item quantity="two">تم حفظ %1$d ملفان في الجهاز</item>
-    <item quantity="few">تم حفظ %1$d ملفات في الجهاز</item>
-    <item quantity="many">تم حفظ %1$d ملفًا في الجهاز</item>
-    <item quantity="other">تم حفظ %1$d ملف في الجهاز</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">هل ترغب في حذف الملف؟</string>
   <string name="gallery_delete.files_dialog.expl">سيتم حذف الملف المحدد نهائيا من معرض صورك.</string>
@@ -192,12 +188,8 @@
   <string name="collect.form_signature_toast_fail.saving">لقد حدث خطأ أثناء حفظ التوقيع. يُرجى المحاولة مرة أخرى</string>
   <string name="collect.form_acknowledge_select.expl">حسنا، يرجى المتابعة.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="zero">%d ملف</item>
-    <item quantity="one">%d ملف</item>
-    <item quantity="two">%d ملفان</item>
-    <item quantity="few">%d من الملفات</item>
-    <item quantity="many">%d من الملفات</item>
-    <item quantity="other">%d من الملفات</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">التعرف على المزيد</string>
   <string name="settings.servers_add.server_dialog.title">إضافة خادم</string>
@@ -336,8 +328,8 @@
   <string name="settings.sec_delete.app_tooltip">احذف التطبيق وجميع البيانات المحفوظة. سوف يعرض عليك السؤال التالي: \"هل ترغب في إزالة تثبيت هذا التطبيق؟\". لن يُحذف التطبيق ما لم تؤكد ذلك.</string>
   <string name="settings.sec_bypass_switch_title">تجاوز الرقابة</string>
   <string name="settings.sec_bypass_switch_expl">تغلب على محاولات حظر Tella في منطقتك. يُرجى العلم أن تفعيل هذه الخاصية سيؤدي إلى بطء إرسال البيانات إلى الخوادم.</string>
-  <string name="settings.servers_add_camouflage.subtitle">تم تمويه تطبيقك حاليًّا 
-باستخدام تطبيق آلة حاسبة</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">غيّر طريقة التمويه</string>
   <string name="settings.servers_remove.camouflage.method">قم بإزالة التمويه</string>
   <string name="settings.servers_hide_tella_title">قم بإخفاء Tella</string>
@@ -352,8 +344,8 @@
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>أقل الخيارات أمنًا:</b> سيظهر تطبيق Tella على الشاشة الرئيسية باسم وأيقونةٍ مختلفين. اضغط على الأيقونة الجديدة لفتح تطبيق Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">الإخفاء خلف تطبيق آلة حاسبة</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>أكثر الخيارات أمنًا:</b> سيكون تطبيق Tella مُمَوّهًا خلف تطبيق آلة حاسبة فعلي. أدخل رقم التعريف الشخصي الخاص بك على الآلة الحاسبة لفتح قفل Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">لن يكون التمويه باستخدام الآلة الحاسبة ممكنًا إلا عند التأمين 
-باستخدام رقم التعريف الشخصي. <font color="#D6933B"><b>غير قفل التأمين من هنا</b></font></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">إذا غيرت طريقة قفل التأمين، سوف تتعطل خاصية التمويه</string>
   <string name="action_continue">المتابعة</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -377,7 +369,7 @@
   <string name="onboard.intro_title">مرحبًا بك في Tella</string>
   <string name="onboard.intro_get_started">البدء</string>
   <string name="onboard.title_camera">الكاميرا</string>
-  <string name="onboard.expl_camera">التقط الصور وسجل مقاطع الفيديو مباشرةً في Tella. يشفر التطبيق تلك الملفات تلقائيًّا ويحفظها داخله ولن تكون مرئية في المعرض الافتراضي لهاتفك.</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">المُسجِّل الصوتي</string>
   <string name="onboard.expl_recorder">سجل مقابلاتك أو أي أصوات حولك باستخدام مسجل الصوت في Tella. يعَمّي التطبيق الملفات الصوتية تلقائيًّا ويحفظها داخل ملف مخفي به.</string>
   <string name="onboard.title_files">ملفات ومجلدات مشفرة</string>
@@ -421,12 +413,8 @@
   <string name="Vault_CreateFolder_SheetAction">إنشاء</string>
   <string name="ServerSettings_ServerName_ToolTip">أعط الخادم الخاص بك اسمًا للتعرف عليه في حال إضافة المزيد من الخوادم لاحقًا. يمكن أن يكون هذا الاسم اسم المنظمة أو اسم المشروع أو غير ذلك من الأسماء.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="zero">%s ملف مستورد</item>
-    <item quantity="one">%s ملف مستورد</item>
-    <item quantity="two">%s ملفان مستوردان</item>
-    <item quantity="few">%s من الملفات مستوردة</item>
-    <item quantity="many">%s من الملفات مستوردة</item>
-    <item quantity="other">%s من الملفات مستوردة</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">الاستيراد والتشفير</string>
   <string name="Rec_Exit_SheetTitle">هل ترغب في حفظ التسجيل؟</string>
@@ -460,13 +448,13 @@
   <string name="Uwazi_RemoveTemplate_SheetTitle">حذف من الجهاز</string>
   <string name="Uwazi_Action_FillEntity">إنشاء كيان</string>
   <string name="Uwazi_Action_RemoveTemplate">حذف القالب</string>
-  <string name="Uwazi_Subtitle_RemoveTemplate">هل أنت متأكد من رغبتك في حذف هذا القالب من جهازك؟</string>
+  <string name="Uwazi_Subtitle_RemoveTemplate">Are you sure you want to remove this template? </string>
   <string name="UWAZI_Language_Header_Title">لغة Uwazi</string>
-  <string name="Uwazi_Language_Screen_Description">تتوفر مجموعة Uwazi بالعديد من اللغات. يُرجى اختيار اللغة التي تفضل تنزيل القوالب بها.</string>
+  <string name="Uwazi_Language_Screen_Description">This Uwazi collection is available in several languages. Please select the language in which you would like to download templates. </string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">أظهر الاختصارات إلى قوالبك المفضلة على شاشة Tella الرئيسية</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">القوالب المفضلة</string>
-  <string name="Uwazi_Templates_Empty_Description">لا توجد قوالب محفوظة. اضغط على 
-زر \"+\" لإضافة قالب جديد.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">لا توجد كيانات مرسلة.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">علبة الصادر فارغة حاليًا. سوف 
 تظهر الكيانات الجاهزة للإرسال هنا.</string>
@@ -501,8 +489,8 @@
   <string name="Uwazi_WidgetMedia_Description_Text">أرفق فيديو أو ملف صوتي</string>
   <string name="Uwazi_WidgetImage_Select_Text">حدد صورة</string>
   <string name="Uwazi_WidgetImage_Select_Description_Text">أرفق صورة</string>
-  <string name="Uwazi_WidgetMedia_Take_Video">سجل فيديو من الكاميرا</string>
-  <string name="Uwazi_WidgetMedia_Take_Photo">التقط صورةً من الكاميرا</string>
+  <string name="Uwazi_WidgetMedia_Take_Video">Take video with camera</string>
+  <string name="Uwazi_WidgetMedia_Take_Photo">Take photo with camera</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">حدد ملفًّا من ملفات Tella</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">حدد من جهازك</string>
   <string name="Uwazi_Widget_Sheet_Description">اختر الطريقة التي تفضل استخدامها لإضافة الملفات</string>
@@ -510,12 +498,8 @@
   <string name="Uwazi_Server_Title">الخادم: </string>
   <string name="Uwazi_Template_Title">قالب: </string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="zero">%1$d ملف مرفق</item>
-    <item quantity="one">%1$d ملف مرفق</item>
-    <item quantity="two">%1$d ملفان مرفقان</item>
-    <item quantity="few">%1$d من الملفات مرفقة</item>
-    <item quantity="many">%1$d من الملفات مرفقة</item>
-    <item quantity="other">%1$d من الملفات مرفقة</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">حدد الملفات</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">حدد ملفات PDF</string>
@@ -526,7 +510,7 @@
   <string name="Uwazi_Drafts_Header_Text">هذه هي الكيانات التي لم ترسلها.
 
 اضغط على الكيان لمواصلة العمل عليه.</string>
-  <string name="Uwazi_Outbox_Header_Text">هذه هي الكيانات التي تقدمها حاليًا.</string>
+  <string name="Uwazi_Outbox_Header_Text">These are entities ready to send or partially sent.</string>
   <string name="Uwazi_Submitted_Header_Text">هذه هي الكيانات التي قدمتها.</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">اختر الطريقة التي تفضل استخدامها لإضافة الملفات</string>
   <string-array name="Uwazi_Language_Array">
@@ -543,44 +527,24 @@
   <string name="Collect_Subtitle_RemoveForm">هل أنت متأكد من رغبتك في حذف \"%1$s\"؟</string>
   <string name="Util_ellapsedTime_Year">منذ أكثر من عام</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="zero">منذ شهر</item>
-    <item quantity="one">منذ شهر</item>
-    <item quantity="two">منذ شهرين</item>
-    <item quantity="few">منذ %d من الشهور</item>
-    <item quantity="many">منذ %d من الشهور</item>
-    <item quantity="other">منذ %d من الشهور</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="zero">منذ أسبوع</item>
-    <item quantity="one">منذ أسبوع</item>
-    <item quantity="two">منذ أسبوعين</item>
-    <item quantity="few">منذ %d من الأسابيع</item>
-    <item quantity="many">منذ %d من الأسابيع</item>
-    <item quantity="other">منذ %d من الأسابيع</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="zero">منذ يوم</item>
-    <item quantity="one">منذ يوم</item>
-    <item quantity="two">منذ يومين</item>
-    <item quantity="few">منذ %d من الأيام</item>
-    <item quantity="many">منذ %d من الأيام</item>
-    <item quantity="other">منذ %d من الأيام</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="zero">منذ ساعة</item>
-    <item quantity="one">منذ ساعة</item>
-    <item quantity="two">منذ ساعتين</item>
-    <item quantity="few">منذ %d من الساعات</item>
-    <item quantity="many">منذ %d من الساعات</item>
-    <item quantity="other">منذ %d من الساعات</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="zero">منذ دقيقة</item>
-    <item quantity="one">منذ دقيقة</item>
-    <item quantity="two">منذ دقيقتين</item>
-    <item quantity="few">منذ %d من الدقائق</item>
-    <item quantity="many">منذ %d من الدقائق</item>
-    <item quantity="other">منذ %d من الدقائق</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">منذ بضع لحظات</string>
   <string name="Donwload_Templates_Title_Description">هذه القوالب المتوفرة على نماذج Uwazi التي تتصل بها.</string>
@@ -589,7 +553,7 @@
   <string name="Server_Url_Screen_Title">أدخل عنوان URL للخادم</string>
   <string name="Login_Type_Screen_Title">سجل الدخول إذا كان لديك اسم مستخدم وكلمة سر، وإلا فيمكنك استخدام إمكانية الوصول العام للخادم.</string>
   <string name="Login_Text">تسجيل الدخول</string>
-  <string name="Public_Login_Text">الوصول العام</string>
+  <string name="Public_Login_Text">Public access</string>
   <string name="Two_Factor_Authentication_Description">يتطلب مثيل Uwazi هذا التحقق على خطوتين. أدخل هنا الرمز المكون من 6 أرقام من تطبيق المصادقة لديك.</string>
   <string name="Two_Factor_Authentication_Screen_Tile">التحقق على خطوتين</string>
   <string name="Authentication_Code">رمز التحقق</string>
@@ -616,7 +580,7 @@
   <string name="Collect_DialogInfo_FormSubmissionStopped">تم إيقاف إرسال النموذج الخاص بك. يمكنك استئناف العملية من صندوق الصادر.</string>
   <string name="action_view">استعراض</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">تيلا Tella في طور الإغلاق</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">يرجى الانتظار. ستعود إلى الشاشة الرئيسية لجهازك خلال ثوانٍ قليلة.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">إزالة التمويه ...</string>
   <string name="Collect_DeleteForm_SheetTitle">هل ترغب في حذف الاستمارة؟</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">هل تريد حذف المسودة؟</string>
@@ -671,29 +635,17 @@
   <string name="settings.docu_auto.delete_action.expl">سوف تحذف Tella الملفات تلقائيًّا من جهازك فور رفعها على الخادم.</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">لن يكون باستطاعتك بعد الآن رفع ملفات على هذا الخادم.</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="zero">صفر ملف</item>
-    <item quantity="one">ملف واحد</item>
-    <item quantity="two">ملفين</item>
-    <item quantity="few">4 ملفات</item>
-    <item quantity="many">20 ملف</item>
-    <item quantity="other">%d ملف</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">تم تحميل %d/%d ميغابايت</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="zero">تم تحميل %d ملف</item>
-    <item quantity="one">تم تحميل %d ملف</item>
-    <item quantity="two">تم تحميل 2% ملفين</item>
-    <item quantity="few">تم تحميل 3% ملفات</item>
-    <item quantity="many">تم تحميل %d ملف</item>
-    <item quantity="other">تم تحميل %d ملفات</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="zero">0% دقيقة متبقية</item>
-    <item quantity="one">%dدقيقة متبقية</item>
-    <item quantity="two">دقيقتين متبقيتين</item>
-    <item quantity="few">%dدقائق متبقية</item>
-    <item quantity="many">%20دقيقة متبقية</item>
-    <item quantity="other">%dدقيقة متبقية</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">تخصيص</string>
   <string name="Uwazi_Send_Header_Title">نهاية الكيان</string>
@@ -713,8 +665,8 @@
   <string name="Setting_Reports_Share_Information_Title">مشاركة معلومات التحقق</string>
   <string name="Setting_Reports_Share_Information_Description"> لجعل ملفاتك قابلة للتحقق، عند إرسال تقارير، ضمّن معلومات حول جهازك وموقعك  </string>
   <string name="Setting_Reports_Background_Upload">تحميل في الخلفية</string>
-  <string name="Setting_Reports_Background_Upload_Description">استمر في تحميل التقارير أثناء القيام بمهام أخرى أو حتى في حالة خروجك من تيلا Tella.
- تحذير: إذا تم تمكينها، ستظل Tella مفتوحةً حتى يتم تحميل جميع التقارير بالكامل.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">اكتملت الإعدادات المتقدمة</string>
   <string name="Setting_Reports_Settings_Completed_Description">يمكنك دائمًا تغيير تفضيلات تقاريرك في قسم الإعدادات بتطبيق تيلا Tella.</string>
   <string name="Drafts_Reports_Empty_Message">مسوداتك فارغة حالياً. ستظهر التقارير التي لم ترسلها هنا.</string>
@@ -841,7 +793,7 @@
   <string name="action_rotate">استدارة</string>
   <string name="Snackbar_file_was_deleted">تم حذف الملف.</string>
   <string name="Snackbar_files_were_deleted">تم حذف الملفات.</string>
-  <string name="Snackbar_changes_were_saved">تم حفظ التغييرات.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">التغييرات غير المحفوظة</string>
   <string name="Edit_Dialog_confirm_exit">لم يتم حفظ تغييراتك. هل ترغب في الحفظ قبل الخروج؟</string>
   <string name="action_exit_without_saving">الخروج بدون حفظ</string>
@@ -868,8 +820,8 @@
   <string name="Settings_General_BottomSheetRefreshWarningText">سوف تعود إلى الشاشة السابقة في بضع ثوان.</string>
   <string name="settings.feedback_enable_sharing">تمكين مشاركة التعليقات</string>
   <string name="settings.feedback_warning">تحذير: استخدام هذه الميزة قد يكشف لشخص يراقب الشبكة أنك تستخدم Tella. استخدمه فقط إذا كنت تشعر بالراحة تجاه هذا الخطر.</string>
-  <string name="feedback_msg">أخبرنا إذا كنت تواجه خطأ ما، أو لديك طلب لميزة جديدة، أو لديك أي تعليقات أخرى.
- هذه التعليقات مجهولة المصدر، لذا تأكد من تضمين معلومات الاتصال إذا كنت تريد ردًا منا.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
+ This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">شكرا لملاحظاتك!</string>
   <string name="save_draft">حفظ المسودة؟</string>
   <string name="description_submit_feedback">يمكنك العودة في أي وقت لتقديم ملاحظاتك.</string>
@@ -920,12 +872,8 @@
   <string name="Learn_More">التعرف على المزيد</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="zero">صفر</item>
-    <item quantity="one">واحد</item>
-    <item quantity="two">اثنين</item>
-    <item quantity="few">بعض</item>
-    <item quantity="many">عديد من</item>
-    <item quantity="other">أخرى</item>
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">حدد الجهات التي تريد ربطها بهذه الخاصية.</string>
   <string name="Analytics_contribute_reminder_title">أنت تشارك البيانات</string>
@@ -960,8 +908,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">لن تشارك التحليلات بعد الآن. يمكنك دائمًا تغيير ذلك في الإعدادات.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
