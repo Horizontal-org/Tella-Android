@@ -9,7 +9,7 @@
   <string name="Vault_Others_Title">တၢ်အဂုၤအဂၤတဖၣ်</string>
   <string name="Vault_Select_Title">ဃုထၢဘၣ်လံာ်တြံ၁်တဖၣ်</string>
   <string name="Vault_RecentFiles">လံာ်တြံ၁်လၢအတယံ၁်ဒံးဘၣ်တဖၣ်</string>
-  <string name="Vault_PhotosAndVideos_Title">တၢ်ဂီၤဒီးတၢ်ဂီၤမူတဖၣ်</string>
+  <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
   <string name="Vault_FavoriteForms_Title">လံာ်ကွီၣ်ဒိလၢ အလီၤသးစဲတဖၣ်</string>
   <string name="Vault_Empty_Msg">လၢန Tella ပူၤအံၤ လံာ်ဒၢတအိၣ်နီတဖျၢၣ်ဒံးဘၣ်. စံၣ်လီၤဖဲ + တၢ်ပနီၣ်အလိၤ ဖဲလာ်အံၤ လၢတၢ်ဆှၢနုာ်လီၤလံာ်တြံာ်အဂီၢ် (မ့တမ့ၢ်) လၢတၢ်ကဒုးအိၣ်ထီၣ်လံာ်ဒၢတဖျၢၣ်အဂီၢ်န့ၣ်တက့ၢ်</string>
   <string name="Vault_Move_SheetDesc">သုးအလီၢ်ဆူလံာ်ဒၢအဂၤတဖျၢၣ်အပူၤ</string>
@@ -28,20 +28,12 @@
   <string name="Vault_FilePath">လံာ်တြံာ်အလီၢ်အကျဲ</string>
   <string name="Vault_RenameFile_SheetTitle">ယုၢ်န့ၢ်က့ၤလံာ်တြံာ်အမံၤလၢအသီ</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="zero">၀ ခါ</item>
-    <item quantity="one">၁ ခါ</item>
-    <item quantity="two">၂ ခါ</item>
-    <item quantity="few">စှၤခါ</item>
-    <item quantity="many">အါခါ</item>
-    <item quantity="other">ကထူးသံကွံာ်လံာ်တြံာ်တဖၣ်အံၤဧါ?</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="zero">၀ ခါ</item>
-    <item quantity="one">၁ ခါ</item>
-    <item quantity="two">၂ ခါ</item>
-    <item quantity="few">စှၤခါ</item>
-    <item quantity="many">အါခါ</item>
-    <item quantity="other">လံာ်တြံာ်လၢတၢ်ဃုထၢဃာ်အီၤတဖၣ်အံၤကဘၣ်တၢ်ထူးသံကွံာ်အီၤလၢ  Tella ပူၤတစိၤသးန့ၣ်လီၤ.</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">အမံၤ A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">အမံၤ Z &gt; A</string>
@@ -58,22 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">လံာ်တြံ၁်အက့ၢ်အဂီၤဒ်အံၤတကလုာ်အံၤ တၢ်အိးထီၣ်အီၤလၢ Tellaပူၤအံၤတန့ၢ်ဘၣ်ႋ မ့ၢ်နဘၣ်သးဆှၢထီၣ်အီၤဆူနတၢ်ပီးတၢ်လီပူၤလၢ နကအိးထီၣ်ကွၢ်အီၤ ဒီးအဲး(ပ်)အဂၤအဂီၢ်န့ၣ်ဧါ?  တၢ်အံၤကပာ်ဖျါထီၣ်ဝဲ လံာ်တြံာ်အတၢ်ဂ့ၢ်တၢ်ကျိၤသ့န့ၣ်လီၤႋ</string>
   <string name="Vault_Export_SheetAction">ဆှၢထီၣ်အီၤဆူတၢ်ပီးတၢ်လီအပူၤ</string>
   <plurals name="Vault_Items">
-    <item quantity="zero">၀ အခါ </item>
-    <item quantity="one">၁ ခါ</item>
-    <item quantity="two">၂ ခါ</item>
-    <item quantity="few">စှၤခါ</item>
-    <item quantity="many">အါမံၤအါခါ</item>
-    <item quantity="other">တၢ်ဖိတၢ်လံၤအခါ အဂုၤအဂၤ</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">လၢ Tella ပူၤအံၤ နလံာ်တြံာ်တအိၣ်နီတခါဒံးဘၣ်</string>
   <string name="Vault_FavoriteTemplates_Title">တၢ်ကဘျၣ်ဒိလၢယဘၣ်သးအီၤတဖၣ်</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="zero"></item>
-    <item quantity="one">လံာ်တြံာ်တခါအံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
-    <item quantity="two">လံာ်တြံာ်တဖၣ်အံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
-    <item quantity="few">လံာ်တြံာ်တဖၣ်အံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
-    <item quantity="many">လံာ်တြံာ်တဖၣ်အံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
-    <item quantity="other">လံာ်တြံာ်တဖၣ်အံၤအဘၣ်တၢ်သုးကွံာ်အီၤဂ့ၤဂ့ၤဘၣ်ဘၣ်လံန့ၣ်လီၤ</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">လံာ်တြံာ်တနီၤလၢနဃုထၢဃာ်အီၤအံၤ အခဲအံၤအဘၣ်တၢ်သူအီၤဒံးလၢ တၢ်ဘျးစဲတခါအပူၤအဖၢမုၢ်န့ၣ်လီၤ. နမ့ၢ်ကထူးသံကွံာ်လံာ်တြံာ်သ့ၣ်တဖၣ်အံၤန့ၣ်ဒီး ကလဲၤမၤဘၣ်ဒိစ့ၢ်ကီး လံာ်တၢ်ဂ့ၢ်တၢ်ကျိၤ ဒီး လံာ်ပာ်ဖျါတဖၣ်လၢ တၢ်ဆှၢအီၤတတုၤဒံးဘၣ်တဖၣ်န့ၣ်လီၤ.</string>
   <string name="Vault_Warning_Title">တၢ်ဟ့ၣ်ပလီၢ်</string>

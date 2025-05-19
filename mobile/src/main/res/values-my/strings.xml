@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ဖောင်မှ ထွက်မလား။</string>
   <string name="verification_prompt_dialog_title">GPS ဖွင့်လိုပါသလား။</string>
   <string name="collect_tab.title_blank">ဗလာ</string>
-  <string name="action_cancel">ပယ်ဖျက်ပါ</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">ကျွန်တော်တို့ကို ဆက်သွယ်ပါ</string>
   <string name="collect_dialog.text_download.progress">ဖောင်ကို ဒေါင်းလုပ်လုပ်နေသည်</string>
   <string name="collect_toast_download.completed">ဒေါင်းလုဒ် ပြီးပါပြီ</string>
-  <string name="action_delete">ဖျက်မည်</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">ပုံစံအကြမ်း</string>
   <string name="collect.blank_action_download.form">ဒေါင်းလုဒ်လုပ်ပါ</string>
   <string name="settings_text_empty.field">ဤအကွက်သည် ဗလာမဖြစ်ရပါ။</string>
@@ -84,7 +84,8 @@
   <string name="permission_dialog.expl_device.storage">ဖိုင်များကို ထုတ်ယူရန်အတွက် Tella သည် စက်၏ သိုလှောင်မှုတွင် ရေးသားရန် ခွင့်ပြုချက် လိုအပ်ပါသည်။</string>
   <string name="gallery_toast_fail.deleting.files">ဖိုင်များကို ဖျက်ရာတွင် အမှားအယွင်း ရှိနေသည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ။</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="other">%1$d ဖိုင်များကို စက်တွင် သိမ်းဆည်းပြီးပါပြီ</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">ဖိုင်ကို ဖျက်မလား။</string>
   <string name="gallery_delete.files_dialog.expl">ရွေးချယ်ထားသော ဖိုင်များကို သင့်ဓာတ်ပုံပြခန်းမှ အပြီးတိုင် ဖျက်လိုက်ပါမည်။</string>
@@ -186,7 +187,8 @@
   <string name="collect.form_signature_toast_fail.saving">လက်မှတ်ကို သိမ်းဆည်းရာတွင် အမှားအယွင်းရှိခဲ့သည်။ ကျေးဇူးပြု၍ ထပ်စမ်းကြည့်ပါ</string>
   <string name="collect.form_acknowledge_select.expl">ကျေးဇူးပြု၍ ဆက်လက်လုပ်ဆောင်ပါ။</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="other">%d ဖိုင်များ</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">ပိုမိုလေ့လာရန်</string>
   <string name="settings.servers_add.server_dialog.title">ဆာဗာထည့်ပါ</string>
@@ -325,7 +327,8 @@
   <string name="settings.sec_delete.app_tooltip">အက်ပ်နှင့် ၎င်းတွင်ပါရှိသော အချက်အလက်အားလုံးကို ဖျက်ပါ။ \"ဤအက်ပ်ကို ဖယ်ရှားလိုပါသလား\" ဟု သင့်ကို မေးပါလိမ့်မည်။ အတည်မပြုပါက Tella ကို ဖျက်မည် မဟုတ်ပါ။</string>
   <string name="settings.sec_bypass_switch_title">ဆင်ဆာကို ရှောင်ကွင်းပါ</string>
   <string name="settings.sec_bypass_switch_expl">သင့်ဒေသရှိ Tella ကို ပိတ်ဆို့ရန် ကြိုးပမ်းမှုများကို ကျော်လွှားပါ။ ၎င်းကို ဖွင့်ခြင်းဖြင့် ဆာဗာများသို့ ဒေတာပေးပို့ရန် နှေးကွေးစေမည်ကို သတိပြုပါ။</string>
-  <string name="settings.servers_add_camouflage.subtitle">သင့်အက်ပ်ကို ဂဏန်းတွက်စက်အက်ပ်ဖြင့် လက်ရှိတွင် ဖုံးကွယ်ထားသည်</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">ဖုံးကွယ်ခြင်းနည်းလမ်းကို ပြောင်းလဲပါ</string>
   <string name="settings.servers_remove.camouflage.method">ဖုံးကွယ်ခြင်းကို ဖယ်ရှားမည်</string>
   <string name="settings.servers_hide_tella_title">Tella ကို ဝှက်မည်</string>
@@ -340,7 +343,8 @@
   <string name="settings.servers_setup_change_name_icon_subtitle"><b> လုံခြုံရေး အားနည်းသည်-</b> Tella သည် အခြားအက်ပ်အမည်နှင့် သင်္ကေတဖြင့် ပင်မစခရင်တွင် ရှိနေပါမည်။ သင်္ကေတအသစ်ပေါ် နှိပ်လျှင် အမှန်တကယ် Tella ကို ဖွင့်ပါမည်။</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">ဂဏန်းတွက်စက် အက်ပ်နောက်ကွယ်တွင် ဝှက်ပါ</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b> ပိုမိုလုံခြုံစေရန်-</b> Tella ကို အမှန်တကယ်အသုံးပြုနိုင်သော ဂဏန်းတွက်စက် အက်ပ်နောက်ကွယ်တွင် ဝှက်ထားပါ။ Tella ကို လော့ခ်ဖွင့်ရန် ဂဏန်းတွက်စက်တွင် သင့်ပင်နံပါတ်ကို ရိုက်ထည့်ပါ။</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">ပင်လော့ခ်ချခြင်းကို သင်အသုံးပြုမှသာ ဂဏန်းပေါင်းစက်ကို ဖုံးကွယ်နိုင်မည်ဖြစ်သည်။ <font color="#D6933B"> <b> လော့ခ်ကို ဤနေရာတွင်ပြောင်းပါ </b> </font></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">သင်၏လော့ခ်ချနည်းကို သင်ပြောင်းပါက၊ ဖုံးကွယ်ခြင်းကို ပိတ်ပါမည်</string>
   <string name="action_continue">ရှေ့သို့ ဆက်မည်</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -407,7 +411,8 @@
   <string name="Vault_CreateFolder_SheetAction">ဖန်တီးမည်</string>
   <string name="ServerSettings_ServerName_ToolTip">နောင်တွင် ဆာဗာများ ထပ်ထည့်ပါက မှတ်မိစေရန် သင့်ဆာဗာကို အမည်ပေးပါ။ ၎င်းသည် အဖွဲ့အစည်းအမည်၊ ပရောဂျက်အမည် စသည်ဖြင့် ဖြစ်နိုင်သည်။</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="other">%s ဖိုင် ထည့်သွင်းပြီးပါပြီ</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">ထည့်သွင်းခြင်းနှင့် ကုဒ်ဝှက်ခြင်း</string>
   <string name="Rec_Exit_SheetTitle">အသံသွင်းထားသောဖိုင်ကို သိမ်းမလား။</string>
@@ -446,7 +451,8 @@
   <string name="Uwazi_Language_Screen_Description">ဤ Uwazi စုစည်းမှုကို ဘာသာစကားများစွာဖြင့် ရယူအသုံးပြုနိုင်ပါသည်။ သင်ဒေါင်းလုဒ်လုပ် ရယူလိုသည့် အသင့်သုံးပုံစံလွှာအတွက် ဘာသာစကား ရွေးချယ်ပေးပါ။</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Tella ၏ ပင်မစခရင်တွင် သင်အနှစ်သက်ဆုံး အသင့်သုံးပုံစံလွှာများဆီသို့ ရှော့ကတ်များကို ပြသထားသည်။</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">အနှစ်သက်ဆုံး အသင့်သုံးပုံစံလွှာများ</string>
-  <string name="Uwazi_Templates_Empty_Description">သင့်တွင် သိမ်းထားသော အသင့်သုံးပုံစံလွှာတစ်ခုမျှ မရှိပါ။ အသင့်သုံးပုံစံလွှာအသစ် ထည့်ရန် \"+\" ခလုတ်ကို နှိပ်ပါ။</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">သင်အနေဖြင့် Entity တစ်ခုမျှ တင်သွင်းထားခြင်းမရှိပါ။</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">လက်ရှိတွင် သင်၏ Outbox မှာ အလွတ်ဖြစ်နေပါသည်။ ဤနေရာတွင် ပေးပို့ရန် အသင့်ဖြစ်သော Entity များ ပေါ်လာပါမည်။</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">မူကြမ်းရေးထားသော Entity တစ်ခုမျှ မရှိပါ။</string>
@@ -489,7 +495,8 @@
   <string name="Uwazi_Server_Title">ဆာဗာ-</string>
   <string name="Uwazi_Template_Title">အသင့်သုံး နမူနာပုံစံလွှာ-</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="other">%1$d ဖိုင် တွဲထားပါသည်</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">ဖိုင်များကို ရွေးချယ်ပါ</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">PDF ဖိုင်များကို ရွေးချယ်ပါ</string>
@@ -517,19 +524,24 @@
   <string name="Collect_Subtitle_RemoveForm">\"%1$s\" ကို ဖယ်ရှားလိုသည်မှာ သေချာပါသလား။</string>
   <string name="Util_ellapsedTime_Year">လွန်ခဲ့သော တစ်နှစ်ကျော်က</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="other">လွန်ခဲ့သော %d လက</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="other">လွန်ခဲ့သော %d ပတ်က</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="other">လွန်ခဲ့သော %d ရက်က</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="other">လွန်ခဲ့သော %d နာရီက</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="other">လွန်ခဲ့သော %d မိနစ်က</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">လွန်ခဲ့သော စက္ကန့်အနည်းငယ်က</string>
   <string name="Donwload_Templates_Title_Description">အောက်ပါတို့သည် သင်ချိတ်ဆက်ထာသော Uwazi ဖြစ်ရပ်များ၌ ဖြည့်စွက်အသုံးပြုနိုင်သော အသင့်သုံးပုံစံလွှာများ ဖြစ်သည်။</string>
@@ -565,7 +577,7 @@
   <string name="Collect_DialogInfo_FormSubmissionStopped">သင်၏ ဖောင်တင်သွင်းမှု ရပ်သွားပါပြီ။ Outbox တွင် ဆက်လက်ပြုလုပ်နိုင်ပါသည်။</string>
   <string name="action_view">ကြည့်မည်</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella ကို ပိတ်နေသည် ...</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">ခေတ္တစောင့်ပေးပါ။ သင့်စက်၏ ပင်မစခရင်သို့ စက္ကန့်အနည်းငယ်အတွင်း ပြန်လည် ရောက်ရှိသွားပါမည်။</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">အခြားအက်ပ် အသွင်ယူခြင်းကို ဖယ်ရှားနေသည် ...</string>
   <string name="Collect_DeleteForm_SheetTitle">ဖောင်ပုံစံကို ဖျက်မလား။</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">မူကြမ်းကို ဖျက်မလား။</string>
@@ -620,14 +632,17 @@
   <string name="settings.docu_auto.delete_action.expl">ဤဆာဗာသို့ ဖိုင်များ အပ်လုဒ်တင်ပြီးသည်နှင့် Tellaက သင့်စက်ရှိ ဖိုင်များကို အလိုအလျောက် ဖျက်ပါမည်။</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">ဤဆာဗာသို့ ဖိုင်များ ထပ်၍ အပ်လုဒ်တင်နိုင်မည် မဟုတ်ပါ။</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="other">ဖိုင် %d ခု</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB အပ်လုဒ်တင်ထားသည်</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="other">%d ဖိုင် အပ်လုဒ်တင်ထားသည်</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="other">%d မိနစ် ကျန်သေးသည်</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">စိတ်ကြိုက်ပြင်ဆင်ခြင်း</string>
   <string name="Uwazi_Send_Header_Title">Entity ၏ အဆုံးသတ်</string>
@@ -647,8 +662,8 @@
   <string name="Setting_Reports_Share_Information_Title">အတည်ပြုခြင်းဆိုင်ရာ အချက်အလက်များ မျှဝေမည်</string>
   <string name="Setting_Reports_Share_Information_Description">သင့်ဖိုင်များကို အတည်ပြု၍ ရနိုင်စေရန် အစီရင်ခံချက်များ ပေးပို့ရာတွင် သင့်စက်နှင့် တည်နေရာ အချက်အလက်များ ထည့်သွင်းပေးပါ။</string>
   <string name="Setting_Reports_Background_Upload">နောက်ခံတွင် အပ်လုဒ်တင်မည်</string>
-  <string name="Setting_Reports_Background_Upload_Description">သင်အခြားအရာများ လုပ်ဆောင်နေစဉ် သို့မဟုတ် Tella မှ ထွက်နေစဉ် အစီရင်ခံချက်များကို ဆက်၍အပ်လုဒ်တင်မည်။ 
-သတိပေးချက်– ဖွင့်ထားလိုက်လျှင် အစီရင်ခံချက် အပြည့်အစုံ တင်ပြီးသည်အထိ Tella ကို ဖွင့်ထားပါမည်။</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">အဆင့်မြင့် ဆက်တင်များ သတ်မှတ်ပြီးပါပြီ</string>
   <string name="Setting_Reports_Settings_Completed_Description">အစီရင်ခံချက်ဆိုင်ရာ စိတ်ကြိုက်ရွေးချယ်မှုများကို Tella ဆက်တင်များတွင် အချိန်မရွေး ပြောင်းလဲနိုင်ပါသည်။</string>
   <string name="Drafts_Reports_Empty_Message">လက်ရှိတွင် သင်၏ မူကြမ်းများ မှာ အလွတ်ဖြစ်နေပါသည်။ ဤနေရာတွင် မတင်သွင်းရသေးသော အစီရင်ခံချက်များ ပေါ်လာပါမည်။</string>
@@ -772,7 +787,7 @@
   <string name="action_rotate">လှည့်မည်</string>
   <string name="Snackbar_file_was_deleted">ဖိုင်ကို ဖျက်လိုက်ပါပြီ။</string>
   <string name="Snackbar_files_were_deleted">ဖိုင်များကို ဖျက်လိုက်ပါပြီ။</string>
-  <string name="Snackbar_changes_were_saved">သင့်ပြောင်းလဲချက်များကို သိမ်းဆည်းပြီးပါပြီ။</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">မသိမ်းဆည်းရသေးသော ပြောင်းလဲချက်များ</string>
   <string name="Edit_Dialog_confirm_exit">သင်၏ ပြောင်းလဲချက်များကို မသိမ်းဆည်းရသေးပါ။ အကောင့်မှ မထွက်မီ သိမ်းဆည်းလိုပါသလား။</string>
   <string name="action_exit_without_saving">မသိမ်းဘဲ ထွက်မည်</string>
@@ -790,8 +805,8 @@
   <string name="Settings_General_BottomSheetRefreshWarningText">သင်သည် စက္ကန့်အနည်းငယ်အတွင်း ယခင်စခရင်သို့ ပြန်လည်ရောက်ရှိသွားပါမည်။</string>
   <string name="settings.feedback_enable_sharing">တုံ့ပြန်ချက် မျှဝေမှုကို ဖွင့်မည်</string>
   <string name="settings.feedback_warning">သတိပေးချက်- ဤအင်္ဂါရပ်ကို အသုံးပြုပါက သင် Tella သုံးကြောင်း ကွန်ရက်ကို စောင့်ကြည့်သူတစ်ဦးဦးက သိနိုင်ပါသည်။ ဤအန္တရာယ်ကို ကိုင်တွယ်နိုင်မှသာ အသုံးပြုပါ။</string>
-  <string name="feedback_msg">သင်သည် ချို့ယွင်းချက်တစ်ခု ကြုံတွေ့နေရပါက၊ အင်္ဂါရပ်အသစ်တစ်ခုကို တောင်းဆိုလိုပါက သို့မဟုတ် အခြားတုံ့ပြန်ချက်တစ်စုံတစ်ရာ ရှိပါက ကျွန်ုပ်တို့ကို အသိပေးပါ။
-ဤတုံ့ပြန်ချက်သည် အမည်မသိဖြစ်သောကြောင့် ကျွန်ုပ်တို့အား တုံ့ပြန်စေလိုပါက ဆက်သွယ်ရန် အချက်အလက်ကို ထည့်ထားကြောင်း သေချာပါစေ။</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
+ This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">တုံ့ပြန်ချက်အတွက် ကျေးဇူးတင်ပါသည်။</string>
   <string name="save_draft">မူကြမ်းကို သိမ်းဆည်းမလား။</string>
   <string name="description_submit_feedback">သင့်တုံ့ပြန်ချက်ကို တင်သွင်းရန် အချိန်မရွေး ပြန်လာနိုင်ပါသည်။</string>

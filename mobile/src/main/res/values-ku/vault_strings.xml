@@ -28,12 +28,12 @@
   <string name="Vault_FilePath">ڕێڕەوی فایل</string>
   <string name="Vault_RenameFile_SheetTitle">ناوگۆڕینی فایل</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">فایل بسڕدرێتەوە؟</item>
-    <item quantity="other">بەتاڵ؟</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">فایلی هەڵبژێردراو بۆ هەمیشە لە تێلا دەسڕدرێتەوە</item>
-    <item quantity="other">بەتاڵ</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">ناوی A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">ناوی Z &gt; A</string>
@@ -50,14 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">فۆرماتی ئەم فایلە لەناو تێلادا ناکرێتەوە. دەتەوێت فایلەکە هەناردە بکەیتە سەر ئامێرەکەت بۆ ئەوەی لە ڕێگەی ئەپێکی جیاوازەوە بیکەیتەوە؟ ئەمە لەوانەیە ناوەڕۆکی فایلەکە ئاشکرا بکات.</string>
   <string name="Vault_Export_SheetAction">هەناردن</string>
   <plurals name="Vault_Items">
-    <item quantity="one">ئایتەمەکان</item>
-    <item quantity="other">بەتاڵ</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">تۆ هێشتا هیچ فایلێکت لە تێلادا نییە.</string>
   <string name="Vault_FavoriteTemplates_Title">قاڵبە دڵخوازەکان</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">فایلەکە بەسەرکەوتوویی گواسترایەوە</item>
-    <item quantity="other">فایلەکە بە سەرکەوتوویی گواسترایەوە</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">هەندێک لە فایلە هەڵبژێردراوەکان لە ئێستادا لە پەیوەندییەکانتدا بەکار دەبرێن. سڕینەوە ڕەنگە کاریگەریی لەسەر ئەو فۆرم و ڕاپۆرتانە هەبێت کە هێشتا نەنێردراون.</string>
   <string name="Vault_Warning_Title">ئاگاداری</string>
