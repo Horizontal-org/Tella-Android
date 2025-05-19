@@ -15,9 +15,9 @@
   <string name="Vault_Move_SheetDesc">Kuendhessa ku mukwama umueni</string>
   <string name="Vault_Rename_SheetAction">Kunhoressa</string>
   <string name="Vault_Save_SheetAction">Kuvhiga</string>
-  <string name="Vault_Delete_SheetAction">Kulassa</string>
+  <string name="Vault_Delete_SheetAction">Kulassa/Bvisa</string>
   <string name="Vault_Share_SheetAction">Kutumira</string>
-  <string name="Vault_Upload_SheetAction">Kutwala</string>
+  <string name="Vault_Upload_SheetAction">Kuthwala</string>
   <string name="Vault_File_SheetAction">Mashoko ho chikwama</string>
   <string name="Vault_FileInfo">Mashoko ho chikwama</string>
   <string name="Vault_FileSize">Saizi</string>
@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Kuvhaka</string>
   <string name="Vault_FileResolution">Kuthonga</string>
   <string name="Vault_FileLength">Kurebha</string>
-  <string name="Vault_FilePath">Gwandja lo chikwama</string>
+  <string name="Vault_FilePath">Kandja lo chikwama</string>
   <string name="Vault_RenameFile_SheetTitle">Kunhoressa swe zina lo chikwama</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">Kulassa chikwama?</item>
@@ -54,13 +54,13 @@
     <item quantity="other">H swina chiro</item>
   </plurals>
   <string name="Vault_No_Files_Title">Aussati wa no chikwama pa Tella.</string>
-  <string name="Vault_FavoriteTemplates_Title">Mufananidjo unodissiswa</string>
+  <string name="Vault_FavoriteTemplates_Title">Mufananidjo nji nondissiswa</string>
   <plurals name="Vault_File_Successfully_Moved">
     <item quantity="one">Chikwama chavhiswa swakanaka</item>
     <item quantity="other">Swimueni swikwama swavissua swakanaka</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Mamwe emafaira awasarudza ari kushandiswa muzvisungo zvako parizvino. Kuabvhisa kunogona kukanganisa mafomu nemishumo isina kutumirwa kare.</string>
-  <string name="Vault_Warning_Title">Chizivisso</string>
+  <string name="Vault_Warning_Title">Chizivisso/Nyevero</string>
   <string name="Vault_Delete_anyway">Kulassa/bvisa swakabhondalo</string>
   <string name="Vault_Keep_Original">KUSSIA CHOKUTANGA</string>
   <string name="Vault_Delete_Original">KHULASSA CHOKUTANGA</string>

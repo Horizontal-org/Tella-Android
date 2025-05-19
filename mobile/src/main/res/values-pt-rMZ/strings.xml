@@ -404,7 +404,7 @@ se conectar a um servidor.</string>
   <string name="settings.sec_confirm_exit_tella">Sair do Tella</string>
   <string name="Home_BottomNav_Home">Página inicial</string>
   <string name="Home_BottomNav_Rec">Gravar</string>
-  <string name="Home_BottomNav_Camera">Câmera</string>
+  <string name="Home_BottomNav_Camera">Câmera.</string>
   <string name="Home_BottomNav_Forms">Formulários</string>
   <string name="Home_BottomNav_Reports">Relatórios</string>
   <string name="Vault_Move_AppBar">Mover “%s”</string>
@@ -430,7 +430,7 @@ se conectar a um servidor.</string>
   <string name="settings.gen_select_about">Sobre &amp; Ajuda</string>
   <string name="settings.gen_select_language">Língua</string>
   <string name="home_action.desc_quick.exit">Sair</string>
-  <string name="settings.camo_camera4">Câmera</string>
+  <string name="settings.camo_camera4">Câmera.</string>
   <string name="settings.camo_camera3">CameraPro</string>
   <string name="settings.camo_camera2">SuperCam</string>
   <string name="settings.camo_camera1">EasyCam</string>
@@ -832,7 +832,7 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
   <string name="no_background_activity">Actualmente, não existem actividades em curso em segundo plano.</string>
   <string name="encryption_in_progress">Encriptação de ficheiros em curso</string>
   <string name="encryption_exit_prompt">Há ficheiros que estão sendo encriptados em segundo plano. Quer sair e perder os ficheiros?</string>
-  <string name="exit_discard_files">Sair e descartar ficheiros</string>
+  <string name="exit_discard_files">Sair e descartar os ficheiros.</string>
   <string name="exit_and_discard_files">Sair e descartar os ficheiros.</string>
   <string name="files_being_encrypted_message">Há ficheiros que estão sendo encriptados em segundo plano. Quer sair e perder os ficheiros?</string>
   <string name="Home_BottomNav_Resources">Recursos</string>

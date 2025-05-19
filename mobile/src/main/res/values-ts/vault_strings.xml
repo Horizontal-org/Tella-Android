@@ -8,9 +8,9 @@
   <string name="Vault_Videos_Title">Mavhidiyo</string>
   <string name="Vault_Others_Title">Svin\'wana</string>
   <string name="Vault_Select_Title">Kheta maarkivho</string>
-  <string name="Vault_RecentFiles">Maarkivho ya svesvinyana</string>
+  <string name="Vault_RecentFiles">Maarkivho ya svosvinyana</string>
   <string name="Vault_PhotosAndVideos_Title">Mafoto ni Mavhidiyo</string>
-  <string name="Vault_FavoriteForms_Title">Maformulariyo lawa usvirhandzaka</string>
+  <string name="Vault_FavoriteForms_Title">Maformulariyo lawa umarhandzaka</string>
   <string name="Vault_Empty_Msg">A wu se va na arkivho ka Tella ya wena. Deketa botawu “+” kuva unghenisa arkivho ya wena yo sungula, kumbe uya eka Kamera kumbe Mikrofoni kuva utumbuluxa yin\'wana. U nga tlhela u tumbuluxa mapaxta kuva uhlayisa maarkivho ya wena hi kuhleleka.</string>
   <string name="Vault_Move_SheetDesc">Rurhisa uyisa ka paxta lin\'wana</string>
   <string name="Vault_Rename_SheetAction">Cinca vito</string>

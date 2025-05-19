@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">তৈরি হয়েছে</string>
   <string name="Vault_FileResolution">রেজোলিউশন</string>
   <string name="Vault_FileLength">দৈর্ঘ্য</string>
-  <string name="Vault_FilePath">ফাইলের পথ</string>
+  <string name="Vault_FilePath">ফাইলের অবস্থান</string>
   <string name="Vault_RenameFile_SheetTitle">ফাইলের নাম পরিবর্তন করুন</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">ফাইলটি মুছবেন?</item>

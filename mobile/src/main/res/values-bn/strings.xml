@@ -106,7 +106,7 @@
   <string name="collect.form_exit_dialog.action_save.exit">সংরক্ষণ করুন এবং প্রস্থান করুন</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">যাইহোক প্রস্থান করুন</string>
   <string name="settings.docu_error_not.valid.URL">এটি একটি সঠিক URL নয়৷</string>
-  <string name="home_action.label_quick.delete">মুছে দিন</string>
+  <string name="home_action.label_quick.delete">মুছুন</string>
   <string name="gallery_subheading_sort.by">অনুসারে সাজান</string>
   <string name="gallery_list.item_newest.to.oldest">নতুন থেকে পুরাতন</string>
   <string name="gallery_list.item_oldest.to.newest">পুরনো থেকে নতুন</string>
@@ -128,7 +128,7 @@
   <string name="collect.blank_expl_no.forms">দেখানোর মত কোন ফর্ম নেই। আপনি সংযুক্ত সার্ভারগুলিতে ফর্ম আছে কিনা তা পরীক্ষা করতে রিফ্রেশ বোতামটি চাপুন৷</string>
   <string name="settings.camo_heading">একটি ভিন্ন নাম এবং লোগো নির্বাচন করুন</string>
   <string name="gallery_expl_empty">দেখানোর জন্য কোন ফাইল নেই। ফাইল ইমপোর্ট করতে + বোতামে চাপুন।</string>
-  <string name="collect.blank_toast_not.connected">আপনি ইন্টারনেটের সাথে সংযুক্ত নন। সংযুক্ত থাকাকালীন আবার চেষ্টা করুন</string>
+  <string name="collect.blank_toast_not.connected">আপনি ইন্টারনেটের সাথে সংযুক্ত নন। সংযুক্ত হলে আবার চেষ্টা করুন</string>
   <string name="settings.gen_crash.reports_action">ক্র্যাশ রিপোর্ট শেয়ার করুন</string>
   <string name="settings.gen_crash.reports_action.expl">ক্র্যাশ রিপোর্ট আমাদের Tella উন্নত করতে সাহায্য করে। সেগুলি স্বয়ংক্রিয়ভাবে পাঠানো হয় এবং ডিভাইস মডেল এবং অ্যান্ড্রয়েড সংস্করণের মতো ডেটা অন্তর্ভুক্ত করে।</string>
   <string name="collect.form_dialog.action_add.group">যোগ করুন</string>
@@ -273,7 +273,7 @@
   <string name="settings.docu_error_must.select.auto.upload.server">আপনাকে অবশ্যই একটি সার্ভার নির্বাচন করতে হবে।</string>
   <string name="camera_tab.title_video">ভিডিও</string>
   <string name="camera_tab.title_photo">ছবি</string>
-  <string name="action_upload">আপলোড করুন</string>
+  <string name="action_upload">আপলোড</string>
   <string name="collect.blank_action.desc_more.options">আরও বিকল্প</string>
   <string name="action_next">পরবর্তী</string>
   <string name="meter">%f মি</string>
@@ -331,7 +331,7 @@
   <string name="settings.servers_add_camouflage.subtitle">আপনার অ্যাপটি বর্তমানে একটি ক্যালকুলেটর অ্যাপের মত 
  ছদ্মবেশী</string>
   <string name="settings.servers_change.camouflage.method">ক্যামোফ্লেজ পদ্ধতি পরিবর্তন করুন</string>
-  <string name="settings.servers_remove.camouflage.method">ক্যামোফ্লেজ সরান</string>
+  <string name="settings.servers_remove.camouflage.method">ছদ্মবেশ সরান</string>
   <string name="settings.servers_hide_tella_title">Tella লুকান</string>
   <string name="settings.servers_hide_tella_desc">Tella লুকানোর জন্য আপনার পছন্দের পদ্ধতি নির্বাচন করুন</string>
   <string name="settings.servers_setup_camouflage_title">ছদ্মবেশ সেট আপ করুন</string>
@@ -492,7 +492,7 @@
   <string name="Uwazi_WidgetMedia_Take_Photo">ক্যামেরা দিয়ে ছবি তুলুন</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">Tella ফাইল থেকে নির্বাচন করুন</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">আপনার ডিভাইস থেকে নির্বাচন করুন</string>
-  <string name="Uwazi_Widget_Sheet_Description">আপনি কীভাবে ফাইলগুলি যুক্ত করতে চান তা নির্বাচন করুন</string>
+  <string name="Uwazi_Widget_Sheet_Description">আপনি কিভাবে ফাইল যোগ করতে চান তা ঠিক করুন</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">এই ক্ষেত্রটি বাধ্যতামূলক।</string>
   <string name="Uwazi_Server_Title">সার্ভার:</string>
   <string name="Uwazi_Template_Title">টেমপ্লেট:</string>
@@ -687,7 +687,7 @@
   <string name="Delete_Report_Confirmation">আপনি কি এই রিপোর্টটি মুছে ফেলার বিষয়ে নিশ্চিত?</string>
   <string name="Delete_Submitted_Report_Confirmation">আপনি কি আপনার রেকর্ড থেকে এই পাঠানো রিপোর্ট মুছে ফেলার বিষয়ে নিশ্চিত?</string>
   <string name="View_Report">দেখুন</string>
-  <string name="Delete_Report">মুছে দিন</string>
+  <string name="Delete_Report">মুছুন</string>
   <string name="Paused_Report">বিরতি দেওয়া হয়েছে</string>
   <string name="Report_Waiting_For_Connection">সংযোগের জন্য অপেক্ষা করছে</string>
   <string name="Project_Url_Screen_Title">প্রজেক্টের URL লিখুন</string>
@@ -765,7 +765,7 @@
   <string name="action_hide_pin">পিন লুকান</string>
   <string name="action_go_back">ফিরে যান</string>
   <string name="Settings_show_unlock_attempts_remaining">বাকি আনলক প্রচেষ্টা দেখান</string>
-  <string name="Settings_unlock_screen_instructions">আনলক স্ক্রিনে, Tella-এর ভিতরের সবকিছু মুছে ফেলার আগে ব্যর্থ আনলক করার প্রচেষ্টার অবশিষ্ট সংখ্যা দেখান</string>
+  <string name="Settings_unlock_screen_instructions">Tella-এর ভিতরের সবকিছু মুছে ফেলার আগে আনলক স্ক্রিনে কতবার আনলক করার প্রচেষ্টার অবশিষ্ট রয়েছে তা দেখান</string>
   <string name="Settings_Delete_After_Failed_Unlock">আনলক ব্যর্থ হওয়ার পরে মুছুন</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Tella এর ভিতরের সবকিছু মুছে ফেলার আগে কতগুলি ব্যর্থ আনলক প্রচেষ্টা অনুমোদিত তা নির্ধারণ করুন।</string>
   <string name="Settings_Off_Do_Not_Delete">বন্ধ (ডেটা মুছবে না)</string>

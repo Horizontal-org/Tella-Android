@@ -14,7 +14,7 @@
   <string name="Vault_Empty_Msg">Ainda não tem ficheiros na sua Tella. Clique no botão “+” abaixo para importar o seu primeiro ficheiro, ou aceda à Câmara, ou ao Microfone para criar um. Também pode criar pastas para manter os seus ficheiros organizados.</string>
   <string name="Vault_Move_SheetDesc">Mover para outra pasta</string>
   <string name="Vault_Rename_SheetAction">Mudar o nome</string>
-  <string name="Vault_Save_SheetAction">Gravar</string>
+  <string name="Vault_Save_SheetAction">Guardar</string>
   <string name="Vault_Delete_SheetAction">Apagar</string>
   <string name="Vault_Share_SheetAction">Partilhar</string>
   <string name="Vault_Upload_SheetAction">Carregar</string>
