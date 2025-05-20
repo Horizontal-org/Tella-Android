@@ -630,7 +630,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
             seekBarContainer.visibility = View.VISIBLE
-            vaultRecyclerView.setMargins(null, null, null, 110)
+            vaultRecyclerView.setMargins(null, null, null, 60)
         } else {
             seekBarContainer.visibility = View.GONE
             vaultRecyclerView.setMargins(null, null, null, 55)
