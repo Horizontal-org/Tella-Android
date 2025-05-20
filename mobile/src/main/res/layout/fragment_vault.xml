@@ -45,7 +45,7 @@
         android:layout_gravity="bottom"
         android:id="@+id/panicSeekContainer"
         android:background="@color/space_cadet"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/action_quick_delete">
         <SeekBar
