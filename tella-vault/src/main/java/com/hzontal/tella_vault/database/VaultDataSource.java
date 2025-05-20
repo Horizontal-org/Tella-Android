@@ -414,39 +414,62 @@ public class VaultDataSource implements IVaultDatabase {
 
         switch (filter) {
             case AUDIO:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "audio/%" + "'";
+                return cn(D.C_MIME_TYPE) + " LIKE 'audio/%'";
+
             case PDF:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "application/pdf" + "'";
+                return cn(D.C_MIME_TYPE) + " = 'application/pdf'";
+
             case VIDEO:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
+                return cn(D.C_MIME_TYPE) + " LIKE 'video/%'";
+
             case PHOTO:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "'";
+                return cn(D.C_MIME_TYPE) + " LIKE 'image/%'";
+
             case OTHERS:
-                return cn(D.C_MIME_TYPE) + " NOT LIKE '" + "audio/%" + "'"
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "video/%" + "'"
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "image/%" + "'"
-                        + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "text/%" + "'"
-                        ;
+                return cn(D.C_MIME_TYPE) + " NOT LIKE 'audio/%' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'video/%' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'image/%' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'text/%' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/pdf' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/msword' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-excel' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.text' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.oasis.opendocument.spreadsheet' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/rtf' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.ms-powerpoint' AND "
+                        + cn(D.C_MIME_TYPE) + " != 'application/vnd.openxmlformats-officedocument.presentationml.presentation'";
+
             case AUDIO_VIDEO:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "audio/%" + "' OR " + cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
+                return cn(D.C_MIME_TYPE) + " LIKE 'audio/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%'";
+
             case DOCUMENTS:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "text/%" + "' OR " + cn(D.C_MIME_TYPE) + " IN " +
-                        "(" + "'application/pdf'" + ","
-                        + "'application/msword'" + ","
-                        + "'application/vnd.ms-excel'" + ""
-                        + "'application/mspowerpoint'" + ""
-                        + "'audio/flac'" + ""
-                        + "'application/zip'" + ""
-                        + ")";
+                return cn(D.C_MIME_TYPE) + " LIKE 'text/%' OR " + cn(D.C_MIME_TYPE) + " IN (" +
+                        "'application/pdf'," +
+                        "'application/msword'," +
+                        "'application/vnd.openxmlformats-officedocument.wordprocessingml.document'," +
+                        "'application/vnd.ms-excel'," +
+                        "'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'," +
+                        "'application/vnd.oasis.opendocument.text'," +
+                        "'application/vnd.oasis.opendocument.spreadsheet'," +
+                        "'application/rtf'," +
+                        "'application/vnd.ms-powerpoint'," +
+                        "'application/vnd.openxmlformats-officedocument.presentationml.presentation'" +
+                        ")";
+
             case ALL_WITHOUT_DIRECTORY:
-                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "' AND " + cn(D.C_MIME_TYPE) + " NOT LIKE '" + "resource/%" + "'";
+                return cn(D.C_TYPE) + " != '" + VaultFile.Type.DIRECTORY.getValue() + "' AND "
+                        + cn(D.C_MIME_TYPE) + " NOT LIKE 'resource/%'";
+
             case PHOTO_VIDEO:
-                return cn(D.C_MIME_TYPE) + " LIKE '" + "image/%" + "' OR " + cn(D.C_MIME_TYPE) + " LIKE '" + "video/%" + "'";
+                return cn(D.C_MIME_TYPE) + " LIKE 'image/%' OR " + cn(D.C_MIME_TYPE) + " LIKE 'video/%'";
+
             default:
                 return cn(D.C_PARENT_ID) + " = '" + parentId + "'";
-
         }
     }
+
 
     /**
      * Deletes all records from a table except the root directory.
