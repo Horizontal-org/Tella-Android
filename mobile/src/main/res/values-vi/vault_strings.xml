@@ -28,10 +28,12 @@
   <string name="Vault_FilePath">Đường dẫn tệp</string>
   <string name="Vault_RenameFile_SheetTitle">Đổi tên tệp tin</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="other">Trống</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="other">Trống</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Tên A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Tên Z &gt; A</string>
@@ -48,12 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">không thể mở tệp tin ở định dạng này bên trong Tella. Bạn có muốn xuất tệp sang thiết bị của mình để mở tệp đó thông qua một ứng dụng khác không? Điều này có thể làm lộ nội dung của tệp tin. </string>
   <string name="Vault_Export_SheetAction">Xuất</string>
   <plurals name="Vault_Items">
-    <item quantity="other">Trống</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">Bạn chưa có bất kỳ tệp tin nào trong Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Biểu mẫu ưa thích</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="other">Tệp đã được di chuyển thành công.</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Một số tệp đã chọn hiện đang được sử dụng trong các kết nối của bạn. Việc xóa có thể ảnh hưởng đến các biểu mẫu và báo cáo chưa được gửi.</string>
   <string name="Vault_Warning_Title">Cảnh báo</string>

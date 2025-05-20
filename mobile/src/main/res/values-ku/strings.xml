@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">فۆڕمی دەرچوون؟</string>
   <string name="verification_prompt_dialog_title">GPS چالاک بکە؟</string>
   <string name="collect_tab.title_blank">بەتاڵ</string>
-  <string name="action_cancel">ڕەتکردنەوە</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">پەیوەندیمان پێوە بکە</string>
   <string name="collect_dialog.text_download.progress">داگرتنی فۆرمەکە</string>
   <string name="collect_toast_download.completed">داگرتن تەواو بوو</string>
-  <string name="action_delete">سڕینەوە</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">ڕەشنووس</string>
   <string name="collect.blank_action_download.form">داگرتن</string>
   <string name="settings_text_empty.field">ئەم فیڵدە نابێ بەتاڵ بێت.</string>
@@ -84,8 +84,8 @@
   <string name="permission_dialog.expl_device.storage">بۆ هەناردەکردنی فایلەکان، تێلا پێویستی بە مۆڵەتە بۆ نووسین لەسەر شوێنی خەزنکردنی ئامێرەکە.</string>
   <string name="gallery_toast_fail.deleting.files">لە سڕینەوەی فایلەکاندا هەڵەیەک ڕوویدا. تکایە دووبارە هەوڵ بدەوە.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="one">%1$d پاشەکەوت کراوە لە ناو ئامیرەکەدا</item>
-    <item quantity="other">%1$d پاشەکەوت کراون لە ناو ئامیرەکەدا</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">فایلەکە بسڕێتەوە؟</string>
   <string name="gallery_delete.files_dialog.expl">فایلە هەڵبژێردراوەکە بۆ هەمیشە لە گەلەرییەکەت دەسڕێتەوە.</string>
@@ -187,8 +187,8 @@
   <string name="collect.form_signature_toast_fail.saving">لە پاشەکەوتکردنی ئیمزاکەدا هەڵەیەک ڕوویدا. تکایە دووبارە هەوڵ بدەوە</string>
   <string name="collect.form_acknowledge_select.expl">باشە. تکایە بەردەوام بە.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d فایل</item>
-    <item quantity="other">%d فایل</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">زیاتر فێربە</string>
   <string name="settings.servers_add.server_dialog.title">زیادکردنی سێرڤەر</string>
@@ -327,7 +327,8 @@
   <string name="settings.sec_delete.app_tooltip">ئەپەکە و هەموو ئەو داتایانەی تێیدایە بسڕەوە. پرسیارت ئەوەت لێدەکرێت \" دەتەوێت ئەم ئەپە هەڵبوەشێنیتەوە؟\" تا قبووڵی نەکەیت، تێلا ناسڕدرێتەوە.</string>
   <string name="settings.sec_bypass_switch_title">سانسۆری Bypass</string>
   <string name="settings.sec_bypass_switch_expl">بەسەر هەوڵەکانی بلۆککردنی تێلا لە ناوچەکەتدا زاڵبە. ئاگاداربە کە چالاککردنی ئەمە ناردنی داتا بۆ سێرڤەرەکان خاوتر دەکاتەوە.</string>
-  <string name="settings.servers_add_camouflage.subtitle">لە ئێستادا ئەپەکەت بە ئەپی ژمێرەر حەشاردراوە</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">گۆڕینی شێوازی CAMOUFLAGE</string>
   <string name="settings.servers_remove.camouflage.method">لابردنی CAMOUFLAGE</string>
   <string name="settings.servers_hide_tella_title">شاردنەوەی تێلا</string>
@@ -343,7 +344,8 @@
   <string name="settings.servers_setup_hide_behind_calculator_title">خۆشاردنەوە لە پشت ئەپێکی ژمێرەر</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>پارێزراوتر:</b>
 تێلا لە پشت ئەپێکی کارای ژمیرەر حەشار بدە. PINـەکەت بخەرە سەر ژمێرەرەکە بۆ کردنەوەی قفڵی تێلا.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[خۆحەشاردانی ژمێرەر تەنیا کاتێک دەشێت کە قفڵی PIN بەکار بهێنیت.<font color=\"#D6933B\"><b>قفل لێرەدا بگۆڕە</font></b>]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">ئەگەر شێوازی قفلەکەت بگۆرێت، Camouflage ناچالاک دەبێت</string>
   <string name="action_continue">بەردەوامبوون</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -410,8 +412,8 @@
   <string name="Vault_CreateFolder_SheetAction">دروستکردن</string>
   <string name="ServerSettings_ServerName_ToolTip">ناوێک بدە بە سێرڤەرەکەت کە ئەگەر دواتر سێرڤەری دیکەت زیاد کرد، بیناسیتەوە. ئەو ناوە دەتوانێت ناوی ڕێکخراوەکە، ناوی پرۆژەکە، و هتد بێت.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">%s فایل هاوردە کراوە</item>
-    <item quantity="other">%s فایل هاوردە کراوە</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">هاوردەکردن و کۆدکردن</string>
   <string name="Rec_Exit_SheetTitle">تۆمارکردن پاشەکەوت بکرێت؟</string>
@@ -450,7 +452,8 @@
   <string name="Uwazi_Language_Screen_Description">ئەم کۆمەڵە ئووازییە بە چەند زمانێک بەردەستە. تکایە ئەو زمانە هەڵبژێرە کە دەتەوێت قاڵبەکانی پێ دابگریت.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">قەدبڕەکانی قاڵبە دڵخوازەکانت لەسەر شاشەی سەرەکی تێلانیشان بدە.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">قاڵبە دڵخوازەکان</string>
-  <string name="Uwazi_Templates_Empty_Description">هیچ قاڵبێکی پاشەکەوتکراوت نییە. بۆ زیادکردنی قاڵبێکی نوێ پەنجە بە دوگمەی \"+\"دا بنێ.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">هیچ پێکهاتەیەکی پێشکەشکراوت نییە.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">Outboxـەکەت لە ئێستادا بەتاڵە. ئەو پێکهاتانەی کە ئامادەی ناردنن لێرەدا دەردەکەون.</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">تۆ هیچ پێکهاتەیەکی ڕەشنووست نییە.</string>
@@ -493,8 +496,8 @@
   <string name="Uwazi_Server_Title">سێرڤەر :</string>
   <string name="Uwazi_Template_Title">قاڵب :</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="one">%1$d فایل هاوپێچ کراوە</item>
-    <item quantity="other">%1$d هاوپێچ کراون</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">فایلەکان هەڵبژێرە</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">فایلە PDFـەکان هەڵبژێرە</string>
@@ -522,24 +525,24 @@
   <string name="Collect_Subtitle_RemoveForm">ئایا دڵنیایت لەوەی کە دەتەوێت \"%1$s\" لاببەیت؟</string>
   <string name="Util_ellapsedTime_Year">زیاتر لە ساڵێک لەمەوبەر</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">یەک ساڵ لەمەوبەر</item>
-    <item quantity="other">%d ساڵ لەمەوبەر</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">یەک حەفتە لەمەوبەر</item>
-    <item quantity="other">%d حەفتە لەمەوبەر</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">یەک ڕۆژ لەمەوبەر</item>
-    <item quantity="other">ڕۆژ لەمەوبەر</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one">یەک کاتژمێر لەمەوبەر</item>
-    <item quantity="other">%d کاتژمێر لەمەوبەر</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one">یەک خولەک لەمەوبەر</item>
-    <item quantity="other">%d خوەک لەمەوبەر</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">چەند چرکەیەک لەمەوبەر</string>
   <string name="Donwload_Templates_Title_Description">ئەمانە قاڵبە بەردەستەکانی سەر نموونەکانی ئووازین کە پەیوەندیت پێیانەوە هەیە.</string>
@@ -575,7 +578,7 @@
   <string name="Collect_DialogInfo_FormSubmissionStopped">پێشکەشکردنی فۆرمەکەت وەستاوە. دەتوانیت لە Outboxـەکەوە دەستی پێ بکەیتەوە.</string>
   <string name="action_view">دیمەن</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">تێلا خەریکە دەکوژێتەوە …</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">تکایە چاوەڕوان بە. تا چەند چرکەی تر دەگەڕێیتەوە سەر شاشەی سەرەکیی ئامێرەکەت.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">لابردنی camouflage …</string>
   <string name="Collect_DeleteForm_SheetTitle">سڕینەوەی فۆڕم؟</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">سڕینەوەی ڕەشنووس؟</string>
@@ -630,17 +633,17 @@
   <string name="settings.docu_auto.delete_action.expl">تێلا بە شێوەیەکی ئۆتۆماتیکی هەر خێرا دوای بەرزکردنەوەی فایلەکان بۆ سەر سێرڤەرەکە، فایلەکان لە ئامێرەکەت دەسڕێتەوە.</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">چیتر ناتوانیت فایلەکان بۆ سەر ئەم سێرڤەرە بەرز بکەیتەوە.</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">یەک فایل</item>
-    <item quantity="other">%d فایل</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB بارکراوە</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d فایل بارکراوە</item>
-    <item quantity="other">%dفایلەکان بارکراون</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d خولەک ماوە</item>
-    <item quantity="other">%d خولەک ماوە</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">تایبەتمەندکردن</string>
   <string name="Uwazi_Send_Header_Title">کۆتاییهاتنی پێکهاتە</string>
@@ -660,8 +663,8 @@
   <string name="Setting_Reports_Share_Information_Title">زانیاری سەلماندن هاوبەش بکە</string>
   <string name="Setting_Reports_Share_Information_Description">لە کاتی ناردنی ڕاپۆرتەکان زانیاری دەربارەی ئامێرەکەت و شوێنەکەت دابنێ بۆ ئەوەی فایلەکانت سەلمێندراو بن.</string>
   <string name="Setting_Reports_Background_Upload">بارکردنی باکگراوند</string>
-  <string name="Setting_Reports_Background_Upload_Description">بەردەوام بە لە بارکردنی ڕاپۆرتەکان لە کاتی ئەنجامدانی کارەکانی تر یان ئەگەر لە تێلا چوویتە دەرەوە.
-ئاگاداری: ئەگەر چالاک بکرێت، تێلا بە کراوەیی دەمێنێتەوە هەتا هەموو ڕاپۆرتەکان بەتەواوی بار دەکرێن.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">ڕێکخستنە پێشکەوتووەکان تەواو بوون</string>
   <string name="Setting_Reports_Settings_Completed_Description">هەمیشە دەتوانیت هەڵبژاردەکانی ڕاپۆرتەکانت لە ڕێکخستنەکانی تێلادا بگۆڕیت.</string>
   <string name="Drafts_Reports_Empty_Message">لە ئێستادا ڕەشنووسەکانت بەتاڵن. ئەو ڕاپۆرتانەی کە تۆ پێشکەشت نەکردووە لێرەدا دەردەکەون.</string>
@@ -901,8 +904,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>

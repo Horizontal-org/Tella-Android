@@ -28,20 +28,12 @@
   <string name="Vault_FilePath">مسار الملف</string>
   <string name="Vault_RenameFile_SheetTitle">إعادة تسمية الملف</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="zero">هل ترغب في حذف الملف؟</item>
-    <item quantity="one">هل ترغب في حذف الملف؟</item>
-    <item quantity="two">هل ترغب في حذف الملفين؟</item>
-    <item quantity="few">هل ترغب في حذف الملفات؟</item>
-    <item quantity="many">هل ترغب في حذف الملفات؟</item>
-    <item quantity="other">هل ترغب في حذف الملفات؟</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="zero">سوف يُحذف الملف المحدد من Tella نهائيًّا.</item>
-    <item quantity="one">سوف يُحذف الملف المحدد من Tella نهائيًّا.</item>
-    <item quantity="two">سوف يُحذَف الملفان المحددان من Tella نهائيًّا.</item>
-    <item quantity="few">سوف تُحذف الملفات المحددة من Tella نهائيًّا.</item>
-    <item quantity="many">سوف تُحذف الملفات المحددة من Tella نهائيًّا.</item>
-    <item quantity="other">سوف تُحذف الملفات المحددة من Tella نهائيًّا.</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">الاسم مرتبة أبجديًّا من الياء إلى الألف</string>
   <string name="Vault_SortNameDesc_SheetAction">الاسم مرتبة أبجديًّا من الألف إلى الياء</string>
@@ -58,22 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
   <string name="Vault_Export_SheetAction">تصدير</string>
   <plurals name="Vault_Items">
-    <item quantity="zero">عنصر</item>
-    <item quantity="one">عنصر</item>
-    <item quantity="two">عنصران</item>
-    <item quantity="few">من العناصر</item>
-    <item quantity="many">من العناصر</item>
-    <item quantity="other">من العناصر</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">ليس لديك أي ملفات بعد في Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">القوالب المفضلة</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="zero">تم نقل صفر ملف بنجاح</item>
-    <item quantity="one">تم نقل ملف بنجاح</item>
-    <item quantity="two">تم نقل ملفين بنجاح</item>
-    <item quantity="few">تم نقل 3 ملفات بنجاح</item>
-    <item quantity="many">تم نقل 20 ملف بنجاح</item>
-    <item quantity="other">تم نقل الملفات بنجاح</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">بعض الملفات المختارة مستخدمة حالياً في اتصالاتك. قد يؤثر حذفها على النماذج والتقارير التي لم يتم إرسالها بعد.</string>
   <string name="Vault_Warning_Title">تحذير</string>

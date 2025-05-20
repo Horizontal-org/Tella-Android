@@ -18,17 +18,17 @@
   <string name="LockPatternSet_Message_PatternStarted">تم بدء استخدام النمط</string>
   <string name="LockPatternSet_Message_PatternCleared">تم محو النمط</string>
   <string name="LockPatternSet_Message_CellAdded">لقد أضيفت الخلية</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">تم إضافة <xliff:g id="cell_index" example="3">%1$d</xliff:g> خلايا</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">تم إكمال النمط</string>
   <string name="UnLockPattern_PatternArea">منطقة رسم النمط.</string>
-  <string name="UnLockPattern_Message_DrawPattern">ارسم النمط 
- لفتح قفل Tella</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">يُرجى المحاولة مرة أخرى. النمطان غير متطابقين.</string>
   <string name="LockPinSet_Message_EnterPin">أدخل رقم التعريف الشخصي</string>
-  <string name="UnlockPin_Message_EnterPin">أدخل رقم التعريف الشخصي لفتح قفل
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
 Tella</string>
-  <string name="LockPinSet_Message_Hint">استخدم 6 أحرف على الأقل 
-تجنب استخدام كلمات المرور التي يسهل تخمينها، مثل تاريخ ميلادك.</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">يُرجى تأكيد رقم التعريف الشخصي</string>
   <string name="LockPinConfirm_Message_Confirm">يُرجى إدخال رقم التعريف الشخصي مرةً أخرى،
 فقط للتأكد.</string>
@@ -47,8 +47,8 @@ Tella</string>
   <string name="LockSuccess_Action_GoToTella">الذهاب إلى Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">كلمة سر غير صحيحة،
 يُرجى المحاولة مرة أخرى</string>
-  <string name="UnlockPassword_Message_EnterPassword">أدخل كلمة السر
-لفتح قفل Tella</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">تأكيد كلمة السر</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">يُرجى إدخال كلمة السر مرة أخرى،
 فقط للتأكد.</string>

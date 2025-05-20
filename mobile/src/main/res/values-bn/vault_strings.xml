@@ -25,15 +25,15 @@
   <string name="Vault_FileCreated">তৈরি হয়েছে</string>
   <string name="Vault_FileResolution">রেজোলিউশন</string>
   <string name="Vault_FileLength">দৈর্ঘ্য</string>
-  <string name="Vault_FilePath">ফাইলের পথ</string>
+  <string name="Vault_FilePath">ফাইলের অবস্থান</string>
   <string name="Vault_RenameFile_SheetTitle">ফাইলের নাম পরিবর্তন করুন</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">ফাইলটি মুছবেন?</item>
-    <item quantity="other">ফাইলগুলি মুছবেন?</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">নির্বাচিত ফাইল Tella থেকে স্থায়ীভাবে মুছে ফেলা হবে।</item>
-    <item quantity="other">নির্বাচিত ফাইলগুলি Tella থেকে স্থায়ীভাবে মুছে ফেলা হবে।</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">নাম A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">নাম Z &gt; A</string>
@@ -50,14 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">এই ফাইল ফর্ম্যাটটি Tella দিয়ে খোলা যাবে না। আপনি কি ফাইলটি একটি ভিন্ন অ্যাপের মাধ্যমে খুলতে আপনার ডিভাইসে এক্সপোর্ট করতে চান? এটি ফাইলের বিষয়বস্তু প্রকাশ করতে পারে।</string>
   <string name="Vault_Export_SheetAction">এক্সপোর্ট</string>
   <plurals name="Vault_Items">
-    <item quantity="one">আইটেম</item>
-    <item quantity="other">আইটেম</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">Tella তে আপনার কাছে এখনও কোনও ফাইল নেই।</string>
   <string name="Vault_FavoriteTemplates_Title">প্রিয় টেমপ্লেট</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">ফাইল সফলভাবে সরানো হয়েছে</item>
-    <item quantity="other">ফাইলগুলি সফলভাবে সরানো হয়েছে</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">নির্বাচিত কিছু ফাইল বর্তমানে আপনার সংযোগে ব্যবহৃত হচ্ছে। মোছা হলে তা এখনও পাঠানো হয়নি এমন ফর্ম ও রিপোর্টগুলিকে প্রভাবিত করতে পারে।</string>
   <string name="Vault_Warning_Title">সতর্কতা</string>

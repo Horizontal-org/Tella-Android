@@ -85,8 +85,8 @@
   <string name="permission_dialog.expl_device.storage">ফাইলগুলি এক্সপোর্ট করার জন্য, Tella -এর ডিভাইস স্টোরেজে লেখার অনুমতি প্রয়োজন।</string>
   <string name="gallery_toast_fail.deleting.files">ফাইলগুলি মুছে ফেলার সময় একটি সমস্যা হয়েছে৷ আবার চেষ্টা করুন।</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="one">%1$d টি ফাইল ডিভাইসে সংরক্ষণ করা হয়েছে</item>
-    <item quantity="other">%1$d টি ফাইল ডিভাইসে সংরক্ষণ করা হয়েছে</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">ফাইল মুছবেন?</string>
   <string name="gallery_delete.files_dialog.expl">নির্বাচিত ফাইলটি আপনার গ্যালারি থেকে স্থায়ীভাবে মুছে ফেলা হবে।</string>
@@ -106,7 +106,7 @@
   <string name="collect.form_exit_dialog.action_save.exit">সংরক্ষণ করুন এবং প্রস্থান করুন</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">যাইহোক প্রস্থান করুন</string>
   <string name="settings.docu_error_not.valid.URL">এটি একটি সঠিক URL নয়৷</string>
-  <string name="home_action.label_quick.delete">মুছে দিন</string>
+  <string name="home_action.label_quick.delete">মুছুন</string>
   <string name="gallery_subheading_sort.by">অনুসারে সাজান</string>
   <string name="gallery_list.item_newest.to.oldest">নতুন থেকে পুরাতন</string>
   <string name="gallery_list.item_oldest.to.newest">পুরনো থেকে নতুন</string>
@@ -128,7 +128,7 @@
   <string name="collect.blank_expl_no.forms">দেখানোর মত কোন ফর্ম নেই। আপনি সংযুক্ত সার্ভারগুলিতে ফর্ম আছে কিনা তা পরীক্ষা করতে রিফ্রেশ বোতামটি চাপুন৷</string>
   <string name="settings.camo_heading">একটি ভিন্ন নাম এবং লোগো নির্বাচন করুন</string>
   <string name="gallery_expl_empty">দেখানোর জন্য কোন ফাইল নেই। ফাইল ইমপোর্ট করতে + বোতামে চাপুন।</string>
-  <string name="collect.blank_toast_not.connected">আপনি ইন্টারনেটের সাথে সংযুক্ত নন। সংযুক্ত থাকাকালীন আবার চেষ্টা করুন</string>
+  <string name="collect.blank_toast_not.connected">আপনি ইন্টারনেটের সাথে সংযুক্ত নন। সংযুক্ত হলে আবার চেষ্টা করুন</string>
   <string name="settings.gen_crash.reports_action">ক্র্যাশ রিপোর্ট শেয়ার করুন</string>
   <string name="settings.gen_crash.reports_action.expl">ক্র্যাশ রিপোর্ট আমাদের Tella উন্নত করতে সাহায্য করে। সেগুলি স্বয়ংক্রিয়ভাবে পাঠানো হয় এবং ডিভাইস মডেল এবং অ্যান্ড্রয়েড সংস্করণের মতো ডেটা অন্তর্ভুক্ত করে।</string>
   <string name="collect.form_dialog.action_add.group">যোগ করুন</string>
@@ -188,8 +188,8 @@
   <string name="collect.form_signature_toast_fail.saving">স্বাক্ষর সংরক্ষণ করার সময় একটি সমস্যা হয়েছে৷ আবার চেষ্টা করুন</string>
   <string name="collect.form_acknowledge_select.expl">ঠিক আছে। অনুগ্রহ করে চালিয়ে যান।</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d ফাইল</item>
-    <item quantity="other">%d ফাইলগুলি</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">আরও জানুন</string>
   <string name="settings.servers_add.server_dialog.title">সার্ভার যোগ করুন</string>
@@ -273,7 +273,7 @@
   <string name="settings.docu_error_must.select.auto.upload.server">আপনাকে অবশ্যই একটি সার্ভার নির্বাচন করতে হবে।</string>
   <string name="camera_tab.title_video">ভিডিও</string>
   <string name="camera_tab.title_photo">ছবি</string>
-  <string name="action_upload">আপলোড করুন</string>
+  <string name="action_upload">আপলোড</string>
   <string name="collect.blank_action.desc_more.options">আরও বিকল্প</string>
   <string name="action_next">পরবর্তী</string>
   <string name="meter">%f মি</string>
@@ -331,7 +331,7 @@
   <string name="settings.servers_add_camouflage.subtitle">আপনার অ্যাপটি বর্তমানে একটি ক্যালকুলেটর অ্যাপের মত 
  ছদ্মবেশী</string>
   <string name="settings.servers_change.camouflage.method">ক্যামোফ্লেজ পদ্ধতি পরিবর্তন করুন</string>
-  <string name="settings.servers_remove.camouflage.method">ক্যামোফ্লেজ সরান</string>
+  <string name="settings.servers_remove.camouflage.method">ছদ্মবেশ সরান</string>
   <string name="settings.servers_hide_tella_title">Tella লুকান</string>
   <string name="settings.servers_hide_tella_desc">Tella লুকানোর জন্য আপনার পছন্দের পদ্ধতি নির্বাচন করুন</string>
   <string name="settings.servers_setup_camouflage_title">ছদ্মবেশ সেট আপ করুন</string>
@@ -412,8 +412,8 @@
   <string name="Vault_CreateFolder_SheetAction">তৈরি করুন</string>
   <string name="ServerSettings_ServerName_ToolTip">আপনি যদি পরে আরও সার্ভার যোগ করেন তাহলে আপনার সার্ভারকে এটি সনাক্ত করার জন্য একটি নাম দিন। এটি প্রতিষ্ঠানের নাম, প্রজেক্টের নাম ইত্যাদি হতে পারে।</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">%s ফাইল ইমপোর্ট করা হয়েছে</item>
-    <item quantity="other">%s ফাইল ইমপোর্ট করা হয়েছে</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">ইমপোর্ট এবং এনক্রিপ্ট করা হচ্ছে</string>
   <string name="Rec_Exit_SheetTitle">রেকর্ডিং সংরক্ষণ করবেন?</string>
@@ -492,13 +492,13 @@
   <string name="Uwazi_WidgetMedia_Take_Photo">ক্যামেরা দিয়ে ছবি তুলুন</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">Tella ফাইল থেকে নির্বাচন করুন</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">আপনার ডিভাইস থেকে নির্বাচন করুন</string>
-  <string name="Uwazi_Widget_Sheet_Description">আপনি কীভাবে ফাইলগুলি যুক্ত করতে চান তা নির্বাচন করুন</string>
+  <string name="Uwazi_Widget_Sheet_Description">আপনি কিভাবে ফাইল যোগ করতে চান তা ঠিক করুন</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">এই ক্ষেত্রটি বাধ্যতামূলক।</string>
   <string name="Uwazi_Server_Title">সার্ভার:</string>
   <string name="Uwazi_Template_Title">টেমপ্লেট:</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="one"> %1$d টি ফাইল সংযুক্ত করা হয়েছে</item>
-    <item quantity="other"> %1$d টি ফাইল সংযুক্ত করা হয়েছে</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">ফাইল নির্বাচন করুন</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">পিডিএফ ফাইল নির্বাচন করুন</string>
@@ -526,24 +526,24 @@
   <string name="Collect_Subtitle_RemoveForm">আপনি কি \" %1$s \" মুছে ফেলার বিষয়ে নিশ্চিত?</string>
   <string name="Util_ellapsedTime_Year">এক বছরেরও বেশি আগে</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">এক মাস আগে</item>
-    <item quantity="other">%d এক মাস আগে</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">এক সপ্তাহ আগে</item>
-    <item quantity="other">%d সপ্তাহ আগে</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">এক দিন আগে</item>
-    <item quantity="other">%d দিন আগে</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one">এক ঘণ্টা আগে</item>
-    <item quantity="other">%d এক ঘণ্টা আগে</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one">এক মিনিট আগে</item>
-    <item quantity="other">%d মিনিট আগে</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">কয়েক সেকেন্ড আগে</string>
   <string name="Donwload_Templates_Title_Description">আপনি যে Uwazi instances এর সাথে সংযুক্ত আছেন সেখানে এই টেমপ্লেটগুলি পাওয়া যাবে৷</string>
@@ -634,17 +634,17 @@
   <string name="settings.docu_auto.delete_action.expl">Tella সার্ভারে আপলোড হওয়ার সাথে সাথে আপনার ডিভাইস থেকে ফাইলগুলি স্বয়ংক্রিয়ভাবে মুছে ফেলবে।</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">আপনি আর এই সার্ভারে ফাইল আপলোড করতে পারবেন না৷</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">একটি ফাইল</item>
-    <item quantity="other">%d টি ফাইল</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d / %d মেগাবাইট আপলোড করা হয়েছে৷</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d ফাইল আপলোড হয়েছে</item>
-    <item quantity="other">%d ফাইল আপলোড হয়েছে</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d মিনিট বাকি</item>
-    <item quantity="other">%d মিনিট বাকি</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">কাস্টমাইজেশন</string>
   <string name="Uwazi_Send_Header_Title">সত্তার সমাপ্তি</string>
@@ -687,7 +687,7 @@
   <string name="Delete_Report_Confirmation">আপনি কি এই রিপোর্টটি মুছে ফেলার বিষয়ে নিশ্চিত?</string>
   <string name="Delete_Submitted_Report_Confirmation">আপনি কি আপনার রেকর্ড থেকে এই পাঠানো রিপোর্ট মুছে ফেলার বিষয়ে নিশ্চিত?</string>
   <string name="View_Report">দেখুন</string>
-  <string name="Delete_Report">মুছে দিন</string>
+  <string name="Delete_Report">মুছুন</string>
   <string name="Paused_Report">বিরতি দেওয়া হয়েছে</string>
   <string name="Report_Waiting_For_Connection">সংযোগের জন্য অপেক্ষা করছে</string>
   <string name="Project_Url_Screen_Title">প্রজেক্টের URL লিখুন</string>
@@ -765,7 +765,7 @@
   <string name="action_hide_pin">পিন লুকান</string>
   <string name="action_go_back">ফিরে যান</string>
   <string name="Settings_show_unlock_attempts_remaining">বাকি আনলক প্রচেষ্টা দেখান</string>
-  <string name="Settings_unlock_screen_instructions">আনলক স্ক্রিনে, Tella-এর ভিতরের সবকিছু মুছে ফেলার আগে ব্যর্থ আনলক করার প্রচেষ্টার অবশিষ্ট সংখ্যা দেখান</string>
+  <string name="Settings_unlock_screen_instructions">Tella-এর ভিতরের সবকিছু মুছে ফেলার আগে আনলক স্ক্রিনে কতবার আনলক করার প্রচেষ্টার অবশিষ্ট রয়েছে তা দেখান</string>
   <string name="Settings_Delete_After_Failed_Unlock">আনলক ব্যর্থ হওয়ার পরে মুছুন</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Tella এর ভিতরের সবকিছু মুছে ফেলার আগে কতগুলি ব্যর্থ আনলক প্রচেষ্টা অনুমোদিত তা নির্ধারণ করুন।</string>
   <string name="Settings_Off_Do_Not_Delete">বন্ধ (ডেটা মুছবে না)</string>
@@ -789,7 +789,7 @@
   <string name="action_rotate">ঘোরান</string>
   <string name="Snackbar_file_was_deleted">ফাইলটি মুছে ফেলা হয়েছে।</string>
   <string name="Snackbar_files_were_deleted">ফাইলগুলো মুছে ফেলা হয়েছে।</string>
-  <string name="Snackbar_changes_were_saved">আপনার পরিবর্তনগুলি সংরক্ষিত হয়েছে।</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">অসংরক্ষিত পরিবর্তনসমূহ</string>
   <string name="Edit_Dialog_confirm_exit">আপনার পরিবর্তনগুলি সংরক্ষণ করা হয়নি। প্রস্থান করার আগে আপনি কি সংরক্ষণ করতে চান?</string>
   <string name="action_exit_without_saving">সংরক্ষণ না করেই প্রস্থান করুন</string>
@@ -858,8 +858,8 @@
   <string name="Learn_More">আরও জানুন</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="one">%1$d সত্তা নির্বাচিত</item>
-    <item quantity="other">%1$d সত্তা নির্বাচিত</item>
+    <item quantity="one">%1$d entity selected</item>
+    <item quantity="other">%1$d entities selected</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">আপনি এই বস্তুতে যেগুলি সংযোগ করতে চান তা নির্বাচন করুন।</string>
   <string name="Analytics_contribute_reminder_title">আপনি তথ্য শেয়ার করছেন</string>
@@ -894,8 +894,8 @@
   <string name="select_entities">সত্তা নির্বাচন করুন</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">আপনি এই বস্তুতে যেগুলি সংযোগ করতে চান তা খুঁজুন করুন।</string>
   <string name="add_more_entities">আরও সত্তা যোগ করুন</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">UwaziEntryFragment খুঁজে পাওয়া যায়নি</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">আপনি অ্যানালিটিক্স শেয়ার করতে সাইন আপ করেছেন। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
   <string name="Settings_Analytics_turn_off_dialog">আপনি আর অ্যানালিটিক্স শেয়ার করবেন না। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -980,7 +980,7 @@
   <string name="nextcloud_file_size_limit">এই মুহূর্তে, নেক্সটক্লাউড সার্ভারে শুধুমাত্র ২০ মেগা বাইট বা এর চেয়ে ছোট ফাইলগুলি জমা দেওয়া যেতে পারে৷</string>
   <string name="invalid_url">অকার্যকর URL</string>
   <string name="delete_report">রিপোর্ট মুছবেন?</string>
-  <string name="report_submitted_msg">আপনার রিপোর্ট সফলভাবে জমা দেওয়া হয়েছে।</string>
+  <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

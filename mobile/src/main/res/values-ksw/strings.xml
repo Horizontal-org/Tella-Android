@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ကဟးထီၣ်ဖဲလံာ်ကွီၣ်ဒိအပူၤဧါ?</string>
   <string name="verification_prompt_dialog_title">ကအိးထီၣ်စူးကါ GPS ဧါ?</string>
   <string name="collect_tab.title_blank">တၢ်အိၣ်လီၤဟိ</string>
-  <string name="action_cancel">ဆိကတီၢ်</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">တၢ်ဆဲးကျိးပှၤ</string>
   <string name="collect_dialog.text_download.progress">တၢ်ဟံးန့ၢ်ပာ်ဃာ်လံာ်ကွီၣ်ဒိအဖၢမုၢ်လီၤ</string>
   <string name="collect_toast_download.completed">တၢ်ဟံးန့ၢ်ပာ်ဃာ်အီၤဝံၤဝဲဒၣ်လံ</string>
-  <string name="action_delete">ထူးသံကွံာ်</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">တၢ်အပတြီာ်</string>
   <string name="collect.blank_action_download.form">ဟံးန့ၢ်ပာ်ဃာ်</string>
   <string name="settings_text_empty.field">တၢ်လီၢ်တတီၤအံၤတၢ်ပာ် အိၣ်ကလီအီၤတသ့ဘၣ်န့ၣ်လီၤ.</string>
@@ -84,12 +84,8 @@
   <string name="permission_dialog.expl_device.storage">လၢတၢ်ကဆှၢထီၣ်ဝဲဒၣ်လံာ်တြံ၁်တဖၣ်ကန့ၢ်ဝဲအဂီၢ်, Tella လိၣ်ဘၣ်ဝဲဒၣ်တၢ်ဟ့ၣ်တၢ်ပျဲအခွဲးလၢ တၢ်ဲကကွဲးလီၤတၢ်ဖဲ စဲးဖီကဟၣ်ပီးလီအတၢ်ပာ်ကီၤဃာ်အလီၢ်အပူၤအံၤန့ၣ်လီၤ.</string>
   <string name="gallery_toast_fail.deleting.files">တၢ်ကမၣ်အိၣ်ထီၣ်ဝဲ ဖဲတၢ်ထုးသံဝဲဒၣ်လံာ်တြံ၁်တဖၣ်အခါန့ၣ်လီၤ. ဝံသးစူၤမၤကွၢ်ကဒီးအသီတဘျီတက့ၢ်.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="zero">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
-    <item quantity="one">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
-    <item quantity="two">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
-    <item quantity="few">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
-    <item quantity="many">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
-    <item quantity="other">%1$d လံာ်တြံာ်အံၤတၢ်ဆှၢနုာ်ပာ်ဃာ်အီၤလၢစဲးဖီကဟၣ်ပီးလီအပူၤလံ</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">ကထူးသံကွံ၁်လံ၁်တြံ၁်အံၤဧါ?</string>
   <string name="gallery_delete.files_dialog.expl">လံာ်တြံာ်လၢနဃုထၢထီၣ်အီၤအံၤ အကဘၣ်တၢ်ထူးသံကွံာ်အီၣ်တစိၤသးလၢ နတၢ်ပာ်ကီၤတၢ်ဂီၤအတၢ်လီၢ်ပူၤအံၤန့ၣ်လီၤ.</string>
@@ -191,12 +187,8 @@
   <string name="collect.form_signature_toast_fail.saving">တၢ်ကမၣ်အိၣ်ထီၣ်ဝဲဖဲ တၢ်ပာ်ကီၤဝဲဒၣ်တၢ်ဆဲးလီၤမံၤအခါန့ၣ်လီၤ. ဝံသးစူၤမၤကွၢ်ကဒီးအသီတဘျီ</string>
   <string name="collect.form_acknowledge_select.expl">အိၣ်ခ့ၣ်. ဝံသးစူၤဆဲးမၤအီၤဆူညါတက့ၢ်.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="zero">%d လံာ်တြံာ်</item>
-    <item quantity="one">%d လံာ်တြံာ်</item>
-    <item quantity="two">%d လံာ်တြံာ်</item>
-    <item quantity="few">%d လံာ်တြံာ်</item>
-    <item quantity="many">%d လံာ်တြံာ်</item>
-    <item quantity="other">%d လံာ်တြံာ်</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">တၢ်မၤလိနၢ်ပၢၢ်အါထီၣ်</string>
   <string name="settings.servers_add.server_dialog.title">ထၢနုာ်အါထီၣ် အ့ထၢၣ်နဲးသန့အကျိၤ</string>
@@ -268,7 +260,7 @@
   <string name="play.audio_action.expl_minus15s">-၁၅ စဲးကီး</string>
   <string name="recorder_meta_space.available.days">%1$d အသီ %2$d နၣ်ရံၣ် %3$s အိၣ်တ့ၢ်</string>
   <string name="recorder_meta_space.available.hours">%1$d နၣ်ရံၣ် %2$d မံးနံး (%3$s) အိၣ်တ့ၢ်</string>
-  <string name="camera_video.resolution_dialog.title">တၢ်ဂီၤမူအကံၢ်အစီ</string>
+  <string name="camera_video.resolution_dialog.title">Select video resolution</string>
   <string name="camera_video.resolution_dialog.expl">အကံၢ်အစီဒံးအဂ့ၤ, တၢ်ပာ်ဃာ်တၢ်ဂီၤမူအလံာ်တြံ၁်အက့ၢ်အဂီၤ ဒံးဒိၣ်ထီၣ်ဝဲန့ၣ်လီၤ.</string>
   <string name="camera_video.resolution_select_highest">အကံၢ်အစီလၢအဂ့ၤကတၢၢ်</string>
   <string name="camera_video.resolution_select_1080p">အကံၢ်အစီလၢအဂ့ၤ (1080p)</string>
@@ -320,7 +312,7 @@
   <string name="action_disable">ပံးတံာ်ဃာ်</string>
   <string name="settings.servers_delete.server_dialog.title">ကထုးသံကွံာ် \"%1$s\" အ့ထၢၣ်နဲၤအကျိၤသန့အံၤဧါ?</string>
   <string name="action_edit">ကဘှီဘၣ်က့ၤအီၤလီၤ</string>
-  <string name="settings.server_add.server_dialog_advanced">နုာ်လီၤ</string>
+  <string name="settings.server_add.server_dialog_advanced">Advanced</string>
   <string name="settings.docu_error_auth.required">တၢ်လိၣ်ဘၣ်တၢ်အုၣ်သးအမ့ၢ်အတီ</string>
   <string name="settings.sec_lock_timeout_immediately">တဘျီဃီ</string>
   <string name="settings.sec_lock_timeout_1min">၁ မံးနံး</string>
@@ -335,7 +327,8 @@
   <string name="settings.sec_delete.app_tooltip">ထုးသံကွံာ်အဲး(ပ်)ဒီးတၢ်ဂ့ၢ်တၢ်ကျိၤလၢအပၣ်ဃုာ်တဖၣ်န့ၣ်တက့ၢ်. တၢ်ကသံကွၢ်နၤလၢ, “နအဲၣ်ဒိးထုးထီၣ်ကွံာ်အဲး(ပ်)အံၤဧါ.”              မ့တမ့ၢ်ဘၣ်လၢ နပာ်ဂၢၢ်ဘၣ်ကျၢၤဘၣ်န့ၣ်ဒီး, တၢ်တထုးသံကွံာ် Tella အံၤဘၣ်န့ၣ်လီၤ.</string>
   <string name="settings.sec_bypass_switch_title">တၢ်ဟးဆှဲးတၢ်ပဲာ်ထံတြူာ်သံတၢ်</string>
   <string name="settings.sec_bypass_switch_expl">ကျဲးစၢးမၤနၢၤကွံာ် တၢ်ကီတၢ်ခဲလၢ အတြီတံာ်ဝဲဒၣ်တၢ်သူ Tella ဖဲနလီၢ်ကဝီၤပူၤန့ၣ်တက့ၢ်. မၤနီၣ်ဃာ်လၢ တၢ်အိးထီၣ်စူးကါဝဲဒၣ်တၢ်အံၤ  အကမၤဃၢထီၣ်ဝဲဒၣ် နတၢ်ဆှၢဃီၤတၢ်ဂ့ၢ်တၢ်ကျိၤဆူ အ့ထၢၣ်နဲးသန့အကျိၤအပူၤန့ၣ်လီၤ.</string>
-  <string name="settings.servers_add_camouflage.subtitle">အခဲအံၤ နအဲး(ပ်)အံၤ အဘၣ်တၢ်မၤလီၤဂာ်လီၤဘၢအီၤဒီး စဲးဒွးနီၢ်ဂံၢ်အဲး(်ပ်)လံန့ၣ်လီၤ. </string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">ဆီတလဲတၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အကျိၤအကျဲ</string>
   <string name="settings.servers_remove.camouflage.method">သုးကွံာ် တၢ်မၤလီၤဂာ်လီၤဘၢတၢ်</string>
   <string name="settings.servers_hide_tella_title">ပာ်သဒၢ Tella</string>
@@ -350,7 +343,8 @@
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>တၢ်ဘံၣ်တၢ်ဘၢစှၤ-</b> Tella ကအိၣ်ဖျါထီၣ်ဖဲပီးလီအမဲာ်သၣ်ခီၣ်ထံးလိၤ            ဒ်အဲး(ပ်)အမံၤလီၤဆီတခါအသိး ဒီးတၢ်ပနီၣ်လီၤဆီတခါအသိးန့ၣ်လီၤ. စံၣ်လီၤဘၣ်တၢ်ပနီၣ်အသီအံၤဒ်သိးနကအိးထီၣ် Tella နီၢ်ကီၢ်အဂီၢ်န့ၣ်တက့ၢ်</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">စဲးဒွးနီၣ်ဂံၢ်အအဲး(ပ်)</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>တၢ်ဘံၣ်တၢ်ဘၢအါထီၣ်-</b>Tella ကအိၣ်သဒၢသးဖဲ စဲးဒွးနီၣ်ဂံၢ် အအဲး(ပ်)လၢအမၤတၢ်နီၢ်နီၢ်အလီၢ်ခံတပၤန့ၣ်လီၤ. ထၢနုာ်လီၤန PIN နီၣ်ဂံၢ်ဖဲ စဲးဒွးနီၣ်ဂံၢ်  အပူၤလၢ တၢ်ကအိးထီၣ် Tella အဂီၢ်တက့ၢ်.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[တၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အစဲးဒွးနီၣ်ဂံၢ်အံၤ ကဲထီၣ်သးသ့ဒၣ်ထဲလၢဖဲနမ့ၢ်စူးကါဝဲဒၣ် PIN အနီၣ်ဝံာ်တံာ်အခါန့ၣ်လီၤ.<font color=\"#D6933B\"><b>ဆီတလဲနီၣ်ဝံာ်တံာ်ဖဲအံၤ</font></b>]]></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">နမ့ၢ်ဆီတလဲနနီၣ်ဝံာ်တံာ်အကျိၤအကျဲန့ၣ်, တၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အံၤ အကဘၣ်တၢ်မၤကတၢၢ်ကွံာ်အီၤန့ၣ်လီၤ</string>
   <string name="action_continue">ဆဲးကွၢ်ဆူညါ</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -367,7 +361,7 @@
   <string name="settings.camo_jeweldash">ဂၠူၣ်ဝဲလ်ဒ့ၣ်ရၠ်တၢ်လိာ်ကွဲ</string>
   <string name="settings.camo_time">တၢ်ဆၢကတီၢ်</string>
   <string name="settings.camo_stopwatch">နၣ်ရံၣ်ဖီၣ်တၢ်ဆၢကတီၢ်</string>
-  <string name="fragment_mic">စဲးဖီၣ်တၢ်ကလုၢ်</string>
+  <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">တၢ်ဖီၣ်ဃာ်တၢ်ကလုၢ်</string>
   <string name="mic_rename_recording">ကယုၢ်န့ၢ်က့ၤ တၢ်ဖီၣ်ဃာ်တၢ်ကလုၢ်အမံၤအံၤလၢအသီ</string>
   <string name="recorder_toast_recording.saved">တၢ်ကလုၢ်လၢတၢ်ဖီၣ်ဃာ်အီၤအံၤ အဘၣ်တၢ်ပာ်ကီၤဃာ်ဝဲဖဲန Tella အလံာ်တြံာ်တဖၣ်အပူၤလီၤ</string>
@@ -391,7 +385,7 @@
   <string name="onboard.continue_btn_share_data">ဆဲးမၤအီၤလၢအတအိၣ်ဒီး
 တၢ်ဘျးစဲဝဲဒီးအ့ထၢၣ်နဲးသန့အကျိၤ</string>
   <string name="onboard.expl_hide_tella">လၢတၢ်ကမၤကီထီၣ် Tella အတၢ်ဃုထံၣ်န့ၢ်လၢနစဲးဖီကဟၣ်ပီးလီအပူၤအဂီၢ်, နဆီတလဲဝဲဒၣ် အဲး(ပ်)အံၤအက့ၢ်အဂီၤအတၢ်အိၣ်ဖျါလၢ စခရံၣ်အမဲာ်သၣ်ဂံၢ်ထံးအလိၤအံၤသ့ဝဲန့ၣ်လီၤ.</string>
-  <string name="onboard.default_btn_title_hide_tella">ပာ်ဃာ် Tella အက့ၢ်အဂီၤဒ်အအိၣ်ပာ်အသိး</string>
+  <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
   <string name="onboard.default_btn_subtitle_hide_tella">Tella ကအိၣ်ဖျါဒံးဝဲဖဲနတၢ်ပီးတၢ်လီအမဲာ်သၣ်ဂံၢ်ထံးအပူၤန့ၣ်လီၤ</string>
   <string name="onboard.title_advanced_complete">တၢ်ဆီတလဲမၤထီထီၣ်တၢ်ဒ်နီၢ်ကစၢ်အတၢ်ဘၣ်သးအသိး ဝံၤဝဲဒၣ်လံ.</string>
   <string name="onboard.expl_advanced_complete">နဆီတလဲဝဲဒၣ် နတၢ်ဘၣ်သးဖဲ Tella အတၢ်ဆီလီၤပာ်လီၤအလီၢ်အပူၤန့ၢ်ထီဘိန့ၣ်လီၤ.</string>
@@ -418,12 +412,8 @@
   <string name="Vault_CreateFolder_SheetAction">တ့ထီၣ်</string>
   <string name="ServerSettings_ServerName_ToolTip">ယုာ်န့ၢ်နအ့ထၢၣ်နဲးအပှာ်ယဲၤသန့အမံၤ ဒ်သိးတၢ်ကွၢ်နီၣ်အီၤကဘၣ်ဝဲလၢခံ ဖဲလၢနထၢနုာ်လီၤအါထီၣ် အ့ထၢၣ်နဲးအပှာ်ယဲၤသန့အခါန့ၣ်တက့ၢ်ႋ တၢ်အံၤကမ့ၢ်၀ဲဒၣ် တၢ်ကရၢကရိအမံၤ ပရီကၠဲးအမံၤ ဒီး တၢ်အဂုအၤဂၤ သ့ဝဲန့ၣ်လီၤႋ</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="zero">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
-    <item quantity="one">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
-    <item quantity="two">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
-    <item quantity="few">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
-    <item quantity="many">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
-    <item quantity="other">%s လံာ်တြံာ်တၢ်ဆှၢနုာ်အီၤဝံၤဝဲဒၣ်လံ</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">တၢ်ဆှၢနုာ်လီၤတၢ်ဒီးတၢ်ဆီတလဲကွံာ်ဆူတၢ်ခူသူၣ်</string>
   <string name="Rec_Exit_SheetTitle">ကပာ်ကီၤဃာ်တၢ်ကလုၢ်လၢတၢ်ဖီၣ်ဃာ်အီၤအံၤဧါ?</string>
@@ -462,7 +452,8 @@
   <string name="Uwazi_Language_Screen_Description">တၢ်ပာ်ဖှိၣ်တဖၣ်အအိၣ်လၢ Uwaziပူၤအံၤ နသူအီၤဒီး ကျိာ်အါမံၤအါကလုာ်သ့ဝဲန့ၣ်လီၤ. ဃုထၢဘၣ် ကျိာ်တခါခါနကသူဝဲလၢ တၢ်ကဘျၣ်ဒိလၢနအဲၣ်ဒိးဟံးန့ၢ်ပာ်ဖှိၣ်ဝဲအပူၤန့ၣ်တက့ၢ်</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">လၢTella အမဲာ်သၣ်ဂံၢ်ထံးအဖီခိၣ်အံၤ ပာ်ဖျါထီၣ်တၢ်ပနီၣ်တခါလၢအကဆှၢနၤချ့ချ့ဆူ တၢ်ကဘျၣ်အဒိလၢနဘၣ်သူၣ်ဘၣ်သးအီၤတဖၣ်အအိၣ်န့ၣ်တက့ၢ်</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">တၢ်ကဘျၣ်ဒိလၢယဘၣ်သးအီၤတဖၣ်</string>
-  <string name="Uwazi_Templates_Empty_Description">တၢ်ကဘျၣ်အဒိ လၢနပာ်ကီၤပာ်ဃာ်အီၤတအိၣ်နီတခါဘၣ်. စံၣ်လီၤဘၣ် + တၢ်ပနီၣ်အံၤ လၢနကထၢနုာ်လီၤ တၢ်ကဘျၣ်ဒိ အသီတခါအဂီၢ်န့ၣ်လီၤ.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description"> Entity လၢနတီၣ်ထီၣ်ဃာ်အီၤတအိၣ်နီတခါဘၣ်</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">အခဲအံၤလၢ နOutboxအပူၤတၢ်အိၣ်ခီလီန့ၣ်လီၤ. ဖဲအံၤ Entity လၢအအိၣ်ကတဲာ်ကတီၤအသးလၢတၢ်ကဆှၢအီၤအဂီၢ်တဖၣ် ကဟဲဖျါထီၣ်ဝဲဒၣ်န့ၣ်လီၤ</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">နEntity အပတြီာ် တအိၣ်နီတခါဘၣ်</string>
@@ -505,12 +496,8 @@
   <string name="Uwazi_Server_Title">အ့ထၢၣ်နဲးကျိၤ</string>
   <string name="Uwazi_Template_Title">တၢ်ကဘျၣ်ဒိလၢအအိၣ်ဃာ်တဖၣ်</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="zero">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="one">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="two">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="few">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="many">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="other">%1$d လံာ်တြံာ်အံၤတၢ်ဘျးစဲဃာ်အီၤဝံၤဝဲလံ</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">ဃုထၢဘၣ်လံာ်တြံ၁်တဖၣ်</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">ဃုထၢဘၣ် PDF လံာ်တြံ၁်တဖၣ်</string>
@@ -536,44 +523,24 @@
   <string name="Collect_Subtitle_RemoveForm">မ့ၢ်နကအဲၣ်ဒိးသုးကွံာ် \"%1$s\" ဧါ?</string>
   <string name="Util_ellapsedTime_Year">လၢအပူၤကွံာ် ၁ နံၣ်ဆူဖီခိၣ် အတီၢ်ပူၤ</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="zero">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
-    <item quantity="one">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
-    <item quantity="two">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
-    <item quantity="few">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
-    <item quantity="many">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
-    <item quantity="other">လၢအပူၤကွံာ် %d လါအတီၢ်ပူၤ</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="zero">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
-    <item quantity="one">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
-    <item quantity="two">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
-    <item quantity="few">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
-    <item quantity="many">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
-    <item quantity="other">လၢအပူၤကွံာ် %d နွံအတီၢ်ပူၤ</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="zero">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
-    <item quantity="one">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
-    <item quantity="two">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
-    <item quantity="few">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
-    <item quantity="many">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
-    <item quantity="other">လၢအပူၤကွံာ် %d သီအတီၢ်ပူၤ</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="zero">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
-    <item quantity="one">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
-    <item quantity="two">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
-    <item quantity="few">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
-    <item quantity="many">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
-    <item quantity="other">လၢအပူၤကွံာ် %d နၣ်ရံၣ်အတီၢ်ပူၤ</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="zero">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
-    <item quantity="one">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
-    <item quantity="two">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
-    <item quantity="few">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
-    <item quantity="many">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
-    <item quantity="other">လၢအပူၤကွံာ်  %d  မံးနံးအတီၢ်ပူၤ</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">လၢအပူၤကွံာ် စှၤမံးနံးအတီၢ်ပူၤ</string>
   <string name="Donwload_Templates_Title_Description">တၢ်သ့ၣ်တဖၣ်အံၤမ့ၢ်ဝဲ တၢ်ကဘျၣ်ဒိတဖၣ်လၢ နမၤန့ၢ်အီၤသ့ဝဲလၢ Uwazi တၢ်အဒိအတဲာ်ပူၤန့ၣ်လီၤ. </string>
@@ -609,7 +576,7 @@
   <string name="Collect_DialogInfo_FormSubmissionStopped">နတၢ်တီၣ်ထီၣ်လံာ်ကွီၣ်ဒိအံၤ အအိၣ်ပတုာ်အသးလံန့ၣ်လီၤ. နက့ၤစးထီၣ်တီၣ်ထီၣ်   ကဒါက့ၤအီၤလၢ Outbox အပူၤသ့ဝဲန့ၣ်လီၤ.</string>
   <string name="action_view">ကကွၢ်ကီတၢ်</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella အပံးတံာ်အသးအဖၢမုၢ်န့ၣ်လီၤ</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">ဝံသးစူၤအိၣ်ခိးဘၣ်တစိာ်ဖိတက့ၢ်. လၢစဲးကးတစိာ်ဖိအတီၢ်ပူၤ, နကဟဲက့ၤတုၤကဒါက့ၤဆူ နစဲးဖီကဟၣ်အမဲာ်သၣ်ဂံၢ်ခီၣ်ထံးအအိၣ်န့ၣ်လီၤ.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">ကသုးကွံာ် တၢ်မၤလီၤဂာ်လီၤဘၢတၢ်အံၤန့ၣ်လီၤ</string>
   <string name="Collect_DeleteForm_SheetTitle">ကထူးသံကွံာ်လံာ်ကွီၣ်ဒိတခါအံၤဧါ?</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">ကထူးသံကွံာ် တၢ်အပတြီာ်အံၤဧါ?</string>
@@ -664,29 +631,17 @@
   <string name="settings.docu_auto.delete_action.expl">Tella ကထူးသံကွံာ်လံာ်တြံာ်လၢနတၢ်ပီးတၢ်လီအပူၤတဘျီဃီဖဲလၢတၢ်သ့ၣ်တဖၣ်အံၤတၢ်တီၣ်ထီၣ်အီၤဆူအ့ထၢၣ်နဲးသန့အကျိၤပူၤဝံၤဝဲအဆၢကတီၢ်န့ၣ်လီၤ</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">နတီၣ်ထီၣ်ဝဲ လံာ်တြာ်တဖၣ်အံၤလၢ အ့ထၢၣ်နဲးအကျိၤတခါအံၤအပူၤတန့ၢ်တသ့ဝဲလၢၤဘၣ်</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="zero">%d လံာ်တြံာ်</item>
-    <item quantity="one">%d လံာ်တြံာ်</item>
-    <item quantity="two">%d လံာ်တြံာ်</item>
-    <item quantity="few">%d လံာ်တြံာ်</item>
-    <item quantity="many">%d လံာ်တြံာ်</item>
-    <item quantity="other">%d လံာ်တြံာ်</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB အတီၣ်ထီၣ်ဃၣ်အသးဝံၤလံ</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="zero">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="one">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="two">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="few">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="many">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
-    <item quantity="other">%d လံာ်တြံာ်အံၤတၢ်တီၣ်ထီၣ်အီၤဝံၤဝဲလံ</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="zero">%d မံနံးအိၣ်တ့ၢ်ဒံး</item>
-    <item quantity="one">%d မံးနံး အိၣ်တ့ၢ်ဒံး</item>
-    <item quantity="two">%d မံးနံး အိၣ်တ့ၢ်ဒံး</item>
-    <item quantity="few">%d မံးနံး အိၣ်တ့ၢ်ဒံး</item>
-    <item quantity="many">%d မံးနံး အိၣ်တ့ၢ်ဒံး</item>
-    <item quantity="other">%d မံးနံး အိၣ်တ့ၢ်ဒံး</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">တၢ်ဆီလီၤပာ်လီၤဒ်နီၢ်ကစၢ်အတၢ်ဘၣ်သး</string>
   <string name="Uwazi_Send_Header_Title">Entity အကတၢၢ်</string>
@@ -706,7 +661,8 @@
   <string name="Setting_Reports_Share_Information_Title">ဟ့ၣ်နီၤလီၤ တၢ်ပာ်ဂၢၢ်ပာ်ကျၢၤ အတၢ်ဂ့ၢ်တၢ်ကျိၤတဖၣ်</string>
   <string name="Setting_Reports_Share_Information_Description">ဒ်သိးတၢ်ကပာ်ဂၢၢ်ပာ်ကျၢၤဝဲလၢ တၢ်အံၤမ့ၢ်နတၢ်ဂ့ၢ်တၢ်ကျိၤအလံာ်တြံာ်အဂီၢ်န့ၣ် ဖဲလၢနဆှၢထီၣ်ဝဲဒၣ်လံာ်ပာ်ဖျါအဆၢကတီၢ် ထၢနုာ်လီၤဘၣ် နစဲးဖီကဟၣ်ပီးလီလၢနသုအီၤအဂ့ၢ်အကျိၤ ဒီး အတၢ်လီၢ်တၢ်ကျဲ န့ၣ်တက့ၢ်. </string>
   <string name="Setting_Reports_Background_Upload">တၢ်တီၣ်ထီၣ် တၢ်အလွဲၢ်ဒီးတၢ်တ့ဖျါလၢတၢ်လီၢ်ခံတကပၤ</string>
-  <string name="Setting_Reports_Background_Upload_Description">လံာ်ပာ်ဖျါတဖၣ်အံၤ ဆဲးတီၣ်ထီၣ်အီၤဒံးဆူညါတုၤအဝံၤဝဲ ဖဲနမၤဝဲတၢ်အဂုၤအဂၤအကတီၢ်မ့ၢ်ဂ့ၤ (ဲမ့တမ့ၢ်) ဖဲနမ့ၢ်ကဟးထီၣ်ကွံာ်လၢ Tella ဒၣ်လဲာ်န့ၣ်တက့ၢ်. တၢ်ဟ့ၣ်ပလီၢ်-  နမ့ၢ်ဆဲးအိးထီၣ်အီၤဒံးန့ၣ်ဒီး  Tella အံၤကအိးထီၣ်ဒံးအသး တုၤလၢ လံာ်ပာ်ဖျါတဖၣ် အတီၣ်ထီၣ်အသးလၢ ပရီကၠဲးအပူၤလၢလၢပှဲၤပှဲၤဝံၤဝဲတစူၤန့ၣ်လီၤ.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">တၢ်ပာ်ပနီၣ် တၢ်ဆီလီၤပာ်လီၤလၢအပတီၢ်ထီဝံၤဝဲဒၣ်လံန့ၣ်လီၤ.</string>
   <string name="Setting_Reports_Settings_Completed_Description">နဆီတလဲဝဲဒၣ်လံာ်ပာ်ဖျါအကလုာ်လၢနဘၣ်သးအီၤတဖၣ်အံၤသ့ဝဲထီဘိလၢ Tella အတၢ်ဆီလီၤပာ်လီၤအပူၤန့ၣ်လီၤ.</string>
   <string name="Drafts_Reports_Empty_Message">လၢတၢ်အပတြီာ်အလီၢ်အပူၤအံၤ တၢ်တအိၣ်နီတမံၤဘၣ်. လံာ်ပာ်ဖျါလၢ အတတီၣ်ထီၣ်ဃာ်အသးသ့ၣ်တဖၣ် ကဟဲဖျါထီၣ်ဝဲဒၣ်ဖဲအံၤန့ၣ်လီၤ.</string>
@@ -830,7 +786,7 @@
   <string name="action_rotate">ယကလဲလိာ်ဝးတရံးအီၤလီၤ.</string>
   <string name="Snackbar_file_was_deleted">တၢ်ထူးသံကွံာ်တၢ်ဂ့ၢ်တၢ်ကျိၤလံာ်တြံာ်တဖၣ်အံၤလံန့ၣ်လီၤ.</string>
   <string name="Snackbar_files_were_deleted">တၢ်ထူ:သံကွံာ် တၢ်ဂ့ၢ်တၢ်ကျိၤလံာ်တြံာ်တဖၣ် အံၤလံန့ၣ်လီၤ.</string>
-  <string name="Snackbar_changes_were_saved">တၢ်လၢနဆီတလဲကွံာ်အီၤတဖၣ် အဘၣ်တၢ်ပာ်ကီၤဃာ်အီၤလံန့ၣ်လီၤ.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">တၢ်ဆီတလဲအသးလၢ တၢ်တပာ်ကီၤဃာ်အီၤဒံးဘၣ်တဖၣ်</string>
   <string name="Edit_Dialog_confirm_exit">တၢ်ဂ့ၢ်တၢ်ကျိၤလၢနဆီတလဲကွံာ်အီၤတဖၣ် တဘၣ်တၢ်ပာ်ကီၤဃာ်အီၤဒံးဘၣ်. တချုးလၢနဟးထီၣ်ကွံာ်ဒံးဘၣ်န့ၣ် မ့ၢ်နအဲၣ်ဒိးပာ်ကီၤဃာ်အီၤကစီၢဒီဧါ?</string>
   <string name="action_exit_without_saving">တပာ်ကီၤတၢ်ဂ့ၢ်တၢ်ကျိၤအံၤဘၣ်ဒီး ကဟးထီၣ်ကွံာ်လီၤ. </string>
@@ -936,8 +892,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
