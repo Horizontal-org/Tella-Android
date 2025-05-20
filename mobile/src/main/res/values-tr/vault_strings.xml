@@ -5,7 +5,7 @@
   <string name="Vault_Files_Title">Tella files</string>
   <string name="Vault_Documents_Title">Documents</string>
   <string name="Vault_Audios_Title">Audio</string>
-  <string name="Vault_Videos_Title">വീഡിയോകള്‍</string>
+  <string name="Vault_Videos_Title">Videos</string>
   <string name="Vault_Others_Title">Others</string>
   <string name="Vault_Select_Title">Select files</string>
   <string name="Vault_RecentFiles">Recent files</string>
@@ -14,10 +14,10 @@
   <string name="Vault_Empty_Msg">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
   <string name="Vault_Move_SheetDesc">Move to another folder</string>
   <string name="Vault_Rename_SheetAction">Rename</string>
-  <string name="Vault_Save_SheetAction">സംരക്ഷിക്കുക</string>
-  <string name="Vault_Delete_SheetAction">നീക്കം ചെയ്യുക</string>
-  <string name="Vault_Share_SheetAction">പങ്കുവയ്ക്കുക</string>
-  <string name="Vault_Upload_SheetAction">അപ്‌ലോഡ്</string>
+  <string name="Vault_Save_SheetAction">Save</string>
+  <string name="Vault_Delete_SheetAction">Delete</string>
+  <string name="Vault_Share_SheetAction">Share</string>
+  <string name="Vault_Upload_SheetAction">Upload</string>
   <string name="Vault_File_SheetAction">File information</string>
   <string name="Vault_FileInfo">File info</string>
   <string name="Vault_FileSize">Size</string>
@@ -25,7 +25,7 @@
   <string name="Vault_FileCreated">Created</string>
   <string name="Vault_FileResolution">Resolution</string>
   <string name="Vault_FileLength">Length</string>
-  <string name="Vault_FilePath">ഫയല്‍ പാത</string>
+  <string name="Vault_FilePath">File path</string>
   <string name="Vault_RenameFile_SheetTitle">Rename file</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
     <item quantity="one">Delete file?</item>
@@ -37,8 +37,8 @@
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Name A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Name Z &gt; A</string>
-  <string name="Vault_SortDateAsc_SheetAction">പുതിയത് മുതൽ പഴയതിലേക്ക്</string>
-  <string name="Vault_SortDateDesc_SheetAction">പഴയത് മുതൽ പുതിയതിലേക്ക്</string>
+  <string name="Vault_SortDateAsc_SheetAction">Newest to oldest</string>
+  <string name="Vault_SortDateDesc_SheetAction">Oldest to newest</string>
   <string name="Vault_ManageFiles_SheetTitle">Manage files</string>
   <string name="Vault_DeleteFile_SheetDesc">After importing the file to Tella, the original file will be deleted from your device. The only remaining copy will be the one in Tella.</string>
   <string name="Vault_TakePhotoVideo_SheetAction">Take photo/video</string>
@@ -67,5 +67,5 @@
   <string name="Vault_deleteFileImported_SheetDesc"> After importing the file into Tella, do you want to keep the original file on your device or delete it?
  
  If you delete it, the file imported into Tella will be the only copy left. </string>
-  <string name="Vault_FileEdit_SheetAction">Edit</string>
+  <string name="Vault_FileEdit_SheetAction">Düzenle</string>
 </resources>

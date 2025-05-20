@@ -14,7 +14,7 @@
   <string name="Vault_Empty_Msg">Ainda não tem ficheiros na sua Tella. Clique no botão “+” abaixo para importar o seu primeiro ficheiro, ou aceda à Câmara, ou ao Microfone para criar um. Também pode criar pastas para manter os seus ficheiros organizados.</string>
   <string name="Vault_Move_SheetDesc">Mover para outra pasta</string>
   <string name="Vault_Rename_SheetAction">Mudar o nome</string>
-  <string name="Vault_Save_SheetAction">Gravar</string>
+  <string name="Vault_Save_SheetAction">Guardar</string>
   <string name="Vault_Delete_SheetAction">Apagar</string>
   <string name="Vault_Share_SheetAction">Partilhar</string>
   <string name="Vault_Upload_SheetAction">Carregar</string>
@@ -28,12 +28,12 @@
   <string name="Vault_FilePath">Percurso do ficheiro</string>
   <string name="Vault_RenameFile_SheetTitle">Mudar o nome do ficheiro.</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">Apagar ficheiro?</item>
-    <item quantity="other">Vazio</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">O ficheiro seleccionado será apagado do Tella permanentemente.</item>
-    <item quantity="other">Vazio</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Nomeie de A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Nomeie de Z &gt; A</string>
@@ -50,14 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">Este formato de ficheiro não pode ser aberto no Tella. Gostaria de exportar o ficheiro para o seu dispositivo para o abrir através de um aplicativo diferente? Isto pode expor o conteúdo do ficheiro.</string>
   <string name="Vault_Export_SheetAction">Exportar</string>
   <plurals name="Vault_Items">
-    <item quantity="one">Itens</item>
-    <item quantity="other">Vazio</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">Ainda não tem nenhum ficheiro no Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">Ficheiro transferido com sucesso</item>
-    <item quantity="other">Ficheiros transferidos com sucesso</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Alguns dos ficheiros seleccionados estão a ser utilizados nas suas ligações. Apagá-los pode afectar formulários e relatórios que ainda não tenham sido enviados.</string>
   <string name="Vault_Warning_Title">Aviso</string>

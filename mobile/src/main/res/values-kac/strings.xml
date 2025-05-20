@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Hkrang laika (form) kaw na pru na kun?</string>
   <string name="verification_prompt_dialog_title">Mungkan nga shara madun masat ya ai ladat (GPS) hpe hpaw da na kun?</string>
   <string name="collect_tab.title_blank">Man ai shara</string>
-  <string name="action_cancel">Dawm kau u</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">Anhte hpe matut mahkai u</string>
   <string name="collect_dialog.text_download.progress">Hkrang laika (form) hpe htawt bang la nga ai</string>
   <string name="collect_toast_download.completed">Lamang htawt bang la ai lam ngut sai</string>
-  <string name="action_delete">Shaprai hkau u</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">Laika nhprang</string>
   <string name="collect.blank_action_download.form">Lamang htawt bang la u</string>
   <string name="settings_text_empty.field">Ndai shara gaw kaman n mai ngam da ai</string>
@@ -23,7 +23,8 @@
   <string name="action_ok">Hkrak sai</string>
   <string name="collect.form_toast_validation.error">Ndai bai htang htai ai lam gaw n jaw ai</string>
   <string name="collect.form_error_response.mandatory">Ndai bai htang htai ai lam gaw galaw nan galaw ra ai.</string>
-  <string name="homescreen_heading_quick.delete">Hpaw tawn ai Lawan Shaprai ai lam</string>
+  <string name="homescreen_heading_quick.delete">Quick Delete
+mode activation</string>
   <string name="settings.about_list.item_privacy.policy">Dinghkrai hte seng ai hkrang tara</string>
   <string name="recorder_toast_fail.recording">Nsen rim bang ai shaloi, ningra ai lam lama ma nga ai. Chyeju hte kalang bai chyam yu u</string>
   <string name="recorder_content.desc_blinking.red.dot">Nsen rim bang nga ai</string>
@@ -33,12 +34,12 @@
   <string name="lock_dialog.expl_save.pattern">Na a sumsaw maka hpe matsing bang nga ai</string>
   <string name="lock_dialog.expl_unlock.app">Tella hpe sumsaw hpaw da ai lam</string>
   <string name="action_skip">Shalai kau u</string>
-  <string name="settings.docu_delete.server_dialog.expl">Ndai madung kompyuta jak hpe nang shaprai kau ai rai yang, laika nhprang hte tang shawn da ai hkrang laika ni yawng hpe na a jaka kaw na shaprai kau ya na re.</string>
+  <string name="settings.docu_delete.server_dialog.expl">If you delete this server, all draft and submitted forms will be deleted from your device. Delete anyway?</string>
   <string name="settings.docu_toast_server.deleted">Shaprai da ngut sai madung kompyuta jak (server)</string>
   <string name="settings.docu_toast_server.created">Galaw shalat da ai madung kompyuta jak (server)</string>
   <string name="settings.docu_toast_server.updated">Madung kompyuta jak (server) hpe prat madang bung hkra galaw ngut sai</string>
   <string name="settings.docu_dialog.title_server.settings">Madung kompyuta jak masat ai lam ni</string>
-  <string name="settings.docu_field_server.name">Na a madung kompyuta jak (server) hpe mying shamying u</string>
+  <string name="settings.docu_field_server.name">Server name</string>
   <string name="settings.docu_field_server.url">Madung kompyuta jak (server) laksan hkri-dun hkringdat(URL)</string>
   <string name="collect.sent_tab.title">Tang shawn ngut sai</string>
   <string name="home_expl_cancel.quick.delete">Lamang dawm na matu shara ra kaw ahtawk hkra dat u</string>
@@ -84,18 +85,14 @@
   <string name="permission_dialog.expl_device.storage">Lamang nhtan ni hpe shapraw la na matu, Tella gaw jak kata na lamang mazing gawk (storage) hta ka na ahkang ra nga ai.</string>
   <string name="gallery_toast_fail.deleting.files">Lamang nhtan ni hpe shaprai kau ai shaloi, ningra ai lam lama ma nga ai. Chyeju hte kalang bai chyam yu u.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="zero">%1$d jak hta matsing bang da ngut sai lamang nhtan (file).</item>
-    <item quantity="one">%1$d jak hta matsing bang da ngut sai lamang nhtan (file).</item>
-    <item quantity="two">%1$d jak hta matsing bang da ngut sai lamang nhtan ni (files).</item>
-    <item quantity="few">%1$d jak hta matsing bang da ngut sai lamang nhtan ni (files).</item>
-    <item quantity="many">%1$d jak hta matsing bang da ngut sai lamang nhtan ni (files).</item>
-    <item quantity="other">%1$d jak hta matsing bang da ngut sai lamang nhtan ni (files)</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Lamang nhtan (file) hpe shaprai na kun?</string>
   <string name="gallery_delete.files_dialog.expl">The selected file will be permanently deleted from your gallery.</string>
   <string name="gallery_save.to.device_dialog.title">Jak kata na sumla madun gawk (gallery) hta matsing bang da na kun?</string>
   <string name="gallery_save.to.device_dialog.expl">Ndai gaw, na a lamang nhtan hpe Tella shinggan e nga ai na jak a sumla madun gawk (gallery) hte, kaga bungli lamang ni hta shang yu mai hkra galaw ya nga ai.</string>
-  <string name="gallery_dialog.expl_encrypting">Lamang nhtan (file) hpe ning-ip ga makoi hte la da nga ai...</string>
+  <string name="gallery_dialog.expl_encrypting">Encrypting</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Ning-ip ga makoi hte hpaw la ai nga ai</string>
   <string name="gallery_toast_fail.import">Lamang nhtan ni hpe htawt la na matu sumla madun gawk hpaw ai shaloi, ningra ai lam lama ma nga ai. Chyeju hte kalang bai chyam yu u</string>
   <string name="gallery_toast_fail.saving.file">Lamang nhtan(file) hpe matsing bang ai shaloi, ningra ai lam lama ma nga ai. Chyeju hte kalang bai chyam yu u</string>
@@ -121,7 +118,7 @@
   <string name="settings.docu_error_no.internet">Nang gaw intanet hte n matut mahkai da ai. Matut mahkai ngut ai shaloi kalang bai chyam yu u.</string>
   <string name="settings.docu_dialog.action_try.again.connecting">Kalang bai chyam yu u</string>
   <string name="settings.about_select_tutorial">Ladat sharin lamang</string>
-  <string name="settings.camo_expl">Lamang masat kumla hte mying gaw na jak a pat man hta galai mat na rai ti mung, Tella lamang masat kumla gaw, Android masat ya ai lam ni hte seng ai lamana jahpan (menu) kaw mu lu nga na rai nga ai.</string>
+  <string name="settings.camo_expl">Select a custom icon and name to better hide Tella on your device. Note that the Tella icon will remain visible from the Android settings.</string>
   <string name="gallery_action.desc_save.to.device">Jak rai kata hta e matsing bang da u</string>
   <string name="settings.docu_verification_action">Jep shagrin ai lai ladat</string>
   <string name="settings.docu_verification_action.expl">Na a jak rai hte nga shara hte seng ai shiga lamai lamang ni hpe mahkawng ai let, na a shiga lamang nhtan ni hpe masat shagrin la lu ai.</string>
@@ -191,16 +188,12 @@
   <string name="collect.form_signature_toast_fail.saving">Lata masat sen hpe matsing da ai lam hta ningra ai lam langai ngai nga ai. Chyeju hte kalang bai chyam yu u</string>
   <string name="collect.form_acknowledge_select.expl">Hkrak sai. Chyeju hte dingngam galaw u.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="zero">Lamang nhtan (file)</item>
-    <item quantity="one">Lamang nhtan (file)</item>
-    <item quantity="two">Lamang nhtan ni (file)</item>
-    <item quantity="few">Lamang nhtan ni (file)</item>
-    <item quantity="many">Lamang nhtan ni (file)</item>
-    <item quantity="other">Lamang nhtan ni (file)</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">Matut nna hkaja u</string>
   <string name="settings.servers_add.server_dialog.title">Madung kompyuta jak hta jat bang u</string>
-  <string name="settings.prot_select_delete.forms">Hkrang laika (form) ni hpe shaprai kau u</string>
+  <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
   <string name="settings.prot_select_delete.servers">Madung kompyuta jak masat ai lam ni hpe shaprai kau u</string>
   <string name="settings.prot_select_delete.app">Tella hpe Shaprai kau u</string>
   <string name="collect.sent_action_edit.to.resend">Kalang bai shagun na matu jep shagrin u</string>
@@ -260,7 +253,7 @@
   <string name="verification.info_wifi.expl">Jak a makau mayang e nga ai sin-yu kata hkridun(Wi-Fi) ni yawng a mying.</string>
   <string name="collect.blank_banner_forms.updated">Hkrang laika nkau mi hpe madang shatsaw lamang bang ngut sai. Hpang jahtum na kasi kamang(version) hpe lu la hkra, hkrang laika ni a makau na madang shatsaw lamang hkalap (button) hpe ahtawk dat u.</string>
   <string name="settings.docu_auto.upload.server.selection_dialog.expl">Kaning re ai madung compyuta jak hpang de lamang nhtan ni hpe nang shagun jaw mayu ai kun?</string>
-  <string name="settings.serv_add.server.selection_dialog.title">Kaning re ai madung kompyuta jak hpan hte nang matut mahkai mayu ai kun?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">What type of server?</string>
   <string name="settings.docu_add.server_dialog.select_odk">Yawng mai lang ai shiga lamang hkinghku rai (Open Data Kit -ODK)</string>
   <string name="settings.docu_add.server_dialog.expl">Nang matut mahkai mayu ai madung kompyuta jak hpan hpe lata san la u. Nang hkrak n chye ai rai yang, na a wuhpung wuhpawng hpe sa u.</string>
   <string name="settings.docu_add.server_dialog.select_tus">Lamang shagun ai lam hpe matsun madun u</string>
@@ -268,9 +261,9 @@
   <string name="play.audio_action.expl_minus15s">Sekkan 15 hta yawm ai</string>
   <string name="recorder_meta_space.available.days">%1$d shani ni, nari hkying hkum ni %2$d (%3$s) ngam ai</string>
   <string name="recorder_meta_space.available.hours">Nari hkying hkum ni %1$d Nari minit %2$d (%3$s) ngam ai</string>
-  <string name="camera_video.resolution_dialog.title">Sumla hkrung sumla san ningja</string>
-  <string name="camera_video.resolution_dialog.expl">Sumla san ningja madang tsaw wa magang, sumla hkrung lamang nhtawn grau kaba ra magang rai nga ai.</string>
-  <string name="camera_video.resolution_select_highest">Madang grau tsaw ai</string>
+  <string name="camera_video.resolution_dialog.title">Select video resolution</string>
+  <string name="camera_video.resolution_dialog.expl">Higher resolution means that the video will be of higher quality but the file size will also be larger.</string>
+  <string name="camera_video.resolution_select_highest">Highest possible</string>
   <string name="camera_video.resolution_select_1080p">Madang tsaw ai(dingdung yawn sumla san ningja 1080)</string>
   <string name="camera_video.resolution_select_720p">Pran wan madang(dingdung yawn sula san ningja 720)</string>
   <string name="camera_video.resolution_select_480p">Madang nem ai (dingdung yawn sumla san ningja 480)</string>
@@ -298,9 +291,9 @@
   <string name="settings.select_security">Shim Lam</string>
   <string name="settings.select_lock_timeout">Chyahkring chyahkra hkring sa ai lam hpe sumsaw la u</string>
   <string name="settings.sec_camera.mute_switch">Sumla dem jak (Kemra) nsen n shapru ai lai ladat(mode)</string>
-  <string name="settings.sec_camera.mute_expl">Dat sumla ni hte sumla hkrung ni dem ai shaloi, kaga mashan ni a maju jung ai lam yawm mat hkra sumla dem jak(kemra) pat shinggang (shutter) hpe la da u.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Lawan shaprai hkau u</string>
-  <string name="settings.sec_quick.delete_expl">Ahkyak ahkya masa lam ni hta, Tella kata na lamang nhtan ni hpe lawan wan shaprai kau lu na matu, Tella a pat man ntsa hta ahtawk karawt mai ai hkalap (button) langai hpe madun da ai.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
   <string name="settings.servers.title_server.settings">Madung kompyuta jak ni</string>
   <string name="settings.servers.add_server.expl">Na a wuhpung wuhpawng de shiga lamang ni mahkawng nna, shagun sa na matu madung kompyuta jak ni hte matut mahkai u</string>
   <string name="settings.servers_auto.upload_action">Madung compyuta jak (server) de shi hte shi lamang shagun jaw u</string>
@@ -320,14 +313,14 @@
   <string name="action_disable">Pat da u</string>
   <string name="settings.servers_delete.server_dialog.title">%1$s Madung kompyuta (server) hpe shaprai kau na kun?</string>
   <string name="action_edit">Jep shagrin u</string>
-  <string name="settings.server_add.server_dialog_advanced">Hpaw shang u</string>
+  <string name="settings.server_add.server_dialog_advanced">Advanced</string>
   <string name="settings.docu_error_auth.required">Ra kadawn ai tengman lam sakse madun ai lam</string>
   <string name="settings.sec_lock_timeout_immediately">Ya jang kalang ta</string>
   <string name="settings.sec_lock_timeout_1min">Minit mi</string>
   <string name="settings.sec_lock_timeout_5min">Minit manga</string>
   <string name="settings.sec_lock_timeout_30min">Minit sumshi (Nari chyen mi)</string>
   <string name="settings.sec_lock_timeout_1hour">hkying hkum mi (Nari hkum mi)</string>
-  <string name="settings.sec_lock_timeout_desc">Talla hpe sumsaw la na matu aten kade daram na ai lam hpe myit dawdan u. Aten grau nna kadun ai rai yang, Tella hpe sumsaw hpaw da ai ten hta, na a jak hpe marai langai ngai sawk tam ai hte seng ai myit tsang lam hpe shayawm ya lu ai majaw, grau nna shim nga ai.</string>
+  <string name="settings.sec_lock_timeout_desc">Decide how long it takes for Tella to lock</string>
   <string name="settings.prot_select_delete.vault">Delete files</string>
   <string name="settings.sec_delete.vault_tooltip">Tella kata bang da ai lamang nhtan ni yawng hpe shaprai kau u.</string>
   <string name="settings.sec_delete.forms_tooltip">Laika nhprang hte tang shawn da ai hkrang laika ni yawng hpe shaprai kau u.</string>
@@ -335,7 +328,8 @@
   <string name="settings.sec_delete.app_tooltip">Bungli lamang hte dai hta rawng ai shiga lamang ni yawng hpe shaprai kau u. \"Ndai bungli lamang hpe nang shaw kau mayu nni?\" ngu nna, nang hpe san wa na ra ai. Nang hkap la shagrin ai lam n nga jang, Tella hpe mung shaprai kau ai lam nga na n re.</string>
   <string name="settings.sec_bypass_switch_title">Jep joi ai lam (censorship) hpe koi yen u</string>
   <string name="settings.sec_bypass_switch_expl">Na a buga ginra hta Tella hpe pat shingdang na matu shakut shaja ai lam ni hpe dang kau u. Dai hpe hpaw tawn ai majaw, madung kompyuta ni hpang de shiga lamang sa ai shaloi grau lanyan shangun chye ai hpe matsing da u.</string>
-  <string name="settings.servers_add_camouflage.subtitle">Na a bungli lamang hpe kaga mying hte lamang masat kumla hpe lang nna ndai laman hta makoi magap da sai.</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">MAGAP MAKOI AI LAM LADAT HPE GALAI KAU U</string>
   <string name="settings.servers_remove.camouflage.method">MAGAP MAKOI AI LAM HPE SHAW KAU U</string>
   <string name="settings.servers_hide_tella_title">Tella hpe makoi magap u</string>
@@ -347,10 +341,11 @@
   <string name="settings.servers_setup_hide_behind_camouflage_title">Bungli lamang (app) ajet langai a hpang e makoi da u</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">Shim dik htum lata la ai lam: Tatut akyu jashawn nga ai bungli lamang a hpang e, Tella hpe ning-ip makoi magap da u</string>
   <string name="settings.servers_setup_change_name_icon_title">MYING HTE LAMANG MASAT KUMLA HPE GALAI KAU U</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Shim lam yawm ai</b> Tella gaw kaga bungli lamang(app) mying hte lamang masat kumla(icon) hku nna pat man ntsa pru wa na re.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_title">Sawn sang jak (Calculator) bungli lamang (app)</string>
-  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Grau shim hkra:</b> Tatut ahkyu jashawn ngai ai sawn sang jak bungli lamang langai a hpang e, Tella hpe ning-ip makoi da ai. Sumsaw hpaw nna Tella hpe hpaw na matu, sawn sang jak hta na a dinghkrai masat htihkum (PIN) hpe jat bang u.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[Dinghkrai masat htihkum(PIN) sumsaw hpe nang lang ai rai yang chyu sha, sawn sang jak makoi magap ai lam hpe galaw ya lu nga ai. <font color=\"#D6933B\"><b>Sumsaw hpe ndai kaw galai u</font></b>]]></string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">Na a sumsaw ladat hpe nang galai kau ai rai yang, makoi magap ai lam n mai galaw sai</string>
   <string name="action_continue">Dingngam galaw u</string>
   <string name="settings.camo_icamera">iSumla dem jak (Kemra)</string>
@@ -367,43 +362,43 @@
   <string name="settings.camo_jeweldash">Ja Dumbri</string>
   <string name="settings.camo_time">Aten</string>
   <string name="settings.camo_stopwatch">Jahkring masat Nari</string>
-  <string name="fragment_mic">Nsen rim jak</string>
+  <string name="fragment_mic">Microphone</string>
   <string name="mic_recording">Nsen rim ai lam</string>
   <string name="mic_rename_recording">Nsen rim ai lam hpe mying bai shamying u</string>
   <string name="recorder_toast_recording.saved">Nsen rim ai lam hpe na a Tella lamang nhtan hta e matsing bang da sai</string>
   <string name="onboard.intro_title">Tella kaw na hkap tau la ga ai</string>
   <string name="onboard.intro_get_started">Galaw hpang u</string>
   <string name="onboard.title_camera">Sumla dem jak (Kemra)</string>
-  <string name="onboard.expl_camera">Dat sumla ni hte sumla hkrung ni hpe Tella kaw dan tawk dem u. Ndai lamang nhtan ni hpe Tella hta shi hte shi ning-ip ga makoi hte la da nna, matsing bang da nhtawm, na a phone kata rawng ai ayan lamang madun gawk (gallery) kaw na mu lu na n rai sai.</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">Nsen rim jak</string>
-  <string name="onboard.expl_recorder">Masha san jep lam (interview) ni hte nsen ni hpe Tella hta dan tawk rim bang da u. Nsen lamang nhtan ni hpe Tella hta shi hte shi ning-ip ga makoi hte la da nna, matsing bang da nhtawm, na a phone kata rawng ai ayan mazing gawk kaw na shang lang lu na n rai sai.</string>
+  <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
   <string name="onboard.title_files">Ning-ip ga makoi hte la da ai lamang nhtan ni hte laika nhtan ni</string>
-  <string name="onboard.expl_files">Tella kata na lamang nhtan ni hte laika nhtan ni yawng hpe ning-ip ga makoi hte la da sai. Tella hpe sumsaw hte la da ai rai yang, na a lamang nhtan ni hte laika nhtan ni hpe ning-ip ga makoi hte la da ya na rai nna, Tella a shinggan na shang lang n mai sai.</string>
+  <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
   <string name="onboard.title_lock_finish">Sumsaw</string>
   <string name="onboard.expl_lock_finish">Na a sumsaw hpe galaw lajang ngut sai! Nang hku nna dai hpe masat ai lam hta kam ai ten hta e galai ai.</string>
   <string name="onboard.title_all_done">Yawng galaw ngut sai!</string>
-  <string name="onboard.expl_all_done">Nang hku nna Tella de sa mai ai, shing n rai, madang tsaw lata la ai lam ni hte Tella hpe matut galaw jahtuk la mai ai.</string>
+  <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
   <string name="onboard.go_btn_all_done">Tella de sa u</string>
   <string name="onboard.advanced_btn_all_done">Madang tsaw masat ai lam ni (settings)</string>
   <string name="onboard.title_share_data">Nang mahkawng zing da ai shiga lami lamang (data) hpe garan u</string>
-  <string name="onboard.expl_share_data">Wuphung wuhpawng langai ngai hte rau bungli galaw ai rai yang, lamang nhtan ni hte shiga lamang ni hpe sa na matu, shi a madung kompyuta hte matut mahkai u. Na a wuhpung wuhpawng hku nna, madung kompyuta shiga lami lamang ni hte seng nna, nang hpe karum madi shadaw ya mai nga ai.</string>
+  <string name="onboard.expl_share_data">If you work with an organization, connect to the organization’s server to send files and data with them. Your organization should provide you with the server details.</string>
   <string name="onboard.connect_btn_share_data">Madung kompyuta hte matut mahkai u</string>
   <string name="onboard.continue_btn_share_data">Madung kompyuta langai ngai de n matut mahkai ai sha dingngam sa u</string>
-  <string name="onboard.expl_hide_tella">Na a jak hta Tella hpe grau tam yak na hkra, na a pat man ntsa shi a hkrang nsam hpe nang galai kau mai ai.</string>
-  <string name="onboard.default_btn_title_hide_tella">Tella a shawng na nga da chyalu hkrang nsam hpe hkang zing u</string>
-  <string name="onboard.default_btn_subtitle_hide_tella">Tella gaw na jak a pat man ntsa e matut na mu lu nga na re</string>
+  <string name="onboard.expl_hide_tella">To make it harder to find on your device, you can hide Tella by changing the way it looks on your homescreen.</string>
+  <string name="onboard.default_btn_title_hide_tella">KEEP tella’s default look</string>
+  <string name="onboard.default_btn_subtitle_hide_tella">Tella remains visible on the home screen</string>
   <string name="onboard.title_advanced_complete">Madang tsaw jahtuk la ai lam ngut sai!</string>
-  <string name="onboard.expl_advanced_complete">Nang hku nna, Tella masat ai lam (Setting) ni hta, na a ra sharawng ai lam ni hpe man man galai mai sai.</string>
+  <string name="onboard.expl_advanced_complete">You can always continue changing your preferences in Settings.</string>
   <string name="onboard.title_connected_server">Madung kompyuta (server) hte matut mahkai da sai</string>
-  <string name="onboard.expl_connected_server">Madung kompyuta jak hpe nang atsawm sha matut mahkai ngut re majaw, na a shiga lamang (data) ni hpe garan mai sai.</string>
-  <string name="onboard.expl_hide_tella_set">Akyu jashawn jai lang nga ai Sawn sang jak bungli lamang a hpang e, Tella hpe ning-ip makoi da na re. Sawn sang jak kaw, na a dinghkrai masat htihkum(PIN) a hpang \"=\" hte hkan nna shang let Tella hpe hpaw u</string>
+  <string name="onboard.expl_connected_server">You have successfully connected Tella to the server and will be able to share your data.</string>
+  <string name="onboard.expl_hide_tella_set">Your camouflage is set up! You can change it anytime in Settings.</string>
   <string name="onboard.hide_behind_calculator_not_possible">Dinghkrai masat htihkum(PIN) sumsaw langai hpe nang lang ai rai yang chyu sha, Sawn sang jak makoi magap ai lam hpe galaw lu na rai nga ai.</string>
   <string name="onboard.calculator_button">Sawn sang jak hpe lata san la u</string>
   <string name="onboard.calculator_expl">Akyu jashawn jai lang nga ai Sawn sang jak bungli lamang a hpang e, Tella hpe ning-ip makoi da na re. Sawn sang jak kaw, na a dinghkrai masat htihkum(PIN) a hpang \"=\" hte hkan nna shang let Tella hpe hpaw u</string>
   <string name="settings.general_recent_files_switch_title">Ndai laman na lamang nhtan (file) ni</string>
-  <string name="settings.general_recent_files_switch_expl">Tella a pat man ntsa, na a ndai laman na lamang nhtan (files) ni hpe lawan ladan shang lang na ahkang jaw ai.</string>
+  <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
   <string name="settings.general_favorite_forms_switch_title">Ra dik hkrang laika ni</string>
-  <string name="settings.general_favorite_forms_switch_expl">Tella a pat man ntsa, nang ra dik ai hkrang laika ni hpe lawan ladan shang lang na ahkang jaw ai.</string>
+  <string name="settings.general_favorite_forms_switch_expl">Show shortcuts to your favorite forms on Tella’s homescreen.</string>
   <string name="settings.sec_confirm_camouflage_title">Makoi madap ai lam hpe hpaw na matu Tella kaw na pru na kun?</string>
   <string name="settings.sec_confirm_camouflage_desc">Tella hpe bai hpaw na matu, na a bungli lamang ni kaw na %s bungli lamang masat kumla hpe tam u.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Tella hpe bai hpaw na matu, na a bungli lamang (apps) ni kaw na Sawn sang jak bungli lamang masat kumla (icon) hpe tam u. Sawn sang jak (Calculator) kaw, na a dinghkrai masat htihkum (PIN) a hpang \"=\" hte hkan nna shang let Tella hpe hpaw u.</string>
@@ -417,12 +412,8 @@
   <string name="Vault_CreateFolder_SheetAction">Shalat shapraw u</string>
   <string name="ServerSettings_ServerName_ToolTip">Hpang de, madung kompyuta (server) ni bai jat bang ai rai yang, dai hpe matsing lu na matu, na a madung kompyuta hpe amying langai jaw da u. Dai gaw, wuhpung langai a mying, bungli masing hte seng ai mying zawn re ai ni mai byin nga ai.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="zero">% htawt la ngut sai lamang nhtan (file)</item>
-    <item quantity="one">% htawt la ngut sai lamang nhtan (file)</item>
-    <item quantity="two">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="few">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="many">% htawt la ngut sai lamang nhtan ni (files)</item>
-    <item quantity="other">% htawt la ngut sai lamang nhtan ni (files)</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Lamang htawt la ai lam hte ning-ip ga makoi la da ai lam</string>
   <string name="Rec_Exit_SheetTitle">Na a nsen rim da ai lamang nhtan hpe matsing bang da na kun?</string>
@@ -433,7 +424,7 @@
   <string name="Vault_Encrypting_Cancel_SheetText">Nang dawm kau ai rai yang, na a lamang nhtan (file) hpe shamat kau na re</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">NING-IP GA MAKOI HTE LA DA AI LADAT(ENCRYPTION) HPE BAI HPANG U</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Delete">LAMANG NHTAN (FILE) HPE SHAPRAI KAU U</string>
-  <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Sumsaw (lock) hpe galai kau nna, makoi magap ai lam hpe shaw kau na kun?</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Change lock method and remove camouflage?</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetText">Nang ya lang ai Sawnsang jak (Calculator) makoi magap ai lam gaw, dinghkrai masat htihkum (PIN) sumsaw hte sha lang mai ai. Na a sumsaw la ai ladat hpe nang galai kau ai rai yang, Tella hpe tut nawng makoi magap da na n rai sai raitim, na a phone pat man ntsa hta gaw mu nga ai.</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">MAGAP MAKOI AI LAM HPE SHAW KAU U</string>
   <string name="SettingsCamo_EnterLock_Password">Na a makoi magap ai ladat hpe galai na matu, na a ga makoi hpe dip bang u</string>
@@ -918,8 +909,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -1011,4 +1002,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

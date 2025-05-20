@@ -312,7 +312,7 @@ mode activation</string>
   <string name="action_enable">Enable</string>
   <string name="action_disable">Disable</string>
   <string name="settings.servers_delete.server_dialog.title">Delete \"%1$s\" server?</string>
-  <string name="action_edit">Edit</string>
+  <string name="action_edit">Düzenle</string>
   <string name="settings.server_add.server_dialog_advanced">Advanced</string>
   <string name="settings.docu_error_auth.required">Authentication required</string>
   <string name="settings.sec_lock_timeout_immediately">Immediately</string>
@@ -549,7 +549,7 @@ button to add a new template.</string>
   <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
   <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
   <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
-  <string name="Vault_Filter_Name">Name</string>
+  <string name="Vault_Filter_Name">Ad</string>
   <string name="Server_Url_Screen_Title">Enter the server URL</string>
   <string name="Login_Type_Screen_Title">Log in if you have a username and password, or use the server\'s public access.</string>
   <string name="Login_Text">Log in</string>
@@ -680,7 +680,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Reports_Select_Title">Title</string>
   <string name="Reports_Select_Description">Description</string>
   <string name="Reports_Attach_files_Here">Attach files here</string>
-  <string name="Connection_Title">Connections</string>
+  <string name="Connection_Title">Bağlantılar</string>
   <string name="Reports_Saved_Draft">The report was saved as a draft</string>
   <string name="Reports_Pause">Pause</string>
   <string name="Reports_Resume">Resume</string>
@@ -752,23 +752,23 @@ they are uploaded to this project as a report.</string>
   <string name="action_display_gridView">display in gridView</string>
   <string name="action_display_list">display in list</string>
   <string name="quick_exit_action">quick exit</string>
-  <string name="action_zoom">zoom</string>
+  <string name="action_zoom">yakışlaştırma</string>
   <string name="action_edit_recording_name">edit recording name</string>
   <string name="action_create_new_folder">create new folder</string>
   <string name="action_quick_delete">quick delete</string>
   <string name="orange_theme">orange theme</string>
-  <string name="blue_theme">blue theme</string>
-  <string name="green_theme">green theme</string>
-  <string name="yellow_theme">yellow theme</string>
+  <string name="blue_theme">mavi tema</string>
+  <string name="green_theme">yeşil tema</string>
+  <string name="yellow_theme">sarı tema</string>
   <string name="settings.sec_keep.exif_switch">Preserve metadata when importing</string>
   <string name="settings.sec_keep.exif_expl">Retain EXIF metadata when importing photos and videos into Tella. This includes data about when the image was created, camera settings, location and your device.</string>
-  <string name="Rename_name_Hint">Name</string>
+  <string name="Rename_name_Hint">Ad</string>
   <string name="action_go_to_homescreen">go to home screen</string>
-  <string name="action_show_password">show password</string>
-  <string name="action_hide_password">hide password</string>
+  <string name="action_show_password">parolayı göster</string>
+  <string name="action_hide_password">parolayı gizle</string>
   <string name="action_show_pin">show pin</string>
   <string name="action_hide_pin">hide pin</string>
-  <string name="action_go_back">go back</string>
+  <string name="action_go_back">geri dön</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
@@ -777,196 +777,175 @@ they are uploaded to this project as a report.</string>
   <string name="Settings_Five_Attempts">5 attempts</string>
   <string name="Settings_Ten_Attempts">10 attempts</string>
   <string name="Settings_Twenty_Attempts">20 attempts</string>
-  <string name="Settings_Off">Off</string>
-  <string name="Settings_On">On</string>
+  <string name="Settings_Off">Kapalı</string>
+  <string name="Settings_On">Açık</string>
   <string name="Settings_Disabled">Disabled</string>
   <string name="Settings_remaining_attempts_before_deletion">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_failed_unlock_message_template">Your Tella data will be deleted after %1$d failed unlock attempts</string>
   <string name="Settings_feature_not_available_camouflage">This feature is not available with the calculator camouflage. Change your camouflage to enable this feature.</string>
-  <string name="Auto_Upload_Report">The file(s) you imported have been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Media_Report">The photo(s)/video you took has been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Recording_Report">The recording you made has been automatically uploaded as a report.</string>
-  <string name="Auto_Upload_Imported_Report_And_Deleted">The file(s) you imported have been uploaded as a report and automatically deleted.</string>
-  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"The photo/video you took has been uploaded as a report and automatically deleted."</string>
-  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"The recording you made has been uploaded as a report and automatically deleted."</string>
-  <string name="Report_Available_in_Outbox">Your report is available in the Outbox</string>
-  <string name="Snackbar_Submit_Report_WithProject_Error">To submit a report, please select a project, type in a title and either add a description or attach a file.</string>
-  <string name="action_rotate">Rotate</string>
-  <string name="Snackbar_file_was_deleted">The file was deleted.</string>
-  <string name="Snackbar_files_were_deleted">The files were deleted.</string>
+  <string name="Auto_Upload_Report">İthal ettiğiniz dosya(lar) otomatik olarak bir rapor olarak yüklendi.</string>
+  <string name="Auto_Upload_Media_Report">Çektiğiniz fotoğraf(lar)/video otomatik olarak bir rapor olarak yüklendi.</string>
+  <string name="Auto_Upload_Recording_Report">Yaptığınız kayıt otomatik olarak bir rapor olarak yüklendi.</string>
+  <string name="Auto_Upload_Imported_Report_And_Deleted">İthal ettiğiniz dosya(lar) bir rapor olarak yüklendi ve otomatik olarak silindi.</string>
+  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"Çektiğiniz fotoğraf/video bir rapor olarak yüklendi ve otomatik olarak silindi."</string>
+  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"Yaptığınız kayıt bir rapor olarak yüklendi ve otomatik olarak silindi."</string>
+  <string name="Report_Available_in_Outbox">Raporunuz Giden Kutusunda mevcuttur</string>
+  <string name="Snackbar_Submit_Report_WithProject_Error">Bir rapor göndermek için lütfen bir proje seçin, bir başlık yazın ve ya bir açıklama ekleyin ya da bir dosya ekleyin.</string>
+  <string name="action_rotate">Döndürme</string>
+  <string name="Snackbar_file_was_deleted">Dosya silindi.</string>
+  <string name="Snackbar_files_were_deleted">Dosyalar silindi.</string>
   <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
-  <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
-  <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
-  <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
-  <string name="incorrect_pattern">Incorrect Pattern.
-
-</string>
-  <string name="incorrect_pin">Incorrect Pin. 
-
-</string>
-  <string name="incorrect_password">Incorrect Password. 
-
-</string>
-  <string name="attempts_remaining_singular">You have 1 attempt remaining until
- everything in your Tella is deleted.</string>
-  <string name="attempts_remaining_plural">You have %1$d attempts remaining until
- everything in your Tella is deleted.</string>
-  <string name="exceeded_max_attempts">You have exceeded the maximum number of
- incorrect login attempts. All your Tella data
- has been deleted.</string>
-  <string name="Settings_General_TextJustificationTitle">Text justification</string>
-  <string name="Settings_General_TextJustificationExpl">Align longer sections of text to the left and right margins for a neater look. If disabled, text will be left- or right-aligned to increase accessibility.</string>
-  <string name="Settings_General_TextSpacingTitle">Increase text spacing</string>
-  <string name="Settings_General_TextSpacingExpl">Increase line spacing to 150% and paragraph spacing to 225%.</string>
-  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella will now refresh</string>
-  <string name="Settings_General_BottomSheetRefreshWarningText">You will return to the previous screen in a few seconds.</string>
-  <string name="settings.feedback_enable_sharing">Enable feedback sharing</string>
-  <string name="settings.feedback_warning">WARNING: using this feature may reveal to someone observing the network that you use Tella. Only use if you feel comfortable with this risk.</string>
-  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
- This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
-  <string name="thanks_for_your_feedback">Thanks for your feedback!</string>
-  <string name="save_draft">Save draft?</string>
-  <string name="description_submit_feedback">You can come back anytime to submit your feedback.</string>
-  <string name="feedback">Feedback</string>
-  <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
-</string>
-  <string name="feedback_title">Feedback</string>
-  <string name="feedback_sent_msg">Your feedback has been sent</string>
-  <string name="share_feedback_action">share feedback</string>
-  <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
-  <string name="Forms_NoDraftForms">You have no draft forms.</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">Forms available on server</string>
+  <string name="Edit_Dialog_confirm_exit_title">Kaydedilmemiş değişiklikler</string>
+  <string name="Edit_Dialog_confirm_exit">Değişiklikleriniz kaydedilmedi. Çıkış yapmadan önce kaydetmek ister misiniz?</string>
+  <string name="action_exit_without_saving">KAYDETMEDEN ÇIKIN</string>
+  <string name="incorrect_pattern">Yanlış Desen.</string>
+  <string name="incorrect_pin">Yanlış Pin.</string>
+  <string name="incorrect_password">Yanlış Şifre.</string>
+  <string name="attempts_remaining_singular">Tella\'nızdaki her şeyin silinmemesi için son 1 deneme hakkınız kaldı.</string>
+  <string name="attempts_remaining_plural">Toplam %1$d yanlış girme hakkınız kaldı, hakkınız biterse Tella verileri silinir.</string>
+  <string name="exceeded_max_attempts">Maksimum yanlış giriş denemesi sayısını aşmışsınız. Tüm Tella verilerinizi silinmiştir.</string>
+  <string name="Settings_General_TextJustificationTitle">Metin yaslama</string>
+  <string name="Settings_General_TextJustificationExpl">Daha düzgün bir görünüm için uzun metin parçalarını sol ve sağ kenarlara hizalayın. Devre dışı bırakıldığında, metin erişilebilirliği artırmak için sola veya sağa hizalanır.</string>
+  <string name="Settings_General_TextSpacingTitle">Metin aralığını artırma</string>
+  <string name="Settings_General_TextSpacingExpl" formatted="false">Satır aralığını %150\'ye ve paragraf aralığını %225\'e çıkarın.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella şimdi yenilenecek</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">Birkaç saniye içinde önceki ekrana döneceksiniz.</string>
+  <string name="settings.feedback_enable_sharing">Geri bildirim paylaşımını etkinleştir</string>
+  <string name="settings.feedback_warning">UYARI: Bu özelliği kullanmak, ağın gözlemcilerine Tella\'yı kullandığınızı açıklatabilir. Sadece bu riskle rahat olduğunuz takdirde kullanın.</string>
+  <string name="feedback_msg">Eğer bir hata yaşıyorsanız, yeni bir özellik isteğiniz varsa veya başka bir geri bildiriminiz varsa bize bildirin.
+Bu geri bildirim anonimdir, bu nedenle bizimden bir yanıt almak istiyorsanız lütfen iletişim bilgilerinizi ekleyin.</string>
+  <string name="thanks_for_your_feedback">Geri bildiriminiz için teşekkür ederiz!</string>
+  <string name="save_draft">Taslak kaydedilsin mi?</string>
+  <string name="description_submit_feedback">Geri dönerek her zaman geri bildiriminizi gönderebilirsiniz.</string>
+  <string name="feedback">Geri bildirim</string>
+  <string name="not_internet_msg">İnternete bağlı değilsiniz. Geri bildiriminiz, bağlandığınızda otomatik olarak gönderilecektir.</string>
+  <string name="feedback_title">Geri bildirim</string>
+  <string name="feedback_sent_msg">Geri bildiriminiz gönderildi</string>
+  <string name="share_feedback_action">Geri bildirim paylaşın</string>
+  <string name="Forms_NoOutboxForms">Giden kutunuz şu anda boş. Göndermeye hazır olan formlar burada görünecektir.</string>
+  <string name="Forms_NoDraftForms">Taslak formunuz yok.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Sunucuda bulunan formlar</string>
   <string name="Forms_BlankSubheadingDownloadedForms">These are empty forms you can fill out.</string>
-  <string name="background_activities">Background activities</string>
-  <string name="current_background_activities">These are the activities currently ongoing in the background.</string>
-  <string name="file_encryption_in_progress">File encryption in progress</string>
-  <string name="no_background_activity">There are currently no ongoing activities in the background.</string>
-  <string name="encryption_in_progress">File encryption in progress</string>
-  <string name="encryption_exit_prompt">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
-  <string name="exit_discard_files">Exit and discard files</string>
-  <string name="exit_and_discard_files">Exit and discard files</string>
-  <string name="files_being_encrypted_message">There are files being encrypted in the background. Do you want to exit and lose the files?</string>
-  <string name="Home_BottomNav_Resources">Resources</string>
-  <string name="Resources_DownloadedTitle">Downloaded</string>
-  <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
-  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
-  <string name="Resources_AvailableTitle">Available for download</string>
-  <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
-  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
-  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
-  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
-  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
-  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
-  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
-  <string name="Resources_Exit">EXIT</string>
-  <string name="Error_DownloadFailed">Error: Download failed</string>
-  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
-  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
-  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
-  <string name="back">BACK</string>
-  <string name="encrypting">Encrypting </string>
-  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
+  <string name="background_activities">Arka plan faaliyetleri</string>
+  <string name="current_background_activities">Şu anda arka planda devam eden faaliyetler şunlardır.</string>
+  <string name="file_encryption_in_progress">Dosya şifreleme devam ediyor</string>
+  <string name="no_background_activity">Şu anda arka planda devam eden hiçbir faaliyet yok.</string>
+  <string name="encryption_in_progress">Dosya şifreleme devam ediyor</string>
+  <string name="encryption_exit_prompt">Arka planda dosyalar şifreleniyor. Çıkış yapıp dosyaları kaybetmek istiyor musunuz?</string>
+  <string name="exit_discard_files">Çıkış yap ve dosyaları iptal et</string>
+  <string name="exit_and_discard_files">Çıkış yap ve dosyaları iptal et</string>
+  <string name="files_being_encrypted_message">Arka planda dosyalar şifreleniyor. Çıkış yapıp dosyaları kaybetmek istiyor musunuz?</string>
+  <string name="Home_BottomNav_Resources">Kaynaklar</string>
+  <string name="Resources_DownloadedTitle">İndirilenler</string>
+  <string name="Resources_DownloadedEmptyMessage">Henüz hiçbir kaynak indirmediniz. Aşağıdaki her bir kaynakın yanındaki \"indir\" simgesine dokunun ve başlatın.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">Herhangi bir kaynak indirmediniz.</string>
+  <string name="Resources_AvailableTitle">İndirilebilir</string>
+  <string name="Resources_AvailableInfoMessage">Tella Web projenizden indirilebilecek kaynaklar şunlardır.</string>
+  <string name="Resources_AvailableEmptyMessage">Tella Web projenizden indirilebilecek kaynaklar bulunmamaktadır.</string>
+  <string name="Resources_RemoveFromDownloads">İndirmelerden Kaldır</string>
+  <string name="Resources_RemovedResource">\"%s\" indirme listenizden kaldırıldı.</string>
+  <string name="Resources_DialogTitle_StopDownload">İndirmeyi durdurup ve çıkmak istiyormusunuz?</string>
+  <string name="Resources_DialogMsg_StopDownload">İndirme ilerlemeniz kaybolacak. Daha sonra kaynakları tekrar indirmek için her zaman geri dönebilirsiniz.</string>
+  <string name="Resources_KeepDownloading">İNDIRMEYE DEVAM ET</string>
+  <string name="Resources_Exit">ÇIK</string>
+  <string name="Error_DownloadFailed">Hata: İndirme başarısız oldu</string>
+  <string name="exit_and_discard_verification_info">Çıkış yap ve doğrulama bilgilerini iptal et</string>
+  <string name="recording_in_progress_exit_warning">Tella hala cihazınız ve konumunuz hakkında bilgi kaydediyor. Çıkış yaparsanız, dosyanız doğrulanamaz.</string>
+  <string name="exit_and_discard_info">ÇIKIŞ YAP VE BİLGİLERİ İPTAL ET</string>
+  <string name="back">Geri</string>
+  <string name="encrypting">Şifreleme</string>
+  <string name="Sensitive_Chnage_Title">⚠️ Gelecek sürümde hassas değişiklikler</string>
+  <string name="Sensitive_Chnage_Description">Tella\'nın gelecek sürümü (15 Temmuz 2024\'te yayınlanacak) önemli teknik geliştirmeleri içerecektir. Bu değişiklikler, bazı dosyaların yeni sürüme güncellerken kaybolması riskini taşır.
 
- If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
+Eğer Tella\'da hassas dosyalar depoluyorsanız, güncelleme yapmadan önce bunları Tella dışında güvenli bir yere kopyalamanızı tavsiye ederiz.
 
- Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
-  <string name="Learn_More">LEARN MORE</string>
+Aşağıdaki \'Daha Fazla Bilgi Edinin\' düğmesine tıklayarak, yaklaşan değişiklikler hakkında daha fazla bilgi edinmek ve Tella\'dan tüm dosyaları dışa aktarma rehberliği için tıklayınız.</string>
+  <string name="Learn_More">DAHA FAZLA BİLGİ EDİNİN</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
   </plurals>
-  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
-  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
-  <string name="Analytics_contribute_more_info2"> visit this page.</string>
-  <string name="Analytics_contribute_title">Would you like to contribute?</string>
-  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
-  <string name="Analytics_how_works_title">How it works</string>
-  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
-• We collect as little data as possible.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Specific questions</string>
-  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected
-😎 Calculator camouflage enabled</string>
-  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
-  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will <b>never</b> share your data or sell it to anyone.</string>
-  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
-  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Bu özellik ile bağlamak istediğiniz varlıkları seçin.</string>
+  <string name="Analytics_contribute_reminder_title">Veri paylaşıyorsunuz</string>
+  <string name="Analytics_contribute_reminder_description">Hatırlatma: Şu anda uygulamanızın analizlerini Tella\'yı geliştirmek için paylaşıyorsunuz. Her zaman Ayarlar\'a giderek paylaştırmayı durdurabilirsiniz.</string>
+  <string name="Analytics_contribute_more_info">Veri toplama yöntemlerimiz hakkında daha fazla bilgi için,</string>
+  <string name="Analytics_contribute_more_info2">Bu sayfayı ziyaret edin.</string>
+  <string name="Analytics_contribute_title">Katkıda bulunmak ister misiniz?</string>
+  <string name="Analytics_contribute_description">Her zaman Ayarlar\'a giderek çıkabilirsiniz.</string>
+  <string name="Analytics_contribute_info_link">Veri toplama yöntemlerimiz hakkında daha fazla bilgi için bu sayfayı ziyaret edin.</string>
+  <string name="Analytics_how_works_title">Nasıl çalışır</string>
+  <string name="Analytics_how_works_description">• Gizlilik saygılı bir sistem olan DivviUp\'ı analiz için kullanıyoruz.
+• Mümkün olan en az veri topluyoruz.
+• Tüm veriler anonimdir ve asla size bağlanamaz.</string>
+  <string name="Analytics_questions_title">Özel sorular</string>
+  <string name="Analytics_questions_description">Her çalışma, belirli sorular hakkında veri toplar. İşte bir örnek:</string>
+  <string name="Analytics_questions_examples">🔓 Haftada 4 kez Tella açıldı
+💾 Tella\'da 32 dosya depolandı
+📖 İspanyolca dil seçildi
+⚡ 1 sunucu bağlandı
+😎 Hesap makinesi kılıfı etkinleştirildi</string>
+  <string name="Analytics_share_data_title">Verilerinizi paylaşarak Tella\'yı geliştirin</string>
+  <string name="Analytics_share_data_description">Bu çalışmaya katılarak, hangi özelliklerin size önemli olduğunu ve uygulamayı nasıl kullandığınızı anlamamıza yardımcı olacaksınız.</string>
+  <string name="Analytics_respect_privacy_title">Gizliliğinize saygı duyuyoruz</string>
+  <string name="Analytics_respect_privacy_description">• Tella\'da depoladığınız veya organizasyonunuzla paylaştığınız hiçbir dosyaya erişmeyeceğiz. 
+• Verilerinizi <b>hiçbir zaman</b> kimseyle paylaşmayacağız veya satmayacağız.</string>
+  <string name="Analytics_banner_title">Tella\'yı geliştirmek için analizleri paylaşın</string>
+  <string name="Analytics_banner_improve_description">Tella\'yı nasıl kullandığınızı anlamamıza yardımcı olun. Tüm veriler anonimdir ve asla sizinle ilişkilendirilemez.
 
-Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
-  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
-  <string name="select_entities">Select entities</string>
-  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-  <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
-  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
-  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
+Tella ekibiyle analizleri paylaşmak ister misiniz?</string>
+  <string name="Settings_Analytics_switch_title">Tella\'yı geliştirmek için verileri paylaşın</string>
+  <string name="Settings_Analytics_switch_expl">Tella\'yı nasıl kullandığınızı anlamamıza yardımcı olun. Verileriniz asla sizinle ilişkilendirilemez.</string>
+  <string name="select_entities">Varlıkları seçin</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Bu özellikle bağlamak istediğiniz varlıkları arayın veya seçin.</string>
+  <string name="add_more_entities">Daha fazla varlık ekle</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
+  <string name="Settings_Analytics_turn_on_dialog">Analizleri paylaşmak için kaydoldunuz. Bunu her zaman Ayarlar\'da değiştirebilirsiniz.</string>
+  <string name="Settings_Analytics_turn_off_dialog">Artık analizleri paylaşmayacaksınız. Bunu her zaman Ayarlar\'da değiştirebilirsiniz.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
-  <string name="unlock">Unlock</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
-  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
- forms, reports, and files directly from Tella
- to your organization.</string>
-  <string name="action_flip_vertically">Flip vertically</string>
-  <string name="action_flip_horizontally">Flip horizontally</string>
+  <string name="unlock">Kilidi aç</string>
+  <string name="Onboard_Collect_Data">Veri toplamak</string>
+  <string name="Onboard_Collect_Data_Exp">Bir organizasyon ile çalışıyorsanız, formları, raporları ve dosyaları doğrudan Tella\'dan organizasyonunuza gönderebilirsiniz.</string>
+  <string name="action_flip_vertically">Dikey olarak çevirin</string>
+  <string name="action_flip_horizontally">Yatay olarak çevirin</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
-  <string name="create_new_folder">CREATE NEW FOLDER</string>
-  <string name="use_shared_drive">USE SHARED DRIVE</string>
-  <string name="go_to_google_drive">GO TO GOOGLE DRIVE</string>
-  <string name="select_google_drive">Select Google drive</string>
+  <string name="create_new_folder">YENİ KLASÖR OLUŞTUR</string>
+  <string name="use_shared_drive">PAYLAŞILAN SÜRÜCÜYÜ KULLANIN</string>
+  <string name="go_to_google_drive">GOOGLE DRİVE\'A GİT</string>
+  <string name="select_google_drive">Google Drive\'ı seç</string>
   <string name="google_drive" translatable="false">Google Drive
 </string>
-  <string name="learn_more_about_the_types_of_drives">Learn more about the types of drives.</string>
-  <string name="description_google_drive">You can either connect to an organizational Shared Drive or create a new folder in your personal Drive.</string>
-  <string name="select_a_drive_to_connect">Select a Drive to connect to</string>
+  <string name="learn_more_about_the_types_of_drives">Sürücü türleri hakkında daha fazla bilgi edinin.</string>
+  <string name="description_google_drive">Ya bir kurumsal paylaşılan Google Drive bağlanabilir ya da kişisel Google Drive\'da yeni bir klasör oluşturabilirsiniz.</string>
+  <string name="select_a_drive_to_connect">Bağlanmak için bir Google Drive seçin</string>
   <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
-  <string name="settings_add.server.selection_dialog.title">What type of server would you like to connect to?</string>
-  <string name="unavailable_connections">Unavailable connections</string>
-  <string name="unavailable_connections_desc">For the following categories, only one connection can be
- enabled at a time. To add a new connection, please delete
- the current one by going to Connections Settings. </string>
-  <string name="no_permission_to_folder_google_drive">You do not have permission to upload to this folder.</string>
-  <string name="settings.servers.title_server.settings2">Connections</string>
-  <string name="settings.servers.add_server.expl2">If you work with an organization, connect to its
- server to send files and data. Your organization
- should provide you with the server details. </string>
+  <string name="settings_add.server.selection_dialog.title">Ne tür bir sunucuya bağlanmak istersiniz?</string>
+  <string name="unavailable_connections">Kullanılamayan bağlantılar</string>
+  <string name="unavailable_connections_desc">Aşağıdaki kategoriler için yalnızca bir bağlantı aynı anda etkinleştirilebilir. Yeni bir bağlantı eklemek için, lütfen Mevcut olanı Bağlantı Ayarlarına giderek silin.</string>
+  <string name="no_permission_to_folder_google_drive">Bu klasöre yükleme izniniz yok.</string>
+  <string name="settings.servers.title_server.settings2">Bağlantılar</string>
+  <string name="settings.servers.add_server.expl2">Bir organizasyon ile çalışıyorsanız, dosyaları ve verileri göndermek için onun sunucusuna bağlanın. Organizasyonunuz size sunucu ayrıntılarını sağlamalıdır.</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
-  <string name="go_to_dropbox">GO TO DROPBOX</string>
+  <string name="go_to_dropbox">DROPBOX\'A GİT</string>
   <string name="dropbox" translatable="false">Dropbox</string>
-  <string name="Drafts_Header_Message">These are reports you are working on.</string>
-  <string name="Outboxes_Header_Message">These reports are ready to be submitted</string>
-  <string name="Submitted_Header_Message">These are reports that you have successfully submitted.</string>
-  <string name="Connections_description">Learn more about connections here. If you
- work with an organization, you can ask them
- about which connection to use.</string>
-  <string name="Connections_description_selection">Learn more about connections here.</string>
+  <string name="Drafts_Header_Message">Bunlar üzerinde çalıştığınız raporlar.</string>
+  <string name="Outboxes_Header_Message">Bu raporlar gönderilmeye hazırdır</string>
+  <string name="Submitted_Header_Message">Bunlar, başarıyla gönderdiğiniz raporlardır.</string>
+  <string name="Connections_description">Bağlantılar hakkında daha fazla bilgi edinin. Bir organizasyon ile çalışıyorsanız, hangi bağlantıyı kullanacağınızı onlara sorabilirsiniz.</string>
+  <string name="Connections_description_selection">Bağlantılar hakkında daha fazla bilgi edinin.</string>
   <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="NextCloud">Nextcloud</string>
-  <string name="NextCloud_Create_New_Folder">Create new folder</string>
-  <string name="NextCloud_Create_New_Folder_Description">Your reports will be uploaded to a new
- folder on your Nextcloud. Choose a name
- for this folder here.</string>
-  <string name="NextCloud_Folder_Name">Folder name</string>
-  <string name="Error_Connecting_To_Server_Msg">Error connecting to server. Please try again.</string>
+  <string name="NextCloud_Create_New_Folder">Yeni klasör oluştur</string>
+  <string name="NextCloud_Create_New_Folder_Description">Raporlarınız Nextcloud\'daki yeni bir klasöre yüklenecek. Lütfen bu klasör için bir ad seçin.</string>
+  <string name="NextCloud_Folder_Name">Klasör ismi</string>
+  <string name="Error_Connecting_To_Server_Msg">Sunucuya bağlanılamadı. Lütfen tekrar deneyin</string>
   <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
   <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
   <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
   <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
-  <string name="ssl_validator_question">Do you want to trust this certificate anyway?</string>
+  <string name="ssl_validator_question">Yine de bu sertifikaya güvenmek istiyor musunuz?</string>
   <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
   <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
   <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
@@ -992,16 +971,16 @@ Would you like to share analytics with the Tella team?</string>
   <string name="login_data_own_scheme" translatable="false">nc</string>
   <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
-  <string name="go_to_nextcloud">Go to Nextcloud</string>
-  <string name="google_drive_create_folder_description">Your reports will be uploaded to a new folder on your Google Drive. Choose a name for this folder here.</string>
-  <string name="folder_name">Folder name</string>
-  <string name="Folder_Empty_Error">Folder name cannot be empty</string>
-  <string name="file_name_taken">File name taken. Please use a different one.</string>
-  <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
-  <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
-  <string name="invalid_url">Invalid URL</string>
-  <string name="delete_report">Delete report?</string>
+  <string name="go_to_nextcloud">Nextcloud\'a git</string>
+  <string name="google_drive_create_folder_description">Raporlarınız Google Drive\'daki yeni bir klasöre yüklenecektir. Bu klasör için bir isim seçin.</string>
+  <string name="folder_name">Klasör ismi</string>
+  <string name="Folder_Empty_Error">Klasör adı  boş bırakılamaz</string>
+  <string name="file_name_taken">Dosya adı alındı. Lütfen farklı bir tane kullanın.</string>
+  <string name="folder_exist_error">Klasör adı zaten alınmıştır. Lütfen farklı bir tane kullanın.</string>
+  <string name="nextcloud_file_size_limit">Nextcloud sunucusu için şu an da sadece 20MB den küçük dosyalar gönderilebilir.</string>
+  <string name="invalid_url">Geçersiz URL</string>
+  <string name="delete_report">Rapor silinsin mi?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
-  <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="Collect_MediaWidget_Attach_File">Dosya ekle</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

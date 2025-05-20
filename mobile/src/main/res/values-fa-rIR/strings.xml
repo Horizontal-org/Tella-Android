@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">می‌خواهید از فرم خارج شوید؟</string>
   <string name="verification_prompt_dialog_title">GPS فعال شود؟</string>
   <string name="collect_tab.title_blank">خالی</string>
-  <string name="action_cancel">لغو</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">تماس با ما</string>
   <string name="collect_dialog.text_download.progress">دانلود فرم</string>
   <string name="collect_toast_download.completed">دانلود پایان یافت</string>
-  <string name="action_delete">حذف</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">پیش‌نویس</string>
   <string name="collect.blank_action_download.form">دانلود</string>
   <string name="settings_text_empty.field">این قسمت نمی‌تواند خالی باشد.</string>
@@ -188,8 +188,8 @@
   <string name="collect.form_signature_toast_fail.saving">هنگام ذخیره کردن امضا خطایی رخ داد. لطفا دوباره امتحان کنید</string>
   <string name="collect.form_acknowledge_select.expl">تایید. ادامه دهید.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d فایل</item>
-    <item quantity="other">%d فایل ها</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">اطلاعات بیشتر</string>
   <string name="settings.servers_add.server_dialog.title">افزودن سرور</string>
@@ -328,7 +328,8 @@
   <string name="settings.sec_delete.app_tooltip">برنامه و همه داده‌های مرتبط با آن حذف شود. از شما سوال می‌شود که «آیا می‌خواهید این برنامه را حذف کنید؟» اگر تایید نکنید، Tella حذف نمی‌شود.</string>
   <string name="settings.sec_bypass_switch_title">دور زدن سانسور</string>
   <string name="settings.sec_bypass_switch_expl">اقدامات صورت‌گرفته برای مسدود کردن Tella در منطقه را خنثی کنید. توجه کنید که فعال کردن این گزینه سرعت ارسال داده به سرورها را کاهش می‌دهد.</string>
-  <string name="settings.servers_add_camouflage.subtitle">برنامه‌ شما هم‌اکنون با برنامه «ماشین‌حساب» استتار می‌شود</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">تغییر دادن روش استتار</string>
   <string name="settings.servers_remove.camouflage.method">حذف استتار</string>
   <string name="settings.servers_hide_tella_title">پنهان کردن Tella</string>
@@ -343,7 +344,8 @@
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>با سطح امنیت پایین‌تر:</b> Tella با نام و نماد متفاوتی در صفحه اصلی ظاهر می‌شود. ضربه زدن بر روی نماد جدید سبب باز شدن Tella واقعی می‌شود.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">پنهان کردن پشت برنامه ماشین‌حساب</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>امن‌تر:</b>پنهان کردن Tella پشت یک برنامه ماشین‌حساب واقعی فعال. برای باز کردن قفل Tella، پین خود را در ماشین‌حساب وارد کنید.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">استتار ماشین‌حساب فقط در صورتی امکان‌پذیر است که از قفل پین استفاده کنید.<font color="#D6933B"><b> قفل را اینجا تغییر دهید</b></font></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">اگر روش قفل کردن را تغییر دهید، قابلیت استتار غیرفعال می‌شود</string>
   <string name="action_continue">ادامه</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -411,8 +413,8 @@
   <string name="Vault_CreateFolder_SheetAction">ایجاد</string>
   <string name="ServerSettings_ServerName_ToolTip">برای سرور خود نامی انتخاب کنید تا در صورت افزایش تعداد سرورها بتوانید آن را شناسایی کنید. می‌توانید نام سازمان، نام پروژه و... را به سرور بدهید.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="one">%s  فایل وارد شد</item>
-    <item quantity="other">%s  فایل وارد شد</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">وارد کردن و رمزگذاری</string>
   <string name="Rec_Exit_SheetTitle">فایل صوتی ضبط شده ذخیره شود؟</string>
@@ -451,8 +453,8 @@
   <string name="Uwazi_Language_Screen_Description">این مجموعه Uwazi به چندین زبان در دسترس است. زبان موردنظر برای دانلود قالب را انتخاب کنید.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">میانبر قالب‌ها موردعلاقه را در صفحه اصلی Tella نمایش دهید.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">قالب‌های موردعلاقه</string>
-  <string name="Uwazi_Templates_Empty_Description">شما قالب ذخیره‌شده ندارید. برای افزودن قالب جدید،
-دکمه «+» را بزنید.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">شما مدخل ارسال‌شده ندارید.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">صندوق خروجی شما فعلاً خالی است. مدخل‌های
 آماده ارسال اینجا ظاهر می‌شوند.</string>
@@ -496,8 +498,8 @@
   <string name="Uwazi_Server_Title">سرور:</string>
   <string name="Uwazi_Template_Title">قالب:</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="one">%1$d فایل پیوست شد</item>
-    <item quantity="other">%1$d فایل ها پیوست شدند</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">انتخاب فایل</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">انتخاب فایل PDF</string>
@@ -525,24 +527,24 @@
   <string name="Collect_Subtitle_RemoveForm">آیا مطمئن هستید که می‌خواهید \"%1$s\" را حذف کنید؟</string>
   <string name="Util_ellapsedTime_Year">بیش از یک سال پیش</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">یک ماه پیش</item>
-    <item quantity="other">%d ماه پیش</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">یک هفته پیش</item>
-    <item quantity="other">%d هفته پیش</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">یک روز پیش</item>
-    <item quantity="other">%d روز پیش</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="one">یک ساعت پیش</item>
-    <item quantity="other">%d ساعت پیش</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="one">یک دقیقه پیش</item>
-    <item quantity="other">%d دقیقه پیش</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">چند ثانیه پیش</string>
   <string name="Donwload_Templates_Title_Description">این‌ها قالب‌هایی هستند که در نمونه‌های Uwazi که به آن‌ها متصل شده‌اید، در دسترس هستند.</string>
@@ -578,7 +580,7 @@
   <string name="Collect_DialogInfo_FormSubmissionStopped">فرآیند ارسال فرم متوقف شد. می‌توانید آن را از صندوق خروجی از سر بگیرید.</string>
   <string name="action_view">مشاهده</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella در حال متوقف شدن است...</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">صبر کنید. تا چند ثانیه دیگر به صفحه اصلی دستگاه خود باز خواهید گشت.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">حذف استتار ...</string>
   <string name="Collect_DeleteForm_SheetTitle">فرم حذف شود؟</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">پیش‌نویس حذف شود؟</string>
@@ -633,17 +635,17 @@
   <string name="settings.docu_auto.delete_action.expl">به محض بارگذاری فایل‌ها در سرور، Tella آن‌ها را به‌طور خودکار از دستگاه شما حذف می‌کند.</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">شما دیگر نمی‌توانید فایلی در این سرور بارگذاری کنید.</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="one">یک فایل</item>
-    <item quantity="other">%d فایل ها</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB بارگذاری شد</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="one">%d فابل بارگذاری شد</item>
-    <item quantity="other">%d فابل ها بارگذاری شدند</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="one">%d دقیقه مانده</item>
-    <item quantity="other">%d دقیقه مانده</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">سفارشی‌سازی</string>
   <string name="Uwazi_Send_Header_Title">پایان مدخل</string>
@@ -663,8 +665,8 @@
   <string name="Setting_Reports_Share_Information_Title">اشتراک‌گذاری اطلاعات راستی‌آزمایی</string>
   <string name="Setting_Reports_Share_Information_Description">هنگام ارسال گزارش‌ها، اطلاعات مربوط به دستگاه و موقعیت مکانی خود را وارد کنید تا فایل‌هایتان قابل تأیید شوند.</string>
   <string name="Setting_Reports_Background_Upload">بارگذاری در پس‌زمینه</string>
-  <string name="Setting_Reports_Background_Upload_Description">هنگام انجام دادن کارهای دیگر یا در صورت خروج از Tella، بارگذاری گزارش‌ها ادامه می‌یابد.
-هشدار: در صورت فعال شدن، قفل Tella تا زمان بارگذاری کامل همه گزارش‌ها باز می‌ماند.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">تنظیمات پیشرفته پایان یافت</string>
   <string name="Setting_Reports_Settings_Completed_Description">در هر زمان می‌توان ترجیحات «گزارش‌ها» را در قسمت «تنظیمات» Tella تغییر دهید.</string>
   <string name="Drafts_Reports_Empty_Message">پیش‌نویس‌های شما فعلاً خالی است. گزارش‌های ارسال‌نشده اینجا ظاهر می‌شوند.</string>
@@ -904,8 +906,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -997,4 +999,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

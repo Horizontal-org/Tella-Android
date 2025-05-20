@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Thoát biểu mẫu?</string>
   <string name="verification_prompt_dialog_title">Bật GPS?</string>
   <string name="collect_tab.title_blank">Trống</string>
-  <string name="action_cancel">Hủy</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">Liên hệ với chúng tôi</string>
   <string name="collect_dialog.text_download.progress">Đang tải xuống biểu mẫu</string>
   <string name="collect_toast_download.completed">Tải xuống hoàn tất</string>
-  <string name="action_delete">Xóa</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">Bản nháp</string>
   <string name="collect.blank_action_download.form">Tải xuống</string>
   <string name="settings_text_empty.field">Trường này không được để trống.</string>
@@ -85,7 +85,8 @@ kích hoạt chế độ</string>
   <string name="permission_dialog.expl_device.storage">Để xuất tệp, Tella cần có quyền ghi vào bộ nhớ của thiết bị.</string>
   <string name="gallery_toast_fail.deleting.files">Đã xảy ra lỗi khi xóa các tệp tin. Vui lòng thử lại.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="other">Đã lưu %1$d tệp vào thiết bị</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Xóa tệp tin?</string>
   <string name="gallery_delete.files_dialog.expl">Tệp tin đã chọn sẽ bị xóa vĩnh viễn khỏi thư viện của bạn.</string>
@@ -187,7 +188,8 @@ kích hoạt chế độ</string>
   <string name="collect.form_signature_toast_fail.saving">Đã xảy ra lỗi khi lưu chữ ký. Vui lòng thử lại</string>
   <string name="collect.form_acknowledge_select.expl">OK. Vui lòng tiếp tục.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="other">%d tệp</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">Tìm hiểu thêm</string>
   <string name="settings.servers_add.server_dialog.title">Thêm máy chủ</string>
@@ -326,8 +328,8 @@ kích hoạt chế độ</string>
   <string name="settings.sec_delete.app_tooltip">Xóa ứng dụng và tất cả dữ liệu bên trong. Bạn sẽ được hỏi “Bạn có muốn gỡ cài đặt ứng dụng này không?” Trừ khi bạn xác nhận, Tella sẽ không bị xóa.</string>
   <string name="settings.sec_bypass_switch_title">Vượt qua kiểm duyệt</string>
   <string name="settings.sec_bypass_switch_expl">Vượt qua các cố gắng ngăn chặn Tella trong khu vực của bạn. Lưu ý rằng việc bật tính năng này sẽ khiến việc gửi dữ liệu đến máy chủ chậm hơn.</string>
-  <string name="settings.servers_add_camouflage.subtitle">Ứng dụng của bạn hiện đang được ngụy trang
- bằng ứng dụng Máy tính</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">THAY ĐỔI PHƯƠNG PHÁP NGỤY TRANG</string>
   <string name="settings.servers_remove.camouflage.method">TẮT NGỤY TRANG</string>
   <string name="settings.servers_hide_tella_title">Ẩn Tella</string>
@@ -342,7 +344,8 @@ kích hoạt chế độ</string>
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>Ít bảo mật hơn:</b> Tella sẽ xuất hiện trên màn hình chính với tên và biểu tượng ứng dụng khác. Nhấn vào biểu tượng mới sẽ mở Tella thật.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">ẩn sau một ứng dụng máy tính</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Bảo mật hơn:</b> Ngụy trang Tella phía sau một ứng dụng máy tính hoạt động thực sự. Nhập mã PIN của bạn vào máy tính để mở khóa Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">Chế độ ngụy trang Máy tính chỉ khả thi nếu bạn sử dụng khóa mã PIN.<font color="#D6933B"><b> Thay đổi khóa tại đây</b></font></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">Nếu bạn thay đổi phương thức khóa, chế độ Ngụy trang sẽ bị vô hiệu hóa</string>
   <string name="action_continue">Tiếp tục</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -410,7 +413,8 @@ kết nối với máy chủ</string>
   <string name="Vault_CreateFolder_SheetAction">Tạo</string>
   <string name="ServerSettings_ServerName_ToolTip">Đặt tên cho máy chủ để phân biệt nếu bạn thêm nhiều máy chủ sau này. Đó có thể là tên tổ chức, tên dự án, v.v.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="other">Đã nhập %s tệp</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Nhập và mã hóa</string>
   <string name="Rec_Exit_SheetTitle">Lưu bản ghi âm?</string>
@@ -449,8 +453,8 @@ kết nối với máy chủ</string>
   <string name="Uwazi_Language_Screen_Description">Bộ sưu tập Uwazi này có sẵn bằng nhiều ngôn ngữ. Vui lòng chọn ngôn ngữ mà bạn muốn tải biểu mẫu xuống. </string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Hiển thị phím tắt đến các biểu mẫu yêu thích của bạn trên màn hình chính của Tella.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Biểu mẫu ưa thích</string>
-  <string name="Uwazi_Templates_Empty_Description">Bạn chưa lưu biểu mẫu nào. Nhấn vào nút “+”
-để thêm biểu mẫu mới.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">Bạn chưa có thực thể được gửi.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">Hộp thư đi của bạn đang trống. Thực thể
 sẵn sàng gửi sẽ xuất hiện ở đây.</string>
@@ -494,7 +498,8 @@ sẵn sàng gửi sẽ xuất hiện ở đây.</string>
   <string name="Uwazi_Server_Title">Máy chủ : </string>
   <string name="Uwazi_Template_Title">Biểu mẫu : </string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="other">Đã đính kèm %1$d tệp tin</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Chọn tệp tin</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Chọn tệp PDF</string>
@@ -522,19 +527,24 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
   <string name="Collect_Subtitle_RemoveForm">Bạn chắc chắn muốn xóa \" %1$s \" không? </string>
   <string name="Util_ellapsedTime_Year">Hơn một năm trước</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="other">%d tháng trước</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="other"> %d tuần trước</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="other"> %d ngày trước</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="other">%d phút trước</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="other">%d phút trước</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">Vài giây trước</string>
   <string name="Donwload_Templates_Title_Description">Đây là các biểu mẫu có sẵn trên các phiên bản Uwazi mà bạn đã kết nối.</string>
@@ -570,7 +580,7 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
   <string name="Collect_DialogInfo_FormSubmissionStopped">Việc gửi biểu mẫu của bạn đã bị dừng. Bạn có thể tiếp tục gửi trong Hộp thư đi.</string>
   <string name="action_view">Xem</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella đang đóng …</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">Vui lòng chờ. Bạn sẽ quay lại màn hình chính của thiết bị sau vài giây.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">Loại bỏ ngụy trang …</string>
   <string name="Collect_DeleteForm_SheetTitle">Xóa biểu mẫu?</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">Xóa bản nháp?</string>
@@ -625,14 +635,17 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
   <string name="settings.docu_auto.delete_action.expl">Tella sẽ tự động xóa các tệp tin khỏi thiết bị của bạn ngay khi chúng được tải lên máy chủ.</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">Bạn sẽ không thể tải tệp tin lên máy chủ này nữa.</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="other">%d tệp tin</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">Đã tải lên %d /%dMB</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="other">Đã tải lên %d tệp</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="other">%d phút còn lại</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">Tùy chỉnh</string>
   <string name="Uwazi_Send_Header_Title">Kết thúc thực thể</string>
@@ -652,8 +665,8 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
   <string name="Setting_Reports_Share_Information_Title">Chia sẻ thông tin xác minh</string>
   <string name="Setting_Reports_Share_Information_Description">Bao gồm thông tin về thiết bị và vị trí của bạn khi gửi báo cáo, để làm cho các tệp của bạn có thể xác minh được.</string>
   <string name="Setting_Reports_Background_Upload">Tải nền lên</string>
-  <string name="Setting_Reports_Background_Upload_Description">Tiếp tục tải lên các báo cáo trong khi thực hiện các tác vụ khác hoặc nếu bạn thoát khỏi Tella.
-CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi tất cả báo cáo được tải lên hoàn toàn.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">Hoàn tất cài đặt nâng cao</string>
   <string name="Setting_Reports_Settings_Completed_Description">Bạn luôn có thể thay đổi tùy chọn Báo cáo trong phần Cài đặt của Tella.</string>
   <string name="Drafts_Reports_Empty_Message">Mục Bản nháp của bạn hiện đang trống. Các báo cáo chưa được gửi sẽ xuất hiện ở đây.</string>
@@ -777,7 +790,7 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="action_rotate">Xoay</string>
   <string name="Snackbar_file_was_deleted">Các tệp đã bị xóa.</string>
   <string name="Snackbar_files_were_deleted">Các tệp đã bị xóa.</string>
-  <string name="Snackbar_changes_were_saved">Những thay đổi của bạn đã được lưu lại</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Các thay đổi chưa được lưu</string>
   <string name="Edit_Dialog_confirm_exit">Các thay đổi của bạn chưa được lưu. Bạn có muốn lưu trước khi thoát không?</string>
   <string name="action_exit_without_saving">Thoát mà không lưu </string>
@@ -799,8 +812,8 @@ CẢNH BÁO: Nếu được bật, Tella sẽ vẫn mở khóa cho đến khi t�
   <string name="Settings_General_BottomSheetRefreshWarningText">Bạn sẽ quay lại màn hình trước trong vài giây.</string>
   <string name="settings.feedback_enable_sharing">Bật chia sẻ đánh giá</string>
   <string name="settings.feedback_warning">CẢNH BÁO: sử dụng tính năng này có thể lộ ra cho kẻ nào đó đang theo dõi mạng rằng bạn đang sử dụng Tella. Do vậy, bạn chỉ nên sử dụng nếu vẫn thấy thoải mái với rủi ro này.</string>
-  <string name="feedback_msg">Vui lòng cho chúng tôi biết nếu bạn gặp lỗi, có yêu cầu về tính năng mới, hoặc có bất kỳ nhận xét nào khác.
-Đánh giá này là ẩn danh, vì vậy hãy nhớ bao gồm thông tin liên hệ nếu bạn muốn nhận phản hồi từ chúng tôi.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
+ This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Cảm ơn phần nhận xét của bạn!</string>
   <string name="save_draft">Lưu bản nháp?</string>
   <string name="description_submit_feedback">Bạn có thể quay lại bất kỳ lúc nào để gửi đánh giá của mình.</string>
@@ -886,8 +899,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -979,4 +992,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="delete_report">Delete report?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

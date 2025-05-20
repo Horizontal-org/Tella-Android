@@ -48,7 +48,7 @@
   <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
   <string name="Vault_MoveHere">move here</string>
   <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
-  <string name="Vault_Export_SheetAction">சாதனத்தில் சேமி</string>
+  <string name="Vault_Export_SheetAction">Export</string>
   <plurals name="Vault_Items">
     <item quantity="one">items</item>
     <item quantity="other"></item>

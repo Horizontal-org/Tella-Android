@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="LockSelect_Action_Cancel">ரத்துசெய்யவும்</string>
+  <string name="LockSelect_Action_Cancel">Cancel</string>
   <string name="LockSelect_Action_Back">Back</string>
-  <string name="LockSelect_Action_Confirm">தொடர்</string>
-  <string name="LockPatternConfirm_Action_Confirm">உறுதிப்படுத்த மீண்டும் வடிவத்தை வரையவும்</string>
-  <string name="LockSelect_Action_Continue">தொடர்</string>
-  <string name="LockPatternSet_Draw_Pattern">பூட்டுநீக்கு வடிவத்தை வரையவும்</string>
+  <string name="LockSelect_Action_Confirm">Next</string>
+  <string name="LockPatternConfirm_Action_Confirm">Confirm your pattern</string>
+  <string name="LockSelect_Action_Continue">Next</string>
+  <string name="LockPatternSet_Draw_Pattern">Draw an unlock pattern</string>
   <string name="UnlockPattern_DrawToUnlock">Draw pattern to unlock Tella</string>
-  <string name="LockPatternConfirm_Pattern_Confirmed">இப்போது, டெல்லா கணக்கைத் திறக்கப் பயன்படுத்தப்படும் உங்கள் வடிவம் இது</string>
-  <string name="LockPatternSet_Pattern_Recorded">வடிவம் பதிவு செய்யப்பட்டது</string>
-  <string name="UnlockPattern_PatternTooShort">குறைந்தது %d புள்ளிகளை இணைக்கவும். தயவுசெய்து மீண்டும் வரையவும்.</string>
-  <string name="LockPatternSet_RecordingPattern">முடிந்ததும் விரலை விடுவிக்கவும்</string>
-  <string name="LockPatternSet_Action_Redraw">தயவுசெய்து மீண்டும் வரையவும்</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">தவறான வடிவம். தயவுசெய்து மீண்டும் முயற்சிக்கவும்.</string>
-  <string name="LockPatternSet_Message_PatternStarted">வடிவம் தொடங்கியது</string>
-  <string name="LockPatternSet_Message_PatternCleared">வடிவம் அழிக்கப்பட்டது</string>
-  <string name="LockPatternSet_Message_CellAdded">செல் வடிவம் சேர்க்கப்பட்டது</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Your new unlock pattern</string>
+  <string name="LockPatternSet_Pattern_Recorded">Pattern recorded</string>
+  <string name="UnlockPattern_PatternTooShort">Draw your pattern by
+ connecting at least six dots</string>
+  <string name="LockPatternSet_RecordingPattern">Release finger when done</string>
+  <string name="LockPatternSet_Action_Redraw">Clear</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Incorrect pattern,
+ please try again</string>
+  <string name="LockPatternSet_Message_PatternStarted">Pattern started</string>
+  <string name="LockPatternSet_Message_PatternCleared">Pattern cleared</string>
+  <string name="LockPatternSet_Message_CellAdded">Cell added</string>
   <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
-  <string name="LockPatternSet_Message_PatternDetected">வடிவம் முடிந்தது</string>
-  <string name="UnLockPattern_PatternArea">வடிவ பகுதி</string>
+  <string name="LockPatternSet_Message_PatternDetected">Pattern completed</string>
+  <string name="UnLockPattern_PatternArea">Pattern area.</string>
   <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
 unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>

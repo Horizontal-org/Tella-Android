@@ -28,10 +28,12 @@
   <string name="Vault_FilePath">ဖိုင်လမ်းကြောင်း</string>
   <string name="Vault_RenameFile_SheetTitle">ဖိုင်အမည်ပြောင်းမည်</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="other">ဖိုင်များကို ပယ်ဖျက်လိုပါသလား။</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="other">ရွေးချယ်ထားသောဖိုင်များကို Tella မှ အပြီးတိုင် ပယ်ဖျက်ပါမည်။</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">အမည် A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">အမည် Z &gt; A</string>
@@ -48,12 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">ဤဖိုင်ပုံစံကို Tella တွင် ဖွင့်၍မရပါ။ အခြားအက်ပ်တစ်ခုဖြင့် ဖွင့်ရန် ဖိုင်ကို သင့်စက်ထဲ၌ သိမ်းမလား။ ၎င်းသည် ဖိုင်ပါ အကြောင်းအရာကို ဖော်ထုတ်နိုင်သည်။</string>
   <string name="Vault_Export_SheetAction">စက်ထဲ၌ သိမ်းမည်</string>
   <plurals name="Vault_Items">
-    <item quantity="other">ခု</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">သင့် Tella တွင် ဖိုင်တစ်ဖိုင်မျှ မရှိသေးပါ။</string>
   <string name="Vault_FavoriteTemplates_Title">အနှစ်သက်ဆုံး အသင့်သုံးပုံစံလွှာများ</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="other">ဖိုင်များကို အောင်မြင်စွာ ရွှေ့လိုက်ပါပြီ</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">ရွေးချယ်ထားသော ဖိုင်များအနက် အချို့ကို သင်၏ ချိတ်ဆက်မှုများ၌ အသုံးပြုနေဆဲဖြစ်သည်။ ထိုဖိုင်များကို ဖျက်လိုက်ပါက မပေးပို့ရသေးသော ဖောင်ပုံစံများနှင့် အစီရင်ခံချက်များကို ထိခိုက်စေနိုင်ပါသည်။</string>
   <string name="Vault_Warning_Title">သတိပေးချက်</string>
