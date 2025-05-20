@@ -30,19 +30,6 @@ import com.hzontal.utils.MediaFile.isPDFFile
 import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showChooseImportSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
-import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
-import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
-import org.hzontal.shared_ui.breadcrumb.model.Item
-import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventObserver
@@ -71,7 +58,6 @@ import org.horizontal.tella.mobile.views.activity.viewer.PhotoViewerActivity.Com
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity
 import org.horizontal.tella.mobile.views.activity.viewer.VideoViewerActivity.Companion.VIEW_VIDEO
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.custom.SpaceAtEndDecoration
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.attachments.AttachmentsRecycleViewAdapter
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.attachments.IGalleryVaultHandler
@@ -88,6 +74,19 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.WRI
 import org.horizontal.tella.mobile.views.fragment.vault.edit.VaultEditFragment
 import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment.Companion.VAULT_FILE_INFO_TOOLBAR
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.RadioOptionConsumer
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showChooseImportSheet
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showRadioListOptionsSheet
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
+import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
+import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
+import org.hzontal.shared_ui.breadcrumb.model.Item
+import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
+import org.hzontal.shared_ui.utils.DialogUtils
 
 
 @AndroidEntryPoint
@@ -165,9 +164,7 @@ class AttachmentsFragment :
 
         binding.appbar.outlineProvider = null
         gridLayoutManager = GridLayoutManager(activity, viewModel.spanCount)
-        // Add item decoration for space at the end
-        val spacing = resources.getDimensionPixelSize(org.horizontal.tella.mobile.R.dimen.recycler_view_item_spacing)
-        binding.attachmentsRecyclerView.addItemDecoration(SpaceAtEndDecoration(spacing))
+
 
         binding.attachmentsRecyclerView.apply {
             adapter = attachmentsAdapter
