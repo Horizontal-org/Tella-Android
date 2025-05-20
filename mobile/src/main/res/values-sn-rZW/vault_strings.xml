@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Magwaro ese.</string>
+  <string name="Vault_Images_Title">Mifananidzo.</string>
+  <string name="Vault_Files_Title">Swikwama/Mafomu pa Tella.</string>
+  <string name="Vault_Documents_Title">Maphepa.</string>
+  <string name="Vault_Audios_Title">Mazwi.</string>
+  <string name="Vault_Videos_Title">Bassikopo.</string>
+  <string name="Vault_Others_Title">Smimueni.</string>
+  <string name="Vault_Select_Title">Kugeta swikwama.</string>
+  <string name="Vault_RecentFiles">Swikhama swispwa.</string>
+  <string name="Vault_PhotosAndVideos_Title">Mupikija no bassikopo.</string>
+  <string name="Vault_FavoriteForms_Title">Mafomu anodiwa</string>
+  <string name="Vault_Empty_Msg">A ussati wa no chikwama pa Tella hako. Keta ba batani \'\'+\"\' bassi apo kuti uvhisse chikwama chako cho kutanga kana kuenda pa camera ka kuti mucrofoni kuti uvake chikwama unokwanissa kuvaka mukwama kuti swikwama swako swigaremo.</string>
+  <string name="Vault_Move_SheetDesc">Kuendhessa ku mukwama umueni</string>
+  <string name="Vault_Rename_SheetAction">Kunhoressa</string>
+  <string name="Vault_Save_SheetAction">Kuvhiga</string>
+  <string name="Vault_Delete_SheetAction">Kulassa/Bvisa</string>
+  <string name="Vault_Share_SheetAction">Kutumira</string>
+  <string name="Vault_Upload_SheetAction">Kuthwala</string>
+  <string name="Vault_File_SheetAction">Mashoko ho chikwama</string>
+  <string name="Vault_FileInfo">Mashoko ho chikwama</string>
+  <string name="Vault_FileSize">Saizi</string>
+  <string name="Vault_FileFormat">Chiemo</string>
+  <string name="Vault_FileCreated">Kuvhaka</string>
+  <string name="Vault_FileResolution">Kuthonga</string>
+  <string name="Vault_FileLength">Kurebha</string>
+  <string name="Vault_FilePath">Kandja lo chikwama</string>
+  <string name="Vault_RenameFile_SheetTitle">Kunhoressa swe zina lo chikwama</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Zina A&gt;Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Zina Z&gt;A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Rispwa kuenda lo kare</string>
+  <string name="Vault_SortDateDesc_SheetAction">Lo khare kuenda rispwa</string>
+  <string name="Vault_ManageFiles_SheetTitle">Kuonerera swikwama</string>
+  <string name="Vault_DeleteFile_SheetDesc">Mushure mekutora faira kuisa muTella, faira rekutanga richabviswa mumudziyo wako. Kopi imwe chete ichasara ichava iri muTella.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Kuvhissa mupikicha bi bassikopo</string>
+  <string name="Vault_RecordAudio_SheetAction">Kutepa mazwi</string>
+  <string name="Vault_Import_SheetAction">Kuvhissa ko pa foni</string>
+  <string name="Vault_ImportDelete_SheetAction">Kuvhissa no kulassa chikwama cho kutanga</string>
+  <string name="Vault_CreateFolder_SheetTitle">Kuvhaka mugwama umueni</string>
+  <string name="Vault_MoveHere">Kuvhissa apa</string>
+  <string name="Vault_ViewerOther_SheetDesc">Mafomati efaira iri haagoni kuvhurwa mukati meTella. Unoda kutumira faira iri kunze kumudziyo wako kuti uivhure neapp yakasiyana here? Izvi zvinogona kufumura zviri mukati mefaira.</string>
+  <string name="Vault_Export_SheetAction">Kuendessa</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Aussati wa no chikwama pa Tella.</string>
+  <string name="Vault_FavoriteTemplates_Title">Mufananidjo nji nondissiswa</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Mamwe emafaira awasarudza ari kushandiswa muzvisungo zvako parizvino. Kuabvhisa kunogona kukanganisa mafomu nemishumo isina kutumirwa kare.</string>
+  <string name="Vault_Warning_Title">Chizivisso/Nyevero</string>
+  <string name="Vault_Delete_anyway">Kulassa/bvisa swakabhondalo</string>
+  <string name="Vault_Keep_Original">KUSSIA CHOKUTANGA</string>
+  <string name="Vault_Delete_Original">KHULASSA CHOKUTANGA</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Ukapeja kutumira chikwama pa Tella unodha kussiya chikwama chokuthanga kana kuchilassa muvhundjo?
+Kana ukulassa chikwama pa Tella ndichona chega chainga cha sala.</string>
+  <string name="Vault_FileEdit_SheetAction">Kunhoressa</string>
+</resources>
