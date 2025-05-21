@@ -64,6 +64,7 @@ import org.horizontal.tella.mobile.views.custom.CameraResolutionButton
 import org.horizontal.tella.mobile.views.custom.CameraSwitchButton
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import java.io.File
+import android.provider.Settings
 
 @AndroidEntryPoint
 class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView {
@@ -380,7 +381,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun onCaptureClicked() {
         if (Preferences.isShutterMute()) {
             val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()

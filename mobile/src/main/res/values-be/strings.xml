@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Выйсці з формы?</string>
   <string name="verification_prompt_dialog_title">Увага</string>
   <string name="collect_tab.title_blank">Пустая</string>
-  <string name="action_cancel">Адмяніць</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">Звяжыцеся з намі</string>
   <string name="collect_dialog.text_download.progress">Загрузка ў працэсе …</string>
   <string name="collect_toast_download.completed">Загрузка завершана</string>
-  <string name="action_delete">Выдаліць</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">Чарнавік</string>
   <string name="collect.blank_action_download.form">Загрузіць</string>
   <string name="settings_text_empty.field">Гэта поле не павінна заставацца пустым.</string>
@@ -343,7 +343,7 @@
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
  use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Continue</string>
@@ -368,7 +368,7 @@
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
   <string name="onboard.title_camera">Camera</string>
-  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">Recorder</string>
   <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
   <string name="onboard.title_files">Encrypted files &amp; folders</string>
@@ -793,7 +793,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_rotate">Rotate</string>
   <string name="Snackbar_file_was_deleted">The file was deleted.</string>
   <string name="Snackbar_files_were_deleted">The files were deleted.</string>
-  <string name="Snackbar_changes_were_saved">Your changes have been saved.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
   <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
@@ -909,8 +909,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -1000,6 +1000,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
   <string name="invalid_url">Invalid URL</string>
   <string name="delete_report">Delete report?</string>
-  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

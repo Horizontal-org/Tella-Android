@@ -28,12 +28,12 @@
   <string name="Vault_FilePath">مسیر فایل</string>
   <string name="Vault_RenameFile_SheetTitle">تغییر نام فایل</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">فايل حذف شود؟</item>
-    <item quantity="other">خالی</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">فایل انتخاب‌شده به‌صورت دائم از Tella حذف می‌شود.</item>
-    <item quantity="other">خالی</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">نام A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">نام Z &gt; A</string>
@@ -50,14 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">این قالب فایل را نمی‌توان در Tella باز کرد. آیا می‌خواهید فایل را به دستگاه خود منتقل کنید و آنجا با برنامه دیگری باز کنید؟ این کار ممکن است باعث افشای محتوای فایل شود.</string>
   <string name="Vault_Export_SheetAction">انتقال</string>
   <plurals name="Vault_Items">
-    <item quantity="one">آیتم‌ها</item>
-    <item quantity="other">خالی</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">هنوز هیچ فایلی در Tella ندارید.</string>
   <string name="Vault_FavoriteTemplates_Title">قالب‌های موردعلاقه</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">فایل با موفقیت حذف شد.</item>
-    <item quantity="other">فایل با موفقیت حذف شد.</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">برخی از فایل‌های انتخاب‌شده هم‌اکنون در اتصال‌های شما به کار گرفته شده‌اند. حذف کردن آن‌ها ممکن است بر فرم‌ها و گزارش‌های ارسال‌نشده تاثیر بگذارد.</string>
   <string name="Vault_Warning_Title">هشدار</string>

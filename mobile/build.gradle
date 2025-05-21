@@ -15,8 +15,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 201
-        versionName "2.15.1"
+        versionCode 204
+        versionName "2.16.0"
         multiDexEnabled true
 
         ndk {
@@ -30,7 +30,7 @@ android {
         String dropboxKey = localProperties['DROPBOX_APP_KEY']
         if (dropboxKey == null) {
             logger.warn("No value provided for DROPBOX_APP_KEY.  Specify a value in a examples/android/local.properties file. You can register for one at https://developers.dropbox.com/")
-            dropboxKey = "PUT_YOUR_KEY_HERE"
+            dropboxKey = ""
         }
         buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
         manifestPlaceholders = [dropboxKey: dropboxKey]

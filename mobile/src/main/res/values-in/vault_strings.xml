@@ -28,10 +28,12 @@
   <string name="Vault_FilePath">Jalur berkas</string>
   <string name="Vault_RenameFile_SheetTitle">Ubah nama berkas</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="other">Kosong</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="other">Kosong</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Nama A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Nama Z &gt; A</string>
@@ -48,12 +50,14 @@
   <string name="Vault_ViewerOther_SheetDesc">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
   <string name="Vault_Export_SheetAction">Mengekspor</string>
   <plurals name="Vault_Items">
-    <item quantity="other">Kosong</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">Anda tidak memiliki berkas apapun di dalam Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Templat favorit</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="other">Berkas berhasil dipindah</item>
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Beberapa dari berkas sedang digunakan di koneksi Anda. Menghapusnya bisa berdampak pada formulir dan laporan yang belum dikirim.</string>
   <string name="Vault_Warning_Title">Peringatan</string>

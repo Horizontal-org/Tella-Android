@@ -21,6 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -49,7 +50,7 @@ import org.horizontal.tella.mobile.domain.entity.googledrive.Config
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import org.horizontal.tella.mobile.util.setMargins
@@ -65,6 +66,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 import org.horizontal.tella.mobile.views.custom.CountdownTextView
 import org.horizontal.tella.mobile.views.fragment.forms.LOCATION_REQUEST_CODE
 import org.horizontal.tella.mobile.views.fragment.forms.SharedFormsViewModel
+import org.horizontal.tella.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.ImproveClickOptions
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultAdapter
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -121,8 +123,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     lateinit var config: Config
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentVaultBinding.inflate(inflater, container, false)
         return binding.root
@@ -231,19 +232,16 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
     private fun hasLocationPermissions(context: Context): Boolean {
         return ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            context, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            context, Manifest.permission.ACCESS_COARSE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestLocationPermissions() {
         baseActivity.maybeChangeTemporaryTimeout()
         val permissions = arrayOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
         )
         ActivityCompat.requestPermissions(
             //1
@@ -323,8 +321,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     }
 
     private fun maybeShowRecentBackgroundActivities() {
-        disposables.wire(
-            RecentBackgroundActivitiesEvent::class.java,
+        disposables.wire(RecentBackgroundActivitiesEvent::class.java,
             object : EventObserver<RecentBackgroundActivitiesEvent?>() {
                 override fun onNext(event: RecentBackgroundActivitiesEvent) {
                     handleBackgroundActivityEvent(event)
@@ -408,14 +405,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             else -> {
-                BottomSheetUtils.showStandardSheet(
-                    baseActivity.supportFragmentManager,
+                BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
                     baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
                     baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
                     baseActivity.getString(R.string.Vault_Export_SheetAction),
                     baseActivity.getString(R.string.action_cancel),
-                    onConfirmClick = { exportVaultFiles(vaultFile) }
-                )
+                    onConfirmClick = { exportVaultFiles(vaultFile) })
             }
         }
     }
@@ -429,8 +424,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         startActivity(Intent(activity, CollectFormEntryActivity::class.java))
     }
 
-    override fun onFavoriteTemplateClickListener(template: CollectTemplate) {
-        // Handle favorite template click
+    override fun onFavoriteTemplateClickListener(template: UwaziTemplate) {
+        bundle.putString(COLLECT_TEMPLATE, Gson().toJson(template))
+        navManager().navigateFromHomeScreenToUwaziEntryScreen()
     }
 
     override fun onServerItemClickListener(item: ServerDataItem) {
@@ -498,9 +494,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             setIsAcceptedAnalytics(true)
             baseActivity.divviupUtils.runInstallEvent()
             DialogUtils.showBottomMessage(
-                requireActivity(),
-                getString(R.string.Settings_Analytics_turn_on_dialog),
-                false
+                requireActivity(), getString(R.string.Settings_Analytics_turn_on_dialog), false
             )
         }
     }
@@ -640,7 +634,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun setupPanicView() {
         if (Preferences.isQuickExit()) {
             seekBarContainer.visibility = View.VISIBLE
-            vaultRecyclerView.setMargins(null, null, null, 110)
+            vaultRecyclerView.setMargins(null, null, null, 60)
         } else {
             seekBarContainer.visibility = View.GONE
             vaultRecyclerView.setMargins(null, null, null, 55)
@@ -681,9 +675,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         error?.let {
             Timber.e(it, "Error fetching recent files in HomeFragment")
             Toast.makeText(
-                requireContext(),
-                "Error fetching recent files: ${it.message}",
-                Toast.LENGTH_LONG
+                requireContext(), "Error fetching recent files: ${it.message}", Toast.LENGTH_LONG
             ).show()
         }
     }
@@ -703,9 +695,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun onExportError() {
         // Handle export error, e.g., show a failure message
         DialogUtils.showBottomMessage(
-            baseActivity,
-            getString(R.string.gallery_toast_fail_exporting_to_device),
-            false
+            baseActivity, getString(R.string.gallery_toast_fail_exporting_to_device), false
         )
     }
 
@@ -731,7 +721,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         }
     }
 
-    private fun handleFavoriteCollectTemplatesSuccess(files: List<CollectTemplate>) {
+    private fun handleFavoriteCollectTemplatesSuccess(files: List<UwaziTemplate>) {
         if (files.isNotEmpty()) {
             vaultAdapter.addFavoriteTemplates(files)
         } else {
@@ -879,8 +869,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun updateOrRequestPermissions() {
         baseActivity.maybeChangeTemporaryTimeout()
         val hasWritePermission = ContextCompat.checkSelfPermission(
-            baseActivity,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            baseActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
         val minSdk29 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
@@ -912,8 +901,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         if (isMainDBMigrated && isVaultDBMigrated) return
 
         if (isShowFailedMigrationSheet()) {
-            BottomSheetUtils.showStandardSheet(
-                baseActivity.supportFragmentManager,
+            BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
                 getString(R.string.Migration_Failed_Title),
                 getString(R.string.Migration_Failed_Description),
                 null,
@@ -923,8 +911,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 },
                 onCancelClick = {
                     setShowFailedMigrationSheet(false)
-                }
-            )
+                })
         }
     }
 

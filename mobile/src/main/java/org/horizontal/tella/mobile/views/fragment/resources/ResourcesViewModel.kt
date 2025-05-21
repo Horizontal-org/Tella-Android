@@ -23,11 +23,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ResourcesViewModel @Inject constructor(
-    private val resourcesRepository: ResourcesRepository
+    private val resourcesRepository: ResourcesRepository,
+    private val keyDataSource: KeyDataSource
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean> get() = _progress
@@ -162,27 +162,34 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun getPdfFile(id: String?) {
-        disposables.add(Single
-            .fromCallable<Single<VaultFile>> {
-                MyApplication.rxVault[id]
-            }
-            .doOnSubscribe { _progress.postValue(true) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doFinally {
-                _progress.postValue(false)
-            }
-            .subscribe(
-                { vaultFile: Single<VaultFile>? ->
-                    if (vaultFile == null) {
-                        _error.postValue(NotFountException())
-                    } else {
-                        _pdfFile.postValue(vaultFile.blockingGet())
-                    }
+        if (id == null) {
+            _error.postValue(NotFountException())
+            return
+        }
+
+        disposables.add(
+            MyApplication.keyRxVault.rxVault // Use the injected KeyRxVault
+                .firstOrError() // Get the first emission (RxVault instance)
+                .flatMap { rxVault ->
+                    rxVault[id] // Get the VaultFile by ID
                 }
-            ) { throwable: Throwable? ->
-                handleError(throwable)
-            })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .doFinally { _progress.postValue(false) }
+                .subscribe(
+                    { vaultFile ->
+                        _pdfFile.postValue(vaultFile)
+                    },
+                    { throwable ->
+                        if (throwable is NoSuchElementException) {
+                            _error.postValue(NotFountException())
+                        } else {
+                            handleError(throwable)
+                        }
+                    }
+                )
+        )
     }
 
     fun listResources() {
@@ -203,27 +210,40 @@ class ResourcesViewModel @Inject constructor(
     }
 
     fun removeResource(resource: Resource) {
-        disposables.add(keyDataSource.resourceDataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { _progress.postValue(true) }
-            .flatMapSingle { dataSource: ResourceDataSource ->
-                dataSource.deleteResource(
-                    resource
-                )
-            }
-            .flatMapSingle { MyApplication.rxVault[it] }
-            .flatMapSingle { MyApplication.rxVault.delete(it) }
-            .doFinally { _progress.postValue(false) }
-            .subscribe(
-                {
-                    if (it) _deletedResource.postValue(resource.fileName)
+        disposables.add(
+            keyDataSource.resourceDataSource
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _progress.postValue(true) }
+                .flatMapSingle { dataSource ->
+                    dataSource.deleteResource(resource) // Single<String> fileId
                 }
-            ) { throwable: Throwable? ->
-                handleError(throwable)
-            }
+                .flatMapSingle { fileId ->
+                    MyApplication.keyRxVault.rxVault
+                        .firstOrError()
+                        .flatMap { rxVault ->
+                            rxVault[fileId]
+                                .flatMap { vaultFile ->
+                                    rxVault.delete(vaultFile) // ✅ Already returns Single<Boolean>
+                                }
+                        }
+                }
+                .doFinally { _progress.postValue(false) }
+                .subscribe(
+                    { success ->
+                        if (success) {
+                            _deletedResource.postValue(resource.fileName)
+                        }
+                    },
+                    { throwable ->
+                        handleError(throwable)
+                    }
+                )
         )
     }
+
+
+
 
     private fun handleError(throwable: Throwable?) {
         FirebaseCrashlytics.getInstance().recordException(

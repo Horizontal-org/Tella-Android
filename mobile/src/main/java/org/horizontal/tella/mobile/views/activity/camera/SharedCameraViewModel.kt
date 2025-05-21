@@ -124,7 +124,11 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
         disposables.add(
             MediaFileHandler.getLastVaultFileFromDb().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ vaultFiles -> _lastMediaFileSuccess.postValue(vaultFiles[0]) },
+                .subscribe({ vaultFiles ->   if (!vaultFiles.isNullOrEmpty()) {
+                    _lastMediaFileSuccess.postValue(vaultFiles[0])
+                } else {
+                    _lastMediaFileError.postValue(Throwable("No media files found"))
+                } },
                     { throwable -> _lastMediaFileError.postValue(throwable) })
         )
     }

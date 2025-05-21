@@ -16,14 +16,17 @@
   <string name="LockPatternSet_Message_PatternStarted">Galaw hpang da sai maka</string>
   <string name="LockPatternSet_Message_PatternCleared">Shaw jasan kau sai maka</string>
   <string name="LockPatternSet_Message_CellAdded">Bang da ngut sai gawk madin (Cell)</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Gawk madin (cell)<xliff:g id="cell_index" example="3">%1$d</xliff:g> jat bang ngut sai.</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">Galaw ngut sai maka</string>
   <string name="UnLockPattern_PatternArea">Maka ningdam.</string>
-  <string name="UnLockPattern_Message_DrawPattern">Tella hpe hpaw na matu na a maka soi u</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Chyeju hte kalang bai chyam yu u. Na a maka ni n htuk nga ai.</string>
   <string name="LockPinSet_Message_EnterPin">Na a dinghkrai masat htihkum(PIN)hpe dip bang u</string>
-  <string name="UnlockPin_Message_EnterPin">Tella hpe hpaw na matu na a dinghkrai masat htihkum(PIN) hpe dip bang u</string>
-  <string name="LockPinSet_Message_Hint">N law htum ruhkum 6 hpe lang u. Na a shangai nhtoi zawn re loi loi hte tak la mai ai htihkum ni hpe jai lang ai lam hpe koi gam u.</string>
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
+Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Na a dinghkrai masat htihkum(PIN) hpe shagrin u</string>
   <string name="LockPinConfirm_Message_Confirm">Chyeju hte, grau teng na matu, na a dinghkrai masat htihkum (PIN) hpe kalang mi bai dip bang u.</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">Chyeju hte kalang bai chyam yu u. Na a dinghkrai masat htihkum (PIN)ni n htuk nga ai.</string>
@@ -35,7 +38,8 @@
   <string name="LockSuccess_Message_Hint">Na a sumsaw lata la ai lam hpe galoi mung mai galai nhtawm, dai hta grau nna masat ai lam ni hta Tella hpe nang myit ra ai hku gram lajang la mai ai.</string>
   <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Ga makoi shut ai, chyeju hte kalang bai chyam yu u</string>
-  <string name="UnlockPassword_Message_EnterPassword">Tella hpe hpaw na matu na a ga makoi ka bang u</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Na a ga makoi hpe shagrin u</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Chyeju hte kaja wa teng hkra na a ga makoi hpe kalang mi bai ka bang u.</string>
   <string name="LockPasswordSet_Settings_EnterCurrentPassword">Na a sumsaw hpe galai na matu, nang ya lang nga ai ga makoi hpe dip bang u</string>

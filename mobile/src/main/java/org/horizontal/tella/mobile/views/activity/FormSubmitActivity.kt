@@ -8,7 +8,12 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ActivityFormSubmitBinding
@@ -25,6 +30,7 @@ import org.horizontal.tella.mobile.views.fragment.forms.SubmitFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import org.hzontal.shared_ui.utils.DialogUtils
 
 @AndroidEntryPoint
 class FormSubmitActivity : BaseLockActivity() {
@@ -39,9 +45,8 @@ class FormSubmitActivity : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFormSubmitBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        applyEdgeToEdge(binding.root)
         init()
-
         binding.appbar.configureAppBar()
 
         if (intent.hasExtra(FORM_INSTANCE_ID_KEY)) {
@@ -194,10 +199,21 @@ class FormSubmitActivity : BaseLockActivity() {
     }
 
     private fun formReSubmitError(error: Throwable) {
-        val errorMessage = FormUtils.getFormSubmitErrorMessage(this, error)
-        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
-        finish()
+        lifecycleScope.launch {
+            val errorMessage = FormUtils.getFormSubmitErrorMessage(this@FormSubmitActivity, error)
+            withContext(Dispatchers.Main) {
+                DialogUtils.showBottomMessage(
+                    this@FormSubmitActivity,
+                    errorMessage,
+                    true
+                )
+            }
+            delay(2000)
+            withContext(Dispatchers.Main) {
+                SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                finish()
+            }
+        }
     }
 
     private fun formReSubmitNoConnectivity() {

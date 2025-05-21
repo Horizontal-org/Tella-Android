@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentSumbittedPreviewBinding
@@ -12,6 +13,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.send.SEND_ENTITY
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 
+@AndroidEntryPoint
 class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBinding>(
     FragmentSumbittedPreviewBinding::inflate
 ) {

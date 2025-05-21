@@ -9,21 +9,24 @@
   <string name="UnlockPattern_DrawToUnlock">Gambar pola untuk mebuka Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">Pola buka kunci baru Anda</string>
   <string name="LockPatternSet_Pattern_Recorded">Pola direkam</string>
-  <string name="UnlockPattern_PatternTooShort">Connect at least %d dots, please redraw</string>
+  <string name="UnlockPattern_PatternTooShort">Gambar pola Anda dengan menghubungkan setidaknya enam titik</string>
   <string name="LockPatternSet_RecordingPattern">Angkat jari ketika selesai</string>
   <string name="LockPatternSet_Action_Redraw">Bersihkan</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Wrong pattern, please try again</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Pola salah, mohon coba lagi</string>
   <string name="LockPatternSet_Message_PatternStarted">Pola dimulai</string>
   <string name="LockPatternSet_Message_PatternCleared">Pola dihapus</string>
   <string name="LockPatternSet_Message_CellAdded">Sel ditambahkan</string>
   <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">Pola selesai</string>
   <string name="UnLockPattern_PatternArea">Pattern area</string>
-  <string name="UnLockPattern_Message_DrawPattern">Gambar pola Anda untuk membuka kunci Tella</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Silakan coba lagi. Pola Anda tidak cocok.</string>
   <string name="LockPinSet_Message_EnterPin">Masukkan PIN Anda</string>
-  <string name="UnlockPin_Message_EnterPin">Masukkan PIN untuk membuka kunci Tella</string>
-  <string name="LockPinSet_Message_Hint">Gunakan setidaknya 6 karakter. Hindari menggunakan nomor yang bisa ditebak dengan mudah, seperti ulang tahun Anda.</string>
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
+Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Konfirmasikan PIN Anda</string>
   <string name="LockPinConfirm_Message_Confirm">Silakan masukkan PIN Anda satu kali lagi, untuk memastikan.</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">Silakan coba lagi. PIN Anda tidak cocok.</string>
@@ -36,7 +39,8 @@
   <string name="LockSuccess_Message_Hint">Anda selalu bisa mengubah opsi kunci Anda dan menyesuaikan Tella lebih lanjut di Pengaturan.</string>
   <string name="LockSuccess_Action_GoToTella">Buka Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Kata sandi salah, silakan coba lagi</string>
-  <string name="UnlockPassword_Message_EnterPassword">Masukkan kata sandi Anda untuk membuka kunci Tella</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Konfirmasi kata sandi Anda</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Masukkan kata sandi Anda sekali lagi, untuk memastikan.</string>
   <string name="LockPasswordSet_Settings_EnterCurrentPassword">Masukkan kata sandi Anda saat ini untuk mengubah kunci Anda</string>

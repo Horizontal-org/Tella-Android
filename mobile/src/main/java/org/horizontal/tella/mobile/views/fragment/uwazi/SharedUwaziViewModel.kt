@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,14 +14,18 @@ import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import org.horizontal.tella.mobile.domain.entity.uwazi.EntityInstanceBundle
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.mappers.toViewEntityInstanceItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.mappers.toViewEntityTemplateItem
+import javax.inject.Inject
 
-class SharedUwaziViewModel : ViewModel() {
+@HiltViewModel
+class SharedUwaziViewModel @Inject constructor(
+) : ViewModel() {
 
     var error = MutableLiveData<Throwable?>()
     private val _templates = MutableLiveData<List<Any>>()
@@ -30,10 +34,10 @@ class SharedUwaziViewModel : ViewModel() {
     val progress: LiveData<Boolean> get() = _progress
     private val keyDataSource: KeyDataSource = MyApplication.getKeyDataSource()
     private val disposables = CompositeDisposable()
-    private var _showSheetMore = SingleLiveEvent<CollectTemplate>()
-    val showSheetMore: LiveData<CollectTemplate> get() = _showSheetMore
-    private var _openEntity = SingleLiveEvent<CollectTemplate>()
-    val openEntity: LiveData<CollectTemplate> get() = _openEntity
+    private var _showSheetMore = SingleLiveEvent<UwaziTemplate>()
+    val showSheetMore: LiveData<UwaziTemplate> get() = _showSheetMore
+    private var _openEntity = SingleLiveEvent<UwaziTemplate>()
+    val openEntity: LiveData<UwaziTemplate> get() = _openEntity
     private var _openEntityInstance = SingleLiveEvent<UwaziEntityInstance>()
     val openEntityInstance: LiveData<UwaziEntityInstance> get() = _openEntityInstance
     private var _showInstanceSheetMore = SingleLiveEvent<UwaziEntityInstance>()
@@ -65,7 +69,7 @@ class SharedUwaziViewModel : ViewModel() {
             }
             .doFinally { _progress.postValue(false) }
             .subscribe(
-                { templates: List<CollectTemplate> ->
+                { templates: List<UwaziTemplate> ->
                     val resultList = mutableListOf<Any>()
                     resultList.add(0, R.string.Uwazi_Templates_HeaderMessage)
                     templates.map {
@@ -178,7 +182,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    private fun onMoreClicked(template: CollectTemplate) {
+    private fun onMoreClicked(template: UwaziTemplate) {
         _showSheetMore.postValue(template)
     }
 
@@ -186,7 +190,7 @@ class SharedUwaziViewModel : ViewModel() {
         _showInstanceSheetMore.postValue(instance)
     }
 
-    private fun toggleFavorite(template: CollectTemplate) {
+    private fun toggleFavorite(template: UwaziTemplate) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -199,7 +203,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    fun confirmDelete(template: CollectTemplate) {
+    fun confirmDelete(template: UwaziTemplate) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -241,7 +245,7 @@ class SharedUwaziViewModel : ViewModel() {
         )
     }
 
-    private fun openEntity(template: CollectTemplate) {
+    private fun openEntity(template: UwaziTemplate) {
         _openEntity.postValue(template)
     }
 
@@ -250,32 +254,43 @@ class SharedUwaziViewModel : ViewModel() {
     }
 
     fun getInstanceUwaziEntity(instanceId: Long) {
-        var uwaziEntityInstance: UwaziEntityInstance? = null
-        disposables.add(keyDataSource.uwaziDataSource
-            .flatMapSingle { dataSource: UwaziDataSource ->
-                dataSource.getBundle(
-                    instanceId
-                )
-            }
-            .flatMapSingle { bundle: EntityInstanceBundle ->
-                uwaziEntityInstance = bundle.instance
-                MyApplication.rxVault.get(bundle.fileIds)
-            }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ vaultFiles: List<VaultFile> ->
-                val widgetMediaFiles = mutableListOf<FormMediaFile>()
-                for (file in vaultFiles) {
-                    widgetMediaFiles.add(FormMediaFile.fromMediaFile(file))
+        disposables.add(
+            keyDataSource.uwaziDataSource
+                .firstOrError()  // Convert to Single
+                .flatMap { dataSource: UwaziDataSource ->
+                    dataSource.getBundle(instanceId)
                 }
-                uwaziEntityInstance?.widgetMediaFiles = widgetMediaFiles
-                onInstanceSuccess.postValue(
-                    uwaziEntityInstance?.let { maybeCloneInstance(it) }
+                .flatMap { bundle: EntityInstanceBundle ->
+                    MyApplication.keyRxVault.rxVault
+                        .firstOrError()
+                        .flatMap { rxVault ->
+                            rxVault.get(bundle.fileIds)
+                                .map { vaultFiles ->
+                                    val widgetMediaFiles = vaultFiles.map { file ->
+                                        FormMediaFile.fromMediaFile(file).apply {
+                                            status = FormMediaFileStatus.NOT_SUBMITTED
+                                        }
+                                    }
+                                    bundle.instance.apply {
+                                        this.widgetMediaFiles = widgetMediaFiles
+                                    }
+                                }
+                        }
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { instance ->
+                        onInstanceSuccess.postValue(maybeCloneInstance(instance))
+                    },
+                    { throwable ->
+                        FirebaseCrashlytics.getInstance().apply {
+                            recordException(throwable)
+                            log("Failed to get Uwazi entity instance $instanceId")
+                        }
+                        onGetInstanceError.postValue(throwable)
+                    }
                 )
-            }) { throwable: Throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
-                onGetInstanceError.postValue(throwable)
-            }
         )
     }
 

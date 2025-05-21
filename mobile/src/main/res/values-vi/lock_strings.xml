@@ -16,14 +16,17 @@
   <string name="LockPatternSet_Message_PatternStarted">Mẫu khóa đã bắt đầu</string>
   <string name="LockPatternSet_Message_PatternCleared">Mẫu khóa đã được xóa</string>
   <string name="LockPatternSet_Message_CellAdded">Ô đã nhập</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Ô<xliff:g id="cell_index" example="3">%1$d</xliff:g> đã được nhập</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">Hoàn thành mẫu khóa</string>
   <string name="UnLockPattern_PatternArea">Khu vực mẫu khóa</string>
-  <string name="UnLockPattern_Message_DrawPattern">Vẽ mẫu khóa của bạn để mở khóa Tella</string>
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
+unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Mẫu khóa của bạn không khớp. Vui lòng thử lại.</string>
   <string name="LockPinSet_Message_EnterPin">Nhập mã PIN của bạn</string>
-  <string name="UnlockPin_Message_EnterPin">Nhập mã PIN của bạn để mở khóa Tella</string>
-  <string name="LockPinSet_Message_Hint">Sử dụng ít nhất 6 chữ số. Tránh sử dụng các con số dễ đoán như ngày sinh của bạn.</string>
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
+Tella</string>
+  <string name="LockPinSet_Message_Hint">Use at least 6 digits.
+Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPinSet_Message_Confirm">Xác nhận mã PIN của bạn</string>
   <string name="LockPinConfirm_Message_Confirm">Vui lòng nhập mã PIN của bạn một lần nữa,
  chỉ để chắc chắn.</string>
@@ -37,8 +40,8 @@
   <string name="LockSuccess_Action_GoToTella">Đến tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mật khẩu không đúng,
  vui lòng thử lại</string>
-  <string name="UnlockPassword_Message_EnterPassword">Nhập mật khẩu của bạn để
- mở khóa Tella</string>
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
+unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Xác nhận mật khẩu của bạn</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Vui lòng nhập lại mật khẩu của bạn một lần nữa để đảm bảo.</string>
   <string name="LockPasswordSet_Settings_EnterCurrentPassword">Nhập mật khẩu hiện tại của bạn để thay đổi khóa</string>

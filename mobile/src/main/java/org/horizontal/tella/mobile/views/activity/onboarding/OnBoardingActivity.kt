@@ -60,7 +60,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out
         )
         setContentView(binding.root)
-
+        applyEdgeToEdge(binding.root)
         // Instantiate a ViewPager and a Tablayout
         if (!isOnboardLockSet && !isFromSettings) initViewPager(6)
 

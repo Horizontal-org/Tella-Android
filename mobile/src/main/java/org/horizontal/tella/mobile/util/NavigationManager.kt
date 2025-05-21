@@ -2,6 +2,7 @@ package org.horizontal.tella.mobile.util
 
 import android.os.Bundle
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.reports.di.NavControllerProvider
 
 class NavigationManager(
@@ -131,6 +132,10 @@ class NavigationManager(
 
     fun navigateFromHomeScreenToUwaziScreen() {
         navigateTo(R.id.action_homeScreen_to_uwazi_screen)
+    }
+
+    fun navigateFromHomeScreenToUwaziEntryScreen() {
+        navigateToWithBundle(R.id.action_homeScreen_to_uwaziEntryScreen)
     }
 
     fun navigateToEnterNextCloudLoginScreen() {

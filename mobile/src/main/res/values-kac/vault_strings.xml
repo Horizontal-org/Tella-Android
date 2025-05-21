@@ -9,9 +9,9 @@
   <string name="Vault_Others_Title">Kaga ni</string>
   <string name="Vault_Select_Title">Lamang nhtan (file) ni hpe lata san u</string>
   <string name="Vault_RecentFiles">Ndai laman na lamang nhtan (file) ni</string>
-  <string name="Vault_PhotosAndVideos_Title">Dat sumla ni hte sumla hkrung ni</string>
+  <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
   <string name="Vault_FavoriteForms_Title">Ra dik hkrang laika ni</string>
-  <string name="Vault_Empty_Msg">Ndai laika nhtan (folder) gaw gaman re. Lamang nhtan (file) langai, shing n rai, laika nhtan (folder) langai hpe shalat shapraw lu na matu, lawu na dai + hkalap (button) ahtawk u.</string>
+  <string name="Vault_Empty_Msg">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
   <string name="Vault_Move_SheetDesc">Kaga laika nhtan (folder) de htawt sit u</string>
   <string name="Vault_Rename_SheetAction">Mying bai shamying u</string>
   <string name="Vault_Save_SheetAction">Matsing bang da u</string>
@@ -28,20 +28,12 @@
   <string name="Vault_FilePath">Lamag nhtan lam mahkrun</string>
   <string name="Vault_RenameFile_SheetTitle">Lamang nhtan (file) hpe mying bai shamying u</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="zero">Lamang nhtan (file) hpe shaprai kau na kun?</item>
-    <item quantity="one">Lamang nhtan (file) hpe shaprai kau na kun?</item>
-    <item quantity="two">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
-    <item quantity="few">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
-    <item quantity="many">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
-    <item quantity="other">Lamang nhtan (files) ni hpe shaprai kau na kun?</item>
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="zero">Lata san da ai lamang nhtan (file) hpe Tella kaw nna tut nawng shaprai kau na re.</item>
-    <item quantity="one">Lata san da ai lamang nhtan (file) hpe Tella kaw nna tut nawng shaprai kau na re.</item>
-    <item quantity="two">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
-    <item quantity="few">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
-    <item quantity="many">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
-    <item quantity="other">Lata san da ai lamang nhtan (files) ni hpe Tella kaw nna tut nawng shaprai kau na re.</item>
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Mying A kaw nna Z du hkra</string>
   <string name="Vault_SortNameDesc_SheetAction">Mying Z kaw nna A du hkra</string>
@@ -55,15 +47,11 @@
   <string name="Vault_ImportDelete_SheetAction">Madung lamang nhtan hpe htawt la nna, shaprai kau u</string>
   <string name="Vault_CreateFolder_SheetTitle">Laika nhtan (folder) ningnan langai hpe shalat shapraw u</string>
   <string name="Vault_MoveHere">Ndai kaw htawt sit u</string>
-  <string name="Vault_ViewerOther_SheetDesc">Ndai lamang nhtan (file) hkrang hpe Tella hta n mai hpaw ai. Kaga bungli lamang (app) langai hte dai hpe hpaw na matu, lamang nhtan hpe na a jak kata hta matsing bang da mayu ai kun? Ndai gaw lamang nhtan hte seng ai malawm ni hpe shabrawng kau ya mai nga ai.</string>
-  <string name="Vault_Export_SheetAction">Jak rai kata hta e matsing bang da u</string>
+  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
+  <string name="Vault_Export_SheetAction">Export</string>
   <plurals name="Vault_Items">
-    <item quantity="zero">Mahkyen lamang</item>
-    <item quantity="one">Mahkyen lamang</item>
-    <item quantity="two">Mahkyen lamang ni</item>
-    <item quantity="few">Mahkyen lamang ni</item>
-    <item quantity="many">Mahkyen lamang ni</item>
-    <item quantity="other">Mahkyen lamang ni</item>
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
   </plurals>
   <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
   <string name="Vault_FavoriteTemplates_Title">Favorite templates</string>

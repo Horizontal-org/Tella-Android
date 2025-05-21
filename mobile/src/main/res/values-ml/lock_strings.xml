@@ -16,14 +16,14 @@
   <string name="LockPatternSet_Message_PatternStarted">പാറ്റേൺ/മാതൃക തുടങ്ങി</string>
   <string name="LockPatternSet_Message_PatternCleared">പാറ്റേൺ/മാതൃക മായ്ച്ചു</string>
   <string name="LockPatternSet_Message_CellAdded">കളം ചേർത്തു</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose"><xliff:g id="cell_index" example="3">%1$d</xliff:g> - ആം കളം ചേർത്തു</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
   <string name="LockPatternSet_Message_PatternDetected">പാറ്റേണ്‍/മാതൃക പൂർത്തിയായി </string>
   <string name="UnLockPattern_PatternArea">പാറ്റേണ്‍ ഏരിയ (മാതൃക പ്രദേശം)</string>
-  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to 
+  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
 unlock Tella</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
-  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock 
+  <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock
 Tella</string>
   <string name="LockPinSet_Message_Hint">Use at least 6 digits.
 Avoid using numbers that can be guessed easily, such as your birthday.</string>
@@ -46,7 +46,7 @@ done!</string>
   <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
-  <string name="UnlockPassword_Message_EnterPassword">Enter your password to 
+  <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
   <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Please enter your password one more

@@ -12,6 +12,7 @@ import com.hzontal.tella_locking_ui.common.extensions.toggleVisibility
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.utils.MediaFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentAttachmentsSelectorBinding
 import org.horizontal.tella.mobile.util.setCheckDrawable
@@ -31,6 +32,7 @@ const val VAULT_FILE_KEY = "vfk"
 const val VAULT_FILES_FILTER = "vff"
 const val VAULT_PICKER_SINGLE = "vps"
 
+@AndroidEntryPoint
 class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.OnClickListener {
 
     private lateinit var binding: FragmentAttachmentsSelectorBinding
@@ -48,6 +50,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         super.onCreate(savedInstanceState)
         binding = FragmentAttachmentsSelectorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         initView()
         getSelectedMediaFromIntent()
         initObservers()

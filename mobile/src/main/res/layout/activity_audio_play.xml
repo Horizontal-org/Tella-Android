@@ -20,6 +20,8 @@
 
     <include
         android:id="@+id/content"
+        android:paddingTop="?attr/actionBarSize"
+
         layout="@layout/content_audio_play" />
 
     <FrameLayout

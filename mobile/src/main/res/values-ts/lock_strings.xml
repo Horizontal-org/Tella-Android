@@ -2,9 +2,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="LockSelect_Action_Cancel">Kanselara</string>
   <string name="LockSelect_Action_Back">Tlhelela ndzhaku</string>
-  <string name="LockSelect_Action_Confirm">Mahlweni</string>
+  <string name="LockSelect_Action_Confirm">Yana mahlweni</string>
   <string name="LockPatternConfirm_Action_Confirm">Tiyisisa xifaniso xa wena</string>
-  <string name="LockSelect_Action_Continue">Mahlweni</string>
+  <string name="LockSelect_Action_Continue">Yana mahlweni</string>
   <string name="LockPatternSet_Draw_Pattern">Dezenyara xifaniso xa kupfula</string>
   <string name="UnlockPattern_DrawToUnlock">Dezenyara xifaniso kuva upfula Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">Xifaniso xa wena leximpsha xa kupfula</string>
@@ -13,7 +13,7 @@
 ligara 6 wa tiponto kumbe ku tlula</string>
   <string name="LockPatternSet_RecordingPattern">Susa litiho loko uhetile</string>
   <string name="LockPatternSet_Action_Redraw">Tima</string>
-  <string name="LockPatternConfirm_Message_WrongPattern">Xifaniso lexi hoxeke, thlela usungula</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Xifaniso lexi hoxeke, tlhela usungula</string>
   <string name="LockPatternSet_Message_PatternStarted">Xifaniso xi sunguliwile</string>
   <string name="LockPatternSet_Message_PatternCleared">Xifaniso xi timiwile</string>
   <string name="LockPatternSet_Message_CellAdded">Selulari yi engeteliwile</string>
@@ -21,7 +21,7 @@ ligara 6 wa tiponto kumbe ku tlula</string>
   <string name="LockPatternSet_Message_PatternDetected">Xifaniso xi helelile</string>
   <string name="UnLockPattern_PatternArea">Ndhawu ya kutsala xifaniso</string>
   <string name="UnLockPattern_Message_DrawPattern">Dezenyara xifaniso xa wena kuva upfula Tella</string>
-  <string name="UnLockPattern_Message_IncorrectPattern">Thlela usungula. Svifaniso sva wena svi fambelani.</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">Tlhela usungula. Svifaniso sva wena a svi fambelani.</string>
   <string name="LockPinSet_Message_EnterPin">Nghenisa PIN ya wena</string>
   <string name="UnlockPin_Message_EnterPin">Nghenisa PIN ya wena kuva upfula Tella</string>
   <string name="LockPinSet_Message_Hint">Tirhisa tinomboro ta 6. Ungatirhisi tinomboro leti tingativiwaka hi kuolova, kufana ni siku la wena la kupsaliwa.</string>

@@ -70,7 +70,7 @@
     </style>
 
     <style name="Password_EditText" parent="Style_EditText">
-        <item name="android:inputType">numberPassword</item>
+        <item name="android:inputType">textPassword</item>
     </style>
 
     <style name="Calculator_Text">
