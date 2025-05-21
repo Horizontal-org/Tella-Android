@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.StrictMode;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ import com.hzontal.tella_vault.rx.RxVault;
 import com.owncloud.android.lib.common.utils.Log_OC;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.hzontal.shared_ui.data.CommonPrefs;
 
 import org.conscrypt.Conscrypt;
@@ -53,6 +55,7 @@ import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.Security;
 import java.util.Arrays;
 
@@ -63,6 +66,7 @@ import javax.net.ssl.SSLEngine;
 import dagger.hilt.android.HiltAndroidApp;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
+
 import org.horizontal.tella.mobile.bus.TellaBus;
 import org.horizontal.tella.mobile.data.database.KeyDataSource;
 import org.horizontal.tella.mobile.data.nextcloud.TempFileManager;
@@ -99,8 +103,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     Vault.Config vaultConfig;
     private static final String TAG = MyApplication.class.getSimpleName();
     public static final String DOT = ".";
-    public static final OwnCloudVersion MINIMUM_SUPPORTED_SERVER_VERSION = OwnCloudVersion.nextcloud_17;
-    private static WeakReference<Context> appContext;
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app
     private int activityReferences = 0;
@@ -235,6 +237,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         insertConscrypt();
         enableStrictMode();
+        setupBouncyCastleProvider();
     }
 
     private void configureCrashlytics() {
@@ -436,5 +439,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
     }
 
+
+    private void setupBouncyCastleProvider() {
+        try {
+            if (Security.getProvider("BC") == null) {
+                Security.addProvider(new BouncyCastleProvider());
+                Timber.i("BouncyCastle provider registered");
+            }
+        } catch (Exception e) {
+            Timber.e(e, "Failed to register BouncyCastle provider");
+        }
+    }
 
 }

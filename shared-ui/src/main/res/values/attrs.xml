@@ -14,11 +14,18 @@
         <attr name="rightImg" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="DualTextCheckView">
+        <attr name="rightText" format="reference|string"/>
+        <attr name="leftText" format="reference|string"/>
+        <attr name="checkboxVisible" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="RoundButton">
         <attr name="text" format="reference|string" />
         <attr name="check_state" format="boolean" />
         <attr name="tint_color" format="color|reference" />
         <attr name="text_color" format="color|reference" />
+        <attr name="text_all_caps" format="boolean"/>
     </declare-styleable>
 
 

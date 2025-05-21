@@ -11,7 +11,5 @@ class PeerToPeerActivity  : BaseLockActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPeerToPeerBinding.inflate(layoutInflater)
         setContentView(binding.getRoot())
-        binding.toolbar.backClickListener = { this.onBackPressed() }
-
     }
 }
