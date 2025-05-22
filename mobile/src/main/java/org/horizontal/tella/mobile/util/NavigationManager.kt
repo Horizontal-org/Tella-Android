@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.util
 
 import android.os.Bundle
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.reports.di.NavControllerProvider
 
 class NavigationManager(
@@ -180,6 +179,10 @@ class NavigationManager(
 
     fun navigateFromActionConnectHotspotScreenToScanQrCodeScreen() {
         navigateToWithBundle(R.id.action_startNearBySharingFragment_to_scanQrCodeScreen)
+    }
+
+    fun navigateFromScanQrCodeToDeviceInfo() {
+        navigateToWithBundle(R.id.action_qrCodeScreen_to_deviceInfoScreen)
     }
 
 }

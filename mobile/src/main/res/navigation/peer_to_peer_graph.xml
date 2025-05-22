@@ -23,7 +23,7 @@
         android:id="@+id/connectHotspotScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectHotspotFragment"
         android:label="ConnectHotspotFragment"
-        tools:layout="@layout/connect_hotspot_layout" >
+        tools:layout="@layout/connect_hotspot_layout">
 
         <action
             android:id="@+id/action_connectHotspotScreen_to_qrCodeScreen"
@@ -35,13 +35,21 @@
         android:id="@+id/scanQrCodeScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.ScanQrCodeFragment"
         android:label="ScanQrCodeScreen"
-        tools:layout="@layout/scan_qrcode_fragment" />
+        tools:layout="@layout/scan_qrcode_fragment"/>
 
     <fragment
         android:id="@+id/qrCodeScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.QRCodeFragment"
         android:label="QrCodeScreen"
-        tools:layout="@layout/fragment_qr_code" >
-
+        tools:layout="@layout/fragment_qr_code">
+        <action
+            android:id="@+id/action_qrCodeScreen_to_deviceInfoScreen"
+            app:destination="@id/deviceInfoScreen" />
     </fragment>
+
+    <fragment
+        android:id="@+id/deviceInfoScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ShowDeviceInfoFragment"
+        android:label="DeviceInfoScreen"
+        tools:layout="@layout/show_device_info_layout" />
 </navigation>

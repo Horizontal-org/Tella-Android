@@ -23,6 +23,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var server: TellaServer? = null
+    private var payload: PeerConnectionPayload? = null
+    private lateinit var qrPayload: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +34,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             setupServerAndQr(ip)
         }
         handleBack()
+        handleConnectManually()
     }
 
     private fun setupServerAndQr(ip: String) {
@@ -50,14 +53,14 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val pin = "111111"
         val port = port
 
-        val payload = PeerConnectionPayload(
+        payload = PeerConnectionPayload(
             connectCode = ip,
             port = port,
             certificateHash = certHash,
             pin = pin
         )
 
-        val qrPayload = Gson().toJson(payload)
+        qrPayload = Gson().toJson(payload)
         generateQrCode(qrPayload)
     }
 
@@ -80,6 +83,19 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     private fun handleBack() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
         binding.backBtn.setOnClickListener { nav().popBackStack() }
+    }
+
+    private fun handleConnectManually(){
+        binding.connectManuallyButton.setOnClickListener {
+            connectManually()
+        }
+    }
+
+    private fun connectManually() {
+        payload?.let {
+            bundle.putString("payload", qrPayload)
+            navManager().navigateFromScanQrCodeToDeviceInfo()
+        }
     }
 
     // TODO NEXT STEPS

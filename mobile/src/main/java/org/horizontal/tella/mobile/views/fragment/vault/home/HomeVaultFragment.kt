@@ -98,7 +98,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private var nextCloudServers: ArrayList<NextCloudServer>? = null
-    private var favoriteForms: ArrayList<CollectForm>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
