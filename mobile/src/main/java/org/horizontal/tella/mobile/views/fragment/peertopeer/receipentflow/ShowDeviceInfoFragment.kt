@@ -10,7 +10,6 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 class ShowDeviceInfoFragment :
     BaseBindingFragment<ShowDeviceInfoLayoutBinding>(ShowDeviceInfoLayoutBinding::inflate) {
 
-
     private var payload: PeerConnectionPayload? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

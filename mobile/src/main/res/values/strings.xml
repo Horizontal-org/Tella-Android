@@ -1037,5 +1037,6 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="nearby_sharing">Nearby sharing</string>
   <string name="how_it_works">How it works</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
+  <string name="enter_recipient_info">Enter the recipient’s device\n information to find it on the network</string>
 
 </resources>

@@ -87,7 +87,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectCode"
-        app:leftText="@string/pin" />
+        app:leftText="@string/connect_code" />
 
     <org.hzontal.shared_ui.buttons.DualTextCheckView
         android:id="@+id/port"
@@ -100,7 +100,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin"
-        app:leftText="@string/port" />
+        app:leftText="@string/connect_code" />
 
     <TextView
         android:id="@+id/back_btn"

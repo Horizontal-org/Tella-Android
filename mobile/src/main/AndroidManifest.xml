@@ -662,10 +662,7 @@
             android:name=".views.dialog.nextcloud.NextCloudLoginFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".views.fragment.peertopeer.activity.PeerToPeerActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -704,7 +701,8 @@
         <activity
             android:name=".views.fragment.peertopeer.activity.PeerToPeerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

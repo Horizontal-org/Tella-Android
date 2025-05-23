@@ -185,4 +185,7 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_qrCodeScreen_to_deviceInfoScreen)
     }
 
+    fun navigateFromScanQrCodeToSenderManualConnectionScreen() {
+        navigateToWithBundle(R.id.action_scanQrCodeScreen_to_senderManualConnectionScreen)
+    }
 }
