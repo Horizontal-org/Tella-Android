@@ -54,7 +54,8 @@ class PeerToPeerViewModel @Inject constructor(
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
     var currentNetworkInfo: NetworkInfo? = null
-        private set
+    private val _registrationSuccess = MutableLiveData<Boolean>()
+    val registrationSuccess: LiveData<Boolean> get() = _registrationSuccess
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
@@ -172,11 +173,12 @@ class PeerToPeerViewModel @Inject constructor(
             result.onSuccess {
                 Log.d("QRCode", "Registered successfully: $it")
                 val file = createFileFromAsset(context, "testDemo.txt")
-                peerClient.prepareUpload(ip,port,hash,"test report",file,UUID.randomUUID().toString(),calculateSha256(file),UUID.randomUUID().toString())
-                // update UI state
+                _registrationSuccess.postValue(true) // Notify success
             }.onFailure {
+                //   peerClient.prepareUpload(ip,port,hash,"test report",file,UUID.randomUUID().toString(),calculateSha256(file),UUID.randomUUID().toString())
+                // update UI state
                 Log.e("QRCode", "Registration failed: ${it.message}")
-                // handle error (maybe post a value to LiveData)
+                _registrationSuccess.postValue(false) // Optional: Notify failure
             }
         }
     }

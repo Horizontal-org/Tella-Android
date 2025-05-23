@@ -37,6 +37,9 @@
         android:label="ScanQrCodeScreen"
         tools:layout="@layout/scan_qrcode_fragment">
         <action
+            android:id="@+id/action_scanQrCodeScreen_to_prepareUploadFragment"
+            app:destination="@id/prepareUploadFragment" />
+        <action
             android:id="@+id/action_scanQrCodeScreen_to_senderManualConnectionScreen"
             app:destination="@id/senderManualConnectionScreen" />
     </fragment>
@@ -56,6 +59,11 @@
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ShowDeviceInfoFragment"
         android:label="DeviceInfoScreen"
         tools:layout="@layout/show_device_info_layout" />
+    <fragment
+        android:id="@+id/prepareUploadFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PrepareUploadFragment"
+        tools:layout="@layout/fragment_prepare_upload"
+        android:label="PrepareUploadFragment" />
 
     <fragment
         android:id="@+id/senderManualConnectionScreen"

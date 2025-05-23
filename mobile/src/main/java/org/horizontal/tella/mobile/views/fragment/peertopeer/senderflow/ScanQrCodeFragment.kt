@@ -33,7 +33,13 @@ class ScanQrCodeFragment :
 
         barcodeView = CompoundBarcodeView(requireContext())
         barcodeView = binding.qrCodeScanView
-
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                navManager().navigateFromScanQrCodeTo()
+            } else {
+                //  handle error UI
+            }
+        }
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
