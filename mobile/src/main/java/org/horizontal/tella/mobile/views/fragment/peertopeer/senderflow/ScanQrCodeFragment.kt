@@ -79,7 +79,6 @@ class ScanQrCodeFragment :
                 }
             }
 
-
             override fun possibleResultPoints(resultPoints: MutableList<com.google.zxing.ResultPoint>?) {
             }
         })
