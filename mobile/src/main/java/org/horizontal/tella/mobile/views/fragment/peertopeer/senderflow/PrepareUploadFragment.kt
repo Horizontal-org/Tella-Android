@@ -231,6 +231,9 @@ class PrepareUploadFragment :
         highLightButtons()
     }
 
+    override fun removeFiles() {
+        highLightButtons()
+    }
 
     private fun highLightButtons() {
         val isSubmitEnabled =
@@ -255,7 +258,7 @@ class PrepareUploadFragment :
         }
     }
     private fun showSubmitReportErrorSnackBar() {
-        val errorRes = R.string.Snackbar_Submit_Report_WithProject_Error
+        val errorRes = R.string.Snackbar_Submit_Files_Error
 
         DialogUtils.showBottomMessage(
             baseActivity,
@@ -271,14 +274,10 @@ class PrepareUploadFragment :
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
-
     }
 
     override fun addFiles() {
         showSelectFilesSheet()
-    }
-
-    override fun removeFiles() {
     }
 
     override fun onBackPressed(): Boolean {

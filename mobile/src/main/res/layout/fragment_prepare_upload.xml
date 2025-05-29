@@ -61,6 +61,7 @@
                     android:textColor="@color/wa_white"
                     app:backgroundTint="@color/wa_white"
                     app:errorTextAppearance="@style/TextEntryLayoutErrorStyle" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -104,7 +105,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/tella_main_vertical"
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
-            android:background="@drawable/bg_round_orange_btn"
+            android:background="@drawable/bg_round_orange16_btn"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:text="@string/collect.end_action_submit"

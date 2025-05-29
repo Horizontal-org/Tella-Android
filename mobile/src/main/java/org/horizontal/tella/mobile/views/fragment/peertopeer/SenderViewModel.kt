@@ -7,12 +7,8 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
-import org.horizontal.tella.mobile.domain.entity.EntityStatus
-import org.horizontal.tella.mobile.domain.entity.Server
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import javax.inject.Inject
 
 @HiltViewModel
