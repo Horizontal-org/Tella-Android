@@ -19,6 +19,8 @@ import java.security.cert.X509Certificate
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocket
+import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
@@ -179,5 +181,22 @@ class TellaPeerToPeerClient {
             }
         }
     }
+
+    suspend fun fetchServerFingerprint(ip: String, port: Int): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val socket = SSLSocketFactory.getDefault()
+                .createSocket(ip, port) as SSLSocket
+            socket.soTimeout = 5000
+            socket.startHandshake()
+
+            val cert = socket.session.peerCertificates[0] as X509Certificate
+            val fingerprint = CertificateUtils.getPublicKeyHash(cert)
+            Result.success(fingerprint)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
 
 }

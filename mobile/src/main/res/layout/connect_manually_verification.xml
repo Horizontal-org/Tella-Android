@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:arrowBackIcon="@drawable/ic_close_white"
+        app:arrowBackIconContentDescription="@string/action_go_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:startTitle="@string/connect_manually" />
+
+    <ImageView
+        android:id="@+id/deviceImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/device"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/titleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="@style/Tella_Main_White_TextExtraLargeBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/show_device_information"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/deviceImg"
+        app:layout_constraintBottom_toTopOf="@+id/titleDescTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <TextView
+        android:id="@+id/titleDescTextView"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_small_margin"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:gravity="start"
+        android:text="@string/make_sure_sequence_matches"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintBottom_toTopOf="@+id/hashContentTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <TextView
+        android:id="@+id/hashContentTextView"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:padding="24dp"
+        tools:text="87fd 5869 a6b3 e414 112c 1934 ca00 be77 b8e4 584c 829a 4536 490b da9a 3928 be4a"
+        android:background="@drawable/bg_dual_text_check"
+        app:layout_constraintTop_toBottomOf="@id/titleDescTextView"
+        app:layout_constraintBottom_toTopOf="@+id/warningTextView" />
+
+    <TextView
+        android:id="@+id/warningTextView"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:gravity="start"
+        android:text="@string/make_sure_sequence_matches"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/hashContentTextView"
+        app:layout_constraintBottom_toTopOf="@+id/confirmAndConnectBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/confirmAndConnectBtn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:background="@drawable/bg_round_orange_btn"
+        app:text_color="@color/btn_dark_letter"
+        app:check_state="false"
+        app:layout_constraintTop_toBottomOf="@id/warningTextView"
+        app:layout_constraintBottom_toTopOf="@+id/discardBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:text="@string/confirm_and_connect" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/discardBtn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
+        app:check_state="false"
+        app:layout_constraintTop_toBottomOf="@id/confirmAndConnectBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:text="@string/discard_and_start_over" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

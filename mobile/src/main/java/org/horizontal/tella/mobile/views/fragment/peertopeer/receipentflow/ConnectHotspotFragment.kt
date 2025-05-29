@@ -30,7 +30,6 @@ class ConnectHotspotFragment :
     }
 
     private fun initObservers() {
-
         viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
             when (info.type) {
                 ConnectionType.HOTSPOT, ConnectionType.WIFI, ConnectionType.CELLULAR -> {

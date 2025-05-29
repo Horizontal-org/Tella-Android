@@ -17,39 +17,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
-import org.json.JSONArray
-import org.json.JSONObject
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.security.MessageDigest
-import java.security.SecureRandom
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 @HiltViewModel
 class PeerToPeerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val peerClient: TellaPeerToPeerClient
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
@@ -145,7 +131,6 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-    @SuppressLint("DiscouragedPrivateApi")
     private fun getDeviceHotspotIpAddress(): String? {
         return try {
             val networkInterfaces = NetworkInterface.getNetworkInterfaces()
@@ -173,13 +158,33 @@ class PeerToPeerViewModel @Inject constructor(
             result.onSuccess {
                 Log.d("QRCode", "Registered successfully: $it")
                 val file = createFileFromAsset(context, "testDemo.txt")
-                _registrationSuccess.postValue(true) // Notify success
-            }.onFailure {
-                //   peerClient.prepareUpload(ip,port,hash,"test report",file,UUID.randomUUID().toString(),calculateSha256(file),UUID.randomUUID().toString())
+                peerClient.prepareUpload(
+                    ip,
+                    port,
+                    hash,
+                    "test report",
+                    file,
+                    UUID.randomUUID().toString(),
+                    calculateSha256(file),
+                    UUID.randomUUID().toString()
+                )
                 // update UI state
                 Log.e("QRCode", "Registration failed: ${it.message}")
                 _registrationSuccess.postValue(false) // Optional: Notify failure
             }
+        }
+    }
+
+    fun handleCertificate(ip: String, port: String, pin: String) {
+        viewModelScope.launch {
+            val result = FingerprintFetcher.fetch(ip, port.toInt())
+
+            result.onSuccess { hash ->
+                Timber.d("hash ***** $hash")
+            }.onFailure { error ->
+                Timber.d("error ***** $error")
+            }
+
         }
     }
 
@@ -203,8 +208,6 @@ class PeerToPeerViewModel @Inject constructor(
         return tempFile
     }
 
-
-
     private fun calculateSha256(file: File): String {
         val digest = MessageDigest.getInstance("SHA-256")
         file.inputStream().use { input ->
@@ -216,7 +219,6 @@ class PeerToPeerViewModel @Inject constructor(
         }
         return digest.digest().joinToString("") { "%02x".format(it) }
     }
-
 
 
 }

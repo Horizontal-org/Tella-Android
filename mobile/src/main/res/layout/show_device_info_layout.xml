@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_purple">
@@ -87,7 +86,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connectCode"
-        app:leftText="@string/connect_code" />
+        app:leftText="@string/pin" />
 
     <org.hzontal.shared_ui.buttons.DualTextCheckView
         android:id="@+id/port"
@@ -100,7 +99,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin"
-        app:leftText="@string/connect_code" />
+        app:leftText="@string/port" />
 
     <TextView
         android:id="@+id/back_btn"

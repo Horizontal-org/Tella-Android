@@ -32,6 +32,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/connectManuallyVerificationFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectManuallyVerificationFragment"
+        android:label="ConnectManuallyVerificationFragment"
+        tools:layout="@layout/connect_manually_verification" />
+
+    <fragment
         android:id="@+id/scanQrCodeScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.ScanQrCodeFragment"
         android:label="ScanQrCodeScreen"
@@ -69,5 +75,10 @@
         android:id="@+id/senderManualConnectionScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderManualConnectionFragment"
         android:label="SenderManualConnectionScreen"
-        tools:layout="@layout/sender_manual_connection" />
+        tools:layout="@layout/sender_manual_connection" >
+        <action
+            android:id="@+id/action_senderManualConnectionScreen_to_connectManuallyVerificationFragment"
+            app:destination="@id/connectManuallyVerificationFragment" />
+    </fragment>
+
 </navigation>

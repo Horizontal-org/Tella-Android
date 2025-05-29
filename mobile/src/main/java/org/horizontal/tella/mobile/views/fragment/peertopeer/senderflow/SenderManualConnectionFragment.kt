@@ -65,6 +65,9 @@ class SenderManualConnectionFragment :
                 if (enabled) android.R.color.white else android.R.color.darker_gray
             )
         )
+        binding.nextBtn.setOnClickListener {
+            viewModel.handleCertificate(ip = binding.connectCode.text.toString(), port = binding.port.text.toString(), pin = binding.pin.text.toString())
+        }
     }
 
 }
