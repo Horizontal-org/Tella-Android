@@ -30,6 +30,7 @@ import java.net.NetworkInterface
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.jvm.Throws
 
 @HiltViewModel
 class PeerToPeerViewModel @Inject constructor(
@@ -42,6 +43,10 @@ class PeerToPeerViewModel @Inject constructor(
     var currentNetworkInfo: NetworkInfo? = null
     private val _registrationSuccess = MutableLiveData<Boolean>()
     val registrationSuccess: LiveData<Boolean> get() = _registrationSuccess
+    private val _getHashSuccess = MutableLiveData<String>()
+    val getHashSuccess: LiveData<String> get() = _getHashSuccess
+    private val _getHashError = MutableLiveData<Throwable>()
+    val getHashError: LiveData<Throwable> get() = _getHashError
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
@@ -169,7 +174,7 @@ class PeerToPeerViewModel @Inject constructor(
                     UUID.randomUUID().toString()
                 )
                 // update UI state
-                Log.e("QRCode", "Registration failed: ${it.message}")
+                //   Log.e("QRCode", "Registration failed: ${it.message}")
                 _registrationSuccess.postValue(false) // Optional: Notify failure
             }
         }
@@ -180,8 +185,10 @@ class PeerToPeerViewModel @Inject constructor(
             val result = FingerprintFetcher.fetch(ip, port.toInt())
 
             result.onSuccess { hash ->
+                _getHashSuccess.postValue(hash)
                 Timber.d("hash ***** $hash")
             }.onFailure { error ->
+                _getHashError.postValue(error)
                 Timber.d("error ***** $error")
             }
 

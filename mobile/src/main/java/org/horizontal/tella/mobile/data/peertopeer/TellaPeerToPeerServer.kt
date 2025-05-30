@@ -14,13 +14,10 @@ import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
-import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
@@ -31,7 +28,6 @@ import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 const val port = 53317
 

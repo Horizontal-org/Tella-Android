@@ -7,7 +7,7 @@ import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBindin
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 
-class ConnectManuallyVerificationFragment:
+class RecipientVerificationFragment:
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
 
     private var payload: PeerConnectionPayload? = null

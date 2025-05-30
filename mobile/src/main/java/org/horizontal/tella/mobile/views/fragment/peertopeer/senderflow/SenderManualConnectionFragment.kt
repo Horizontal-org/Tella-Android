@@ -66,7 +66,21 @@ class SenderManualConnectionFragment :
             )
         )
         binding.nextBtn.setOnClickListener {
-            viewModel.handleCertificate(ip = binding.connectCode.text.toString(), port = binding.port.text.toString(), pin = binding.pin.text.toString())
+            viewModel.handleCertificate(
+                ip = binding.connectCode.text.toString(),
+                port = binding.port.text.toString(),
+                pin = binding.pin.text.toString()
+            )
+        }
+    }
+
+    private fun initObservers() {
+        viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
+
+        }
+
+        viewModel.getHashError.observe(viewLifecycleOwner) { error->
+            error.localizedMessage?.let { showToast(it) }
         }
     }
 

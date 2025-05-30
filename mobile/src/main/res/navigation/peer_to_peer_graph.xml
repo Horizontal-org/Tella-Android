@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/connectManuallyVerificationFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectManuallyVerificationFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientVerificationFragment"
         android:label="ConnectManuallyVerificationFragment"
         tools:layout="@layout/connect_manually_verification" />
 
@@ -64,18 +64,30 @@
         android:id="@+id/deviceInfoScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ShowDeviceInfoFragment"
         android:label="DeviceInfoScreen"
-        tools:layout="@layout/show_device_info_layout" />
+        tools:layout="@layout/show_device_info_layout" >
+        <action
+            android:id="@+id/action_deviceInfoScreen_to_recipientVerificationScreen"
+            app:destination="@id/recipientVerificationScreen" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/recipientVerificationScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientVerificationFragment"
+        android:label="RecipientVerificationScreen"
+        tools:layout="@layout/connect_manually_verification"/>
+
     <fragment
         android:id="@+id/prepareUploadFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PrepareUploadFragment"
-        tools:layout="@layout/fragment_prepare_upload"
-        android:label="PrepareUploadFragment" />
+        android:label="PrepareUploadFragment"
+        tools:layout="@layout/fragment_prepare_upload" />
 
     <fragment
         android:id="@+id/senderManualConnectionScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderManualConnectionFragment"
         android:label="SenderManualConnectionScreen"
-        tools:layout="@layout/sender_manual_connection" >
+        tools:layout="@layout/sender_manual_connection">
         <action
             android:id="@+id/action_senderManualConnectionScreen_to_connectManuallyVerificationFragment"
             app:destination="@id/connectManuallyVerificationFragment" />
