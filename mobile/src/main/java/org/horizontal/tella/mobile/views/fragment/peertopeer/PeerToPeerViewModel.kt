@@ -28,9 +28,7 @@ import java.io.FileOutputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.security.MessageDigest
-import java.util.UUID
 import javax.inject.Inject
-import kotlin.jvm.Throws
 
 @HiltViewModel
 class PeerToPeerViewModel @Inject constructor(
@@ -168,6 +166,7 @@ class PeerToPeerViewModel @Inject constructor(
                 PeerSessionManager.sessionId = sessionId
                 // update UI state
                 _registrationSuccess.postValue(true)
+            }
         }
     }
 
