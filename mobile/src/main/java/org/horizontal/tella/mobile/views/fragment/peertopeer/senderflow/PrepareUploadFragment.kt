@@ -14,6 +14,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.media.MediaFileHandler
@@ -87,6 +88,13 @@ class PrepareUploadFragment :
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
+
+        viewModel.prepareResults.observe(viewLifecycleOwner) { responses ->
+            responses.forEach { response ->
+                val id = response.transmissionId
+                // navigate to next screen
+            }
+        }
         highLightButtonsInit()
         checkIsNewDraftEntry()
     }
@@ -102,6 +110,7 @@ class PrepareUploadFragment :
             binding.sendReportBtn.text = getString(R.string.Send_Action_Label)
         }
     }
+
 
 
     private fun highLightButtonsInit() {
@@ -251,9 +260,24 @@ class PrepareUploadFragment :
 
     private fun initClickListeners(isSubmitEnabled: Boolean) {
         binding.sendReportBtn.setOnClickListener {
-            if (isSubmitEnabled) {
-            } else {
-                showSubmitReportErrorSnackBar()
+            binding.sendReportBtn.setOnClickListener {
+                if (isSubmitEnabled) {
+                    val selectedFiles = filesRecyclerViewAdapter.getFiles()// however you get selected VaultFiles
+
+                    if (selectedFiles.isNotEmpty()) {
+                        viewModel.prepareUploadsFromVaultFiles(
+                            files = selectedFiles,
+                            ip = "",
+                            port = "",
+                            expectedFingerprint = "",
+                            sessionId = ""
+                        )
+                    } else {
+                        showToast("No file selected")
+                    }
+                } else {
+                    showSubmitReportErrorSnackBar()
+                }
             }
         }
     }

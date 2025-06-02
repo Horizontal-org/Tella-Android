@@ -160,23 +160,14 @@ class PeerToPeerViewModel @Inject constructor(
     fun onQrCodeParsed(ip: String, port: String, hash: String, pin: String) {
         viewModelScope.launch {
             val result = peerClient.registerPeerDevice(ip, port, hash, pin)
-            result.onSuccess {
-                Log.d("QRCode", "Registered successfully: $it")
-                val file = createFileFromAsset(context, "testDemo.txt")
-                peerClient.prepareUpload(
-                    ip,
-                    port,
-                    hash,
-                    "test report",
-                    file,
-                    UUID.randomUUID().toString(),
-                    calculateSha256(file),
-                    UUID.randomUUID().toString()
-                )
+            result.onSuccess { sessionId ->
+                Log.d("QRCode", "Registered successfully: $sessionId")
+                PeerSessionManager.ip = ip
+                PeerSessionManager.port = port
+                PeerSessionManager.hash = hash
+                PeerSessionManager.sessionId = sessionId
                 // update UI state
-                //   Log.e("QRCode", "Registration failed: ${it.message}")
-                _registrationSuccess.postValue(false) // Optional: Notify failure
-            }
+                _registrationSuccess.postValue(true)
         }
     }
 
