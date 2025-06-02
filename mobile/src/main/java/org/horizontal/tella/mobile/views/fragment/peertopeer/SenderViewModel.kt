@@ -61,39 +61,40 @@ class SenderViewModel @Inject constructor(
 
     fun prepareUploadsFromVaultFiles(
         files: List<VaultFile>,
-        ip: String,
-        port: String,
-        expectedFingerprint: String,
-        sessionId: String,
         title: String = "Title of the report"
     ) {
+        val info = PeerSessionManager.getConnectionInfo() ?: run {
+            Timber.e("Connection info missing")
+            return
+        }
+
         viewModelScope.launch {
             val successfulResponses = mutableListOf<PeerPrepareUploadResponse>()
 
             for (file in files) {
                 val result = peerClient.prepareUpload(
-                    ip = ip,
-                    port = port,
-                    expectedFingerprint = expectedFingerprint,
+                    ip = info.ip,
+                    port = info.port,
+                    expectedFingerprint = info.expectedFingerprint,
                     title = title,
                     file = File(file.path),
                     fileId = file.id,
                     sha256 = file.hash,
-                    sessionId = sessionId
+                    sessionId = info.sessionId
                 )
 
                 result.onSuccess { transmissionId ->
                     Timber.d("Success: transmissionId = $transmissionId")
                     successfulResponses.add(PeerPrepareUploadResponse(transmissionId))
                 }.onFailure {
-                    Timber.e(it, "Failed to prepare upload")
-                    // You can log or ignore errors here — not returned to LiveData
+                    Timber.e(it, "Failed to prepare upload for file: ${file.name}")
                 }
             }
 
             _prepareResults.postValue(successfulResponses)
         }
     }
+
 
 
 }

@@ -262,16 +262,9 @@ class PrepareUploadFragment :
         binding.sendReportBtn.setOnClickListener {
             binding.sendReportBtn.setOnClickListener {
                 if (isSubmitEnabled) {
-                    val selectedFiles = filesRecyclerViewAdapter.getFiles()// however you get selected VaultFiles
-
+                    val selectedFiles = filesRecyclerViewAdapter.getFiles()
                     if (selectedFiles.isNotEmpty()) {
-                        viewModel.prepareUploadsFromVaultFiles(
-                            files = selectedFiles,
-                            ip = "",
-                            port = "",
-                            expectedFingerprint = "",
-                            sessionId = ""
-                        )
+                        viewModel.prepareUploadsFromVaultFiles(selectedFiles)
                     } else {
                         showToast("No file selected")
                     }

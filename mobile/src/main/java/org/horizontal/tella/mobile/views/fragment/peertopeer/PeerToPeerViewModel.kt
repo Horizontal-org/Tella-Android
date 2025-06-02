@@ -160,10 +160,7 @@ class PeerToPeerViewModel @Inject constructor(
             val result = peerClient.registerPeerDevice(ip, port, hash, pin)
             result.onSuccess { sessionId ->
                 Log.d("QRCode", "Registered successfully: $sessionId")
-                PeerSessionManager.ip = ip
-                PeerSessionManager.port = port
-                PeerSessionManager.hash = hash
-                PeerSessionManager.sessionId = sessionId
+                PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
                 // update UI state
                 _registrationSuccess.postValue(true)
             }
