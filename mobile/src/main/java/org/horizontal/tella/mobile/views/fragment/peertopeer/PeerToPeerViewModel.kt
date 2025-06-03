@@ -8,7 +8,6 @@ import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.text.format.Formatter
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
@@ -162,7 +161,7 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-    fun onQrCodeParsed(ip: String, port: String, hash: String, pin: String) {
+    fun startRegistration(ip: String, port: String, hash: String, pin: String) {
         viewModelScope.launch {
             val result = peerClient.registerPeerDevice(ip, port, hash, pin)
             result.onSuccess { sessionId ->

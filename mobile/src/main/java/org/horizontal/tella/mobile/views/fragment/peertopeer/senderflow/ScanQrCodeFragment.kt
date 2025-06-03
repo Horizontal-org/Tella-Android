@@ -65,7 +65,7 @@ class ScanQrCodeFragment :
                     try {
                         val payload = Gson().fromJson(qrContent, PeerConnectionPayload::class.java)
 
-                        viewModel.onQrCodeParsed(
+                        viewModel.startRegistration(
                             ip = payload.connectCode,
                             port = payload.port.toString(),
                             hash = payload.certificateHash,

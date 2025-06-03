@@ -43,13 +43,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         }
         handleBack()
         handleConnectManually()
-        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromQrCodeScreenToWaitingFragment()
-            } else {
-            }
-        }
+        initObservers()
     }
 
     private fun setupServerAndQr(ip: String) {
@@ -111,6 +105,16 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         payload?.let {
             bundle.putString("payload", qrPayload)
             navManager().navigateFromScanQrCodeToDeviceInfo()
+        }
+    }
+
+    private fun initObservers() {
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingFragment()
+            } else {
+            }
         }
     }
 

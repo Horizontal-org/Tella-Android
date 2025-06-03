@@ -53,5 +53,13 @@ class ShowDeviceInfoFragment :
                 navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
             }
         }
+
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingFragment()
+            } else {
+            }
+        }
     }
 }
