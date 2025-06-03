@@ -4,12 +4,15 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
 import org.horizontal.tella.mobile.data.peertopeer.port
@@ -18,13 +21,18 @@ import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCodeBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var server: TellaServer? = null
     private var payload: PeerConnectionPayload? = null
     private lateinit var qrPayload: String
+
+    @Inject
+    lateinit var peerToPeerManager: PeerToPeerManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +60,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             ip = ip,
             keyPair = keyPair,
             certificate = certificate,
-            keyStoreConfig = config
+            keyStoreConfig = config,
+            peerToPeerManager = peerToPeerManager
         )
         server?.start()
 
@@ -92,7 +101,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         binding.backBtn.setOnClickListener { nav().popBackStack() }
     }
 
-    private fun handleConnectManually(){
+    private fun handleConnectManually() {
         binding.connectManuallyButton.setOnClickListener {
             connectManually()
         }
@@ -105,8 +114,5 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         }
     }
 
-    // TODO NEXT STEPS
-    //TODO  WORK ON THE SENDER RESPONER
-    // TODO PREAPRE REGISTER RESPONE
 
 }

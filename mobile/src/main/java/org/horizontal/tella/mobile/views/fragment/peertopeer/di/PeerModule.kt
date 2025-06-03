@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import javax.inject.Singleton
 
@@ -15,5 +16,11 @@ object PeerModule {
     @Singleton
     fun providePeerClient(): TellaPeerToPeerClient {
         return TellaPeerToPeerClient()
+    }
+
+    @Provides
+    @Singleton
+    fun providePeerToPeerManager(): PeerToPeerManager {
+        return PeerToPeerManager()
     }
 }

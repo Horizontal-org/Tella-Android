@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 
@@ -33,6 +34,8 @@ class SenderManualConnectionFragment :
         binding.port.onChange {
             updateNextButtonState()
         }
+
+        initObservers()
 
         updateNextButtonState()
 
@@ -66,6 +69,18 @@ class SenderManualConnectionFragment :
             )
         )
         binding.nextBtn.setOnClickListener {
+            val ip = binding.connectCode.text.toString()
+            val port = binding.port.text.toString()
+            val pin = binding.pin.text.toString()
+
+            viewModel.setPeerSessionInfo(
+                PeerConnectionInfo(
+                    ip = ip,
+                    port = port,
+                    pin = pin.toInt()
+                )
+            ) // Store values
+
             viewModel.handleCertificate(
                 ip = binding.connectCode.text.toString(),
                 port = binding.port.text.toString(),
@@ -76,10 +91,13 @@ class SenderManualConnectionFragment :
 
     private fun initObservers() {
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
+            bundle.putString("hash", hash)
+            viewModel.setPeerSessionInfo(PeerConnectionInfo(hash = hash))
 
+            navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }
 
-        viewModel.getHashError.observe(viewLifecycleOwner) { error->
+        viewModel.getHashError.observe(viewLifecycleOwner) { error ->
             error.localizedMessage?.let { showToast(it) }
         }
     }

@@ -5,10 +5,12 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer
  */
 
 data class PeerConnectionInfo(
-    val ip: String,
-    val port: String,
-    val expectedFingerprint: String,
-    val sessionId: String
+    val ip: String = "",
+    val port: String = "",
+    val expectedFingerprint: String = "",
+    val sessionId: String = "",
+    val hash: String = "",
+    val pin: Int = 0
 )
 
 object PeerSessionManager {

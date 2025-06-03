@@ -16,9 +16,13 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
+import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
@@ -37,7 +41,8 @@ class TellaPeerToPeerServer(
     private val serverPort: Int = port,
     private val keyPair: KeyPair,
     private val certificate: X509Certificate,
-    private val keyStoreConfig: KeyStoreConfig
+    private val keyStoreConfig: KeyStoreConfig,
+    private val peerToPeerManager: PeerToPeerManager
 ) : TellaServer {
 
     private var engine: ApplicationEngine? = null
@@ -57,6 +62,7 @@ class TellaPeerToPeerServer(
         }
 
         engine = embeddedServer(Netty, environment = applicationEngineEnvironment {
+            var firstConnectionReceived = false
             sslConnector(
                 keyStore = keyStore,
                 keyAlias = keyStoreConfig.alias,
@@ -76,6 +82,14 @@ class TellaPeerToPeerServer(
                     get("/") {
                         Log.i("Test", "Server started")
                         call.respondText("The server is running securely over HTTPS.")
+                    }
+
+                    post("/api/v1/ping") {
+                        val hash = CertificateUtils.getPublicKeyHash(certificate)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            peerToPeerManager.notifyClientConnected(hash)
+                        }
+                        call.respondText("pong", status = HttpStatusCode.OK)
                     }
 
                     post("/api/v1/register") {

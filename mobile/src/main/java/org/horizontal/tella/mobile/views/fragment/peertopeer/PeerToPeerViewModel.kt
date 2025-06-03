@@ -17,23 +17,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
 import timber.log.Timber
-import java.io.File
-import java.io.FileOutputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
-import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
 class PeerToPeerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val peerClient: TellaPeerToPeerClient
+    private val peerClient: TellaPeerToPeerClient,
+    private val peerToPeerManager: PeerToPeerManager
 ) : ViewModel() {
 
     private val _networkInfo = MutableLiveData<NetworkInfo>()
@@ -45,6 +47,11 @@ class PeerToPeerViewModel @Inject constructor(
     val getHashSuccess: LiveData<String> get() = _getHashSuccess
     private val _getHashError = MutableLiveData<Throwable>()
     val getHashError: LiveData<Throwable> get() = _getHashError
+    private val _sessionInfo = MutableStateFlow<PeerConnectionInfo?>(null)
+    val sessionInfo: StateFlow<PeerConnectionInfo?> = _sessionInfo
+
+    val clientHash = peerToPeerManager.clientConnected
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
@@ -159,7 +166,6 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             val result = peerClient.registerPeerDevice(ip, port, hash, pin)
             result.onSuccess { sessionId ->
-                Log.d("QRCode", "Registered successfully: $sessionId")
                 PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
                 // update UI state
                 _registrationSuccess.postValue(true)
@@ -172,47 +178,25 @@ class PeerToPeerViewModel @Inject constructor(
             val result = FingerprintFetcher.fetch(ip, port.toInt())
 
             result.onSuccess { hash ->
-                _getHashSuccess.postValue(hash)
                 Timber.d("hash ***** $hash")
+                _getHashSuccess.postValue(hash)
+
+                // Notify the server after fetching the hash
+                runCatching {
+                    ServerPinger.notifyServer(ip, port.toInt())
+                }.onFailure {
+                    Timber.e(it, "Failed to ping server after fetching hash")
+                }
+
             }.onFailure { error ->
-                _getHashError.postValue(error)
                 Timber.d("error ***** $error")
+                _getHashError.postValue(error)
             }
-
         }
     }
 
 
-    private fun createFileFromAsset(context: Context, assetFileName: String): File {
-        // Create a temporary file in the cache directory
-        val tempFile = File(context.cacheDir, assetFileName)
-
-        if (!tempFile.exists()) {
-            Log.e("PrepareUpload", "File does not exist: ${tempFile.absolutePath}")
-        }
-
-        // Open the asset file
-        context.assets.open(assetFileName).use { inputStream ->
-            // Write the content of the asset to the temporary file
-            FileOutputStream(tempFile).use { outputStream ->
-                inputStream.copyTo(outputStream)
-            }
-        }
-
-        return tempFile
+    fun setPeerSessionInfo(info: PeerConnectionInfo) {
+        _sessionInfo.value = info
     }
-
-    private fun calculateSha256(file: File): String {
-        val digest = MessageDigest.getInstance("SHA-256")
-        file.inputStream().use { input ->
-            val buffer = ByteArray(8192)
-            var bytesRead: Int
-            while (input.read(buffer).also { bytesRead = it } != -1) {
-                digest.update(buffer, 0, bytesRead)
-            }
-        }
-        return digest.digest().joinToString("") { "%02x".format(it) }
-    }
-
-
 }

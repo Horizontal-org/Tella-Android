@@ -33,8 +33,8 @@
 
     <fragment
         android:id="@+id/connectManuallyVerificationFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientVerificationFragment"
-        android:label="ConnectManuallyVerificationFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
+        android:label="ConnectManuallyVerificationScreen"
         tools:layout="@layout/connect_manually_verification" />
 
     <fragment
@@ -96,7 +96,7 @@
         android:label="SenderManualConnectionScreen"
         tools:layout="@layout/sender_manual_connection">
         <action
-            android:id="@+id/action_senderManualConnectionScreen_to_connectManuallyVerificationFragment"
+            android:id="@+id/action_senderManualConnectionScreen_to_connectManuallyVerificationScreen"
             app:destination="@id/connectManuallyVerificationFragment" />
     </fragment>
     <fragment

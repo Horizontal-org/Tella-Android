@@ -191,6 +191,14 @@ class NavigationManager(
     fun navigateFromScanQrCodeToSenderManualConnectionScreen() {
         navigateToWithBundle(R.id.action_scanQrCodeScreen_to_senderManualConnectionScreen)
     }
+
+    fun navigateFromSenderManualConnectionToConnectManuallyVerification() {
+        navigateToWithBundle(R.id.action_senderManualConnectionScreen_to_connectManuallyVerificationScreen)
+    }
+
+    fun navigateFromDeviceInfoScreenTRecipientVerificationScreen(){
+        navigateToWithBundle(R.id.action_deviceInfoScreen_to_recipientVerificationScreen)
+    }
     fun navigateFromQrCodeScreenToWaitingFragment() {
         navigateToWithBundle(R.id.action_qrCodeScreen_to_waitingFragment)
     }

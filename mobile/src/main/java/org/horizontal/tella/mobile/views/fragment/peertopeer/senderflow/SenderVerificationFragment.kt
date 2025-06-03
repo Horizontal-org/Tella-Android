@@ -2,22 +2,19 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
 import android.os.Bundle
 import android.view.View
-import com.google.gson.Gson
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 
 class SenderVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
-
-    private var payload: PeerConnectionPayload? = null
+    private val viewModel: PeerToPeerViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("payload")?.let { payloadJson ->
-            payload = Gson().fromJson(payloadJson, PeerConnectionPayload::class.java)
-        }
         initListeners()
         initView()
     }
@@ -25,9 +22,14 @@ class SenderVerificationFragment :
     private fun initView() {
         binding.titleDescTextView.text = getString(R.string.make_sure_sequence_matches_recipient)
         binding.warningTextView.text = getString(R.string.sequence_mismatch_warning_recipient)
+
     }
 
     private fun initListeners() {
-
+        lifecycleScope.launchWhenStarted {
+            viewModel.sessionInfo.collect { session ->
+                binding.hashContentTextView.text = session?.hash
+            }
+        }
     }
 }

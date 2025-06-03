@@ -2,15 +2,22 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.databinding.ShowDeviceInfoLayoutBinding
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 
 class ShowDeviceInfoFragment :
     BaseBindingFragment<ShowDeviceInfoLayoutBinding>(ShowDeviceInfoLayoutBinding::inflate) {
+    private val viewModel: PeerToPeerViewModel by activityViewModels()
 
     private var payload: PeerConnectionPayload? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,6 +26,7 @@ class ShowDeviceInfoFragment :
         }
         initListeners()
         initView()
+        initObservers()
     }
 
     private fun initView() {
@@ -28,6 +36,22 @@ class ShowDeviceInfoFragment :
     }
 
     private fun initListeners() {
+        binding.backBtn.setOnClickListener { back() }
+    }
 
+    private fun initObservers() {
+        lifecycleScope.launch {
+            viewModel.clientHash.collect { hash ->
+                viewModel.setPeerSessionInfo(
+                    PeerConnectionInfo(
+                        ip = payload?.connectCode.toString(),
+                        port = payload?.port.toString(),
+                        pin = payload?.pin?.toInt()!!,
+                        hash = hash
+                    )
+                )
+                navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
+            }
+        }
     }
 }
