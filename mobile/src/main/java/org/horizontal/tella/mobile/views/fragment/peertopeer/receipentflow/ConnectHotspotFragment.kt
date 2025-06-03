@@ -57,6 +57,7 @@ class ConnectHotspotFragment :
         binding.nextBtn.setOnClickListener { }
 
         binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
+
     }
 
     private fun updateNextButtonState(connectionType: ConnectionType?) {

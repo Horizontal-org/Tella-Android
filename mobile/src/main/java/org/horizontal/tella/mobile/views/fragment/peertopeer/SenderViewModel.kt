@@ -26,8 +26,8 @@ import javax.inject.Inject
 class SenderViewModel @Inject constructor(
     private val peerClient: TellaPeerToPeerClient
 ) : ViewModel() {
-    private val _prepareResults = MutableLiveData<List<PeerPrepareUploadResponse>>()
-    val prepareResults: LiveData<List<PeerPrepareUploadResponse>> = _prepareResults
+    private val _prepareResults = MutableLiveData<PeerPrepareUploadResponse>()
+    val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -69,32 +69,24 @@ class SenderViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val successfulResponses = mutableListOf<PeerPrepareUploadResponse>()
+            val result = peerClient.prepareUpload(
+                ip = info.ip,
+                port = info.port,
+                expectedFingerprint = info.expectedFingerprint,
+                title = title,
+                files = files,
+                sessionId = info.sessionId
+            )
 
-            for (file in files) {
-                val result = peerClient.prepareUpload(
-                    ip = info.ip,
-                    port = info.port,
-                    expectedFingerprint = info.expectedFingerprint,
-                    title = title,
-                    file = File(file.path),
-                    fileId = file.id,
-                    sha256 = file.hash,
-                    sessionId = info.sessionId
-                )
-
-                result.onSuccess { transmissionId ->
-                    Timber.d("Success: transmissionId = $transmissionId")
-                    successfulResponses.add(PeerPrepareUploadResponse(transmissionId))
-                }.onFailure {
-                    Timber.e(it, "Failed to prepare upload for file: ${file.name}")
-                }
+            result.onSuccess { transmissionId ->
+                Timber.d("Success: transmissionId = $transmissionId")
+                _prepareResults.postValue(PeerPrepareUploadResponse(transmissionId))
+            }.onFailure { error ->
+                Timber.e(error, "Failed to prepare upload for  ${files.size} files")
+                // Optionally post a failure state to LiveData if needed
             }
-
-            _prepareResults.postValue(successfulResponses)
         }
     }
-
 
 
 }

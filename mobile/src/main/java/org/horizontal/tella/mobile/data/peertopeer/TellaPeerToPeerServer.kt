@@ -14,6 +14,7 @@ import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
@@ -96,30 +97,22 @@ class TellaPeerToPeerServer(
                             HttpStatusCode.OK
                         )
                     }
-
-
                     post("/api/v1/prepare-upload") {
                         val request = try {
                             call.receive<PrepareUploadRequest>()
                         } catch (e: Exception) {
-                            call.respondText("Invalid body", status = HttpStatusCode.BadRequest)
+                            call.respond(HttpStatusCode.BadRequest, "Invalid body: ${e.message}")
                             return@post
                         }
 
                         if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
-                            call.respondText(
-                                "Missing required fields",
-                                status = HttpStatusCode.BadRequest
-                            )
+                            call.respond(HttpStatusCode.BadRequest, "Missing required fields")
                             return@post
                         }
-
-                        // we can process the files or store metadata here
                         val transmissionId = UUID.randomUUID().toString()
-                        call.respondText(
-                            Gson().toJson(PeerPrepareUploadResponse(transmissionId)),
-                            ContentType.Application.Json,
-                            HttpStatusCode.OK
+                        call.respond(
+                            HttpStatusCode.OK,
+                            PeerPrepareUploadResponse(transmissionId)
                         )
                     }
                 }

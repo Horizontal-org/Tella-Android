@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
 import android.util.Log
+import com.hzontal.tella_vault.VaultFile
 import kotlinx.serialization.encodeToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -119,66 +120,66 @@ class TellaPeerToPeerClient {
         ip: String,
         port: String,
         expectedFingerprint: String,
-        title: String = "Title of the report",
-        file: File,
-        fileId: String,
-        sha256: String,
+        title: String,
+        files: List<VaultFile>,
         sessionId: String
-    ): Result<String> {
-        return withContext(Dispatchers.IO) {
-            val url = "https://$ip:$port/api/v1/prepare-upload"
+    ): Result<String> = withContext(Dispatchers.IO) {
+        val url = "https://$ip:$port/api/v1/prepare-upload"
 
-            val fileItem = FileItem(
-                id = fileId,
-                fileName = file.name,
-                size = file.length(),
-                fileType = "application/octet-stream",
-                sha256 = sha256
+        val fileItems = files.map {
+            P2PFile(
+                id = it.id,
+                fileName = it.name,
+                size = it.size,
+                fileType = "application/octet-stream", // or detect mime type
+                sha256 = it.hash
             )
+        }
 
-            val requestPayload = PrepareUploadRequest(
-                title = title,
-                sessionId = sessionId,
-                files = listOf(fileItem)
-            )
+        val requestPayload = PrepareUploadRequest(
+            title = title,
+            sessionId = sessionId,
+            files = fileItems
+        )
 
-            val jsonPayload = Json.encodeToString(requestPayload)
-            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
-            Log.d("PeerClient", "Request payload: $requestBody")
-            val client = getClientWithFingerprintValidation(expectedFingerprint)
+        val jsonPayload = Json.encodeToString(requestPayload)
+        val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+        val client = getClientWithFingerprintValidation(expectedFingerprint)
 
-            try {
-                val request = Request.Builder()
-                    .url(url)
-                    .post(requestBody)
-                    .addHeader("Content-Type", "application/json")
-                    .build()
+        try {
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .addHeader("Content-Type", "application/json")
+                .build()
 
-                client.newCall(request).execute().use { response ->
-                    if (response.isSuccessful) {
-                        val responseBody = response.body?.string()
-                        responseBody?.let {
-                            val jsonObject = JSONObject(it)
-                            val transmissionId = jsonObject.getString("transmissionId")
-                            Log.d("PrepareUpload", "Transmission ID: $transmissionId")
-                            return@use Result.success(transmissionId)
-                        }
-                    } else {
-                        Log.e("PrepareUpload", "Error ${response.code}: ${response.message}")
-                        when (response.code) {
-                            409 -> {
-                                Log.e("PrepareUpload", "Conflict: Try canceling active sessions.")
-                            }
+            client.newCall(request).execute().use { response ->
+                val body = response.body?.string()
 
-                            else -> {}
-                        }
+                if (response.isSuccessful && body != null) {
+                    return@use try {
+                        val transmissionId = JSONObject(body).getString("transmissionId")
+                        Result.success(transmissionId)
+                    } catch (e: Exception) {
+                        Log.e("PrepareUpload", "Invalid JSON response: $body", e)
+                        Result.failure(Exception("Malformed server response"))
                     }
+                } else {
+                    Log.e("PrepareUpload", "Server error ${response.code}: ${response.message}")
+                    when (response.code) {
+                        400 -> Log.e("PrepareUpload", "Bad Request – likely missing or invalid fields.")
+                        409 -> Log.e("PrepareUpload", "Conflict – maybe another active session.")
+                        500 -> Log.e("PrepareUpload", "Internal Server Error – try again later.")
+                        else -> Log.e("PrepareUpload", "Unhandled server error code.")
+                    }
+                    return@use Result.failure(Exception("Server returned error ${response.code}"))
                 }
-                Result.failure(Exception("Unsuccessful response"))
-            } catch (e: Exception) {
-                Log.e("PrepareUpload", "Exception: ${e.message}", e)
-                Result.failure(e)
             }
+
+            Result.failure(Exception("No response from server"))
+        } catch (e: Exception) {
+            Log.e("PrepareUpload", "Exception during upload: ${e.message}", e)
+            Result.failure(e)
         }
     }
 

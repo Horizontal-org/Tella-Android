@@ -35,6 +35,13 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         }
         handleBack()
         handleConnectManually()
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingFragment()
+            } else {
+            }
+        }
     }
 
     private fun setupServerAndQr(ip: String) {

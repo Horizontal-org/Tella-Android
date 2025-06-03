@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.data.peertopeer
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FileItem(
+data class P2PFile(
     val id: String,
     val fileName: String,
     val size: Long,

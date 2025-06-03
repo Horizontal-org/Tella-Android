@@ -35,7 +35,7 @@ class ScanQrCodeFragment :
         barcodeView = binding.qrCodeScanView
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                navManager().navigateFromScanQrCodeTo()
+                navManager().navigateFromScanQrCodeToPrepareUploadFragment()
             } else {
                 //  handle error UI
             }

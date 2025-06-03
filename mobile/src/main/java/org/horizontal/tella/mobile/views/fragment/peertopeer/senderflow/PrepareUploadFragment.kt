@@ -89,11 +89,9 @@ class PrepareUploadFragment :
             isNewDraft = false
         }
 
-        viewModel.prepareResults.observe(viewLifecycleOwner) { responses ->
-            responses.forEach { response ->
+        viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
                 val id = response.transmissionId
                 // navigate to next screen
-            }
         }
         highLightButtonsInit()
         checkIsNewDraftEntry()
@@ -265,6 +263,9 @@ class PrepareUploadFragment :
                     val selectedFiles = filesRecyclerViewAdapter.getFiles()
                     if (selectedFiles.isNotEmpty()) {
                         viewModel.prepareUploadsFromVaultFiles(selectedFiles)
+                        // navigate to waiting view
+                        bundle.putBoolean("isSender", true)
+                        navManager().navigateFromPrepareUploadFragmentToWaitingFragment()
                     } else {
                         showToast("No file selected")
                     }

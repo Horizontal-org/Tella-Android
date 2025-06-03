@@ -184,11 +184,18 @@ class NavigationManager(
     fun navigateFromScanQrCodeToDeviceInfo() {
         navigateToWithBundle(R.id.action_qrCodeScreen_to_deviceInfoScreen)
     }
-    fun navigateFromScanQrCodeTo() {
+    fun navigateFromScanQrCodeToPrepareUploadFragment() {
         navigateToWithBundle(R.id.action_scanQrCodeScreen_to_prepareUploadFragment)
     }
 
     fun navigateFromScanQrCodeToSenderManualConnectionScreen() {
         navigateToWithBundle(R.id.action_scanQrCodeScreen_to_senderManualConnectionScreen)
+    }
+    fun navigateFromQrCodeScreenToWaitingFragment() {
+        navigateToWithBundle(R.id.action_qrCodeScreen_to_waitingFragment)
+    }
+
+    fun navigateFromPrepareUploadFragmentToWaitingFragment() {
+        navigateToWithBundle(R.id.action_prepareUploadFragment_to_waitingFragment)
     }
 }
