@@ -55,10 +55,13 @@ class ShowDeviceInfoFragment :
             }
         }
 
-        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+        viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
+                // Navigate to the next screen
                 bundle.putBoolean("isSender", false)
                 navManager().navigateFromQrCodeScreenToWaitingFragment()
+                //  reset the LiveData state if we want to consume event once
+                viewModel.resetRegistrationState()
             } else {
             }
         }

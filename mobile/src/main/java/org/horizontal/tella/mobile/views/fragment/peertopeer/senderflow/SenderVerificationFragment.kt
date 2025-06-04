@@ -28,6 +28,7 @@ class SenderVerificationFragment :
     }
 
     private fun initView() {
+        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
         binding.titleDescTextView.text = getString(R.string.make_sure_sequence_matches_recipient)
         binding.warningTextView.text = getString(R.string.sequence_mismatch_warning_recipient)
 
@@ -58,6 +59,17 @@ class SenderVerificationFragment :
     }
 
     private fun initObservers() {
+
+        viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                // Navigate to the next screen
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingFragment()
+                //  reset the LiveData state if we want to consume event once
+                viewModel.resetRegistrationState()
+            } else {
+            }
+        }
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()

@@ -11,12 +11,12 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
@@ -65,7 +65,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
-        val pin = "111111"
+        val pin = (100000..999999).random().toString()
         val port = port
 
         payload = PeerConnectionPayload(

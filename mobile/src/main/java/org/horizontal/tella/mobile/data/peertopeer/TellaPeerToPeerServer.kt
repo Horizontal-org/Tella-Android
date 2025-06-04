@@ -63,7 +63,6 @@ class TellaPeerToPeerServer(
         }
 
         engine = embeddedServer(Netty, environment = applicationEngineEnvironment {
-            var firstConnectionReceived = false
             sslConnector(
                 keyStore = keyStore,
                 keyAlias = keyStoreConfig.alias,

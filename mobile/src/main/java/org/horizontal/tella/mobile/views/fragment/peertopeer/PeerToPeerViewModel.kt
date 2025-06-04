@@ -61,15 +61,14 @@ class PeerToPeerViewModel @Inject constructor(
                 _incomingPrepareRequest.postValue(request)
             }
         }
-    }
 
-    init {
         viewModelScope.launch {
             PeerEventManager.registrationEvents.collect { success ->
                 _registrationServerSuccess.postValue(success)
             }
         }
     }
+
     fun resetRegistrationState() {
         _registrationServerSuccess.postValue(false)
     }
