@@ -71,6 +71,9 @@ class PrepareUploadFragment :
     }
 
     private fun initView() {
+        binding.toolbar.backClickListener = {
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        }
         gridLayoutManager = GridLayoutManager(context, 3)
         binding.filesRecyclerView.apply {
             layoutManager = gridLayoutManager

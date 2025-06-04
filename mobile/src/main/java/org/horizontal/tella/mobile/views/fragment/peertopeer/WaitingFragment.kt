@@ -2,10 +2,8 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
@@ -15,7 +13,8 @@ import org.hzontal.shared_ui.utils.DialogUtils
 /**
  * Created by wafa on 3/6/2025.
  */
-class WaitingFragment : BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate){
+class WaitingFragment :
+    BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private val viewModelSender: SenderViewModel by activityViewModels()
 
@@ -26,6 +25,9 @@ class WaitingFragment : BaseBindingFragment<FragmentWaitingBinding>(FragmentWait
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isSender = arguments?.getBoolean("isSender") ?: false
 
+        binding.toolbar.backClickListener = {
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        }
         if (!isSender) {
             binding.toolbar.setStartTextTitle(getString(R.string.receive_files))
             binding.waitingText.text = getString(R.string.waiting_for_the_sender_to_share_files)
@@ -43,11 +45,17 @@ class WaitingFragment : BaseBindingFragment<FragmentWaitingBinding>(FragmentWait
 
         viewModelSender.prepareRejected.observe(viewLifecycleOwner) { wasRejected ->
             if (wasRejected) {
-                parentFragmentManager.setFragmentResult("prepare_upload_result", bundleOf("rejected" to true))
+                parentFragmentManager.setFragmentResult(
+                    "prepare_upload_result",
+                    bundleOf("rejected" to true)
+                )
                 findNavController().popBackStack()
             }
         }
-        parentFragmentManager.setFragmentResultListener("prepare_upload_result", viewLifecycleOwner) { _, result ->
+        parentFragmentManager.setFragmentResultListener(
+            "prepare_upload_result",
+            viewLifecycleOwner
+        ) { _, result ->
             val wasRejected = result.getBoolean("rejected", false)
             if (wasRejected) {
                 DialogUtils.showBottomMessage(
