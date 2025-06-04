@@ -95,15 +95,26 @@ class PrepareUploadFragment :
         parentFragmentManager.setFragmentResultListener("prepare_upload_result", viewLifecycleOwner) { _, result ->
             val wasRejected = result.getBoolean("rejected", false)
             if (wasRejected) {
-                showTooltip(
-                    binding.root,
-                    "Recipient rejected the files.",
-                    Gravity.TOP
+//                showTooltip(
+//                    binding.root,
+//                    "Recipient rejected the files.",
+//                    Gravity.TOP
+//                )
+                DialogUtils.showBottomMessage(
+                    baseActivity, "Recipient rejected the files.",
+                    true
                 )
+            
             }
         }
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
                 val id = response.transmissionId
+            DialogUtils.showBottomMessage(
+                baseActivity,
+                "The receiver accepted the files transfer ",
+                false,
+                3000
+            )
                 // navigate to next screen
         }
 
