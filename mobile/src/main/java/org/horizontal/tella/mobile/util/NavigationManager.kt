@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.util
 
 import android.os.Bundle
+import androidx.navigation.navOptions
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.views.fragment.reports.di.NavControllerProvider
 
@@ -199,6 +200,7 @@ class NavigationManager(
     fun navigateFromDeviceInfoScreenTRecipientVerificationScreen(){
         navigateToWithBundle(R.id.action_deviceInfoScreen_to_recipientVerificationScreen)
     }
+
     fun navigateFromQrCodeScreenToWaitingFragment() {
         navigateToWithBundle(R.id.action_qrCodeScreen_to_waitingFragment)
     }
@@ -210,10 +212,24 @@ class NavigationManager(
     fun navigateConnectManuallyVerificationFragmentToprepareUploadFragment(){
         navigateToWithBundle(R.id.action_connectManuallyVerificationFragment_to_prepareUploadFragment)
     }
+
     fun navigateFromRecipientVerificationScreenToWaitingFragment(){
         navigateToWithBundle(R.id.action_recipientVerificationScreen_to_waitingFragment)
     }
+
     fun navigateFromWaitingFragmentToRecipientSuccessFragment(){
         navigateToWithBundle(R.id.action_waitingFragment_to_recipientSuccessFragment)
+    }
+
+    fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {
+        navControllerProvider.navController.navigate(
+            R.id.startNearBySharingFragment,
+            bundle,
+            navOptions {
+                popUpTo(R.id.startNearBySharingFragment) {
+                    inclusive = true
+                }
+            }
+        )
     }
 }

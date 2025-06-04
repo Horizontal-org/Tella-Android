@@ -5,15 +5,20 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import javax.inject.Inject
 
 class SenderVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private lateinit var peerConnectionInfo: PeerConnectionInfo
+
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +53,7 @@ class SenderVerificationFragment :
         }
 
         binding.discardBtn.setOnClickListener {
-
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
     }
 

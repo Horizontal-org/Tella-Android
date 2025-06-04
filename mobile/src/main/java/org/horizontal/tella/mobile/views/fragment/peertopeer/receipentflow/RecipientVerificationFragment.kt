@@ -22,7 +22,13 @@ class RecipientVerificationFragment :
         }
         initListeners()
         initView()
-        initObservers()
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
+            } else {
+            }
+        }
     }
 
     private fun initView() {
@@ -36,16 +42,6 @@ class RecipientVerificationFragment :
     private fun initListeners() {
         binding.confirmAndConnectBtn.setOnClickListener {
 
-        }
-    }
-
-    private fun initObservers() {
-        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
-            } else {
-            }
         }
     }
 }
