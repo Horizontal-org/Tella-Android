@@ -19,6 +19,7 @@ class SenderVerificationFragment :
         super.onViewCreated(view, savedInstanceState)
         initListeners()
         initView()
+        initObservers()
     }
 
     private fun initView() {
@@ -44,6 +45,16 @@ class SenderVerificationFragment :
                 hash = peerConnectionInfo.hash,
                 pin = peerConnectionInfo.pin.toString()
             )
+        }
+    }
+
+    private fun initObservers() {
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()
+            } else {
+                //  handle error UI
+            }
         }
     }
 }

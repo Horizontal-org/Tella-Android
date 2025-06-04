@@ -206,4 +206,11 @@ class NavigationManager(
     fun navigateFromPrepareUploadFragmentToWaitingFragment() {
         navigateToWithBundle(R.id.action_prepareUploadFragment_to_waitingFragment)
     }
+
+    fun navigateConnectManuallyVerificationFragmentToprepareUploadFragment(){
+        navigateToWithBundle(R.id.action_connectManuallyVerificationFragment_to_prepareUploadFragment)
+    }
+    fun navigateFromRecipientVerificationScreenToWaitingFragment(){
+        navigateToWithBundle(R.id.action_recipientVerificationScreen_to_waitingFragment)
+    }
 }

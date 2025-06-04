@@ -168,6 +168,9 @@ class PeerToPeerViewModel @Inject constructor(
                 PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
                 // update UI state
                 _registrationSuccess.postValue(true)
+            }.onFailure { error ->
+                Timber.d("error ***** $error")
+
             }
         }
     }

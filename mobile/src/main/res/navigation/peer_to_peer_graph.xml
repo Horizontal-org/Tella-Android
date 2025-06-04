@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/startNearBySharingFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.prepareupload.StartNearBySharingFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.StartNearBySharingFragment"
         android:label="StartNearBySharingFragment"
         tools:layout="@layout/start_near_by_sharing_fragment">
         <action
@@ -35,7 +35,11 @@
         android:id="@+id/connectManuallyVerificationFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
         android:label="ConnectManuallyVerificationScreen"
-        tools:layout="@layout/connect_manually_verification" />
+        tools:layout="@layout/connect_manually_verification" >
+        <action
+            android:id="@+id/action_connectManuallyVerificationFragment_to_prepareUploadFragment"
+            app:destination="@id/prepareUploadFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/scanQrCodeScreen"
@@ -78,7 +82,11 @@
         android:id="@+id/recipientVerificationScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientVerificationFragment"
         android:label="RecipientVerificationScreen"
-        tools:layout="@layout/connect_manually_verification"/>
+        tools:layout="@layout/connect_manually_verification">
+        <action
+            android:id="@+id/action_recipientVerificationScreen_to_waitingFragment"
+            app:destination="@id/waitingFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/prepareUploadFragment"
@@ -101,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/waitingFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.prepareupload.WaitingFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingFragment"
         tools:layout="@layout/fragment_waiting"
         android:label="WaitingFragment" />
 

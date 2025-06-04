@@ -92,7 +92,14 @@ class SenderManualConnectionFragment :
     private fun initObservers() {
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
             bundle.putString("payload", hash)
-            viewModel.setPeerSessionInfo(PeerConnectionInfo(hash = hash))
+            viewModel.setPeerSessionInfo(
+                PeerConnectionInfo(
+                    ip = binding.connectCode.text.toString(),
+                    port = binding.port.text.toString(),
+                    pin = binding.pin.text.toString().toInt(),
+                    hash = hash
+                )
+            )
 
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }

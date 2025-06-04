@@ -33,13 +33,7 @@ class ScanQrCodeFragment :
 
         barcodeView = CompoundBarcodeView(requireContext())
         barcodeView = binding.qrCodeScanView
-        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                navManager().navigateFromScanQrCodeToPrepareUploadFragment()
-            } else {
-                //  handle error UI
-            }
-        }
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
@@ -53,6 +47,7 @@ class ScanQrCodeFragment :
         }
         handleBack()
         initListeners()
+        initObservers()
     }
 
     private fun startScanning() {
@@ -118,6 +113,16 @@ class ScanQrCodeFragment :
     private fun initListeners() {
         binding.connectManuallyButton.setOnClickListener {
             navManager().navigateFromScanQrCodeToSenderManualConnectionScreen()
+        }
+    }
+
+    private fun initObservers(){
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                navManager().navigateFromScanQrCodeToPrepareUploadFragment()
+            } else {
+                //  handle error UI
+            }
         }
     }
 }
