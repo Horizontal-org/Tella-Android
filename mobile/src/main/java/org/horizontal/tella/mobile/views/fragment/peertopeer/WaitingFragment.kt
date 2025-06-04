@@ -17,7 +17,7 @@ class WaitingFragment : BaseBindingFragment<FragmentWaitingBinding>(FragmentWait
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isSender = arguments?.getBoolean("isSender") ?: false
 
-        if (isSender) {
+        if (!isSender) {
             binding.waitingText.text = "Waiting for the sender to share files"
         } else {
             binding.waitingText.text = "Waiting for the recipient to accept files"

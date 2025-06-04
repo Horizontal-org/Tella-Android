@@ -20,6 +20,8 @@ import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +31,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerEventManager
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
@@ -105,11 +108,18 @@ class TellaPeerToPeerServer(
                         }
 
                         val sessionId = UUID.randomUUID().toString()
+
+                        // Emit registration success event asynchronously
+                        launch {
+                            PeerEventManager.emitRegistrationSuccess()
+                        }
+
                         call.respondText(
                             Gson().toJson(PeerResponse(sessionId)),
                             ContentType.Application.Json,
                             HttpStatusCode.OK
                         )
+
                     }
                     post("/api/v1/prepare-upload") {
                         val request = try {

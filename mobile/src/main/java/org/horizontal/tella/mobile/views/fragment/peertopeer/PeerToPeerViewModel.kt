@@ -20,14 +20,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
+import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
 import timber.log.Timber
 import java.net.Inet4Address
 import java.net.NetworkInterface
+import java.security.MessageDigest
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,10 +52,32 @@ class PeerToPeerViewModel @Inject constructor(
     val getHashError: LiveData<Throwable> get() = _getHashError
     private val _sessionInfo = MutableStateFlow<PeerConnectionInfo?>(null)
     val sessionInfo: StateFlow<PeerConnectionInfo?> = _sessionInfo
+    private val _registrationServerSuccess = MutableLiveData<Boolean>()
+    val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
+    private val _incomingUploadRequest = MutableLiveData<PrepareUploadRequest>()
+    val incomingUploadRequest: LiveData<PrepareUploadRequest> = _incomingUploadRequest
 
     val clientHash = peerToPeerManager.clientConnected
 
 
+    init {
+        viewModelScope.launch {
+            PeerEventManager.incomingUploadRequests.collect { request ->
+                _incomingUploadRequest.postValue(request)
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            PeerEventManager.registrationEvents.collect { success ->
+                _registrationServerSuccess.postValue(success)
+            }
+        }
+    }
+    fun resetRegistrationState() {
+        _registrationServerSuccess.postValue(false)
+    }
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
     fun fetchCurrentNetworkInfo() {
@@ -178,7 +204,6 @@ class PeerToPeerViewModel @Inject constructor(
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
             val result = FingerprintFetcher.fetch(ip, port.toInt())
-
             result.onSuccess { hash ->
                 Timber.d("hash ***** $hash")
                 _getHashSuccess.postValue(hash)
