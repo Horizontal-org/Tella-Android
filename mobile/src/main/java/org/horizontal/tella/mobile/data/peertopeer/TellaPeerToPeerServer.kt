@@ -131,11 +131,20 @@ class TellaPeerToPeerServer(
                             call.respond(HttpStatusCode.BadRequest, "Missing required fields")
                             return@post
                         }
-                        val transmissionId = UUID.randomUUID().toString()
-                        call.respond(
-                            HttpStatusCode.OK,
-                            PeerPrepareUploadResponse(transmissionId)
-                        )
+
+                        val accepted = PeerEventManager.emitPrepareUploadRequest(request)
+
+                        if (accepted) {
+                            val transmissionId = UUID.randomUUID().toString()
+                            call.respond(HttpStatusCode.OK, PeerPrepareUploadResponse(transmissionId))
+                        } else {
+                            call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
+                        }
+//                        val transmissionId = UUID.randomUUID().toString()
+//                        call.respond(
+//                            HttpStatusCode.OK,
+//                            PeerPrepareUploadResponse(transmissionId)
+//                        )
                     }
                 }
 

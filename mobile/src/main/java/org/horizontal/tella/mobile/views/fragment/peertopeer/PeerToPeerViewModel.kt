@@ -49,21 +49,19 @@ class PeerToPeerViewModel @Inject constructor(
     val getHashError: LiveData<Throwable> get() = _getHashError
     private val _sessionInfo = MutableStateFlow<PeerConnectionInfo?>(null)
     val sessionInfo: StateFlow<PeerConnectionInfo?> = _sessionInfo
+    val clientHash = peerToPeerManager.clientConnected
     private val _registrationServerSuccess = MutableLiveData<Boolean>()
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
-    private val _incomingUploadRequest = MutableLiveData<PrepareUploadRequest>()
-    val incomingUploadRequest: LiveData<PrepareUploadRequest> = _incomingUploadRequest
+    private val _incomingPrepareRequest = MutableLiveData<PrepareUploadRequest>()
+    val incomingPrepareRequest: LiveData<PrepareUploadRequest> = _incomingPrepareRequest
 
-    val clientHash = peerToPeerManager.clientConnected
-
-
-//    init {
-//        viewModelScope.launch {
-//            PeerEventManager.incomingUploadRequests.collect { request ->
-//                _incomingUploadRequest.postValue(request)
-//            }
-//        }
-//    }
+    init {
+        viewModelScope.launch {
+            PeerEventManager.prepareUploadEvents.collect { request ->
+                _incomingPrepareRequest.postValue(request)
+            }
+        }
+    }
 
     init {
         viewModelScope.launch {
@@ -74,6 +72,9 @@ class PeerToPeerViewModel @Inject constructor(
     }
     fun resetRegistrationState() {
         _registrationServerSuccess.postValue(false)
+    }
+    fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
+        PeerEventManager.resolveUserDecision(sessionId, accepted)
     }
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")

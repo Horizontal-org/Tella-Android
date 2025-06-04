@@ -1041,4 +1041,6 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="sequence_mismatch_warning_recipient">If the sequence on your device does not match the sequence on the recipient’s device, the connection may not be secure and should be discarded.</string>
   <string name="discard_and_start_over">Discard and start over</string>
     <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
+  <string name="prepare_upload_message">The sender is trying to send you %1$d files</string>
+
 </resources>

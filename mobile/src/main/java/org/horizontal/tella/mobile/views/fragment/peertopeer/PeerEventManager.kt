@@ -3,7 +3,9 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.response.respond
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
 
 /**
@@ -22,13 +24,19 @@ object PeerEventManager {
     // we can add emitRegistrationFailure or other event types if needed
 
 
-    val prepareUploadEvents =
-        MutableSharedFlow<Pair<PrepareUploadRequest, (Boolean) -> Unit>>(replay = 0)
+    private val _prepareUploadEvents = MutableSharedFlow<PrepareUploadRequest>(replay = 1)
+    val prepareUploadEvents = _prepareUploadEvents.asSharedFlow()
 
-    suspend fun emitPrepareUploadRequest(
-        request: PrepareUploadRequest,
-        callback: (Boolean) -> Unit
-    ) {
-        prepareUploadEvents.emit(request to callback)
+    private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
+
+    suspend fun emitPrepareUploadRequest(request: PrepareUploadRequest): Boolean {
+        val deferred = CompletableDeferred<Boolean>()
+        decisionMap[request.sessionId] = deferred
+        _prepareUploadEvents.emit(request)
+        return deferred.await() // Wait for UI decision
+    }
+
+    fun resolveUserDecision(sessionId: String, accepted: Boolean) {
+        decisionMap.remove(sessionId)?.complete(accepted)
     }
 }

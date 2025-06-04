@@ -29,7 +29,7 @@
             style="@style/Tella_Main_White_TextExtraLargeBold"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_large_margin"
-            android:text="The sender is trying to send you 6 files"
+            android:text="@string/prepare_upload_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
