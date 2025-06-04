@@ -11,6 +11,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentRecipientSuccessBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import org.hzontal.shared_ui.utils.DialogUtils
 
 /**
  * Created by wafa on 3/6/2025.
@@ -37,6 +38,12 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
             acceptBtn.setOnClickListener {
              //   onAcceptFilesSelected()
                 viewModel.confirmPrepareUpload(sessionId, true)
+                DialogUtils.showBottomMessage(
+                    baseActivity,
+                    "The receiver accepted the files transfer ",
+                    false,
+                    3000
+                )
             }
 
             rejectBtn.setOnClickListener {
