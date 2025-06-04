@@ -213,4 +213,7 @@ class NavigationManager(
     fun navigateFromRecipientVerificationScreenToWaitingFragment(){
         navigateToWithBundle(R.id.action_recipientVerificationScreen_to_waitingFragment)
     }
+    fun navigateFromWaitingFragmentToRecipientSuccessFragment(){
+        navigateToWithBundle(R.id.action_waitingFragment_to_recipientSuccessFragment)
+    }
 }

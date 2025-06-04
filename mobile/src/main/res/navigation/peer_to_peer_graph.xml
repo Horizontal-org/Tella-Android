@@ -111,6 +111,19 @@
         android:id="@+id/waitingFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingFragment"
         tools:layout="@layout/fragment_waiting"
-        android:label="WaitingFragment" />
+        android:label="WaitingFragment" >
+        <action
+            android:id="@+id/action_waitingFragment_to_recipientSuccessFragment"
+            app:destination="@id/recipientSuccessFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/successConnectFragment"
+        android:name="org.horizontal.tella.mobile.views.dialog.uwazi.step6.SuccessConnectFragment"
+        android:label="SuccessConnectFragment" />
+    <fragment
+        android:id="@+id/recipientSuccessFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientSuccessFragment"
+        tools:layout="@layout/fragment_recipient_success"
+        android:label="RecipientSuccessFragment" />
 
 </navigation>
