@@ -60,13 +60,13 @@ class PeerToPeerViewModel @Inject constructor(
     val clientHash = peerToPeerManager.clientConnected
 
 
-    init {
-        viewModelScope.launch {
-            PeerEventManager.incomingUploadRequests.collect { request ->
-                _incomingUploadRequest.postValue(request)
-            }
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            PeerEventManager.incomingUploadRequests.collect { request ->
+//                _incomingUploadRequest.postValue(request)
+//            }
+//        }
+//    }
 
     init {
         viewModelScope.launch {
