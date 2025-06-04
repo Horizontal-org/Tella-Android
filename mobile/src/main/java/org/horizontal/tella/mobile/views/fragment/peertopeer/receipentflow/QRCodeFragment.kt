@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
@@ -12,9 +11,9 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
-import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
@@ -30,6 +29,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     private var server: TellaServer? = null
     private var payload: PeerConnectionPayload? = null
     private lateinit var qrPayload: String
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     @Inject
     lateinit var peerToPeerManager: PeerToPeerManager
@@ -60,14 +61,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val (keyPair, certificate) = CertificateGenerator.generateCertificate(ipAddress = ip)
         val config = KeyStoreConfig()
 
-        server = TellaPeerToPeerServer(
-            ip = ip,
-            keyPair = keyPair,
-            certificate = certificate,
-            keyStoreConfig = config,
-            peerToPeerManager = peerToPeerManager
-        )
-        server?.start()
+        peerServerStarterManager.startServer(ip, keyPair, certificate, config)
+
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
         val pin = "111111"
@@ -127,6 +122,5 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             }
         }
     }
-
 
 }

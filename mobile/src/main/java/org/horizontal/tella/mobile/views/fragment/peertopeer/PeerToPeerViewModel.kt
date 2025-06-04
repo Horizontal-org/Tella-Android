@@ -21,17 +21,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
 import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
-import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
-import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
 import timber.log.Timber
 import java.net.Inet4Address
 import java.net.NetworkInterface
-import java.security.MessageDigest
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel

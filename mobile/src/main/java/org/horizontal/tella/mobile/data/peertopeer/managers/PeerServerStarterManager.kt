@@ -1,0 +1,41 @@
+package org.horizontal.tella.mobile.data.peertopeer.managers
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
+import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import java.security.KeyPair
+import java.security.cert.X509Certificate
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Singleton
+class PeerServerStarterManager @Inject constructor(
+    private val peerToPeerManager: PeerToPeerManager
+) {
+    private var server: TellaPeerToPeerServer? = null
+
+    fun startServer(ip: String, keyPair: KeyPair, cert: X509Certificate, config: KeyStoreConfig) {
+        if (server == null) {
+            server = TellaPeerToPeerServer(
+                ip = ip,
+                keyPair = keyPair,
+                certificate = cert,
+                keyStoreConfig = config,
+                peerToPeerManager = peerToPeerManager
+            )
+            server?.start()
+        }
+    }
+
+    //TODO: AHLEM CHECK WHERE WE WANT TO STOP THE SERVER
+    fun stopServer() {
+        CoroutineScope(Dispatchers.IO).launch {
+            server?.stop()
+            server = null
+        }
+    }
+
+    fun isRunning(): Boolean = server != null
+}

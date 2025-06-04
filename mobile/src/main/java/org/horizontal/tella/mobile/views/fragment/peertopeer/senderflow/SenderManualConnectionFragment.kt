@@ -68,6 +68,8 @@ class SenderManualConnectionFragment :
                 if (enabled) android.R.color.white else android.R.color.darker_gray
             )
         )
+        binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.backBtn.setOnClickListener { nav().popBackStack() }
         binding.nextBtn.setOnClickListener {
             val ip = binding.connectCode.text.toString()
             val port = binding.port.text.toString()

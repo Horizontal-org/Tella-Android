@@ -46,6 +46,10 @@ class SenderVerificationFragment :
                 pin = peerConnectionInfo.pin.toString()
             )
         }
+
+        binding.discardBtn.setOnClickListener {
+
+        }
     }
 
     private fun initObservers() {

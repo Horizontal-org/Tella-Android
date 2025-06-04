@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.data.peertopeer
+package org.horizontal.tella.mobile.data.peertopeer.managers
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

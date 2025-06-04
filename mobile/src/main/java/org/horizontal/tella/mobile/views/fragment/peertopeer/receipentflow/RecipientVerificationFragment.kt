@@ -22,6 +22,7 @@ class RecipientVerificationFragment :
         }
         initListeners()
         initView()
+        initObservers()
     }
 
     private fun initView() {
