@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
@@ -20,6 +23,7 @@ import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.CAPTURE_WITH_AUTO_UPLOAD
+import org.horizontal.tella.mobile.views.activity.viewer.sharedViewModel
 import org.horizontal.tella.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
@@ -33,6 +37,7 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILES_
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
 import org.horizontal.tella.mobile.views.interfaces.IReportAttachmentsHandler
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -87,10 +92,35 @@ class PrepareUploadFragment :
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
-
+        parentFragmentManager.setFragmentResultListener("prepare_upload_result", viewLifecycleOwner) { _, result ->
+            val wasRejected = result.getBoolean("rejected", false)
+            if (wasRejected) {
+                showTooltip(
+                    binding.root,
+                    "Recipient rejected the files.",
+                    Gravity.TOP
+                )
+            }
+        }
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
                 val id = response.transmissionId
                 // navigate to next screen
+        }
+
+        binding.toolbar.backClickListener = {  BottomSheetUtils.showConfirmSheet(
+            baseActivity.supportFragmentManager,
+            getString((R.string.exit_nearby_sharing)),
+            getString(R.string.your_progress_will_be_lost),
+            getString(R.string.action_exit),
+            getString(R.string.action_cancel),
+            object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        findNavController().popBackStack()
+                    }
+                }
+            }
+        )
         }
         highLightButtonsInit()
         checkIsNewDraftEntry()

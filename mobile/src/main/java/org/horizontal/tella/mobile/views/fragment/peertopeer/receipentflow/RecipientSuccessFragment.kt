@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.fragment.findNavController
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentRecipientSuccessBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -34,16 +35,16 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
 
             // Handle Accept/Reject buttons
             acceptBtn.setOnClickListener {
-                onAcceptFilesSelected()
+             //   onAcceptFilesSelected()
                 viewModel.confirmPrepareUpload(sessionId, true)
             }
 
             rejectBtn.setOnClickListener {
-                onRejectFilesSelected()
+              //  onRejectFilesSelected()
                 viewModel.confirmPrepareUpload(sessionId, false)
                 // Set result to notify previous fragment
-                setFragmentResult("prepare_upload_result", bundleOf("rejected" to true))
-                nav().popBackStack()
+                parentFragmentManager.setFragmentResult("prepare_upload_result", bundleOf("rejected" to true))
+                findNavController().popBackStack()
 
             }
         }

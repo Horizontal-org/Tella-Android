@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
+import org.apache.commons.httpclient.HttpException
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
@@ -28,6 +29,8 @@ class SenderViewModel @Inject constructor(
 ) : ViewModel() {
     private val _prepareResults = MutableLiveData<PeerPrepareUploadResponse>()
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
+    private val _prepareRejected = MutableLiveData<Boolean>()
+    val prepareRejected: LiveData<Boolean> = _prepareRejected
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -82,8 +85,18 @@ class SenderViewModel @Inject constructor(
                 Timber.d("Success: transmissionId = $transmissionId")
                 _prepareResults.postValue(PeerPrepareUploadResponse(transmissionId))
             }.onFailure { error ->
-                Timber.e(error, "Failed to prepare upload for  ${files.size} files")
-                // Optionally post a failure state to LiveData if needed
+                    if (error is retrofit2.HttpException) {
+                        val code = error.code()
+                        if (code == 403) {
+                            // Rejected by the receiver
+                            _prepareRejected.postValue(true)
+                        } else {
+                            Timber.e("HTTP error: ${error.code()} - ${error.message()}")
+                        }
+                    } else {
+                        Timber.e(error, "Unexpected error during prepare upload")
+                    }
+
             }
         }
     }
