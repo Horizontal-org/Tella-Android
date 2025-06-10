@@ -30,7 +30,7 @@ class ShowDeviceInfoFragment :
     }
 
     private fun initView() {
-        binding.connectCode.setRightText(payload?.connectCode)
+        binding.connectCode.setRightText(payload?.ipAdress)
         binding.pin.setRightText(payload?.pin)
         binding.port.setRightText(payload?.port.toString())
     }
@@ -45,7 +45,7 @@ class ShowDeviceInfoFragment :
             viewModel.clientHash.collect { hash ->
                 viewModel.setPeerSessionInfo(
                     PeerConnectionInfo(
-                        ip = payload?.connectCode.toString(),
+                        ip = payload?.ipAdress.toString(),
                         port = payload?.port.toString(),
                         pin = payload?.pin?.toInt()!!,
                         hash = hash

@@ -69,7 +69,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val port = port
 
         payload = PeerConnectionPayload(
-            connectCode = ip,
+            ipAdress = ip,
             port = port,
             certificateHash = certHash,
             pin = pin
