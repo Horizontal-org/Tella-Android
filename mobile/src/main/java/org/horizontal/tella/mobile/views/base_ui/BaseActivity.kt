@@ -11,6 +11,9 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
@@ -31,6 +34,8 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var loading: View
     @Inject lateinit var divviupUtils : DivviupUtils
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Let content draw behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         setThemeStyle()
         supportFragmentManager.setupForAccessibility(this)
@@ -42,6 +47,18 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         maybeRestoreExitTimeOut()
         initLoading()
+    }
+
+    fun applyEdgeToEdge(view: View) {
+        // remove default system window fitting
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Apply insets manually
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
     }
 
     override fun attachBaseContext(base: Context) {

@@ -6,11 +6,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
 import org.horizontal.tella.mobile.views.fragment.uwazi.send.SEND_ENTITY
+
+@AndroidEntryPoint
 
 class OutboxUwaziFragment : UwaziListFragment() {
 

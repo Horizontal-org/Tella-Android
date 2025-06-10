@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.hzontal.tella_vault.BaseVault;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVault;
 import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 
 import java.io.IOException;
@@ -22,8 +23,10 @@ import java.util.concurrent.Executors;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.util.Util;
+
 import timber.log.Timber;
 
 
@@ -56,7 +59,9 @@ public class AudioRecorder {
     public Observable<VaultFile> startRecording(String filename, @Nullable String parent) {
         return Observable.fromCallable(() -> {
             VaultFile vaultFile;
-            RxVaultFileBuilder rxVaultFileBuilder = MyApplication.rxVault.builder()
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            RxVaultFileBuilder rxVaultFileBuilder = rxVault.builder()
                     .setName(filename)
                     .setMimeType("audio/aac");
             if (parent == null) {
@@ -69,7 +74,7 @@ public class AudioRecorder {
                         .blockingGet();
             }
 
-            BaseVault.VaultOutputStream outputStream = MyApplication.rxVault.getOutStream(vaultFile);
+            BaseVault.VaultOutputStream outputStream = rxVault.getOutStream(vaultFile);
 
             if (outputStream == null) {
                 return null;

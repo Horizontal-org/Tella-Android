@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Keluar dari formulir?</string>
   <string name="verification_prompt_dialog_title">Aktifkan GPS?</string>
   <string name="collect_tab.title_blank">Laman kosong</string>
-  <string name="action_cancel">Batal</string>
+  <string name="action_cancel">cancel</string>
   <string name="settings_menu.item_contact">Hubungi kami</string>
   <string name="collect_dialog.text_download.progress">Mengunduh formulir</string>
   <string name="collect_toast_download.completed">Unduhan selesai</string>
-  <string name="action_delete">Hapus</string>
+  <string name="action_delete">delete</string>
   <string name="collect.draft_tab.title">Bagan</string>
   <string name="collect.blank_action_download.form">Unduh</string>
   <string name="settings_text_empty.field">Kolom ini tidak boleh kosong.</string>
@@ -85,7 +85,8 @@ Hapus Cepat</string>
   <string name="permission_dialog.expl_device.storage">Untuk mengekspor file, Tella butuh izin untuk memodifikasi penyimpanan gawai.</string>
   <string name="gallery_toast_fail.deleting.files">Ada kesalahan dalam menghapus berkas. Silakan coba lagi.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="other">%1$d berkas disimpan ke perangkat</item>
+    <item quantity="one">%1$d file saved to the device</item>
+    <item quantity="other">%1$d files saved to the device</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Hapus berkas?</string>
   <string name="gallery_delete.files_dialog.expl">Berkas yang dipilih akan dihapus secara permanen dari galeri Anda.</string>
@@ -187,7 +188,8 @@ Hapus Cepat</string>
   <string name="collect.form_signature_toast_fail.saving">Terjadi kesalahan dalam menyimpan tanda tangan. Silakan coba lagi</string>
   <string name="collect.form_acknowledge_select.expl">OKE. Silakan lanjutkan.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="other">%d berkas-berkas</item>
+    <item quantity="one">%d file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="action_learn.more">Pelajari Selengkapnya</string>
   <string name="settings.servers_add.server_dialog.title">Tambahkan peladen</string>
@@ -326,7 +328,8 @@ Hapus Cepat</string>
   <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
   <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
   <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
-  <string name="settings.servers_add_camouflage.subtitle">Aplikasi Anda saat ini berkamuflase sebagai kalkulator</string>
+  <string name="settings.servers_add_camouflage.subtitle">Your app is currently camouflaged
+ with a Calculator app</string>
   <string name="settings.servers_change.camouflage.method">CHANGE CAMOUFLAGE METHOD</string>
   <string name="settings.servers_remove.camouflage.method">REMOVE CAMOUFLAGE</string>
   <string name="settings.servers_hide_tella_title">Hide Tella</string>
@@ -341,7 +344,7 @@ Hapus Cepat</string>
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>Kurang aman.</b> Tella akan muncul di layar utama dengan nama dan ikon berbeda. Mengetuk ikon baru tersebut akan membuka Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">sembunyikan dibalik kalkulator</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>Lebih aman.</b> Kamuflase Tella dibalik aplikasi kalkulator yang berfungsi. Masukkan PIN Anda di kalkulator untuk membuka Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you 
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
  use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Lanjutkan</string>
@@ -366,7 +369,7 @@ Hapus Cepat</string>
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
   <string name="onboard.title_camera">Kamera</string>
-  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not visible from your phone’s regular gallery.</string>
+  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
   <string name="onboard.title_recorder">Perekam</string>
   <string name="onboard.expl_recorder">Rekam wawancara atau suara apapun di sekitar Anda dengan perekam suara di Tella. Berkas audio dienkripsi secara otomatis dan disimpan di folder tersembunyi di dalam Tella.</string>
   <string name="onboard.title_files">Encrypted files &amp; folders</string>
@@ -410,7 +413,8 @@ connecting to a server</string>
   <string name="Vault_CreateFolder_SheetAction">Buat</string>
   <string name="ServerSettings_ServerName_ToolTip">Berikan peladen Anda sebuah nama untuk mengenalinya jika Anda menambahkan peladen lainnya di kemudian hari. Namanya bisa berupa nama organisasi, nama proyek, dll.</string>
   <plurals name="Vault_Importing_SheetProgress">
-    <item quantity="other">% berkas diimpor</item>
+    <item quantity="one">%s file imported</item>
+    <item quantity="other">%s files imported</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">Mengimpor dan mengenkripsi</string>
   <string name="Rec_Exit_SheetTitle">Simpan rekaman?</string>
@@ -449,7 +453,8 @@ connecting to a server</string>
   <string name="Uwazi_Language_Screen_Description">Koleksi Uwazi ini tersedia dalam beberapa bahasa. Silakan pilih bahasa yang Anda inginkan untuk mengunduh templat.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Tampilkan pintasan ke templat favorit Anda di layar utama Tella.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">Templat favorit</string>
-  <string name="Uwazi_Templates_Empty_Description">Anda tidak memiliki templat tersimpan. Ketuk tombol \"+\" untuk menambahkannya.</string>
+  <string name="Uwazi_Templates_Empty_Description">Your have no saved templates. Tap the “+”
+button to add a new template.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">Anda tidak memiliki entitas yang dikirimkan.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">Kotak Keluar Anda saat ini kosong. Entitas yang siap dikirim akan muncul di sini.</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">Anda tidak memiliki entitas draf</string>
@@ -492,7 +497,8 @@ connecting to a server</string>
   <string name="Uwazi_Server_Title">Peladen :</string>
   <string name="Uwazi_Template_Title">Templat :</string>
   <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
-    <item quantity="other">%1$d berkas dilampirkan</item>
+    <item quantity="one">%1$d file attached</item>
+    <item quantity="other">%1$d files attached</item>
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">Pilih berkas</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">Pilih berkas PDF</string>
@@ -518,19 +524,24 @@ connecting to a server</string>
   <string name="Collect_Subtitle_RemoveForm">Anda yakin ingin menghapus \"%1$s\"?</string>
   <string name="Util_ellapsedTime_Year">Lebih dari satu tahun lalu</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="other">%d bulan lalu</item>
+    <item quantity="one">A month ago</item>
+    <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="other">%d minggu lalu</item>
+    <item quantity="one">A week ago</item>
+    <item quantity="other">%d weeks ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="other">%d hari lalu</item>
+    <item quantity="one">One day ago</item>
+    <item quantity="other">%d days ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
-    <item quantity="other">%d jam lalu</item>
+    <item quantity="one">An hour ago</item>
+    <item quantity="other">%d hours ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Minutes">
-    <item quantity="other">%d menit lalu</item>
+    <item quantity="one">A minute ago</item>
+    <item quantity="other">%d minutes ago</item>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">Beberapa detik lalu</string>
   <string name="Donwload_Templates_Title_Description">Berikut adalah templat yang tersedia di Uwazi yang terhubung dengan Anda.</string>
@@ -566,7 +577,7 @@ connecting to a server</string>
   <string name="Collect_DialogInfo_FormSubmissionStopped">Pengiriman formulir Anda telah dihentikan. Anda bisa melanjutkannya dari Kotak Keluar.</string>
   <string name="action_view">Lihat</string>
   <string name="SettingsCamo_Dialog_TimeoutTitle">Tella dimatikan ...</string>
-  <string name="SettingsCamo_Dialog_TimeoutDesc">Mohon tunggu. Anda akan kembali ke layar utama perangkat Anda dalam beberapa detik.</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Please wait. You will return to your device\'s home screen in a few seconds.</string>
   <string name="SettingsCamo_Dialog_RemovingCamouflage">Menghapus kamuflase …</string>
   <string name="Collect_DeleteForm_SheetTitle">Hapus formulir?</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">Hapus draf?</string>
@@ -621,14 +632,17 @@ connecting to a server</string>
   <string name="settings.docu_auto.delete_action.expl">Tella akan menghapus secara otomatis berkas di dalam perangkat Anda setelah diunggah ke peladen</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">Anda tidak lagi dapat mengunggah berkas ke peladen ini.</string>
   <plurals name="upload.main_meta_number.of.files">
-    <item quantity="other">%d berkas</item>
+    <item quantity="one">One file</item>
+    <item quantity="other">%d files</item>
   </plurals>
   <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d%d MB diunggah</string>
   <plurals name="upload.main_meta_number.of.files.uploaded">
-    <item quantity="other">%d berkas diunggah</item>
+    <item quantity="one">%d file uploaded</item>
+    <item quantity="other">%d files uploaded</item>
   </plurals>
   <plurals name="upload.main_meta_minutes.left">
-    <item quantity="other">%d menit tersisa</item>
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
   </plurals>
   <string name="settings.select_customization">Penyesuaian</string>
   <string name="Uwazi_Send_Header_Title">Akhir dari entitas</string>
@@ -648,7 +662,8 @@ connecting to a server</string>
   <string name="Setting_Reports_Share_Information_Title">Bagikan informasi verifikasi</string>
   <string name="Setting_Reports_Share_Information_Description">Sertakan informasi mengenai perangkat dan lokasi Anda saat mengirim laporan, untuk membuat berkas Anda bisa diverifikasi.</string>
   <string name="Setting_Reports_Background_Upload">Unggahan di latar belakang</string>
-  <string name="Setting_Reports_Background_Upload_Description">Lanjut mengunggah laporan saat melakukan tugas lain atau saat Anda menutup Tella. PERINGATAN: Jika diaktifkan, Tella akan tetap tidak terkunci sampai semua laporan diunggah semua.</string>
+  <string name="Setting_Reports_Background_Upload_Description">Continue uploading reports while doing other tasks or if you exit Tella.
+WARNING: If enabled, Tella will remain unlocked until all reports are fully uploaded.</string>
   <string name="Setting_Reports_Settings_Completed">Pengaturan tingkat lanjut selesai</string>
   <string name="Setting_Reports_Settings_Completed_Description">Anda selalu bisa mengubah preferensi Laporan Anda di Pengaturan Tella.</string>
   <string name="Drafts_Reports_Empty_Message">Draf Anda saat ini kosong. Laporan yang belum Anda serahkan akan muncul di sini.</string>
@@ -772,7 +787,7 @@ connecting to a server</string>
   <string name="action_rotate">Putar</string>
   <string name="Snackbar_file_was_deleted">Berkasnya telah dihapus.</string>
   <string name="Snackbar_files_were_deleted">Berkas-berkasnya telah dihapuis.</string>
-  <string name="Snackbar_changes_were_saved">Perubahan yang kamu lakukan telah disimpan.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Perubahan yang belum disimpan</string>
   <string name="Edit_Dialog_confirm_exit">Perubahan yang Anda buat belum disimpan. Apakah Anda ingin menyimpannya sebelum keluar?</string>
   <string name="action_exit_without_saving">KELUAR TANPA MENYIMPAN</string>
@@ -798,8 +813,8 @@ connecting to a server</string>
   <string name="Settings_General_BottomSheetRefreshWarningText">Anda akan kembali ke layar sebelumnya dalam beberapa detik.</string>
   <string name="settings.feedback_enable_sharing">Aktifkan berbagi umpan balik</string>
   <string name="settings.feedback_warning">PERINGATAN: menggunakan fitur ini dapat menyingkap kepada seseorang yang mengamati jaringan bahwa Anda menggunakan Tella. Gunakan hanya jika Anda merasa nyaman dengan risiko ini.</string>
-  <string name="feedback_msg">Beri tahu kami jika Anda mengalami bug, memiliki permintaan untuk fitur baru, atau memiliki umpan balik lainnya. 
- Umpan balik ini bersifat anonim, jadi pastikan untuk menyertakan informasi kontak jika Anda menginginkan tanggapan dari kami.</string>
+  <string name="feedback_msg">Tell us if you are experiencing a bug, have a request for a new feature, or have any other feedback.
+ This feedback is anonymous, so make sure to include contact information if you want a response from us.</string>
   <string name="thanks_for_your_feedback">Terima kasih untuk umpan balik Anda!</string>
   <string name="save_draft">Simpan draf?</string>
   <string name="description_submit_feedback">Anda bisa kembali lagi kapan saja untuk mengirimkan umpan balik.</string>
@@ -825,80 +840,78 @@ Anda akan dikirim secara otomatis saat Anda terhubung.</string>
   <string name="Home_BottomNav_Resources">Resources</string>
   <string name="Resources_DownloadedTitle">Downloaded</string>
   <string name="Resources_DownloadedEmptyMessage">You have not downloaded any resources. Tap on the “download” icon next to each resource below to get started.</string>
-  <string name="Resources_DownloadedEmptyMessage_NoAvailable">You have not downloaded any resources.</string>
-  <string name="Resources_AvailableTitle">Available for download</string>
-  <string name="Resources_AvailableInfoMessage">These are the resources available for download from your Tella Web project(s). </string>
-  <string name="Resources_AvailableEmptyMessage">There are no resources available for download from your Tella Web project(s).</string>
-  <string name="Resources_RemoveFromDownloads">Remove from downloads</string>
-  <string name="Resources_RemovedResource">\"%s\" has been removed from your downloads.</string>
-  <string name="Resources_DialogTitle_StopDownload">Stop download and exit?</string>
-  <string name="Resources_DialogMsg_StopDownload">Your download progress will be lost. You can always come back later to download the resource again.</string>
-  <string name="Resources_KeepDownloading">KEEP DOWNLOADING</string>
-  <string name="Resources_Exit">EXIT</string>
-  <string name="Error_DownloadFailed">Error: Download failed</string>
-  <string name="exit_and_discard_verification_info">Exit and discard verification information</string>
-  <string name="recording_in_progress_exit_warning">Tella is still recording information about your device and location. If you exit, your file will not be verifiable.</string>
-  <string name="exit_and_discard_info">EXIT AND DISCARD INFORMATION</string>
-  <string name="back">BACK</string>
-  <string name="encrypting">Encrypting </string>
-  <string name="Sensitive_Chnage_Title">⚠️ Sensitive changes in next release</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
-
- If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
-
- Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
-  <string name="Learn_More">LEARN MORE</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">Anda tidak </string>
+  <string name="Resources_AvailableTitle">Tersedia untuk diunduh</string>
+  <string name="Resources_AvailableInfoMessage">Berikut adalah sumber daya yang tersedia untuk diunduh dari proyek Tella Web Anda. </string>
+  <string name="Resources_AvailableEmptyMessage">Tidak ada sumber daya yang tersedia untuk diunduh dari proyek Tella Web Anda.</string>
+  <string name="Resources_RemoveFromDownloads">Hapus dari unduhan</string>
+  <string name="Resources_RemovedResource">\"%s\" telah dihapus dari unduhan Anda.</string>
+  <string name="Resources_DialogTitle_StopDownload">Berhenti mengunduh dan keluar?</string>
+  <string name="Resources_DialogMsg_StopDownload">Progres unduhan Anda akan hilang. Anda selalu dapat kembali nanti untuk melanjutkan mengunduh sumber dayanya lagi.</string>
+  <string name="Resources_KeepDownloading">TETAP MENGUNDUH</string>
+  <string name="Resources_Exit">KELUAR</string>
+  <string name="Error_DownloadFailed">Galat: Unduhan gagal</string>
+  <string name="exit_and_discard_verification_info">Keluar dan buang informasi verifikasi</string>
+  <string name="recording_in_progress_exit_warning">Tella masih merekam informasi tentang perangkat dan lokasi Anda. Jika Anda keluar, berkas Anda tidak akan bisa diverifikasi.</string>
+  <string name="exit_and_discard_info">KELUAR DAN BUANG INFORMASI</string>
+  <string name="back">KEMBALI</string>
+  <string name="encrypting">Mengenkripsi </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Perubahan sensitif pada rilis berikutnya</string>
+  <string name="Sensitive_Chnage_Description">Versi Tella berikutnya (akan dirilis pada 15 Juli 2024) akan mencakup berbagai perbaikan teknis besar. Perubahan ini membawa risiko kecil bahwa beberapa berkas akan hilang saat melakukan pembaruan ke versi baru.
+ 
+ Jika Anda menyimpan berkas sensitif di Tella, kami sarankan Anda menyalinnya ke tempat yang aman di luar Tella sebelum pembaruan. 
+ 
+ Ketuk \'Pelajari Lebih Lanjut\' di bawah untuk informasi lebih lanjut tentang perubahan yang akan datang dan panduan tentang cara mengekspor semua berkas dari Tella.</string>
+  <string name="Learn_More">PELAJARI LEBIH LANJUT</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
   </plurals>
-  <string name="Uwazi_RelationShipWidget_Select_Entities">Select the entities you want to connect to this property.</string>
-  <string name="Analytics_contribute_reminder_title">You are sharing data</string>
-  <string name="Analytics_contribute_reminder_description">Reminder: You are currently sharing your app’s analytics to improve Tella. Stop sharing anytime by going to Settings.</string>
-  <string name="Analytics_contribute_more_info">For more information on how we collect data,  </string>
-  <string name="Analytics_contribute_more_info2"> visit this page.</string>
-  <string name="Analytics_contribute_title">Would you like to contribute?</string>
-  <string name="Analytics_contribute_description">You can opt out anytime by going to Settings.</string>
-  <string name="Analytics_contribute_info_link">For more information on how we collect data, visit this page.</string>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">Pilih entitas yang Anda ingin sambungkan ke properti ini.</string>
+  <string name="Analytics_contribute_reminder_title">Anda sedang membagikan data</string>
+  <string name="Analytics_contribute_reminder_description">Pengingat: Saat ini Anda sedang membagikan analitik aplikasi untuk meningkatkan Tella. Berhenti berbagi kapanpun dengan membuka Pengaturan.</string>
+  <string name="Analytics_contribute_more_info">Untuk informasi lebih lanjut tentang bagaimana kami mengumpulkan data,  </string>
+  <string name="Analytics_contribute_more_info2">kunjungi halaman ini.</string>
+  <string name="Analytics_contribute_title">Apakah Anda ingin berkontribusi?</string>
+  <string name="Analytics_contribute_description">Anda bisa keluar kapan saja dengan membuka Pengaturan.</string>
+  <string name="Analytics_contribute_info_link">Untuk informasi tentang bagaimana kami mengumpulkan data, kunjungi halaman ini.</string>
   <string name="Analytics_how_works_title">Bagaimana ia bekerja</string>
-  <string name="Analytics_how_works_description">• We use DivviUp, a privacy-respecting system for analytics.
-• We collect as little data as possible.
-• All data is anonymous and can never be linked to you.</string>
-  <string name="Analytics_questions_title">Specific questions</string>
-  <string name="Analytics_questions_description">Each study collects data about specific questions. Here’s a sample:</string>
-  <string name="Analytics_questions_examples">🔓 Opened Tella 4 times a week
-💾  32 files stored in Tella
-📖  Spanish language selected
-⚡  1 server connected
-😎 Calculator camouflage enabled</string>
-  <string name="Analytics_share_data_title">Share your data to improve Tella</string>
-  <string name="Analytics_share_data_description">By joining this study, you would help us understand which features are important to you and how you use the app.</string>
-  <string name="Analytics_respect_privacy_title">We respect your privacy</string>
-  <string name="Analytics_respect_privacy_description">• We will not access any of the files that you store in Tella or share with your organization.
-• We will <b>never</b> share your data or sell it to anyone.</string>
-  <string name="Analytics_banner_title">Share analytics to improve Tella</string>
-  <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
+  <string name="Analytics_how_works_description">• Kami menggunakan DivviUp, sistem analitik yang menghargai privasi.
+• Kami mengumpulkan sesedikit mungkin.
+• Semua data bersifat anonim dan tidak akan pernah bisa dikaitkan dengan Anda.</string>
+  <string name="Analytics_questions_title">Pertanyaan spesifik</string>
+  <string name="Analytics_questions_description">Setiap studi mengumpulkan data tentang pertanyaan tertentu. Berikut contohnya:</string>
+  <string name="Analytics_questions_examples">🔓 Membuka Tella 4 kali dalam seminggu
+💾  32 berkas disimpan di Tella
+📖  Bahasa Spanyol dipilih
+⚡  1 peladen terhubung
+😎 Kamuflase kalkulator diaktifkan</string>
+  <string name="Analytics_share_data_title">Bagikan data Anda untuk meningkatkan Tella</string>
+  <string name="Analytics_share_data_description">Dengan bergabung dalam studi ini, Anda akan membantu kami memahami fitur mana yang penting bagi Anda dan bagaimana Anda menggunakan aplikasinya.</string>
+  <string name="Analytics_respect_privacy_title">Kami menghormati privasi Anda</string>
+  <string name="Analytics_respect_privacy_description">•  Kami tidak akan mengakses berkas apa pun yang Anda simpan di Tella atau yang dibagikan dengan organisasi Anda.
+•  Kami tidak <b>pernah</b> membagikan data atau menjualnya ke siapa pun.</string>
+  <string name="Analytics_banner_title">Bagikan analitik untuk meningkatkan Tella</string>
+  <string name="Analytics_banner_improve_description">Bantu kami memahami bagaimana Anda menggunakan Tella. Semua data bersifat anonim dan tidak akan pernah bisa dikaitkan dengan Anda.
 
-Would you like to share analytics with the Tella team?</string>
-  <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
-  <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
-  <string name="select_entities">Select entities</string>
-  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
-  <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
-  <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
-  <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
+Apakah Anda ingin membagikan analitik kepada tim Tella?</string>
+  <string name="Settings_Analytics_switch_title">Bagikan data untuk meningkatkan Tella</string>
+  <string name="Settings_Analytics_switch_expl">Bantu kami memahami bagaimana Anda menggunakan Tella.Data Anda tidak akan pernah dapat dikaitkan dengan Anda.</string>
+  <string name="select_entities">Pilih entitas</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Cari atau pilih entitas yang ingin Anda sambungkan ke properti ini.</string>
+  <string name="add_more_entities">Tambahkan lebih banyak entitas</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
+  <string name="Settings_Analytics_turn_on_dialog"> Anda telah mendaftar untuk membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
+  <string name="Settings_Analytics_turn_off_dialog">Anda tidak lagi bisa membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
   <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
-  <string name="unlock">Unlock</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
-  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
- forms, reports, and files directly from Tella
- to your organization.</string>
-  <string name="action_flip_vertically">Flip vertically</string>
-  <string name="action_flip_horizontally">Flip horizontally</string>
+  <string name="unlock">Buka kunci</string>
+  <string name="Onboard_Collect_Data">Kumpulkan data</string>
+  <string name="Onboard_Collect_Data_Exp">Jika Anda bekerja dengan organisasi, kirimkan formulir, laporan, dan berkas langsung dari Tella ke organisasi Anda.</string>
+  <string name="action_flip_vertically">Balik secara vertikal</string>
+  <string name="action_flip_horizontally">Balik secara horizontal</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
   <string name="create_new_folder">BUAT FOLDER BARU</string>
   <string name="use_shared_drive">GUNAKAN DRIVE BERSAMA</string>
@@ -969,6 +982,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="nextcloud_file_size_limit">Untuk saat ini, hanya berkas berukuran lebih kecil dari 20MB yang dapat dikirimkan ke peladen Nextcloud;</string>
   <string name="invalid_url">URL tidak valid</string>
   <string name="delete_report">Hapus laporan?</string>
-  <string name="report_submitted_msg">Laporan Anda berhasil dikirimkan.</string>
+  <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Lampirkan berkas</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

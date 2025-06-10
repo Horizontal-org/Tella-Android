@@ -12,7 +12,7 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.database.UwaziDataSource
 import org.horizontal.tella.mobile.data.repository.UwaziRepository
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.ListTemplateResult
 import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
@@ -31,15 +31,15 @@ class DownloadedTemplatesViewModel : ViewModel(){
     private val disposables = CompositeDisposable()
     private var  _connectionAvailable = MutableLiveData<Boolean>()
     val connectionAvailable : LiveData<Boolean> get() = _connectionAvailable
-    private var  _showDeleteSheet = MutableLiveData<Pair<Boolean,CollectTemplate>>()
-    val showDeleteSheet : LiveData<Pair<Boolean,CollectTemplate>> get() = _showDeleteSheet
+    private var  _showDeleteSheet = MutableLiveData<Pair<Boolean,UwaziTemplate>>()
+    val showDeleteSheet : LiveData<Pair<Boolean,UwaziTemplate>> get() = _showDeleteSheet
 
 
     init {
         refreshTemplateList()
     }
 
-    private fun onDownloadClicked(template : CollectTemplate){
+    private fun onDownloadClicked(template : UwaziTemplate){
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -68,11 +68,11 @@ class DownloadedTemplatesViewModel : ViewModel(){
             })
     }
 
-    private fun onMoreClicked(template : CollectTemplate){
+    private fun onMoreClicked(template : UwaziTemplate){
         _showDeleteSheet.postValue(Pair(true,template))
     }
 
-    fun confirmDelete(template : CollectTemplate){
+    fun confirmDelete(template : UwaziTemplate){
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -157,7 +157,7 @@ class DownloadedTemplatesViewModel : ViewModel(){
         )
     }
 
-    private fun collectTemplateToViewTemplate(template : CollectTemplate) : ViewTemplateItem {
+    private fun collectTemplateToViewTemplate(template : UwaziTemplate) : ViewTemplateItem {
      return   template.toViewTemplateItem(onDownloadClicked = { onDownloadClicked(template) },
             onMoreClicked = {onMoreClicked(template)})
     }

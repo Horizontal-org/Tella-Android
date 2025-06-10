@@ -9,7 +9,7 @@ import org.horizontal.tella.mobile.data.uwazi.UwaziConstants
 import org.horizontal.tella.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziValue
@@ -17,7 +17,7 @@ import org.horizontal.tella.mobile.presentation.uwazi.UwaziValueAttachment
 
 class UwaziParser(private val context: Context?) {
 
-    private var template: CollectTemplate? = null
+    private var template: UwaziTemplate? = null
     private var entityInstance: UwaziEntityInstance = UwaziEntityInstance()
     private var entryPrompts = mutableListOf<UwaziEntryPrompt>()
     var hashCode: Int? = null //used to check is the answers has changed
@@ -62,11 +62,11 @@ class UwaziParser(private val context: Context?) {
         return entityInstance
     }
 
-    fun getTemplate(): CollectTemplate? {
+    fun getTemplate(): UwaziTemplate? {
         return template
     }
 
-    fun setTemplate(collectTemplate: CollectTemplate) {
+    fun setTemplate(collectTemplate: UwaziTemplate) {
         template = collectTemplate
     }
 
@@ -77,11 +77,11 @@ class UwaziParser(private val context: Context?) {
     }
 
     fun parseTemplateForRelationShipEntities(templateString: String) {
-        template = Gson().fromJson(templateString, CollectTemplate::class.java)
+        template = Gson().fromJson(templateString, UwaziTemplate::class.java)
     }
 
     fun parseTemplate(templateString: String): UwaziFormView {
-        template = Gson().fromJson(templateString, CollectTemplate::class.java)
+        template = Gson().fromJson(templateString, UwaziTemplate::class.java)
         entityInstance.collectTemplate = template
         entityInstance.template = template?.entityRow?.name.toString()
         return prepareFormView()

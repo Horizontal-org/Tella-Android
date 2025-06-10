@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -193,22 +194,25 @@ public class VideoWidget extends MediaFileBinaryWidget {
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
             List<VaultFile> files = new ArrayList<>();
 
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFileId())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
+            if (getFilename() != null) {
+                RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst(); // Synchronously retrieve the vault
+                VaultFile vaultFile = rxVault.get(getFileId())
+                        .subscribeOn(Schedulers.io())
+                        .blockingGet(); // Synchronously retrieve the file
+                files.add(vaultFile);
+            }
 
-            files.add(vaultFile);
+            Intent intent = new Intent(getContext(), AttachmentsActivitySelector.class)
+                    .putExtra(RETURN_ODK, true)
+                    .putExtra(VAULT_FILES_FILTER, FilterType.VIDEO)
+                    .putExtra(VAULT_PICKER_SINGLE, true);
 
-            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
-                            .putExtra(RETURN_ODK, true)
-                            .putExtra(VAULT_FILES_FILTER, FilterType.VIDEO)
-                            .putExtra(VAULT_PICKER_SINGLE,true),
-                    C.MEDIA_FILE_ID);
+            activity.startActivityForResult(intent, C.MEDIA_FILE_ID);
 
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
+
 }

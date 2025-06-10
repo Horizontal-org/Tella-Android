@@ -51,8 +51,7 @@ class NextCloudViewModel @Inject constructor(
     private val nextCloudRepository: NextCloudRepository,
     private val nextCloudDataSource: NextCloudDataSource,
     private val statusProvider: StatusProvider,
-    @ApplicationContext private val context: Context,
-) : BaseReportsViewModel() {
+    @ApplicationContext private val context: Context) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
     val reportProcess: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _reportProcess
@@ -76,38 +75,55 @@ class NextCloudViewModel @Inject constructor(
     override fun getReportBundle(instance: ReportInstance) {
         _progress.postValue(true)
         getReportBundleUseCase.setId(instance.id)
-        getReportBundleUseCase.execute(onSuccess = { result ->
-            val resultInstance = result.instance
-            disposables.add(nextCloudDataSource.getReportMediaFiles(result.instance)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ files ->
-                    val vaultFiles: MutableList<VaultFile?> =
-                        MyApplication.rxVault.get(result.fileIds).blockingGet() ?: return@subscribe
-                    val filesResult = arrayListOf<FormMediaFile>()
 
-                    files.forEach { formMediaFile ->
-                        val vaultFile =
-                            vaultFiles.firstOrNull { vaultFile -> formMediaFile.id == vaultFile?.id }
-                        if (vaultFile != null) {
-                            val fileResult = FormMediaFile.fromMediaFile(vaultFile)
-                            fileResult.status = formMediaFile.status
-                            fileResult.uploadedSize = formMediaFile.uploadedSize
-                            filesResult.add(fileResult)
-
+        getReportBundleUseCase.execute(
+            onSuccess = { result ->
+                disposables.add(
+                    nextCloudDataSource.getReportMediaFiles(result.instance)
+                        .flatMap { files ->
+                            MyApplication.keyRxVault.rxVault
+                                .firstOrError()
+                                .flatMap { rxVault ->
+                                    rxVault.get(result.fileIds)
+                                        .map { vaultFiles ->
+                                            Triple(result.instance, files, vaultFiles ?: emptyList())
+                                        }
+                                }
                         }
-                    }
-                    resultInstance.widgetMediaFiles = filesResult
-                    _reportInstance.postValue(resultInstance)
-                }) { throwable: Throwable? ->
-                    Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ (instance, files, vaultFiles) ->
+                            val filesResult = processMediaFiles(files, vaultFiles)
+                            instance.widgetMediaFiles = filesResult
+                            _reportInstance.postValue(instance)
+                        }, { throwable ->
+                            Timber.d(throwable)
+                            FirebaseCrashlytics.getInstance().recordException(throwable)
+                            _error.postValue(throwable)
+                        })
+                )
+            },
+            onError = {
+                _error.postValue(it)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
+    }
 
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+    private fun processMediaFiles(
+        files: List<FormMediaFile>,
+        vaultFiles: List<VaultFile>
+    ): ArrayList<FormMediaFile> {
+        return files.mapNotNull { formMediaFile ->
+            vaultFiles.firstOrNull { it.id == formMediaFile.id }?.let { vaultFile ->
+                FormMediaFile.fromMediaFile(vaultFile).apply {
+                    status = formMediaFile.status
+                    uploadedSize = formMediaFile.uploadedSize
+                }
+            }
+        }.toCollection(ArrayList())
     }
 
     override fun getFormInstance(

@@ -794,7 +794,7 @@ they are uploaded to this project as a report.</string>
   <string name="action_rotate">Rotate</string>
   <string name="Snackbar_file_was_deleted">The file was deleted.</string>
   <string name="Snackbar_files_were_deleted">The files were deleted.</string>
-  <string name="Snackbar_changes_were_saved">Your changes have been saved.</string>
+  <string name="Snackbar_changes_were_saved">Your changes have been saved as a copy of the original file.</string>
   <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
   <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
   <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
@@ -910,8 +910,8 @@ Would you like to share analytics with the Tella team?</string>
   <string name="select_entities">Select entities</string>
   <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">Search for or select the entities you want to connect to this property.</string>
   <string name="add_more_entities">Add more entities</string>
-  <string name="on_select_entities_clicked_tag">onSelectEntitiesClicked</string>
-  <string name="could_not_find_uwazientryfragment">Could not find UwaziEntryFragment</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
   <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
@@ -1001,6 +1001,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
   <string name="invalid_url">Invalid URL</string>
   <string name="delete_report">Delete report?</string>
-  <string name="report_submitted_msg">Your report have successfully been submitted.</string>
+  <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
+  <string name="form_successfully_submitted">%1$s successfully submitted</string>
 </resources>

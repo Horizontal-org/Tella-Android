@@ -12,7 +12,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences.hasAcceptedAnalyt
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isShowVaultAnalyticsSection
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isTimeToShowReminderAnalytics
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.*
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.viewholders.base.BaseViewHolder
@@ -163,7 +163,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         updateItemsAfterward()
     }
 
-    fun addFavoriteTemplates(templates: List<CollectTemplate>) {
+    fun addFavoriteTemplates(templates: List<UwaziTemplate>) {
         val newFavoriteTemplatesItem = DataItem.FavoriteTemplates(templates)
 
         // Check if the current favorite templates are the same as the new ones

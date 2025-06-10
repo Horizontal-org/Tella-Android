@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentDraftsUwaziBinding
@@ -14,6 +15,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.UwaziDraftsAdapter
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UWAZI_INSTANCE
 
+@AndroidEntryPoint
 class DraftsUwaziFragment :
     BaseBindingFragment<FragmentDraftsUwaziBinding>(FragmentDraftsUwaziBinding::inflate) {
     private val viewModel: SharedUwaziViewModel by viewModels()

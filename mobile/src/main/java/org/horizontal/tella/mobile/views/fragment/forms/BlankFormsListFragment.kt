@@ -77,7 +77,7 @@ class BlankFormsListFragment :
         if (alertDialog != null) return
         if (activity != null) {
             //model.showFab.postValue(false)
-            showFab(false)
+          //  showFab(false)
         }
         alertDialog = DialogsUtil.showFormUpdatingDialog(
             context,
@@ -128,7 +128,7 @@ class BlankFormsListFragment :
                 if (alertDialog != null) return@observe
                 if (activity != null) {
                     //model.showFab.postValue(false)
-                    showFab(false)
+                  //  showFab(false)
                 }
                 if (!silentFormUpdates) {
                     alertDialog = DialogsUtil.showCollectRefreshProgressDialog(

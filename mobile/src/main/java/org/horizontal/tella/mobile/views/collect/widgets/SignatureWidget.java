@@ -16,12 +16,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.javarosa.form.api.FormEntryPrompt;
 
 import androidx.annotation.NonNull;
 
 import io.reactivex.schedulers.Schedulers;
+
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.mvp.contract.ICollectAttachmentMediaFilePresenterContract;
@@ -117,20 +119,25 @@ public class SignatureWidget extends MediaFileBinaryWidget implements ICollectAt
             Activity activity = (Activity) getContext();
             FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
 
-            VaultFile vaultFile = getFilename() != null ? MyApplication.rxVault
-                    .get(getFilename())
-                    .subscribeOn(Schedulers.io())
-                    .blockingGet() : null;
+            VaultFile vaultFile = null;
+            if (getFilename() != null) {
+                RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst(); // Synchronously retrieve the vault
+                vaultFile = rxVault.get(getFilename())
+                        .subscribeOn(Schedulers.io())
+                        .blockingGet(); // Synchronously retrieve the file
+            }
 
-            activity.startActivityForResult(new Intent(getContext(), SignatureActivity.class)
-                            .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile),
-                    C.MEDIA_FILE_ID
-            );
+            Intent intent = new Intent(getContext(), SignatureActivity.class)
+                    .putExtra(QuestionAttachmentActivity.MEDIA_FILE_KEY, vaultFile);
+
+            activity.startActivityForResult(intent, C.MEDIA_FILE_ID);
+
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }
+
 
     private void showPreview() {
         signatureButton.setVisibility(GONE);

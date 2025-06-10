@@ -10,7 +10,6 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
-import com.hzontal.tella_vault.rx.RxVault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Completable
@@ -33,7 +32,7 @@ import org.horizontal.tella.mobile.domain.entity.googledrive.Config
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
-import org.horizontal.tella.mobile.domain.entity.uwazi.CollectTemplate
+import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import javax.inject.Inject
 
@@ -42,11 +41,9 @@ import javax.inject.Inject
 class HomeVaultViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context,
     private val keyDataSource: KeyDataSource,
-    private val config: Config
-) : ViewModel() {
+    private val config: Config,
+    ) : ViewModel() {
     private val disposables = CompositeDisposable()
-    private val rxVault: RxVault? = MyApplication.rxVault
-
     private val _errorMessage = SingleLiveEvent<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
@@ -63,8 +60,8 @@ class HomeVaultViewModel @Inject constructor(
     val favoriteCollectFormsError: LiveData<Throwable> get() = _favoriteCollectFormsError
 
     // SingleLiveEvent properties for favorite collect templates
-    private val _favoriteCollectTemplates = SingleLiveEvent<List<CollectTemplate>>()
-    val favoriteCollectTemplates: LiveData<List<CollectTemplate>> get() = _favoriteCollectTemplates
+    private val _favoriteCollectTemplates = SingleLiveEvent<List<UwaziTemplate>>()
+    val favoriteCollectTemplates: LiveData<List<UwaziTemplate>> get() = _favoriteCollectTemplates
 
     private val _favoriteCollectTemplatesError = SingleLiveEvent<Throwable?>()
     val favoriteCollectTemplatesError: LiveData<Throwable?> get() = _favoriteCollectTemplatesError
@@ -90,30 +87,35 @@ class HomeVaultViewModel @Inject constructor(
 
     // Execute Panic Mode
     fun executePanicMode() {
+        val rxVault = MyApplication.keyRxVault.rxVault.firstOrError().blockingGet()
+
         keyDataSource.dataSource
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
                 if (Preferences.isDeleteGalleryEnabled()) {
-                    rxVault?.destroy()?.blockingAwait()
+                    rxVault.destroy().blockingAwait()
                     MediaFileHandler.destroyGallery(appContext)
                 }
+
                 if (Preferences.isDeleteServerSettingsActive()) {
                     dataSource.deleteDatabase()
-                } else {
-                    if (Preferences.isEraseForms()) {
-                        dataSource.deleteFormsAndRelatedTables()
-                    }
+                } else if (Preferences.isEraseForms()) {
+                    dataSource.deleteFormsAndRelatedTables()
                 }
+
                 clearSharedPreferences()
                 MyApplication.exit(appContext)
                 MyApplication.resetKeys()
+
                 if (Preferences.isUninstallOnPanic()) {
                     uninstallTella(appContext)
                 }
+
                 Completable.complete()
             }
             .blockingAwait()
     }
+
 
     // Fetch server counts
     fun countAllServers() {
@@ -202,19 +204,26 @@ class HomeVaultViewModel @Inject constructor(
 
     // Get Recent Files
     fun getRecentFiles(filterType: FilterType?, sort: Sort?, limits: Limits) {
-        rxVault?.list(filterType, sort, limits)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(
-                { vaultFiles: List<VaultFile?> ->
-                    _recentFiles.value = vaultFiles
-                },
-                { throwable: Throwable ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
-                    _recentFilesError.value = throwable
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { rxVault ->
+                    rxVault.list(filterType, sort, limits)
                 }
-            )?.let { disposables.add(it) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { vaultFiles ->
+                        _recentFiles.value = vaultFiles
+                    },
+                    { throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        _recentFilesError.value = throwable
+                    }
+                )
+        )
     }
+
 
 
     // Get Favorite Collect Forms
@@ -247,7 +256,7 @@ class HomeVaultViewModel @Inject constructor(
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { templates: List<CollectTemplate>? ->
+                    { templates: List<UwaziTemplate>? ->
                         _favoriteCollectTemplates.value = templates ?: emptyList()
                     },
                     { throwable: Throwable? ->

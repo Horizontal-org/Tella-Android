@@ -40,6 +40,7 @@ class SignatureActivity : BaseLockActivity() {
 
         binding = ActivitySignatureBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         initView()
 
         setupToolbar()

@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
+import com.hzontal.tella_vault.rx.RxVault;
 
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils;
 import org.hzontal.shared_ui.buttons.PanelToggleButton;
@@ -136,7 +137,9 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
             String[] ids = Arrays.copyOf(
                     result.toArray(), result.size(),
                     String[].class);
-            files = MyApplication.rxVault
+            RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
+
+            files = rxVault
                     .get(ids)
                     .subscribeOn(Schedulers.io())
                     .blockingGet();
