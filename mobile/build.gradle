@@ -16,8 +16,6 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode 204
         versionName "2.16.0"
-        versionCode 202
-        versionName "2.15.1"
         multiDexEnabled true
 
         ndk {
