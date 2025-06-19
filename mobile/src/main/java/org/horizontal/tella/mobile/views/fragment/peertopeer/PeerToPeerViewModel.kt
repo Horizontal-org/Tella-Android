@@ -38,6 +38,7 @@ class PeerToPeerViewModel @Inject constructor(
     private val peerToPeerManager: PeerToPeerManager
 ) : ViewModel() {
 
+    var hasNavigatedToSuccessFragment = false
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
     var currentNetworkInfo: NetworkInfo? = null
@@ -52,8 +53,8 @@ class PeerToPeerViewModel @Inject constructor(
     val clientHash = peerToPeerManager.clientConnected
     private val _registrationServerSuccess = MutableLiveData<Boolean>()
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
-    private val _incomingPrepareRequest = MutableLiveData<PrepareUploadRequest>()
-    val incomingPrepareRequest: LiveData<PrepareUploadRequest> = _incomingPrepareRequest
+    private val _incomingPrepareRequest = MutableLiveData<PrepareUploadRequest?>()
+    val incomingPrepareRequest: MutableLiveData<PrepareUploadRequest?> = _incomingPrepareRequest
 
     init {
         viewModelScope.launch {
@@ -219,7 +220,10 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-
+    fun clearPrepareRequest() {
+        _incomingPrepareRequest.value = null
+        hasNavigatedToSuccessFragment = false
+    }
     fun setPeerSessionInfo(info: PeerConnectionInfo) {
         _sessionInfo.value = info
     }

@@ -47,24 +47,17 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
             }
 
             rejectBtn.setOnClickListener {
-              //  onRejectFilesSelected()
                 viewModel.confirmPrepareUpload(sessionId, false)
-                // Set result to notify previous fragment
-                parentFragmentManager.setFragmentResult("prepare_upload_result", bundleOf("rejected" to true))
-                findNavController().popBackStack()
+                // Set result safely via SavedStateHandle
+                findNavController().previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("prepare_upload_result", true)
 
+                // Pop back
+                findNavController().popBackStack()
             }
         }
     }
 
-    private fun onAcceptFilesSelected() {
-        binding.acceptBtn.isChecked = true
-        binding.rejectBtn.isChecked = false
-    }
-
-    private fun onRejectFilesSelected() {
-        binding.rejectBtn.isChecked = true
-        binding.acceptBtn.isChecked = false
-    }
 
 }

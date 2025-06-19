@@ -18,10 +18,6 @@ class WaitingFragment :
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private val viewModelSender: SenderViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val isSender = arguments?.getBoolean("isSender") ?: false
 
@@ -37,10 +33,14 @@ class WaitingFragment :
         }
 
         viewModel.incomingPrepareRequest.observe(viewLifecycleOwner) { request ->
-            val fileCount = request.files.size
-            bundle.putInt("fileCount", fileCount)
-            bundle.putString("sessionId", request.sessionId)
-            navManager().navigateFromWaitingFragmentToRecipientSuccessFragment()
+            if (request != null && !viewModel.hasNavigatedToSuccessFragment) {
+                viewModel.hasNavigatedToSuccessFragment = true
+
+                val fileCount = request.files.size
+                bundle.putInt("fileCount", fileCount)
+                bundle.putString("sessionId", request.sessionId)
+                navManager().navigateFromWaitingFragmentToRecipientSuccessFragment()
+            }
         }
 
         viewModelSender.prepareRejected.observe(viewLifecycleOwner) { wasRejected ->
@@ -52,18 +52,33 @@ class WaitingFragment :
                 findNavController().popBackStack()
             }
         }
-        parentFragmentManager.setFragmentResultListener(
-            "prepare_upload_result",
-            viewLifecycleOwner
-        ) { _, result ->
-            val wasRejected = result.getBoolean("rejected", false)
-            if (wasRejected) {
-                DialogUtils.showBottomMessage(
-                    baseActivity, "Sender's files rejected.",
-                    true
-                )
+
+        val navBackStackEntry = findNavController().currentBackStackEntry
+        navBackStackEntry?.savedStateHandle?.getLiveData<Boolean>("prepare_upload_result")
+            ?.observe(viewLifecycleOwner) { wasRejected ->
+                if (wasRejected) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity, "Sender's files rejected.",
+                        true
+                    )
+                }
             }
-        }
     }
 
+    //        parentFragmentManager.setFragmentResultListener(
+//                "prepare_upload_result",
+//        viewLifecycleOwner
+//        ) { _, result ->
+//            val wasRejected = result.getBoolean("rejected", false)
+//            if (wasRejected) {
+//                DialogUtils.showBottomMessage(
+//                    baseActivity, "Sender's files rejected.",
+//                    true
+//                )
+//            }
+//        }
+    override fun onStop() {
+        super.onStop()
+        viewModel.clearPrepareRequest()
+    }
 }
