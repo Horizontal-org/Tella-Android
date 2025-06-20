@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
+import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
@@ -40,7 +41,7 @@ class SenderVerificationFragment :
                 if (session != null) {
                     peerConnectionInfo = session
                 }
-                binding.hashContentTextView.text = session?.hash
+                binding.hashContentTextView.text = session?.hash?.formatHash()
             }
         }
 

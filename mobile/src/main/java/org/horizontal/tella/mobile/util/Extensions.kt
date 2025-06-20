@@ -135,6 +135,15 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle,)
+    navigate(destinationId, bundle)
+}
+
+fun String.formatHash(): String {
+    return this
+        .take(64) // take only the first 64 characters
+        .chunked(4) // split into groups of 4
+        .chunked(4) // make 4 lines
+        .joinToString("\n") { it.joinToString(" ") }
+
 }
 

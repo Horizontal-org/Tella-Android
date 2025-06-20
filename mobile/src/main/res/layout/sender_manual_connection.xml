@@ -67,11 +67,11 @@
             app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
             <EditText
-                android:id="@+id/connectCode"
+                android:id="@+id/ip_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans"
-                android:hint="@string/connect_code"
+                android:hint="@string/ip_address"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:inputType="textNoSuggestions"

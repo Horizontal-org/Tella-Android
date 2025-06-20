@@ -9,6 +9,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
+import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import javax.inject.Inject
@@ -42,7 +43,7 @@ class RecipientVerificationFragment :
     private fun initView() {
         lifecycleScope.launchWhenStarted {
             viewModel.sessionInfo.collect { session ->
-                binding.hashContentTextView.text = session?.hash
+                binding.hashContentTextView.text = session?.hash?.formatHash()
             }
         }
     }
@@ -52,7 +53,6 @@ class RecipientVerificationFragment :
             binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
             bundle.putBoolean("isSender", false)
             navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
-
         }
 
         binding.toolbar.backClickListener = {

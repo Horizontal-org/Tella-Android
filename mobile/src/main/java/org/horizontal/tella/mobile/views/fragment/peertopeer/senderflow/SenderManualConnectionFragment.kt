@@ -24,10 +24,10 @@ class SenderManualConnectionFragment :
     }
 
     private fun initView() {
-        binding.connectCode.onChange {
+        binding.ipAddress.onChange {
             updateNextButtonState()
         }
-        binding.port.onChange {
+        binding.pin.onChange {
             updateNextButtonState()
         }
 
@@ -54,9 +54,8 @@ class SenderManualConnectionFragment :
     }
 
     private fun isInputValid(): Boolean {
-        return binding.connectCode.text?.isNotBlank() == true &&
-                binding.pin.text?.isNotBlank() == true &&
-                binding.port.text?.isNotBlank() == true
+        return binding.ipAddress.text?.isNotBlank() == true &&
+                binding.pin.text?.isNotBlank() == true
     }
 
     private fun updateNextButtonState() {
@@ -71,10 +70,9 @@ class SenderManualConnectionFragment :
         binding.toolbar.backClickListener = { nav().popBackStack() }
         binding.backBtn.setOnClickListener { nav().popBackStack() }
         binding.nextBtn.setOnClickListener {
-            val ip = binding.connectCode.text.toString()
-            val port = binding.port.text.toString()
+            val ip = binding.ipAddress.text.toString()
             val pin = binding.pin.text.toString()
-
+            val port = binding.port.text.toString()
             viewModel.setPeerSessionInfo(
                 PeerConnectionInfo(
                     ip = ip,
@@ -84,7 +82,7 @@ class SenderManualConnectionFragment :
             ) // Store values
 
             viewModel.handleCertificate(
-                ip = binding.connectCode.text.toString(),
+                ip = binding.ipAddress.text.toString(),
                 port = binding.port.text.toString(),
                 pin = binding.pin.text.toString()
             )
@@ -96,7 +94,7 @@ class SenderManualConnectionFragment :
             bundle.putString("payload", hash)
             viewModel.setPeerSessionInfo(
                 PeerConnectionInfo(
-                    ip = binding.connectCode.text.toString(),
+                    ip = binding.ipAddress.text.toString(),
                     port = binding.port.text.toString(),
                     pin = binding.pin.text.toString().toInt(),
                     hash = hash

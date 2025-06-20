@@ -43,7 +43,7 @@ object CertificateUtils {
     fun getPublicKeyHash(certificate: X509Certificate): String {
         val digest = java.security.MessageDigest.getInstance("SHA-256")
         val hash = digest.digest(certificate.publicKey.encoded)
-        return hash.joinToString("") { "%02x".format(it) }
+        return hash.joinToString("") { "%04x".format(it) }
     }
 
     fun createSSLContext(

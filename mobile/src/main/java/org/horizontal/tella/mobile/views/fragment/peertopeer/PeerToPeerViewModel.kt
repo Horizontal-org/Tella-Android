@@ -35,7 +35,7 @@ import javax.inject.Inject
 class PeerToPeerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val peerClient: TellaPeerToPeerClient,
-    private val peerToPeerManager: PeerToPeerManager
+    peerToPeerManager: PeerToPeerManager
 ) : ViewModel() {
 
     var hasNavigatedToSuccessFragment = false
