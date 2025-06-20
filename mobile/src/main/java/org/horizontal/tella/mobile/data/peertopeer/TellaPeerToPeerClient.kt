@@ -131,17 +131,12 @@ class TellaPeerToPeerClient {
                 id = it.id,
                 fileName = it.name,
                 size = it.size,
-                fileType = "application/octet-stream", // or detect mime type
+                fileType = "application/octet-stream",
                 sha256 = it.hash
             )
         }
 
-        val requestPayload = PrepareUploadRequest(
-            title = title,
-            sessionId = sessionId,
-            files = fileItems
-        )
-
+        val requestPayload = PrepareUploadRequest(title, sessionId, fileItems)
         val jsonPayload = Json.encodeToString(requestPayload)
         val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
         val client = getClientWithFingerprintValidation(expectedFingerprint)
@@ -153,11 +148,11 @@ class TellaPeerToPeerClient {
                 .addHeader("Content-Type", "application/json")
                 .build()
 
-            client.newCall(request).execute().use { response ->
+            return@withContext client.newCall(request).execute().use { response ->
                 val body = response.body?.string()
 
                 if (response.isSuccessful && body != null) {
-                    return@use try {
+                    try {
                         val transmissionId = JSONObject(body).getString("transmissionId")
                         Result.success(transmissionId)
                     } catch (e: Exception) {
@@ -168,20 +163,21 @@ class TellaPeerToPeerClient {
                     Log.e("PrepareUpload", "Server error ${response.code}: ${response.message}")
                     when (response.code) {
                         400 -> Log.e("PrepareUpload", "Bad Request – likely missing or invalid fields.")
+                        403 -> Log.e("PrepareUpload", "Forbidden – the server is refusing the request.")
                         409 -> Log.e("PrepareUpload", "Conflict – maybe another active session.")
                         500 -> Log.e("PrepareUpload", "Internal Server Error – try again later.")
                         else -> Log.e("PrepareUpload", "Unhandled server error code.")
                     }
-                    return@use Result.failure(Exception("Server returned error ${response.code}"))
+                    Result.failure(Exception("Server returned error ${response.code}"))
                 }
             }
 
-            Result.failure(Exception("No response from server"))
         } catch (e: Exception) {
             Log.e("PrepareUpload", "Exception during upload: ${e.message}", e)
             Result.failure(e)
         }
     }
+
 
     suspend fun fetchServerFingerprint(ip: String, port: Int): Result<String> = withContext(Dispatchers.IO) {
         try {

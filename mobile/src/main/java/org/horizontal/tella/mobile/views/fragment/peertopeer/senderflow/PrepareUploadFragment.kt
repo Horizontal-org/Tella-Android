@@ -95,21 +95,18 @@ class PrepareUploadFragment :
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
         }
-        parentFragmentManager.setFragmentResultListener("prepare_upload_result", viewLifecycleOwner) { _, result ->
-            val wasRejected = result.getBoolean("rejected", false)
-            if (wasRejected) {
-//                showTooltip(
-//                    binding.root,
-//                    "Recipient rejected the files.",
-//                    Gravity.TOP
-//                )
-                DialogUtils.showBottomMessage(
-                    baseActivity, "Recipient rejected the files.",
-                    true
-                )
-            
+        val navBackStackEntry = findNavController().currentBackStackEntry
+        navBackStackEntry?.savedStateHandle
+            ?.getLiveData<Boolean>("prepare_upload_result")
+            ?.observe(viewLifecycleOwner) { wasRejected ->
+                if (wasRejected) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity, "Recipient rejected the files.",
+                        true
+                    )
+                }
             }
-        }
+
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
                 val id = response.transmissionId
             DialogUtils.showBottomMessage(

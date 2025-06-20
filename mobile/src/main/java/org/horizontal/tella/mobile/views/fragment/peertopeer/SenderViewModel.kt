@@ -85,23 +85,12 @@ class SenderViewModel @Inject constructor(
                 Timber.d("Success: transmissionId = $transmissionId")
                 _prepareResults.postValue(PeerPrepareUploadResponse(transmissionId))
             }.onFailure { error ->
-                    if (error is retrofit2.HttpException) {
-                        val code = error.code()
-                        if (code == 403) {
-                            // Rejected by the receiver
-                            _prepareRejected.postValue(true)
-                        } else {
-                            Timber.e("HTTP error: ${error.code()} - ${error.message()}")
-                        }
-                    } else {
-                        Timber.e(error, "Unexpected error during prepare upload")
-                    }
+              //  if (error.message?.contains("403") == true) {
+                    _prepareRejected.postValue(true)
 
             }
+            }
         }
-    }
-
-
 }
 
 
