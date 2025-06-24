@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.ConnectionType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.data.NetworkInfo
 import timber.log.Timber
@@ -55,6 +56,8 @@ class PeerToPeerViewModel @Inject constructor(
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
     private val _incomingPrepareRequest = MutableLiveData<PrepareUploadRequest?>()
     val incomingPrepareRequest: MutableLiveData<PrepareUploadRequest?> = _incomingPrepareRequest
+    private val _incomingRequest = MutableStateFlow<IncomingRegistration?>(null)
+    val incomingRequest: StateFlow<IncomingRegistration?> = _incomingRequest
 
     init {
         viewModelScope.launch {
@@ -66,6 +69,12 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.registrationEvents.collect { success ->
                 _registrationServerSuccess.postValue(success)
+            }
+        }
+
+        viewModelScope.launch {
+            PeerEventManager.registrationRequests.collect { (registrationId, payload) ->
+                _incomingRequest.value = IncomingRegistration(registrationId, payload)
             }
         }
     }
@@ -218,6 +227,14 @@ class PeerToPeerViewModel @Inject constructor(
                 _getHashError.postValue(error)
             }
         }
+    }
+
+    fun onUserConfirmedRegistration(registrationId: String) {
+        PeerEventManager.confirmRegistration(registrationId, accepted = true)
+    }
+
+    fun onUserRejectedRegistration(registrationId: String) {
+        PeerEventManager.confirmRegistration(registrationId, accepted = false)
     }
 
     fun clearPrepareRequest() {

@@ -22,6 +22,7 @@ import io.ktor.server.routing.routing
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
@@ -34,6 +35,7 @@ import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
+import kotlin.coroutines.Continuation
 
 const val port = 53317
 
@@ -50,6 +52,9 @@ class TellaPeerToPeerServer(
 
     override val certificatePem: String
         get() = CertificateUtils.certificateToPem(certificate)
+
+    private val pendingRegistrations = mutableMapOf<String, Continuation<PeerResponse>>()
+
 
     override fun start() {
         val keyStore = KeyStore.getInstance("PKCS12").apply {
@@ -96,27 +101,25 @@ class TellaPeerToPeerServer(
                         val request = try {
                             call.receive<PeerRegisterPayload>()
                         } catch (e: Exception) {
-                            call.respondText(
-                                """{"error": "Invalid request body"}""",
-                                ContentType.Application.Json,
-                                HttpStatusCode.BadRequest
-                            )
+                            call.respond(HttpStatusCode.BadRequest, "Invalid request body")
                             return@post
                         }
 
-                        val sessionId = UUID.randomUUID().toString()
+                        val registrationId = UUID.randomUUID().toString()
 
-                        // Emit registration success event asynchronously
+                        val accepted = PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
+
+                        if (!accepted) {
+                            call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
+                            return@post
+                        }
+
+                        val sessionId = registrationId // or generate a separate one
                         launch {
                             PeerEventManager.emitRegistrationSuccess()
                         }
 
-                        call.respondText(
-                            Gson().toJson(PeerResponse(sessionId)),
-                            ContentType.Application.Json,
-                            HttpStatusCode.OK
-                        )
-
+                        call.respond(HttpStatusCode.OK, PeerResponse(sessionId))
                     }
                     post("/api/v1/prepare-upload") {
                         val request = try {
@@ -135,7 +138,10 @@ class TellaPeerToPeerServer(
 
                         if (accepted) {
                             val transmissionId = UUID.randomUUID().toString()
-                            call.respond(HttpStatusCode.OK, PeerPrepareUploadResponse(transmissionId))
+                            call.respond(
+                                HttpStatusCode.OK,
+                                PeerPrepareUploadResponse(transmissionId)
+                            )
                         } else {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
                         }

@@ -3,8 +3,11 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
@@ -29,12 +32,32 @@ class RecipientVerificationFragment :
         }
         initListeners()
         initView()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.incomingRequest.collect { request ->
+                    if (request != null) {
+                        binding.confirmAndConnectBtn.isEnabled = true
+                        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
+
+                        // Set the click listener when the request is available
+                        binding.confirmAndConnectBtn.setOnClickListener {
+                            viewModel.onUserConfirmedRegistration(request.registrationId)
+                        }
+                    } else {
+                        binding.confirmAndConnectBtn.isEnabled = false
+                        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange16_btn)
+                        binding.confirmAndConnectBtn.setOnClickListener(null) // Optional: clear listener
+                    }
+                }
+            }
+        }
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
+                bundle.putBoolean("isSender", false)
+                navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
                 binding.confirmAndConnectBtn.setOnClickListener {
-                 //   bundle.putBoolean("isSender", false)
-                    navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
+
                 }
             }
         }
