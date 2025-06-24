@@ -97,11 +97,11 @@ class PrepareUploadFragment :
         }
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
-            ?.getLiveData<Boolean>("prepare_upload_result")
+            ?.getLiveData<Boolean>("transferRejected")
             ?.observe(viewLifecycleOwner) { wasRejected ->
                 if (wasRejected) {
                     DialogUtils.showBottomMessage(
-                        baseActivity, "Recipient rejected the files.",
+                        baseActivity, getString(R.string.recipient_rejected_the_files),
                         true
                     )
                 }
@@ -111,7 +111,7 @@ class PrepareUploadFragment :
                 val id = response.transmissionId
             DialogUtils.showBottomMessage(
                 baseActivity,
-                "The receiver accepted the files transfer ",
+                getString(R.string.the_receiver_accepted_the_files_transfer),
                 false,
                 3000
             )
@@ -139,12 +139,8 @@ class PrepareUploadFragment :
 
     private fun checkIsNewDraftEntry() {
         if (isNewDraft) {
-           // binding.deleteBtn.invisible()
-          //  binding.sendLaterBtn.show()
             binding.sendReportBtn.text = getString(R.string.collect_end_action_submit)
         } else {
-           // binding.deleteBtn.show()
-          //  binding.sendLaterBtn.invisible()
             binding.sendReportBtn.text = getString(R.string.Send_Action_Label)
         }
     }
@@ -304,8 +300,8 @@ class PrepareUploadFragment :
                     if (selectedFiles.isNotEmpty()) {
                         viewModel.prepareUploadsFromVaultFiles(selectedFiles)
                         // navigate to waiting view
-                        bundle.putBoolean("isSender", true)
-                        navManager().navigateFromPrepareUploadFragmentToWaitingFragment()
+                        //bundle.putBoolean("isSender", true)
+                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                     } else {
                         showToast("No file selected")
                     }

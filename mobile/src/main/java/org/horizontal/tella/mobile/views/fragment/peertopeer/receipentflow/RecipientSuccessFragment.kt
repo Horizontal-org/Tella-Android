@@ -51,7 +51,7 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
                 // Set result safely via SavedStateHandle
                 findNavController().previousBackStackEntry
                     ?.savedStateHandle
-                    ?.set("prepare_upload", true)
+                    ?.set("receiverDeclined", true)
 
                 // Pop back
                 findNavController().popBackStack()

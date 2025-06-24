@@ -33,8 +33,8 @@ class RecipientVerificationFragment :
             if (success) {
                 binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
                 binding.confirmAndConnectBtn.setOnClickListener {
-                    bundle.putBoolean("isSender", false)
-                    navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
+                 //   bundle.putBoolean("isSender", false)
+                    navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
                 }
             }
         }
@@ -51,8 +51,8 @@ class RecipientVerificationFragment :
     private fun initListeners() {
         binding.confirmAndConnectBtn.setOnClickListener {
             binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
-            bundle.putBoolean("isSender", false)
-            navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
+          //  bundle.putBoolean("isSender", false)
+            navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
         }
 
         binding.toolbar.backClickListener = {

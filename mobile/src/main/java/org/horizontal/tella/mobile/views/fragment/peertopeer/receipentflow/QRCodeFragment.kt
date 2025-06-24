@@ -47,8 +47,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 // Navigate to the next screen
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromQrCodeScreenToWaitingFragment()
+              //  bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
                 //  reset the LiveData state if we want to consume event once
                 viewModel.resetRegistrationState()
             } else {
@@ -116,8 +116,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     private fun initObservers() {
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromQrCodeScreenToWaitingFragment()
+               // bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
             } else {
             }
         }

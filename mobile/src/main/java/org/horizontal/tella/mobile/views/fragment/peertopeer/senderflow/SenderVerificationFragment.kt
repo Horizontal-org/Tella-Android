@@ -64,8 +64,8 @@ class SenderVerificationFragment :
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 // Navigate to the next screen
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromQrCodeScreenToWaitingFragment()
+               // bundle.putBoolean("isSender", false)
+                navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
                 //  reset the LiveData state if we want to consume event once
                 viewModel.resetRegistrationState()
             } else {

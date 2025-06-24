@@ -223,6 +223,7 @@ class PeerToPeerViewModel @Inject constructor(
     fun clearPrepareRequest() {
         _incomingPrepareRequest.value = null
         hasNavigatedToSuccessFragment = false
+
     }
     fun setPeerSessionInfo(info: PeerConnectionInfo) {
         _sessionInfo.value = info

@@ -63,8 +63,8 @@
             android:id="@+id/action_qrCodeScreen_to_deviceInfoScreen"
             app:destination="@id/deviceInfoScreen" />
         <action
-            android:id="@+id/action_qrCodeScreen_to_waitingFragment"
-            app:destination="@id/waitingFragment" />
+            android:id="@+id/action_qrCodeScreen_to_waitingReceiverFragment"
+            app:destination="@id/waitingReceiverFragment" />
     </fragment>
 
     <fragment
@@ -84,8 +84,8 @@
         android:label="RecipientVerificationScreen"
         tools:layout="@layout/connect_manually_verification">
         <action
-            android:id="@+id/action_recipientVerificationScreen_to_waitingFragment"
-            app:destination="@id/waitingFragment" />
+            android:id="@+id/action_recipientVerificationScreen_to_waitingReceiverFragment"
+            app:destination="@id/waitingReceiverFragment" />
     </fragment>
 
     <fragment
@@ -94,8 +94,8 @@
         android:label="PrepareUploadFragment"
         tools:layout="@layout/fragment_prepare_upload" >
         <action
-            android:id="@+id/action_prepareUploadFragment_to_waitingFragment"
-            app:destination="@id/waitingFragment" />
+            android:id="@+id/action_prepareUploadFragment_to_waitingSenderFragment"
+            app:destination="@id/waitingSenderFragment" />
     </fragment>
 
     <fragment
@@ -108,22 +108,28 @@
             app:destination="@id/connectManuallyVerificationFragment" />
     </fragment>
     <fragment
-        android:id="@+id/waitingFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingFragment"
+        android:id="@+id/waitingReceiverFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingReceiverFragment"
         tools:layout="@layout/fragment_waiting"
-        android:label="WaitingFragment" >
+        android:label="WaitingReceiverFragment" >
         <action
-            android:id="@+id/action_waitingFragment_to_recipientSuccessFragment"
+            android:id="@+id/action_waitingReceiverFragment_to_recipientSuccessFragment"
             app:destination="@id/recipientSuccessFragment" />
     </fragment>
     <fragment
         android:id="@+id/successConnectFragment"
         android:name="org.horizontal.tella.mobile.views.dialog.uwazi.step6.SuccessConnectFragment"
+        tools:layout="@layout/fragment_success_connect_flow"
         android:label="SuccessConnectFragment" />
     <fragment
         android:id="@+id/recipientSuccessFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientSuccessFragment"
         tools:layout="@layout/fragment_recipient_success"
         android:label="RecipientSuccessFragment" />
+    <fragment
+        android:id="@+id/waitingSenderFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingSenderFragment"
+        tools:layout="@layout/fragment_waiting"
+        android:label="WaitingSenderFragment" />
 
 </navigation>

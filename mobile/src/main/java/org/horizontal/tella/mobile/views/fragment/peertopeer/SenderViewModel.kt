@@ -1,25 +1,23 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.apache.commons.httpclient.HttpException
+import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 
@@ -29,8 +27,9 @@ class SenderViewModel @Inject constructor(
 ) : ViewModel() {
     private val _prepareResults = MutableLiveData<PeerPrepareUploadResponse>()
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
-    private val _prepareRejected = MutableLiveData<Boolean>()
-    val prepareRejected: LiveData<Boolean> = _prepareRejected
+    private val _prepareRejected = MutableLiveData<Event<Boolean>>()
+    val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
+
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -85,12 +84,15 @@ class SenderViewModel @Inject constructor(
                 Timber.d("Success: transmissionId = $transmissionId")
                 _prepareResults.postValue(PeerPrepareUploadResponse(transmissionId))
             }.onFailure { error ->
-              //  if (error.message?.contains("403") == true) {
-                    _prepareRejected.postValue(true)
-
-            }
+                //  if (error.message?.contains("403") == true) {
+                withContext(Dispatchers.Main) {
+                    _prepareRejected.value = Event(true)
+                }
             }
         }
+    }
+
+
 }
 
 
