@@ -21,7 +21,7 @@ class WaitingReceiverFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar()
         observeIncomingPrepareRequest()
-        observeSenderRejection()
+        observeReceiverRejection()
     }
 
     private fun setupToolbar() {
@@ -49,7 +49,7 @@ class WaitingReceiverFragment :
         }
     }
 
-    private fun observeSenderRejection() {
+    private fun observeReceiverRejection() {
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
             ?.getLiveData<Boolean>("receiverDeclined")
