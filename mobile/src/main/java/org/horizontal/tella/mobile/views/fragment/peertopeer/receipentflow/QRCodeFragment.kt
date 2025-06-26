@@ -17,7 +17,6 @@ import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
-import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import javax.inject.Inject
@@ -26,9 +25,9 @@ import javax.inject.Inject
 class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCodeBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-    private var server: TellaServer? = null
     private var payload: PeerConnectionPayload? = null
     private lateinit var qrPayload: String
+
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
@@ -47,7 +46,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 // Navigate to the next screen
-              //  bundle.putBoolean("isSender", false)
+                //  bundle.putBoolean("isSender", false)
                 navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
                 //  reset the LiveData state if we want to consume event once
                 viewModel.resetRegistrationState()
@@ -63,7 +62,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
         peerServerStarterManager.startServer(ip, keyPair, certificate, config)
 
-
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
         val pin = (100000..999999).random().toString()
         val port = port
@@ -78,7 +76,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         qrPayload = Gson().toJson(payload)
         generateQrCode(qrPayload)
     }
-
 
     private fun generateQrCode(content: String) {
         try {
@@ -116,7 +113,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     private fun initObservers() {
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-               // bundle.putBoolean("isSender", false)
+                bundle.putBoolean("isSender", false)
                 navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
             } else {
             }

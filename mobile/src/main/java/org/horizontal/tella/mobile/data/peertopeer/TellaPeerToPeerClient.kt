@@ -11,9 +11,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.json.JSONObject
-import java.io.File
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -74,7 +75,6 @@ class TellaPeerToPeerClient {
 
             val jsonPayload = Json.encodeToString(payload)
             val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
-            Log.d("PeerClient", "Request payload: $requestBody")
 
             val client = getClientWithFingerprintValidation(expectedFingerprint)
             val request = Request.Builder()

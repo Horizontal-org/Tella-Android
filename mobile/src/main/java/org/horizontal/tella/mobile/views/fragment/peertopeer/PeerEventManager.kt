@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 
 /**

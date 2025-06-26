@@ -44,6 +44,12 @@ class RecipientVerificationFragment :
                         binding.confirmAndConnectBtn.setOnClickListener {
                             viewModel.onUserConfirmedRegistration(request.registrationId)
                         }
+
+                        binding.discardBtn.setOnClickListener {
+                            peerServerStarterManager.stopServer()
+                            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+                            viewModel.onUserRejectedRegistration(request.registrationId)
+                        }
                     } else {
                         binding.confirmAndConnectBtn.isEnabled = false
                         binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange16_btn)
@@ -54,11 +60,8 @@ class RecipientVerificationFragment :
         }
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                bundle.putBoolean("isSender", false)
-                navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
-                binding.confirmAndConnectBtn.setOnClickListener {
-
-                }
+                    bundle.putBoolean("isSender", false)
+                    navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
             }
         }
     }
@@ -72,11 +75,6 @@ class RecipientVerificationFragment :
     }
 
     private fun initListeners() {
-        binding.confirmAndConnectBtn.setOnClickListener {
-            binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
-          //  bundle.putBoolean("isSender", false)
-            navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
-        }
 
         binding.toolbar.backClickListener = {
             peerServerStarterManager.stopServer()
@@ -87,6 +85,8 @@ class RecipientVerificationFragment :
             peerServerStarterManager.stopServer()
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
+
+        binding.confirmAndConnectBtn.setOnClickListener(null)
     }
 
 }

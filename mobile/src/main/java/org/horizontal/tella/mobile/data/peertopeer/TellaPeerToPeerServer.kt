@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
 import android.util.Log
-import com.google.gson.Gson
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.call
@@ -19,12 +17,12 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
@@ -35,7 +33,6 @@ import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
-import kotlin.coroutines.Continuation
 
 const val port = 53317
 
@@ -52,9 +49,6 @@ class TellaPeerToPeerServer(
 
     override val certificatePem: String
         get() = CertificateUtils.certificateToPem(certificate)
-
-    private val pendingRegistrations = mutableMapOf<String, Continuation<PeerResponse>>()
-
 
     override fun start() {
         val keyStore = KeyStore.getInstance("PKCS12").apply {

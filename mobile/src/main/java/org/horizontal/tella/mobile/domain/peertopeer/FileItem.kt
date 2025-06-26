@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.data.peertopeer
+package org.horizontal.tella.mobile.domain.peertopeer
 
 import kotlinx.serialization.Serializable
 

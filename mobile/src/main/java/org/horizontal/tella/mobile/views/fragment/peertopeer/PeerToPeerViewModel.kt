@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
-import org.horizontal.tella.mobile.data.peertopeer.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
@@ -230,10 +230,13 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     fun onUserConfirmedRegistration(registrationId: String) {
-        PeerEventManager.confirmRegistration(registrationId, accepted = true)
+        viewModelScope.launch {
+            PeerEventManager.confirmRegistration(registrationId, true)
+            _registrationSuccess.postValue(true)
+        }
     }
-
     fun onUserRejectedRegistration(registrationId: String) {
+        //TODO when the user reject i THINK the client should go back to the
         PeerEventManager.confirmRegistration(registrationId, accepted = false)
     }
 
