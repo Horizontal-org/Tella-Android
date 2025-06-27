@@ -298,10 +298,11 @@ class PrepareUploadFragment :
                 if (isSubmitEnabled) {
                     val selectedFiles = filesRecyclerViewAdapter.getFiles()
                     if (selectedFiles.isNotEmpty()) {
-                        viewModel.prepareUploadsFromVaultFiles(selectedFiles)
+                        bundle.putSerializable("selectedFiles", ArrayList(selectedFiles)) // assuming VaultFile is Serializable
+                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
+                        //viewModel.prepareUploadsFromVaultFiles(selectedFiles)
                         // navigate to waiting view
                         //bundle.putBoolean("isSender", true)
-                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                     } else {
                         showToast("No file selected")
                     }
