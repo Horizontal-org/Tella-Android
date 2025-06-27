@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">Bütün fayllar</string>
+  <string name="Vault_Images_Title">Şəkillər</string>
+  <string name="Vault_Files_Title">Tella faylları</string>
+  <string name="Vault_Documents_Title">Sənədlər</string>
+  <string name="Vault_Audios_Title">Audio</string>
+  <string name="Vault_Videos_Title">Videolar</string>
+  <string name="Vault_Others_Title">Digər</string>
+  <string name="Vault_Select_Title">Faylları seç</string>
+  <string name="Vault_RecentFiles">Son fayllar</string>
+  <string name="Vault_PhotosAndVideos_Title">Foto və Videolar</string>
+  <string name="Vault_FavoriteForms_Title">Seçilmiş formalar</string>
+  <string name="Vault_Empty_Msg">Tella tətbiqinizdə hələ ki, fayl yoxdur. Aşağıda \"+\" düyməsinə klikləyərək, ilk faylı idxal edə, yaxud Kamera və ya Mikrofona keçərək, yeni fayl yarada bilərsiz. Həmçinin qovluqlar yaradaraq, fayllarınızı səliqə ilə yerləşdirə bilərsiz.</string>
+  <string name="Vault_Move_SheetDesc">Digər qovluğa köçür</string>
+  <string name="Vault_Rename_SheetAction">Adını dəyiş</string>
+  <string name="Vault_Save_SheetAction">Saxla</string>
+  <string name="Vault_Delete_SheetAction">Sil</string>
+  <string name="Vault_Share_SheetAction">Paylaş</string>
+  <string name="Vault_Upload_SheetAction">Yüklə</string>
+  <string name="Vault_File_SheetAction">Fayl məlumatı</string>
+  <string name="Vault_FileInfo">Fayl haqda</string>
+  <string name="Vault_FileSize">Ölçü</string>
+  <string name="Vault_FileFormat">Format</string>
+  <string name="Vault_FileCreated">Yaradıldı</string>
+  <string name="Vault_FileResolution">Ekran ölçüsü</string>
+  <string name="Vault_FileLength">Uzunluq</string>
+  <string name="Vault_FilePath">Faylın yolu</string>
+  <string name="Vault_RenameFile_SheetTitle">Faylın adını dəyiş</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Fayl silinsin?</item>
+    <item quantity="other">Boş</item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">Seçilmiş fayl Tella-dan həmişəlik silinəcək.</item>
+    <item quantity="other">Boş</item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Ad A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Ad Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Yenidən köhnəyə</string>
+  <string name="Vault_SortDateDesc_SheetAction">Köhnədən yeniyə</string>
+  <string name="Vault_ManageFiles_SheetTitle">Faylları idarə et</string>
+  <string name="Vault_DeleteFile_SheetDesc">Faylı Tellaya ixrac edəndən sonra alətinizdəki orijinal fayl silinəcək. Yalnız Telladakı nüsxə qalacaq.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Foto/video çək</string>
+  <string name="Vault_RecordAudio_SheetAction">Səs yaz</string>
+  <string name="Vault_Import_SheetAction">Cihazdan idxal et</string>
+  <string name="Vault_ImportDelete_SheetAction">İdxal et və orijinal faylı sil</string>
+  <string name="Vault_CreateFolder_SheetTitle">Yeni qovluq yarat</string>
+  <string name="Vault_MoveHere">bura köçür</string>
+  <string name="Vault_ViewerOther_SheetDesc">Bu fayl formatı Tella daxilində açılmır. Faylı başqa tətbiq vasitəsilə açmaq üçün cihazınıza köçürmək istərdiniz? Ancaq bu, faylın mətninin ifşasına səbəb ola bilər.</string>
+  <string name="Vault_Export_SheetAction">İxrac</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">ədəd</item>
+    <item quantity="other">Boş</item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Tella-da hələ ki, faylınız yoxdur.</string>
+  <string name="Vault_FavoriteTemplates_Title">Sevimli şablonlar</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">Fayl uğurla köçürüldü</item>
+    <item quantity="other">Fayllar uğurla köçürüldü</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">Seçilmiş fayllardan bəziləri hazırda bağlantınızda istifadə olunmaqdadır. Onların silinməsi hələ göndərilməmiş forma və hesabatlara təsir edə bilər.</string>
+  <string name="Vault_Warning_Title">Xəbərdarlıq</string>
+  <string name="Vault_Delete_anyway">Hər halda silin</string>
+  <string name="Vault_Keep_Original">ORİJİNALI SAXLA</string>
+  <string name="Vault_Delete_Original">ORİJİNALI SİL</string>
+  <string name="Vault_deleteFileImported_SheetDesc">Faylı Tella-ya idxal etdikdən sonra orijinal faylın cihazınızda qalmasını, yoxsa silinməsini istəyirsiz?
+
+Orijinal faylı silsəniz, Tella-ya köçürülən fayl onun yeganə surəti olacaq.</string>
+  <string name="Vault_FileEdit_SheetAction">Redaktə edin</string>
+</resources>

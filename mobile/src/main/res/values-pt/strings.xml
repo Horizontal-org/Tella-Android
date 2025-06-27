@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Sair do formulário?</string>
   <string name="verification_prompt_dialog_title">Habilitar o GPS?</string>
   <string name="collect_tab.title_blank">Em branco</string>
-  <string name="action_cancel">cancel</string>
+  <string name="action_cancel">cancelar</string>
   <string name="settings_menu.item_contact">Fale conosco</string>
   <string name="collect_dialog.text_download.progress">Baixando o formulário</string>
   <string name="collect_toast_download.completed">Transferência concluída</string>
-  <string name="action_delete">delete</string>
+  <string name="action_delete">excluir</string>
   <string name="collect.draft_tab.title">Rascunho</string>
   <string name="collect.blank_action_download.form">Baixar</string>
   <string name="settings_text_empty.field">Este campo não pode ficar vazio.</string>
@@ -23,8 +23,8 @@
   <string name="action_ok">Está bem</string>
   <string name="collect.form_toast_validation.error">Esta resposta é inválida</string>
   <string name="collect.form_error_response.mandatory">Essa resposta é obrigatória.</string>
-  <string name="homescreen_heading_quick.delete">Quick Delete
-mode activation</string>
+  <string name="homescreen_heading_quick.delete">Modo Deletar Rápido
+ativado</string>
   <string name="settings.about_list.item_privacy.policy">Política de Privacidade</string>
   <string name="recorder_toast_fail.recording">Erro ao gravar o áudio. Por favor, tente novamente</string>
   <string name="recorder_content.desc_blinking.red.dot">Gravando áudio…</string>
@@ -85,8 +85,8 @@ mode activation</string>
   <string name="permission_dialog.expl_device.storage">Para exportar arquivos, Tella precisa de permissão para gravar no armazenamento do aparelho.</string>
   <string name="gallery_toast_fail.deleting.files">Erro ao excluir arquivos. Por favor, tente novamente.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="one">%1$d file saved to the device</item>
-    <item quantity="other">%1$d files saved to the device</item>
+    <item quantity="one">%1$d arquivo salvo no dispositivo</item>
+    <item quantity="other">%1$d arquivos salvos no dispositivo</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Excluir o arquivo?</string>
   <string name="gallery_delete.files_dialog.expl">O arquivo selecionado será excluído permanentemente da sua galeria.</string>
@@ -188,8 +188,8 @@ mode activation</string>
   <string name="collect.form_signature_toast_fail.saving">Um erro ocorreu ao salvar a assinatura. Por favor, tente novamente</string>
   <string name="collect.form_acknowledge_select.expl">OK. Por favor continue.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d file</item>
-    <item quantity="other">%d files</item>
+    <item quantity="one">%d arquivo</item>
+    <item quantity="other">%d arquivos</item>
   </plurals>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
