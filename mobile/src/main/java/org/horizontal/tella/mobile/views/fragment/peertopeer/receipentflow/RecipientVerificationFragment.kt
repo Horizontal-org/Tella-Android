@@ -61,10 +61,9 @@ class RecipientVerificationFragment :
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 bundle.putBoolean("isSender", false)
-            //    navManager().navigateFromRecipientVerificationScreenToWaitingFragment()
-                binding.confirmAndConnectBtn.setOnClickListener {
-                 //   bundle.putBoolean("isSender", false)
-                    navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
+              ///  binding.confirmAndConnectBtn.setOnClickListener {
+                navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
+          //  }
             }
         }
     }
