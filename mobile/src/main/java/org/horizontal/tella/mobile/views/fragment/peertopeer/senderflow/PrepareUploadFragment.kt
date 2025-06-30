@@ -256,16 +256,7 @@ class PrepareUploadFragment :
     }
 
     private fun putFiles(vaultFileList: List<VaultFile>) {
-        val filteredFiles = vaultFileList.filter { file ->
-            isValidFile(file)
-        }.also {
-            if (it.size != vaultFileList.size) {
-                showToast(getString(R.string.nextcloud_file_size_limit))
-            }
-        }
-
-        // Insert the filtered files
-        filteredFiles.forEach { file ->
+        vaultFileList.forEach { file ->
             filesRecyclerViewAdapter.insertAttachment(file)
         }
 
@@ -299,10 +290,8 @@ class PrepareUploadFragment :
                     val selectedFiles = filesRecyclerViewAdapter.getFiles()
                     if (selectedFiles.isNotEmpty()) {
                         bundle.putSerializable("selectedFiles", ArrayList(selectedFiles)) // assuming VaultFile is Serializable
-                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
-                        //viewModel.prepareUploadsFromVaultFiles(selectedFiles)
                         // navigate to waiting view
-                        //bundle.putBoolean("isSender", true)
+                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                     } else {
                         showToast("No file selected")
                     }
@@ -320,12 +309,6 @@ class PrepareUploadFragment :
             getString(errorRes),
             false
         )
-    }
-
-    // Helper function to check if the file is valid (less than or equal to 20MB)
-    private fun isValidFile(file: VaultFile): Boolean {
-        val isFileSizeValid = file.size <= 20 * 1024 * 1024 // 20MB in bytes
-        return isFileSizeValid
     }
 
     override fun playMedia(mediaFile: VaultFile?) {
