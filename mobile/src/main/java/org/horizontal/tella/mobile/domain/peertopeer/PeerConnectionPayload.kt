@@ -3,8 +3,8 @@ package org.horizontal.tella.mobile.domain.peertopeer
 import com.google.gson.annotations.SerializedName
 
 data class PeerConnectionPayload(
-    @SerializedName("connect_code")
-    val connectCode: String,
+    @SerializedName("ip_address")
+    val ipAddress : String,
 
     @SerializedName("port")
     val port: Int,

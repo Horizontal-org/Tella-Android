@@ -7,5 +7,5 @@ import java.util.UUID
 data class PeerRegisterPayload(
     val pin: String,
     val nonce: String = UUID.randomUUID().toString(),
-    val autoAccept: Boolean = false,
+   // val autoAccept: Boolean = false,
 )

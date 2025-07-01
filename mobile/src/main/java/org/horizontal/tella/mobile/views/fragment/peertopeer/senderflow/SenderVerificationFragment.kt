@@ -3,10 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
@@ -65,6 +62,7 @@ class SenderVerificationFragment :
 
     private fun initObservers() {
 
+        viewModel.isManualConnection = true
 
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {

@@ -72,11 +72,11 @@ class TellaPeerToPeerClient {
             val payload = PeerRegisterPayload(
                 pin = pin,
                 nonce = UUID.randomUUID().toString(),
-                autoUpload
+             //   autoUpload
             )
 
             val jsonPayload = Json.encodeToString(payload)
-            val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+            val requestBody = jsonPayload.toRequestBody()
 
             val client = getClientWithFingerprintValidation(expectedFingerprint)
             val request = Request.Builder()

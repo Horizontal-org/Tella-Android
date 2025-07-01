@@ -43,6 +43,9 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         }
         handleBack()
         handleConnectManually()
+
+        viewModel.isManualConnection = false
+
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 // Navigate to the next screen
@@ -67,7 +70,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val port = port
 
         payload = PeerConnectionPayload(
-            connectCode = ip,
+            ipAddress = ip,
             port = port,
             certificateHash = certHash,
             pin = pin

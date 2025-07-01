@@ -39,6 +39,7 @@ class PeerToPeerViewModel @Inject constructor(
     peerToPeerManager: PeerToPeerManager
 ) : ViewModel() {
 
+    var isManualConnection: Boolean = true // default is manual
     var hasNavigatedToSuccessFragment = false
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
@@ -75,6 +76,12 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.registrationRequests.collect { (registrationId, payload) ->
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
+
+                if (!isManualConnection) {
+                    // QR-mode: auto-accept immediately
+                    PeerEventManager.confirmRegistration(registrationId, true)
+                    _registrationSuccess.postValue(true)
+                }
             }
         }
     }

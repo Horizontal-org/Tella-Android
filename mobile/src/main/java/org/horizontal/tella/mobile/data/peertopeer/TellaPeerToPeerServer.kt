@@ -101,11 +101,11 @@ class TellaPeerToPeerServer(
 
                         val registrationId = UUID.randomUUID().toString()
 
-                        val accepted = if (request.autoAccept) {
-                            true // Automatically accept
-                        } else {
-                            PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
-                        }
+                       // val accepted = if (request.autoAccept) {
+                         //   true // Automatically accept
+                        //} else {
+                        val accepted =   PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
+                        //}
 
                         if (!accepted) {
                             call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")

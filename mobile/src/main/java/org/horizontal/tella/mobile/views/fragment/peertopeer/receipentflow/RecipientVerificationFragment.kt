@@ -31,7 +31,31 @@ class RecipientVerificationFragment :
             payload = Gson().fromJson(payloadJson, PeerConnectionPayload::class.java)
         }
         initListeners()
-        initView()
+        initObservers()
+    }
+
+    private fun initListeners() {
+
+        binding.toolbar.backClickListener = {
+            peerServerStarterManager.stopServer()
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        }
+
+        binding.discardBtn.setOnClickListener {
+            peerServerStarterManager.stopServer()
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        }
+
+        binding.confirmAndConnectBtn.setOnClickListener(null)
+    }
+
+    private fun initObservers() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.sessionInfo.collect { session ->
+                binding.hashContentTextView.text = session?.hash?.formatHash()
+            }
+        }
+        viewModel.isManualConnection = true
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -63,29 +87,6 @@ class RecipientVerificationFragment :
                 navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
             }
         }
-    }
-
-    private fun initView() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.sessionInfo.collect { session ->
-                binding.hashContentTextView.text = session?.hash?.formatHash()
-            }
-        }
-    }
-
-    private fun initListeners() {
-
-        binding.toolbar.backClickListener = {
-            peerServerStarterManager.stopServer()
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
-
-        binding.discardBtn.setOnClickListener {
-            peerServerStarterManager.stopServer()
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
-
-        binding.confirmAndConnectBtn.setOnClickListener(null)
     }
 
 }
