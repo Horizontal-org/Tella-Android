@@ -40,10 +40,11 @@ object CertificateUtils {
     fun decodeBase64(encodedString: String): ByteArray =
         Base64.decode(encodedString, Base64.NO_WRAP)
 
+
     fun getPublicKeyHash(certificate: X509Certificate): String {
         val digest = java.security.MessageDigest.getInstance("SHA-256")
-        val hash = digest.digest(certificate.publicKey.encoded)
-        return hash.joinToString("") { "%04x".format(it) }
+        val hash = digest.digest(certificate.encoded)
+        return hash.joinToString("") { "%02x".format(it) } // <-- fix here
     }
 
     fun createSSLContext(
