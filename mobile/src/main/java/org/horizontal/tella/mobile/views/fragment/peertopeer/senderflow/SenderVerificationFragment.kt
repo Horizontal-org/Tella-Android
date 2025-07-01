@@ -53,7 +53,8 @@ class SenderVerificationFragment :
                 ip = peerConnectionInfo.ip,
                 port = peerConnectionInfo.port,
                 hash = peerConnectionInfo.hash,
-                pin = peerConnectionInfo.pin.toString()
+                pin = peerConnectionInfo.pin.toString(),
+                autoUpload = false
             )
         }
 
@@ -63,8 +64,6 @@ class SenderVerificationFragment :
     }
 
     private fun initObservers() {
-
-
 
 
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->

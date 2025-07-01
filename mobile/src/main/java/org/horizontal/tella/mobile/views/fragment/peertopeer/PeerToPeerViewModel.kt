@@ -82,9 +82,11 @@ class PeerToPeerViewModel @Inject constructor(
     fun resetRegistrationState() {
         _registrationServerSuccess.postValue(false)
     }
+
     fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
         PeerEventManager.resolveUserDecision(sessionId, accepted)
     }
+
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
     fun fetchCurrentNetworkInfo() {
@@ -194,9 +196,15 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-    fun startRegistration(ip: String, port: String, hash: String, pin: String) {
+    fun startRegistration(
+        ip: String,
+        port: String,
+        hash: String,
+        pin: String,
+        autoUpload: Boolean
+    ) {
         viewModelScope.launch {
-            val result = peerClient.registerPeerDevice(ip, port, hash, pin)
+            val result = peerClient.registerPeerDevice(ip, port, hash, pin, autoUpload)
             result.onSuccess { sessionId ->
                 PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
                 // update UI state
@@ -235,6 +243,7 @@ class PeerToPeerViewModel @Inject constructor(
             _registrationSuccess.postValue(true)
         }
     }
+
     fun onUserRejectedRegistration(registrationId: String) {
         //TODO when the user reject i THINK the client should go back to the
         PeerEventManager.confirmRegistration(registrationId, accepted = false)
@@ -245,6 +254,7 @@ class PeerToPeerViewModel @Inject constructor(
         hasNavigatedToSuccessFragment = false
 
     }
+
     fun setPeerSessionInfo(info: PeerConnectionInfo) {
         _sessionInfo.value = info
     }

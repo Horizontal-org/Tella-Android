@@ -101,20 +101,24 @@ class TellaPeerToPeerServer(
 
                         val registrationId = UUID.randomUUID().toString()
 
-                        val accepted = PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
+                        val accepted = if (request.autoAccept) {
+                            true // Automatically accept
+                        } else {
+                            PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
+                        }
 
                         if (!accepted) {
                             call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
                             return@post
                         }
 
-                        val sessionId = registrationId // or generate a separate one
                         launch {
                             PeerEventManager.emitRegistrationSuccess()
                         }
 
-                        call.respond(HttpStatusCode.OK, PeerResponse(sessionId))
+                        call.respond(HttpStatusCode.OK, PeerResponse(registrationId))
                     }
+
                     post("/api/v1/prepare-upload") {
                         val request = try {
                             call.receive<PrepareUploadRequest>()

@@ -62,7 +62,8 @@ class TellaPeerToPeerClient {
         ip: String,
         port: String,
         expectedFingerprint: String,
-        pin: String
+        pin: String,
+        autoUpload: Boolean
     ): Result<String> = withContext(Dispatchers.IO) {
         val url = "https://$ip:$port/api/v1/register"
         Log.d("PeerClient", "Connecting to: $url")
@@ -70,7 +71,8 @@ class TellaPeerToPeerClient {
         try {
             val payload = PeerRegisterPayload(
                 pin = pin,
-                nonce = UUID.randomUUID().toString()
+                nonce = UUID.randomUUID().toString(),
+                autoUpload
             )
 
             val jsonPayload = Json.encodeToString(payload)
@@ -162,8 +164,16 @@ class TellaPeerToPeerClient {
                 } else {
                     Log.e("PrepareUpload", "Server error ${response.code}: ${response.message}")
                     when (response.code) {
-                        400 -> Log.e("PrepareUpload", "Bad Request – likely missing or invalid fields.")
-                        403 -> Log.e("PrepareUpload", "Forbidden – the server is refusing the request.")
+                        400 -> Log.e(
+                            "PrepareUpload",
+                            "Bad Request – likely missing or invalid fields."
+                        )
+
+                        403 -> Log.e(
+                            "PrepareUpload",
+                            "Forbidden – the server is refusing the request."
+                        )
+
                         409 -> Log.e("PrepareUpload", "Conflict – maybe another active session.")
                         500 -> Log.e("PrepareUpload", "Internal Server Error – try again later.")
                         else -> Log.e("PrepareUpload", "Unhandled server error code.")
@@ -179,21 +189,21 @@ class TellaPeerToPeerClient {
     }
 
 
-    suspend fun fetchServerFingerprint(ip: String, port: Int): Result<String> = withContext(Dispatchers.IO) {
-        try {
-            val socket = SSLSocketFactory.getDefault()
-                .createSocket(ip, port) as SSLSocket
-            socket.soTimeout = 5000
-            socket.startHandshake()
+    suspend fun fetchServerFingerprint(ip: String, port: Int): Result<String> =
+        withContext(Dispatchers.IO) {
+            try {
+                val socket = SSLSocketFactory.getDefault()
+                    .createSocket(ip, port) as SSLSocket
+                socket.soTimeout = 5000
+                socket.startHandshake()
 
-            val cert = socket.session.peerCertificates[0] as X509Certificate
-            val fingerprint = CertificateUtils.getPublicKeyHash(cert)
-            Result.success(fingerprint)
-        } catch (e: Exception) {
-            Result.failure(e)
+                val cert = socket.session.peerCertificates[0] as X509Certificate
+                val fingerprint = CertificateUtils.getPublicKeyHash(cert)
+                Result.success(fingerprint)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
-    }
-
 
 
 }

@@ -6,5 +6,6 @@ import java.util.UUID
 @Serializable
 data class PeerRegisterPayload(
     val pin: String,
-    val nonce: String = UUID.randomUUID().toString()
+    val nonce: String = UUID.randomUUID().toString(),
+    val autoAccept: Boolean = false,
 )

@@ -64,7 +64,8 @@ class ScanQrCodeFragment :
                             ip = payload.connectCode,
                             port = payload.port.toString(),
                             hash = payload.certificateHash,
-                            pin = payload.pin
+                            pin = payload.pin,
+                            autoUpload = true
                         )
 
                     } catch (e: Exception) {
