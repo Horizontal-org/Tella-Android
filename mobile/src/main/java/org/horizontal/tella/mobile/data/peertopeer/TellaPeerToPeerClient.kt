@@ -141,7 +141,7 @@ class TellaPeerToPeerClient {
 
         val requestPayload = PrepareUploadRequest(title, sessionId, fileItems)
         val jsonPayload = Json.encodeToString(requestPayload)
-        val requestBody = jsonPayload.toRequestBody("application/json".toMediaType())
+        val requestBody = jsonPayload.toRequestBody()
         val client = getClientWithFingerprintValidation(expectedFingerprint)
 
         try {
