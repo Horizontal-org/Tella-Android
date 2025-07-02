@@ -22,9 +22,11 @@ object CertificateGenerator {
     fun generateCertificate(
         commonName: String = "Tella Android",
         organization: String = "Tella",
-        validityDays: Int = 365,
+        validityDays: Int = 7,
         ipAddress: String
     ): Pair<KeyPair, X509Certificate> {
+        require(ipAddress.isNotBlank()) { "IP address must not be empty when generating a certificate." }
+
         val keyGen = KeyPairGenerator.getInstance("RSA")
         keyGen.initialize(2048)
         val keyPair = keyGen.generateKeyPair()
@@ -41,18 +43,16 @@ object CertificateGenerator {
             issuer, serialNumber, now, validTo, subject, keyPair.public
         )
 
-        if (ipAddress.isNotEmpty()) {
-            val san = org.bouncycastle.asn1.x509.GeneralNames(
-                org.bouncycastle.asn1.x509.GeneralName(
-                    org.bouncycastle.asn1.x509.GeneralName.iPAddress, ipAddress
-                )
+        val san = org.bouncycastle.asn1.x509.GeneralNames(
+            org.bouncycastle.asn1.x509.GeneralName(
+                org.bouncycastle.asn1.x509.GeneralName.iPAddress, ipAddress
             )
-            certBuilder.addExtension(
-                org.bouncycastle.asn1.x509.Extension.subjectAlternativeName,
-                false,
-                san
-            )
-        }
+        )
+        certBuilder.addExtension(
+            org.bouncycastle.asn1.x509.Extension.subjectAlternativeName,
+            false,
+            san
+        )
 
         val signer = JcaContentSignerBuilder("SHA256withRSA")
             .build(keyPair.private)
@@ -64,5 +64,6 @@ object CertificateGenerator {
 
         return Pair(keyPair, certificate)
     }
+
 
 }
