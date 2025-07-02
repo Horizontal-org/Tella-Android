@@ -42,9 +42,9 @@ class TellaPeerToPeerServer(
     private val keyPair: KeyPair,
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
-    private val peerToPeerManager: PeerToPeerManager
+    private val peerToPeerManager: PeerToPeerManager,
 ) : TellaServer {
-
+    private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
 
     override val certificatePem: String
@@ -99,12 +99,15 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        val registrationId = UUID.randomUUID().toString()
+                        val sessionId = UUID.randomUUID().toString()
+                        val session = PeerResponse(sessionId)
+                        // Store the session in a shared serverSession variable
+                        serverSession = session
 
                        // val accepted = if (request.autoAccept) {
                          //   true // Automatically accept
                         //} else {
-                        val accepted =   PeerEventManager.emitIncomingRegistrationRequest(registrationId, request)
+                        val accepted =   PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
                         //}
 
                         if (!accepted) {
@@ -115,8 +118,7 @@ class TellaPeerToPeerServer(
                         launch {
                             PeerEventManager.emitRegistrationSuccess()
                         }
-
-                        call.respond(HttpStatusCode.OK, PeerResponse(registrationId))
+                        call.respond(HttpStatusCode.OK, session)
                     }
 
                     post("/api/v1/prepare-upload") {
@@ -132,6 +134,11 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
+                        if (request.sessionId != serverSession?.sessionId) {
+                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                            return@post
+                        }
+
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
 
                         if (accepted) {
@@ -143,11 +150,6 @@ class TellaPeerToPeerServer(
                         } else {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
                         }
-//                        val transmissionId = UUID.randomUUID().toString()
-//                        call.respond(
-//                            HttpStatusCode.OK,
-//                            PeerPrepareUploadResponse(transmissionId)
-//                        )
                     }
                 }
 

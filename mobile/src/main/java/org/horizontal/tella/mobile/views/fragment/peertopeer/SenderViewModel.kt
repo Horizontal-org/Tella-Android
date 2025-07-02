@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
@@ -71,28 +72,44 @@ class SenderViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = peerClient.prepareUpload(
+            when (val result = peerClient.prepareUpload(
                 ip = info.ip,
                 port = info.port,
                 expectedFingerprint = info.expectedFingerprint,
                 title = title,
                 files = files,
                 sessionId = info.sessionId
-            )
+            )) {
+                is PrepareUploadResult.Success -> {
+                    Timber.d("Success: transmissionId = ${result.transmissionId}")
+                    _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissionId))
+                }
 
-            result.onSuccess { transmissionId ->
-                Timber.d("Success: transmissionId = $transmissionId")
-                _prepareResults.postValue(PeerPrepareUploadResponse(transmissionId))
-            }.onFailure { error ->
-                //  if (error.message?.contains("403") == true) {
-                withContext(Dispatchers.Main) {
-                    _prepareRejected.value = Event(true)
+                is PrepareUploadResult.Forbidden -> {
+                    withContext(Dispatchers.Main) {
+                        Timber.w("Upload rejected by receiver")
+                        _prepareRejected.value = Event(true)
+                    }
+                }
+
+                is PrepareUploadResult.BadRequest -> {
+                    Timber.e("Bad request – possibly invalid data")
+                }
+
+                is PrepareUploadResult.Conflict -> {
+                    Timber.e("Upload conflict – another session may be active")
+                }
+
+                is PrepareUploadResult.ServerError -> {
+                    Timber.e("Internal server error – try again later")
+                }
+
+                is PrepareUploadResult.Failure -> {
+                    Timber.e(result.exception, "Unhandled error during upload")
                 }
             }
         }
     }
-
-
 }
 
 

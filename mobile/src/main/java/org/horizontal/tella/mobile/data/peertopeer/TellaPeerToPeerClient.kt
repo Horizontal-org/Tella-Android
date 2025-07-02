@@ -12,6 +12,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.json.JSONObject
@@ -125,7 +126,7 @@ class TellaPeerToPeerClient {
         title: String,
         files: List<VaultFile>,
         sessionId: String
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): PrepareUploadResult = withContext(Dispatchers.IO) {
         val url = "https://$ip:$port/api/v1/prepare-upload"
 
         val fileItems = files.map {
@@ -150,41 +151,31 @@ class TellaPeerToPeerClient {
                 .addHeader("Content-Type", "application/json")
                 .build()
 
-            return@withContext client.newCall(request).execute().use { response ->
+            client.newCall(request).execute().use { response ->
                 val body = response.body?.string()
 
                 if (response.isSuccessful && body != null) {
-                    try {
+                    return@withContext try {
                         val transmissionId = JSONObject(body).getString("transmissionId")
-                        Result.success(transmissionId)
+                        PrepareUploadResult.Success(transmissionId)
                     } catch (e: Exception) {
                         Log.e("PrepareUpload", "Invalid JSON response: $body", e)
-                        Result.failure(Exception("Malformed server response"))
+                        PrepareUploadResult.Failure(Exception("Malformed server response"))
                     }
                 } else {
                     Log.e("PrepareUpload", "Server error ${response.code}: ${response.message}")
-                    when (response.code) {
-                        400 -> Log.e(
-                            "PrepareUpload",
-                            "Bad Request – likely missing or invalid fields."
-                        )
-
-                        403 -> Log.e(
-                            "PrepareUpload",
-                            "Forbidden – the server is refusing the request."
-                        )
-
-                        409 -> Log.e("PrepareUpload", "Conflict – maybe another active session.")
-                        500 -> Log.e("PrepareUpload", "Internal Server Error – try again later.")
-                        else -> Log.e("PrepareUpload", "Unhandled server error code.")
+                    return@withContext when (response.code) {
+                        400 -> PrepareUploadResult.BadRequest
+                        403 -> PrepareUploadResult.Forbidden
+                        409 -> PrepareUploadResult.Conflict
+                        500 -> PrepareUploadResult.ServerError
+                        else -> PrepareUploadResult.Failure(Exception("Unhandled server error ${response.code}"))
                     }
-                    Result.failure(Exception("Server returned error ${response.code}"))
                 }
             }
-
         } catch (e: Exception) {
             Log.e("PrepareUpload", "Exception during upload: ${e.message}", e)
-            Result.failure(e)
+            PrepareUploadResult.Failure(e)
         }
     }
 
