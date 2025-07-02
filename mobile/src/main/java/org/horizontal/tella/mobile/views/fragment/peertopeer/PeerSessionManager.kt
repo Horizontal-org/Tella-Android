@@ -10,7 +10,8 @@ data class PeerConnectionInfo(
     val expectedFingerprint: String = "",
     val sessionId: String = "",
     val hash: String = "",
-    val pin: Int = 0
+    val pin: Int = 0,
+    var transmissionId: String? = null
 )
 
 object PeerSessionManager {
@@ -29,6 +30,11 @@ object PeerSessionManager {
 
     fun isSessionValid(): Boolean = connectionInfo != null
 
+    fun setTransmissionId(id: String) {
+        connectionInfo?.transmissionId = id
+    }
+
+    fun getTransmissionId(): String? = connectionInfo?.transmissionId
     fun clear() {
         connectionInfo = null
     }

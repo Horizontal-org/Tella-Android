@@ -6,7 +6,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -15,6 +14,8 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
+import org.horizontal.tella.mobile.util.FileUtil.getMimeType
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
 import java.security.SecureRandom
 import java.security.cert.CertificateException
@@ -130,11 +131,12 @@ class TellaPeerToPeerClient {
         val url = "https://$ip:$port/api/v1/prepare-upload"
 
         val fileItems = files.map {
+            val mimeType = getMimeType(it.name) ?: "application/octet-stream"
             P2PFile(
                 id = it.id,
                 fileName = it.name,
                 size = it.size,
-                fileType = "application/octet-stream",
+                fileType = mimeType,
                 sha256 = it.hash
             )
         }
@@ -157,6 +159,8 @@ class TellaPeerToPeerClient {
                 if (response.isSuccessful && body != null) {
                     return@withContext try {
                         val transmissionId = JSONObject(body).getString("transmissionId")
+                        // Store it in the session manager
+                        PeerSessionManager.setTransmissionId(transmissionId)
                         PrepareUploadResult.Success(transmissionId)
                     } catch (e: Exception) {
                         Log.e("PrepareUpload", "Invalid JSON response: $body", e)
