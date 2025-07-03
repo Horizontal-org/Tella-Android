@@ -211,7 +211,7 @@ class PeerToPeerViewModel @Inject constructor(
         autoUpload: Boolean
     ) {
         viewModelScope.launch {
-            val result = peerClient.registerPeerDevice(ip, port, hash, pin, autoUpload)
+            val result = peerClient.registerPeerDevice(ip, port, hash, pin)
             result.onSuccess { sessionId ->
                 PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
                 // update UI state

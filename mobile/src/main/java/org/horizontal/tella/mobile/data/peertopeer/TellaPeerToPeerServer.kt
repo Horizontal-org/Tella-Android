@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
@@ -83,7 +84,7 @@ class TellaPeerToPeerServer(
                         call.respondText("The server is running securely over HTTPS.")
                     }
 
-                    post("/api/v1/ping") {
+                    post(PeerApiRoutes.PING) {
                         val hash = CertificateUtils.getPublicKeyHash(certificate)
                         CoroutineScope(Dispatchers.IO).launch {
                             peerToPeerManager.notifyClientConnected(hash)
@@ -91,7 +92,7 @@ class TellaPeerToPeerServer(
                         call.respondText("pong", status = HttpStatusCode.OK)
                     }
 
-                    post("/api/v1/register") {
+                    post(PeerApiRoutes.REGISTER) {
                         val request = try {
                             call.receive<PeerRegisterPayload>()
                         } catch (e: Exception) {
@@ -121,7 +122,7 @@ class TellaPeerToPeerServer(
                         call.respond(HttpStatusCode.OK, session)
                     }
 
-                    post("/api/v1/prepare-upload") {
+                    post(PeerApiRoutes.PREPARE_UPLOAD) {
                         val request = try {
                             call.receive<PrepareUploadRequest>()
                         } catch (e: Exception) {

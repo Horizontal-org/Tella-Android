@@ -10,6 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
@@ -17,6 +18,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
+import timber.log.Timber
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -65,9 +67,10 @@ class TellaPeerToPeerClient {
         port: String,
         expectedFingerprint: String,
         pin: String,
-        autoUpload: Boolean
     ): Result<String> = withContext(Dispatchers.IO) {
-        val url = "https://$ip:$port/api/v1/register"
+
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
+
         Log.d("PeerClient", "Connecting to: $url")
 
         try {
@@ -90,6 +93,7 @@ class TellaPeerToPeerClient {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     val errorBody = response.body.string()
+                    TODO("WE SHOULD USE TIMBER INSTEAD")
                     Log.e(
                         "PeerClient", """
                     HTTP ${response.code} Error
@@ -128,7 +132,8 @@ class TellaPeerToPeerClient {
         files: List<VaultFile>,
         sessionId: String
     ): PrepareUploadResult = withContext(Dispatchers.IO) {
-        val url = "https://$ip:$port/api/v1/prepare-upload"
+
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
 
         val fileItems = files.map {
             val mimeType = getMimeType(it.name) ?: "application/octet-stream"
@@ -182,23 +187,6 @@ class TellaPeerToPeerClient {
             PrepareUploadResult.Failure(e)
         }
     }
-
-
-    suspend fun fetchServerFingerprint(ip: String, port: Int): Result<String> =
-        withContext(Dispatchers.IO) {
-            try {
-                val socket = SSLSocketFactory.getDefault()
-                    .createSocket(ip, port) as SSLSocket
-                socket.soTimeout = 5000
-                socket.startHandshake()
-
-                val cert = socket.session.peerCertificates[0] as X509Certificate
-                val fingerprint = CertificateUtils.getPublicKeyHash(cert)
-                Result.success(fingerprint)
-            } catch (e: Exception) {
-                Result.failure(e)
-            }
-        }
 
 
 }
