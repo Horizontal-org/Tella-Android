@@ -2,14 +2,17 @@ package org.horizontal.tella.mobile.data.peertopeer
 
 import android.util.Log
 import com.hzontal.tella_vault.VaultFile
-import kotlinx.serialization.encodeToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
@@ -18,15 +21,12 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
-import timber.log.Timber
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
@@ -77,7 +77,7 @@ class TellaPeerToPeerClient {
             val payload = PeerRegisterPayload(
                 pin = pin,
                 nonce = UUID.randomUUID().toString(),
-             //   autoUpload
+                //   autoUpload
             )
 
             val jsonPayload = Json.encodeToString(payload)
@@ -87,7 +87,7 @@ class TellaPeerToPeerClient {
             val request = Request.Builder()
                 .url(url)
                 .post(requestBody)
-                .addHeader("Content-Type", "application/json")
+                .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -105,8 +105,8 @@ class TellaPeerToPeerClient {
                     return@use Result.failure(Exception("HTTP ${response.code}: $errorBody"))
                 }
 
-                val contentType = response.header("Content-Type") ?: ""
-                if (!contentType.contains("application/json")) {
+                val contentType = response.header(CONTENT_TYPE) ?: ""
+                if (!contentType.contains(CONTENT_TYPE_JSON)) {
                     Log.w("PeerClient", "Unexpected Content-Type: $contentType")
                 }
 
@@ -136,7 +136,7 @@ class TellaPeerToPeerClient {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
 
         val fileItems = files.map {
-            val mimeType = getMimeType(it.name) ?: "application/octet-stream"
+            val mimeType = getMimeType(it.name) ?: CONTENT_TYPE_OCTET
             P2PFile(
                 id = it.id,
                 fileName = it.name,
@@ -155,7 +155,7 @@ class TellaPeerToPeerClient {
             val request = Request.Builder()
                 .url(url)
                 .post(requestBody)
-                .addHeader("Content-Type", "application/json")
+                .addHeader(PeerToPeerConstants.CONTENT_TYPE, PeerToPeerConstants.CONTENT_TYPE_JSON)
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -163,7 +163,8 @@ class TellaPeerToPeerClient {
 
                 if (response.isSuccessful && body != null) {
                     return@withContext try {
-                        val transmissionId = JSONObject(body).getString("transmissionId")
+                        val transmissionId =
+                            JSONObject(body).getString(PeerToPeerConstants.TRANSMISSION_ID_KEY)
                         // Store it in the session manager
                         PeerSessionManager.setTransmissionId(transmissionId)
                         PrepareUploadResult.Success(transmissionId)
