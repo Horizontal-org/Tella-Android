@@ -105,14 +105,18 @@ class TellaPeerToPeerServer(
                         // Store the session in a shared serverSession variable
                         serverSession = session
 
-                       // val accepted = if (request.autoAccept) {
-                         //   true // Automatically accept
+                        // val accepted = if (request.autoAccept) {
+                        //   true // Automatically accept
                         //} else {
-                        val accepted =   PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
+                        val accepted =
+                            PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
                         //}
 
                         if (!accepted) {
-                            call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
+                            call.respond(
+                                HttpStatusCode.Forbidden,
+                                "Receiver rejected the registration"
+                            )
                             return@post
                         }
 

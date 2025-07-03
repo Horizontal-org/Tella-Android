@@ -64,8 +64,7 @@ class ScanQrCodeFragment :
                             ip = payload.ipAddress,
                             port = payload.port.toString(),
                             hash = payload.certificateHash,
-                            pin = payload.pin,
-                            autoUpload = true
+                            pin = payload.pin
                         )
 
                     } catch (e: Exception) {
@@ -117,7 +116,7 @@ class ScanQrCodeFragment :
         }
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 navManager().navigateFromScanQrCodeToPrepareUploadFragment()

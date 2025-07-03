@@ -50,8 +50,7 @@ class SenderVerificationFragment :
                 ip = peerConnectionInfo.ip,
                 port = peerConnectionInfo.port,
                 hash = peerConnectionInfo.hash,
-                pin = peerConnectionInfo.pin.toString(),
-                autoUpload = false
+                pin = peerConnectionInfo.pin.toString()
             )
         }
 
