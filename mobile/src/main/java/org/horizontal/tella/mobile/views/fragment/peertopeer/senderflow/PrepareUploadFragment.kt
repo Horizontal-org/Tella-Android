@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,14 +14,16 @@ import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.bus.EventObserver
+import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.CAPTURE_WITH_AUTO_UPLOAD
-import org.horizontal.tella.mobile.views.activity.viewer.sharedViewModel
 import org.horizontal.tella.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
@@ -31,6 +31,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_RE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OnNavBckListener
 import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
+import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.REPORT_ENTRY
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
@@ -42,6 +43,8 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import org.hzontal.shared_ui.utils.DialogUtils
 
+var PREPARE_UPLOAD_ENTRY = "PREPARE_UPLOAD_ENTRY"
+
 @AndroidEntryPoint
 class PrepareUploadFragment :
     BaseBindingFragment<FragmentPrepareUploadBinding>(FragmentPrepareUploadBinding::inflate),
@@ -51,6 +54,8 @@ class PrepareUploadFragment :
     private var reportInstance: ReportInstance? = null
     private val viewModel: SenderViewModel by viewModels()
     private var isNewDraft = true
+    private var disposables =
+        MyApplication.bus().createCompositeDisposable()
 
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(this)
@@ -68,6 +73,7 @@ class PrepareUploadFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
         initData()
+        onAudioRecordingListener()
     }
 
     private fun initView() {
@@ -108,30 +114,31 @@ class PrepareUploadFragment :
             }
 
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
-                val id = response.transmissionId
+            val id = response.transmissionId
             DialogUtils.showBottomMessage(
                 baseActivity,
                 getString(R.string.the_receiver_accepted_the_files_transfer),
                 false,
                 3000
             )
-                // navigate to next screen
+            // navigate to next screen
         }
 
-        binding.toolbar.backClickListener = {  BottomSheetUtils.showConfirmSheet(
-            baseActivity.supportFragmentManager,
-            getString((R.string.exit_nearby_sharing)),
-            getString(R.string.your_progress_will_be_lost),
-            getString(R.string.action_exit),
-            getString(R.string.action_cancel),
-            object : BottomSheetUtils.ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    if (isConfirmed) {
-                        findNavController().popBackStack()
+        binding.toolbar.backClickListener = {
+            BottomSheetUtils.showConfirmSheet(
+                baseActivity.supportFragmentManager,
+                getString((R.string.exit_nearby_sharing)),
+                getString(R.string.your_progress_will_be_lost),
+                getString(R.string.action_exit),
+                getString(R.string.action_cancel),
+                object : BottomSheetUtils.ActionConfirmed {
+                    override fun accept(isConfirmed: Boolean) {
+                        if (isConfirmed) {
+                            findNavController().popBackStack()
+                        }
                     }
                 }
-            }
-        )
+            )
         }
         highLightButtonsInit()
         checkIsNewDraftEntry()
@@ -144,7 +151,6 @@ class PrepareUploadFragment :
             binding.sendReportBtn.text = getString(R.string.Send_Action_Label)
         }
     }
-
 
 
     private fun highLightButtonsInit() {
@@ -245,6 +251,9 @@ class PrepareUploadFragment :
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+        val intent = Intent(activity, MicActivity::class.java)
+        intent.putExtra(PREPARE_UPLOAD_ENTRY, true)
+        baseActivity.startActivity(intent)
     }
 
     @Deprecated("Deprecated in Java")
@@ -271,7 +280,7 @@ class PrepareUploadFragment :
 
     private fun highLightButtons() {
         val isSubmitEnabled =
-            isTitleEnabled  && filesRecyclerViewAdapter.getFiles()
+            isTitleEnabled && filesRecyclerViewAdapter.getFiles()
                 .isNotEmpty()
 
         val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
@@ -289,7 +298,10 @@ class PrepareUploadFragment :
                 if (isSubmitEnabled) {
                     val selectedFiles = filesRecyclerViewAdapter.getFiles()
                     if (selectedFiles.isNotEmpty()) {
-                        bundle.putSerializable("selectedFiles", ArrayList(selectedFiles)) // assuming VaultFile is Serializable
+                        bundle.putSerializable(
+                            "selectedFiles",
+                            ArrayList(selectedFiles)
+                        ) // assuming VaultFile is Serializable
                         // navigate to waiting view
                         navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                     } else {
@@ -301,6 +313,7 @@ class PrepareUploadFragment :
             }
         }
     }
+
     private fun showSubmitReportErrorSnackBar() {
         val errorRes = R.string.Snackbar_Submit_Files_Error
 
@@ -321,6 +334,16 @@ class PrepareUploadFragment :
     override fun onBackPressed(): Boolean {
         exitOrSave()
         return true
+    }
+
+    private fun onAudioRecordingListener() {
+        disposables.wire(
+            AudioRecordEvent::class.java,
+            object : EventObserver<AudioRecordEvent?>() {
+                override fun onNext(event: AudioRecordEvent) {
+                    putFiles(listOf(event.vaultFile))
+                }
+            })
     }
 
 }

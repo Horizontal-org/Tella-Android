@@ -33,6 +33,7 @@ import org.horizontal.tella.mobile.views.activity.MetadataActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.VAULT_CURRENT_ROOT_PARENT
 import org.horizontal.tella.mobile.views.activity.viewer.toolBar
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
+import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PREPARE_UPLOAD_ENTRY
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import java.util.Locale
 import java.util.UUID
@@ -44,6 +45,7 @@ class MicActivity : MetadataActivity(),
     private var animator: ObjectAnimator? = null
     private var isCollect: Boolean = false
     private var isReport: Boolean = false
+    private var isPrepareUpload = false
     private var notRecording = false
     private var lastUpdateTime: Long = 0
     private var isAddingInProgress = false
@@ -75,6 +77,7 @@ class MicActivity : MetadataActivity(),
         if (intent != null) {
             isCollect = intent.getBooleanExtra(COLLECT_ENTRY, false)
             isReport = intent.getBooleanExtra(REPORT_ENTRY, false)
+            isPrepareUpload = intent.getBooleanExtra(PREPARE_UPLOAD_ENTRY, false)
             currentRootParent = intent.getStringExtra(VAULT_CURRENT_ROOT_PARENT)
         }
 
@@ -93,11 +96,11 @@ class MicActivity : MetadataActivity(),
         recordingName = findViewById(R.id.rec_name)
         toolBar = findViewById(R.id.toolbar)
 
-        if (isCollect || isReport || currentRootParent?.isNotEmpty() == true) {
+        if (isCollect || isReport || isPrepareUpload || currentRootParent?.isNotEmpty() == true) {
             mPlay.visibility = View.GONE
         }
 
-        if (isCollect || currentRootParent?.isNotEmpty() == true) {
+        if (isCollect || isPrepareUpload || currentRootParent?.isNotEmpty() == true) {
             toolBar.navigationIcon =
                 ContextCompat.getDrawable(this, R.drawable.ic_close_white)
 
@@ -304,7 +307,7 @@ class MicActivity : MetadataActivity(),
     }
 
     private fun maybeReturnCollectRecording(vaultFile: VaultFile?) {
-        if (isCollect) {
+        if (isCollect || isPrepareUpload) {
             MyApplication.bus().post(AudioRecordEvent(vaultFile))
         }
         if (isReport) {

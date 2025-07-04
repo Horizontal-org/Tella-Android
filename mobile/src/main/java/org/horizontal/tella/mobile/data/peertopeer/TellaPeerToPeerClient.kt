@@ -127,7 +127,7 @@ class TellaPeerToPeerClient {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
 
         val fileItems = files.map {
-            val mimeType = getMimeType(it.name) ?: CONTENT_TYPE_OCTET
+            val mimeType = it.mimeType ?: CONTENT_TYPE_OCTET
             P2PFile(
                 id = it.id,
                 fileName = it.name,
@@ -150,7 +150,7 @@ class TellaPeerToPeerClient {
                 .build()
 
             client.newCall(request).execute().use { response ->
-                val body = response.body?.string()
+                val body = response.body.string()
 
                 if (response.isSuccessful && body != null) {
                     return@withContext try {
@@ -172,6 +172,7 @@ class TellaPeerToPeerClient {
                         500 -> PrepareUploadResult.ServerError
                         else -> PrepareUploadResult.Failure(Exception("Unhandled server error ${response.code}"))
                     }
+
                 }
             }
         } catch (e: Exception) {
