@@ -1,6 +1,5 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
-import android.util.Log
 import com.hzontal.tella_vault.VaultFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,6 +20,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
+import timber.log.Timber
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -70,9 +70,7 @@ class TellaPeerToPeerClient {
     ): Result<String> = withContext(Dispatchers.IO) {
 
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
-
-        Log.d("PeerClient", "Connecting to: $url")
-
+        Timber.d("Connecting to: $url")
         try {
             val payload = PeerRegisterPayload(
                 pin = pin,
@@ -93,21 +91,14 @@ class TellaPeerToPeerClient {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
                     val errorBody = response.body.string()
-                    TODO("WE SHOULD USE TIMBER INSTEAD")
-                    Log.e(
-                        "PeerClient", """
-                    HTTP ${response.code} Error
-                    URL: $url
-                    Headers: ${response.headers}
-                    Body: $errorBody
-                """.trimIndent()
-                    )
+                    Timber.e( """HTTP ${response.code} Error URL: $url Headers: ${response.headers}  Body: $errorBody """.trimIndent())
                     return@use Result.failure(Exception("HTTP ${response.code}: $errorBody"))
                 }
 
                 val contentType = response.header(CONTENT_TYPE) ?: ""
                 if (!contentType.contains(CONTENT_TYPE_JSON)) {
-                    Log.w("PeerClient", "Unexpected Content-Type: $contentType")
+                    Timber.e("PeerClient Unexpected Content-Type: %s", contentType)
+
                 }
 
                 val body = response.body?.string() ?: ""
@@ -119,7 +110,7 @@ class TellaPeerToPeerClient {
                 }
             }
         } catch (e: Exception) {
-            Log.e("PeerClient", "Request failed", e)
+            Timber.e(e, "PeerClient Request failed")
             Result.failure(e)
         }
     }
@@ -155,7 +146,7 @@ class TellaPeerToPeerClient {
             val request = Request.Builder()
                 .url(url)
                 .post(requestBody)
-                .addHeader(PeerToPeerConstants.CONTENT_TYPE, PeerToPeerConstants.CONTENT_TYPE_JSON)
+                .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -169,11 +160,11 @@ class TellaPeerToPeerClient {
                         PeerSessionManager.setTransmissionId(transmissionId)
                         PrepareUploadResult.Success(transmissionId)
                     } catch (e: Exception) {
-                        Log.e("PrepareUpload", "Invalid JSON response: $body", e)
+                        Timber.e(e, "Invalid JSON response: %s", body)
                         PrepareUploadResult.Failure(Exception("Malformed server response"))
                     }
                 } else {
-                    Log.e("PrepareUpload", "Server error ${response.code}: ${response.message}")
+                    Timber.e("Server error %d: %s", response.code, response.message)
                     return@withContext when (response.code) {
                         400 -> PrepareUploadResult.BadRequest
                         403 -> PrepareUploadResult.Forbidden
@@ -184,7 +175,7 @@ class TellaPeerToPeerClient {
                 }
             }
         } catch (e: Exception) {
-            Log.e("PrepareUpload", "Exception during upload: ${e.message}", e)
+            Timber.e(e, "Exception during upload")
             PrepareUploadResult.Failure(e)
         }
     }
