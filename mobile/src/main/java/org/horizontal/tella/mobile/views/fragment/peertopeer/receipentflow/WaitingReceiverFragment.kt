@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import org.hzontal.shared_ui.utils.DialogUtils
 
 /**

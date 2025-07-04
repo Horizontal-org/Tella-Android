@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -15,9 +16,9 @@ import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_T
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
+import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
-import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
 import timber.log.Timber
@@ -67,21 +68,22 @@ class TellaPeerToPeerClient {
         port: String,
         expectedFingerprint: String,
         pin: String,
-    ): Result<String> = withContext(Dispatchers.IO) {
+    ): RegisterPeerResult = withContext(Dispatchers.IO) {
 
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
         Timber.d("Connecting to: $url")
+
         try {
             val payload = PeerRegisterPayload(
                 pin = pin,
-                nonce = UUID.randomUUID().toString(),
-                //   autoUpload
+                nonce = UUID.randomUUID().toString()
             )
 
             val jsonPayload = Json.encodeToString(payload)
             val requestBody = jsonPayload.toRequestBody()
 
             val client = getClientWithFingerprintValidation(expectedFingerprint)
+
             val request = Request.Builder()
                 .url(url)
                 .post(requestBody)
@@ -89,31 +91,36 @@ class TellaPeerToPeerClient {
                 .build()
 
             client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    val errorBody = response.body.string()
-                    Timber.e( """HTTP ${response.code} Error URL: $url Headers: ${response.headers}  Body: $errorBody """.trimIndent())
-                    return@use Result.failure(Exception("HTTP ${response.code}: $errorBody"))
+                val body = response.body?.string().orEmpty()
+
+                if (response.isSuccessful) {
+                    return@use try {
+                        val json = JSONObject(body)
+                        val sessionId = json.getString("sessionId")
+                        RegisterPeerResult.Success(sessionId)
+                    } catch (e: Exception) {
+                        RegisterPeerResult.Failure(Exception("Malformed JSON: ${e.message}"))
+                    }
                 }
 
-                val contentType = response.header(CONTENT_TYPE) ?: ""
-                if (!contentType.contains(CONTENT_TYPE_JSON)) {
-                    Timber.e("PeerClient Unexpected Content-Type: %s", contentType)
-
-                }
-
-                val body = response.body?.string() ?: ""
-                return@use try {
-                    val json = JSONObject(body)
-                    Result.success(json.getString("sessionId"))
-                } catch (e: Exception) {
-                    Result.failure(Exception("Invalid JSON response: ${e.message}"))
+                // Handle known status codes
+                return@use when (response.code) {
+                    400 -> RegisterPeerResult.InvalidFormat
+                    401 -> RegisterPeerResult.InvalidPin
+                    403 -> RegisterPeerResult.RejectedByReceiver
+                    409 -> RegisterPeerResult.Conflict
+                    429 -> RegisterPeerResult.TooManyRequests
+                    500 -> RegisterPeerResult.ServerError
+                    else -> RegisterPeerResult.Failure(Exception("Unhandled error ${response.code}: $body"))
                 }
             }
+
         } catch (e: Exception) {
-            Timber.e(e, "PeerClient Request failed")
-            Result.failure(e)
+            Timber.e(e, "registerPeerDevice failed")
+            return@withContext RegisterPeerResult.Failure(e)
         }
     }
+
 
     suspend fun prepareUpload(
         ip: String,

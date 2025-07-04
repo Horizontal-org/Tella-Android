@@ -29,7 +29,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerEventManager
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
@@ -40,6 +40,7 @@ const val port = 53317
 class TellaPeerToPeerServer(
     private val ip: String,
     private val serverPort: Int = port,
+    private val pin: Int,
     private val keyPair: KeyPair,
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
@@ -96,21 +97,36 @@ class TellaPeerToPeerServer(
                         val request = try {
                             call.receive<PeerRegisterPayload>()
                         } catch (e: Exception) {
-                            call.respond(HttpStatusCode.BadRequest, "Invalid request body")
+                            call.respond(HttpStatusCode.BadRequest, "Invalid request format")
                             return@post
                         }
 
+                        //TODO CHECK IF THE PIN IS CORRECT
+                        if (!isValidPin(request.pin) || pin.toString() != request.pin) {
+                            call.respond(HttpStatusCode.Unauthorized, "Invalid PIN")
+                            return@post
+                        }
+
+                        if (serverSession != null) {
+                            call.respond(HttpStatusCode.Conflict, "Active session already exists")
+                            return@post
+                        }
+
+                        // if (isRateLimited(...)) {
+                        //     call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
+                        //     return@post
+                        // }
+
                         val sessionId = UUID.randomUUID().toString()
                         val session = PeerResponse(sessionId)
-                        // Store the session in a shared serverSession variable
                         serverSession = session
 
-                        // val accepted = if (request.autoAccept) {
-                        //   true // Automatically accept
-                        //} else {
-                        val accepted =
+                        val accepted = try {
                             PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
-                        //}
+                        } catch (e: Exception) {
+                            call.respond(HttpStatusCode.InternalServerError, "Internal error")
+                            return@post
+                        }
 
                         if (!accepted) {
                             call.respond(
@@ -123,8 +139,10 @@ class TellaPeerToPeerServer(
                         launch {
                             PeerEventManager.emitRegistrationSuccess()
                         }
+
                         call.respond(HttpStatusCode.OK, session)
                     }
+
 
                     post(PeerApiRoutes.PREPARE_UPLOAD) {
                         val request = try {
@@ -164,5 +182,9 @@ class TellaPeerToPeerServer(
 
     override fun stop() {
         engine?.stop(1000, 5000)
+    }
+
+    private fun isValidPin(pin: String): Boolean {
+        return pin.length == 6 // or whatever your rule is
     }
 }

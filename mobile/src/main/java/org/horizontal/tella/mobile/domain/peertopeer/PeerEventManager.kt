@@ -1,10 +1,9 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.domain.peertopeer
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
-import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 
 /**
  * Created by wafa on 3/6/2025.

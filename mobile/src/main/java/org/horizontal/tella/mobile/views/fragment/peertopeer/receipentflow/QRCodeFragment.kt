@@ -63,17 +63,19 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val (keyPair, certificate) = CertificateGenerator.generateCertificate(ipAddress = ip)
         val config = KeyStoreConfig()
 
-        peerServerStarterManager.startServer(ip, keyPair, certificate, config)
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
-        val pin = (100000..999999).random().toString()
+        val pin = (100000..999999).random()
         val port = port
+
+        peerServerStarterManager.startServer(ip, keyPair, pin, certificate, config)
+
 
         payload = PeerConnectionPayload(
             ipAddress = ip,
             port = port,
             certificateHash = certHash,
-            pin = pin
+            pin = pin.toString()
         )
 
         qrPayload = Gson().toJson(payload)

@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,7 @@ import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
 
 /**
  * Created by wafa on 3/6/2025.

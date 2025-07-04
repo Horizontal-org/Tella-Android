@@ -109,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/waitingReceiverFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingReceiverFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.WaitingReceiverFragment"
         tools:layout="@layout/fragment_waiting"
         android:label="WaitingReceiverFragment" >
         <action
@@ -128,7 +128,7 @@
         android:label="RecipientSuccessFragment" />
     <fragment
         android:id="@+id/waitingSenderFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.WaitingSenderFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.WaitingSenderFragment"
         tools:layout="@layout/fragment_waiting"
         android:label="WaitingSenderFragment" />
 

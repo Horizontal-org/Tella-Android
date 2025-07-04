@@ -5,9 +5,9 @@ package org.horizontal.tella.mobile.data.peertopeer.remote
  */
 sealed class PrepareUploadResult {
     data class Success(val transmissionId: String) : PrepareUploadResult()
-    object Forbidden : PrepareUploadResult()
-    object BadRequest : PrepareUploadResult()
-    object Conflict : PrepareUploadResult()
-    object ServerError : PrepareUploadResult()
+    data object Forbidden : PrepareUploadResult()
+    data object BadRequest : PrepareUploadResult()
+    data object Conflict : PrepareUploadResult()
+    data object ServerError : PrepareUploadResult()
     data class Failure(val exception: Throwable) : PrepareUploadResult()
 }

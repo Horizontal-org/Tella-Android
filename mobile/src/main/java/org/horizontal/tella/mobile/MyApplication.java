@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.http.HttpResponseCache;
 import android.os.Build;
 import android.os.StrictMode;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.hilt.work.HiltWorkerFactory;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 import androidx.work.Configuration;
 
@@ -169,6 +171,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        MultiDex.install(this);
         CommonPrefs.getInstance().init(newBase);
         SharedPrefs.getInstance().init(newBase);
         super.attachBaseContext(LocaleManager.getInstance().getLocalizedContext(newBase));

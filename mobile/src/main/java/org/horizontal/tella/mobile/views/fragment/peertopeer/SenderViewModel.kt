@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
+import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,8 +47,8 @@ class SenderViewModel @Inject constructor(
                                     .subscribeOn(Schedulers.io())
                                     .onErrorReturn { null } // safe, allows null
                             }
-                            .filter { it != null } // filter out nulls
-                            .map { it!! } // safe to force unwrap if you're sure it's not null now
+                            .filter { true } // filter out nulls
+                            .map { it } // safe to force unwrap if you're sure it's not null now
                             .toList()
                     }
             }

@@ -16,11 +16,18 @@ class PeerServerStarterManager @Inject constructor(
 ) {
     private var server: TellaPeerToPeerServer? = null
 
-    fun startServer(ip: String, keyPair: KeyPair, cert: X509Certificate, config: KeyStoreConfig) {
+    fun startServer(
+        ip: String,
+        keyPair: KeyPair,
+        pin: Int,
+        cert: X509Certificate,
+        config: KeyStoreConfig
+    ) {
         if (server == null) {
             server = TellaPeerToPeerServer(
                 ip = ip,
                 keyPair = keyPair,
+                pin = pin,
                 certificate = cert,
                 keyStoreConfig = config,
                 peerToPeerManager = peerToPeerManager

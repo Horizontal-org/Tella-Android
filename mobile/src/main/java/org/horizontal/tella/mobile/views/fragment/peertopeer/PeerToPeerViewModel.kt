@@ -17,7 +17,9 @@ import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
 import timber.log.Timber
@@ -98,17 +100,44 @@ class PeerToPeerViewModel @Inject constructor(
         pin: String
     ) {
         viewModelScope.launch {
-            val result = peerClient.registerPeerDevice(ip, port, hash, pin)
-            result.onSuccess { sessionId ->
-                PeerSessionManager.saveConnectionInfo(ip, port, hash, sessionId)
-                // update UI state
-                _registrationSuccess.postValue(true)
-            }.onFailure { error ->
-                Timber.d("error ***** $error")
+            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
+                is RegisterPeerResult.Success -> {
+                    PeerSessionManager.saveConnectionInfo(ip, port, hash, result.sessionId)
+                    _registrationSuccess.postValue(true)
+                }
 
+                RegisterPeerResult.InvalidPin -> {
+                    _getHashError.postValue(Exception("Invalid PIN"))
+                }
+
+                RegisterPeerResult.InvalidFormat -> {
+                    _getHashError.postValue(Exception("Invalid request format"))
+                }
+
+                RegisterPeerResult.Conflict -> {
+                    _getHashError.postValue(Exception("Active session already exists"))
+                }
+
+                RegisterPeerResult.TooManyRequests -> {
+                    _getHashError.postValue(Exception("Too many requests, try again later"))
+                }
+
+                RegisterPeerResult.ServerError -> {
+                    _getHashError.postValue(Exception("Server error, try again later"))
+                }
+
+                RegisterPeerResult.RejectedByReceiver -> {
+                    _getHashError.postValue(Exception("Receiver rejected the registration"))
+                }
+
+                is RegisterPeerResult.Failure -> {
+                    Timber.e(result.exception, "Registration failed")
+                    _getHashError.postValue(result.exception)
+                }
             }
         }
     }
+
 
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {

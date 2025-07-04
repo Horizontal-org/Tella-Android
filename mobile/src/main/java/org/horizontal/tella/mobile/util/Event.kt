@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.util
 
 /**
  * Created by wafa on 23/6/2025.
