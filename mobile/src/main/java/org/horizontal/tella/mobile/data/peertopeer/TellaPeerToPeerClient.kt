@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -55,12 +54,9 @@ class TellaPeerToPeerClient {
             init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
         }
 
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .sslSocketFactory(sslContext.socketFactory, trustManager)
-            .build()
+        return OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS)
+            .sslSocketFactory(sslContext.socketFactory, trustManager).build()
     }
 
     suspend fun registerPeerDevice(
@@ -69,41 +65,36 @@ class TellaPeerToPeerClient {
         expectedFingerprint: String,
         pin: String,
     ): RegisterPeerResult = withContext(Dispatchers.IO) {
-
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
         Timber.d("Connecting to: $url")
 
-        try {
-            val payload = PeerRegisterPayload(
-                pin = pin,
-                nonce = UUID.randomUUID().toString()
-            )
+        val payload = PeerRegisterPayload(
+            pin = pin, nonce = UUID.randomUUID().toString()
+        )
 
-            val jsonPayload = Json.encodeToString(payload)
-            val requestBody = jsonPayload.toRequestBody()
+        val jsonPayload = Json.encodeToString(payload)
+        val requestBody = jsonPayload.toRequestBody()
+        val client = getClientWithFingerprintValidation(expectedFingerprint)
 
-            val client = getClientWithFingerprintValidation(expectedFingerprint)
-
-            val request = Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+        val request =
+            Request.Builder().url(url).post(requestBody).addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
                 .build()
 
+        return@withContext try {
             client.newCall(request).execute().use { response ->
                 val body = response.body?.string().orEmpty()
 
                 if (response.isSuccessful) {
-                    return@use try {
-                        val json = JSONObject(body)
-                        val sessionId = json.getString("sessionId")
-                        RegisterPeerResult.Success(sessionId)
-                    } catch (e: Exception) {
-                        RegisterPeerResult.Failure(Exception("Malformed JSON: ${e.message}"))
-                    }
+                    return@use parseSessionIdFromResponse(body)
                 }
 
-                // Handle known status codes
+                Timber.w(
+                    """registerPeerDevice failed
+                   Status: ${response.code}
+                   URL: $url
+                   Body: $body""".trimIndent()
+                )
+
                 return@use when (response.code) {
                     400 -> RegisterPeerResult.InvalidFormat
                     401 -> RegisterPeerResult.InvalidPin
@@ -114,13 +105,22 @@ class TellaPeerToPeerClient {
                     else -> RegisterPeerResult.Failure(Exception("Unhandled error ${response.code}: $body"))
                 }
             }
-
         } catch (e: Exception) {
-            Timber.e(e, "registerPeerDevice failed")
-            return@withContext RegisterPeerResult.Failure(e)
+            Timber.e(e, "registerPeerDevice request failed")
+            RegisterPeerResult.Failure(e)
         }
     }
 
+    private fun parseSessionIdFromResponse(body: String): RegisterPeerResult {
+        return try {
+            val json = JSONObject(body)
+            val sessionId = json.getString("sessionId")
+            RegisterPeerResult.Success(sessionId)
+        } catch (e: Exception) {
+            Timber.e(e, "Malformed JSON response: %s", body)
+            RegisterPeerResult.Failure(Exception("Malformed JSON: ${e.message}"))
+        }
+    }
 
     suspend fun prepareUpload(
         ip: String,
@@ -157,34 +157,39 @@ class TellaPeerToPeerClient {
                 .build()
 
             client.newCall(request).execute().use { response ->
-                val body = response.body.string()
+                val responseBody = response.body?.string().orEmpty()
 
-                if (response.isSuccessful && body != null) {
-                    return@withContext try {
-                        val transmissionId =
-                            JSONObject(body).getString(PeerToPeerConstants.TRANSMISSION_ID_KEY)
-                        // Store it in the session manager
-                        PeerSessionManager.setTransmissionId(transmissionId)
-                        PrepareUploadResult.Success(transmissionId)
-                    } catch (e: Exception) {
-                        Timber.e(e, "Invalid JSON response: %s", body)
-                        PrepareUploadResult.Failure(Exception("Malformed server response"))
-                    }
+                return@withContext if (response.isSuccessful) {
+                    parseTransmissionId(responseBody)
                 } else {
-                    Timber.e("Server error %d: %s", response.code, response.message)
-                    return@withContext when (response.code) {
-                        400 -> PrepareUploadResult.BadRequest
-                        403 -> PrepareUploadResult.Forbidden
-                        409 -> PrepareUploadResult.Conflict
-                        500 -> PrepareUploadResult.ServerError
-                        else -> PrepareUploadResult.Failure(Exception("Unhandled server error ${response.code}"))
-                    }
-
+                    Timber.e("Server error ${response.code}: ${response.message}")
+                    handleServerError(response.code, responseBody)
                 }
             }
         } catch (e: Exception) {
             Timber.e(e, "Exception during upload")
-            PrepareUploadResult.Failure(e)
+            return@withContext PrepareUploadResult.Failure(e)
+        }
+    }
+
+    private fun parseTransmissionId(body: String): PrepareUploadResult {
+        return try {
+            val transmissionId = JSONObject(body).getString(PeerToPeerConstants.TRANSMISSION_ID_KEY)
+            PeerSessionManager.setTransmissionId(transmissionId)
+            PrepareUploadResult.Success(transmissionId)
+        } catch (e: Exception) {
+            Timber.e(e, "Invalid JSON response: %s", body)
+            PrepareUploadResult.Failure(Exception("Malformed server response"))
+        }
+    }
+
+    private fun handleServerError(code: Int, body: String): PrepareUploadResult {
+        return when (code) {
+            400 -> PrepareUploadResult.BadRequest
+            403 -> PrepareUploadResult.Forbidden
+            409 -> PrepareUploadResult.Conflict
+            500 -> PrepareUploadResult.ServerError
+            else -> PrepareUploadResult.Failure(Exception("Unhandled server error $code: $body"))
         }
     }
 
