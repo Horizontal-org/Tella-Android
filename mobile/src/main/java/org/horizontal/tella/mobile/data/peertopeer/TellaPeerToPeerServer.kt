@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
@@ -143,36 +144,40 @@ class TellaPeerToPeerServer(
                         call.respond(HttpStatusCode.OK, session)
                     }
 
+                        post(PeerApiRoutes.PREPARE_UPLOAD) {
+                            val request = try {
+                                call.receive<PrepareUploadRequest>()
+                            } catch (e: Exception) {
+                                call.respond(HttpStatusCode.BadRequest, "Invalid body: ${e.message}")
+                                return@post
+                            }
 
-                    post(PeerApiRoutes.PREPARE_UPLOAD) {
-                        val request = try {
-                            call.receive<PrepareUploadRequest>()
-                        } catch (e: Exception) {
-                            call.respond(HttpStatusCode.BadRequest, "Invalid body: ${e.message}")
-                            return@post
-                        }
+                            if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
+                                call.respond(HttpStatusCode.BadRequest, "Missing required fields")
+                                return@post
+                            }
 
-                        if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
-                            call.respond(HttpStatusCode.BadRequest, "Missing required fields")
-                            return@post
-                        }
+                            if (request.sessionId != serverSession?.sessionId) {
+                                call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                                return@post
+                            }
 
-                        if (request.sessionId != serverSession?.sessionId) {
-                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                            return@post
-                        }
+                            val accepted = PeerEventManager.emitPrepareUploadRequest(request)
+                            if (accepted) {
+                                val files = request.files.map { file ->
+                                    FileInfo(
+                                        id = file.id,
+                                        transmissionId = UUID.randomUUID().toString()
+                                    )
+                                }
+                                call.respond(
+                                    HttpStatusCode.OK,
+                                    PeerPrepareUploadResponse(files = files)
+                                )
+                            } else {
+                                call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
+                            }
 
-                        val accepted = PeerEventManager.emitPrepareUploadRequest(request)
-
-                        if (accepted) {
-                            val transmissionId = UUID.randomUUID().toString()
-                            call.respond(
-                                HttpStatusCode.OK,
-                                PeerPrepareUploadResponse(transmissionId)
-                            )
-                        } else {
-                            call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
-                        }
                     }
                 }
 

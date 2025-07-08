@@ -3,6 +3,11 @@ package org.horizontal.tella.mobile.domain.peertopeer
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PeerPrepareUploadResponse(
+data class FileInfo(
+    val id: String,
     val transmissionId: String
+)
+
+data class PeerPrepareUploadResponse(
+    val files: List<FileInfo>
 )

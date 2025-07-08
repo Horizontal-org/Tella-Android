@@ -114,7 +114,7 @@ class PrepareUploadFragment :
             }
 
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
-            val id = response.transmissionId
+            val transmissionId = response.files.firstOrNull()?.transmissionId
             DialogUtils.showBottomMessage(
                 baseActivity,
                 getString(R.string.the_receiver_accepted_the_files_transfer),

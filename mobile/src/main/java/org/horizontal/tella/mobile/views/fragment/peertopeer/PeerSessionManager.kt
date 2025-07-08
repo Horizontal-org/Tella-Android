@@ -30,12 +30,17 @@ object PeerSessionManager {
 
     fun isSessionValid(): Boolean = connectionInfo != null
 
-    fun setTransmissionId(id: String) {
-        connectionInfo?.transmissionId = id
+    private val transmissionMap = mutableMapOf<String, String>() // fileId -> transmissionId
+
+    fun saveTransmissionId(fileId: String, transmissionId: String) {
+        transmissionMap[fileId] = transmissionId
     }
 
-    fun getTransmissionId(): String? = connectionInfo?.transmissionId
-    fun clear() {
-        connectionInfo = null
+    fun getTransmissionId(fileId: String): String? {
+        return transmissionMap[fileId]
+    }
+
+    fun clearTransmissions() {
+        transmissionMap.clear()
     }
 }

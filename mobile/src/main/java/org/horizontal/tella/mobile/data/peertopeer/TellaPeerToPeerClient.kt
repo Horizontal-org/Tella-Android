@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
+import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
@@ -174,15 +175,18 @@ class TellaPeerToPeerClient {
 
     private fun parseTransmissionId(body: String): PrepareUploadResult {
         return try {
-            val transmissionId = JSONObject(body).getString(PeerToPeerConstants.TRANSMISSION_ID_KEY)
-            PeerSessionManager.setTransmissionId(transmissionId)
-            PrepareUploadResult.Success(transmissionId)
+            val response = Json.decodeFromString<PeerPrepareUploadResponse>(body)
+
+            response.files.forEach {
+                PeerSessionManager.saveTransmissionId(it.id, it.transmissionId)
+            }
+
+            PrepareUploadResult.Success(response.files)
         } catch (e: Exception) {
             Timber.e(e, "Invalid JSON response: %s", body)
             PrepareUploadResult.Failure(Exception("Malformed server response"))
         }
     }
-
     private fun handleServerError(code: Int, body: String): PrepareUploadResult {
         return when (code) {
             400 -> PrepareUploadResult.BadRequest
