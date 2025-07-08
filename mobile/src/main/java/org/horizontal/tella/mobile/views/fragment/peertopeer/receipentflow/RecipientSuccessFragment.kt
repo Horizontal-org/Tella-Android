@@ -2,10 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentRecipientSuccessBinding
@@ -47,6 +44,7 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
             }
 
             rejectBtn.setOnClickListener {
+                //TODO WE MOVE THIS TO THE NAV MANAGER
                 viewModel.confirmPrepareUpload(sessionId, false)
                 // Set result safely via SavedStateHandle
                 findNavController().previousBackStackEntry

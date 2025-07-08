@@ -29,25 +29,22 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:rightIcon="@drawable/ic_delete_white_24px"
         app:rightIconContentDescription="@string/action_delete"
-        app:startTitle="@string/Reports_Title_Screen" />
+        app:startTitle="@string/receiving_and_encrypting_files" />
 
     <androidx.appcompat.widget.AppCompatButton
-        style="@style/Unlock_White_Text"
-        android:layout_marginBottom="18dp"
-        android:layout_width="wrap_content"
+        android:id="@+id/next_btn"
+        style="@style/Submit_Text_Button"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:id="@+id/cancel_btn"
-        android:text="@string/Uwazi_Submit_Later"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:layout_marginStart="@dimen/activity_horizontal_large_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
+        android:layout_marginBottom="18dp"
         android:background="@drawable/action_button_background"
-        android:backgroundTint="@color/wa_white_20"
+        android:text="@string/Reports_Pause"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="@dimen/activity_horizontal_large_margin"
-        android:layout_marginStart="@dimen/activity_horizontal_large_margin"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

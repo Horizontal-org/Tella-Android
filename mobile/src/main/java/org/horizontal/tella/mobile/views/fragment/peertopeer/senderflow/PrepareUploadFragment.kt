@@ -19,7 +19,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
-import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
+import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
@@ -44,6 +44,7 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.utils.DialogUtils
 
 var PREPARE_UPLOAD_ENTRY = "PREPARE_UPLOAD_ENTRY"
+var BUNDLE_PEER_TO_PEER_FORM_INSTANCE = "BUNDLE_PEER_TO_PEER_FORM_INSTANCE"
 
 @AndroidEntryPoint
 class PrepareUploadFragment :
@@ -51,7 +52,7 @@ class PrepareUploadFragment :
     IReportAttachmentsHandler, OnNavBckListener {
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isTitleEnabled = false
-    private var reportInstance: ReportInstance? = null
+    private var peerToPeerInstance: PeerToPeerInstance? = null
     private val viewModel: SenderViewModel by viewModels()
     private var isNewDraft = true
     private var disposables =
@@ -90,13 +91,13 @@ class PrepareUploadFragment :
         }
 
         arguments?.let { bundle ->
-            if (bundle.get(BUNDLE_REPORT_FORM_INSTANCE) != null) {
-                reportInstance = bundle.get(BUNDLE_REPORT_FORM_INSTANCE) as ReportInstance
-                bundle.remove(BUNDLE_REPORT_FORM_INSTANCE)
+            if (bundle.get(BUNDLE_PEER_TO_PEER_FORM_INSTANCE) != null) {
+                peerToPeerInstance = bundle.get(BUNDLE_PEER_TO_PEER_FORM_INSTANCE) as PeerToPeerInstance
+                bundle.remove(BUNDLE_PEER_TO_PEER_FORM_INSTANCE)
             }
         }
 
-        reportInstance?.let { instance ->
+        peerToPeerInstance?.let { instance ->
             binding.reportTitleEt.setText(instance.title)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
             isNewDraft = false
@@ -134,7 +135,7 @@ class PrepareUploadFragment :
                 object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
-                            findNavController().popBackStack()
+                           back()
                         }
                     }
                 }
@@ -165,7 +166,6 @@ class PrepareUploadFragment :
             }
 
         }
-
     }
 
     private fun exitOrSave() {
@@ -174,7 +174,6 @@ class PrepareUploadFragment :
 
     @SuppressLint("StringFormatInvalid")
     private fun initData() {
-
 
     }
 

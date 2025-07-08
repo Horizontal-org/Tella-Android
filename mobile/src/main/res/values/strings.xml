@@ -1051,4 +1051,5 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
     <string name="sender_files_rejected">Sender\'s files rejected.</string>
   <string name="the_receiver_accepted_the_files_transfer">"The receiver accepted the files transfer "</string>
   <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
+  <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
 </resources>
