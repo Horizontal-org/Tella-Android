@@ -989,4 +989,5 @@ Gostaria de partilhar dados com a equipa do Tella?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Anexar arquivo</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+    <string name="send_files_title">Send files</string>
 </resources>

@@ -82,8 +82,8 @@ class SenderViewModel @Inject constructor(
                 sessionId = info.sessionId
             )) {
                 is PrepareUploadResult.Success -> {
-                    Timber.d("Success: transmissionId = ${result.transmissionId}")
-                    _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissionId))
+                    Timber.d("Success: transmissionId = ${result.transmissions}")
+                    _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissions))
                 }
 
                 is PrepareUploadResult.Forbidden -> {

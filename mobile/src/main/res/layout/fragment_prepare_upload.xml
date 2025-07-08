@@ -108,7 +108,7 @@
             android:background="@drawable/bg_round_orange16_btn"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
-            android:text="@string/collect.end_action_submit"
+            android:text="@string/send_files_title"
             android:textAlignment="center"
             android:textColor="@color/btn_dark_letter"
             android:textSize="16sp"

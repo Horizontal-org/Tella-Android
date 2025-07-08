@@ -977,4 +977,5 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="report_submitted_msg">Tsamba yako yatumirwa swakanaka</string>
   <string name="Collect_MediaWidget_Attach_File">Kuisa gwaro mapwepo</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+    <string name="send_files_title">Send files</string>
 </resources>

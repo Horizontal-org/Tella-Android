@@ -54,7 +54,6 @@ class PrepareUploadFragment :
     private var isTitleEnabled = false
     private var peerToPeerInstance: PeerToPeerInstance? = null
     private val viewModel: SenderViewModel by viewModels()
-    private var isNewDraft = true
     private var disposables =
         MyApplication.bus().createCompositeDisposable()
 
@@ -73,7 +72,6 @@ class PrepareUploadFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
-        initData()
         onAudioRecordingListener()
     }
 
@@ -100,7 +98,6 @@ class PrepareUploadFragment :
         peerToPeerInstance?.let { instance ->
             binding.reportTitleEt.setText(instance.title)
             putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
-            isNewDraft = false
         }
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
@@ -115,7 +112,7 @@ class PrepareUploadFragment :
             }
 
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
-            val transmissionId = response.files.firstOrNull()?.transmissionId
+           // val transmissionId = response.files.firstOrNull()?.transmissionId
             DialogUtils.showBottomMessage(
                 baseActivity,
                 getString(R.string.the_receiver_accepted_the_files_transfer),
@@ -142,17 +139,7 @@ class PrepareUploadFragment :
             )
         }
         highLightButtonsInit()
-        checkIsNewDraftEntry()
     }
-
-    private fun checkIsNewDraftEntry() {
-        if (isNewDraft) {
-            binding.sendReportBtn.text = getString(R.string.collect_end_action_submit)
-        } else {
-            binding.sendReportBtn.text = getString(R.string.Send_Action_Label)
-        }
-    }
-
 
     private fun highLightButtonsInit() {
         binding.apply {
@@ -169,14 +156,8 @@ class PrepareUploadFragment :
     }
 
     private fun exitOrSave() {
-
+         navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
     }
-
-    @SuppressLint("StringFormatInvalid")
-    private fun initData() {
-
-    }
-
 
     private fun showSelectFilesSheet() {
         showVaultSelectFilesSheet(baseActivity.supportFragmentManager,
