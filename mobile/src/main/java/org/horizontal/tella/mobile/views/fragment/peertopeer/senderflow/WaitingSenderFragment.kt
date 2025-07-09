@@ -9,24 +9,26 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
+import org.hzontal.shared_ui.utils.DialogUtils
 
 /**
  * Created by wafa on 3/6/2025.
  */
 class WaitingSenderFragment :
     BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
-    private val viewModelSender: SenderViewModel by activityViewModels()
+    private val viewModel: SenderViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.toolbar.setStartTextTitle(getString(R.string.send_files))
         binding.waitingText.text = getString(R.string.waiting_for_the_recipient_to_accept_files)
-        val selectedFiles = arguments?.getSerializable("selectedFiles") as? List<VaultFile> ?: emptyList()
-        viewModelSender.prepareUploadsFromVaultFiles(selectedFiles)
+        val selectedFiles =
+            arguments?.getSerializable("selectedFiles") as? List<VaultFile> ?: emptyList()
+        viewModel.prepareUploadsFromVaultFiles(selectedFiles)
         binding.toolbar.backClickListener = {
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
 
-        viewModelSender.prepareRejected.observe(viewLifecycleOwner) { event ->
+        viewModel.prepareRejected.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { wasRejected ->
                 if (wasRejected) {
                     findNavController().previousBackStackEntry
@@ -35,6 +37,11 @@ class WaitingSenderFragment :
                     findNavController().popBackStack()
                 }
             }
+        }
+
+
+        viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
+            navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
         }
     }
 }

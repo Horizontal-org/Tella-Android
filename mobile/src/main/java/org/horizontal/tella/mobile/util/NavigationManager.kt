@@ -185,6 +185,7 @@ class NavigationManager(
     fun navigateFromScanQrCodeToDeviceInfo() {
         navigateToWithBundle(R.id.action_qrCodeScreen_to_deviceInfoScreen)
     }
+
     fun navigateFromScanQrCodeToPrepareUploadFragment() {
         navigateToWithBundle(R.id.action_scanQrCodeScreen_to_prepareUploadFragment)
     }
@@ -197,7 +198,7 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_senderManualConnectionScreen_to_connectManuallyVerificationScreen)
     }
 
-    fun navigateFromDeviceInfoScreenTRecipientVerificationScreen(){
+    fun navigateFromDeviceInfoScreenTRecipientVerificationScreen() {
         navigateToWithBundle(R.id.action_deviceInfoScreen_to_recipientVerificationScreen)
     }
 
@@ -209,16 +210,20 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_prepareUploadFragment_to_waitingSenderFragment)
     }
 
-    fun navigateConnectManuallyVerificationFragmentToprepareUploadFragment(){
+    fun navigateConnectManuallyVerificationFragmentToprepareUploadFragment() {
         navigateToWithBundle(R.id.action_connectManuallyVerificationFragment_to_prepareUploadFragment)
     }
 
-    fun navigateFromRecipientVerificationScreenToWaitingReceiverFragment(){
+    fun navigateFromRecipientVerificationScreenToWaitingReceiverFragment() {
         navigateToWithBundle(R.id.action_recipientVerificationScreen_to_waitingReceiverFragment)
     }
 
-    fun navigateFromWaitingReceiverFragmentToRecipientSuccessFragment(){
+    fun navigateFromWaitingReceiverFragmentToRecipientSuccessFragment() {
         navigateToWithBundle(R.id.action_waitingReceiverFragment_to_recipientSuccessFragment)
+    }
+
+    fun navigateFromWaitingSenderFragmentToUploadFilesFragment() {
+        navigateToWithBundle(R.id.action_waitingSenderFragment_to_uploadFilesFragment)
     }
 
     fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {

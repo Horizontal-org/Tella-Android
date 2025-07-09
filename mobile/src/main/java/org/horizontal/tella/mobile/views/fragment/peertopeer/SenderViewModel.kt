@@ -16,6 +16,8 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
+import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
@@ -31,7 +33,7 @@ class SenderViewModel @Inject constructor(
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
     private val _prepareRejected = MutableLiveData<Event<Boolean>>()
     val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
-
+    var peerToPeerInstance: PeerToPeerInstance? = null
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -63,6 +65,16 @@ class SenderViewModel @Inject constructor(
         return vaultFiles
     }
 
+    fun vaultFilesToMediaFiles(files: List<VaultFile>): List<FormMediaFile> {
+        val vaultFiles = mutableListOf<FormMediaFile>()
+        files.map { vaultFile ->
+            val mediaFile = FormMediaFile.fromMediaFile(vaultFile)
+            mediaFile.status = FormMediaFileStatus.NOT_SUBMITTED
+            vaultFiles.add(FormMediaFile.fromMediaFile(vaultFile))
+        }
+        return vaultFiles
+    }
+
     fun prepareUploadsFromVaultFiles(
         files: List<VaultFile>,
         title: String = "Title of the report"
@@ -82,8 +94,19 @@ class SenderViewModel @Inject constructor(
                 sessionId = info.sessionId
             )) {
                 is PrepareUploadResult.Success -> {
-                    Timber.d("Success: transmissionId = ${result.transmissions}")
+                    peerToPeerInstance?.sessionID = info.sessionId
+                    val fileInfoMap = result.transmissions.associateBy { it.id }
+
+                    peerToPeerInstance?.widgetMediaFiles?.forEach { mediaFile ->
+                        fileInfoMap[mediaFile.id]?.let { fileInfo ->
+                            mediaFile.transmissionId = fileInfo.transmissionId
+                        }
+                    }
+
                     _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissions))
+
+                    //TODO UNIFY THE INSTANCE EITHER USE PEERTOPEERINSTANCE OR USE PEERSESSIONMANAGER
+                    //TODO UNIFY THE FORMENDVIEW TO USE THE NEW STATE MANAGER ...
                 }
 
                 is PrepareUploadResult.Forbidden -> {
@@ -111,6 +134,8 @@ class SenderViewModel @Inject constructor(
             }
         }
     }
+
+
 }
 
 

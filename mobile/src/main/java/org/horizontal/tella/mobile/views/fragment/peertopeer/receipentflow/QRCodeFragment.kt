@@ -13,6 +13,7 @@ import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PServerState
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
@@ -33,6 +34,9 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     @Inject
     lateinit var peerToPeerManager: PeerToPeerManager
+
+    @Inject
+    lateinit var p2PServerState: P2PServerState
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,7 +72,14 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val pin = (100000..999999).random()
         val port = port
 
-        peerServerStarterManager.startServer(ip, keyPair, pin, certificate, config)
+        peerServerStarterManager.startServer(
+            ip,
+            keyPair,
+            pin.toString(),
+            certificate,
+            config,
+            p2PServerState
+        )
 
 
         payload = PeerConnectionPayload(

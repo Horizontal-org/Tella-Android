@@ -1,45 +1,43 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
+import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
+import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 
 class UploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+    private val viewModel: SenderViewModel by activityViewModels()
+    protected lateinit var endView: PeerToPeerEndView
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        showFormEndView()
     }
 
-
     private fun showFormEndView() {
-        /*   if (reportInstance == null) {
-               return
-           }
+        if (viewModel.peerToPeerInstance == null) {
+            return
+        }
 
-           reportInstance?.let { reportFormInstance ->
+        viewModel.peerToPeerInstance?.let { peerInstance ->
 
-               endView = ReportsFormEndView(
-                   activity,
-                   reportFormInstance.title,
-                   reportFormInstance.description,
-               )
-               endView.setInstance(
-                   reportFormInstance, MyApplication.isConnectedToInternet(baseActivity), false
-               )
-               binding.endViewContainer.removeAllViews()
-               binding.endViewContainer.addView(endView)
-               endView.clearPartsProgress(reportFormInstance)
-           }*/
+            endView = PeerToPeerEndView(
+                baseActivity,
+                peerInstance.title,
+            )
+            endView.setInstance(
+                peerInstance, MyApplication.isConnectedToInternet(baseActivity), false
+            )
+            binding.endViewContainer.removeAllViews()
+            binding.endViewContainer.addView(endView)
+            endView.clearPartsProgress(peerInstance)
+        }
     }
 
 }

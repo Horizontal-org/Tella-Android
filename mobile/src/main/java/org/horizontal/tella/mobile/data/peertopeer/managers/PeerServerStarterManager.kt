@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.data.peertopeer.managers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.horizontal.tella.mobile.data.peertopeer.TELLAPeerToPeerServer
+import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PServerState
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import java.security.KeyPair
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class PeerServerStarterManager @Inject constructor(
     private val peerToPeerManager: PeerToPeerManager
 ) {
-    private var server: TELLAPeerToPeerServer? = null
+    private var server: TellaPeerToPeerServer? = null
 
     fun startServer(
         ip: String,
@@ -26,7 +26,7 @@ class PeerServerStarterManager @Inject constructor(
         p2PServerState: P2PServerState,
     ) {
         if (server == null) {
-            server = TELLAPeerToPeerServer(
+            server = TellaPeerToPeerServer(
                 ip = ip,
                 keyPair = keyPair,
                 pin = pin,

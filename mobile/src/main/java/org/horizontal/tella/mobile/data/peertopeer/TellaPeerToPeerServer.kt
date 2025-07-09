@@ -40,7 +40,7 @@ import java.util.UUID
 
 const val port = 53317
 
-class TELLAPeerToPeerServer(
+class TellaPeerToPeerServer(
     private val ip: String,
     private val serverPort: Int = port,
     private val pin: String,
@@ -141,7 +141,7 @@ class TELLAPeerToPeerServer(
 
                         launch {
                             p2PServerState.apply {
-                                pin = this@TELLAPeerToPeerServer.pin
+                                pin = this@TellaPeerToPeerServer.pin
 
                             }
                             PeerEventManager.emitRegistrationSuccess()

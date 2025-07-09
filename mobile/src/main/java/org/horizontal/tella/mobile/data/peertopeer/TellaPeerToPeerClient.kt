@@ -11,10 +11,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
+import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
@@ -132,18 +134,18 @@ class TellaPeerToPeerClient {
 
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
 
-//        val fileItems = files.map {
-//            val mimeType = it.mimeType ?: CONTENT_TYPE_OCTET
-//            P2PFile(
-//                id = it.id,
-//                fileName = it.name,
-//                size = it.size,
-//                fileType = mimeType,
-//                sha256 = it.hash
-//            )
-//        }
+        val fileItems = files.map {
+            val mimeType = it.mimeType ?: CONTENT_TYPE_OCTET
+            P2PFile(
+                id = it.id,
+                fileName = it.name,
+                size = it.size,
+                fileType = mimeType,
+                sha256 = it.hash
+            )
+        }
 
-        val requestPayload = PrepareUploadRequest(title, sessionId, files)
+        val requestPayload = PrepareUploadRequest(title, sessionId, fileItems)
         val jsonPayload = Json.encodeToString(requestPayload)
         val requestBody = jsonPayload.toRequestBody()
         val client = getClientWithFingerprintValidation(expectedFingerprint)

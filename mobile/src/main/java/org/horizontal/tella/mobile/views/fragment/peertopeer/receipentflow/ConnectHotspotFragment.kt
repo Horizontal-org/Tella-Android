@@ -25,6 +25,7 @@ class ConnectHotspotFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var isCheckboxChecked = false
+    private val permissionsToRequest = mutableListOf<String>()
 
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
@@ -46,6 +47,7 @@ class ConnectHotspotFragment :
         initObservers()
         initListeners()
         checkAndRequestPermissions()
+        updateInfoOrGetPermission()
     }
 
     private fun initObservers() {
@@ -98,7 +100,6 @@ class ConnectHotspotFragment :
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkAndRequestPermissions() {
-        val permissionsToRequest = mutableListOf<String>()
 
         if (ContextCompat.checkSelfPermission(
                 baseActivity,
@@ -121,9 +122,14 @@ class ConnectHotspotFragment :
         ) {
             permissionsToRequest.add(ACCESS_NETWORK_STATE)
         }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun updateInfoOrGetPermission() {
         if (permissionsToRequest.isNotEmpty()) {
-            requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
+            baseActivity.maybeChangeTemporaryTimeout {
+                requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
+            }
         } else {
             viewModel.updateNetworkInfo()
         }

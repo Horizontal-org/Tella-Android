@@ -1,10 +1,10 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -27,7 +27,6 @@ import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companio
 import org.horizontal.tella.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_FORM_INSTANCE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OnNavBckListener
 import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
@@ -44,7 +43,6 @@ import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesShe
 import org.hzontal.shared_ui.utils.DialogUtils
 
 var PREPARE_UPLOAD_ENTRY = "PREPARE_UPLOAD_ENTRY"
-var BUNDLE_PEER_TO_PEER_FORM_INSTANCE = "BUNDLE_PEER_TO_PEER_FORM_INSTANCE"
 
 @AndroidEntryPoint
 class PrepareUploadFragment :
@@ -52,8 +50,7 @@ class PrepareUploadFragment :
     IReportAttachmentsHandler, OnNavBckListener {
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isTitleEnabled = false
-    private var peerToPeerInstance: PeerToPeerInstance? = null
-    private val viewModel: SenderViewModel by viewModels()
+    private val viewModel: SenderViewModel by activityViewModels()
     private var disposables =
         MyApplication.bus().createCompositeDisposable()
 
@@ -88,17 +85,7 @@ class PrepareUploadFragment :
             exitOrSave()
         }
 
-        arguments?.let { bundle ->
-            if (bundle.get(BUNDLE_PEER_TO_PEER_FORM_INSTANCE) != null) {
-                peerToPeerInstance = bundle.get(BUNDLE_PEER_TO_PEER_FORM_INSTANCE) as PeerToPeerInstance
-                bundle.remove(BUNDLE_PEER_TO_PEER_FORM_INSTANCE)
-            }
-        }
-
-        peerToPeerInstance?.let { instance ->
-            binding.reportTitleEt.setText(instance.title)
-            putFiles(viewModel.mediaFilesToVaultFiles(instance.widgetMediaFiles))
-        }
+        //TODO HANDLE THIS IN THE NAVMANAGER
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
             ?.getLiveData<Boolean>("transferRejected")
@@ -111,17 +98,6 @@ class PrepareUploadFragment :
                 }
             }
 
-        viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
-           // val transmissionId = response.files.firstOrNull()?.transmissionId
-            DialogUtils.showBottomMessage(
-                baseActivity,
-                getString(R.string.the_receiver_accepted_the_files_transfer),
-                false,
-                3000
-            )
-            // navigate to next screen
-        }
-
         binding.toolbar.backClickListener = {
             BottomSheetUtils.showConfirmSheet(
                 baseActivity.supportFragmentManager,
@@ -132,7 +108,7 @@ class PrepareUploadFragment :
                 object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
-                           back()
+                            back()
                         }
                     }
                 }
@@ -156,7 +132,7 @@ class PrepareUploadFragment :
     }
 
     private fun exitOrSave() {
-         navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
     }
 
     private fun showSelectFilesSheet() {
@@ -274,25 +250,30 @@ class PrepareUploadFragment :
 
     private fun initClickListeners(isSubmitEnabled: Boolean) {
         binding.sendReportBtn.setOnClickListener {
-            binding.sendReportBtn.setOnClickListener {
-                if (isSubmitEnabled) {
-                    val selectedFiles = filesRecyclerViewAdapter.getFiles()
-                    if (selectedFiles.isNotEmpty()) {
-                        bundle.putSerializable(
-                            "selectedFiles",
-                            ArrayList(selectedFiles)
-                        ) // assuming VaultFile is Serializable
-                        // navigate to waiting view
-                        navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
-                    } else {
-                        showToast("No file selected")
-                    }
+            if (isSubmitEnabled) {
+                val selectedFiles = filesRecyclerViewAdapter.getFiles()
+                if (selectedFiles.isNotEmpty()) {
+                    // Fill the PeerToPeerInstance in the ViewModel
+                    viewModel.peerToPeerInstance = PeerToPeerInstance(
+                        updated = System.currentTimeMillis(),
+                        widgetMediaFiles = viewModel.vaultFilesToMediaFiles(selectedFiles),
+                        title = binding.reportTitleEt.text.toString()
+                    )
+
+                    // Optional: add to bundle if still needed elsewhere
+                    bundle.putSerializable("selectedFiles", ArrayList(selectedFiles))
+
+                    // Navigate
+                    navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                 } else {
-                    showSubmitReportErrorSnackBar()
+                    showToast("No file selected")
                 }
+            } else {
+                showSubmitReportErrorSnackBar()
             }
         }
     }
+
 
     private fun showSubmitReportErrorSnackBar() {
         val errorRes = R.string.Snackbar_Submit_Files_Error
