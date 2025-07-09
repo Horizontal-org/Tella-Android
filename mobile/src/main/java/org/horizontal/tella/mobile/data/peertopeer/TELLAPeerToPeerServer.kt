@@ -174,8 +174,8 @@ class TELLAPeerToPeerServer(
                                 return@post
                             }
 
-                            // Create a new P2PSession
                             val session = P2PSession(sessionId = sessionId, title = request.title)
+
 
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()
@@ -191,7 +191,6 @@ class TELLAPeerToPeerServer(
                                 )
                             }
 
-                            // Save session to server state
                             p2PServerState.session = session
 
                             call.respond(
