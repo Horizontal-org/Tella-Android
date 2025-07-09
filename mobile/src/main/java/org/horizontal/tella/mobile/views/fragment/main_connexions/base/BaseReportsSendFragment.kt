@@ -82,7 +82,7 @@ abstract class BaseReportsSendFragment :
         binding.toolbar.backClickListener = {
             handleBackButton()
         }
-        binding.toolbar.setRightIcon(icon = -1)
+        binding.setRightIcon(icon = -1)
 
         if (reportInstance?.status == EntityStatus.SUBMITTED) {
             binding.nextBtn.hide()

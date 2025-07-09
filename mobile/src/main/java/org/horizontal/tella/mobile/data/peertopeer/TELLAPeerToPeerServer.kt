@@ -1,6 +1,5 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
-import android.util.Log
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.call
@@ -22,15 +21,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PServerState
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
+import org.horizontal.tella.mobile.data.peertopeer.model.ReceivingFile
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
-import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
@@ -38,14 +40,15 @@ import java.util.UUID
 
 const val port = 53317
 
-class TellaPeerToPeerServer(
+class TELLAPeerToPeerServer(
     private val ip: String,
     private val serverPort: Int = port,
-    private val pin: Int,
+    private val pin: String,
     private val keyPair: KeyPair,
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
+    private val p2PServerState: P2PServerState
 ) : TellaServer {
     private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
@@ -82,7 +85,6 @@ class TellaPeerToPeerServer(
                 routing {
                     // Root route to confirm the server is running
                     get("/") {
-                        Log.i("Test", "Server started")
                         call.respondText("The server is running securely over HTTPS.")
                     }
 
@@ -103,7 +105,7 @@ class TellaPeerToPeerServer(
                         }
 
                         //TODO CHECK IF THE PIN IS CORRECT
-                        if (!isValidPin(request.pin) || pin.toString() != request.pin) {
+                        if (!isValidPin(request.pin) || pin != request.pin) {
                             call.respond(HttpStatusCode.Unauthorized, "Invalid PIN")
                             return@post
                         }
@@ -138,47 +140,69 @@ class TellaPeerToPeerServer(
                         }
 
                         launch {
+                            p2PServerState.apply {
+                                pin = this@TELLAPeerToPeerServer.pin
+
+                            }
                             PeerEventManager.emitRegistrationSuccess()
                         }
 
                         call.respond(HttpStatusCode.OK, session)
                     }
+                    post(PeerApiRoutes.PREPARE_UPLOAD) {
+                        val request = try {
+                            call.receive<PrepareUploadRequest>()
+                        } catch (e: Exception) {
+                            call.respond(HttpStatusCode.BadRequest, "Invalid body: ${e.message}")
+                            return@post
+                        }
 
-                        post(PeerApiRoutes.PREPARE_UPLOAD) {
-                            val request = try {
-                                call.receive<PrepareUploadRequest>()
-                            } catch (e: Exception) {
-                                call.respond(HttpStatusCode.BadRequest, "Invalid body: ${e.message}")
+                        if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
+                            call.respond(HttpStatusCode.BadRequest, "Missing required fields")
+                            return@post
+                        }
+
+                        if (request.sessionId != serverSession?.sessionId) {
+                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                            return@post
+                        }
+
+                        val accepted = PeerEventManager.emitPrepareUploadRequest(request)
+                        if (accepted) {
+                            val sessionId = serverSession?.sessionId ?: run {
+                                call.respond(HttpStatusCode.InternalServerError, "Missing session")
                                 return@post
                             }
 
-                            if (request.title.isBlank() || request.sessionId.isBlank() || request.files.isEmpty()) {
-                                call.respond(HttpStatusCode.BadRequest, "Missing required fields")
-                                return@post
-                            }
+                            // Create a new P2PSession
+                            val session = P2PSession(sessionId = sessionId, title = request.title)
 
-                            if (request.sessionId != serverSession?.sessionId) {
-                                call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                                return@post
-                            }
-
-                            val accepted = PeerEventManager.emitPrepareUploadRequest(request)
-                            if (accepted) {
-                                val files = request.files.map { file ->
-                                    FileInfo(
-                                        id = file.id,
-                                        transmissionId = UUID.randomUUID().toString()
-                                    )
-                                }
-                                call.respond(
-                                    HttpStatusCode.OK,
-                                    PeerPrepareUploadResponse(files = files)
+                            val responseFiles = request.files.map { file ->
+                                val transmissionId = UUID.randomUUID().toString()
+                                val receivingFile = ReceivingFile(
+                                    file = file,
+                                    transmissionId = transmissionId
                                 )
-                            } else {
-                                call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
+                                session.files[transmissionId] = receivingFile
+
+                                FileInfo(
+                                    id = file.id,
+                                    transmissionId = transmissionId
+                                )
                             }
 
+                            // Save session to server state
+                            p2PServerState.session = session
+
+                            call.respond(
+                                HttpStatusCode.OK,
+                                PeerPrepareUploadResponse(files = responseFiles)
+                            )
+                        } else {
+                            call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
+                        }
                     }
+
                 }
 
             }
@@ -190,6 +214,6 @@ class TellaPeerToPeerServer(
     }
 
     private fun isValidPin(pin: String): Boolean {
-        return pin.length == 6 // or whatever your rule is
+        return pin.length == 6
     }
 }
