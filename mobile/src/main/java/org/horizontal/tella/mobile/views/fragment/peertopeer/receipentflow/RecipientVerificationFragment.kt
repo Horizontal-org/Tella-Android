@@ -50,12 +50,9 @@ class RecipientVerificationFragment :
     }
 
     private fun initObservers() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.sessionInfo.collect { session ->
-                binding.hashContentTextView.text = session?.hash?.formatHash()
-            }
-        }
-        viewModel.isManualConnection = true
+        binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
+
+        viewModel.p2PState.isUsingManualConnection = true
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {

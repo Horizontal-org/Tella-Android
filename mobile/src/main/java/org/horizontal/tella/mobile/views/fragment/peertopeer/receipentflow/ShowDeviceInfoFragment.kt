@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.databinding.ShowDeviceInfoLayoutBinding
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 
 class ShowDeviceInfoFragment :
@@ -42,15 +41,13 @@ class ShowDeviceInfoFragment :
 
     private fun initObservers() {
         lifecycleScope.launch {
-            viewModel.clientHash.collect { hash ->
-                viewModel.setPeerSessionInfo(
-                    PeerConnectionInfo(
-                        ip = payload?.ipAddress.toString(),
-                        port = payload?.port.toString(),
-                        pin = payload?.pin?.toInt()!!,
-                        hash = hash
-                    )
-                )
+            viewModel.clientHash.collect { clientHash ->
+                with(viewModel.p2PState) {
+                    ip = payload?.ipAddress.toString()
+                    port = payload?.port.toString()
+                    pin = payload?.pin
+                    hash = clientHash
+                }
                 navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
             }
         }
@@ -58,7 +55,7 @@ class ShowDeviceInfoFragment :
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 // Navigate to the next screen
-            //    bundle.putBoolean("isSender", false)
+                //    bundle.putBoolean("isSender", false)
                 navManager().navigateFromWaitingReceiverFragmentToRecipientSuccessFragment()
                 //  reset the LiveData state if we want to consume event once
                 viewModel.resetRegistrationState()

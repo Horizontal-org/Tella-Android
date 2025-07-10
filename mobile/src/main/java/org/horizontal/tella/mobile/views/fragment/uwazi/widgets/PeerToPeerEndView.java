@@ -126,7 +126,8 @@ public class PeerToPeerEndView extends FrameLayout {
     String getStatusLabel(EntityStatus status) {
         String title = "";
         if (status == EntityStatus.SUBMITTED) {
-            title = getResources().getString(R.string.File_Uploaded_on) + " " + Util.getDateTimeString(instance.getUpdated());
+            title = "";
+            //getResources().getString(R.string.File_Uploaded_on) + " " + Util.getDateTimeString(instance.getUpdated());
         } else if (status == EntityStatus.PAUSED) {
             title = getResources().getString(R.string.Paused_Report);
         } else if (status == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {

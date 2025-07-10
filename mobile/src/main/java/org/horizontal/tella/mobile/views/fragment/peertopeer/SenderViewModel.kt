@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
@@ -27,7 +28,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SenderViewModel @Inject constructor(
-    private val peerClient: TellaPeerToPeerClient
+    private val peerClient: TellaPeerToPeerClient,
+    var p2PSharedState: P2PSharedState
 ) : ViewModel() {
     private val _prepareResults = MutableLiveData<PeerPrepareUploadResponse>()
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
@@ -79,22 +81,17 @@ class SenderViewModel @Inject constructor(
         files: List<VaultFile>,
         title: String = "Title of the report"
     ) {
-        val info = PeerSessionManager.getConnectionInfo() ?: run {
-            Timber.e("Connection info missing")
-            return
-        }
 
         viewModelScope.launch {
             when (val result = peerClient.prepareUpload(
-                ip = info.ip,
-                port = info.port,
-                expectedFingerprint = info.expectedFingerprint,
+                ip = p2PSharedState.ip,
+                port = p2PSharedState.port,
                 title = title,
                 files = files,
-                sessionId = info.sessionId
+                sessionId = p2PSharedState.sessionId
             )) {
                 is PrepareUploadResult.Success -> {
-                    peerToPeerInstance?.sessionID = info.sessionId
+                    peerToPeerInstance?.sessionID = p2PSharedState.sessionId
                     val fileInfoMap = result.transmissions.associateBy { it.id }
 
                     peerToPeerInstance?.widgetMediaFiles?.forEach { mediaFile ->

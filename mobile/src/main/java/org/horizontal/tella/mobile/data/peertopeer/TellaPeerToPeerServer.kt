@@ -21,9 +21,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
-import org.horizontal.tella.mobile.data.peertopeer.model.P2PServerState
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
-import org.horizontal.tella.mobile.data.peertopeer.model.ReceivingFile
+import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
@@ -48,7 +48,7 @@ class TellaPeerToPeerServer(
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
-    private val p2PServerState: P2PServerState
+    private val p2PSharedState: P2PSharedState
 ) : TellaServer {
     private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
@@ -89,9 +89,8 @@ class TellaPeerToPeerServer(
                     }
 
                     post(PeerApiRoutes.PING) {
-                        val hash = CertificateUtils.getPublicKeyHash(certificate)
                         CoroutineScope(Dispatchers.IO).launch {
-                            peerToPeerManager.notifyClientConnected(hash)
+                            peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
                         }
                         call.respondText("pong", status = HttpStatusCode.OK)
                     }
@@ -140,10 +139,6 @@ class TellaPeerToPeerServer(
                         }
 
                         launch {
-                            p2PServerState.apply {
-                                pin = this@TellaPeerToPeerServer.pin
-
-                            }
                             PeerEventManager.emitRegistrationSuccess()
                         }
 
@@ -173,13 +168,13 @@ class TellaPeerToPeerServer(
                                 call.respond(HttpStatusCode.InternalServerError, "Missing session")
                                 return@post
                             }
-
-                            val session = P2PSession(sessionId = sessionId, title = request.title)
+                            p2PSharedState.sessionId = sessionId
+                            val session = P2PSession(title = request.title)
 
 
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()
-                                val receivingFile = ReceivingFile(
+                                val receivingFile = ProgressFile(
                                     file = file,
                                     transmissionId = transmissionId
                                 )
@@ -191,7 +186,7 @@ class TellaPeerToPeerServer(
                                 )
                             }
 
-                            p2PServerState.session = session
+                            p2PSharedState.session = session
 
                             call.respond(
                                 HttpStatusCode.OK,

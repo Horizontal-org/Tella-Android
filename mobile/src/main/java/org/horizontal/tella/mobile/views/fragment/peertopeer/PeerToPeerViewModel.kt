@@ -16,6 +16,7 @@ import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
@@ -29,7 +30,8 @@ import javax.inject.Inject
 class PeerToPeerViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val peerClient: TellaPeerToPeerClient,
-    peerToPeerManager: PeerToPeerManager
+    peerToPeerManager: PeerToPeerManager,
+    val p2PState: P2PSharedState
 ) : ViewModel() {
 
     var isManualConnection: Boolean = true // default is manual
@@ -41,8 +43,6 @@ class PeerToPeerViewModel @Inject constructor(
     val getHashSuccess: LiveData<String> get() = _getHashSuccess
     private val _getHashError = MutableLiveData<Throwable>()
     val getHashError: LiveData<Throwable> get() = _getHashError
-    private val _sessionInfo = MutableStateFlow<PeerConnectionInfo?>(null)
-    val sessionInfo: StateFlow<PeerConnectionInfo?> = _sessionInfo
     val clientHash = peerToPeerManager.clientConnected
     private val _registrationServerSuccess = MutableLiveData<Boolean>()
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
@@ -102,7 +102,10 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
-                    PeerSessionManager.saveConnectionInfo(ip, port, hash, result.sessionId)
+                    with(p2PState) {
+                        this.sessionId = result.sessionId
+                    }
+
                     _registrationSuccess.postValue(true)
                 }
 
@@ -178,7 +181,4 @@ class PeerToPeerViewModel @Inject constructor(
 
     }
 
-    fun setPeerSessionInfo(info: PeerConnectionInfo) {
-        _sessionInfo.value = info
-    }
 }

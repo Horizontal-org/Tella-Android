@@ -254,11 +254,11 @@ class PrepareUploadFragment :
                 val selectedFiles = filesRecyclerViewAdapter.getFiles()
                 if (selectedFiles.isNotEmpty()) {
                     // Fill the PeerToPeerInstance in the ViewModel
-                    viewModel.peerToPeerInstance = PeerToPeerInstance(
-                        updated = System.currentTimeMillis(),
-                        widgetMediaFiles = viewModel.vaultFilesToMediaFiles(selectedFiles),
-                        title = binding.reportTitleEt.text.toString()
-                    )
+                    /*  viewModel.peerToPeerInstance = PeerToPeerInstance(
+                          updated = System.currentTimeMillis(),
+                          widgetMediaFiles = viewModel.vaultFilesToMediaFiles(selectedFiles),
+                          title = binding.reportTitleEt.text.toString()
+                      )*/
 
                     // Optional: add to bundle if still needed elsewhere
                     bundle.putSerializable("selectedFiles", ArrayList(selectedFiles))

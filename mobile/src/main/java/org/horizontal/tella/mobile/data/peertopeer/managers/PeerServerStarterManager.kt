@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
-import org.horizontal.tella.mobile.data.peertopeer.model.P2PServerState
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import java.security.KeyPair
 import java.security.cert.X509Certificate
@@ -23,7 +23,7 @@ class PeerServerStarterManager @Inject constructor(
         pin: String,
         cert: X509Certificate,
         config: KeyStoreConfig,
-        p2PServerState: P2PServerState,
+        p2PSharedState: P2PSharedState,
     ) {
         if (server == null) {
             server = TellaPeerToPeerServer(
@@ -33,7 +33,7 @@ class PeerServerStarterManager @Inject constructor(
                 certificate = cert,
                 keyStoreConfig = config,
                 peerToPeerManager = peerToPeerManager,
-                p2PServerState = p2PServerState
+                p2PSharedState = p2PSharedState
             )
             server?.start()
         }

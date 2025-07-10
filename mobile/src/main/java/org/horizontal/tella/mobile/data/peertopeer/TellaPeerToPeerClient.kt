@@ -19,7 +19,6 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerSessionManager
 import org.json.JSONObject
 import timber.log.Timber
 import java.security.SecureRandom
@@ -27,11 +26,13 @@ import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class TellaPeerToPeerClient {
+class TellaPeerToPeerClient @Inject constructor(){
+
 
     private fun getClientWithFingerprintValidation(expectedFingerprint: String): OkHttpClient {
         val trustManager = object : X509TrustManager {
@@ -83,7 +84,7 @@ class TellaPeerToPeerClient {
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                val body = response.body?.string().orEmpty()
+                val body = response.body.string().orEmpty()
 
                 if (response.isSuccessful) {
                     return@use parseSessionIdFromResponse(body)
@@ -178,7 +179,7 @@ class TellaPeerToPeerClient {
             val response = Json.decodeFromString<PeerPrepareUploadResponse>(body)
 
             response.files.forEach {
-                PeerSessionManager.saveTransmissionId(it.id, it.transmissionId)
+             //   PeerSessionManager.saveTransmissionId(it.id, it.transmissionId)
             }
 
             PrepareUploadResult.Success(response.files)

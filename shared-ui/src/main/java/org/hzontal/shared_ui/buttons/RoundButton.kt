@@ -128,6 +128,7 @@ class RoundButton @JvmOverloads constructor(
         else ContextCompat.getDrawable(context, R.drawable.bg_information_button)
     }
 
+    //TODO FIX TEXT ALLCAPS EVERY WHERE
     private fun setTextCaps(isTextAllCaps: Boolean) {
         binding.sheetTextView.isAllCaps = isTextAllCaps
     }

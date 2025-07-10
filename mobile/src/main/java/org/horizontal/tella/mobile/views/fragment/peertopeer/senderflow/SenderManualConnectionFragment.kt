@@ -7,10 +7,10 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerConnectionInfo
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 
+//TODO SHOW ERRORS IN THE BOTTOM
 class SenderManualConnectionFragment :
     BaseBindingFragment<SenderManualConnectionBinding>(SenderManualConnectionBinding::inflate) {
 
@@ -70,17 +70,6 @@ class SenderManualConnectionFragment :
         binding.toolbar.backClickListener = { nav().popBackStack() }
         binding.backBtn.setOnClickListener { nav().popBackStack() }
         binding.nextBtn.setOnClickListener {
-            val ip = binding.ipAddress.text.toString()
-            val pin = binding.pin.text.toString()
-            val port = binding.port.text.toString()
-            viewModel.setPeerSessionInfo(
-                PeerConnectionInfo(
-                    ip = ip,
-                    port = port,
-                    pin = pin.toInt()
-                )
-            ) // Store values
-
             viewModel.handleCertificate(
                 ip = binding.ipAddress.text.toString(),
                 port = binding.port.text.toString(),
@@ -92,15 +81,6 @@ class SenderManualConnectionFragment :
     private fun initObservers() {
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
             bundle.putString("payload", hash)
-            viewModel.setPeerSessionInfo(
-                PeerConnectionInfo(
-                    ip = binding.ipAddress.text.toString(),
-                    port = binding.port.text.toString(),
-                    pin = binding.pin.text.toString().toInt(),
-                    hash = hash
-                )
-            )
-
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }
 
