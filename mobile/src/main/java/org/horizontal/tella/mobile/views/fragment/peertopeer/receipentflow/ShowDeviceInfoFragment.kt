@@ -29,9 +29,9 @@ class ShowDeviceInfoFragment :
     }
 
     private fun initView() {
-        binding.connectCode.setRightText(payload?.ipAddress)
-        binding.pin.setRightText(payload?.pin)
-        binding.port.setRightText(payload?.port.toString())
+        binding.connectCode.setRightText(viewModel.p2PState.ip)
+        binding.pin.setRightText(viewModel.p2PState.pin)
+        binding.port.setRightText(viewModel.p2PState.port)
     }
 
     private fun initListeners() {

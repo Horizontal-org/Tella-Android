@@ -86,6 +86,7 @@ class SenderViewModel @Inject constructor(
             when (val result = peerClient.prepareUpload(
                 ip = p2PSharedState.ip,
                 port = p2PSharedState.port,
+                expectedFingerprint = p2PSharedState.hash,
                 title = title,
                 files = files,
                 sessionId = p2PSharedState.sessionId
@@ -132,6 +133,10 @@ class SenderViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        p2PSharedState.clear()
+    }
 
 }
 

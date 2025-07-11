@@ -181,4 +181,9 @@ class PeerToPeerViewModel @Inject constructor(
 
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        p2PState.clear()
+    }
+
 }

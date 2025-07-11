@@ -10,4 +10,16 @@ class P2PSharedState(
     var session: P2PSession? = null,
     var failedAttempts: Int = 0,
     var isUsingManualConnection: Boolean = false
-)
+) {
+
+    fun clear() {
+        ip = ""
+        port = ""
+        sessionId = ""
+        hash = ""
+        pin = null
+        session = null
+        failedAttempts = 0
+        isUsingManualConnection = false
+    }
+}
