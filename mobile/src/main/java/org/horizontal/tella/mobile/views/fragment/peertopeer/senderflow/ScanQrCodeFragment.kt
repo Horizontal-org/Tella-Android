@@ -64,6 +64,7 @@ class ScanQrCodeFragment :
                         viewModel.p2PState.port = payload.port.toString()
                         viewModel.p2PState.hash = payload.certificateHash
                         viewModel.p2PState.ip = payload.ipAddress
+
                         viewModel.startRegistration(
                             ip = payload.ipAddress,
                             port = payload.port.toString(),

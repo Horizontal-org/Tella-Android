@@ -70,7 +70,7 @@ class PeerToPeerViewModel @Inject constructor(
             PeerEventManager.registrationRequests.collect { (registrationId, payload) ->
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
 
-                if (!isManualConnection) {
+                if (!p2PState.isUsingManualConnection) {
                     // QR-mode: auto-accept immediately
                     PeerEventManager.confirmRegistration(registrationId, true)
                     _registrationSuccess.postValue(true)
@@ -147,6 +147,7 @@ class PeerToPeerViewModel @Inject constructor(
             val result = FingerprintFetcher.fetch(ip, port.toInt())
             result.onSuccess { hash ->
                 Timber.d("hash ***** $hash")
+                p2PState.hash = hash
                 _getHashSuccess.postValue(hash)
 
                 // Notify the server after fetching the hash

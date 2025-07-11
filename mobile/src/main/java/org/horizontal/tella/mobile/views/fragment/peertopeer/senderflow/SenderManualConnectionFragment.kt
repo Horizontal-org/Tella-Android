@@ -10,7 +10,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 
-//TODO SHOW ERRORS IN THE BOTTOM
+// TODO: Show errors in the bottom sheet
 class SenderManualConnectionFragment :
     BaseBindingFragment<SenderManualConnectionBinding>(SenderManualConnectionBinding::inflate) {
 
@@ -18,63 +18,36 @@ class SenderManualConnectionFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initListeners()
         initView()
+        initListeners()
+        initObservers()
     }
 
-    private fun initView() {
-        binding.ipAddress.onChange {
-            updateNextButtonState()
-        }
-        binding.pin.onChange {
-            updateNextButtonState()
-        }
-
-        binding.port.onChange {
-            updateNextButtonState()
-        }
-
-        initObservers()
+    private fun initView() = with(binding) {
+        ipAddress.onChange { updateNextButtonState() }
+        pin.onChange { updateNextButtonState() }
+        port.onChange { updateNextButtonState() }
 
         updateNextButtonState()
-
-        KeyboardUtil(binding.root)
-
+        KeyboardUtil(root)
     }
 
-    private fun initListeners() {
-        binding.backBtn.setOnClickListener {
-            nav().popBackStack()
-        }
+    private fun initListeners() = with(binding) {
+        backBtn.setOnClickListener { nav().popBackStack() }
+        toolbar.backClickListener = { nav().popBackStack() }
 
-        binding.nextBtn.setOnClickListener {
+        nextBtn.setOnClickListener {
+            val ip = ipAddress.text.toString()
+            val port = port.text.toString()
+            val pin = this.pin.text.toString()
 
-        }
-    }
+            viewModel.p2PState.apply {
+                this.ip = ip
+                this.port = port
+                this.pin = pin
+            }
 
-    private fun isInputValid(): Boolean {
-        return binding.ipAddress.text?.isNotBlank() == true &&
-                binding.pin.text?.isNotBlank() == true
-    }
-
-    private fun updateNextButtonState() {
-        val enabled = isInputValid()
-        binding.nextBtn.isEnabled = enabled
-        binding.nextBtn.setTextColor(
-            ContextCompat.getColor(
-                baseActivity,
-                if (enabled) android.R.color.white else android.R.color.darker_gray
-            )
-        )
-        binding.toolbar.backClickListener = { nav().popBackStack() }
-        binding.backBtn.setOnClickListener { nav().popBackStack() }
-        binding.nextBtn.setOnClickListener {
-            viewModel.handleCertificate(
-                ip = binding.ipAddress.text.toString(),
-                port = binding.port.text.toString(),
-                pin = binding.pin.text.toString()
-            )
+            viewModel.handleCertificate(ip, port, pin)
         }
     }
 
@@ -89,4 +62,19 @@ class SenderManualConnectionFragment :
         }
     }
 
+    private fun isInputValid(): Boolean = with(binding) {
+        ipAddress.text?.isNotBlank() == true &&
+                pin.text?.isNotBlank() == true
+    }
+
+    private fun updateNextButtonState() = with(binding) {
+        val enabled = isInputValid()
+        nextBtn.isEnabled = enabled
+        nextBtn.setTextColor(
+            ContextCompat.getColor(
+                baseActivity,
+                if (enabled) android.R.color.white else android.R.color.darker_gray
+            )
+        )
+    }
 }

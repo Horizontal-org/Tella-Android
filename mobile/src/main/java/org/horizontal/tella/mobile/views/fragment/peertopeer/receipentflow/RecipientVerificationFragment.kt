@@ -19,6 +19,7 @@ import javax.inject.Inject
 
 class RecipientVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
+
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var payload: PeerConnectionPayload? = null
 
@@ -27,58 +28,49 @@ class RecipientVerificationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         arguments?.getString("payload")?.let { payloadJson ->
             payload = Gson().fromJson(payloadJson, PeerConnectionPayload::class.java)
         }
+
         initListeners()
         initObservers()
     }
 
-    private fun initListeners() {
+    private fun initListeners() = with(binding) {
+        toolbar.backClickListener = { navigateBackAndStopServer() }
+        discardBtn.setOnClickListener { navigateBackAndStopServer() }
 
-        binding.toolbar.backClickListener = {
-            peerServerStarterManager.stopServer()
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
-
-        binding.discardBtn.setOnClickListener {
-            peerServerStarterManager.stopServer()
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
-
-        binding.confirmAndConnectBtn.setOnClickListener(null)
+        // Button is disabled until a request is received.
+        confirmAndConnectBtn.setOnClickListener(null)
     }
 
-    private fun initObservers() {
-        binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
-
+    private fun initObservers() = with(binding) {
+        hashContentTextView.text = viewModel.p2PState.hash.formatHash()
         viewModel.p2PState.isUsingManualConnection = true
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.incomingRequest.collect { request ->
                     if (request != null) {
-                        binding.confirmAndConnectBtn.isEnabled = true
-                        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
-
-                        // Set the click listener when the request is available
-                        binding.confirmAndConnectBtn.setOnClickListener {
+                        confirmAndConnectBtn.isEnabled = true
+                        confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
+                        confirmAndConnectBtn.setOnClickListener {
                             viewModel.onUserConfirmedRegistration(request.registrationId)
                         }
-
-                        binding.discardBtn.setOnClickListener {
-                            peerServerStarterManager.stopServer()
-                            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+                        discardBtn.setOnClickListener {
                             viewModel.onUserRejectedRegistration(request.registrationId)
+                            navigateBackAndStopServer()
                         }
                     } else {
-                        binding.confirmAndConnectBtn.isEnabled = false
-                        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange16_btn)
-                        binding.confirmAndConnectBtn.setOnClickListener(null) // Optional: clear listener
+                        confirmAndConnectBtn.isEnabled = false
+                        confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange16_btn)
+                        confirmAndConnectBtn.setOnClickListener(null)
                     }
                 }
             }
         }
+
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
@@ -86,4 +78,8 @@ class RecipientVerificationFragment :
         }
     }
 
+    private fun navigateBackAndStopServer() {
+        peerServerStarterManager.stopServer()
+        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+    }
 }
