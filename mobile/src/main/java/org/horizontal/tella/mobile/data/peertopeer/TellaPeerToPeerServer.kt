@@ -21,8 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
-import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
@@ -170,7 +170,6 @@ class TellaPeerToPeerServer(
                             }
                             p2PSharedState.sessionId = sessionId
                             val session = P2PSession(title = request.title)
-
 
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()

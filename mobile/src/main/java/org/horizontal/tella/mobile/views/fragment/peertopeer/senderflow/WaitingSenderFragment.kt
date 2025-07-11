@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
@@ -39,9 +40,15 @@ class WaitingSenderFragment :
             }
         }
 
-
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
-            navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
+            val fileInfos = response.files
+            fileInfos.forEach { fileInfo ->
+                viewModel.p2PSharedState.session?.files?.let { filesMap ->
+                    filesMap[fileInfo.id]?.transmissionId = fileInfo.transmissionId
+                }
+                navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
+            }
         }
+
     }
 }

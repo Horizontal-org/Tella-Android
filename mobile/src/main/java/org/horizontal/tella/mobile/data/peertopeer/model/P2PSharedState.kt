@@ -9,7 +9,7 @@ class P2PSharedState(
     var pin: String? = null,
     var session: P2PSession? = null,
     var failedAttempts: Int = 0,
-    var isUsingManualConnection: Boolean = false
+    var isUsingManualConnection: Boolean = false,
 ) {
 
     fun clear() {

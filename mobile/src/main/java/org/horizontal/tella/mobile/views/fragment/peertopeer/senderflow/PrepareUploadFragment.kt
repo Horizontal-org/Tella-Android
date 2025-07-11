@@ -18,8 +18,12 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
+import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
 import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
+import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
@@ -252,16 +256,29 @@ class PrepareUploadFragment :
         binding.sendReportBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 val selectedFiles = filesRecyclerViewAdapter.getFiles()
-                if (selectedFiles.isNotEmpty()) {
-                    // Fill the PeerToPeerInstance in the ViewModel
-                    /*  viewModel.peerToPeerInstance = PeerToPeerInstance(
-                          updated = System.currentTimeMillis(),
-                          widgetMediaFiles = viewModel.vaultFilesToMediaFiles(selectedFiles),
-                          title = binding.reportTitleEt.text.toString()
-                      )*/
 
-                    // Optional: add to bundle if still needed elsewhere
-                    bundle.putSerializable("selectedFiles", ArrayList(selectedFiles))
+                if (selectedFiles.isNotEmpty()) {
+                    val session = viewModel.p2PSharedState.session ?: P2PSession().also {
+                        viewModel.p2PSharedState.session = it
+                    }
+
+                    selectedFiles.forEach { vaultFile ->
+                        val p2pFile = P2PFile(
+                            id = vaultFile.id,
+                            fileName = vaultFile.name,
+                            size = vaultFile.size,
+                            fileType = vaultFile.mimeType ?: "application/octet-stream",
+                            sha256 = vaultFile.hash
+                        )
+
+                        val progressFile = ProgressFile(
+                            file = p2pFile,
+                            vaultFile = vaultFile,
+                            status = P2PFileStatus.QUEUE
+                        )
+
+                        session.files[vaultFile.id] = progressFile
+                    }
 
                     // Navigate
                     navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
@@ -273,6 +290,7 @@ class PrepareUploadFragment :
             }
         }
     }
+
 
 
     private fun showSubmitReportErrorSnackBar() {

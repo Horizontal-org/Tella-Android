@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import javax.inject.Singleton
 
@@ -27,7 +28,15 @@ object PeerModule {
 
     @Provides
     @Singleton
-    fun provideP2PServerState(): P2PSharedState {
-        return P2PSharedState()
+    fun provideSession(): P2PSession {
+        return P2PSession()
+    }
+
+    @Provides
+    @Singleton
+    fun provideP2PServerState(p2PSession: P2PSession): P2PSharedState {
+        val p2PSharedState = P2PSharedState()
+        p2PSharedState.session = p2PSession
+        return p2PSharedState
     }
 }
