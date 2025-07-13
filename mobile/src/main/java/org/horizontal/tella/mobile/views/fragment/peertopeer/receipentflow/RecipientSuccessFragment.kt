@@ -8,34 +8,40 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentRecipientSuccessBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import org.hzontal.shared_ui.utils.DialogUtils
 
 /**
  * Created by wafa on 3/6/2025.
  */
-class RecipientSuccessFragment :
-    BaseBindingFragment<FragmentRecipientSuccessBinding>(FragmentRecipientSuccessBinding::inflate) {
+class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBinding>(FragmentRecipientSuccessBinding::inflate){
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
     }
-
     private fun initView() {
+        val fileCount = arguments?.getInt("fileCount") ?: 0
+        val sessionId = arguments?.getString("sessionId").orEmpty()
 
         with(binding) {
             // Set the dynamic message
-            waitingText.text =
-                getString(R.string.prepare_upload_message, viewModel.p2PState.session?.files?.size)
+            waitingText.text = getString(R.string.prepare_upload_message, fileCount)
 
             // Handle Accept/Reject buttons
             acceptBtn.setOnClickListener {
-                viewModel.confirmPrepareUpload(viewModel.getSessionId(), true)
+
+                viewModel.confirmPrepareUpload(sessionId, true)
+
                 navManager().navigateFromRecipientSuccessFragmentToRecipientUploadFilesFragment()
             }
 
             rejectBtn.setOnClickListener {
                 //TODO WE MOVE THIS TO THE NAV MANAGER
-                viewModel.confirmPrepareUpload(viewModel.getSessionId(), false)
+                viewModel.confirmPrepareUpload(sessionId, false)
                 // Set result safely via SavedStateHandle
                 findNavController().previousBackStackEntry
                     ?.savedStateHandle

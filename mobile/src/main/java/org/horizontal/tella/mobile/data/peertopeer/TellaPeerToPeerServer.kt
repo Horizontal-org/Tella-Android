@@ -165,41 +165,36 @@ class TellaPeerToPeerServer(
                         }
 
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
-
                         if (accepted) {
-                            val session = p2PSharedState.session ?: run {
+                            val sessionId = serverSession?.sessionId ?: run {
                                 call.respond(HttpStatusCode.InternalServerError, "Missing session")
                                 return@post
                             }
+                            p2PSharedState.session?.sessionId = sessionId
+                            val session = P2PSession(title = request.title)
 
-                            // Assign a transmissionId to each matching file
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()
+                                val receivingFile = ProgressFile(
+                                    file = file,
+                                    transmissionId = transmissionId
+                                )
+                                session.files[transmissionId] = receivingFile
 
-                                val progressFile =
-                                    session.files.values.find { it.file.id == file.id }
-
-                                if (progressFile != null) {
-                                    progressFile.transmissionId = transmissionId
-                                } else {
-                                    // Fallback, in case something went wrong with pre-population
-                                    session.files[transmissionId] =
-                                        ProgressFile(file = file, transmissionId = transmissionId)
-                                }
-
-                                FileInfo(id = file.id, transmissionId = transmissionId)
+                                FileInfo(
+                                    id = file.id,
+                                    transmissionId = transmissionId
+                                )
                             }
 
-                            call.respond(
-                                HttpStatusCode.OK,
-                                PeerPrepareUploadResponse(files = responseFiles)
-                            )
+                            p2PSharedState.session = session
+
+                            val responsePayload = PeerPrepareUploadResponse(files = responseFiles)
+                            call.respond(HttpStatusCode.OK, responsePayload)
                         } else {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
                         }
                     }
-
-
                 }
 
             }

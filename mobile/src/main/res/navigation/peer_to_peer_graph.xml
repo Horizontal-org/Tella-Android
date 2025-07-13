@@ -148,7 +148,7 @@
 
     <fragment
         android:id="@+id/uploadFilesFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderUploadFilesFragment"
         android:label="UploadFilesFragment"
         tools:layout="@layout/fragment_upload_files" />
 

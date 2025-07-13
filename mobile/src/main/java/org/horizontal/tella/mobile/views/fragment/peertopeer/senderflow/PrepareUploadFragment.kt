@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -22,7 +21,6 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
-import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
@@ -33,7 +31,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OnNavBckListener
-import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.REPORT_ENTRY
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
@@ -54,7 +52,7 @@ class PrepareUploadFragment :
     IReportAttachmentsHandler, OnNavBckListener {
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isTitleEnabled = false
-    private val viewModel: SenderViewModel by activityViewModels()
+    private val viewModel: FileTransferViewModel by activityViewModels()
     private var disposables =
         MyApplication.bus().createCompositeDisposable()
 

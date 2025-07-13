@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SenderViewModel @Inject constructor(
+class FileTransferViewModel @Inject constructor(
     private val peerClient: TellaPeerToPeerClient,
     var p2PSharedState: P2PSharedState
 ) : ViewModel() {
@@ -90,7 +90,6 @@ class SenderViewModel @Inject constructor(
                 sessionId = getSessionId()
             )) {
                 is PrepareUploadResult.Success -> {
-                    peerToPeerInstance?.sessionID = getSessionId()
                     val fileInfoMap = result.transmissions.associateBy { it.id }
 
                     peerToPeerInstance?.widgetMediaFiles?.forEach { mediaFile ->

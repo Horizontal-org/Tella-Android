@@ -4,20 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
-import org.hzontal.shared_ui.utils.DialogUtils
+import org.horizontal.tella.mobile.views.fragment.peertopeer.FileTransferViewModel
 
 /**
  * Created by wafa on 3/6/2025.
  */
 class WaitingSenderFragment :
     BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
-    private val viewModel: SenderViewModel by activityViewModels()
+    private val viewModel: FileTransferViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.toolbar.setStartTextTitle(getString(R.string.send_files))

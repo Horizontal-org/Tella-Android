@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
@@ -39,17 +40,17 @@ class PeerToPeerViewModel @Inject constructor(
     var isManualConnection: Boolean = true // default is manual
     var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
-    private val _registrationSuccess = MutableLiveData<Boolean>()
+    private val _registrationSuccess = SingleLiveEvent<Boolean>()
     val registrationSuccess: LiveData<Boolean> get() = _registrationSuccess
-    private val _getHashSuccess = MutableLiveData<String>()
+    private val _getHashSuccess = SingleLiveEvent<String>()
     val getHashSuccess: LiveData<String> get() = _getHashSuccess
-    private val _getHashError = MutableLiveData<Throwable>()
+    private val _getHashError = SingleLiveEvent<Throwable>()
     val getHashError: LiveData<Throwable> get() = _getHashError
     val clientHash = peerToPeerManager.clientConnected
-    private val _registrationServerSuccess = MutableLiveData<Boolean>()
+    private val _registrationServerSuccess = SingleLiveEvent<Boolean>()
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
-    private val _incomingPrepareRequest = MutableLiveData<PrepareUploadRequest?>()
-    val incomingPrepareRequest: MutableLiveData<PrepareUploadRequest?> = _incomingPrepareRequest
+    private val _incomingPrepareRequest = SingleLiveEvent<PrepareUploadRequest?>()
+    val incomingPrepareRequest: SingleLiveEvent<PrepareUploadRequest?> = _incomingPrepareRequest
     private val _incomingRequest = MutableStateFlow<IncomingRegistration?>(null)
     val incomingRequest: StateFlow<IncomingRegistration?> = _incomingRequest
     private val networkInfoManager = NetworkInfoManager(context)
@@ -58,9 +59,6 @@ class PeerToPeerViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             PeerEventManager.prepareUploadEvents.collect { request ->
-                p2PState.session?.sessionId = request.sessionId
-                p2PState.session?.title = request.title
-                populateFilesFromRequest(request, p2PState)
                 _incomingPrepareRequest.postValue(request)
             }
         }
