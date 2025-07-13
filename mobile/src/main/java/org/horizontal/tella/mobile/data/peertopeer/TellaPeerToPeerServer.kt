@@ -19,6 +19,8 @@ import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
@@ -92,7 +94,7 @@ class TellaPeerToPeerServer(
                         CoroutineScope(Dispatchers.IO).launch {
                             peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
                         }
-                        call.respondText("pong", status = HttpStatusCode.OK)
+                        call.respondText("ping", status = HttpStatusCode.OK)
                     }
 
                     post(PeerApiRoutes.REGISTER) {
@@ -187,10 +189,10 @@ class TellaPeerToPeerServer(
 
                             p2PSharedState.session = session
 
-                            call.respond(
-                                HttpStatusCode.OK,
-                                PeerPrepareUploadResponse(files = responseFiles)
-                            )
+                            val responsePayload = PeerPrepareUploadResponse(files = responseFiles)
+                            val json = Json.encodeToString(value = responsePayload)
+                            println("✅ JSON to send: $json") // or Timber.d
+                            call.respond(HttpStatusCode.OK, responsePayload)
                         } else {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
                         }

@@ -22,9 +22,8 @@ class WaitingSenderFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.toolbar.setStartTextTitle(getString(R.string.send_files))
         binding.waitingText.text = getString(R.string.waiting_for_the_recipient_to_accept_files)
-        val selectedFiles =
-            arguments?.getSerializable("selectedFiles") as? List<VaultFile> ?: emptyList()
-        viewModel.prepareUploadsFromVaultFiles(selectedFiles)
+
+        viewModel.prepareUploadsFromVaultFiles()
         binding.toolbar.backClickListener = {
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }

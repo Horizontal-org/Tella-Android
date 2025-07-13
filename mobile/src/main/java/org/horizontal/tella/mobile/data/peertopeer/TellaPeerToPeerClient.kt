@@ -84,7 +84,7 @@ class TellaPeerToPeerClient @Inject constructor(){
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                val body = response.body.string().orEmpty()
+                val body = response.body.string()
 
                 if (response.isSuccessful) {
                     return@use parseSessionIdFromResponse(body)
@@ -159,7 +159,7 @@ class TellaPeerToPeerClient @Inject constructor(){
                 .build()
 
             client.newCall(request).execute().use { response ->
-                val responseBody = response.body?.string().orEmpty()
+                val responseBody = response.body.string()
 
                 return@withContext if (response.isSuccessful) {
                     parseTransmissionId(responseBody)

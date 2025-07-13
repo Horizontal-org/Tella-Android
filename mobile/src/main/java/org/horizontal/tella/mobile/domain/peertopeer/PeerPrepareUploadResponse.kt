@@ -7,7 +7,7 @@ data class FileInfo(
     val id: String,
     val transmissionId: String
 )
-
+@Serializable
 data class PeerPrepareUploadResponse(
     val files: List<FileInfo>
 )

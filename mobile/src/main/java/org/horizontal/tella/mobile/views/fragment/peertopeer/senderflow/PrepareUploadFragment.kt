@@ -256,6 +256,7 @@ class PrepareUploadFragment :
         binding.sendReportBtn.setOnClickListener {
             if (isSubmitEnabled) {
                 val selectedFiles = filesRecyclerViewAdapter.getFiles()
+                viewModel.p2PSharedState.session?.title = binding.reportTitleEt.text.toString()
 
                 if (selectedFiles.isNotEmpty()) {
                     val session = viewModel.p2PSharedState.session ?: P2PSession().also {
@@ -290,7 +291,6 @@ class PrepareUploadFragment :
             }
         }
     }
-
 
 
     private fun showSubmitReportErrorSnackBar() {

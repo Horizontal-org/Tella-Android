@@ -8,7 +8,7 @@ class P2PSharedState(
     var hash: String = "",
     var pin: String? = null,
     var session: P2PSession? = null,
-    var failedAttempts: Int = 0,
+    private var failedAttempts: Int = 0,
     var isUsingManualConnection: Boolean = false,
 ) {
 

@@ -77,18 +77,15 @@ class SenderViewModel @Inject constructor(
         return vaultFiles
     }
 
-    fun prepareUploadsFromVaultFiles(
-        files: List<VaultFile>,
-        title: String = "Title of the report"
-    ) {
+    fun prepareUploadsFromVaultFiles() {
 
         viewModelScope.launch {
             when (val result = peerClient.prepareUpload(
                 ip = p2PSharedState.ip,
                 port = p2PSharedState.port,
                 expectedFingerprint = p2PSharedState.hash,
-                title = title,
-                files = files,
+                title = getTitleFromState(),
+                files = getVaultFilesFromState(),
                 sessionId = p2PSharedState.sessionId
             )) {
                 is PrepareUploadResult.Success -> {
@@ -102,9 +99,6 @@ class SenderViewModel @Inject constructor(
                     }
 
                     _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissions))
-
-                    //TODO UNIFY THE INSTANCE EITHER USE PEERTOPEERINSTANCE OR USE PEERSESSIONMANAGER
-                    //TODO UNIFY THE FORMENDVIEW TO USE THE NEW STATE MANAGER ...
                 }
 
                 is PrepareUploadResult.Forbidden -> {
@@ -131,6 +125,17 @@ class SenderViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getVaultFilesFromState(): List<VaultFile> {
+        return p2PSharedState.session?.files
+            ?.values
+            ?.mapNotNull { it.vaultFile }
+            .orEmpty()
+    }
+
+    private fun getTitleFromState(): String {
+        return p2PSharedState.session?.title ?: ""
     }
 
     override fun onCleared() {
