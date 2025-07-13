@@ -181,29 +181,6 @@ class PeerToPeerViewModel @Inject constructor(
     fun clearPrepareRequest() {
         _incomingPrepareRequest.value = null
         hasNavigatedToSuccessFragment = false
-
-    }
-
-    fun getSessionId(): String {
-        return p2PState.session?.sessionId ?: ""
-    }
-
-    fun populateFilesFromRequest(request: PrepareUploadRequest, sharedState: P2PSharedState) {
-        val session = sharedState.session ?: return
-
-        session.sessionId = request.sessionId
-        session.title = request.title
-
-        request.files.forEach { p2pFile ->
-            val transmissionId = UUID.randomUUID().toString()
-
-            val progressFile = ProgressFile(
-                file = p2pFile,
-                transmissionId = transmissionId
-            )
-
-            session.files[transmissionId] = progressFile
-        }
     }
 
     override fun onCleared() {

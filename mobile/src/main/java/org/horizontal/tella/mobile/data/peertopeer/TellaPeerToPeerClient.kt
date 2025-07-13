@@ -12,6 +12,7 @@ import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
+import org.horizontal.tella.mobile.data.peertopeer.network.ProgressRequestBody
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
@@ -21,6 +22,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.json.JSONObject
 import timber.log.Timber
+import java.io.InputStream
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -197,6 +199,47 @@ class TellaPeerToPeerClient @Inject constructor(){
             else -> PrepareUploadResult.Failure(Exception("Unhandled server error $code: $body"))
         }
     }
+
+
+    suspend fun uploadFileWithProgress(
+        ip: String,
+        port: String,
+        expectedFingerprint: String,
+        sessionId: String,
+        fileId: String,
+        transmissionId: String,
+        inputStream: InputStream,
+        fileSize: Long,
+        onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
+    ): Boolean = withContext(Dispatchers.IO) {
+        val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
+
+        val client = getClientWithFingerprintValidation(expectedFingerprint)
+
+        val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
+            .build()
+
+        return@withContext try {
+            client.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
+                    Timber.d("Upload successful for $fileId")
+                    true
+                } else {
+                    Timber.e("Upload failed for $fileId with code ${response.code}")
+                    false
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Exception while uploading $fileId")
+            false
+        }
+    }
+
 
 
 }

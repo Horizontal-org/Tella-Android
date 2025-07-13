@@ -14,13 +14,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
+import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
-import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
+import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
 import timber.log.Timber
@@ -37,6 +39,8 @@ class FileTransferViewModel @Inject constructor(
     private val _prepareRejected = MutableLiveData<Event<Boolean>>()
     val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
     var peerToPeerInstance: PeerToPeerInstance? = null
+    private val _uploadProgress = MutableLiveData<Int>() // value from 0 to 100
+    val uploadProgress: LiveData<Int> get() = _uploadProgress
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -127,6 +131,57 @@ class FileTransferViewModel @Inject constructor(
         }
     }
 
+
+    fun uploadAllFiles(onFileUploaded: () -> Unit) {
+        viewModelScope.launch {
+            val session = p2PSharedState.session ?: return@launch
+            val ip = p2PSharedState.ip
+            val port = p2PSharedState.port
+            val fingerprint = p2PSharedState.hash
+
+            val totalSize = session.files.values.sumOf { it.vaultFile?.size ?: 0L }
+
+            session.files.values.forEach { progressFile ->
+                val vaultFile = progressFile.vaultFile ?: return@forEach
+                val inputStream =MediaFileHandler.getStream(vaultFile) // Use your actual method here to get InputStream
+
+                progressFile.status = P2PFileStatus.SENDING
+
+                try {
+                    if (inputStream != null) {
+                        peerClient.uploadFileWithProgress(
+                            ip = ip,
+                            port = port,
+                            expectedFingerprint = fingerprint,
+                            sessionId = session.sessionId,
+                            fileId = progressFile.file.id,
+                            transmissionId = progressFile.transmissionId.orEmpty(),
+                            inputStream = inputStream,
+                            fileSize = vaultFile.size
+                        ) { written, _ ->
+                            progressFile.bytesTransferred = written.toInt()
+
+                            val uploaded = session.files.values.sumOf { it.bytesTransferred }
+                            val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+                            _uploadProgress.postValue(percent)
+                        }
+                    }
+
+                    progressFile.status = P2PFileStatus.FINISHED
+                    onFileUploaded()
+                } catch (e: Exception) {
+                    progressFile.status = P2PFileStatus.FAILED
+                    Timber.e(e, "Upload failed for file ${progressFile.file.fileName}")
+                } finally {
+                    inputStream?.close()
+                }
+            }
+
+            session.status = SessionStatus.FINISHED
+        }
+    }
+
+
     private fun getVaultFilesFromState(): List<VaultFile> {
         return p2PSharedState.session?.files
             ?.values
@@ -145,10 +200,6 @@ class FileTransferViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         p2PSharedState.clear()
-    }
-
-    fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
-        PeerEventManager.resolveUserDecision(sessionId, accepted)
     }
 
 }

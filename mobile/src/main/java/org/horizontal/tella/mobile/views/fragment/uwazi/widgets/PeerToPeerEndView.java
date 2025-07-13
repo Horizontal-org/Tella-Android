@@ -12,31 +12,23 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.hzontal.utils.MediaFile;
 
 import org.horizontal.tella.mobile.R;
-import org.horizontal.tella.mobile.domain.entity.EntityStatus;
-import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile;
-import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus;
-import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance;
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus;
+import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile;
+import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus;
 import org.horizontal.tella.mobile.util.FileUtil;
-import org.horizontal.tella.mobile.util.Util;
 import org.hzontal.shared_ui.submission.SubmittingItem;
 
-import java.util.Objects;
+import java.util.List;
 
-/**
- * Created by wafa on 9/7/2025.
- */
 public class PeerToPeerEndView extends FrameLayout {
-    LinearLayout partsListView;
-    TextView titleView;
-    TextView formStatusTextView;
-    TextView formSizeView;
-    String title;
-    LinearProgressIndicator totalProgress;
-    long formSize = 0L;
-    private PeerToPeerInstance instance;
+    private final LinearProgressIndicator totalProgress;
+    private final TextView titleView;
+    private final TextView formSizeView;
+    private LinearLayout partsListView;
+
+    private final String title;
     private boolean previewUploaded;
 
     public PeerToPeerEndView(Context context, String title) {
@@ -50,198 +42,128 @@ public class PeerToPeerEndView extends FrameLayout {
 
         totalProgress = findViewById(R.id.totalProgress);
         formSizeView = findViewById(R.id.formSize);
-
-        formStatusTextView = findViewById(R.id.form_status);
     }
 
-    public void setInstance(@NonNull PeerToPeerInstance instance, boolean offline, boolean previewUploaded) {
-        this.instance = instance;
+    public void setFiles(List<ProgressFile> progressFiles, boolean offline, boolean previewUploaded) {
         this.previewUploaded = previewUploaded;
-        refreshInstance(offline);
-    }
 
-    public void refreshInstance(boolean offline) {
-        if (this.instance == null) {
-            return;
-        }
-
-        TextView formNameView = findViewById(R.id.title);
-
-        formNameView.setText(Objects.requireNonNull(instance.getTitle()));
+        titleView.setText(title);
 
         partsListView = findViewById(R.id.formPartsList);
         partsListView.removeAllViews();
 
-        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
-            partsListView.addView(createFormMediaFileItemView(mediaFile, offline));
-            formSize += mediaFile.size;
+        for (ProgressFile file : progressFiles) {
+            partsListView.addView(createProgressFileItemView(file, offline));
         }
-        setFormSizeLabel(instance, 0);
-        uploadProgressVisibity(instance, offline);
-        setUploadProgress(instance, 0);
+
+        uploadProgressVisibility(progressFiles, true);
+        setUploadProgress(progressFiles, 0f);
     }
 
-    void setFormSizeLabel(@NonNull PeerToPeerInstance instance, int percent) {
-        String title;
-        if (instance.getWidgetMediaFiles().isEmpty()) {
-            title = getStatusLabel(instance.getStatus());
-            formSizeView.setText(title);
-            return;
-        }
-        switch (instance.getStatus()) {
-            case SUBMITTED:
-                title = getStatusLabel(instance.getStatus()) + "\n" +
-                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
-                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
-                        FileUtil.getFileSizeString(formSize);
-                break;
-            case PAUSED:
-                title = getStatusLabel(instance.getStatus()) + "\n" +
-                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
-                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
-                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize);
-                break;
-            case FINALIZED:
-            case SUBMISSION_PENDING:
-            case SUBMISSION_ERROR:
-                title = getStatusLabel(instance.getStatus()) + "\n" +
-                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
-                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ", " +
-                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " +
-                        getResources().getString(R.string.File_Uploaded);
-                break;
-            default:
-                title = percent + "% " + getResources().getString(R.string.File_Uploaded) + "\n" +
-                        getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files,
-                                instance.getWidgetMediaFiles().size(), instance.getWidgetMediaFiles().size()) + ",  " +
-                        getTotalUploadedSize(instance) + "/" + FileUtil.getFileSizeString(formSize) + " " +
-                        getResources().getString(R.string.File_Uploaded);
-                break;
+    public void setUploadProgress(List<ProgressFile> progressFiles, float pct) {
+        if (pct < 0 || pct > 1) return;
+
+        int percentComplete = getTotalUploadedSizePercent(progressFiles);
+
+        for (ProgressFile file : progressFiles) {
+            if (file.getStatus() == P2PFileStatus.FINISHED && file.getVaultFile() != null) {
+                SubmittingItem item = partsListView.findViewWithTag(file.getVaultFile().id);
+                if (item != null) item.setPartUploaded();
+            }
         }
 
-        formSizeView.setText(title);
+        totalProgress.setProgressCompat(percentComplete, true);
+        setFormSizeLabel(progressFiles, percentComplete);
     }
 
 
-    String getStatusLabel(EntityStatus status) {
-        String title = "";
-        if (status == EntityStatus.SUBMITTED) {
-            title = "";
-            //getResources().getString(R.string.File_Uploaded_on) + " " + Util.getDateTimeString(instance.getUpdated());
-        } else if (status == EntityStatus.PAUSED) {
-            title = getResources().getString(R.string.Paused_Report);
-        } else if (status == EntityStatus.FINALIZED || instance.getStatus() == EntityStatus.SUBMISSION_PENDING || instance.getStatus() == EntityStatus.SUBMISSION_ERROR) {
-            title = getResources().getString(R.string.Report_Waiting_For_Connection);
+    public void clearPartsProgress(List<ProgressFile> progressFiles, SessionStatus sessionStatus) {
+        for (ProgressFile file : progressFiles) {
+            if (file.getVaultFile() == null) continue;
+
+            SubmittingItem item = partsListView.findViewWithTag(file.getVaultFile().id);
+            if (item != null) {
+                if (sessionStatus == SessionStatus.FINISHED || file.getStatus() == P2PFileStatus.FINISHED) {
+                    item.setPartUploaded();
+                } else {
+                    item.setPartCleared();
+                }
+            }
         }
-        return title;
     }
 
-    private void uploadProgressVisibity(PeerToPeerInstance instance, Boolean isOnline) {
-        if (!isOnline || instance.getWidgetMediaFiles().isEmpty()) {
-            totalProgress.setVisibility(GONE);
-            return;
+    private int getTotalUploadedSizePercent(List<ProgressFile> progressFiles) {
+        long totalUploadedSize = 0;
+        long totalSize = 0;
+
+        for (ProgressFile file : progressFiles) {
+            totalUploadedSize += file.getBytesTransferred();
+            if (file.getVaultFile() != null) {
+                totalSize += file.getVaultFile().size;
+            }
         }
 
-        if (instance.getStatus() == EntityStatus.SUBMITTED) {
+        return totalSize > 0 ? Math.round((totalUploadedSize * 1f / totalSize) * 100) : 0;
+    }
+
+    private void setFormSizeLabel(List<ProgressFile> files, int percent) {
+        int count = files.size();
+        long totalSize = 0;
+        long totalUploaded = 0;
+
+        for (ProgressFile file : files) {
+            if (file.getVaultFile() != null) {
+                totalSize += file.getVaultFile().size;
+            }
+            totalUploaded += file.getBytesTransferred();
+        }
+
+        String label = percent + "% " + getContext().getString(R.string.File_Uploaded) + "\n" +
+                getResources().getQuantityString(R.plurals.upload_main_meta_number_of_files, count, count) + ", " +
+                FileUtil.getFileSize(totalUploaded) + "/" + FileUtil.getFileSize(totalSize);
+
+        formSizeView.setText(label);
+    }
+
+    private void uploadProgressVisibility(List<ProgressFile> files, boolean isOnline) {
+        if (!isOnline || files.isEmpty()) {
             totalProgress.setVisibility(GONE);
         } else {
             totalProgress.setVisibility(VISIBLE);
         }
     }
 
-    public void setUploadProgress(PeerToPeerInstance instance, float pct) {
-        if (pct < 0 || pct > 1) {
-            return;
-        }
-
-        int percentComplete;
-
-        if (instance.getWidgetMediaFiles().size() > 1) {
-            percentComplete = getTotalUploadedSizePercent(instance);
-        } else {
-            percentComplete = (int) (pct * 100);
-        }
-
-        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
-            if (mediaFile.status == FormMediaFileStatus.SUBMITTED) {
-                SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
-                item.setPartUploaded();
-            }
-        }
-
-        //Timber.d("***Test*** PCT " + pct + "\n getTotalUploadedSize " + getTotalUploadedSize(instance) + "\n FormSize " + formSize + "\n percentComplete " + percentComplete + " \n Math.round(percentComplete) " + Math.toIntExact(percentComplete));
-        totalProgress.setProgressCompat(percentComplete, true);
-        setFormSizeLabel(instance, percentComplete);
-    }
-
-    private int getTotalUploadedSizePercent(PeerToPeerInstance instance) {
-        int totalUploadedSize = 0;
-        for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            totalUploadedSize += formMediaFile.uploadedSize;
-        }
-        if (totalUploadedSize > 0) {
-            float percent = ((float) (totalUploadedSize * 1.0) / formSize);
-            return Math.round(percent * 100);
-
-        } else {
-            return 0;
-        }
-    }
-
-    private String getTotalUploadedSize(PeerToPeerInstance instance) {
-        long totalUploadedSize = 0;
-        for (FormMediaFile formMediaFile : instance.getWidgetMediaFiles()) {
-            totalUploadedSize += formMediaFile.uploadedSize;
-        }
-        return FileUtil.getFileSize(totalUploadedSize);
-    }
-
-    public void clearPartsProgress(PeerToPeerInstance instance) {
-        setPartsCleared(instance);
-    }
-
-
-    private View createFormMediaFileItemView(@NonNull FormMediaFile mediaFile, boolean offline) {
-
+    private View createProgressFileItemView(@NonNull ProgressFile file, boolean offline) {
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
         ImageView thumbView = item.findViewById(R.id.fileThumb);
-        item.setTag(mediaFile.getPartName());
+        item.setTag(file.getVaultFile() != null ? file.getVaultFile().id : file.getFile().getId());
 
-        item.setPartName(mediaFile.name);
-        item.setPartSize(mediaFile.size);
+        item.setPartName(file.getFile().getFileName());
+        item.setPartSize(file.getFile().getSize());
 
-        if (MediaFile.INSTANCE.isImageFileType(mediaFile.mimeType) || (MediaFile.INSTANCE.isVideoFileType(mediaFile.mimeType))) {
+        if (file.getVaultFile() != null && file.getVaultFile().thumb != null) {
             Glide.with(getContext())
-                    .load(mediaFile.thumb)
+                    .load(file.getVaultFile().thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);
-        } else if (MediaFile.INSTANCE.isAudioFileType(mediaFile.mimeType)) {
-            item.setPartIcon(R.drawable.ic_headset_white_24dp);
-        } else {
-            item.setPartIcon(R.drawable.ic_attach_file_white_24dp);
         }
 
-        if (mediaFile.status == FormMediaFileStatus.SUBMITTED || previewUploaded) {
-            item.setPartUploaded();
-        } else {
-            item.setPartPrepared(offline);
+        switch (file.getStatus()) {
+            case FINISHED:
+                item.setPartUploaded();
+                break;
+            case FAILED:
+            case QUEUE:
+            case SENDING:
+                if (previewUploaded) {
+                    item.setPartUploaded();
+                } else {
+                    item.setPartPrepared(offline);
+                }
+                break;
         }
 
         return item;
     }
-
-    private void setPartsCleared(PeerToPeerInstance instance) {
-        for (FormMediaFile mediaFile : instance.getWidgetMediaFiles()) {
-            SubmittingItem item = partsListView.findViewWithTag(mediaFile.getVaultFile().id);
-
-            if (instance.getStatus() == EntityStatus.SUBMITTED) {
-                item.setPartUploaded();
-            } else {
-                item.setPartCleared();
-            }
-        }
-    }
 }
-
-

@@ -18,26 +18,27 @@ class SenderUploadFilesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showFormEndView()
+        observeUploadProgress()
     }
 
     private fun showFormEndView() {
-        if (viewModel.peerToPeerInstance == null) {
-            return
-        }
+        val session = viewModel.p2PSharedState.session ?: return
+        val files = session.files.values.toList()
 
-        viewModel.peerToPeerInstance?.let { peerInstance ->
-
-            endView = PeerToPeerEndView(
-                baseActivity,
-                peerInstance.title,
-            )
-            endView.setInstance(
-                peerInstance, MyApplication.isConnectedToInternet(baseActivity), false
-            )
-            binding.endViewContainer.removeAllViews()
-            binding.endViewContainer.addView(endView)
-            endView.clearPartsProgress(peerInstance)
-        }
+        endView = PeerToPeerEndView(
+            baseActivity, session.title ?: "Transfer"
+        )
+        endView.setFiles(files, MyApplication.isConnectedToInternet(baseActivity), false)
+        binding.endViewContainer.removeAllViews()
+        binding.endViewContainer.addView(endView)
+        endView.clearPartsProgress(files, session.status)
     }
 
+    private fun observeUploadProgress() {
+        viewModel.uploadProgress.observe(viewLifecycleOwner) { percent ->
+            viewModel.p2PSharedState.session?.let { session ->
+                endView.setUploadProgress(session.files.values.toList(), percent.toFloat())
+            }
+        }
+    }
 }
