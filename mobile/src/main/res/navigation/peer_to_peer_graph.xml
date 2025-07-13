@@ -35,7 +35,7 @@
         android:id="@+id/connectManuallyVerificationFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
         android:label="ConnectManuallyVerificationScreen"
-        tools:layout="@layout/connect_manually_verification" >
+        tools:layout="@layout/connect_manually_verification">
         <action
             android:id="@+id/action_connectManuallyVerificationFragment_to_prepareUploadFragment"
             app:destination="@id/prepareUploadFragment" />
@@ -71,7 +71,7 @@
         android:id="@+id/deviceInfoScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ShowDeviceInfoFragment"
         android:label="DeviceInfoScreen"
-        tools:layout="@layout/show_device_info_layout" >
+        tools:layout="@layout/show_device_info_layout">
         <action
             android:id="@+id/action_deviceInfoScreen_to_recipientVerificationScreen"
             app:destination="@id/recipientVerificationScreen" />
@@ -89,10 +89,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/recipientUploadFilesFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientUploadFilesFragment"
+        android:label="recipientUploadFilesFragment"
+        tools:layout="@layout/fragment_upload_files" />
+
+    <fragment
         android:id="@+id/prepareUploadFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PrepareUploadFragment"
         android:label="PrepareUploadFragment"
-        tools:layout="@layout/fragment_prepare_upload" >
+        tools:layout="@layout/fragment_prepare_upload">
         <action
             android:id="@+id/action_prepareUploadFragment_to_waitingSenderFragment"
             app:destination="@id/waitingSenderFragment" />
@@ -110,8 +116,8 @@
     <fragment
         android:id="@+id/waitingReceiverFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.WaitingReceiverFragment"
-        tools:layout="@layout/fragment_waiting"
-        android:label="WaitingReceiverFragment" >
+        android:label="WaitingReceiverFragment"
+        tools:layout="@layout/fragment_waiting">
         <action
             android:id="@+id/action_waitingReceiverFragment_to_recipientSuccessFragment"
             app:destination="@id/recipientSuccessFragment" />
@@ -119,18 +125,22 @@
     <fragment
         android:id="@+id/successConnectFragment"
         android:name="org.horizontal.tella.mobile.views.dialog.uwazi.step6.SuccessConnectFragment"
-        tools:layout="@layout/fragment_success_connect_flow"
-        android:label="SuccessConnectFragment" />
+        android:label="SuccessConnectFragment"
+        tools:layout="@layout/fragment_success_connect_flow" />
     <fragment
         android:id="@+id/recipientSuccessFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientSuccessFragment"
-        tools:layout="@layout/fragment_recipient_success"
-        android:label="RecipientSuccessFragment" />
+        android:label="RecipientSuccessFragment"
+        tools:layout="@layout/fragment_recipient_success">
+        <action
+            android:id="@+id/action_recipientSuccessFragment_to_recipientUploadFilesFragment"
+            app:destination="@id/recipientUploadFilesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/waitingSenderFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.WaitingSenderFragment"
-        tools:layout="@layout/fragment_waiting"
-        android:label="WaitingSenderFragment" >
+        android:label="WaitingSenderFragment"
+        tools:layout="@layout/fragment_waiting">
         <action
             android:id="@+id/action_waitingSenderFragment_to_uploadFilesFragment"
             app:destination="@id/uploadFilesFragment" />
@@ -138,8 +148,8 @@
 
     <fragment
         android:id="@+id/uploadFilesFragment"
-        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.UploadFilesFragment"
-        tools:layout="@layout/fragment_upload_files"
-        android:label="UploadFilesFragment" />
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
+        android:label="UploadFilesFragment"
+        tools:layout="@layout/fragment_upload_files" />
 
 </navigation>

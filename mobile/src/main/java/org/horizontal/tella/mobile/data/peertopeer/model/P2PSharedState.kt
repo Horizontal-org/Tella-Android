@@ -3,8 +3,6 @@ package org.horizontal.tella.mobile.data.peertopeer.model
 class P2PSharedState(
     var ip: String = "",
     var port: String = "",
-    var sessionId: String = "",
-    //THE HASH IS THE SAME EXPECTED FINGER PRINT
     var hash: String = "",
     var pin: String? = null,
     var session: P2PSession? = null,
@@ -15,7 +13,6 @@ class P2PSharedState(
     fun clear() {
         ip = ""
         port = ""
-        sessionId = ""
         hash = ""
         pin = null
         session = null

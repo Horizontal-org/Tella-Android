@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
+package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View
@@ -9,11 +9,11 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.SenderViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 
-class UploadFilesFragment :
+class RecipientUploadFilesFragment:
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
 
     private val viewModel: SenderViewModel by activityViewModels()
-    protected lateinit var endView: PeerToPeerEndView
+    private lateinit var endView: PeerToPeerEndView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

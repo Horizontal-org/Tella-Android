@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
+import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
@@ -24,6 +25,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
 import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,6 +58,9 @@ class PeerToPeerViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             PeerEventManager.prepareUploadEvents.collect { request ->
+                p2PState.session?.sessionId = request.sessionId
+                p2PState.session?.title = request.title
+                populateFilesFromRequest(request, p2PState)
                 _incomingPrepareRequest.postValue(request)
             }
         }
@@ -103,7 +108,7 @@ class PeerToPeerViewModel @Inject constructor(
             when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
                     with(p2PState) {
-                        this.sessionId = result.sessionId
+                        this.session?.sessionId = result.sessionId
                     }
 
                     _registrationSuccess.postValue(true)
@@ -172,7 +177,6 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     fun onUserRejectedRegistration(registrationId: String) {
-        //TODO when the user reject i THINK the client should go back to the
         PeerEventManager.confirmRegistration(registrationId, accepted = false)
     }
 
@@ -180,6 +184,28 @@ class PeerToPeerViewModel @Inject constructor(
         _incomingPrepareRequest.value = null
         hasNavigatedToSuccessFragment = false
 
+    }
+
+    fun getSessionId(): String {
+        return p2PState.session?.sessionId ?: ""
+    }
+
+    fun populateFilesFromRequest(request: PrepareUploadRequest, sharedState: P2PSharedState) {
+        val session = sharedState.session ?: return
+
+        session.sessionId = request.sessionId
+        session.title = request.title
+
+        request.files.forEach { p2pFile ->
+            val transmissionId = UUID.randomUUID().toString()
+
+            val progressFile = ProgressFile(
+                file = p2pFile,
+                transmissionId = transmissionId
+            )
+
+            session.files[transmissionId] = progressFile
+        }
     }
 
     override fun onCleared() {

@@ -224,6 +224,10 @@ class NavigationManager(
 
     fun navigateFromWaitingSenderFragmentToUploadFilesFragment() {
         navigateToWithBundle(R.id.action_waitingSenderFragment_to_uploadFilesFragment)
+    } 
+
+    fun navigateFromRecipientSuccessFragmentToRecipientUploadFilesFragment() {
+        navigateToWithBundle(R.id.action_recipientSuccessFragment_to_recipientUploadFilesFragment)
     }
 
     fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {

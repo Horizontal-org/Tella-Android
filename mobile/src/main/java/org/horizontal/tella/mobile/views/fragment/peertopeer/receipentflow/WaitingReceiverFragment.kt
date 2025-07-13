@@ -40,11 +40,6 @@ class WaitingReceiverFragment :
         viewModel.incomingPrepareRequest.observe(viewLifecycleOwner) { request ->
             if (request != null && !viewModel.hasNavigatedToSuccessFragment) {
                 viewModel.hasNavigatedToSuccessFragment = true
-
-                val fileCount = request.files.size
-                bundle.putInt("fileCount", fileCount)
-                bundle.putString("sessionId", request.sessionId)
-
                 navManager().navigateFromWaitingReceiverFragmentToRecipientSuccessFragment()
             }
         }

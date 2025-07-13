@@ -17,16 +17,12 @@ object PeerEventManager {
 
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
 
-
-
     // Call this when registration succeeds
     suspend fun emitRegistrationSuccess() {
         registrationEvents.emit(true)
     }
 
     // we can add emitRegistrationFailure or other event types if needed
-
-
     private val _prepareUploadEvents = MutableSharedFlow<PrepareUploadRequest>(replay = 1)
     val prepareUploadEvents = _prepareUploadEvents.asSharedFlow()
 

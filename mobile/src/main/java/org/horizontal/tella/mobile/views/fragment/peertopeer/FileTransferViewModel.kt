@@ -19,6 +19,7 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
@@ -86,10 +87,10 @@ class SenderViewModel @Inject constructor(
                 expectedFingerprint = p2PSharedState.hash,
                 title = getTitleFromState(),
                 files = getVaultFilesFromState(),
-                sessionId = p2PSharedState.sessionId
+                sessionId = getSessionId()
             )) {
                 is PrepareUploadResult.Success -> {
-                    peerToPeerInstance?.sessionID = p2PSharedState.sessionId
+                    peerToPeerInstance?.sessionID = getSessionId()
                     val fileInfoMap = result.transmissions.associateBy { it.id }
 
                     peerToPeerInstance?.widgetMediaFiles?.forEach { mediaFile ->
@@ -138,9 +139,17 @@ class SenderViewModel @Inject constructor(
         return p2PSharedState.session?.title ?: ""
     }
 
+    private fun getSessionId(): String {
+        return p2PSharedState.session?.sessionId ?: ""
+    }
+
     override fun onCleared() {
         super.onCleared()
         p2PSharedState.clear()
+    }
+
+    fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
+        PeerEventManager.resolveUserDecision(sessionId, accepted)
     }
 
 }
