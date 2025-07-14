@@ -3,19 +3,31 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.ACCESS_NETWORK_STATE
 import android.Manifest.permission.ACCESS_WIFI_STATE
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import com.google.android.datatransport.Priority
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.hzontal.tella_locking_ui.ui.pin.pinview.ResourceUtils.getColor
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ConnectHotspotLayoutBinding
 import org.horizontal.tella.mobile.util.ConnectionType
+import org.horizontal.tella.mobile.util.LocationProvider.isLocationEnabled
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 
@@ -25,19 +37,14 @@ class ConnectHotspotFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var isCheckboxChecked = false
-    private val permissionsToRequest = mutableListOf<String>()
 
     @RequiresApi(Build.VERSION_CODES.M)
     private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val fineLocationGranted = permissions[ACCESS_FINE_LOCATION] ?: false
-            val wifiStateGranted = permissions[ACCESS_WIFI_STATE] ?: false
-            val networkStateGranted = permissions[ACCESS_NETWORK_STATE] ?: false
-
-            if (fineLocationGranted && wifiStateGranted && networkStateGranted) {
-                viewModel.updateNetworkInfo()
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                checkLocationSettings()
             } else {
-                baseActivity.showToast("Location and network permissions are required to get WiFi SSID.")
+                baseActivity.showToast("Location permission is required to get WiFi SSID.")
             }
         }
 
@@ -47,7 +54,6 @@ class ConnectHotspotFragment :
         initObservers()
         initListeners()
         checkAndRequestPermissions()
-        updateInfoOrGetPermission()
     }
 
     private fun initObservers() {
@@ -88,6 +94,7 @@ class ConnectHotspotFragment :
         } else {
             { }
         })
+
         binding.nextBtn.setTextColor(
             getColor(baseActivity, if (shouldEnable) R.color.wa_white else R.color.wa_white_40)
         )
@@ -100,38 +107,43 @@ class ConnectHotspotFragment :
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun checkAndRequestPermissions() {
-
-        if (ContextCompat.checkSelfPermission(
-                baseActivity,
-                ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(baseActivity, ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
         ) {
-            permissionsToRequest.add(ACCESS_FINE_LOCATION)
-        }
-        if (ContextCompat.checkSelfPermission(
-                baseActivity,
-                ACCESS_WIFI_STATE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionsToRequest.add(ACCESS_WIFI_STATE)
-        }
-        if (ContextCompat.checkSelfPermission(
-                baseActivity,
-                ACCESS_NETWORK_STATE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionsToRequest.add(ACCESS_NETWORK_STATE)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun updateInfoOrGetPermission() {
-        if (permissionsToRequest.isNotEmpty()) {
-            baseActivity.maybeChangeTemporaryTimeout {
-                requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
+            baseActivity.maybeChangeTemporaryTimeout{
+                requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
             }
         } else {
-            viewModel.updateNetworkInfo()
+            checkLocationSettings()
         }
     }
+
+    private fun checkLocationSettings() {
+        val locationRequest = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+            .setAlwaysShow(true)
+
+        val settingsClient = LocationServices.getSettingsClient(requireActivity())
+        settingsClient.checkLocationSettings(builder.build())
+            .addOnSuccessListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    viewModel.updateNetworkInfo()
+                }
+            }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        exception.startResolutionForResult(requireActivity(), 1001)
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        baseActivity.showToast("Failed to open location settings.")
+                    }
+                } else {
+                    baseActivity.showToast("Location services are required to get WiFi SSID.")
+                }
+            }
+    }
+
 }

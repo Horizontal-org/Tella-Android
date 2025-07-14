@@ -19,9 +19,7 @@ class SenderUploadFilesFragment :
         super.onViewCreated(view, savedInstanceState)
         showFormEndView()
         observeUploadProgress()
-        viewModel.uploadAllFiles {
-
-        }
+        viewModel.uploadAllFiles()
     }
 
     private fun showFormEndView() {
