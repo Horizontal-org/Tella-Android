@@ -31,7 +31,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_AUDIO
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BUNDLE_REPORT_VAULT_FILE
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OnNavBckListener
-import org.horizontal.tella.mobile.views.fragment.peertopeer.FileTransferViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.REPORT_ENTRY
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector

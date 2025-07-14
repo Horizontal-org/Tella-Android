@@ -17,7 +17,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ConnectHotspotLayoutBinding
 import org.horizontal.tella.mobile.util.ConnectionType
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 
 @AndroidEntryPoint
 class ConnectHotspotFragment :

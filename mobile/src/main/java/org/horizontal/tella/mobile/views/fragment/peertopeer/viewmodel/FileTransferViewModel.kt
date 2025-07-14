@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.peertopeer
+package org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,9 +18,6 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
-import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
-import org.horizontal.tella.mobile.domain.entity.peertopeer.PeerToPeerInstance
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
@@ -38,7 +35,6 @@ class FileTransferViewModel @Inject constructor(
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
     private val _prepareRejected = MutableLiveData<Event<Boolean>>()
     val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
-    var peerToPeerInstance: PeerToPeerInstance? = null
     private val _uploadProgress = MutableLiveData<Int>() // value from 0 to 100
     val uploadProgress: LiveData<Int> get() = _uploadProgress
 
@@ -64,24 +60,6 @@ class FileTransferViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-    fun mediaFilesToVaultFiles(files: List<FormMediaFile>?): List<VaultFile> {
-        val vaultFiles = ArrayList<VaultFile>()
-        files?.map { mediaFile ->
-            vaultFiles.add(mediaFile.vaultFile)
-        }
-        return vaultFiles
-    }
-
-    fun vaultFilesToMediaFiles(files: List<VaultFile>): List<FormMediaFile> {
-        val vaultFiles = mutableListOf<FormMediaFile>()
-        files.map { vaultFile ->
-            val mediaFile = FormMediaFile.fromMediaFile(vaultFile)
-            mediaFile.status = FormMediaFileStatus.NOT_SUBMITTED
-            vaultFiles.add(FormMediaFile.fromMediaFile(vaultFile))
-        }
-        return vaultFiles
-    }
-
     fun prepareUploadsFromVaultFiles() {
 
         viewModelScope.launch {
@@ -94,14 +72,6 @@ class FileTransferViewModel @Inject constructor(
                 sessionId = getSessionId()
             )) {
                 is PrepareUploadResult.Success -> {
-                    val fileInfoMap = result.transmissions.associateBy { it.id }
-
-                    peerToPeerInstance?.widgetMediaFiles?.forEach { mediaFile ->
-                        fileInfoMap[mediaFile.id]?.let { fileInfo ->
-                            mediaFile.transmissionId = fileInfo.transmissionId
-                        }
-                    }
-
                     _prepareResults.postValue(PeerPrepareUploadResponse(result.transmissions))
                 }
 
@@ -132,7 +102,7 @@ class FileTransferViewModel @Inject constructor(
     }
 
 
-    fun uploadAllFiles(onFileUploaded: () -> Unit) {
+    fun uploadAllFiles() {
         viewModelScope.launch {
             val session = p2PSharedState.session ?: return@launch
             val ip = p2PSharedState.ip
@@ -143,7 +113,8 @@ class FileTransferViewModel @Inject constructor(
 
             session.files.values.forEach { progressFile ->
                 val vaultFile = progressFile.vaultFile ?: return@forEach
-                val inputStream =MediaFileHandler.getStream(vaultFile) // Use your actual method here to get InputStream
+                val inputStream =
+                    MediaFileHandler.getStream(vaultFile)
 
                 progressFile.status = P2PFileStatus.SENDING
 
@@ -162,13 +133,13 @@ class FileTransferViewModel @Inject constructor(
                             progressFile.bytesTransferred = written.toInt()
 
                             val uploaded = session.files.values.sumOf { it.bytesTransferred }
-                            val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+                            val percent =
+                                if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
                             _uploadProgress.postValue(percent)
                         }
                     }
 
                     progressFile.status = P2PFileStatus.FINISHED
-                    onFileUploaded()
                 } catch (e: Exception) {
                     progressFile.status = P2PFileStatus.FAILED
                     Timber.e(e, "Upload failed for file ${progressFile.file.fileName}")

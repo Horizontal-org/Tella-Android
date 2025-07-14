@@ -8,7 +8,7 @@ import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterMan
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerToPeerViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import javax.inject.Inject
 
 class SenderVerificationFragment :

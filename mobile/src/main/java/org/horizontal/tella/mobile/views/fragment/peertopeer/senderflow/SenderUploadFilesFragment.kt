@@ -6,7 +6,7 @@ import androidx.fragment.app.activityViewModels
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.FileTransferViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 
 class SenderUploadFilesFragment :
@@ -19,6 +19,9 @@ class SenderUploadFilesFragment :
         super.onViewCreated(view, savedInstanceState)
         showFormEndView()
         observeUploadProgress()
+        viewModel.uploadAllFiles {
+
+        }
     }
 
     private fun showFormEndView() {
