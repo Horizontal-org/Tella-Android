@@ -208,7 +208,7 @@ class TellaPeerToPeerClient @Inject constructor(){
 
         val request = Request.Builder()
             .url(url)
-            .post(requestBody)
+            .put(requestBody)
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
             .build()
 

@@ -16,6 +16,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
+import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -189,7 +190,7 @@ class TellaPeerToPeerServer(
                         }
                     }
 
-                    post(PeerApiRoutes.UPLOAD) {
+                    put(PeerApiRoutes.UPLOAD) {
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
@@ -198,13 +199,13 @@ class TellaPeerToPeerServer(
 
                         if (sessionId == null || fileId == null || transmissionId == null) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
-                            return@post
+                            return@put
                         }
 
                         if (sessionId != p2PSharedState.session?.sessionId) {
                             Timber.d("session Id")
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                            return@post
+                            return@put
                         }
 
                         val session = p2PSharedState.session
@@ -212,7 +213,7 @@ class TellaPeerToPeerServer(
 
                         if (progressFile == null || progressFile.file.id != fileId) {
                             call.respond(HttpStatusCode.NotFound, "File not found in session")
-                            return@post
+                            return@put
                         }
 
                         val tmpFile = createTempFile(prefix = "p2p_", suffix = "_$fileId")
@@ -220,7 +221,6 @@ class TellaPeerToPeerServer(
 
                         try {
                             val input = call.receiveStream().buffered()
-                            val totalBytesExpected = progressFile.file.size
                             var bytesRead = 0L
                             val buffer = ByteArray(8192)
 
@@ -232,7 +232,7 @@ class TellaPeerToPeerServer(
 
                                 progressFile.bytesTransferred = bytesRead.toInt()
                                 PeerEventManager.onUploadProgressState(
-                                  p2PSharedState
+                                    p2PSharedState
                                 )
                             }
 
@@ -243,7 +243,10 @@ class TellaPeerToPeerServer(
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
-                            call.respond(HttpStatusCode.InternalServerError, "Upload failed: ${e.message}")
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Upload failed: ${e.message}"
+                            )
                         } finally {
                             output.close()
                         }
