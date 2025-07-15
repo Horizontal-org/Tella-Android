@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -61,6 +62,7 @@ class FileTransferViewModel @Inject constructor(
     }
 
     fun prepareUploadsFromVaultFiles() {
+        Timber.d("session id ***prepareUploadsFromVaultFiles ${p2PSharedState.session?.sessionId}")
 
         viewModelScope.launch {
             when (val result = peerClient.prepareUpload(
@@ -97,6 +99,8 @@ class FileTransferViewModel @Inject constructor(
                 is PrepareUploadResult.Failure -> {
                     Timber.e(result.exception, "Unhandled error during upload")
                 }
+
+                else -> {}
             }
         }
     }
@@ -119,11 +123,12 @@ class FileTransferViewModel @Inject constructor(
 
                 try {
                     if (inputStream != null) {
+                        Timber.d("session id ***uploadAllFiles ${getSessionId()}")
                         peerClient.uploadFileWithProgress(
                             ip = ip,
                             port = port,
                             expectedFingerprint = fingerprint,
-                            sessionId = session.sessionId,
+                            sessionId = getSessionId(),
                             fileId = progressFile.file.id,
                             transmissionId = progressFile.transmissionId.orEmpty(),
                             inputStream = inputStream,

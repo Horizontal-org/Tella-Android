@@ -113,6 +113,7 @@ class PeerToPeerViewModel @Inject constructor(
                     with(p2PState) {
                         this.session?.sessionId = result.sessionId
                     }
+                    Timber.d("session id ***startRegistration ${p2PState.session?.sessionId}")
 
                     _registrationSuccess.postValue(true)
                 }

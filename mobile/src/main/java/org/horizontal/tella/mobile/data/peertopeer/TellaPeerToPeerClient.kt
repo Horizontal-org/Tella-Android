@@ -187,7 +187,6 @@ class TellaPeerToPeerClient @Inject constructor(){
         }
     }
 
-
     suspend fun uploadFileWithProgress(
         ip: String,
         port: String,
@@ -199,6 +198,8 @@ class TellaPeerToPeerClient @Inject constructor(){
         fileSize: Long,
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
     ): Boolean = withContext(Dispatchers.IO) {
+
+        Timber.d("session id from the client+$sessionId")
         val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
 
         val client = getClientWithFingerprintValidation(expectedFingerprint)

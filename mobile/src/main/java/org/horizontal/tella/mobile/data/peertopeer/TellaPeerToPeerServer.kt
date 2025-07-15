@@ -35,6 +35,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
+import timber.log.Timber
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
@@ -118,6 +119,7 @@ class TellaPeerToPeerServer(
 
                         val sessionId = UUID.randomUUID().toString()
                         val session = PeerResponse(sessionId)
+                        p2PSharedState.session?.sessionId = sessionId
                         serverSession = session
 
                         val accepted = try {
@@ -161,11 +163,7 @@ class TellaPeerToPeerServer(
 
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
                         if (accepted) {
-                            val sessionId = serverSession?.sessionId ?: run {
-                                call.respond(HttpStatusCode.InternalServerError, "Missing session")
-                                return@post
-                            }
-                            p2PSharedState.session?.sessionId = sessionId
+
                             val session = P2PSession(title = request.title)
 
                             val responseFiles = request.files.map { file ->
@@ -196,12 +194,15 @@ class TellaPeerToPeerServer(
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
 
+                        Timber.d("session id from the server +$sessionId")
+
                         if (sessionId == null || fileId == null || transmissionId == null) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
                             return@post
                         }
 
-                        if (sessionId != serverSession?.sessionId || sessionId != p2PSharedState.session?.sessionId) {
+                        if (sessionId != p2PSharedState.session?.sessionId) {
+                            Timber.d("session Id")
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
                             return@post
                         }
