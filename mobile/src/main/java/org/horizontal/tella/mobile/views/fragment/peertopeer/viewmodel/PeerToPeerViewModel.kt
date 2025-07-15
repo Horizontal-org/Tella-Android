@@ -41,8 +41,8 @@ class PeerToPeerViewModel @Inject constructor(
     val registrationSuccess: LiveData<Boolean> get() = _registrationSuccess
     private val _getHashSuccess = SingleLiveEvent<String>()
     val getHashSuccess: LiveData<String> get() = _getHashSuccess
-    private val _getHashError = SingleLiveEvent<Throwable>()
-    val getHashError: LiveData<Throwable> get() = _getHashError
+    val bottomMessageError = SingleLiveEvent<String>()
+    val bottomSheetError = SingleLiveEvent<Pair<String, String>>()
     val clientHash = peerToPeerManager.clientConnected
     private val _registrationServerSuccess = SingleLiveEvent<Boolean>()
     val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
@@ -110,32 +110,35 @@ class PeerToPeerViewModel @Inject constructor(
                 }
 
                 RegisterPeerResult.InvalidPin -> {
-                    _getHashError.postValue(Exception("Invalid PIN"))
+                    bottomMessageError.postValue("Invalid PIN")
                 }
 
                 RegisterPeerResult.InvalidFormat -> {
-                    _getHashError.postValue(Exception("Invalid request format"))
+                    bottomMessageError.postValue("Invalid request format")
                 }
 
                 RegisterPeerResult.Conflict -> {
-                    _getHashError.postValue(Exception("Active session already exists"))
+                    bottomMessageError.postValue("Active session already exists")
                 }
 
                 RegisterPeerResult.TooManyRequests -> {
-                    _getHashError.postValue(Exception("Too many requests, try again later"))
+                    bottomMessageError.postValue("Too many requests, try again later")
                 }
 
                 RegisterPeerResult.ServerError -> {
-                    _getHashError.postValue(Exception("Server error, try again later"))
+                    bottomMessageError.postValue("Server error, try again later")
                 }
 
                 RegisterPeerResult.RejectedByReceiver -> {
-                    _getHashError.postValue(Exception("Receiver rejected the registration"))
+                    bottomMessageError.postValue("Receiver rejected the registration")
                 }
 
                 is RegisterPeerResult.Failure -> {
-                    Timber.e(result.exception, "Registration failed")
-                    _getHashError.postValue(result.exception)
+                    Timber.e(result.exception, "Connection failure")
+                    bottomSheetError.postValue(
+                        "Connection failed" to
+                                "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                    )
                 }
             }
         }
@@ -159,7 +162,10 @@ class PeerToPeerViewModel @Inject constructor(
 
             }.onFailure { error ->
                 Timber.d("error ***** $error")
-                _getHashError.postValue(error)
+                bottomSheetError.postValue(
+                    "Connection failed" to
+                            "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                )
             }
         }
     }

@@ -44,7 +44,7 @@ class ConnectHotspotFragment :
             if (granted) {
                 checkLocationSettings()
             } else {
-                baseActivity.showToast("Location permission is required to get WiFi SSID.")
+                baseActivity.showToast(getString(R.string.location_permission_is_required_to_get_wifi_ssid))
             }
         }
 
@@ -138,10 +138,10 @@ class ConnectHotspotFragment :
                     try {
                         exception.startResolutionForResult(requireActivity(), 1001)
                     } catch (sendEx: IntentSender.SendIntentException) {
-                        baseActivity.showToast("Failed to open location settings.")
+                        baseActivity.showToast(getString(R.string.failed_to_open_location_settings))
                     }
                 } else {
-                    baseActivity.showToast("Location services are required to get WiFi SSID.")
+                    baseActivity.showToast(getString(R.string.location_permission_is_required_to_get_wifi_ssid))
                 }
             }
     }

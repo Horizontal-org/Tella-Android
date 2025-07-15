@@ -1054,4 +1054,7 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
   <string name="sending_files">Sending files</string>
   <string name="send_files_title">Send files</string>
+    <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
+  <string name="failed_to_open_location_settings">Failed to open location settings.</string>
+  <string name="try_again">Try again</string>
 </resources>

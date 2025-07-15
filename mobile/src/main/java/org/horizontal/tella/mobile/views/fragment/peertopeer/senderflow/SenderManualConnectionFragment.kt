@@ -5,10 +5,14 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
+import org.hzontal.shared_ui.utils.DialogUtils
 
 // TODO: Show errors in the bottom sheet
 class SenderManualConnectionFragment :
@@ -56,9 +60,21 @@ class SenderManualConnectionFragment :
             bundle.putString("payload", hash)
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }
+        viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
+            DialogUtils.showBottomMessage(baseActivity, message, true)
+        }
 
-        viewModel.getHashError.observe(viewLifecycleOwner) { error ->
-            error.localizedMessage?.let { showToast(it) }
+        viewModel.bottomSheetError.observe(viewLifecycleOwner) { (title, description) ->
+            showStandardSheet(
+                baseActivity.supportFragmentManager,
+                title,
+                description,
+                null,
+                getString(R.string.try_again),
+                null
+            ) {
+                activity?.onBackPressed()
+            }
         }
     }
 
