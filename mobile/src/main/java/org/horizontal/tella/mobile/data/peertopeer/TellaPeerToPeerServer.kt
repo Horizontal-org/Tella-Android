@@ -165,7 +165,8 @@ class TellaPeerToPeerServer(
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
                         if (accepted) {
 
-                            val session = P2PSession(title = request.title)
+                            val session =
+                                P2PSession(title = request.title, sessionId = request.sessionId)
 
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()
@@ -190,7 +191,7 @@ class TellaPeerToPeerServer(
                         }
                     }
 
-                    put(PeerApiRoutes.UPLOAD) {
+                    post(PeerApiRoutes.UPLOAD) {
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
@@ -199,13 +200,13 @@ class TellaPeerToPeerServer(
 
                         if (sessionId == null || fileId == null || transmissionId == null) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
-                            return@put
+                            return@post
                         }
 
                         if (sessionId != p2PSharedState.session?.sessionId) {
                             Timber.d("session Id")
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                            return@put
+                            return@post
                         }
 
                         val session = p2PSharedState.session
@@ -213,7 +214,7 @@ class TellaPeerToPeerServer(
 
                         if (progressFile == null || progressFile.file.id != fileId) {
                             call.respond(HttpStatusCode.NotFound, "File not found in session")
-                            return@put
+                            return@post
                         }
 
                         val tmpFile = createTempFile(prefix = "p2p_", suffix = "_$fileId")

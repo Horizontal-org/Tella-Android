@@ -26,7 +26,6 @@ import org.horizontal.tella.mobile.util.fromJsonToObjectList
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
 class FileTransferViewModel @Inject constructor(
     private val peerClient: TellaPeerToPeerClient,
@@ -100,7 +99,6 @@ class FileTransferViewModel @Inject constructor(
                     Timber.e(result.exception, "Unhandled error during upload")
                 }
 
-                else -> {}
             }
         }
     }
@@ -120,7 +118,7 @@ class FileTransferViewModel @Inject constructor(
                     MediaFileHandler.getStream(vaultFile)
 
                 progressFile.status = P2PFileStatus.SENDING
-
+                var percent = 0
                 try {
                     if (inputStream != null) {
                         Timber.d("session id ***uploadAllFiles ${getSessionId()}")
@@ -137,12 +135,11 @@ class FileTransferViewModel @Inject constructor(
                             progressFile.bytesTransferred = written.toInt()
 
                             val uploaded = session.files.values.sumOf { it.bytesTransferred }
-                            val percent =
+                             percent =
                                 if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
-                            _uploadProgress.postValue(percent)
                         }
                     }
-
+                    _uploadProgress.postValue(percent)
                     progressFile.status = P2PFileStatus.FINISHED
                 } catch (e: Exception) {
                     progressFile.status = P2PFileStatus.FAILED
