@@ -423,6 +423,7 @@ public class MediaFileHandler {
             assert DocumentFile.fromSingleUri(context, uri) != null;
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
+            assert DocumentFile.fromSingleUri(context, uri) != null;
             return rxVault
                     .builder(is)
                     .setMimeType(mimeType)

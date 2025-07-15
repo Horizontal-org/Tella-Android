@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -52,6 +53,8 @@ class PeerToPeerViewModel @Inject constructor(
     val incomingRequest: StateFlow<IncomingRegistration?> = _incomingRequest
     private val networkInfoManager = NetworkInfoManager(context)
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
+    private val _uploadProgress = SingleLiveEvent<UploadProgressState?>()
+    val uploadProgress: SingleLiveEvent<UploadProgressState?> = _uploadProgress
 
     init {
         viewModelScope.launch {
@@ -71,10 +74,15 @@ class PeerToPeerViewModel @Inject constructor(
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
 
                 if (!p2PState.isUsingManualConnection) {
-                    // QR-mode: auto-accept immediately
                     PeerEventManager.confirmRegistration(registrationId, true)
                     _registrationSuccess.postValue(true)
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            PeerEventManager.uploadProgressStateFlow.collect { state ->
+
             }
         }
     }

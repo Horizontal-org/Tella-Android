@@ -35,7 +35,6 @@ import javax.net.ssl.X509TrustManager
 
 class TellaPeerToPeerClient @Inject constructor(){
 
-
     private fun getClientWithFingerprintValidation(expectedFingerprint: String): OkHttpClient {
         val trustManager = object : X509TrustManager {
             override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
@@ -91,13 +90,6 @@ class TellaPeerToPeerClient @Inject constructor(){
                 if (response.isSuccessful) {
                     return@use parseSessionIdFromResponse(body)
                 }
-
-                Timber.w(
-                    """registerPeerDevice failed
-                   Status: ${response.code}
-                   URL: $url
-                   Body: $body""".trimIndent()
-                )
 
                 return@use when (response.code) {
                     400 -> RegisterPeerResult.InvalidFormat
@@ -179,11 +171,6 @@ class TellaPeerToPeerClient @Inject constructor(){
     private fun parseTransmissionId(body: String): PrepareUploadResult {
         return try {
             val response = Json.decodeFromString<PeerPrepareUploadResponse>(body)
-
-            response.files.forEach {
-             //   PeerSessionManager.saveTransmissionId(it.id, it.transmissionId)
-            }
-
             PrepareUploadResult.Success(response.files)
         } catch (e: Exception) {
             Timber.e(e, "Invalid JSON response: %s", body)
@@ -239,7 +226,5 @@ class TellaPeerToPeerClient @Inject constructor(){
             false
         }
     }
-
-
 
 }

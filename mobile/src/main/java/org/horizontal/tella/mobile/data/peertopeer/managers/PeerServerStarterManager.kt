@@ -39,7 +39,6 @@ class PeerServerStarterManager @Inject constructor(
         }
     }
 
-    //TODO: AHLEM CHECK WHERE WE WANT TO STOP THE SERVER
     fun stopServer() {
         CoroutineScope(Dispatchers.IO).launch {
             server?.stop()

@@ -41,7 +41,6 @@ class RecipientVerificationFragment :
         toolbar.backClickListener = { navigateBackAndStopServer() }
         discardBtn.setOnClickListener { navigateBackAndStopServer() }
 
-        // Button is disabled until a request is received.
         confirmAndConnectBtn.setOnClickListener(null)
     }
 

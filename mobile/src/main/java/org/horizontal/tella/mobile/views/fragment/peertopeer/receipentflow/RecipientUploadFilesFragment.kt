@@ -8,15 +8,16 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipientUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
 
-    private val viewModel: FileTransferViewModel by activityViewModels()
+    private val viewModel: PeerToPeerViewModel by activityViewModels()
 
     @Inject
     lateinit var p2PSharedState: P2PSharedState
@@ -45,6 +46,9 @@ class RecipientUploadFilesFragment :
     }
 
     private fun observeUploadProgress() {
+        viewModel.uploadProgress.observe(viewLifecycleOwner) { state ->
+            Timber.d("State "+ state?.percent + " Status: "+state?.sessionStatus?.name)
+        }
 
     }
 }

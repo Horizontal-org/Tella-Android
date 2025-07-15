@@ -57,7 +57,6 @@ class AttachmentsViewModel @Inject constructor(
     val duplicateNameError: LiveData<Boolean> = _duplicateNameError
     val counterData = MutableLiveData<Int>()
 
-    //TODO AHLEM FIX THIS val counterData: LiveData<Int> = _counterData
     private val _progressPercent = MutableLiveData<Pair<Double, Int>>()
     val progressPercent: LiveData<Pair<Double, Int>> = _progressPercent
     private val _mediaImportedWithDelete = MutableLiveData<Uri>()
@@ -222,8 +221,7 @@ class AttachmentsViewModel @Inject constructor(
 
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        // counterData.value = 0
-        //  var counter = 1
+
         var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()

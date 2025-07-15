@@ -101,7 +101,6 @@ class FileTransferViewModel @Inject constructor(
         }
     }
 
-
     fun uploadAllFiles() {
         viewModelScope.launch {
             val session = p2PSharedState.session ?: return@launch
