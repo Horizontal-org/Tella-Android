@@ -1008,4 +1008,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="stop">stop</string>
+  <string name="view_files">VIEW FILES</string>
 </resources>

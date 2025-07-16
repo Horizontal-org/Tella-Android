@@ -978,4 +978,5 @@ yi fanele ku ku nyika vutshokotshoko bya servhidor.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
     <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="stop">stop</string>
+  <string name="view_files">VIEW FILES</string>
 </resources>

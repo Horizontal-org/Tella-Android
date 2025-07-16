@@ -1060,4 +1060,19 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
+  <string name="success_title">Success</string>
+  <string name="failure_title">Something went wrong</string>
+  <string name="success_file_received_expl">You have successfully received %d file.</string>
+  <string name="success_files_received_expl">You have successfully received %d files.</string>
+  <string name="success_file_sent_expl">You have successfully sent %d file.</string>
+  <string name="success_files_sent_expl">You have successfully sent %d files.</string>
+  <string name="failure_file_received_expl">We couldn't receive %d file.</string>
+  <string name="failure_files_received_expl">We couldn't receive %d files.</string>
+  <string name="file_received_file_not_received">1 file received, 1 file not received</string>
+  <string name="file_received_files_not_received">1 file received, %d files not received</string>
+  <string name="files_received_file_not_received">%d files received, 1 file not received</string>
+  <string name="files_received_files_not_received">%d files received, %d files not received</string>
+  <string name="view_files_action">View Files</string>
+  <string name="view_files">VIEW FILES</string>
+
 </resources>

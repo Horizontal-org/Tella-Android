@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/space_cadet">
+
+    <ImageView
+        android:id="@+id/setupImgV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/checked_circle"
+        android:contentDescription="@string/Server_Connect_Icon"
+        app:layout_constraintBottom_toTopOf="@+id/tileTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:layout_editor_absoluteX="175dp" />
+
+    <TextView
+        android:id="@+id/tileTv"
+        style="@style/Unlock_White_Text_Bold"
+        android:text="Success"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setupImgV" />
+
+    <TextView
+        android:id="@+id/descriptionTv"
+        style="@style/Unlock_White_Text_Medium"
+        android:layout_marginTop="16dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:text="You have successfully sent 6 files to the recipient."
+        app:layout_constraintBottom_toTopOf="@+id/view_files_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tileTv" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/view_files_btn"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/tigers_eye"
+        android:text="@string/view_files"
+        app:check_state="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTv" />
+</androidx.constraintlayout.widget.ConstraintLayout>
