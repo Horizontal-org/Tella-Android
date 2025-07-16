@@ -136,6 +136,7 @@
             android:id="@+id/action_recipientSuccessFragment_to_recipientUploadFilesFragment"
             app:destination="@id/recipientUploadFilesFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/waitingSenderFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.WaitingSenderFragment"
@@ -143,11 +144,11 @@
         tools:layout="@layout/fragment_waiting">
         <action
             android:id="@+id/action_waitingSenderFragment_to_uploadFilesFragment"
-            app:destination="@id/uploadFilesFragment" />
+            app:destination="@id/uploadSenderFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/uploadFilesFragment"
+        android:id="@+id/uploadSenderFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderUploadFilesFragment"
         android:label="UploadFilesFragment"
         tools:layout="@layout/fragment_upload_files" />

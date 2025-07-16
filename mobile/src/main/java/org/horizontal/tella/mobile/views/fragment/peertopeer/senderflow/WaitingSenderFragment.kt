@@ -42,8 +42,8 @@ class WaitingSenderFragment :
                 viewModel.p2PSharedState.session?.files?.let { filesMap ->
                     filesMap[fileInfo.id]?.transmissionId = fileInfo.transmissionId
                 }
-                navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
             }
+            navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
         }
 
     }
