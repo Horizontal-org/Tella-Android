@@ -17,9 +17,9 @@ class SenderUploadFilesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.uploadAllFiles()
         showFormEndView()
         observeUploadProgress()
-        viewModel.uploadAllFiles()
     }
 
     private fun showFormEndView() {
@@ -36,10 +36,10 @@ class SenderUploadFilesFragment :
     }
 
     private fun observeUploadProgress() {
-        viewModel.uploadProgress.observe(viewLifecycleOwner) { percent ->
-            viewModel.p2PSharedState.session?.let { session ->
-                endView.setUploadProgress(session.files.values.toList(), percent.toFloat())
-            }
+        viewModel.uploadProgress.observe(viewLifecycleOwner) { state ->
+            val files = state.files
+            val percentFloat = state.percent / 100f
+            endView.setUploadProgress(files, percentFloat)
         }
     }
 }

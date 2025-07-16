@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,8 +36,8 @@ class FileTransferViewModel @Inject constructor(
     val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
     private val _prepareRejected = MutableLiveData<Event<Boolean>>()
     val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
-    private val _uploadProgress = MutableLiveData<Int>() // value from 0 to 100
-    val uploadProgress: LiveData<Int> get() = _uploadProgress
+    private val _uploadProgress = MutableLiveData<UploadProgressState>()
+    val uploadProgress: LiveData<UploadProgressState> get() = _uploadProgress
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {
@@ -114,11 +115,10 @@ class FileTransferViewModel @Inject constructor(
 
             session.files.values.forEach { progressFile ->
                 val vaultFile = progressFile.vaultFile ?: return@forEach
-                val inputStream =
-                    MediaFileHandler.getStream(vaultFile)
+                val inputStream = MediaFileHandler.getStream(vaultFile)
 
                 progressFile.status = P2PFileStatus.SENDING
-                var percent = 0
+
                 try {
                     if (inputStream != null) {
                         Timber.d("session id ***uploadAllFiles ${getSessionId()}")
@@ -135,11 +135,18 @@ class FileTransferViewModel @Inject constructor(
                             progressFile.bytesTransferred = written.toInt()
 
                             val uploaded = session.files.values.sumOf { it.bytesTransferred }
-                             percent =
-                                if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+                            val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+
+                            _uploadProgress.postValue(
+                                UploadProgressState(
+                                    percent = percent,
+                                    sessionStatus = session.status,
+                                    files = session.files.values.toList()
+                                )
+                            )
                         }
                     }
-                    _uploadProgress.postValue(percent)
+
                     progressFile.status = P2PFileStatus.FINISHED
                 } catch (e: Exception) {
                     progressFile.status = P2PFileStatus.FAILED
@@ -147,9 +154,29 @@ class FileTransferViewModel @Inject constructor(
                 } finally {
                     inputStream?.close()
                 }
+
+                // Post state after each file is done
+                _uploadProgress.postValue(
+                    UploadProgressState(
+                        percent = session.files.values.sumOf { it.bytesTransferred }.let {
+                            if (totalSize > 0) ((it * 100) / totalSize).toInt() else 0
+                        },
+                        sessionStatus = session.status,
+                        files = session.files.values.toList()
+                    )
+                )
             }
 
             session.status = SessionStatus.FINISHED
+
+            // Final update after all uploads complete
+            _uploadProgress.postValue(
+                UploadProgressState(
+                    percent = 100,
+                    sessionStatus = session.status,
+                    files = session.files.values.toList()
+                )
+            )
         }
     }
 
