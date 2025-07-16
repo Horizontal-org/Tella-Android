@@ -2,11 +2,15 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel
 
 import android.content.Context
 import android.os.Build
+import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.utils.MediaFile.isAudioFileType
+import com.hzontal.utils.MediaFile.isImageFileType
+import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +32,6 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.media.MediaFileHandler
-import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
@@ -236,19 +239,37 @@ class PeerToPeerViewModel @Inject constructor(
                     val file = File(path)
                     if (!file.exists()) return@forEach
 
-                    val vaultFile = when (progressFile.file.fileType) {
-                        "jpg", "jpeg" -> MediaFileHandler.saveJpegPhoto(file.readBytes(), folder.id)
-                            .blockingGet()
+                    val vaultFile = try {
+                        when {
+                            isImageFileType(progressFile.file.fileType) -> {
+                                val imageBytes = file.readBytes()
+                                if (progressFile.file.fileType.contains("png", ignoreCase = true)) {
+                                    MediaFileHandler.savePngImage(imageBytes)
+                                } else {
+                                    MediaFileHandler.saveJpegPhoto(imageBytes, folder.id)
+                                        .blockingGet()
+                                }
+                            }
 
-                        "png" -> MediaFileHandler.savePngImage(file.readBytes())
-                        "mp4" -> MediaFileHandler.saveMp4Video(file, folder.id)
-                        else -> vault.builder(file.inputStream())
-                            .setName(file.name)
-                            .setMimeType(progressFile.file.fileType)
-                            .setType(VaultFile.Type.FILE)
-                            .build(folder.id)
-                            .blockingGet()
+                            isVideoFileType(progressFile.file.fileType) -> {
+                                MediaFileHandler.saveMp4Video(file, folder.id)
+                            }
+
+                            else -> {
+                                vault.builder(file.inputStream())
+                                    .setName(file.name)
+                                    .setMimeType(progressFile.file.fileType)
+                                    .setType(VaultFile.Type.FILE)
+                                    .build(folder.id)
+                                    .blockingGet()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed to save file ${progressFile.file.fileName}")
+                        null
                     }
+
+
 
                     progressFile.vaultFile = vaultFile
                     savedFiles++
