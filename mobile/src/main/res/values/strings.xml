@@ -1057,4 +1057,7 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
     <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="try_again">Try again</string>
+  <string name="stop_sharing_files">Stop sharing files?</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
+  <string name="stop">stop</string>
 </resources>

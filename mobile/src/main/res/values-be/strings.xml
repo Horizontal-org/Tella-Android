@@ -1006,4 +1006,6 @@ Would you like to share analytics with the Tella team?</string>
     <string name="send_files_title">Send files</string>
     <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
+  <string name="stop_sharing_files">Stop sharing files?</string>
+  <string name="stop">stop</string>
 </resources>

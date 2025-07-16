@@ -1,15 +1,20 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,6 +33,19 @@ class RecipientUploadFilesFragment :
         super.onViewCreated(view, savedInstanceState)
         showFormEndView()
         observeUploadProgress()
+        binding.cancel.setOnClickListener {
+            showStandardSheet(
+                baseActivity.supportFragmentManager,
+                getString(R.string.stop_sharing_files),
+                getString(R.string.nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred),
+                getString(R.string.action_continue).uppercase(),
+                getString(R.string.stop).uppercase(),
+                {},
+                {
+                    PeerToPeerFlags.cancelled = true
+                    baseActivity.finish()
+                 })
+        }
     }
 
     private fun showFormEndView() {
