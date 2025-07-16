@@ -24,7 +24,7 @@ class PeerToPeerResultFragment :
 
         // Get values from shared state
         participant = PeerToPeerParticipant.SENDER
-        transferredFiles = viewModel.p2PState.session.files.values.toList()
+        transferredFiles = viewModel.p2PState.session?.files?.values?.toList()
 
         setupImage()
         setupTexts()
@@ -47,7 +47,8 @@ class PeerToPeerResultFragment :
     }
 
     private fun setupTexts() {
-        binding.tileTv.text = getString(if (allFilesTransferred) R.string.success_title else R.string.failure_title)
+        binding.tileTv.text =
+            getString(if (allFilesTransferred) R.string.success_title else R.string.failure_title)
         binding.descriptionTv.text = computeSubtitle()
     }
 
@@ -57,7 +58,7 @@ class PeerToPeerResultFragment :
                 setText(getString(R.string.view_files_action))
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    // TODO: Implement button action
+                    baseActivity.finish()
                 }
             }
         } else {
@@ -66,24 +67,32 @@ class PeerToPeerResultFragment :
     }
 
     private fun computeSubtitle(): String {
-        val total = transferredFiles?.size
-        val successCount = transferredFiles?.count { it.status == successStatus }
-        val failureCount = total?.minus(successCount!!)
+        val total = transferredFiles?.size ?: 0
+        val successCount = transferredFiles?.count { it.status == successStatus } ?: 0
+        val failureCount = total - successCount
 
-        return when {
-            successCount == total -> getString(if (total == 1) successSingleRes() else successMultipleRes(), total)
-            failureCount == total -> getString(if (total == 1) failureSingleRes() else failureMultipleRes(), total)
+        return when (successCount) {
+            total -> {
+                val resId = if (participant == PeerToPeerParticipant.RECIPIENT)
+                    R.plurals.success_file_received_from_sender
+                else
+                    R.plurals.success_file_sent_to_recipient
+
+                return resources.getQuantityString(resId, total, total)
+            }
+            0 -> {
+                baseActivity.resources.getQuantityString(
+                    R.plurals.failure_file_received_expl,
+                    failureCount,
+                    failureCount
+                )
+            }
             else -> {
-                val resId = when {
-                    successCount == 1 && failureCount == 1 -> R.string.file_received_file_not_received
-                    successCount == 1 -> R.string.file_received_files_not_received
-                    failureCount == 1 -> R.string.files_received_file_not_received
-                    else -> R.string.files_received_files_not_received
-                }
-                getString(resId, successCount, failureCount)
+                getString(R.string.partial_success_summary, successCount, failureCount)
             }
         }
     }
+
 
     private val successStatus: P2PFileStatus
         get() = P2PFileStatus.FINISHED
@@ -94,18 +103,4 @@ class PeerToPeerResultFragment :
     private val noFilesTransferred: Boolean
         get() = transferredFiles?.none { it.status == successStatus } == true
 
-    private fun successSingleRes(): Int =
-        if (participant == PeerToPeerParticipant.RECIPIENT)
-            R.string.success_file_received_expl
-        else
-            R.string.success_file_sent_expl
-
-    private fun successMultipleRes(): Int =
-        if (participant == PeerToPeerParticipant.RECIPIENT)
-            R.string.success_files_received_expl
-        else
-            R.string.success_files_sent_expl
-
-    private fun failureSingleRes(): Int = R.string.failure_file_received_expl
-    private fun failureMultipleRes(): Int = R.string.failure_files_received_expl
 }

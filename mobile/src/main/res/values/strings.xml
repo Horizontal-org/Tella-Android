@@ -1048,13 +1048,13 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="exit_nearby_sharing">Exit nearby sharing?</string>
   <string name="your_progress_will_be_lost">Your progress will be lost.</string>
   <string name="ip_address">IP address</string>
-    <string name="sender_files_rejected">Sender\'s files rejected.</string>
+  <string name="sender_files_rejected">Sender\'s files rejected.</string>
   <string name="the_receiver_accepted_the_files_transfer">"The receiver accepted the files transfer "</string>
   <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
   <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
   <string name="sending_files">Sending files</string>
   <string name="send_files_title">Send files</string>
-    <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
+  <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="try_again">Try again</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
@@ -1062,16 +1062,23 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
   <string name="stop">stop</string>
   <string name="success_title">Success</string>
   <string name="failure_title">Something went wrong</string>
-  <string name="success_file_received_expl">You have successfully received %d file.</string>
-  <string name="success_files_received_expl">You have successfully received %d files.</string>
-  <string name="success_file_sent_expl">You have successfully sent %d file.</string>
-  <string name="success_files_sent_expl">You have successfully sent %d files.</string>
-  <string name="failure_file_received_expl">We couldn't receive %d file.</string>
-  <string name="failure_files_received_expl">We couldn't receive %d files.</string>
-  <string name="file_received_file_not_received">1 file received, 1 file not received</string>
-  <string name="file_received_files_not_received">1 file received, %d files not received</string>
-  <string name="files_received_file_not_received">%d files received, 1 file not received</string>
-  <string name="files_received_files_not_received">%d files received, %d files not received</string>
+
+  <plurals name="success_file_received_from_sender">
+    <item quantity="one">You have successfully received %1$d file from the sender.</item>
+    <item quantity="other">You have successfully received %1$d files from the sender.</item>
+  </plurals>
+
+  <plurals name="success_file_sent_to_recipient">
+    <item quantity="one">You have successfully sent %1$d file to the recipient.</item>
+    <item quantity="other">You have successfully sent %1$d files to the recipient.</item>
+  </plurals>
+
+  <string name="partial_success_summary">Only %1$d files were received. %2$d files were not received.</string>
+  <plurals name="failure_file_received_expl">
+    <item quantity="one">0 files were received. %1$d file was not received.</item>
+    <item quantity="other">0 files were received. %1$d files were not received.</item>
+  </plurals>
+
   <string name="view_files_action">View Files</string>
   <string name="view_files">VIEW FILES</string>
 

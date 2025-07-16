@@ -105,7 +105,6 @@ class AttachmentsViewModel @Inject constructor(
         )
     }
 
-
     fun moveFiles(parentId: String?, vaultFiles: List<VaultFile?>?) {
         if (vaultFiles == null || parentId == null) return
 
@@ -169,7 +168,6 @@ class AttachmentsViewModel @Inject constructor(
         )
     }
 
-
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.keyRxVault.rxVault
             .firstOrError()
@@ -177,7 +175,6 @@ class AttachmentsViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
 
     fun createFolder(folderName: String, parent: String) {
         disposables.add(

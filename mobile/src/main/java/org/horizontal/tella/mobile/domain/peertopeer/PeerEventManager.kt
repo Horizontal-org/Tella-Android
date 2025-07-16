@@ -23,26 +23,8 @@ object PeerEventManager {
     private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 1)
     val uploadProgressStateFlow = _uploadProgressStateFlow.asSharedFlow()
 
-
-    suspend fun onUploadProgressState(p2PSharedState : P2PSharedState) {
-        val session = p2PSharedState.session
-        val files = session?.files?.values?.toList() ?: emptyList()
-
-        val totalSize = files.sumOf { it.file.size }
-        val uploaded = files.sumOf { it.bytesTransferred }
-        val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
-
-        val state = session?.status?.let {
-            UploadProgressState(
-                percent = percent,
-                sessionStatus = it,
-                files = files
-            )
-        }
-
-        if (state != null) {
-            _uploadProgressStateFlow.emit(state)
-        }
+    suspend fun onUploadProgressState(state: UploadProgressState) {
+        _uploadProgressStateFlow.emit(state)
     }
 
     suspend fun emitRegistrationSuccess() {

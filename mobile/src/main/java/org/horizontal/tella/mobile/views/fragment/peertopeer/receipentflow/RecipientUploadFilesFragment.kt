@@ -1,7 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -9,13 +7,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
+import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.hzontal.shared_ui.utils.DialogUtils
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,7 +41,7 @@ class RecipientUploadFilesFragment :
                 {
                     PeerToPeerFlags.cancelled = true
                     baseActivity.finish()
-                 })
+                })
         }
     }
 
@@ -64,9 +61,18 @@ class RecipientUploadFilesFragment :
     }
 
     private fun observeUploadProgress() {
-        viewModel.uploadProgress.observe(viewLifecycleOwner) { state ->
-            Timber.d("State "+ state?.percent + " Status: "+state?.sessionStatus?.name)
-        }
 
+        viewModel.uploadProgress.observe(viewLifecycleOwner) { state ->
+            if (state == null) return@observe
+            val files = state.files
+            val percentFloat = state.percent / 100f
+            endView.setUploadProgress(files, percentFloat)
+
+            // Optional: finalize UI when upload is done
+            if (state.sessionStatus == SessionStatus.FINISHED) {
+                endView.clearPartsProgress(files, SessionStatus.FINISHED)
+            }
+        }
     }
+
 }
