@@ -139,6 +139,7 @@ class FileTransferViewModel @Inject constructor(
 
                             _uploadProgress.postValue(
                                 UploadProgressState(
+                                    title = session.title ?: "",
                                     percent = percent,
                                     sessionStatus = session.status,
                                     files = session.files.values.toList()
@@ -158,6 +159,7 @@ class FileTransferViewModel @Inject constructor(
                 // Post state after each file is done
                 _uploadProgress.postValue(
                     UploadProgressState(
+                        title = session.title ?: "",
                         percent = session.files.values.sumOf { it.bytesTransferred }.let {
                             if (totalSize > 0) ((it * 100) / totalSize).toInt() else 0
                         },
@@ -172,6 +174,7 @@ class FileTransferViewModel @Inject constructor(
             // Final update after all uploads complete
             _uploadProgress.postValue(
                 UploadProgressState(
+                    title = session.title ?: "",
                     percent = 100,
                     sessionStatus = session.status,
                     files = session.files.values.toList()

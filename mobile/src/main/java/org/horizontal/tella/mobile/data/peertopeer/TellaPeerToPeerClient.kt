@@ -33,7 +33,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class TellaPeerToPeerClient @Inject constructor(){
+class TellaPeerToPeerClient @Inject constructor() {
 
     private fun getClientWithFingerprintValidation(expectedFingerprint: String): OkHttpClient {
         val trustManager = object : X509TrustManager {
@@ -136,7 +136,8 @@ class TellaPeerToPeerClient @Inject constructor(){
                 fileName = it.name,
                 size = it.size,
                 fileType = mimeType,
-                sha256 = it.hash
+                sha256 = it.hash,
+                thumb = it.thumb
             )
         }
 
@@ -177,6 +178,7 @@ class TellaPeerToPeerClient @Inject constructor(){
             PrepareUploadResult.Failure(Exception("Malformed server response"))
         }
     }
+
     private fun handleServerError(code: Int, body: String): PrepareUploadResult {
         return when (code) {
             400 -> PrepareUploadResult.BadRequest
@@ -208,7 +210,7 @@ class TellaPeerToPeerClient @Inject constructor(){
 
         val request = Request.Builder()
             .url(url)
-            .post(requestBody)
+            .put(requestBody)
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
             .build()
 

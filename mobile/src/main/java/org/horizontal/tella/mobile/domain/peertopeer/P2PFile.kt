@@ -9,7 +9,7 @@ data class P2PFile(
     val size: Long,
     val fileType: String,
     val sha256: String,
-    val thumb: ByteArray? = null
+    val thumb: ByteArray
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

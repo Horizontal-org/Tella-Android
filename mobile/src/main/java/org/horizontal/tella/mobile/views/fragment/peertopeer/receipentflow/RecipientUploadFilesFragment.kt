@@ -68,10 +68,6 @@ class RecipientUploadFilesFragment :
             val percentFloat = state.percent / 100f
             endView.setUploadProgress(files, percentFloat)
 
-            // Optional: finalize UI when upload is done
-            if (state.sessionStatus == SessionStatus.FINISHED) {
-                endView.clearPartsProgress(files, SessionStatus.FINISHED)
-            }
         }
     }
 

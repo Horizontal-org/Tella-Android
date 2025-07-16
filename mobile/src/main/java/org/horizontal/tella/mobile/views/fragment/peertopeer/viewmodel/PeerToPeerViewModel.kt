@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
@@ -29,12 +28,12 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.FileUtil.getMimeType
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import java.io.File
-import java.io.FileInputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,6 +64,8 @@ class PeerToPeerViewModel @Inject constructor(
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
     private val _uploadProgress = SingleLiveEvent<UploadProgressState?>()
     val uploadProgress: SingleLiveEvent<UploadProgressState?> = _uploadProgress
+    private var isVaultSaveDone = false
+
 
     init {
         viewModelScope.launch {
@@ -92,22 +93,16 @@ class PeerToPeerViewModel @Inject constructor(
 
         viewModelScope.launch {
             PeerEventManager.uploadProgressStateFlow.collect { state ->
-                _uploadProgress.postValue(state)
-            }
-        }
-
-        viewModelScope.launch {
-            PeerEventManager.uploadProgressStateFlow.collect { state ->
-                _uploadProgress.postValue(state)
 
                 val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
-                val alreadySaved = state.sessionStatus == SessionStatus.FINISHED
 
-                if (allFinished && !alreadySaved) {
-                    finalizeAndSaveReceivedFiles(state.files)
+                if (allFinished && !isVaultSaveDone) {
+                    isVaultSaveDone = true // prevent re-saving
+                    finalizeAndSaveReceivedFiles(p2PState.session?.title.orEmpty(), state.files)
                 }
             }
         }
+
     }
 
     fun resetRegistrationState() {
@@ -218,15 +213,22 @@ class PeerToPeerViewModel @Inject constructor(
         hasNavigatedToSuccessFragment = false
     }
 
-    private fun finalizeAndSaveReceivedFiles(progressFiles: List<ProgressFile>) {
+    private fun finalizeAndSaveReceivedFiles(
+        folderName: String,
+        progressFiles: List<ProgressFile>
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
             val root = vault.root.blockingGet()
+
             val folder = vault.builder()
-                .setName("Received_" + System.currentTimeMillis())
+                .setName(folderName)
                 .setType(VaultFile.Type.DIRECTORY)
                 .build(root.id)
                 .blockingGet()
+
+            val totalFiles = progressFiles.size
+            var savedFiles = 0
 
             progressFiles.forEach { progressFile ->
                 try {
@@ -234,18 +236,35 @@ class PeerToPeerViewModel @Inject constructor(
                     val file = File(path)
                     if (!file.exists()) return@forEach
 
-                    val vaultFile = when (file.extension.lowercase()) {
-                        "jpg", "jpeg" -> MediaFileHandler.saveJpegPhoto(file.readBytes(), folder.id).blockingGet()
+                    val vaultFile = when (progressFile.file.fileType) {
+                        "jpg", "jpeg" -> MediaFileHandler.saveJpegPhoto(file.readBytes(), folder.id)
+                            .blockingGet()
+
                         "png" -> MediaFileHandler.savePngImage(file.readBytes())
                         "mp4" -> MediaFileHandler.saveMp4Video(file, folder.id)
-                        else -> vault.builder(FileInputStream(file))
+                        else -> vault.builder(file.inputStream())
                             .setName(file.name)
+                            .setMimeType(progressFile.file.fileType)
                             .setType(VaultFile.Type.FILE)
                             .build(folder.id)
                             .blockingGet()
                     }
 
                     progressFile.vaultFile = vaultFile
+                    savedFiles++
+
+                    // Delete temp file after saving
+                    file.delete()
+
+                    // Emit progress after each file
+                    _uploadProgress.postValue(
+                        UploadProgressState(
+                            title = folderName,
+                            percent = ((savedFiles * 100) / totalFiles),
+                            sessionStatus = SessionStatus.SENDING,
+                            files = progressFiles
+                        )
+                    )
 
                 } catch (e: Exception) {
                     Timber.e(e, "Saving to vault failed for file ${progressFile.file.fileName}")
@@ -253,12 +272,11 @@ class PeerToPeerViewModel @Inject constructor(
                 }
             }
 
-            // Optional: Update final session state
             p2PState.session?.status = SessionStatus.FINISHED
 
-            // Re-emit new state with VaultFiles linked
             _uploadProgress.postValue(
                 UploadProgressState(
+                    title = folderName,
                     percent = 100,
                     sessionStatus = SessionStatus.FINISHED,
                     files = progressFiles
@@ -266,7 +284,6 @@ class PeerToPeerViewModel @Inject constructor(
             )
         }
     }
-
 
     override fun onCleared() {
         super.onCleared()

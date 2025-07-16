@@ -39,10 +39,13 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
+import java.io.File
 import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
+import kotlin.io.path.outputStream
+import kotlin.io.path.pathString
 
 const val port = 53317
 
@@ -217,7 +220,7 @@ class TellaPeerToPeerServer(
                             return@put
                         }
 
-                        val tmpFile = createTempFile(prefix = "p2p_", suffix = "_$fileId")
+                        val tmpFile = File.createTempFile(fileId, ".tmp")
                         val output = tmpFile.outputStream().buffered()
 
                         try {
@@ -238,6 +241,7 @@ class TellaPeerToPeerServer(
                                 val percent = if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
 
                                 val state = UploadProgressState(
+                                    title = session.title ?: "",
                                     percent = percent,
                                     sessionStatus = session.status,
                                     files = session.files.values.toList()
@@ -246,14 +250,15 @@ class TellaPeerToPeerServer(
                             }
 
                             progressFile.status = P2PFileStatus.FINISHED
-                            progressFile.path = tmpFile.absolutePath
+                            progressFile.path = tmpFile.path
 
-                            // Final emit after completion
                             val finalState = UploadProgressState(
+                                title = session.title ?: "",
                                 percent = 100,
                                 sessionStatus = SessionStatus.FINISHED,
                                 files = session.files.values.toList()
                             )
+
                             PeerEventManager.onUploadProgressState(finalState)
 
                             call.respond(HttpStatusCode.OK, "Upload complete")
@@ -261,6 +266,7 @@ class TellaPeerToPeerServer(
                             progressFile.status = P2PFileStatus.FAILED
 
                             val failedState = UploadProgressState(
+                                title = session.title ?: "",
                                 percent = 0,
                                 sessionStatus = session.status,
                                 files = session.files.values.toList()

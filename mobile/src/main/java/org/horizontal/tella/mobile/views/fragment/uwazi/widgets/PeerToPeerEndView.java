@@ -66,8 +66,12 @@ public class PeerToPeerEndView extends FrameLayout {
         int percentComplete = getTotalUploadedSizePercent(progressFiles);
 
         for (ProgressFile file : progressFiles) {
-            if (file.getStatus() == P2PFileStatus.FINISHED && file.getVaultFile() != null) {
-                SubmittingItem item = partsListView.findViewWithTag(file.getVaultFile().id);
+            String tagId = file.getVaultFile() != null && file.getVaultFile().id != null
+                    ? file.getVaultFile().id
+                    : file.getFile().getId();
+
+            if (file.getStatus() == P2PFileStatus.FINISHED) {
+                SubmittingItem item = partsListView.findViewWithTag(tagId);
                 if (item != null) item.setPartUploaded();
             }
         }
@@ -76,12 +80,13 @@ public class PeerToPeerEndView extends FrameLayout {
         setFormSizeLabel(progressFiles, percentComplete);
     }
 
-
     public void clearPartsProgress(List<ProgressFile> progressFiles, SessionStatus sessionStatus) {
         for (ProgressFile file : progressFiles) {
-            if (file.getVaultFile() == null) continue;
+            String tagId = file.getVaultFile() != null && file.getVaultFile().id != null
+                    ? file.getVaultFile().id
+                    : file.getFile().getId();
 
-            SubmittingItem item = partsListView.findViewWithTag(file.getVaultFile().id);
+            SubmittingItem item = partsListView.findViewWithTag(tagId);
             if (item != null) {
                 if (sessionStatus == SessionStatus.FINISHED || file.getStatus() == P2PFileStatus.FINISHED) {
                     item.setPartUploaded();
@@ -98,9 +103,12 @@ public class PeerToPeerEndView extends FrameLayout {
 
         for (ProgressFile file : progressFiles) {
             totalUploadedSize += file.getBytesTransferred();
-            if (file.getVaultFile() != null) {
-                totalSize += file.getVaultFile().size;
-            }
+
+            long size = file.getVaultFile() != null && file.getVaultFile().size > 0
+                    ? file.getVaultFile().size
+                    : file.getFile().getSize();
+
+            totalSize += size;
         }
 
         return totalSize > 0 ? Math.round((totalUploadedSize * 1f / totalSize) * 100) : 0;
@@ -112,9 +120,11 @@ public class PeerToPeerEndView extends FrameLayout {
         long totalUploaded = 0;
 
         for (ProgressFile file : files) {
-            if (file.getVaultFile() != null) {
-                totalSize += file.getVaultFile().size;
-            }
+            long size = file.getVaultFile() != null && file.getVaultFile().size > 0
+                    ? file.getVaultFile().size
+                    : file.getFile().getSize();
+
+            totalSize += size;
             totalUploaded += file.getBytesTransferred();
         }
 
@@ -136,14 +146,29 @@ public class PeerToPeerEndView extends FrameLayout {
     private View createProgressFileItemView(@NonNull ProgressFile file, boolean offline) {
         SubmittingItem item = new SubmittingItem(getContext(), null, 0);
         ImageView thumbView = item.findViewById(R.id.fileThumb);
-        item.setTag(file.getVaultFile() != null ? file.getVaultFile().id : file.getFile().getId());
 
-        item.setPartName(file.getFile().getFileName());
-        item.setPartSize(file.getFile().getSize());
+        String tagId = file.getVaultFile() != null && file.getVaultFile().id != null
+                ? file.getVaultFile().id
+                : file.getFile().getId();
+        item.setTag(tagId);
 
-        if (file.getVaultFile() != null && file.getVaultFile().thumb != null) {
+        String name = file.getVaultFile() != null && file.getVaultFile().name != null
+                ? file.getVaultFile().name
+                : file.getFile().getFileName();
+        item.setPartName(name);
+
+        long size = file.getVaultFile() != null && file.getVaultFile().size > 0
+                ? file.getVaultFile().size
+                : file.getFile().getSize();
+        item.setPartSize(size);
+
+        byte[] thumb = file.getVaultFile() != null && file.getVaultFile().thumb != null
+                ? file.getVaultFile().thumb
+                : file.getFile().getThumb();
+
+        if (thumb != null) {
             Glide.with(getContext())
-                    .load(file.getVaultFile().thumb)
+                    .load(thumb)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(thumbView);
