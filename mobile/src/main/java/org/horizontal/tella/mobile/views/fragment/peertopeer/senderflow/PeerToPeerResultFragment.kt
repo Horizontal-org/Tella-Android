@@ -16,14 +16,12 @@ class PeerToPeerResultFragment :
     BaseBindingFragment<FragmentPeerToPeerResultBinding>(FragmentPeerToPeerResultBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-    private lateinit var participant: PeerToPeerParticipant
     private var transferredFiles: List<ProgressFile>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Get values from shared state
-        participant = PeerToPeerParticipant.SENDER
         transferredFiles = viewModel.p2PState.session?.files?.values?.toList()
 
         setupImage()
@@ -73,7 +71,7 @@ class PeerToPeerResultFragment :
 
         return when (successCount) {
             total -> {
-                val resId = if (participant == PeerToPeerParticipant.RECIPIENT)
+                val resId = if (viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT)
                     R.plurals.success_file_received_from_sender
                 else
                     R.plurals.success_file_sent_to_recipient

@@ -34,6 +34,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
+import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerParticipant
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import java.io.File
@@ -46,7 +47,7 @@ class PeerToPeerViewModel @Inject constructor(
     peerToPeerManager: PeerToPeerManager,
     val p2PState: P2PSharedState
 ) : ViewModel() {
-
+    var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
     var isManualConnection: Boolean = true
     var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
@@ -270,7 +271,7 @@ class PeerToPeerViewModel @Inject constructor(
                     }
 
 
-
+                    p2PState.session?.files?.get(progressFile.file.id)?.status =  P2PFileStatus.SAVED
                     progressFile.vaultFile = vaultFile
                     savedFiles++
 

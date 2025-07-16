@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
+import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
@@ -20,6 +22,7 @@ class SenderUploadFilesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.uploadAllFiles()
+        viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
         showFormEndView()
         observeUploadProgress()
         viewModel.uploadAllFiles()
@@ -54,6 +57,13 @@ class SenderUploadFilesFragment :
             val files = state.files
             val percentFloat = state.percent / 100f
             endView.setUploadProgress(files, percentFloat)
+
+
+            val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
+
+            if (state.sessionStatus == SessionStatus.FINISHED && allFinished) {
+                navManager().navigateFromUploadSenderFragmentToPeerToPeerResultFragment()
+            }
         }
     }
 }

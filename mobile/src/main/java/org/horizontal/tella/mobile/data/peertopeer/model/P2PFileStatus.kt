@@ -4,5 +4,6 @@ enum class P2PFileStatus {
     QUEUE,
     SENDING,
     FAILED,
-    FINISHED
+    FINISHED,
+    SAVED,
 }

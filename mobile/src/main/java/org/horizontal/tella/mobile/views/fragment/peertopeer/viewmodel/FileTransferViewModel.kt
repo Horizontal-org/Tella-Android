@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
+import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerParticipant
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,6 +39,7 @@ class FileTransferViewModel @Inject constructor(
     val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
     private val _uploadProgress = MutableLiveData<UploadProgressState>()
     val uploadProgress: LiveData<UploadProgressState> get() = _uploadProgress
+    var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {
         return Single.fromCallable {

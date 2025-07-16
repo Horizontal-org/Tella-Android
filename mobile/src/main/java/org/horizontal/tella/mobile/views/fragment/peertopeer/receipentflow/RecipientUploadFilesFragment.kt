@@ -6,10 +6,12 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerParticipant
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
@@ -30,6 +32,8 @@ class RecipientUploadFilesFragment :
         super.onViewCreated(view, savedInstanceState)
         showFormEndView()
         observeUploadProgress()
+        viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
+
         binding.cancel.setOnClickListener {
             showStandardSheet(
                 baseActivity.supportFragmentManager,
@@ -67,6 +71,12 @@ class RecipientUploadFilesFragment :
             val files = state.files
             val percentFloat = state.percent / 100f
             endView.setUploadProgress(files, percentFloat)
+
+            val allSaved = state.files.all { it.status == P2PFileStatus.SAVED }
+
+            if (state.sessionStatus == SessionStatus.FINISHED && allSaved) {
+                navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
+            }
 
         }
     }

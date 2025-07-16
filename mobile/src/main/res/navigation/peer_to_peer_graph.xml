@@ -92,7 +92,11 @@
         android:id="@+id/recipientUploadFilesFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientUploadFilesFragment"
         android:label="recipientUploadFilesFragment"
-        tools:layout="@layout/fragment_upload_files" />
+        tools:layout="@layout/fragment_upload_files" >
+        <action
+            android:id="@+id/action_recipientUploadFilesFragment_to_peerToPeerResultFragment"
+            app:destination="@id/peerToPeerResultFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/prepareUploadFragment"
@@ -151,6 +155,16 @@
         android:id="@+id/uploadSenderFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderUploadFilesFragment"
         android:label="UploadFilesFragment"
-        tools:layout="@layout/fragment_upload_files" />
+        tools:layout="@layout/fragment_upload_files" >
+        <action
+            android:id="@+id/action_uploadSenderFragment_to_peerToPeerResultFragment"
+            app:destination="@id/peerToPeerResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/peerToPeerResultFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerResultFragment"
+        android:label="PeerToPeerResultFragment"
+        tools:layout="@layout/fragment_peer_to_peer_result"/>
+
 
 </navigation>

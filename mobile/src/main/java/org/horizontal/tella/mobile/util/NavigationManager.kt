@@ -224,11 +224,20 @@ class NavigationManager(
 
     fun navigateFromWaitingSenderFragmentToUploadFilesFragment() {
         navigateToWithBundle(R.id.action_waitingSenderFragment_to_uploadFilesFragment)
-    } 
+    }
+
+    fun navigateFromUploadSenderFragmentToPeerToPeerResultFragment() {
+        navigateToWithBundle(R.id.action_uploadSenderFragment_to_peerToPeerResultFragment)
+    }
+
+    fun navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment() {
+        navigateToWithBundle(R.id.action_recipientUploadFilesFragment_to_peerToPeerResultFragment)
+    }
 
     fun navigateFromRecipientSuccessFragmentToRecipientUploadFilesFragment() {
         navigateToWithBundle(R.id.action_recipientSuccessFragment_to_recipientUploadFilesFragment)
     }
+
 
     fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {
         navControllerProvider.navController.navigate(
