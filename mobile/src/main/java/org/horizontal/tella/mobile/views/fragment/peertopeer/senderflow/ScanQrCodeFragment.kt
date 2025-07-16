@@ -12,10 +12,13 @@ import com.google.gson.Gson
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CompoundBarcodeView
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.databinding.ScanQrcodeFragmentBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 
 class ScanQrCodeFragment :
     BaseBindingFragment<ScanQrcodeFragmentBinding>(ScanQrcodeFragmentBinding::inflate) {
@@ -74,6 +77,7 @@ class ScanQrCodeFragment :
 
                     } catch (e: Exception) {
                         e.printStackTrace()
+                        DialogUtils.showBottomMessage(baseActivity, "Invalid QR Code", true)
                         // Show a message: Invalid QR Code
                     }
                 }
@@ -127,6 +131,28 @@ class ScanQrCodeFragment :
                 navManager().navigateFromScanQrCodeToPrepareUploadFragment()
             } else {
                 //  handle error UI
+            }
+
+            viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
+                DialogUtils.showBottomMessage(baseActivity, message, true)
+            }
+
+            viewModel.bottomSheetError.observe(viewLifecycleOwner) { (title, description) ->
+                showStandardSheet(
+                    baseActivity.supportFragmentManager,
+                    title,
+                    description,
+                    null,
+                    getString(R.string.try_again),
+                    null,
+                 {
+                    viewModel.startRegistration(
+                        ip = viewModel.p2PState.ip,
+                        port = viewModel.p2PState.port,
+                        hash = viewModel.p2PState.hash,
+                        pin = viewModel.p2PState.pin.toString()
+                    )
+                })
             }
         }
     }
