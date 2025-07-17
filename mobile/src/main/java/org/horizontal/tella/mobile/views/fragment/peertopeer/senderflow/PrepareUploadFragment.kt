@@ -99,7 +99,22 @@ class PrepareUploadFragment :
                     )
                 }
             }
+        findNavController().currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<Boolean>("registrationSuccess")
+            ?.observe(viewLifecycleOwner) { success ->
+                if (success == true) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        "Success! Connected to device",
+                        false
+                    )
 
+                    // Remove it so it's not shown again on back navigation
+                    findNavController().currentBackStackEntry?.savedStateHandle
+                        ?.remove<Boolean>("registrationSuccess")
+                }
+            }
         binding.toolbar.backClickListener = {
             BottomSheetUtils.showConfirmSheet(
                 baseActivity.supportFragmentManager,

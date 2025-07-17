@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -130,6 +131,8 @@ class ScanQrCodeFragment :
     private fun initObservers() {
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
+                findNavController().currentBackStackEntry?.savedStateHandle
+                    ?.set("registrationSuccess", true)
                 navManager().navigateFromScanQrCodeToPrepareUploadFragment()
             } else {
                 //  handle error UI

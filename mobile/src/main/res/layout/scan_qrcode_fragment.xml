@@ -83,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        app:circularflow_radiusInDP="25px"
         android:backgroundTint="@color/light_purple"
         android:textColor="@android:color/white"
         app:text_all_caps="true"
