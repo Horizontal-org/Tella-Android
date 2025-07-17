@@ -68,6 +68,7 @@
             app:text_color="@color/btn_dark_letter"
             app:text="@string/accept"
             app:check_state="false"
+            app:text_all_caps="true"
             app:layout_constraintBottom_toTopOf="@+id/reject_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +83,7 @@
             android:layout_marginTop="10dp"
             android:gravity="center"
             app:text="@string/reject"
+            app:text_all_caps="true"
             app:layout_constraintTop_toBottomOf="@+id/accept_btn" />
 
 
