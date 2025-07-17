@@ -70,7 +70,7 @@ public class PeerToPeerEndView extends FrameLayout {
                     ? file.getVaultFile().id
                     : file.getFile().getId();
 
-            if (file.getStatus() == P2PFileStatus.FINISHED) {
+            if (isUploadedStatus(file.getStatus())) {
                 SubmittingItem item = partsListView.findViewWithTag(tagId);
                 if (item != null) item.setPartUploaded();
             }
@@ -88,7 +88,7 @@ public class PeerToPeerEndView extends FrameLayout {
 
             SubmittingItem item = partsListView.findViewWithTag(tagId);
             if (item != null) {
-                if (sessionStatus == SessionStatus.FINISHED || file.getStatus() == P2PFileStatus.FINISHED) {
+                if (sessionStatus == SessionStatus.FINISHED || isUploadedStatus(file.getStatus())) {
                     item.setPartUploaded();
                 } else {
                     item.setPartCleared();
@@ -174,21 +174,20 @@ public class PeerToPeerEndView extends FrameLayout {
                     .into(thumbView);
         }
 
-        switch (file.getStatus()) {
-            case FINISHED:
+        if (isUploadedStatus(file.getStatus())) {
+            item.setPartUploaded();
+        } else {
+            if (previewUploaded) {
                 item.setPartUploaded();
-                break;
-            case FAILED:
-            case QUEUE:
-            case SENDING:
-                if (previewUploaded) {
-                    item.setPartUploaded();
-                } else {
-                    item.setPartPrepared(offline);
-                }
-                break;
+            } else {
+                item.setPartPrepared(offline);
+            }
         }
 
         return item;
+    }
+
+    private boolean isUploadedStatus(P2PFileStatus status) {
+        return status == P2PFileStatus.FINISHED || status == P2PFileStatus.SAVED;
     }
 }

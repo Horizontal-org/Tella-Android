@@ -26,6 +26,8 @@
         <attr name="tint_color" format="color|reference" />
         <attr name="text_color" format="color|reference" />
         <attr name="text_all_caps" format="boolean"/>
+        <attr name="text_round_bold" format="boolean"/>
+        <attr name="default_background" format="reference"/>
     </declare-styleable>
 
 

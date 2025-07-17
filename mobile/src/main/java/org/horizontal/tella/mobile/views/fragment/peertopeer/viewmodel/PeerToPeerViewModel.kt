@@ -270,8 +270,10 @@ class PeerToPeerViewModel @Inject constructor(
                         null
                     }
 
+                    //  Update both the shared session and local progress file status
+                    p2PState.session?.files?.get(progressFile.file.id)?.status = P2PFileStatus.SAVED
+                    progressFile.status = P2PFileStatus.SAVED //  <-- Important!
 
-                    p2PState.session?.files?.get(progressFile.file.id)?.status =  P2PFileStatus.SAVED
                     progressFile.vaultFile = vaultFile
                     savedFiles++
 
@@ -294,6 +296,7 @@ class PeerToPeerViewModel @Inject constructor(
                 }
             }
 
+            // ✅ Final session status
             p2PState.session?.status = SessionStatus.FINISHED
 
             _uploadProgress.postValue(
@@ -306,6 +309,7 @@ class PeerToPeerViewModel @Inject constructor(
             )
         }
     }
+
 
     override fun onCleared() {
         super.onCleared()

@@ -26,24 +26,26 @@ class RoundButton @JvmOverloads constructor(
     private val binding: LayoutRoundButtonBinding =
         LayoutRoundButtonBinding.inflate(LayoutInflater.from(context), this, true)
     private var mChecked = false
+    private var isTextBold = false
+    private var defaultBackground = R.drawable.bg_information_button
     var clickListener: (() -> Unit)? = null
 
     init {
-        initView()
         initListeners()
         extractAttributes(attrs, defStyleAttr)
+        initView()
     }
 
     private fun initView() {
         binding.sheetTextView.background =
-            ContextCompat.getDrawable(context, R.drawable.bg_information_button)
+            ContextCompat.getDrawable(context, defaultBackground)
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(
-                    attrs, R.styleable.RoundButton, defStyleAttr, defStyleAttr
-                )
+                attrs, R.styleable.RoundButton, defStyleAttr, defStyleAttr
+            )
 
             try {
                 text = typedArray.getResourceId(R.styleable.RoundButton_text, -1)
@@ -51,6 +53,11 @@ class RoundButton @JvmOverloads constructor(
                 tintColor = typedArray.getColor(R.styleable.RoundButton_tint_color, -1)
                 textColor = typedArray.getColor(R.styleable.RoundButton_text_color, -1)
                 isTextAllCaps = typedArray.getBoolean(R.styleable.RoundButton_text_all_caps, false)
+                isTextBold = typedArray.getBoolean(R.styleable.RoundButton_text_round_bold, false)
+                defaultBackground = typedArray.getResourceId(
+                    R.styleable.RoundButton_default_background,
+                    R.drawable.bg_information_button
+                )
                 isChecked = mChecked
 
             } finally {
@@ -74,6 +81,7 @@ class RoundButton @JvmOverloads constructor(
         setTextAndVisibility(text, binding.sheetTextView)
         setBackgroundTintColor(tintColor)
         setTextCaps(isTextAllCaps)
+        setTextBold(isBold = isTextBold)
     }
 
     private fun setTextAndVisibility(text: Int, textView: TextView) {
@@ -125,12 +133,19 @@ class RoundButton @JvmOverloads constructor(
             context,
             R.drawable.bg_information_button_selected
         )
-        else ContextCompat.getDrawable(context, R.drawable.bg_information_button)
+        else ContextCompat.getDrawable(context, defaultBackground)
     }
 
     //TODO FIX TEXT ALLCAPS EVERY WHERE
     private fun setTextCaps(isTextAllCaps: Boolean) {
         binding.sheetTextView.isAllCaps = isTextAllCaps
+    }
+
+    private fun setTextBold(isBold: Boolean) {
+        binding.sheetTextView.setTypeface(
+            null,
+            if (isBold) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL
+        )
     }
 
 }

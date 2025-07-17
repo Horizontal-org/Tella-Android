@@ -81,7 +81,6 @@ class ConnectHotspotFragment :
         }
 
         binding.toolbar.backClickListener = { baseActivity.onBackPressed() }
-        binding.backBtn.setOnClickListener { baseActivity.onBackPressed() }
     }
 
     private fun updateNextButtonState(connectionType: ConnectionType?) {
@@ -110,7 +109,7 @@ class ConnectHotspotFragment :
         if (ContextCompat.checkSelfPermission(baseActivity, ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            baseActivity.maybeChangeTemporaryTimeout{
+            baseActivity.maybeChangeTemporaryTimeout {
                 requestPermissionLauncher.launch(ACCESS_FINE_LOCATION)
             }
         } else {

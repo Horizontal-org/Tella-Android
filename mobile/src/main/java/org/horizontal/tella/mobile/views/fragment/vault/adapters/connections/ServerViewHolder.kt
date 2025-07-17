@@ -103,7 +103,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                 reportTypeImg.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         view.resources,
-                        R.drawable.ic_share,
+                        R.drawable.ic_p2p,
                         null
                     )
                 )

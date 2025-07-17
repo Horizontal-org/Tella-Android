@@ -67,12 +67,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/qrCodeImageView" />
 
-    <!-- Manual Connection Button -->
     <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/connectManuallyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        app:text_all_caps="true"
+        app:default_background="@drawable/bg_rounded_information"
         android:backgroundTint="@color/light_purple"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"

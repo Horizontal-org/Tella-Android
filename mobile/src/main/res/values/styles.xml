@@ -427,9 +427,6 @@
         <item name="android:textColor">@color/wa_white</item>
         <item name="android:textSize">40sp</item>
     </style>
-    <style name="Tella_Main_White_Text.Bold">
-        <item name="android:textStyle">bold</item>
-    </style>
 
     <style name="DialogDataCollectionTextEntryLayout" parent="Theme.AppCompat.Light.NoActionBar">
 
