@@ -1,9 +1,6 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.PartData
-import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.call
 import io.ktor.server.application.install
@@ -14,7 +11,6 @@ import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
-import io.ktor.server.request.receiveMultipart
 import io.ktor.server.request.receiveStream
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -205,7 +201,7 @@ class TellaPeerToPeerServer(
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
 
-                        Timber.d("session id from the server: $sessionId")
+                        Timber.d("session id from the server +$sessionId")
 
                         if (sessionId == null || fileId == null || transmissionId == null) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
@@ -224,64 +220,53 @@ class TellaPeerToPeerServer(
                             return@put
                         }
 
+                        val tmpFile = File.createTempFile(fileId, ".tmp")
+                        val output = tmpFile.outputStream().buffered()
+
                         try {
-                            val multipart = call.receiveMultipart()
+                            val input = call.receiveStream().buffered()
+                            val totalSize = session.files.values.sumOf { it.file.size }
                             var bytesRead = 0L
-                            val tmpFile = File.createTempFile(fileId, ".tmp")
-                            val output = tmpFile.outputStream().buffered()
+                            val buffer = ByteArray(8192)
 
-                            multipart.forEachPart { part ->
-                                if (part is PartData.FileItem) {
-                                    val input = part.streamProvider().buffered()
-                                    val buffer = ByteArray(8192)
+                            while (true) {
+                                val read = input.read(buffer)
+                                if (read == -1) break
+                                output.write(buffer, 0, read)
+                                bytesRead += read
+                                progressFile.bytesTransferred = bytesRead.toInt()
 
-                                    while (true) {
-                                        val read = input.read(buffer)
-                                        if (read == -1) break
-                                        output.write(buffer, 0, read)
-                                        bytesRead += read
-                                        progressFile.bytesTransferred = bytesRead.toInt()
+                                // Optional: update session progress percent
+                                val totalTransferred = session.files.values.sumOf { it.bytesTransferred }
+                                val percent = if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
 
-                                        // Update progress
-                                        val totalTransferred = session.files.values.sumOf { it.bytesTransferred }
-                                        val totalSize = session.files.values.sumOf { it.file.size }
-                                        val percent = if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
-
-                                        val state = UploadProgressState(
-                                            title = session.title.orEmpty(),
-                                            percent = percent,
-                                            sessionStatus = session.status,
-                                            files = session.files.values.toList()
-                                        )
-                                        PeerEventManager.onUploadProgressState(state)
-                                    }
-
-                                    input.close()
-                                    part.dispose()
-                                } else {
-                                    part.dispose()
-                                }
+                                val state = UploadProgressState(
+                                    title = session.title ?: "",
+                                    percent = percent,
+                                    sessionStatus = session.status,
+                                    files = session.files.values.toList()
+                                )
+                                PeerEventManager.onUploadProgressState(state)
                             }
 
-                            output.close()
                             progressFile.status = P2PFileStatus.FINISHED
                             progressFile.path = tmpFile.path
 
                             val finalState = UploadProgressState(
-                                title = session.title.orEmpty(),
+                                title = session.title ?: "",
                                 percent = 100,
                                 sessionStatus = SessionStatus.FINISHED,
                                 files = session.files.values.toList()
                             )
+
                             PeerEventManager.onUploadProgressState(finalState)
 
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
-                            Timber.e(e, "Failed to handle file upload for $fileId")
                             progressFile.status = P2PFileStatus.FAILED
 
                             val failedState = UploadProgressState(
-                                title = session.title.orEmpty(),
+                                title = session.title ?: "",
                                 percent = 0,
                                 sessionStatus = session.status,
                                 files = session.files.values.toList()
@@ -289,6 +274,8 @@ class TellaPeerToPeerServer(
                             PeerEventManager.onUploadProgressState(failedState)
 
                             call.respond(HttpStatusCode.InternalServerError, "Upload failed: ${e.message}")
+                        } finally {
+                            output.close()
                         }
                     }
 

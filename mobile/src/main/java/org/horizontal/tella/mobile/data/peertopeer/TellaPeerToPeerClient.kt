@@ -203,25 +203,17 @@ class TellaPeerToPeerClient @Inject constructor() {
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
     ): Boolean = withContext(Dispatchers.IO) {
 
+        Timber.d("session id from the client+$sessionId")
         val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
+
         val client = getClientWithFingerprintValidation(expectedFingerprint)
 
-        // Progress-aware RequestBody for the actual file content
-        val fileBody = ProgressRequestBody(inputStream, fileSize, onProgress)
-
-        // Multipart body
-        val multipartBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart(
-                "file", // form field name
-                fileName, // filename
-                fileBody // content
-            )
-            .build()
+        val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
 
         val request = Request.Builder()
             .url(url)
-            .put(multipartBody)
+            .put(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
             .build()
 
         return@withContext try {
