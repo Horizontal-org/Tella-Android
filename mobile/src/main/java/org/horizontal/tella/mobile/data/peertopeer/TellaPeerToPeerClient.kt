@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -198,20 +199,29 @@ class TellaPeerToPeerClient @Inject constructor() {
         transmissionId: String,
         inputStream: InputStream,
         fileSize: Long,
+        fileName: String,
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
     ): Boolean = withContext(Dispatchers.IO) {
 
-        Timber.d("session id from the client+$sessionId")
         val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
-
         val client = getClientWithFingerprintValidation(expectedFingerprint)
 
-        val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
+        // Progress-aware RequestBody for the actual file content
+        val fileBody = ProgressRequestBody(inputStream, fileSize, onProgress)
+
+        // Multipart body
+        val multipartBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "file", // form field name
+                fileName, // filename
+                fileBody // content
+            )
+            .build()
 
         val request = Request.Builder()
             .url(url)
-            .put(requestBody)
-            .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
+            .put(multipartBody)
             .build()
 
         return@withContext try {
@@ -229,5 +239,6 @@ class TellaPeerToPeerClient @Inject constructor() {
             false
         }
     }
+
 
 }

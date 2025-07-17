@@ -132,12 +132,14 @@ class FileTransferViewModel @Inject constructor(
                             fileId = progressFile.file.id,
                             transmissionId = progressFile.transmissionId.orEmpty(),
                             inputStream = inputStream,
-                            fileSize = vaultFile.size
+                            fileSize = vaultFile.size,
+                            fileName = vaultFile.name,
                         ) { written, _ ->
                             progressFile.bytesTransferred = written.toInt()
 
                             val uploaded = session.files.values.sumOf { it.bytesTransferred }
-                            val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+                            val percent =
+                                if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
 
                             _uploadProgress.postValue(
                                 UploadProgressState(
@@ -149,6 +151,7 @@ class FileTransferViewModel @Inject constructor(
                             )
                         }
                     }
+
 
                     progressFile.status = P2PFileStatus.FINISHED
                 } catch (e: Exception) {
