@@ -36,6 +36,8 @@ class ScanQrCodeFragment :
 
         barcodeView = CompoundBarcodeView(requireContext())
         barcodeView = binding.qrCodeScanView
+        barcodeView.statusView.visibility = View.GONE
+        barcodeView.viewFinder.visibility = View.GONE
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
