@@ -993,4 +993,5 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
     <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="stop">stop</string>
   <string name="view_files">VIEW FILES</string>
+    <string name="result">result</string>
 </resources>

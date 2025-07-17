@@ -42,10 +42,7 @@ class RecipientUploadFilesFragment :
                 getString(R.string.action_continue).uppercase(),
                 getString(R.string.stop).uppercase(),
                 {},
-                {
-                    PeerToPeerFlags.cancelled = true
-                    baseActivity.finish()
-                })
+                {})
         }
     }
 
@@ -75,6 +72,7 @@ class RecipientUploadFilesFragment :
             val allSaved = state.files.all { it.status == P2PFileStatus.SAVED }
 
             if (state.sessionStatus == SessionStatus.FINISHED && allSaved) {
+                viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
                 navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
             }
 

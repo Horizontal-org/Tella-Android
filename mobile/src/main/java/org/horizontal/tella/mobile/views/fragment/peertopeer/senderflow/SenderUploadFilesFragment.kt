@@ -9,6 +9,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.PeerToPeerFlags
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
@@ -34,7 +35,9 @@ class SenderUploadFilesFragment :
                 getString(R.string.action_continue).uppercase(),
                 getString(R.string.stop).uppercase(),
                 {},
-                {})
+                {
+                    PeerToPeerFlags.cancelled = true
+                    baseActivity.finish()})
         }
     }
 
@@ -62,6 +65,7 @@ class SenderUploadFilesFragment :
             val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
 
             if (state.sessionStatus == SessionStatus.FINISHED && allFinished) {
+                viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
                 navManager().navigateFromUploadSenderFragmentToPeerToPeerResultFragment()
             }
         }

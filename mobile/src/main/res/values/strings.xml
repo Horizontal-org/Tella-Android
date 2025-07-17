@@ -1081,5 +1081,6 @@ You can create your own Wi-Fi network\n using your phone’s hotspot feature.\n
 
   <string name="view_files_action">View Files</string>
   <string name="view_files">VIEW FILES</string>
+  <string name="result">Results</string>
 
 </resources>
