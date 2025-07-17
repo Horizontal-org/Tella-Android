@@ -42,7 +42,8 @@ class RecipientUploadFilesFragment :
                 getString(R.string.action_continue).uppercase(),
                 getString(R.string.stop).uppercase(),
                 {},
-                {})
+                {   viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
+                    navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()})
         }
     }
 
