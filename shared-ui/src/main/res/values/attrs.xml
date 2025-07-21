@@ -133,4 +133,10 @@
     <declare-styleable name="ViewPagerComponent">
         <attr name="tabTitles" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="CollapsibleTextView">
+        <attr name="collapsibleTitle" format="string" />
+        <attr name="collapsibleBody" format="string" />
+        <attr name="defaultExpanded" format="boolean" />
+    </declare-styleable>
 </resources>

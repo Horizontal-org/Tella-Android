@@ -14,12 +14,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <org.hzontal.shared_ui.appbar.ToolbarComponent
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-        app:startTitle="@string/wifi" />
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:startTitle="@string/wifi" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
@@ -64,28 +64,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <TextView
+    <org.hzontal.shared_ui.textviews.CollapsibleTextView
         android:id="@+id/tipsTextView"
-        style="@style/Tella_Main_White_Text.Meduim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="@dimen/activity_horizontal_large_margin"
-        android:background="@drawable/bg_home_btn"
-        android:backgroundTint="@color/wa_white_8"
         android:paddingVertical="@dimen/activity_horizontal_margin"
-        android:paddingStart="@dimen/activity_horizontal_margin"
-        android:text="@string/tips_to_connect"
+        app:collapsibleBody="@string/tips_to_connect_body"
+        app:collapsibleTitle="@string/tips_to_connect_title"
+        app:defaultExpanded="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleDescTextView" />
+
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
         android:background="@color/wa_white_20"
         app:layout_constraintTop_toBottomOf="@id/tipsTextView" />
 
