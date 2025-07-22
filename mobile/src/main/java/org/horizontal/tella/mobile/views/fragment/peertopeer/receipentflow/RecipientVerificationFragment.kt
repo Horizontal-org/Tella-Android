@@ -53,17 +53,12 @@ class RecipientVerificationFragment :
                 viewModel.incomingRequest.collect { request ->
                     if (request != null) {
                         confirmAndConnectBtn.isEnabled = true
-                        confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
+                        confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
                         confirmAndConnectBtn.setOnClickListener {
                             viewModel.onUserConfirmedRegistration(request.registrationId)
                         }
-                        discardBtn.setOnClickListener {
-                            viewModel.onUserRejectedRegistration(request.registrationId)
-                            navigateBackAndStopServer()
-                        }
                     } else {
                         confirmAndConnectBtn.isEnabled = false
-                        confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange16_btn)
                         confirmAndConnectBtn.setOnClickListener(null)
                     }
                 }

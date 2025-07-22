@@ -48,7 +48,6 @@ class CollapsibleTextView @JvmOverloads constructor(
         }
     }
 
-
     private fun toggleText() {
         isExpanded = !isExpanded
         collapsibleText.visibility = if (isExpanded) View.VISIBLE else View.GONE

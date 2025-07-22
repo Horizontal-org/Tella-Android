@@ -29,10 +29,8 @@ class SenderVerificationFragment :
     }
 
     private fun initView() {
-        binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_btn)
-        binding.titleDescTextView.text = getString(R.string.make_sure_sequence_matches_recipient)
-        binding.warningTextView.text = getString(R.string.sequence_mismatch_warning_recipient)
-
+        binding.warningTextView.text = getString(R.string.hash_sender_description)
+        binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
     }
 
     private fun initListeners() {
@@ -40,6 +38,7 @@ class SenderVerificationFragment :
         binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
 
         binding.confirmAndConnectBtn.setOnClickListener {
+            binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
             viewModel.startRegistration(
                 ip = viewModel.p2PState.ip,
                 port = viewModel.p2PState.port,
@@ -56,14 +55,14 @@ class SenderVerificationFragment :
     private fun initObservers() {
 
         viewModel.isManualConnection = true
-            viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
-                if (success) {
-                    findNavController().currentBackStackEntry?.savedStateHandle
-                        ?.set("registrationSuccess", true)
-                    navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()
-                } else {
-                    //  handle error UI
-                }
+        viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                findNavController().currentBackStackEntry?.savedStateHandle
+                    ?.set("registrationSuccess", true)
+                navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()
+            } else {
+                //  handle error UI
+            }
         }
         viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
             DialogUtils.showBottomMessage(baseActivity, message, true)
