@@ -15,6 +15,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -449,4 +450,19 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
                     .e(getString(R.string.could_not_find_uwazientryfragment))
         }
     }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        intent?.getStringExtra("navigateTo")?.let { destination ->
+            if (destination == "attachments_screen") {
+                // Avoid navigating if already on the screen
+                if (navController.currentDestination?.id != R.id.attachments_screen) {
+                    navController.navigate(R.id.attachments_screen)
+                }
+            }
+        }
+    }
+
+
 }

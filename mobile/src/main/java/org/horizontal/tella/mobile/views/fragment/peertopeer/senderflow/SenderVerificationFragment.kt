@@ -53,15 +53,12 @@ class SenderVerificationFragment :
     }
 
     private fun initObservers() {
-
         viewModel.isManualConnection = true
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 findNavController().currentBackStackEntry?.savedStateHandle
                     ?.set("registrationSuccess", true)
                 navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()
-            } else {
-                //  handle error UI
             }
         }
         viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->

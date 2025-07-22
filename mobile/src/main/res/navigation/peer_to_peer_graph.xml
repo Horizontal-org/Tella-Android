@@ -92,7 +92,7 @@
         android:id="@+id/recipientUploadFilesFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientUploadFilesFragment"
         android:label="recipientUploadFilesFragment"
-        tools:layout="@layout/fragment_upload_files" >
+        tools:layout="@layout/fragment_upload_files">
         <action
             android:id="@+id/action_recipientUploadFilesFragment_to_peerToPeerResultFragment"
             app:destination="@id/peerToPeerResultFragment" />
@@ -126,11 +126,7 @@
             android:id="@+id/action_waitingReceiverFragment_to_recipientSuccessFragment"
             app:destination="@id/recipientSuccessFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/successConnectFragment"
-        android:name="org.horizontal.tella.mobile.views.dialog.uwazi.step6.SuccessConnectFragment"
-        android:label="SuccessConnectFragment"
-        tools:layout="@layout/fragment_success_connect_flow" />
+
     <fragment
         android:id="@+id/recipientSuccessFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientSuccessFragment"
@@ -155,7 +151,7 @@
         android:id="@+id/uploadSenderFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderUploadFilesFragment"
         android:label="UploadFilesFragment"
-        tools:layout="@layout/fragment_upload_files" >
+        tools:layout="@layout/fragment_upload_files">
         <action
             android:id="@+id/action_uploadSenderFragment_to_peerToPeerResultFragment"
             app:destination="@id/peerToPeerResultFragment" />
@@ -164,7 +160,7 @@
         android:id="@+id/peerToPeerResultFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerResultFragment"
         android:label="PeerToPeerResultFragment"
-        tools:layout="@layout/fragment_peer_to_peer_result"/>
+        tools:layout="@layout/fragment_peer_to_peer_result" />
 
 
 </navigation>

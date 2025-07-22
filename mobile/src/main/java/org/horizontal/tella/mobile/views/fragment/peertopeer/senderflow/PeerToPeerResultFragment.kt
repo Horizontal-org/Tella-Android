@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.databinding.FragmentPeerToPeerResultBinding
+import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 
@@ -61,7 +63,12 @@ class PeerToPeerResultFragment :
                 setText(getString(R.string.view_files_action))
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    baseActivity.finish()
+                    val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                        putExtra("navigateTo", "attachments_screen")
+                    }
+                    startActivity(intent)
+                    requireActivity().finish() // finish PeerToPeerActivity
                 }
             } else {
                 visibility = View.GONE

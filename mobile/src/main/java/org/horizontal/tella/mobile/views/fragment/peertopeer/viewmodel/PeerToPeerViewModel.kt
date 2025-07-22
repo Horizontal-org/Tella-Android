@@ -2,13 +2,11 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel
 
 import android.content.Context
 import android.os.Build
-import android.os.Environment
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hzontal.tella_vault.VaultFile
-import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -296,7 +294,6 @@ class PeerToPeerViewModel @Inject constructor(
                 }
             }
 
-            // ✅ Final session status
             p2PState.session?.status = SessionStatus.FINISHED
 
             _uploadProgress.postValue(

@@ -238,7 +238,6 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_recipientSuccessFragment_to_recipientUploadFilesFragment)
     }
 
-
     fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {
         navControllerProvider.navController.navigate(
             R.id.startNearBySharingFragment,
