@@ -21,8 +21,8 @@
         app:startTitle="@string/result" />
     <ImageView
         android:id="@+id/setupImgV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@drawable/checked_circle"
         android:contentDescription="@string/Server_Connect_Icon"
         app:layout_constraintBottom_toTopOf="@+id/tileTv"
