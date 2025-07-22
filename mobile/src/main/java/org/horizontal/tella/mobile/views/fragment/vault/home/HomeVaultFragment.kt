@@ -738,12 +738,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
      * This function show connections when all the server types are counted.
      **/
     private fun maybeShowConnections() {
-        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
         // If the serversList is not empty, check if it has changed
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections
             vaultAdapter.addConnectionServers(serversList!!)
-
         } else {
             vaultAdapter.removeConnectionServers()
         }
@@ -757,6 +755,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         handleTellaUploadServers(serverCounts.tellaUploadServers)
         handleCollectServers(serverCounts.collectServers)
         handleUwaziServers(serverCounts.uwaziServers)
+        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
 
         // Check if we need to show connections
         maybeShowConnections()
