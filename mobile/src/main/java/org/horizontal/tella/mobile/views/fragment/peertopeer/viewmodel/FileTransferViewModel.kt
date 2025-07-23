@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
@@ -33,12 +34,12 @@ class FileTransferViewModel @Inject constructor(
     private val peerClient: TellaPeerToPeerClient,
     var p2PSharedState: P2PSharedState
 ) : ViewModel() {
-    private val _prepareResults = MutableLiveData<PeerPrepareUploadResponse>()
-    val prepareResults: LiveData<PeerPrepareUploadResponse> = _prepareResults
-    private val _prepareRejected = MutableLiveData<Event<Boolean>>()
-    val prepareRejected: LiveData<Event<Boolean>> = _prepareRejected
-    private val _uploadProgress = MutableLiveData<UploadProgressState>()
-    val uploadProgress: LiveData<UploadProgressState> get() = _uploadProgress
+    private val _prepareResults = SingleLiveEvent<PeerPrepareUploadResponse>()
+    val prepareResults: SingleLiveEvent<PeerPrepareUploadResponse> = _prepareResults
+    private val _prepareRejected = SingleLiveEvent<Event<Boolean>>()
+    val prepareRejected: SingleLiveEvent<Event<Boolean>> = _prepareRejected
+    private val _uploadProgress = SingleLiveEvent<UploadProgressState>()
+    val uploadProgress: SingleLiveEvent<UploadProgressState> get() = _uploadProgress
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
 
     fun putVaultFilesInForm(vaultFileList: String): Single<List<VaultFile>> {

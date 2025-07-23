@@ -50,14 +50,14 @@ class PeerToPeerViewModel @Inject constructor(
     var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
     private val _registrationSuccess = SingleLiveEvent<Boolean>()
-    val registrationSuccess: LiveData<Boolean> get() = _registrationSuccess
+    val registrationSuccess: SingleLiveEvent<Boolean> get() = _registrationSuccess
     private val _getHashSuccess = SingleLiveEvent<String>()
-    val getHashSuccess: LiveData<String> get() = _getHashSuccess
+    val getHashSuccess: SingleLiveEvent<String> get() = _getHashSuccess
     val bottomMessageError = SingleLiveEvent<String>()
     val bottomSheetError = SingleLiveEvent<Pair<String, String>>()
     val clientHash = peerToPeerManager.clientConnected
     private val _registrationServerSuccess = SingleLiveEvent<Boolean>()
-    val registrationServerSuccess: LiveData<Boolean> = _registrationServerSuccess
+    val registrationServerSuccess: SingleLiveEvent<Boolean> = _registrationServerSuccess
     private val _incomingPrepareRequest = SingleLiveEvent<PrepareUploadRequest?>()
     val incomingPrepareRequest: SingleLiveEvent<PrepareUploadRequest?> = _incomingPrepareRequest
     private val _incomingRequest = MutableStateFlow<IncomingRegistration?>(null)
