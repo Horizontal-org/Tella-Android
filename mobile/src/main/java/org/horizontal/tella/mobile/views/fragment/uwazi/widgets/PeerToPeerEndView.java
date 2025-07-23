@@ -188,6 +188,6 @@ public class PeerToPeerEndView extends FrameLayout {
     }
 
     private boolean isUploadedStatus(P2PFileStatus status) {
-        return status == P2PFileStatus.FINISHED || status == P2PFileStatus.SAVED;
+        return status == P2PFileStatus.FINISHED;
     }
 }
