@@ -25,26 +25,43 @@ class PeerServerStarterManager @Inject constructor(
         config: KeyStoreConfig,
         p2PSharedState: P2PSharedState,
     ) {
-        if (server == null) {
-            server = TellaPeerToPeerServer(
-                ip = ip,
-                keyPair = keyPair,
-                pin = pin,
-                certificate = cert,
-                keyStoreConfig = config,
-                peerToPeerManager = peerToPeerManager,
-                p2PSharedState = p2PSharedState
-            )
+        if (isRunning()) {
+            stopServerBlocking() // Ensure clean restart
+        }
+
+        server = TellaPeerToPeerServer(
+            ip = ip,
+            keyPair = keyPair,
+            pin = pin,
+            certificate = cert,
+            keyStoreConfig = config,
+            peerToPeerManager = peerToPeerManager,
+            p2PSharedState = p2PSharedState
+        )
+
+        try {
             server?.start()
+        } catch (e: Exception) {
+            e.printStackTrace() // Optional: log to Sentry or Crashlytics
+            server = null
         }
     }
 
     fun stopServer() {
         CoroutineScope(Dispatchers.IO).launch {
+            stopServerBlocking()
+        }
+    }
+
+    private fun stopServerBlocking() {
+        try {
             server?.stop()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
             server = null
         }
     }
 
-    fun isRunning(): Boolean = server != null
+    private fun isRunning(): Boolean = server != null
 }

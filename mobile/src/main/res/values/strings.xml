@@ -1022,9 +1022,7 @@ Would you like to share analytics with the Tella team?</string>
     <string name="wifi_connection_instruction">Make sure both devices are connected to the same Wi-Fi network</string>
     <string name="tips_to_connect_title">Tips to connect</string>
     <string name="tips_to_connect_body">
-    1. The Wi-Fi network does not need to be connected to the internet.\n
-    2. You can create your own Wi-Fi network using your phone’s hotspot feature.\n
-    3. Disable any VPN connections.
+    1. The Wi-Fi network does not need to be connected to the internet.\n2. You can create your own Wi-Fi network using your phone’s hotspot feature.\n3. Disable any VPN connections.
 </string>
 
     <string name="current_wifi_network">Current Wifi network</string>

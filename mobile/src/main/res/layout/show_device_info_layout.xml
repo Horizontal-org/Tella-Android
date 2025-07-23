@@ -12,10 +12,10 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:arrowBackIcon="@drawable/ic_close_white"
-        app:arrowBackIconContentDescription="@string/action_go_back"
+        app:arrowBackIconContentDescription="@string/connect_manually"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:startTitle="@string/connect_to_device" />
+        app:startTitle="@string/verification" />
 
 
     <ImageView

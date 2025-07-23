@@ -15,6 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_K
 import timber.log.Timber
 
 class PeerToPeerActivity : BaseLockActivity() {
+
     private lateinit var binding: ActivityPeerToPeerBinding
     private val mediaImportViewModel: MediaImportViewModel by viewModels()
 
@@ -80,4 +81,5 @@ class PeerToPeerActivity : BaseLockActivity() {
         mediaImportViewModel.mediaFileLiveData.observe(this, ::onMediaFileImported)
         mediaImportViewModel.importError.observe(this, ::onImportError)
     }
+
 }

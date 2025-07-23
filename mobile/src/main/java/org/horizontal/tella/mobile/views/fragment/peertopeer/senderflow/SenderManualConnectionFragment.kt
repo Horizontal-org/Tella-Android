@@ -9,7 +9,6 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils

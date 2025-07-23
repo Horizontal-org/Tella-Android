@@ -40,7 +40,7 @@ class CollapsibleTextView @JvmOverloads constructor(
             collapsibleText.text = body
             isExpanded = expandedByDefault
             collapsibleText.visibility = if (isExpanded) View.VISIBLE else View.GONE
-            arrowIcon.rotation = if (isExpanded) 180f else 0f
+            arrowIcon.rotation = if (isExpanded) 0f else 180f
         }
 
         findViewById<View>(R.id.header).setOnClickListener {
@@ -51,7 +51,7 @@ class CollapsibleTextView @JvmOverloads constructor(
     private fun toggleText() {
         isExpanded = !isExpanded
         collapsibleText.visibility = if (isExpanded) View.VISIBLE else View.GONE
-        val rotation = if (isExpanded) 180f else 0f
+        val rotation = if (isExpanded) 0f else 180f
         arrowIcon.animate().rotation(rotation).start()
     }
 

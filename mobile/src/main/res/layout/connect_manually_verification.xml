@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_large_margin"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:padding="24dp"
+        android:padding="@dimen/activity_horizontal_large_margin"
         tools:text="87fd 5869 a6b3 e414 112c 1934 ca00 be77 b8e4 584c 829a 4536 490b da9a 3928 be4a"
         android:background="@drawable/bg_dual_text_check"
         app:layout_constraintTop_toBottomOf="@id/deviceImg"

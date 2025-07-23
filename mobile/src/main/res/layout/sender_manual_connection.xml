@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -20,8 +19,7 @@
             app:arrowBackIconContentDescription="@string/connect_manually"
             app:layout_constraintTop_toTopOf="parent"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:startTitle="@string/connect_to_device" />
-
+            app:startTitle="@string/connect_manually" />
 
         <ImageView
             android:id="@+id/deviceImg"
@@ -34,7 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             app:layout_constraintVertical_chainStyle="packed" />
-
 
         <TextView
             android:id="@+id/titleTextView"
@@ -50,7 +47,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deviceImg" />
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/connectCode_layout"
@@ -70,12 +66,12 @@
                 android:id="@+id/ip_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789."
                 android:fontFamily="@font/open_sans"
                 android:hint="@string/ip_address"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
                 android:inputType="textNoSuggestions"
-                android:digits="0123456789."
                 android:maxLines="1"
                 android:textColor="@color/wa_white"
                 android:textDirection="ltr"
