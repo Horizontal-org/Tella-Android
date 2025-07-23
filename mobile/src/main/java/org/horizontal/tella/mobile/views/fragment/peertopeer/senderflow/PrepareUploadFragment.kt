@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
@@ -75,9 +76,6 @@ class PrepareUploadFragment :
     }
 
     private fun initView() {
-        binding.toolbar.backClickListener = {
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
         gridLayoutManager = GridLayoutManager(context, 3)
         binding.filesRecyclerView.apply {
             layoutManager = gridLayoutManager
@@ -86,6 +84,7 @@ class PrepareUploadFragment :
         binding.toolbar.backClickListener = {
             exitOrSave()
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { exitOrSave()}
 
         //TODO HANDLE THIS IN THE NAVMANAGER
         val navBackStackEntry = findNavController().currentBackStackEntry

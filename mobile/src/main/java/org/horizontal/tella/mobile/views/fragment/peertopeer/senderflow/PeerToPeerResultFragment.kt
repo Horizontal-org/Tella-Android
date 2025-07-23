@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import org.horizontal.tella.mobile.R
@@ -29,6 +30,7 @@ class PeerToPeerResultFragment :
         setupImage()
         setupTexts()
         setupButton()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { baseActivity.finish() }
     }
 
 

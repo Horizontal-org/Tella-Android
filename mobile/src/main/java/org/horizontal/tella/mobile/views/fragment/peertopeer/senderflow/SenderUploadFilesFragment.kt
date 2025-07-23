@@ -2,6 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
@@ -39,6 +40,7 @@ class SenderUploadFilesFragment :
                     PeerToPeerFlags.cancelled = true
                     baseActivity.finish()})
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { }
     }
 
     private fun showFormEndView() {
