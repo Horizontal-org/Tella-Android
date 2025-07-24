@@ -15,16 +15,13 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPee
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import kotlin.math.roundToInt
 
 class RecipientUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-
-
     private lateinit var endView: PeerToPeerEndView
-
-
     private val progressPercentLiveData = MutableLiveData<Int>()
     private var sheetShown = false
 
@@ -37,7 +34,7 @@ class RecipientUploadFilesFragment :
     private fun initializeUI() {
         showFormEndView()
         observeUploadProgress()
-        observeBottomSheetProgress() // NEW
+        observeBottomSheetProgress()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
     }
 
@@ -106,15 +103,12 @@ class RecipientUploadFilesFragment :
                     getString(R.string.action_cancel).uppercase(),
                     viewLifecycleOwner
                 ) {
-                    // peerServerStarterManager.stopServer()
-                    viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
-                    navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
+
                 }
             }
 
             val allSaved = files.all { it.status == P2PFileStatus.SAVED }
             if (state.sessionStatus == SessionStatus.FINISHED && allSaved) {
-                //peerServerStarterManager.stopServer()
                 viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
                 navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
             }
@@ -123,10 +117,13 @@ class RecipientUploadFilesFragment :
 
     private fun observeBottomSheetProgress() {
         viewModel.bottomSheetProgress.observe(viewLifecycleOwner) { progress ->
-            if (!sheetShown) return@observe // Only update if the sheet is shown
+            if (!sheetShown) return@observe
 
-            // Update percent on progress bar
-            progressPercentLiveData.value = progress.percent
+            // Convert percent to file count approximation
+            val totalFiles = viewModel.uploadProgress.value?.files?.size ?: return@observe
+            val filesSaved = (progress.percent * totalFiles / 100f).roundToInt()
+            progressPercentLiveData.value = filesSaved
         }
     }
+
 }

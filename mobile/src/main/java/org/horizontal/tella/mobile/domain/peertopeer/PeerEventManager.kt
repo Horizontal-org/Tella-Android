@@ -22,14 +22,14 @@ object PeerEventManager {
 
     // Replays the last actual registration request to new collectors
     private val _registrationRequests = MutableSharedFlow<Pair<String, PeerRegisterPayload>>(
-        replay = 1,
+        replay = 0,
         extraBufferCapacity = 1
     )
     val registrationRequests = _registrationRequests.asSharedFlow()
 
     // Optional: refactor this one later too
     private val _prepareUploadEvents = MutableSharedFlow<Unit>(
-        replay = 1,
+        replay = 0,
         extraBufferCapacity = 1
     )
     val prepareUploadEvents = _prepareUploadEvents.asSharedFlow()
@@ -39,7 +39,7 @@ object PeerEventManager {
     private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
 
-    private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 1)
+    private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 0)
     val uploadProgressStateFlow = _uploadProgressStateFlow.asSharedFlow()
 
     // Upload progress

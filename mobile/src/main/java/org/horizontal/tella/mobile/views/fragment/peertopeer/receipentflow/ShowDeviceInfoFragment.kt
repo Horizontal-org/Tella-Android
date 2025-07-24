@@ -17,7 +17,6 @@ class ShowDeviceInfoFragment :
 
     private var payload: PeerConnectionPayload? = null
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getString("payload")?.let { payloadJson ->

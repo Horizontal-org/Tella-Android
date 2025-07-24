@@ -291,7 +291,6 @@ class PeerToPeerViewModel @Inject constructor(
                     savedFiles++
                     file.delete()
 
-                    // ✅ Update bottom sheet progress only
                     _bottomSheetProgress.postValue(
                         BottomSheetProgressState(
                             current = savedFiles,
@@ -308,7 +307,8 @@ class PeerToPeerViewModel @Inject constructor(
 
             p2PState.session?.status = SessionStatus.FINISHED
 
-            // ✅ Final state for bottom sheet
+            val updatedFiles = p2PState.session?.files?.values?.toList().orEmpty()
+
             _bottomSheetProgress.postValue(
                 BottomSheetProgressState(
                     current = totalFiles,
@@ -316,6 +316,16 @@ class PeerToPeerViewModel @Inject constructor(
                     percent = 100
                 )
             )
+
+            _uploadProgress.postValue(
+                UploadProgressState(
+                    title = p2PState.session?.title ?: "",
+                    sessionStatus = SessionStatus.FINISHED,
+                    files = updatedFiles,
+                    percent = 100
+                )
+            )
+
         }
     }
 
