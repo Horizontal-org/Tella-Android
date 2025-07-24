@@ -67,6 +67,7 @@ class SenderUploadFilesFragment :
             val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
 
             if (state.sessionStatus == SessionStatus.FINISHED && allFinished) {
+                viewModel.closePeerConnection()
                 viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
                 navManager().navigateFromUploadSenderFragmentToPeerToPeerResultFragment()
             }

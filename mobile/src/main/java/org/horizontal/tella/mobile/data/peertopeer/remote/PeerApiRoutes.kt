@@ -5,6 +5,8 @@ object PeerApiRoutes {
     const val PREPARE_UPLOAD = "/api/v1/prepare-upload"
     const val UPLOAD = "/api/v1/upload"
     const val PING = "/api/v1/ping"
+    const val CLOSE = "/api/v1/close-connection"
+
 
     fun buildUrl(ip: String, port: String, endpoint: String): String {
         return "https://$ip:$port$endpoint"

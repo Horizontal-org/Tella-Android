@@ -277,6 +277,49 @@ class TellaPeerToPeerServer(
                         }
                     }
 
+                    post(PeerApiRoutes.CLOSE) {
+                        val payload = try {
+                            call.receive<Map<String, String>>()
+                        } catch (e: Exception) {
+                            call.respond(HttpStatusCode.BadRequest, "Missing or invalid JSON payload")
+                            return@post
+                        }
+
+                        val sessionId = payload["sessionId"]
+
+                        if (sessionId.isNullOrBlank()) {
+                            call.respond(HttpStatusCode.BadRequest, "Missing session ID")
+                            return@post
+                        }
+
+                        val currentSession = serverSession
+                        if (currentSession == null) {
+                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                            return@post
+                        }
+
+                        if (currentSession.sessionId != sessionId) {
+                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                            return@post
+                        }
+
+                        if (p2PSharedState.session?.status == SessionStatus.CLOSED) {
+                            call.respond(HttpStatusCode.Forbidden, "Session already closed")
+                            return@post
+                        }
+
+                        try {
+                            // ✅ Mark session as closed
+                            p2PSharedState.session?.status = SessionStatus.CLOSED
+                            serverSession = null
+
+                            call.respond(HttpStatusCode.OK, mapOf("success" to true))
+                        } catch (e: Exception) {
+                            Timber.e(e, "Error while closing session")
+                            call.respond(HttpStatusCode.InternalServerError, "Server error")
+                        }
+                    }
+
                 }
 
             }

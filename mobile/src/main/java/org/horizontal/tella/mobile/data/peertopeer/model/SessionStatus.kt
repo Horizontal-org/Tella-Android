@@ -4,5 +4,6 @@ enum class SessionStatus {
     WAITING,
     SENDING,
     FINISHED,
-    FINISHED_WITH_ERRORS
+    FINISHED_WITH_ERRORS,
+    CLOSED
 }

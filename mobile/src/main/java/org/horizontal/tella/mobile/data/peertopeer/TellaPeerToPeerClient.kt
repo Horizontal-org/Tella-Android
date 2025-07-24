@@ -5,6 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -232,5 +235,32 @@ class TellaPeerToPeerClient @Inject constructor() {
         }
     }
 
+    suspend fun closeConnection(
+        ip: String,
+        port: String,
+        expectedFingerprint: String,
+        sessionId: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.CLOSE)
 
+        val payload = Json.encodeToString(mapOf("sessionId" to sessionId))
+        val requestBody = payload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
+
+        val client = getClientWithFingerprintValidation(expectedFingerprint)
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+            .build()
+
+        return@withContext try {
+            client.newCall(request).execute().use { response ->
+                response.isSuccessful
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to close connection")
+            false
+        }
+    }
 }
