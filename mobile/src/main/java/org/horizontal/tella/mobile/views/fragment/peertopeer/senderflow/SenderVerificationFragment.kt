@@ -49,6 +49,7 @@ class SenderVerificationFragment :
         }
 
         binding.discardBtn.setOnClickListener {
+            viewModel.closePeerConnection()
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
     }

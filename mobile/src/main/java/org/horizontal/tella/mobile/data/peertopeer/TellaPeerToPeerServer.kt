@@ -33,6 +33,7 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager.closeConnectionEvent
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
@@ -235,8 +236,10 @@ class TellaPeerToPeerServer(
                                 progressFile.bytesTransferred = bytesRead.toInt()
 
                                 // Optional: update session progress percent
-                                val totalTransferred = session.files.values.sumOf { it.bytesTransferred }
-                                val percent = if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
+                                val totalTransferred =
+                                    session.files.values.sumOf { it.bytesTransferred }
+                                val percent =
+                                    if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
 
                                 val state = UploadProgressState(
                                     title = session.title ?: "",
@@ -271,7 +274,10 @@ class TellaPeerToPeerServer(
                             )
                             PeerEventManager.onUploadProgressState(failedState)
 
-                            call.respond(HttpStatusCode.InternalServerError, "Upload failed: ${e.message}")
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Upload failed: ${e.message}"
+                            )
                         } finally {
                             output.close()
                         }
@@ -281,7 +287,10 @@ class TellaPeerToPeerServer(
                         val payload = try {
                             call.receive<Map<String, String>>()
                         } catch (e: Exception) {
-                            call.respond(HttpStatusCode.BadRequest, "Missing or invalid JSON payload")
+                            call.respond(
+                                HttpStatusCode.BadRequest,
+                                "Missing or invalid JSON payload"
+                            )
                             return@post
                         }
 
@@ -309,10 +318,12 @@ class TellaPeerToPeerServer(
                         }
 
                         try {
-                            // ✅ Mark session as closed
                             p2PSharedState.session?.status = SessionStatus.CLOSED
                             serverSession = null
 
+                            launch {
+                                PeerEventManager.emitCloseConnection()
+                            }
                             call.respond(HttpStatusCode.OK, mapOf("success" to true))
                         } catch (e: Exception) {
                             Timber.e(e, "Error while closing session")

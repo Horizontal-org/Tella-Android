@@ -23,7 +23,8 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class RecipientUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
-
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private lateinit var endView: PeerToPeerEndView
     private val progressPercentLiveData = MutableLiveData<Int>()
@@ -51,8 +52,7 @@ class RecipientUploadFilesFragment :
     }
 
     private fun showStopSharingConfirmation() {
-        showStandardSheet(
-            baseActivity.supportFragmentManager,
+        showStandardSheet(baseActivity.supportFragmentManager,
             getString(R.string.stop_sharing_files),
             getString(R.string.nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred),
             getString(R.string.action_continue).uppercase(),
@@ -60,8 +60,7 @@ class RecipientUploadFilesFragment :
             onConfirmClick = {},
             onCancelClick = {
                 stopServerAndNavigate()
-            }
-        )
+            })
     }
 
     private fun stopServerAndNavigate() {
@@ -75,8 +74,7 @@ class RecipientUploadFilesFragment :
         val files = session.files.values.toList()
 
         endView = PeerToPeerEndView(
-            baseActivity,
-            session.title
+            baseActivity, session.title
         )
 
         endView.setFiles(files, MyApplication.isConnectedToInternet(baseActivity), false)
@@ -130,5 +128,6 @@ class RecipientUploadFilesFragment :
             progressPercentLiveData.value = filesSaved
         }
     }
+
 
 }

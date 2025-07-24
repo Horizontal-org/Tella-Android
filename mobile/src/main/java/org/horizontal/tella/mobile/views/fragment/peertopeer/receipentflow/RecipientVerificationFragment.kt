@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
@@ -17,6 +18,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RecipientVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
 
@@ -68,6 +70,12 @@ class RecipientVerificationFragment :
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
+            }
+        }
+
+        viewModel.closeConnection.observe(viewLifecycleOwner) { closeConnection ->
+            if (closeConnection) {
+                navigateBackAndStopServer()
             }
         }
     }

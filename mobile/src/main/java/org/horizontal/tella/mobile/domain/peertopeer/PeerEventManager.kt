@@ -20,6 +20,11 @@ object PeerEventManager {
         extraBufferCapacity = 1
     )
 
+    val closeConnectionEvent = MutableSharedFlow<Boolean>(
+        replay = 0,
+        extraBufferCapacity = 1
+    )
+
     // Replays the last actual registration request to new collectors
     private val _registrationRequests = MutableSharedFlow<Pair<String, PeerRegisterPayload>>(
         replay = 0,
@@ -50,6 +55,10 @@ object PeerEventManager {
     // Trigger one-time event for registration success
     suspend fun emitRegistrationSuccess() {
         registrationEvents.emit(true)
+    }
+
+    suspend fun emitCloseConnection() {
+        closeConnectionEvent.emit(true)
     }
 
     // Trigger upload preparation request, storing the data separately

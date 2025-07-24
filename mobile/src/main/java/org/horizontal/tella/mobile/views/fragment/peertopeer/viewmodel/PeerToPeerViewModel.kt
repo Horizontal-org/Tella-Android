@@ -83,6 +83,9 @@ class PeerToPeerViewModel @Inject constructor(
     private val _bottomSheetProgress = MutableLiveData<BottomSheetProgressState>()
     val bottomSheetProgress: LiveData<BottomSheetProgressState> get() = _bottomSheetProgress
 
+    private val _closeConnection = SingleLiveEvent<Boolean>()
+    val closeConnection: SingleLiveEvent<Boolean> get() = _closeConnection
+
     private var isVaultSaveDone = false
 
     init {
@@ -106,6 +109,14 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.registrationEvents.collect { success ->
                 _registrationServerSuccess.postValue(success)
+            }
+        }
+    }
+
+    private fun observeCloseConnectionEvents() {
+        viewModelScope.launch {
+            PeerEventManager.closeConnectionEvent.collect { success ->
+                _closeConnection.postValue(success)
             }
         }
     }
@@ -326,6 +337,28 @@ class PeerToPeerViewModel @Inject constructor(
                 )
             )
 
+        }
+    }
+
+    fun closePeerConnection() {
+
+        viewModelScope.launch {
+            val ip = p2PState.ip
+            val port = p2PState.port
+            val fingerprint = p2PState.hash
+
+            val success = peerClient.closeConnection(
+                ip = ip,
+                port = port,
+                expectedFingerprint = fingerprint,
+                sessionId = p2PState.session?.sessionId ?: ""
+            )
+
+            if (success) {
+                Timber.d("Connection closed successfully.")
+            } else {
+                Timber.e("Failed to close peer connection.")
+            }
         }
     }
 
