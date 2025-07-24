@@ -244,7 +244,7 @@ class TellaPeerToPeerClient @Inject constructor() {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.CLOSE)
 
         val payload = Json.encodeToString(mapOf("sessionId" to sessionId))
-        val requestBody = payload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
+        val requestBody = payload.toRequestBody()
 
         val client = getClientWithFingerprintValidation(expectedFingerprint)
 

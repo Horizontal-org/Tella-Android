@@ -149,15 +149,15 @@ class ScanQrCodeFragment :
                     description,
                     null,
                     getString(R.string.try_again),
-                    null,
-                 {
+                    null
+                ) {
                     viewModel.startRegistration(
                         ip = viewModel.p2PState.ip,
                         port = viewModel.p2PState.port,
                         hash = viewModel.p2PState.hash,
                         pin = viewModel.p2PState.pin.toString()
                     )
-                })
+                }
             }
         }
     }

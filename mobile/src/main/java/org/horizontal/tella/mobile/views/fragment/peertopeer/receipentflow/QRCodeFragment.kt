@@ -11,6 +11,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.certificate.CertificateGenerator
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
@@ -63,9 +64,9 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private fun setupServerAndQr(ip: String) {
-        val (keyPair, certificate) = CertificateGenerator.generateCertificate(ipAddress = ip)
+        val keyPair = PeerKeyProvider.getKeyPair()
+        val certificate = PeerKeyProvider.getCertificate(ip)
         val config = KeyStoreConfig()
-
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
         val pin = (100000..999999).random()
@@ -85,7 +86,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             p2PSharedState
         )
 
-
         payload = PeerConnectionPayload(
             ipAddress = ip,
             port = port,
@@ -96,6 +96,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         qrPayload = Gson().toJson(payload)
         generateQrCode(qrPayload)
     }
+
 
     private fun generateQrCode(content: String) {
         try {
@@ -114,7 +115,10 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun handleBack() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
-        binding.backBtn.setOnClickListener { nav().popBackStack() }
+        binding.backBtn.setOnClickListener {
+            peerServerStarterManager.stopServer()
+            nav().popBackStack()
+        }
     }
 
     private fun handleConnectManually() {

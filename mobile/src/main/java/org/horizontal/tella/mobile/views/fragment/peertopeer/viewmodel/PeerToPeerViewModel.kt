@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState.Companion.createNewSession
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
@@ -187,6 +188,9 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
+                    if (p2PState.session == null) {
+                        p2PState.session = P2PSharedState.createNewSession()
+                    }
                     p2PState.session?.sessionId = result.sessionId
                     Timber.d("session id ***startRegistration ${p2PState.session?.sessionId}")
                     _registrationSuccess.postValue(true)
@@ -341,7 +345,6 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     fun closePeerConnection() {
-
         viewModelScope.launch {
             val ip = p2PState.ip
             val port = p2PState.port
@@ -353,7 +356,6 @@ class PeerToPeerViewModel @Inject constructor(
                 expectedFingerprint = fingerprint,
                 sessionId = p2PState.session?.sessionId ?: ""
             )
-
             if (success) {
                 Timber.d("Connection closed successfully.")
             } else {

@@ -18,6 +18,7 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.AudioRecordEvent
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
@@ -44,6 +45,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultSelectFilesSheet
 import org.hzontal.shared_ui.utils.DialogUtils
+import javax.inject.Inject
 
 var PREPARE_UPLOAD_ENTRY = "PREPARE_UPLOAD_ENTRY"
 
@@ -60,6 +62,9 @@ class PrepareUploadFragment :
     private val filesRecyclerViewAdapter: ReportsFilesRecyclerViewAdapter by lazy {
         ReportsFilesRecyclerViewAdapter(this)
     }
+
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,7 +129,8 @@ class PrepareUploadFragment :
                 object : BottomSheetUtils.ActionConfirmed {
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
-                            back()
+                            peerServerStarterManager.stopServer()
+                            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
                         }
                     }
                 }

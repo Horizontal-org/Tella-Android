@@ -10,6 +10,18 @@ class P2PSharedState(
     var isUsingManualConnection: Boolean = false,
 ) {
 
+    companion object {
+        fun P2PSharedState.Companion.createNewSession(): P2PSession {
+            return P2PSession(
+                sessionId = "",
+                title = "",
+                files = mutableMapOf(),
+                status = SessionStatus.SENDING
+            )
+        }
+    }
+
+
     fun clear() {
         ip = ""
         port = ""
