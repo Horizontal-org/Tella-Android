@@ -6,18 +6,25 @@ import androidx.activity.viewModels
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ActivityPeerToPeerBinding
 import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PeerToPeerActivity : BaseLockActivity() {
 
     private lateinit var binding: ActivityPeerToPeerBinding
     private val mediaImportViewModel: MediaImportViewModel by viewModels()
+
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +87,11 @@ class PeerToPeerActivity : BaseLockActivity() {
     private fun initObservers() {
         mediaImportViewModel.mediaFileLiveData.observe(this, ::onMediaFileImported)
         mediaImportViewModel.importError.observe(this, ::onImportError)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        peerServerStarterManager.stopServer()
     }
 
 }

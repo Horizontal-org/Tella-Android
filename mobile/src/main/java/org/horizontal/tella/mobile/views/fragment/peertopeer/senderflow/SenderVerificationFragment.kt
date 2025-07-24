@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 class SenderVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
+
     private val viewModel: PeerToPeerViewModel by activityViewModels()
 
     @Inject
@@ -72,15 +73,20 @@ class SenderVerificationFragment :
                 description,
                 null,
                 getString(R.string.try_again),
-                null,
-                {
-                    viewModel.startRegistration(
-                        ip = viewModel.p2PState.ip,
-                        port = viewModel.p2PState.port,
-                        hash = viewModel.p2PState.hash,
-                        pin = viewModel.p2PState.pin.toString()
-                    )
-                })
+                null
+            ) {
+                viewModel.startRegistration(
+                    ip = viewModel.p2PState.ip,
+                    port = viewModel.p2PState.port,
+                    hash = viewModel.p2PState.hash,
+                    pin = viewModel.p2PState.pin.toString()
+                )
+            }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        peerServerStarterManager.stopServer()
     }
 }

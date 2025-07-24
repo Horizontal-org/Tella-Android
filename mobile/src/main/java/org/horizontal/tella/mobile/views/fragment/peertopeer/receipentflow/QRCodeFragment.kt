@@ -138,10 +138,4 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        peerServerStarterManager.stopServer()
-    }
-
 }

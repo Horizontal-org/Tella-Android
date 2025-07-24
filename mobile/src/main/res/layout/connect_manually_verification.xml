@@ -15,7 +15,7 @@
         app:arrowBackIconContentDescription="@string/action_go_back"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:startTitle="@string/connect_manually" />
+        app:startTitle="@string/verification" />
 
     <ImageView
         android:id="@+id/deviceImg"
