@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
@@ -15,6 +16,7 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPee
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class RecipientUploadFilesFragment :
@@ -24,6 +26,8 @@ class RecipientUploadFilesFragment :
     private lateinit var endView: PeerToPeerEndView
     private val progressPercentLiveData = MutableLiveData<Int>()
     private var sheetShown = false
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +63,7 @@ class RecipientUploadFilesFragment :
     }
 
     private fun stopServerAndNavigate() {
-        //peerServerStarterManager.stopServer()
+        peerServerStarterManager.stopServer()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
         navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
     }
@@ -109,8 +113,7 @@ class RecipientUploadFilesFragment :
 
             val allSaved = files.all { it.status == P2PFileStatus.SAVED }
             if (state.sessionStatus == SessionStatus.FINISHED && allSaved) {
-                viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
-                navManager().navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment()
+                stopServerAndNavigate()
             }
         }
     }
