@@ -23,8 +23,7 @@ import kotlin.math.roundToInt
 @AndroidEntryPoint
 class RecipientUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
-    @Inject
-    lateinit var peerServerStarterManager: PeerServerStarterManager
+
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private lateinit var endView: PeerToPeerEndView
     private val progressPercentLiveData = MutableLiveData<Int>()
