@@ -11,7 +11,7 @@ class P2PSharedState(
 ) {
 
     companion object {
-        fun P2PSharedState.Companion.createNewSession(): P2PSession {
+        fun Companion.createNewSession(): P2PSession {
             return P2PSession(
                 sessionId = "",
                 title = "",
