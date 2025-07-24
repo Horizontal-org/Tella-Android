@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
@@ -19,6 +20,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
+@AndroidEntryPoint
 class RecipientUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
 
