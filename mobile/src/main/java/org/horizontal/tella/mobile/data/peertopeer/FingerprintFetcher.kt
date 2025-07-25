@@ -15,11 +15,11 @@ object FingerprintFetcher {
 
     suspend fun fetch(ip: String, port: Int): Result<String> = withContext(Dispatchers.IO) {
         return@withContext try {
-            val socket = createUnsafeSSLSocket(ip, port)
-            val cert = socket.session.peerCertificates[0] as X509Certificate
-            val fingerprint = CertificateUtils.getPublicKeyHash(cert)
-            socket.close()
-            Result.success(fingerprint)
+            createUnsafeSSLSocket(ip, port).use { socket ->
+                val cert = socket.session.peerCertificates[0] as X509Certificate
+                val fingerprint = CertificateUtils.getPublicKeyHash(cert)
+                Result.success(fingerprint)
+            }
         } catch (e: SocketTimeoutException) {
             Result.failure(RuntimeException("Connection timed out", e))
         } catch (e: Exception) {

@@ -24,7 +24,6 @@ class RecipientVerificationFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var payload: PeerConnectionPayload? = null
-
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 

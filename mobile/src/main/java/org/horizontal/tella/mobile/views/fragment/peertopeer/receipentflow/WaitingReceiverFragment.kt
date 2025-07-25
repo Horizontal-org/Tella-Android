@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -14,6 +15,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
  * Created by wafa on 3/6/2025.
  */
 
+@AndroidEntryPoint
 class WaitingReceiverFragment :
     BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
 

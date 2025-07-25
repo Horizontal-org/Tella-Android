@@ -5,22 +5,32 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
+import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
+import javax.inject.Inject
 
-// TODO: Show errors in the bottom sheet
+@AndroidEntryPoint
 class SenderManualConnectionFragment :
     BaseBindingFragment<SenderManualConnectionBinding>(SenderManualConnectionBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        peerServerStarterManager.stopServer()
+        PeerKeyProvider.reset()
+        viewModel.p2PState.clear()
         initView()
         initListeners()
         initObservers()
@@ -70,10 +80,14 @@ class SenderManualConnectionFragment :
                 description,
                 null,
                 getString(R.string.try_again),
-                null,
-             {
-                 viewModel.handleCertificate(viewModel.p2PState.ip, viewModel.p2PState.port, viewModel.p2PState.pin.toString())
-             })
+                null
+            ) {
+                viewModel.handleCertificate(
+                    viewModel.p2PState.ip,
+                    viewModel.p2PState.port,
+                    viewModel.p2PState.pin.toString()
+                )
+            }
         }
     }
 
