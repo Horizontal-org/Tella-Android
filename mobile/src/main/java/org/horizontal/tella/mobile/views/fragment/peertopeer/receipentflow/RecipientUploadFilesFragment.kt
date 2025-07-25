@@ -28,6 +28,7 @@ class RecipientUploadFilesFragment :
     private lateinit var endView: PeerToPeerEndView
     private val progressPercentLiveData = MutableLiveData<Int>()
     private var sheetShown = false
+
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
@@ -120,11 +121,7 @@ class RecipientUploadFilesFragment :
     private fun observeBottomSheetProgress() {
         viewModel.bottomSheetProgress.observe(viewLifecycleOwner) { progress ->
             if (!sheetShown) return@observe
-
-            // Convert percent to file count approximation
-            val totalFiles = viewModel.uploadProgress.value?.files?.size ?: return@observe
-            val filesSaved = (progress.percent * totalFiles / 100f).roundToInt()
-            progressPercentLiveData.value = filesSaved
+            progressPercentLiveData.postValue(progress.current)
         }
     }
 

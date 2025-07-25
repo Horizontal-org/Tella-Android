@@ -724,7 +724,6 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
-
     class ConfirmImageSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
         lateinit var cancelButton: TextView
