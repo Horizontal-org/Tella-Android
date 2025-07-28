@@ -12,6 +12,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import java.util.Random;
 import java.util.UUID;
 
 import org.horizontal.tella.mobile.R;
@@ -92,8 +93,8 @@ public class UwaziGeneratedIdWidget extends UwaziQuestionWidget {
     }
 
     private void generateId() {
-        UUID uuid = UUID.randomUUID();
-        answer.setText(uuid.toString());
+        String id = generateCustomId();
+        answer.setText(id);
     }
 
     @Override
@@ -104,6 +105,22 @@ public class UwaziGeneratedIdWidget extends UwaziQuestionWidget {
     public String setBinaryData(@NonNull Object data) {
         answer.setText(data.toString());
         return data.toString();
+    }
+
+
+    private String generateCustomId() {
+        Random random = new Random();
+
+        StringBuilder letters = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            char letter = (char) ('A' + random.nextInt(26));
+            letters.append(letter);
+        }
+
+        int firstDigits = 1000 + random.nextInt(9000);
+        int secondDigits = 1000 + random.nextInt(9000);
+
+        return letters.toString() + firstDigits + "-" + secondDigits;
     }
 }
 
