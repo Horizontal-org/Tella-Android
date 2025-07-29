@@ -6,7 +6,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.text.format.Formatter
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
@@ -50,29 +49,19 @@ class NetworkInfoManager(private val context: Context) {
                     context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
 
                 val wifiInfo = wifiManager?.connectionInfo
-
                 val ssid = when {
                     wifiInfo?.ssid != null && wifiInfo.ssid != WifiManager.UNKNOWN_SSID ->
                         wifiInfo.ssid.trim('"')
-
-                    else -> "Unknown WiFi (check location permissions)"
+                    else -> "Unknown WiFi"
                 }
 
-                val ipAddress = wifiInfo?.ipAddress?.let {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                        Formatter.formatIpAddress(it)
-                    } else {
-                        // Provide fallback logic if needed for newer APIs
-                        getLocalIpAddress()
-                    }
-                }
-
+                val ipAddress = getLocalIpAddress()
                 _networkInfo.postValue(NetworkInfo(ConnectionType.WIFI, ssid, ipAddress))
             }
 
             isDeviceHotspotEnabled(context) -> {
                 val hotspotSSID = getDeviceHotspotSSID(context) ?: "Hotspot"
-                val hotspotIpAddress = getDeviceHotspotIpAddress()
+                val hotspotIpAddress = getLocalIpAddress() // more reliable than hardcoded
                 _networkInfo.postValue(NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, hotspotIpAddress))
             }
 
@@ -109,24 +98,6 @@ class NetworkInfoManager(private val context: Context) {
             val ssidField = config?.javaClass?.getDeclaredField("SSID")
             ssidField?.isAccessible = true
             ssidField?.get(config) as? String
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    private fun getDeviceHotspotIpAddress(): String? {
-        return try {
-            val interfaces = NetworkInterface.getNetworkInterfaces()
-            for (intf in interfaces) {
-                if (!intf.isUp || intf.isLoopback) continue
-                for (addr in intf.inetAddresses) {
-                    if (!addr.isLoopbackAddress && addr is Inet4Address) {
-                        return addr.hostAddress
-                    }
-                }
-            }
-            null
         } catch (e: Exception) {
             e.printStackTrace()
             null
