@@ -77,7 +77,7 @@ class BlankFormsListFragment :
         if (alertDialog != null) return
         if (activity != null) {
             //model.showFab.postValue(false)
-          //  showFab(false)
+            //  showFab(false)
         }
         alertDialog = DialogsUtil.showFormUpdatingDialog(
             context,
@@ -95,6 +95,11 @@ class BlankFormsListFragment :
             updatedForm?.let { updateFormList(it) } // Update only changed item
         }
         model.onError.observe(viewLifecycleOwner) { error ->
+            DialogUtils.showBottomMessage(
+                baseActivity,
+                getString(R.string.collect_toast_fail_fetch_form_from_server_unknown_error),
+                true
+            )
             Timber.d(error, javaClass.name)
         }
         model.onGetBlankFormDefSuccess.observe(viewLifecycleOwner) { result ->
@@ -128,7 +133,7 @@ class BlankFormsListFragment :
                 if (alertDialog != null) return@observe
                 if (activity != null) {
                     //model.showFab.postValue(false)
-                  //  showFab(false)
+                    //  showFab(false)
                 }
                 if (!silentFormUpdates) {
                     alertDialog = DialogsUtil.showCollectRefreshProgressDialog(
@@ -140,6 +145,7 @@ class BlankFormsListFragment :
         model.onDownloadBlankFormDefSuccess.observe(
             viewLifecycleOwner
         ) { form: CollectForm? -> updateForm(form!!) }
+
         model.onDownloadBlankFormDefStart.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
