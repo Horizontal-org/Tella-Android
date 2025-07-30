@@ -239,8 +239,19 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun applyStatusBarColor(@ColorRes colorInt: Int) {
-        val window = dialog!!.window
-        if (window != null) {
+        val window = dialog?.window ?: return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val controller = window.insetsController
+            // Edge-to-edge support for Android 11+
+            controller?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+
+            window.setDecorFitsSystemWindows(false)
+            window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
+        } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
         }

@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
@@ -70,10 +71,23 @@ fun Int.dpToPx(context: Context): Int {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
 }
 
-fun Window.changeStatusColor(context: Context, color: Int) {
-    addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-    clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-    statusBarColor = context.resources.getColor(color)
+fun Window.changeStatusColor(context: Context, @ColorRes colorRes: Int) {
+    val color = ContextCompat.getColor(context, colorRes)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        statusBarColor = color
+        // enable edge-to-edge
+        setDecorFitsSystemWindows(false)  
+
+        insetsController?.setSystemBarsAppearance(
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+            WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+        )
+    } else {
+        addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        statusBarColor = color
+    }
 }
 
 fun View.setTint(@ColorRes colorRes: Int) {
