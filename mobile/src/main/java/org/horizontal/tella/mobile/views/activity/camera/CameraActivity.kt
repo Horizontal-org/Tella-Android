@@ -65,6 +65,7 @@ import org.horizontal.tella.mobile.views.custom.CameraSwitchButton
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import java.io.File
 import android.provider.Settings
+import timber.log.Timber
 
 @AndroidEntryPoint
 class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView {
@@ -240,11 +241,16 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onAddingStart() {
-        if (Preferences.isShutterMute()) {
-            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+        if (Preferences.isShutterMute() && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            try {
+                audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+            } catch (e: SecurityException) {
+                Timber.e(e)
+            }
         }
     }
+
 
     private fun onAddSuccess(file: VaultFile) {
         capturedMediaFile = file
@@ -379,9 +385,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onCaptureClicked() {
-        if (Preferences.isShutterMute()) {
-            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+        if (Preferences.isShutterMute() && android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            try {
+                audioManager.setStreamMute(AudioManager.STREAM_SYSTEM, false)
+            } catch (e: SecurityException) {
+               Timber.e(e)
+            }
         }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
