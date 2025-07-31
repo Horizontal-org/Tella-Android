@@ -140,7 +140,7 @@ class PeerToPeerViewModel @Inject constructor(
 
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
-            val result = FingerprintFetcher.fetch(ip, port.toInt())
+            val result = FingerprintFetcher.fetch(context,ip, port.toInt())
             result.onSuccess { hash ->
                 Timber.d("hash ***** $hash")
                 p2PState.hash = hash
