@@ -14,9 +14,6 @@
             android:id="@+id/action_startNearBySharingFragment_to_connectHotspotFragment"
             app:destination="@id/connectHotspotScreen" />
 
-        <action
-            android:id="@+id/action_startNearBySharingFragment_to_scanQrCodeScreen"
-            app:destination="@id/scanQrCodeScreen" />
     </fragment>
 
     <fragment
@@ -28,6 +25,9 @@
         <action
             android:id="@+id/action_connectHotspotScreen_to_qrCodeScreen"
             app:destination="@id/qrCodeScreen" />
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_scanQrCodeScreen"
+            app:destination="@id/scanQrCodeScreen" />
 
     </fragment>
 

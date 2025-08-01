@@ -29,6 +29,7 @@ import org.horizontal.tella.mobile.databinding.ConnectHotspotLayoutBinding
 import org.horizontal.tella.mobile.util.ConnectionType
 import org.horizontal.tella.mobile.util.LocationProvider.isLocationEnabled
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerParticipant
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 
 @AndroidEntryPoint
@@ -101,7 +102,10 @@ class ConnectHotspotFragment :
     }
 
     private fun onNextClicked() {
+        if(viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT)
         navManager().navigateFromActionConnectHotspotScreenToQrCodeScreen()
+        else navManager().navigateFromActionConnectHotspotScreenToScanQrCodeScreen()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
