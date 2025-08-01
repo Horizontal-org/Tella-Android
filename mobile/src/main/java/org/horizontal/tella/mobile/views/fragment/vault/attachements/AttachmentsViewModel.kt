@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -256,6 +257,9 @@ class AttachmentsViewModel @Inject constructor(
                 }
 
             }) { throwable: Throwable? ->
+                if (throwable is DuplicateVaultFileException) {
+                    _duplicateNameError.postValue(true)
+                }
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _error.postValue(throwable)
             })
