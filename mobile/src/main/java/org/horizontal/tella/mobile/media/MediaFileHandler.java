@@ -43,6 +43,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -249,12 +250,17 @@ public class MediaFileHandler {
         return null;
     }
 
+
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) {
         return Single.fromCallable(() -> {
             boolean keepExif = Preferences.isKeepExif();
             ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
             ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
 
+            DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+            if (doc == null || !doc.exists()) {
+                throw new FileNotFoundException("File no longer exists at URI: " + uri);
+            }
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
                 Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream);
                 Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10);
@@ -282,7 +288,6 @@ public class MediaFileHandler {
                     .blockingGet();
         });
     }
-
 
     public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
         // create thumb
