@@ -67,6 +67,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Tella_Main_White_TextExtraLargeBold" parent="Tella_Main_White_Text.Bold">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="Tella_Main_White_TextLargeBold" parent="Tella_Main_White_Text.Bold">
         <item name="android:textSize">16sp</item>
     </style>

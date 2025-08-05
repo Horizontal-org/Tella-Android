@@ -13,15 +13,13 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
 import androidx.annotation.ColorRes
+import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
-/*import org. cleaninsights.sdk.Campaign
-import org.cleaninsights.sdk.CleanInsights
-import org.cleaninsights.sdk.CleanInsightsConfiguration*/
 import timber.log.Timber
 
 
@@ -148,7 +146,32 @@ fun Context.isScreenReaderOn(): Boolean {
     return false
 }
 
-fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle,)
+fun NavController.navigateSafe(@IdRes destinationId: Int, args: Bundle? = null) {
+    val currentNode = currentDestination
+    val action = currentNode?.getAction(destinationId)
+
+    if (action != null) {
+        navigate(destinationId, args)
+    } else {
+        val resources = currentNode?.navigatorName?.let {
+            context.resources
+        }
+
+        val destName = try {
+            resources?.getResourceEntryName(destinationId) ?: destinationId.toString()
+        } catch (e: Exception) {
+            destinationId.toString()
+        }
+        Timber.w("[NavigationSafe] Skipping navigation to '$destName' from '${currentNode?.label}' – action not found")
+    }
+}
+
+fun String.formatHash(): String {
+    return this
+        .take(64) // take only the first 64 characters
+        .chunked(4) // split into groups of 4
+        .chunked(4) // make 4 lines
+        .joinToString("\n") { it.joinToString(" ") }
+
 }
 

@@ -58,7 +58,6 @@ class AttachmentsViewModel @Inject constructor(
     val duplicateNameError: LiveData<Boolean> = _duplicateNameError
     val counterData = MutableLiveData<Int>()
 
-    //TODO AHLEM FIX THIS val counterData: LiveData<Int> = _counterData
     private val _progressPercent = MutableLiveData<Pair<Double, Int>>()
     val progressPercent: LiveData<Pair<Double, Int>> = _progressPercent
     private val _mediaImportedWithDelete = MutableLiveData<Uri>()
@@ -106,7 +105,6 @@ class AttachmentsViewModel @Inject constructor(
                 )
         )
     }
-
 
     fun moveFiles(parentId: String?, vaultFiles: List<VaultFile?>?) {
         if (vaultFiles == null || parentId == null) return
@@ -171,7 +169,6 @@ class AttachmentsViewModel @Inject constructor(
         )
     }
 
-
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.keyRxVault.rxVault
             .firstOrError()
@@ -179,7 +176,6 @@ class AttachmentsViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
 
     fun createFolder(folderName: String, parent: String) {
         disposables.add(
@@ -223,8 +219,7 @@ class AttachmentsViewModel @Inject constructor(
 
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        // counterData.value = 0
-        //  var counter = 1
+
         var currentUri: Uri? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()

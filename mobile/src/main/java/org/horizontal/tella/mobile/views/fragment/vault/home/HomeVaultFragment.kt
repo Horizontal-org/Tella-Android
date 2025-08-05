@@ -98,7 +98,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private var nextCloudServers: ArrayList<NextCloudServer>? = null
-    private var favoriteForms: ArrayList<CollectForm>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
@@ -459,6 +458,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
             }
 
+            ServerType.PEERTOPEER -> {
+                nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
+            }
+
             else -> {}
         }
     }
@@ -739,7 +742,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections
             vaultAdapter.addConnectionServers(serversList!!)
-
         } else {
             vaultAdapter.removeConnectionServers()
         }
@@ -753,6 +755,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         handleTellaUploadServers(serverCounts.tellaUploadServers)
         handleCollectServers(serverCounts.collectServers)
         handleUwaziServers(serverCounts.uwaziServers)
+        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
 
         // Check if we need to show connections
         maybeShowConnections()
