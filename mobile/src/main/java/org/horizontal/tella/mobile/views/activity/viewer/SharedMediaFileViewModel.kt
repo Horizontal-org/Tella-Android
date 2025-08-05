@@ -90,7 +90,7 @@ class SharedMediaFileViewModel @Inject constructor(
                     },
                     { throwable ->
                         FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.gallery_toast_fail_deleting_files)
+                        _error.postValue(R.string.file_name_taken)
                     }
                 )
         )

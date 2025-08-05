@@ -12,6 +12,7 @@
     <string name="config_connections_url" translatable="false">https://tella-app.org/for-organizations</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
+        <item>az</item>
         <item>be</item>
         <item>en</item>
         <item>es</item>

@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.hzontal.tella_locking_ui.TellaKeysUI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 
@@ -30,11 +34,18 @@ class OnBoardAllDoneFragment : BaseFragment() {
         (baseActivity as OnBoardActivityInterface).setCurrentIndicator(4)
 
         startBtn = view.findViewById(R.id.startBtn)
-        startBtn.setOnClickListener {
-            TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
-            baseActivity.finish()
-        }
 
+        startBtn.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                // Do heavy unlock off main thread
+                TellaKeysUI.getCredentialsCallback().onLockConfirmed(requireContext())
+
+                // Go back to main thread to finish activity
+                withContext(Dispatchers.Main) {
+                    baseActivity.finish()
+                }
+            }
+        }
         advancedBtn = view.findViewById(R.id.sheet_two_btn)
         advancedBtn.setOnClickListener {
             baseActivity.addFragment(

@@ -111,6 +111,7 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
 
             // Observer for the onMediaFileRenamed LiveData, handles the action when a media file is renamed
             onMediaFileRenamed.observe(this@PhotoViewerActivity) { renamed ->
+                vaultFile?.name = renamed.name
                 onMediaFileRename(renamed)
             }
 

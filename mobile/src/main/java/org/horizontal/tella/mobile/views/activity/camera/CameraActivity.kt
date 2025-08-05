@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.SensorManager
-import android.media.AudioManager
 import android.os.Bundle
 import android.view.OrientationEventListener
 import android.view.View
@@ -38,8 +37,6 @@ import com.otaliastudios.cameraview.gesture.Gesture
 import com.otaliastudios.cameraview.gesture.GestureAction
 import com.otaliastudios.cameraview.size.SizeSelector
 import dagger.hilt.android.AndroidEntryPoint
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.event.CaptureEvent
@@ -63,8 +60,9 @@ import org.horizontal.tella.mobile.views.custom.CameraGridButton
 import org.horizontal.tella.mobile.views.custom.CameraResolutionButton
 import org.horizontal.tella.mobile.views.custom.CameraSwitchButton
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import java.io.File
-import android.provider.Settings
 
 @AndroidEntryPoint
 class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView {
@@ -150,7 +148,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         viewModel.addingInProgress.observe(this) { isAdding ->
             isAddingInProgress = isAdding
             if (isAdding) {
-                onAddingStart()
+                //onAddingStart()
             }
         }
 
@@ -237,13 +235,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     override fun finish() {
         super.finish()
         overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_up)
-    }
-
-    private fun onAddingStart() {
-        if (Preferences.isShutterMute()) {
-            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
-        }
     }
 
     private fun onAddSuccess(file: VaultFile) {
@@ -379,10 +370,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     private fun onCaptureClicked() {
-        if (Preferences.isShutterMute()) {
-            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false)
-        }
         if (cameraView.mode == Mode.PICTURE) {
             cameraView.takePicture()
             divviupUtils.runPhotoTakenEvent()
@@ -467,7 +454,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
-    fun onSwitchClicked() {
+    private fun onSwitchClicked() {
         if (cameraView.facing == Facing.BACK) {
             switchCamera(Facing.FRONT, R.string.action_switch_to_back_camera)
         } else {
@@ -520,7 +507,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         setCameraZoom()
     }
 
-    fun chooseVideoResolution() {
+    private fun chooseVideoResolution() {
         if (videoResolutionManager != null) {
             videoQualityDialog = DialogsUtil.showVideoResolutionDialog(
                 this, { videoSize: SizeSelector -> setVideoSize(videoSize) }, videoResolutionManager

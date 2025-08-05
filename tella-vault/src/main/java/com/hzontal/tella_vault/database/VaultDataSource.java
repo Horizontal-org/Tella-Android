@@ -49,6 +49,23 @@ public class VaultDataSource implements IVaultDatabase {
         }
     }
 
+    public VaultFile getByHash(String hash) {
+        try (Cursor cursor = database.query(
+                D.T_VAULT_FILE,
+                null,
+                D.C_HASH + " = ?",
+                new String[]{hash},
+                null, null, null)) {
+
+            if (cursor.moveToFirst()) {
+                return cursorToVaultFile(cursor);
+            }
+        } catch (Exception e) {
+            Timber.e(e, "getByHash failed");
+        }
+
+        return null;
+    }
 
     /**
      * Returns a singleton instance of VaultDataSource.
