@@ -90,15 +90,13 @@ class BlankFormsListFragment :
         binding.fab.setOnClickListener {
             refreshBlankForms()
         }
-
         model.onToggleFavoriteSuccess.observe(viewLifecycleOwner) { updatedForm ->
             updatedForm?.let { updateFormList(it) } // Update only changed item
         }
         model.onError.observe(viewLifecycleOwner) { error ->
             DialogUtils.showBottomMessage(
                 baseActivity,
-                getString(R.string.collect_toast_fail_fetch_form_from_server_unknown_error),
-                true
+                getString(R.string.collect_toast_fail_fetch_form_from_server_unknown_error), true
             )
             Timber.d(error, javaClass.name)
         }
@@ -145,7 +143,6 @@ class BlankFormsListFragment :
         model.onDownloadBlankFormDefSuccess.observe(
             viewLifecycleOwner
         ) { form: CollectForm? -> updateForm(form!!) }
-
         model.onDownloadBlankFormDefStart.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
