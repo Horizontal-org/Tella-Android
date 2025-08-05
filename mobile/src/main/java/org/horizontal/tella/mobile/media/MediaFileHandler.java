@@ -250,7 +250,6 @@ public class MediaFileHandler {
         return null;
     }
 
-
     public static Single<VaultFile> importPhotoUri(Context context, Uri uri, @Nullable String parentId) {
         return Single.fromCallable(() -> {
             boolean keepExif = Preferences.isKeepExif();
@@ -383,14 +382,17 @@ public class MediaFileHandler {
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
+
+        DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+        if (doc == null || !doc.exists()) {
+            throw new FileNotFoundException("File no longer exists at URI: " + uri);
+        }
+
         try {
             retriever.setDataSource(context, uri);
 
-            // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             long duration = Long.parseLong(time);
-
-            // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
             InputStream is = context.getContentResolver().openInputStream(uri);
@@ -408,39 +410,38 @@ public class MediaFileHandler {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
-
             throw e;
         } finally {
             try {
                 retriever.release();
-            } catch (Exception ignore) {
-            }
+            } catch (Exception ignore) {}
         }
     }
+
 
     public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
 
+        DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+        if (doc == null || !doc.exists()) {
+            throw new FileNotFoundException("File no longer exists at URI: " + uri);
+        }
+
         try {
-
             InputStream is = context.getContentResolver().openInputStream(uri);
-
-            assert DocumentFile.fromSingleUri(context, uri) != null;
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
             return rxVault
                     .builder(is)
                     .setMimeType(mimeType)
                     .setAnonymous(true)
-                    .setName(DocumentFile.fromSingleUri(context, uri).getName())
+                    .setName(doc.getName())
                     .setType(VaultFile.Type.FILE)
                     .build(parentId)
                     .subscribeOn(Schedulers.io());
-
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
-
             throw e;
         }
     }
