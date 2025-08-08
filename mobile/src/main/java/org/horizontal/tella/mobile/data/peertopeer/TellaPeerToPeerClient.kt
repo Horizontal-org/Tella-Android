@@ -5,10 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -141,7 +137,7 @@ class TellaPeerToPeerClient @Inject constructor() {
                 size = it.size,
                 fileType = mimeType,
                 sha256 = it.hash,
-                thumb = it.thumb
+                thumbnail = it.thumb
             )
         }
 

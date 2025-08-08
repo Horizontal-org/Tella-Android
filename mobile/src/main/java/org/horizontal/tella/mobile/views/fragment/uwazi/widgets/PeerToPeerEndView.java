@@ -164,7 +164,7 @@ public class PeerToPeerEndView extends FrameLayout {
 
         byte[] thumb = file.getVaultFile() != null && file.getVaultFile().thumb != null
                 ? file.getVaultFile().thumb
-                : file.getFile().getThumb();
+                : file.getFile().getThumbnail();
 
         if (thumb != null) {
             Glide.with(getContext())

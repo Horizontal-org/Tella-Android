@@ -68,27 +68,25 @@ class TellaPeerToPeerServer(
         val keyStore = KeyStore.getInstance("PKCS12").apply {
             load(null, null)
             setKeyEntry(
-                keyStoreConfig.alias,
-                keyPair.private,
-                keyStoreConfig.password,
-                arrayOf(certificate)
+                keyStoreConfig.alias, keyPair.private, keyStoreConfig.password, arrayOf(certificate)
             )
         }
 
         engine = embeddedServer(Netty, environment = applicationEngineEnvironment {
-            sslConnector(
-                keyStore = keyStore,
+            sslConnector(keyStore = keyStore,
                 keyAlias = keyStoreConfig.alias,
                 keyStorePassword = { keyStoreConfig.password },
-                privateKeyPassword = { keyStoreConfig.password }
-            ) {
+                privateKeyPassword = { keyStoreConfig.password }) {
                 this.host = ip
                 this.port = serverPort
             }
 
             module {
                 install(ContentNegotiation) {
-                    json()
+                    json(kotlinx.serialization.json.Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    })
                 }
                 routing {
                     // Root route to confirm the server is running
@@ -135,8 +133,7 @@ class TellaPeerToPeerServer(
 
                         if (!accepted) {
                             call.respond(
-                                HttpStatusCode.Forbidden,
-                                "Receiver rejected the registration"
+                                HttpStatusCode.Forbidden, "Receiver rejected the registration"
                             )
                             return@post
                         }
@@ -175,14 +172,12 @@ class TellaPeerToPeerServer(
                             val responseFiles = request.files.map { file ->
                                 val transmissionId = UUID.randomUUID().toString()
                                 val receivingFile = ProgressFile(
-                                    file = file,
-                                    transmissionId = transmissionId
+                                    file = file, transmissionId = transmissionId
                                 )
                                 session.files[transmissionId] = receivingFile
 
                                 FileInfo(
-                                    id = file.id,
-                                    transmissionId = transmissionId
+                                    id = file.id, transmissionId = transmissionId
                                 )
                             }
 
@@ -275,8 +270,7 @@ class TellaPeerToPeerServer(
                             PeerEventManager.onUploadProgressState(failedState)
 
                             call.respond(
-                                HttpStatusCode.InternalServerError,
-                                "Upload failed: ${e.message}"
+                                HttpStatusCode.InternalServerError, "Upload failed: ${e.message}"
                             )
                         } finally {
                             output.close()
@@ -288,8 +282,7 @@ class TellaPeerToPeerServer(
                             call.receive<Map<String, String>>()
                         } catch (e: Exception) {
                             call.respond(
-                                HttpStatusCode.BadRequest,
-                                "Missing or invalid JSON payload"
+                                HttpStatusCode.BadRequest, "Missing or invalid JSON payload"
                             )
                             return@post
                         }

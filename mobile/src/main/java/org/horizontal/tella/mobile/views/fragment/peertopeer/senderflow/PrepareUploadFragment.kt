@@ -288,7 +288,7 @@ class PrepareUploadFragment :
                             size = vaultFile.size,
                             fileType = vaultFile.mimeType ?: "application/octet-stream",
                             sha256 = vaultFile.hash,
-                            thumb = vaultFile.thumb ?: ByteArray(0)
+                            thumbnail = vaultFile.thumb ?: ByteArray(0)
                         )
 
                         val progressFile = ProgressFile(
