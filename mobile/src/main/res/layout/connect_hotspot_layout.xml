@@ -58,7 +58,7 @@
         android:layout_marginTop="@dimen/activity_horizontal_small_margin"
         android:gravity="start"
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        android:text="@string/verify_sequence_match"
+        android:text="@string/wifi_connection_instruction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
