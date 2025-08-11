@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
+import org.checkerframework.common.returnsreceiver.qual.This
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -132,6 +133,15 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     private fun initObservers() {
         mediaImportViewModel.mediaFileLiveData.observe(this,::onMediaFileImported)
         mediaImportViewModel.importError.observe(this, ::onImportError)
+        mediaImportViewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.file_name_taken), true
+            )
+        }
     }
 
     private fun initializeListeners() {

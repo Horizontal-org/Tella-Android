@@ -45,7 +45,8 @@ import timber.log.Timber
 import java.io.FileNotFoundException
 
 @RuntimePermissions
-class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler, IGalleryMediaHandler {
+class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
+    IGalleryMediaHandler {
     private var recyclerView: GalleryRecyclerView? = null
     var progressBar: ProgressBar? = null
     var toolbar: Toolbar? = null
@@ -157,6 +158,16 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
                     onImportError(throwable)
                 }
             }
+            duplicateNameError.observe(this@QuestionAttachmentActivity, ::onRenameConflictError)
+
+        }
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.file_name_taken), true
+            )
         }
     }
 
@@ -223,7 +234,7 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
             intent.putExtra(VideoViewerActivity.NO_ACTIONS, true)
             startActivity(intent)
-        }else if (isPDFFile(vaultFile.name,vaultFile.mimeType)){
+        } else if (isPDFFile(vaultFile.name, vaultFile.mimeType)) {
             val intent = Intent(this, PDFReaderActivity::class.java)
             intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
             startActivity(intent)
