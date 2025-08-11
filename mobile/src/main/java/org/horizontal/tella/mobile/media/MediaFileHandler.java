@@ -258,7 +258,7 @@ public class MediaFileHandler {
 
             DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
             if (doc == null || !doc.exists()) {
-                throw new FileNotFoundException("File no longer exists at URI: " + uri);
+                throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
             }
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
                 Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream);
@@ -385,7 +385,7 @@ public class MediaFileHandler {
 
         DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
         if (doc == null || !doc.exists()) {
-            throw new FileNotFoundException("File no longer exists at URI: " + uri);
+            throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
         }
 
         try {
@@ -424,7 +424,7 @@ public class MediaFileHandler {
 
         DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
         if (doc == null || !doc.exists()) {
-            throw new FileNotFoundException("File no longer exists at URI: " + uri);
+            throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
         }
 
         try {

@@ -974,4 +974,5 @@ Analizi Tella komandası ilə böluşmək istərdizmi?</string>
   <string name="report_submitted_msg">Hesabatınız uğurla göndərildi.</string>
   <string name="Collect_MediaWidget_Attach_File">Faylı qoş</string>
   <string name="form_successfully_submitted">%1$s uğurla göndərildi</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

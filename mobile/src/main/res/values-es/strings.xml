@@ -987,4 +987,5 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
   <string name="report_submitted_msg">El reporte se envió correctamente.</string>
   <string name="Collect_MediaWidget_Attach_File">Adjuntar archivo</string>
   <string name="form_successfully_submitted">%1$s eviado correctamente</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

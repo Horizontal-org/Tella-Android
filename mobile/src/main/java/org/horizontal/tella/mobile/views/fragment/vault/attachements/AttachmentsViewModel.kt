@@ -18,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.database.KeyDataSource
@@ -40,6 +41,8 @@ class AttachmentsViewModel @Inject constructor(
     val filesData: LiveData<List<VaultFile?>> = _filesData
     private val _error = MutableLiveData<Throwable?>()
     val error: LiveData<Throwable?> = _error
+    private val _importError = SingleLiveEvent<Throwable>()
+    val importError: LiveData<Throwable> get() = _importError
     private val _filesSize = MutableLiveData<Int>()
     val filesSize: LiveData<Int> = _filesSize
     private val _moveFilesError = MutableLiveData<Throwable?>()
@@ -261,7 +264,7 @@ class AttachmentsViewModel @Inject constructor(
                     _duplicateNameError.postValue(true)
                 }
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
+                _importError.postValue(throwable!!)
             })
     }
 

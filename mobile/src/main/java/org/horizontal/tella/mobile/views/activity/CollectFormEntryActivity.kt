@@ -67,6 +67,7 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.OnShowRationale
 import permissions.dispatcher.PermissionRequest
 import timber.log.Timber
+import java.io.FileNotFoundException
 
 //@RuntimePermission
 @AndroidEntryPoint
@@ -714,9 +715,13 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
         DialogUtils.showBottomMessage(
             this,
-            getString(R.string.gallery_toast_fail_importing_file),
+            getString(messageResId),
             true
         )
         Timber.d(error, javaClass.name)

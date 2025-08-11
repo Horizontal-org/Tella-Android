@@ -54,8 +54,10 @@ import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
+import java.io.FileNotFoundException
 
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
@@ -372,8 +374,17 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         // onAddError(throwable);
     }
 
-    private fun onImportError(throwable: Throwable?){
-       Timber.d(throwable)
+    private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
+        DialogUtils.showBottomMessage(
+            this,
+            getString(messageResId),
+            true
+        )
+        Timber.d(error, javaClass.name)
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
