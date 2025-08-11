@@ -319,6 +319,7 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
         Timber.d(error, javaClass.name)
     }
 
+
     private fun onImportStarted() {
         progressDialog =
             DialogsUtil.showProgressDialog(this, getString(R.string.gallery_dialog_expl_encrypting))
