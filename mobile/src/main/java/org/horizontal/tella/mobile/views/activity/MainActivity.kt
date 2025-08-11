@@ -212,7 +212,8 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
             }
         } catch (e: NullPointerException) {
             // Handle null pointer exception
-            showToast(R.string.gallery_toast_fail_importing_file)
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.gallery_toast_fail_importing_file), true)
             FirebaseCrashlytics.getInstance().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         } catch (e: Exception) {

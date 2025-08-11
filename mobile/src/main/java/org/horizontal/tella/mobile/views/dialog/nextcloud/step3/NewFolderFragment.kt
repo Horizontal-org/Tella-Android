@@ -14,6 +14,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 import org.horizontal.tella.mobile.views.dialog.nextcloud.INextCloudAuthFlow
 import org.horizontal.tella.mobile.views.dialog.nextcloud.NextCloudLoginFlowViewModel
+import org.hzontal.shared_ui.utils.DialogUtils
 
 @AndroidEntryPoint
 class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
@@ -58,7 +59,9 @@ class NewFolderFragment : BaseBindingFragment<NewFolderFragmentBinding>(
 
     private fun setupObservers() {
         viewModel.errorFolderCreation.observe(viewLifecycleOwner) { message ->
-            showToast(message)
+            DialogUtils.showBottomMessage(
+                baseActivity, message, true
+            )
         }
 
         viewModel.errorFolderNameExist.observe(viewLifecycleOwner) { message ->

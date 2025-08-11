@@ -717,8 +717,10 @@ class AttachmentsFragment :
 
     private fun onRenameConflictError(isConflict: Boolean) {
         if (isConflict) {
-            showToast(getString(R.string.file_name_taken))
-        }
+            DialogUtils.showBottomMessage(
+                baseActivity, getString(R.string.file_name_taken), true
+            )
+            }
     }
 
     private fun onGetFilesSuccess(files: List<VaultFile?>) {
