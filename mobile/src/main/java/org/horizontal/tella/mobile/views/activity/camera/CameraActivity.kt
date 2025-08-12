@@ -29,6 +29,7 @@ import com.otaliastudios.cameraview.CameraOptions
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.VideoResult
+import com.otaliastudios.cameraview.controls.Audio
 import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.controls.Flash
 import com.otaliastudios.cameraview.controls.Grid
@@ -389,6 +390,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             } else {
                 setVideoQuality()
                 lastClickTime = System.currentTimeMillis()
+                cameraView.audio = if (Preferences.isShutterMute()) Audio.OFF else Audio.ON
                 cameraView.takeVideo(MediaFileHandler.getTempFile())
                 captureButton.displayStopVideo()
                 durationView.start()
