@@ -390,7 +390,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             } else {
                 setVideoQuality()
                 lastClickTime = System.currentTimeMillis()
-                cameraView.audio = if (Preferences.isShutterMute()) Audio.OFF else Audio.ON
+                cameraView.playSounds = !Preferences.isShutterMute()
                 cameraView.takeVideo(MediaFileHandler.getTempFile())
                 captureButton.displayStopVideo()
                 durationView.start()

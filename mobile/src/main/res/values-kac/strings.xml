@@ -291,7 +291,7 @@ mode activation</string>
   <string name="settings.select_security">Shim Lam</string>
   <string name="settings.select_lock_timeout">Chyahkring chyahkra hkring sa ai lam hpe sumsaw la u</string>
   <string name="settings.sec_camera.mute_switch">Sumla dem jak (Kemra) nsen n shapru ai lai ladat(mode)</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
   <string name="settings.sec_quick.delete_switch">Lawan shaprai hkau u</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
   <string name="settings.servers.title_server.settings">Madung kompyuta jak ni</string>
