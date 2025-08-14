@@ -77,7 +77,7 @@
   <string name="collect_toast_fail.submission.unauthorized">Bu formanı göndərməyə icazəniz yoxdur. Bunun səhv olduğunu düşünürsüzsə, təşkilatınızla əlaqə saxlayın</string>
   <string name="gallery_toast_fail.importing.file">Faylı idxal edəndə xəta oldu. Yenə cəhd edin</string>
   <string name="collect.end_heading">Formanın sonu</string>
-  <string name="collect.end_toast_notification.form.not.sent.no.connection">İntenetə qoşulmamısız. Qoşulandan sonra yenə cəhd edərsiz</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">İnternetə qoşulmamısız. Qoşulamda yenidən cəhd edərsiz</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">Forma və ya onun hissələri göndərilmədi. Pozmaq istədiyinizə əminsiz?</string>
   <string name="action_discard">Poz</string>
   <string name="collect.end_action_submit">Göndər</string>
@@ -330,7 +330,7 @@
   <string name="settings.sec_bypass_switch_expl">Bölgənizdə Tella-nın bloklanmasının qarşısını alın. Nəzərə alın ki, bu, məlumatların serverlərə göndərilməsi sürətini azaldacaq.</string>
   <string name="settings.servers_add_camouflage.subtitle">Tətbiqiniz Kalkulyator kimi kamuflyaj edilib</string>
   <string name="settings.servers_change.camouflage.method">KAMUFLYAJ ÜSULUNU DƏYİŞ</string>
-  <string name="settings.servers_remove.camouflage.method">KAMUFLYAJI GÖTÜR</string>
+  <string name="settings.servers_remove.camouflage.method">KAMUFLYAJDAN ÇIXAR</string>
   <string name="settings.servers_hide_tella_title">Tella-nı gizlət</string>
   <string name="settings.servers_hide_tella_desc">Tella-nın sizə uyğun şəkildə gizlədilməsi yolunu seçin</string>
   <string name="settings.servers_setup_camouflage_title">Kamuflyajı quraşdır</string>
@@ -449,7 +449,7 @@
   <string name="UWAZI_Language_Header_Title">Uwazi dili</string>
   <string name="Uwazi_Language_Screen_Description">Uwazi kolleksiyası müxtəlif dillərdə mövcuddur.  Şablonları yükləmək istədiyiniz dili seçin.</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">Tella-nın əsas ekranında sevimli nümunələrinizə keçidləri göstərin.</string>
-  <string name="Uwazi_General_Favorite_Template_Switch_Title">Sevimli nümunələr</string>
+  <string name="Uwazi_General_Favorite_Template_Switch_Title">Sevimli şablonlar</string>
   <string name="Uwazi_Templates_Empty_Description">Saxlanmış nümunəniz yoxdur. Yeni nümunə yaratmaq üçün \"+\" düyməsinə basın.</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">Göndərilmiş obyektiniz yoxdur.</string>
   <string name="Uwazi_Outbox_Entities_Empty_Description">Gedənlər qutusu boşdur. Göndərilməyə hazır obyektlər burada görünəcək.</string>
@@ -496,7 +496,7 @@
     <item quantity="one">%d fayl qoşmadadır</item>
     <item quantity="other">%d fayl qoşmadadır</item>
   </plurals>
-  <string name="Uwazi_MiltiFileWidget_SelectFiles">Faylları seçin</string>
+  <string name="Uwazi_MiltiFileWidget_SelectFiles">Faylları seç</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">PDF faylları seçin</string>
   <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Əsas sənədlər</string>
   <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">İstədiyiniz qədər PDF faylı qoşun</string>
@@ -507,7 +507,7 @@
 Obyekt üzərində işə davam etmək üçün onun üstünə tıklayın.</string>
   <string name="Uwazi_Outbox_Header_Text">Bunlar göndərilməyə hazır və ya qismən göndərilmiş obyektlərdir.</string>
   <string name="Uwazi_Submitted_Header_Text">Bunlar göndərdiyiniz obyektlərdir.</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Faylları əlavə etmək yolunu seçin</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Faylları əlavə edəcəyin yolu seç</string>
   <string-array name="Uwazi_Language_Array">
     <item>İngilis</item>
     <item>Ərəb</item>
@@ -598,7 +598,7 @@ Obyekt üzərində işə davam etmək üçün onun üstünə tıklayın.</string
   <string name="onboard_setup_customization">Fərdiləşdirmə kodu/faylınız var?</string>
   <string name="settings.camo_clock">Saat</string>
   <string name="onboard.intro_organization_code">Təşkiltın mənə verdiyi kod var</string>
-  <string name="onboard.customization_title">FərdiləşdirməK</string>
+  <string name="onboard.customization_title">Fərdiləşdirmək</string>
   <string name="onboard.customization_subtitle">Fərdiləşdirmə kodunuzu daxil edin</string>
   <string name="onboard.customization_expl">Təşkilatınız Tella-nı onların parametrlərinə uyğun qurmağınız üçün sizə kod verə bilər.</string>
   <string name="upload_toast_fail.finding.metadata.to.upload">Xəta: Faylın təsdiqləmə məlumatları tapılmadı. Yenə cəhd edin</string>
@@ -708,7 +708,7 @@ XƏBƏRDARLIQ: Aktivləşibsə, Tella kilidi bütün hesabatlar tam yüklənən�
   <string name="Setting_Reports_Connection_Name">Bağlantı adı</string>
   <string name="Setting_Reports_Auto_Report">Avtomatik hesabat</string>
   <string name="Setting_Reports_Auto_Report_Description">Tella-da foto/video/audio qeydi edəndə həmin fayldan avtomatik hesabat yaradılır və hesabat bu layihəyə yüklənir.</string>
-  <string name="Setting_Reports_Auto_Delete">Avtomatik sil</string>
+  <string name="Setting_Reports_Auto_Delete">Avtomatik silmək</string>
   <string name="Setting_Reports_Auto_Delete_Description">Bu layihəyə hesabat kimi yüklənən faylları cihazınızdan avtomatik silin.</string>
   <string name="Send_Action_Label">GÖNDƏR</string>
   <string name="Modified_Label">dəyişdirildi</string>
@@ -761,7 +761,7 @@ XƏBƏRDARLIQ: Aktivləşibsə, Tella kilidi bütün hesabatlar tam yüklənən�
   <string name="action_hide_pin">pini gizlət</string>
   <string name="action_go_back">geri qayıt</string>
   <string name="Settings_show_unlock_attempts_remaining">Kilidaçma cəhdlərinin qaldığını göstərir</string>
-  <string name="Settings_unlock_screen_instructions">Kilid ekranında Tella məlumatlarının silinməsinə qədər mümkün uğursuz kilidaçma cəhdlərinin sayını göstərin</string>
+  <string name="Settings_unlock_screen_instructions">Kilidaçma ekranında, Tella daxilindəki məlumatlar silinməzdən əvvəl uğursuz kilidaçma cəhdlərinin qalan sayını göstərin.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Uğursuz cəhddən sonra sil</string>
   <string name="Settings_Delete_After_Failed_Unlock_Descreption">Qərar verin, Tella məlumatlarınızın silinməsinə qədər neçə uğursuz kilidaçma cəhdi ola bilər?</string>
   <string name="Settings_Off_Do_Not_Delete">Söndür (məlumatları silmə)</string>
@@ -825,7 +825,7 @@ Bu rəy anonim qalır, bizdən cavab almaq istəyirsizsə, kontaktlarınızı ə
   <string name="encryption_exit_prompt">Arxa fonda şifrələnməkdə olan fayllar var. Çıxsanız onları itirəcəksiniz?</string>
   <string name="exit_discard_files">Çıxın və faylları silin</string>
   <string name="exit_and_discard_files">Çıxın və faylları silin</string>
-  <string name="files_being_encrypted_message">Arxa fonda şifrələnməkdə olan fayllar var. Çıxaraq onları itirmək istəyirsiniz?</string>
+  <string name="files_being_encrypted_message">Arxa fonda şifrələnməkdə olan fayllar var. Çıxsanız onları itirəcəksiniz?</string>
   <string name="Home_BottomNav_Resources">Resurslar</string>
   <string name="Resources_DownloadedTitle">Yükləndi</string>
   <string name="Resources_DownloadedEmptyMessage">Heç bir resursu yükləməmisiz. Başlamaq üçün aşağıda, hər resursun yanındakı \"yüklə\" işarəsinə klikləyin.</string>

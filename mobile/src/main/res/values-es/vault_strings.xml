@@ -28,8 +28,8 @@
   <string name="Vault_FilePath">Vía de archivo</string>
   <string name="Vault_RenameFile_SheetTitle">Renombrar archivo</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">Borrar archivo?</item>
-    <item quantity="other">Borrar archivos?</item>
+    <item quantity="one">¿Borrar archivo?</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
     <item quantity="one">El archivo seleccionado será eliminado permanentemente de Tella.</item>

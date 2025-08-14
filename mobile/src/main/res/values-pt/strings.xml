@@ -293,7 +293,7 @@ ativado</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
   <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
-  <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>
   <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -374,7 +374,7 @@ ativado</string>
   <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
   <string name="onboard.title_files">Encrypted files &amp; folders</string>
   <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
-  <string name="onboard.title_lock_finish">Lock</string>
+  <string name="onboard.title_lock_finish">Bloqueio</string>
   <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
   <string name="onboard.title_all_done">You’re all done!</string>
   <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>

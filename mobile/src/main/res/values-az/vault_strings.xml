@@ -10,7 +10,7 @@
   <string name="Vault_Select_Title">Faylları seç</string>
   <string name="Vault_RecentFiles">Son fayllar</string>
   <string name="Vault_PhotosAndVideos_Title">Foto və Videolar</string>
-  <string name="Vault_FavoriteForms_Title">Seçilmiş formalar</string>
+  <string name="Vault_FavoriteForms_Title">Sevimli formalar</string>
   <string name="Vault_Empty_Msg">Tella tətbiqinizdə hələ ki, fayl yoxdur. Aşağıda \"+\" düyməsinə klikləyərək, ilk faylı idxal edə, yaxud Kamera və ya Mikrofona keçərək, yeni fayl yarada bilərsiz. Həmçinin qovluqlar yaradaraq, fayllarınızı səliqə ilə yerləşdirə bilərsiz.</string>
   <string name="Vault_Move_SheetDesc">Digər qovluğa köçür</string>
   <string name="Vault_Rename_SheetAction">Adını dəyiş</string>
@@ -67,5 +67,5 @@
   <string name="Vault_deleteFileImported_SheetDesc">Faylı Tella-ya idxal etdikdən sonra orijinal faylın cihazınızda qalmasını, yoxsa silinməsini istəyirsiz?
 
 Orijinal faylı silsəniz, Tella-ya köçürülən fayl onun yeganə surəti olacaq.</string>
-  <string name="Vault_FileEdit_SheetAction">Redaktə edin</string>
+  <string name="Vault_FileEdit_SheetAction">Redaktə et</string>
 </resources>
