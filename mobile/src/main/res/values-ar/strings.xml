@@ -291,9 +291,9 @@
   <string name="settings.select_security">الأمان</string>
   <string name="settings.select_lock_timeout">مهلة القفل</string>
   <string name="settings.sec_camera.mute_switch">الوضع الصامت للكاميرا</string>
-  <string name="settings.sec_camera.mute_expl">اكتم صوت غالق الكاميرا لتقليل جذب الانتباه عند التقاط الصور.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
   <string name="settings.sec_quick.delete_switch">الحذف السريع</string>
-  <string name="settings.sec_quick.delete_expl">إظهار زر منسدل على الشاشة الرئيسية لتطبيق Tella لللخروج السريع من التطبيق في حالات الطوارئ.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">الخوادم</string>
   <string name="settings.servers.add_server.expl">اتصل بالخوادم لجمع البيانات وإرسالها إلى منظمتك</string>
   <string name="settings.servers_auto.upload_action">التحميل التلقائي على الخادم</string>
