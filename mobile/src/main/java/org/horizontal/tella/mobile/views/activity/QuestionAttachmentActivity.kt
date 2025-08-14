@@ -42,9 +42,11 @@ import org.horizontal.tella.mobile.views.fragment.forms.QuestionAttachmentModel
 import org.horizontal.tella.mobile.views.interfaces.IAttachmentsMediaHandler
 import org.horizontal.tella.mobile.views.interfaces.IGalleryMediaHandler
 import timber.log.Timber
+import java.io.FileNotFoundException
 
 @RuntimePermissions
-class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler, IGalleryMediaHandler {
+class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
+    IGalleryMediaHandler {
     private var recyclerView: GalleryRecyclerView? = null
     var progressBar: ProgressBar? = null
     var toolbar: Toolbar? = null
@@ -156,6 +158,16 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
                     onImportError(throwable)
                 }
             }
+            duplicateNameError.observe(this@QuestionAttachmentActivity, ::onRenameConflictError)
+
+        }
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.file_name_taken), true
+            )
         }
     }
 
@@ -222,7 +234,7 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
             intent.putExtra(VideoViewerActivity.VIEW_VIDEO, vaultFile)
             intent.putExtra(VideoViewerActivity.NO_ACTIONS, true)
             startActivity(intent)
-        }else if (isPDFFile(vaultFile.name,vaultFile.mimeType)){
+        } else if (isPDFFile(vaultFile.name, vaultFile.mimeType)) {
             val intent = Intent(this, PDFReaderActivity::class.java)
             intent.putExtra(PDFReaderActivity.VIEW_PDF, vaultFile)
             startActivity(intent)
@@ -306,13 +318,18 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
     }
 
     private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
         DialogUtils.showBottomMessage(
             this,
-            getString(R.string.gallery_toast_fail_importing_file),
+            getString(messageResId),
             true
         )
         Timber.d(error, javaClass.name)
     }
+
 
     private fun onImportStarted() {
         progressDialog =

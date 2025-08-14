@@ -3,9 +3,11 @@ package org.horizontal.tella.mobile.mvvm.media
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Observable
@@ -28,6 +30,9 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
 
     private val _importError = SingleLiveEvent<Throwable>()
     val importError: LiveData<Throwable> get() = _importError
+
+    private val _duplicateNameError = MutableLiveData<Boolean>()
+    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
 
     var attachment: VaultFile? = null
 
@@ -59,6 +64,9 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
                 .subscribe({ vaultFile ->
                     _mediaFileLiveData.postValue(vaultFile)
                 }, { throwable ->
+                    if (throwable is DuplicateVaultFileException) {
+                        _duplicateNameError.postValue(true)
+                    }
                     FirebaseCrashlytics.getInstance().recordException(throwable)
                     _importError.postValue(throwable)
                 })

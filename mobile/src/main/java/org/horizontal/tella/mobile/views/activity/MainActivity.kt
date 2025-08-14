@@ -23,6 +23,7 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
+import org.checkerframework.common.returnsreceiver.qual.This
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -54,8 +55,10 @@ import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
+import java.io.FileNotFoundException
 
 @AndroidEntryPoint
 class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
@@ -130,6 +133,15 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     private fun initObservers() {
         mediaImportViewModel.mediaFileLiveData.observe(this,::onMediaFileImported)
         mediaImportViewModel.importError.observe(this, ::onImportError)
+        mediaImportViewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.file_name_taken), true
+            )
+        }
     }
 
     private fun initializeListeners() {
@@ -210,7 +222,8 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
             }
         } catch (e: NullPointerException) {
             // Handle null pointer exception
-            showToast(R.string.gallery_toast_fail_importing_file)
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.gallery_toast_fail_importing_file), true)
             FirebaseCrashlytics.getInstance().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         } catch (e: Exception) {
@@ -372,8 +385,17 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         // onAddError(throwable);
     }
 
-    private fun onImportError(throwable: Throwable?){
-       Timber.d(throwable)
+    private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
+        DialogUtils.showBottomMessage(
+            this,
+            getString(messageResId),
+            true
+        )
+        Timber.d(error, javaClass.name)
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)

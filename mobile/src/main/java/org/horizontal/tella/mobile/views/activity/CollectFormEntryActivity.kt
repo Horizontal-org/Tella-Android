@@ -7,12 +7,14 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -67,6 +69,7 @@ import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.OnShowRationale
 import permissions.dispatcher.PermissionRequest
 import timber.log.Timber
+import java.io.FileNotFoundException
 
 //@RuntimePermission
 @AndroidEntryPoint
@@ -273,6 +276,8 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                     onImportError(throwable)
                 }
             }
+            duplicateNameError.observe(this@CollectFormEntryActivity, ::onRenameConflictError)
+
         }
     }
 
@@ -346,6 +351,14 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
         formParser?.stopWaitingBinaryData()
         saveCurrentScreen(false)
+    }
+
+    private fun onRenameConflictError(isConflict: Boolean) {
+        if (isConflict) {
+            DialogUtils.showBottomMessage(
+                this, getString(R.string.file_name_taken), true
+            )
+        }
     }
 
     /*   @Override
@@ -714,9 +727,13 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
         DialogUtils.showBottomMessage(
             this,
-            getString(R.string.gallery_toast_fail_importing_file),
+            getString(messageResId),
             true
         )
         Timber.d(error, javaClass.name)
@@ -1010,6 +1027,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun requestGpsPermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
@@ -1025,7 +1043,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 override fun onNext(event: LocationPermissionRequiredEvent) {
                     if (!hasGpsPermissions(context)) {
                         maybeChangeTemporaryTimeout {
-                            requestGpsPermissions(C.GPS_PROVIDER)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestGpsPermissions(C.GPS_PROVIDER)
+                            }
                         }
                     }
                 }
