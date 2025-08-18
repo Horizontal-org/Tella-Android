@@ -20,6 +20,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
@@ -175,17 +176,18 @@ class FileTransferViewModel @Inject constructor(
                 )
             }
 
-            session.status = SessionStatus.FINISHED
-
-            // Final update after all uploads complete
-            _uploadProgress.postValue(
-                UploadProgressState(
-                    title = session.title ?: "",
-                    percent = 100,
-                    sessionStatus = session.status,
-                    files = session.files.values.toList()
-                )
-            )
+            // Instead: wait for the server event confirming all files were saved
+                PeerEventManager.allFilesReceivedEvents.collect {
+                    session.status = SessionStatus.FINISHED
+                    _uploadProgress.postValue(
+                        UploadProgressState(
+                            title = session.title ?: "",
+                            percent = 100,
+                            sessionStatus = session.status,
+                            files = session.files.values.toList()
+                        )
+                    )
+                }
         }
     }
 

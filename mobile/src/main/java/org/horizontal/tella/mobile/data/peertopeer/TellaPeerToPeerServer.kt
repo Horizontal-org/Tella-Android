@@ -248,6 +248,11 @@ class TellaPeerToPeerServer(
                             progressFile.status = P2PFileStatus.FINISHED
                             progressFile.path = tmpFile.path
 
+                            //  Check if every file for the session is finished
+                            if (session.files.values.all { it.status == P2PFileStatus.FINISHED }) {
+                                PeerEventManager.emitAllFilesReceived()
+                            }
+
                             val finalState = UploadProgressState(
                                 title = session.title ?: "",
                                 percent = 100,
