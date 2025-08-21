@@ -71,6 +71,5 @@ object CertificateUtils {
         val hash = digest.digest(certificate.encoded)
         return hash.joinToString("") { "%02x".format(it) } // <-- fix here
     }
-
-
+    
 }

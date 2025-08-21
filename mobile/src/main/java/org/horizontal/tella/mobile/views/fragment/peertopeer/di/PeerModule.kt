@@ -1,8 +1,10 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
@@ -16,8 +18,8 @@ object PeerModule {
 
     @Provides
     @Singleton
-    fun providePeerClient(): TellaPeerToPeerClient {
-        return TellaPeerToPeerClient()
+    fun providePeerClient(@ApplicationContext context: Context): TellaPeerToPeerClient {
+        return TellaPeerToPeerClient(context)
     }
 
     @Provides

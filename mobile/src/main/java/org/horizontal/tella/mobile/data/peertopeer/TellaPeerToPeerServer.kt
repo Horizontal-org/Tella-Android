@@ -33,7 +33,6 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
-import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager.closeConnectionEvent
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
