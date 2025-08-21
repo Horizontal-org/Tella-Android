@@ -47,12 +47,6 @@ object PeerEventManager {
     private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 0)
     val uploadProgressStateFlow = _uploadProgressStateFlow.asSharedFlow()
 
-    private val _allFilesReceivedEvents = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
-    val allFilesReceivedEvents = _allFilesReceivedEvents.asSharedFlow()
-
-    suspend fun emitAllFilesReceived() {
-        _allFilesReceivedEvents.emit(Unit)
-    }
     // Upload progress
     suspend fun onUploadProgressState(state: UploadProgressState) {
         _uploadProgressStateFlow.emit(state)
