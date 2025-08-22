@@ -18,7 +18,6 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndVie
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class RecipientUploadFilesFragment :
@@ -89,30 +88,32 @@ class RecipientUploadFilesFragment :
 
             val files = state.files
             val percent = state.percent.coerceIn(0, 100)
-            val percentFloat = percent / 100f
+            endView.setUploadProgress(files, percent / 100f)
 
-            endView.setUploadProgress(files, percentFloat)
-
-            // Only show the bottom sheet once, updates come from observeBottomSheetProgress
             if (!sheetShown) {
                 sheetShown = true
                 showProgressImportSheet(
                     baseActivity.supportFragmentManager,
                     getString(R.string.Vault_Importing_SheetTitle),
                     files.size,
-                    resources.getQuantityString(
-                        R.plurals.Vault_Importing_SheetProgress, files.size
-                    ),
+                    resources.getQuantityString(R.plurals.Vault_Importing_SheetProgress, files.size),
                     progressStatus = progressPercentLiveData,
                     getString(R.string.action_cancel).uppercase(),
                     viewLifecycleOwner
-                ) {
-
-                }
+                ) { }
             }
 
-            val allSaved = files.all { it.status == P2PFileStatus.SAVED }
-            if (state.sessionStatus == SessionStatus.FINISHED && allSaved) {
+            val isFinishedOrClosed =
+                state.sessionStatus == SessionStatus.FINISHED || state.sessionStatus == SessionStatus.CLOSED
+
+            if (isFinishedOrClosed) {
+                // If sender cancelled mid-way, some files may still be QUEUE/SENDING → mark them FAILED
+                val session = viewModel.p2PState.session
+                session?.files?.values?.forEach { pf ->
+                    if (pf.status == P2PFileStatus.SENDING || pf.status == P2PFileStatus.QUEUE) {
+                        pf.status = P2PFileStatus.FAILED
+                    }
+                }
                 stopServerAndNavigate()
             }
         }

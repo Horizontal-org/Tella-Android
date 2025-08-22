@@ -23,7 +23,6 @@ class SenderUploadFilesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.uploadAllFiles()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
         showFormEndView()
         observeUploadProgress()
@@ -64,13 +63,11 @@ class SenderUploadFilesFragment :
             val percentFloat = state.percent / 100f
             endView.setUploadProgress(files, percentFloat)
 
-
-            val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
-
-            if (state.sessionStatus == SessionStatus.FINISHED && allFinished) {
+            if (state.sessionStatus == SessionStatus.FINISHED) {
                 viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
                 navManager().navigateFromUploadSenderFragmentToPeerToPeerResultFragment()
             }
         }
     }
+
 }

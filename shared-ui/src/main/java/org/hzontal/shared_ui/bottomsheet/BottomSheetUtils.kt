@@ -692,37 +692,39 @@ object BottomSheetUtils {
         cancelText: String,
         lifecycleOwner: LifecycleOwner,
         onCancelImport: (() -> Unit)
-
-    ) {
+    ): CustomBottomSheetFragment {   // <-- return it
         val customSheetFragment =
-            CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
-                .cancellable(true).statusBarColor(R.color.space_cadet)
+            CustomBottomSheetFragment.with(fragmentManager)
+                .page(R.layout.layout_progess_sheet)
+                .cancellable(true)
+                .statusBarColor(R.color.space_cadet)
+
         customSheetFragment.holder(DownloadStatustHolder(), object : Binder<DownloadStatustHolder> {
-            override fun onBind(holder: DownloadStatustHolder) {
-                with(holder) {
-                    progressStatus.observe(lifecycleOwner) { status ->
-                        subtitle.text = "$status/$totalProgress $progressNumberText"
-                        val statusPercent = status * 100 / totalProgress
-                        circularProgress.setProgressPercent(statusPercent, true)
-                        linearProgress.setProgressPercent(statusPercent, true)
-                        if ((status == totalProgress) && (customSheetFragment.isAdded)) {
-                            customSheetFragment.dismiss()
-                        }
-                    }
-                    title.text = titleText
-                    cancelTextView.text = cancelText
-                    cancelTextView.setOnClickListener {
-                        onCancelImport.invoke()
+            override fun onBind(holder: DownloadStatustHolder) = with(holder) {
+                progressStatus.observe(lifecycleOwner) { status ->
+                    subtitle.text = "$status/$totalProgress $progressNumberText"
+                    val statusPercent = status * 100 / totalProgress
+                    circularProgress.setProgressPercent(statusPercent, true)
+                    linearProgress.setProgressPercent(statusPercent, true)
+
+                    if ((status == totalProgress) && customSheetFragment.isAdded) {
                         customSheetFragment.dismiss()
                     }
-
+                }
+                title.text = titleText
+                cancelTextView.text = cancelText
+                cancelTextView.setOnClickListener {
+                    onCancelImport.invoke()
+                    customSheetFragment.dismiss()
                 }
             }
         })
 
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
+        return customSheetFragment
     }
+
 
     class ConfirmImageSheetHolder : PageHolder() {
         lateinit var actionButton: TextView
