@@ -291,7 +291,7 @@ borrado rápido</string>
   <string name="settings.select_security">Seguridad</string>
   <string name="settings.select_lock_timeout">Tiempo límite para el bloqueo</string>
   <string name="settings.sec_camera.mute_switch">Modo silencioso de la cámara</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Borrado rápido</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servidores</string>

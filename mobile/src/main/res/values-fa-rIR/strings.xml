@@ -291,7 +291,7 @@
   <string name="settings.select_security">امنیت</string>
   <string name="settings.select_lock_timeout">زمان قفل شدن</string>
   <string name="settings.sec_camera.mute_switch">حالت سکوت دوربین</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">حذف سریع</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">سرورها</string>

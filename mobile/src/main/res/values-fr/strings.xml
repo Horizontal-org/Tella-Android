@@ -290,7 +290,7 @@
   <string name="settings.select_security">Sécurité</string>
   <string name="settings.select_lock_timeout">Délai de verrouillage</string>
   <string name="settings.sec_camera.mute_switch">Mode silencieux de l’appareil photo</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Suppression rapide</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Serveurs</string>

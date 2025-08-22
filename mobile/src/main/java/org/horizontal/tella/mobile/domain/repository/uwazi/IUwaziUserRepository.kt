@@ -6,6 +6,7 @@ import okhttp3.RequestBody
 import org.horizontal.tella.mobile.data.entity.uwazi.*
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.uwazi.*
+import retrofit2.Response
 
 interface IUwaziUserRepository {
 
@@ -41,7 +42,7 @@ interface IUwaziUserRepository {
         attachments: List<MultipartBody.Part?>,
         attachmentsOriginalName: List<String>,
         documents: List<MultipartBody.Part?>
-    ): Single<UwaziEntityRow>
+    ): Single<Response<Void>>
 
     fun getRelationShipEntities(server: UWaziUploadServer): Single<List<RelationShipRow>>
 }

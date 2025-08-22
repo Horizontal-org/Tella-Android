@@ -23,8 +23,7 @@
             android:src="@drawable/ic_close_white"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="@string/action_cancel"
-            />
+            android:contentDescription="@string/action_cancel" />
 
         <org.horizontal.tella.mobile.views.custom.CameraResolutionButton
             android:id="@+id/resolutionButton"

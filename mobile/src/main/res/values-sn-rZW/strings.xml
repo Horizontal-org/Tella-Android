@@ -290,7 +290,7 @@
   <string name="settings.select_security">Kungarira.</string>
   <string name="settings.select_lock_timeout">Nguvha ho kuvharika.</string>
   <string name="settings.sec_camera.mute_switch">Kunhalala ko camera.</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos and videos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Kulassa chopassi.</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Mudjeke.</string>
