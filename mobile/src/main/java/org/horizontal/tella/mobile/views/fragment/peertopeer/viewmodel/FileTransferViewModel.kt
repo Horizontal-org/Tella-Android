@@ -116,60 +116,71 @@ class FileTransferViewModel @Inject constructor(
 
             val totalSize = session.files.values.sumOf { it.vaultFile?.size ?: 0L }
 
-            fun postProgress() {
-                val uploaded = session.files.values.sumOf { it.bytesTransferred }
-                val percent = if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+            session.files.values.forEach { progressFile ->
+                val vaultFile = progressFile.vaultFile ?: return@forEach
+                val inputStream = MediaFileHandler.getStream(vaultFile)
+
+                progressFile.status = P2PFileStatus.SENDING
+
+                try {
+                    if (inputStream != null) {
+                        Timber.d("session id ***uploadAllFiles ${getSessionId()}")
+                        peerClient.uploadFileWithProgress(
+                            ip = ip,
+                            port = port,
+                            expectedFingerprint = fingerprint,
+                            sessionId = getSessionId(),
+                            fileId = progressFile.file.id,
+                            transmissionId = progressFile.transmissionId.orEmpty(),
+                            inputStream = inputStream,
+                            fileSize = vaultFile.size,
+                            fileName = vaultFile.name,
+                        ) { written, _ ->
+                            progressFile.bytesTransferred = written.toInt()
+
+                            val uploaded = session.files.values.sumOf { it.bytesTransferred }
+                            val percent =
+                                if (totalSize > 0) ((uploaded * 100) / totalSize).toInt() else 0
+
+                            _uploadProgress.postValue(
+                                UploadProgressState(
+                                    title = session.title ?: "",
+                                    percent = percent,
+                                    sessionStatus = session.status,
+                                    files = session.files.values.toList()
+                                )
+                            )
+                        }
+                    }
+
+
+                    progressFile.status = P2PFileStatus.FINISHED
+                } catch (e: Exception) {
+                    progressFile.status = P2PFileStatus.FAILED
+                    Timber.e(e, "Upload failed for file ${progressFile.file.fileName}")
+                } finally {
+                    inputStream?.close()
+                }
+
+                // Post state after each file is done
                 _uploadProgress.postValue(
                     UploadProgressState(
-                        title = session.title.orEmpty(),
-                        percent = percent,
+                        title = session.title ?: "",
+                        percent = session.files.values.sumOf { it.bytesTransferred }.let {
+                            if (totalSize > 0) ((it * 100) / totalSize).toInt() else 0
+                        },
                         sessionStatus = session.status,
                         files = session.files.values.toList()
                     )
                 )
             }
 
-            // upload sequentially; each file reflects its true result
-            for (pf in session.files.values) {
-                val vf = pf.vaultFile ?: continue
-                val input = MediaFileHandler.getStream(vf)
-                pf.status = P2PFileStatus.SENDING
-                postProgress()
-
-                try {
-                    if (input != null) {
-                        val ok = peerClient.uploadFileWithProgress(
-                            ip = ip,
-                            port = port,
-                            expectedFingerprint = fingerprint,
-                            sessionId = session.sessionId.orEmpty(),
-                            fileId = pf.file.id,
-                            transmissionId = pf.transmissionId.orEmpty(),
-                            inputStream = input,
-                            fileSize = vf.size,
-                            fileName = vf.name,
-                        ) { written, _ ->
-                            pf.bytesTransferred = written.toInt()
-                            postProgress()
-                        }
-                        pf.status = if (ok) P2PFileStatus.FINISHED else P2PFileStatus.FAILED
-                    } else {
-                        pf.status = P2PFileStatus.FAILED
-                    }
-                } catch (e: Exception) {
-                    pf.status = P2PFileStatus.FAILED
-                    Timber.e(e, "Upload failed for ${pf.file.fileName}")
-                } finally {
-                    input?.close()
-                }
-                postProgress()
-            }
-
-            // session is done (partial or full)
             session.status = SessionStatus.FINISHED
+
+            // Final update after all uploads complete
             _uploadProgress.postValue(
                 UploadProgressState(
-                    title = session.title.orEmpty(),
+                    title = session.title ?: "",
                     percent = 100,
                     sessionStatus = session.status,
                     files = session.files.values.toList()
@@ -177,8 +188,6 @@ class FileTransferViewModel @Inject constructor(
             )
         }
     }
-
-
 
     private fun getVaultFilesFromState(): List<VaultFile> {
         return p2PSharedState.session?.files
