@@ -39,6 +39,8 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.Bot
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import java.io.File
+import java.util.Collections
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,7 +79,6 @@ class PeerToPeerViewModel @Inject constructor(
     private val _uploadProgress = SingleLiveEvent<UploadProgressState?>()
     val uploadProgress: SingleLiveEvent<UploadProgressState?> get() = _uploadProgress
 
-
     private val networkInfoManager = NetworkInfoManager(context)
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
 
@@ -87,13 +88,21 @@ class PeerToPeerViewModel @Inject constructor(
     private val _closeConnection = SingleLiveEvent<Boolean>()
     val closeConnection: SingleLiveEvent<Boolean> get() = _closeConnection
 
-    private var isVaultSaveDone = false
+    // ---------- Save-on-arrival state ----------
+    // Track files being saved/done by transmissionId to prevent duplicate saves.
+    private val savingOrDone: MutableSet<String> =
+        Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>())
+    private var totalFilesExpected = 0
+    private var savedCount = 0
+    private var targetFolderId: String? = null
+    // -------------------------------------------
 
     init {
         observePrepareUploadEvents()
         observeRegistrationEvents()
         observeRegistrationRequests()
         observeUploadProgress()
+        observeCloseConnectionEvents()
     }
 
     private fun observePrepareUploadEvents() {
@@ -117,7 +126,11 @@ class PeerToPeerViewModel @Inject constructor(
     private fun observeCloseConnectionEvents() {
         viewModelScope.launch {
             PeerEventManager.closeConnectionEvent.collect { success ->
-                _closeConnection.postValue(success)
+                if (success) {
+                    // Set CLOSED now; final emission will happen when all files are saved/failed
+                    p2PState.session?.status = SessionStatus.CLOSED
+                    emitFinalIfReady(SessionStatus.CLOSED)
+                }
             }
         }
     }
@@ -125,10 +138,8 @@ class PeerToPeerViewModel @Inject constructor(
     private fun observeRegistrationRequests() {
         viewModelScope.launch {
             PeerEventManager.registrationRequests.collect { (registrationId, payload) ->
-                if (registrationId.isEmpty()) return@collect // Ignore sentinel
-
+                if (registrationId.isEmpty()) return@collect
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
-
                 if (!p2PState.isUsingManualConnection) {
                     PeerEventManager.confirmRegistration(registrationId, true)
                     _registrationSuccess.postValue(true)
@@ -140,69 +151,247 @@ class PeerToPeerViewModel @Inject constructor(
 
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
-            val result = FingerprintFetcher.fetch(context,ip, port.toInt())
-            result.onSuccess { hash ->
-                Timber.d("hash ***** $hash")
-                p2PState.hash = hash
-                _getHashSuccess.postValue(hash)
-
-                // Notify the server after fetching the hash
-                runCatching {
-                    ServerPinger.notifyServer(ip, port.toInt())
-                }.onFailure {
-                    Timber.e(it, "Failed to ping server after fetching hash")
+            FingerprintFetcher.fetch(context, ip, port.toInt())
+                .onSuccess { hash ->
+                    p2PState.hash = hash
+                    _getHashSuccess.postValue(hash)
+                    runCatching { ServerPinger.notifyServer(ip, port.toInt()) }
+                        .onFailure { Timber.e(it, "Failed to ping server after fetching hash") }
                 }
-
-            }.onFailure { error ->
-                Timber.d("error ***** $error")
-                bottomSheetError.postValue(
-                    "Connection failed" to
-                            "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                )
-            }
+                .onFailure {
+                    bottomSheetError.postValue(
+                        "Connection failed" to
+                                "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                    )
+                }
         }
+    }
+
+    // -------------------- SAVE-ON-ARRIVAL CORE --------------------
+
+    private fun initCountersIfNeeded() {
+        val session = p2PState.session ?: return
+        if (totalFilesExpected == 0) {
+            totalFilesExpected = session.files.size
+            savedCount = session.files.values.count { it.status == P2PFileStatus.SAVED }
+            // Mark already terminal as “done” to avoid reprocessing
+            session.files.values.forEach { pf ->
+                val tx = pf.transmissionId
+                if (!tx.isNullOrBlank() &&
+                    (pf.status == P2PFileStatus.SAVED || pf.status == P2PFileStatus.FAILED)
+                ) {
+                    savingOrDone.add(tx)
+                }
+            }
+            postBottomSheetProgress()
+        }
+    }
+
+    private fun maybeFinalizeAfterSave() {
+        val session = p2PState.session ?: return
+        if (!allFilesSavedOrFailed()) return
+
+        val final = when (session.status) {
+            SessionStatus.CLOSED -> SessionStatus.CLOSED
+            SessionStatus.SENDING, SessionStatus.SAVING -> computeFinalStatus()
+            // If server already marked FINISHED/FINISHED_WITH_ERRORS we keep it
+            SessionStatus.FINISHED, SessionStatus.FINISHED_WITH_ERRORS -> session.status
+            else -> computeFinalStatus()
+        }
+
+        session.status = final
+
+        _uploadProgress.postValue(
+            UploadProgressState(
+                title = session.title.orEmpty(),
+                sessionStatus = final,     // <-- TERMINAL
+                files = session.files.values.toList(),
+                percent = 100
+            )
+        )
+    }
+
+
+
+    private fun obtainTargetFolderId(): String {
+        targetFolderId?.let { return it }
+        val title = (p2PState.session?.title ?: "").trim()
+        val finalTitle = if (title.isEmpty()) "Transfer" else title
+
+        val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
+        val root = vault.root.blockingGet()
+        val folder = vault.builder()
+            .setName(finalTitle)
+            .setType(VaultFile.Type.DIRECTORY)
+            .build(root.id)
+            .blockingGet()
+        targetFolderId = folder.id
+        return folder.id
+    }
+
+    private fun saveOneFile(pf: ProgressFile) {
+        val txId = pf.transmissionId ?: return
+        // Guard to avoid duplicate saves
+        if (!savingOrDone.add(txId)) return
+
+        // First save → switch session to SAVING (so UI doesn’t navigate early)
+        if (p2PState.session?.status == SessionStatus.SENDING) {
+            p2PState.session?.status = SessionStatus.SAVING
+            _uploadProgress.postValue(
+                UploadProgressState(
+                    title = p2PState.session?.title.orEmpty(),
+                    sessionStatus = SessionStatus.SAVING,
+                    files = p2PState.session?.files?.values?.toList().orEmpty(),
+                    percent = 100 // transport might have reached 100; keep UI bar full while saving
+                )
+            )
+        }
+
+        try {
+            val path = pf.path ?: return
+            val f = File(path)
+            if (!f.exists()) return
+
+            val folderId = obtainTargetFolderId()
+            val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
+
+            val vaultFile = try {
+                when {
+                    isImageFileType(pf.file.fileType) -> {
+                        val bytes = f.readBytes()
+                        if (pf.file.fileType.contains("png", true)) {
+                            MediaFileHandler.savePngImage(bytes)
+                        } else {
+                            MediaFileHandler.saveJpegPhoto(bytes, folderId).blockingGet()
+                        }
+                    }
+                    isVideoFileType(pf.file.fileType) -> {
+                        MediaFileHandler.saveMp4Video(f, folderId)
+                    }
+                    else -> {
+                        vault.builder(f.inputStream())
+                            .setName(f.name)
+                            .setMimeType(pf.file.fileType)
+                            .setType(VaultFile.Type.FILE)
+                            .build(folderId)
+                            .blockingGet()
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to save file ${pf.file.fileName}")
+                null
+            }
+
+            // Mark SAVED only after DB write succeeds
+            // NOTE: use transmissionId key; ensure your session map is keyed accordingly.
+            val txKey = pf.transmissionId
+            if (txKey != null) {
+                p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.SAVED
+            }
+            pf.status = P2PFileStatus.SAVED
+            pf.vaultFile = vaultFile
+            savedCount++
+            f.delete()
+        } catch (e: Exception) {
+            Timber.e(e, "Saving to vault failed for file ${pf.file.fileName}")
+            pf.status = P2PFileStatus.FAILED
+            // do not increment savedCount on failure
+        } finally {
+            postBottomSheetProgress()
+            maybeFinalizeAfterSave()
+        }
+    }
+
+    private fun postBottomSheetProgress() {
+        _bottomSheetProgress.postValue(
+            BottomSheetProgressState(
+                current = savedCount,
+                total = totalFilesExpected,
+                percent = if (totalFilesExpected > 0) (savedCount * 100 / totalFilesExpected) else 0
+            )
+        )
+    }
+
+    private fun sessionIsTerminal(sessionStatus: SessionStatus): Boolean =
+        sessionStatus == SessionStatus.FINISHED ||
+                sessionStatus == SessionStatus.FINISHED_WITH_ERRORS ||
+                sessionStatus == SessionStatus.CLOSED
+
+    private fun allFilesSavedOrFailed(): Boolean =
+        p2PState.session?.files?.values?.all {
+            it.status == P2PFileStatus.SAVED || it.status == P2PFileStatus.FAILED
+        } == true
+
+    private fun computeFinalStatus(): SessionStatus {
+        val files = p2PState.session?.files?.values.orEmpty()
+        val anyFailed = files.any { it.status == P2PFileStatus.FAILED }
+        return if (anyFailed) SessionStatus.FINISHED_WITH_ERRORS else SessionStatus.FINISHED
+    }
+
+    private fun emitFinalIfReady(triggerStatus: SessionStatus) {
+        val session = p2PState.session ?: return
+
+        // Only finish when:
+        // - session is terminal (by sender or by logic), AND
+        // - all files are saved/failed locally
+        if (!sessionIsTerminal(triggerStatus)) return
+        if (!allFilesSavedOrFailed()) return
+
+        val final = when (session.status) {
+            SessionStatus.CLOSED -> SessionStatus.CLOSED
+            else -> computeFinalStatus()
+        }
+        session.status = final
+
+        _uploadProgress.postValue(
+            UploadProgressState(
+                title = session.title.orEmpty(),
+                sessionStatus = final,
+                files = session.files.values.toList(),
+                percent = 100
+            )
+        )
     }
 
     private fun observeUploadProgress() {
         viewModelScope.launch {
             PeerEventManager.uploadProgressStateFlow.collect { state ->
-                val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
+                initCountersIfNeeded()
 
-                _uploadProgress.postValue(state) // existing state for other logic
+                // Forward raw transport progress (SENDING) from the server
+                _uploadProgress.postValue(state)
 
-                if (allFinished && !isVaultSaveDone) {
-                    isVaultSaveDone = true
-                    finalizeAndSaveReceivedFiles(p2PState.session?.title.orEmpty(), state.files)
+                // Save each FINISHED file exactly once (by transmissionId)
+                state.files.forEach { pf ->
+                    val txId = pf.transmissionId
+                    if (txId != null &&
+                        pf.status == P2PFileStatus.FINISHED &&
+                        !savingOrDone.contains(txId)
+                    ) {
+                        viewModelScope.launch(Dispatchers.IO) { saveOneFile(pf) }
+                    }
                 }
+
+                // If the sender is done/cancelled, finalize when all files are saved/failed
+                emitFinalIfReady(state.sessionStatus)
             }
         }
     }
 
-
-    fun startRegistration(
-        ip: String,
-        port: String,
-        hash: String,
-        pin: String
-    ) {
+    fun startRegistration(ip: String, port: String, hash: String, pin: String) {
         viewModelScope.launch {
             when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
-                    if (p2PState.session == null) {
-                        p2PState.session = P2PSharedState.createNewSession()
-                    }
+                    if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
                     p2PState.session?.sessionId = result.sessionId
-                    Timber.d("session id ***startRegistration ${p2PState.session?.sessionId}")
                     _registrationSuccess.postValue(true)
                 }
-
                 RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
                 RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
                 RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")
                 RegisterPeerResult.TooManyRequests -> bottomMessageError.postValue("Too many requests, try again later")
                 RegisterPeerResult.ServerError -> bottomMessageError.postValue("Server error, try again later")
                 RegisterPeerResult.RejectedByReceiver -> bottomMessageError.postValue("Receiver rejected the registration")
-
                 is RegisterPeerResult.Failure -> {
                     Timber.e(result.exception, "Connection failure")
                     bottomSheetError.postValue(
@@ -247,123 +436,20 @@ class PeerToPeerViewModel @Inject constructor(
         networkInfoManager.fetchCurrentNetworkInfo()
     }
 
-    private fun finalizeAndSaveReceivedFiles(
-        folderName: String,
-        progressFiles: List<ProgressFile>
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
-            val root = vault.root.blockingGet()
-
-            val folder = vault.builder()
-                .setName(folderName)
-                .setType(VaultFile.Type.DIRECTORY)
-                .build(root.id)
-                .blockingGet()
-
-            val totalFiles = progressFiles.size
-            var savedFiles = 0
-
-            progressFiles.forEach { progressFile ->
-                try {
-                    val path = progressFile.path ?: return@forEach
-                    val file = File(path)
-                    if (!file.exists()) return@forEach
-
-                    val vaultFile = try {
-                        when {
-                            isImageFileType(progressFile.file.fileType) -> {
-                                val imageBytes = file.readBytes()
-                                if (progressFile.file.fileType.contains("png", ignoreCase = true)) {
-                                    MediaFileHandler.savePngImage(imageBytes)
-                                } else {
-                                    MediaFileHandler.saveJpegPhoto(imageBytes, folder.id)
-                                        .blockingGet()
-                                }
-                            }
-
-                            isVideoFileType(progressFile.file.fileType) -> {
-                                MediaFileHandler.saveMp4Video(file, folder.id)
-                            }
-
-                            else -> {
-                                vault.builder(file.inputStream())
-                                    .setName(file.name)
-                                    .setMimeType(progressFile.file.fileType)
-                                    .setType(VaultFile.Type.FILE)
-                                    .build(folder.id)
-                                    .blockingGet()
-                            }
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e, "Failed to save file ${progressFile.file.fileName}")
-                        null
-                    }
-
-                    p2PState.session?.files?.get(progressFile.file.id)?.status = P2PFileStatus.SAVED
-                    progressFile.status = P2PFileStatus.SAVED
-                    progressFile.vaultFile = vaultFile
-                    savedFiles++
-                    file.delete()
-
-                    _bottomSheetProgress.postValue(
-                        BottomSheetProgressState(
-                            current = savedFiles,
-                            total = totalFiles,
-                            percent = ((savedFiles * 100) / totalFiles)
-                        )
-                    )
-
-                } catch (e: Exception) {
-                    Timber.e(e, "Saving to vault failed for file ${progressFile.file.fileName}")
-                    progressFile.status = P2PFileStatus.FAILED
-                }
-            }
-
-            p2PState.session?.status = SessionStatus.FINISHED
-
-            val updatedFiles = p2PState.session?.files?.values?.toList().orEmpty()
-
-            _bottomSheetProgress.postValue(
-                BottomSheetProgressState(
-                    current = totalFiles,
-                    total = totalFiles,
-                    percent = 100
-                )
-            )
-
-            _uploadProgress.postValue(
-                UploadProgressState(
-                    title = p2PState.session?.title ?: "",
-                    sessionStatus = SessionStatus.FINISHED,
-                    files = updatedFiles,
-                    percent = 100
-                )
-            )
-
-        }
-    }
-
     fun closePeerConnection() {
         viewModelScope.launch {
             val ip = p2PState.ip
             val port = p2PState.port
             val fingerprint = p2PState.hash
-
             val success = peerClient.closeConnection(
                 ip = ip,
                 port = port,
                 expectedFingerprint = fingerprint,
                 sessionId = p2PState.session?.sessionId ?: ""
             )
-            if (success) {
-                Timber.d("Connection closed successfully.")
-            } else {
-                Timber.e("Failed to close peer connection.")
-            }
+            if (!success) Timber.e("Failed to close peer connection.")
         }
     }
-
 
     override fun onCleared() {
         super.onCleared()

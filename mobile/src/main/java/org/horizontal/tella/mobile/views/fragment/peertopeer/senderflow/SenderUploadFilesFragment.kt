@@ -37,6 +37,7 @@ class SenderUploadFilesFragment :
                 getString(R.string.stop).uppercase(),
                 {},
                 {
+                    viewModel.closePeerConnection()
                     PeerToPeerFlags.cancelled = true
                     baseActivity.finish()
                 })

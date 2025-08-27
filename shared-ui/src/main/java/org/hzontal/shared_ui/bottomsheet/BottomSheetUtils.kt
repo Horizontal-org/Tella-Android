@@ -354,7 +354,7 @@ object BottomSheetUtils {
                     setupButton(buttonFourDeactivated, buttonFourLabel)
                     setupButton(buttonFiveDeactivated, buttonFiveLabel)
                     setupButton(buttonSixDeactivated, buttonSixLabel)
-                    unavailableConnexionText.text = unavailableConnexionLabel;
+                    unavailableConnexionText.text = unavailableConnexionLabel
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
                     // Set button click listeners using a helper method

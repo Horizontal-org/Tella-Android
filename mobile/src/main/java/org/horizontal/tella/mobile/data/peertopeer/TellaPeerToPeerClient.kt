@@ -43,7 +43,6 @@ class TellaPeerToPeerClient @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) {
 
-    // ---------------- Public API (unchanged) ----------------
 
     suspend fun registerPeerDevice(
         ip: String,
@@ -185,7 +184,7 @@ class TellaPeerToPeerClient @Inject constructor(
     suspend fun closeConnection(
         ip: String,
         port: String,
-        expectedFingerprint: String, // DER HEX
+        expectedFingerprint: String,
         sessionId: String
     ): Boolean = withContext(Dispatchers.IO) {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.CLOSE)

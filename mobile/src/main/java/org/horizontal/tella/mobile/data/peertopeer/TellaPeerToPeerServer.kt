@@ -57,6 +57,7 @@ class TellaPeerToPeerServer(
     private val peerToPeerManager: PeerToPeerManager,
     private val p2PSharedState: P2PSharedState
 ) : TellaServer {
+
     private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
 
@@ -67,15 +68,20 @@ class TellaPeerToPeerServer(
         val keyStore = KeyStore.getInstance("PKCS12").apply {
             load(null, null)
             setKeyEntry(
-                keyStoreConfig.alias, keyPair.private, keyStoreConfig.password, arrayOf(certificate)
+                keyStoreConfig.alias,
+                keyPair.private,
+                keyStoreConfig.password,
+                arrayOf(certificate)
             )
         }
 
         engine = embeddedServer(Netty, environment = applicationEngineEnvironment {
-            sslConnector(keyStore = keyStore,
+            sslConnector(
+                keyStore = keyStore,
                 keyAlias = keyStoreConfig.alias,
                 keyStorePassword = { keyStoreConfig.password },
-                privateKeyPassword = { keyStoreConfig.password }) {
+                privateKeyPassword = { keyStoreConfig.password }
+            ) {
                 this.host = ip
                 this.port = serverPort
             }
@@ -87,12 +93,12 @@ class TellaPeerToPeerServer(
                         isLenient = true
                     })
                 }
-                routing {
-                    // Root route to confirm the server is running
-                    get("/") {
-                        call.respondText("The server is running securely over HTTPS.")
-                    }
 
+                routing {
+                    // Sanity probe
+                    get("/") { call.respondText("The server is running securely over HTTPS.") }
+
+                    // Client presence hint (optional)
                     post(PeerApiRoutes.PING) {
                         CoroutineScope(Dispatchers.IO).launch {
                             peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
@@ -100,6 +106,7 @@ class TellaPeerToPeerServer(
                         call.respondText("ping", status = HttpStatusCode.OK)
                     }
 
+                    // 1) Register a session
                     post(PeerApiRoutes.REGISTER) {
                         val request = try {
                             call.receive<PeerRegisterPayload>()
@@ -131,19 +138,15 @@ class TellaPeerToPeerServer(
                         }
 
                         if (!accepted) {
-                            call.respond(
-                                HttpStatusCode.Forbidden, "Receiver rejected the registration"
-                            )
+                            call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
                             return@post
                         }
 
-                        launch {
-                            PeerEventManager.emitRegistrationSuccess()
-                        }
-
+                        launch { PeerEventManager.emitRegistrationSuccess() }
                         call.respond(HttpStatusCode.OK, session)
                     }
 
+                    // 2) Prepare upload → create receiving session, STATUS = SENDING
                     post(PeerApiRoutes.PREPARE_UPLOAD) {
                         val request = try {
                             call.receive<PrepareUploadRequest>()
@@ -163,38 +166,34 @@ class TellaPeerToPeerServer(
                         }
 
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
-                        if (accepted) {
-
-                            val session =
-                                P2PSession(title = request.title, sessionId = request.sessionId)
-
-                            val responseFiles = request.files.map { file ->
-                                val transmissionId = UUID.randomUUID().toString()
-                                val receivingFile = ProgressFile(
-                                    file = file, transmissionId = transmissionId
-                                )
-                                session.files[transmissionId] = receivingFile
-
-                                FileInfo(
-                                    id = file.id, transmissionId = transmissionId
-                                )
-                            }
-
-                            p2PSharedState.session = session
-
-                            val responsePayload = PeerPrepareUploadResponse(files = responseFiles)
-                            call.respond(HttpStatusCode.OK, responsePayload)
-                        } else {
+                        if (!accepted) {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
+                            return@post
                         }
+
+                        val session = P2PSession(
+                            title = request.title,
+                            sessionId = request.sessionId
+                        ).also { it.status = SessionStatus.SENDING }
+
+                        val responseFiles = request.files.map { file ->
+                            val transmissionId = UUID.randomUUID().toString()
+                            val receivingFile = ProgressFile(file = file, transmissionId = transmissionId)
+                            session.files[transmissionId] = receivingFile
+                            FileInfo(id = file.id, transmissionId = transmissionId)
+                        }
+
+                        p2PSharedState.session = session
+                        call.respond(HttpStatusCode.OK, PeerPrepareUploadResponse(files = responseFiles))
                     }
 
+                    // 3) Upload each file (transport-only; recipient will SAVE later)
                     put(PeerApiRoutes.UPLOAD) {
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
 
-                        Timber.d("session id from the server +$sessionId")
+                        Timber.d("UPLOAD: session=$sessionId, fileId=$fileId, tx=$transmissionId")
 
                         if (sessionId == null || fileId == null || transmissionId == null) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
@@ -213,6 +212,7 @@ class TellaPeerToPeerServer(
                             return@put
                         }
 
+                        // temp file for the recipient VM to persist into Vault later
                         val tmpFile = File.createTempFile(fileId, ".tmp")
                         val output = tmpFile.outputStream().buffered()
 
@@ -229,77 +229,73 @@ class TellaPeerToPeerServer(
                                 bytesRead += read
                                 progressFile.bytesTransferred = bytesRead.toInt()
 
-                                // Optional: update session progress percent
-                                val totalTransferred =
-                                    session.files.values.sumOf { it.bytesTransferred }
-                                val percent =
-                                    if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
+                                // Broadcast “transport” progress; keep status = SENDING
+                                val totalTransferred = session.files.values.sumOf { it.bytesTransferred }
+                                val percent = if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
 
-                                val state = UploadProgressState(
-                                    title = session.title ?: "",
-                                    percent = percent,
-                                    sessionStatus = session.status,
-                                    files = session.files.values.toList()
+                                PeerEventManager.onUploadProgressState(
+                                    UploadProgressState(
+                                        title = session.title.orEmpty(),
+                                        percent = percent,
+                                        sessionStatus = session.status,   // SENDING
+                                        files = session.files.values.toList()
+                                    )
                                 )
-                                PeerEventManager.onUploadProgressState(state)
                             }
 
-                            progressFile.status = P2PFileStatus.FINISHED
-                            progressFile.path = tmpFile.path
+                            progressFile.status = P2PFileStatus.FINISHED       // network finished
+                            progressFile.path = tmpFile.path                    // handoff path to recipient
 
-                            val finalState = UploadProgressState(
-                                title = session.title ?: "",
-                                percent = 100,
-                                sessionStatus = SessionStatus.FINISHED,
-                                files = session.files.values.toList()
+                            // Emit one last transport-progress tick (still SENDING)
+                            val totalTransferred2 = session.files.values.sumOf { it.bytesTransferred }
+                            val totalSize2 = session.files.values.sumOf { it.file.size }
+                            val percent2 = if (totalSize2 > 0) ((totalTransferred2 * 100) / totalSize2).toInt() else 0
+
+                            PeerEventManager.onUploadProgressState(
+                                UploadProgressState(
+                                    title = session.title.orEmpty(),
+                                    percent = percent2,
+                                    sessionStatus = session.status,   // still SENDING
+                                    files = session.files.values.toList()
+                                )
                             )
-
-                            PeerEventManager.onUploadProgressState(finalState)
 
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
 
-                            val failedState = UploadProgressState(
-                                title = session.title ?: "",
-                                percent = 0,
-                                sessionStatus = session.status,
-                                files = session.files.values.toList()
+                            PeerEventManager.onUploadProgressState(
+                                UploadProgressState(
+                                    title = session.title.orEmpty(),
+                                    percent = 0,
+                                    sessionStatus = session.status, // SENDING
+                                    files = session.files.values.toList()
+                                )
                             )
-                            PeerEventManager.onUploadProgressState(failedState)
 
-                            call.respond(
-                                HttpStatusCode.InternalServerError, "Upload failed: ${e.message}"
-                            )
+                            call.respond(HttpStatusCode.InternalServerError, "Upload failed: ${e.message}")
                         } finally {
                             output.close()
                         }
                     }
 
+                    // 4) Close session (transport finished/cancelled by sender)
                     post(PeerApiRoutes.CLOSE) {
                         val payload = try {
                             call.receive<Map<String, String>>()
                         } catch (e: Exception) {
-                            call.respond(
-                                HttpStatusCode.BadRequest, "Missing or invalid JSON payload"
-                            )
+                            call.respond(HttpStatusCode.BadRequest, "Missing or invalid JSON payload")
                             return@post
                         }
 
                         val sessionId = payload["sessionId"]
-
                         if (sessionId.isNullOrBlank()) {
                             call.respond(HttpStatusCode.BadRequest, "Missing session ID")
                             return@post
                         }
 
-                        val currentSession = serverSession
-                        if (currentSession == null) {
-                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                            return@post
-                        }
-
-                        if (currentSession.sessionId != sessionId) {
+                        val current = serverSession
+                        if (current == null || current.sessionId != sessionId) {
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
                             return@post
                         }
@@ -312,19 +308,14 @@ class TellaPeerToPeerServer(
                         try {
                             p2PSharedState.session?.status = SessionStatus.CLOSED
                             serverSession = null
-
-                            launch {
-                                PeerEventManager.emitCloseConnection()
-                            }
+                            launch { PeerEventManager.emitCloseConnection() }
                             call.respond(HttpStatusCode.OK, mapOf("success" to true))
                         } catch (e: Exception) {
                             Timber.e(e, "Error while closing session")
                             call.respond(HttpStatusCode.InternalServerError, "Server error")
                         }
                     }
-
                 }
-
             }
         }).start(wait = false)
     }
@@ -333,7 +324,5 @@ class TellaPeerToPeerServer(
         engine?.stop(1000, 5000)
     }
 
-    private fun isValidPin(pin: String): Boolean {
-        return pin.length == 6
-    }
+    private fun isValidPin(pin: String) = pin.length == 6
 }

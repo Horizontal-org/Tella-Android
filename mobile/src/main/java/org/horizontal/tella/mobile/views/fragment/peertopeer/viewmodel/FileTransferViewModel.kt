@@ -198,6 +198,21 @@ class FileTransferViewModel @Inject constructor(
         p2PSharedState.clear()
     }
 
+    fun closePeerConnection() {
+        viewModelScope.launch {
+            val ip = p2PSharedState.ip
+            val port = p2PSharedState.port
+            val fingerprint = p2PSharedState.hash
+            val success = peerClient.closeConnection(
+                ip = ip,
+                port = port,
+                expectedFingerprint = fingerprint,
+                sessionId = p2PSharedState.session?.sessionId ?: ""
+            )
+            if (!success) Timber.e("Failed to close peer connection.")
+        }
+    }
+
 }
 
 
