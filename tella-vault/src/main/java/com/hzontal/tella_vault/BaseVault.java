@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.WorkerThread;
 
 import com.hzontal.tella_vault.database.VaultDataSource;
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
@@ -202,7 +203,8 @@ public abstract class BaseVault {
         return baseCreate(builder, VaultDataSource.ROOT_UID);
     }
 
-    protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder, String parentId) throws VaultException {
+    protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder, String parentId)
+            throws VaultException, DuplicateVaultFileException {
         try {
             VaultFile vaultFile = new VaultFile(builder);
 
@@ -212,7 +214,7 @@ public abstract class BaseVault {
                 byte[] key = mainKeyHolder.get().getKey().getEncoded();
 
                 DigestOutputStream os = new DigestOutputStream(
-                        CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()), // todo: change this
+                        CipherStreamUtils.getEncryptedOutputStream(key, fos, file.getName()),
                         MessageDigest.getInstance("SHA-256"));
 
                 IOUtils.copy(builder.data, os);
@@ -223,11 +225,19 @@ public abstract class BaseVault {
                 vaultFile.size = getSize(file);
             }
 
+            // Check for duplicate using hash
+            VaultFile existing = database.getByHash(vaultFile.hash);
+            if (existing != null) {
+                throw new DuplicateVaultFileException(existing);
+            }
+
             return database.create(parentId, vaultFile);
+
         } catch (IOException | NoSuchAlgorithmException | LifecycleMainKey.MainKeyUnavailableException e) {
             throw new VaultException(e);
         }
     }
+
 
     protected Boolean baseMove(VaultFile vaultFile, String newParent) throws VaultException {
         return database.move(vaultFile, newParent);

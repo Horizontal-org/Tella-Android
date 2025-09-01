@@ -156,14 +156,29 @@ class GeneralSettings :
     private fun setLanguageSetting() {
         val language = LocaleManager.getInstance().languageSetting
         if (language != null) {
-            val locale = Locale(language)
-            binding.languageSetting.text = StringUtils.capitalize(locale.displayName, locale)
+            val locale = if (language.contains("-")) {
+                val parts = language.split("-")
+                Locale(parts[0], parts[1]) // e.g., "sn-ZW" → Locale("sn", "ZW")
+            } else {
+                Locale(language)
+            }
+
+            val displayLang = locale.getDisplayLanguage(locale)
+            val displayCountry = locale.getDisplayCountry(locale)
+
+            val label = if (displayCountry.isNotEmpty()) {
+                StringUtils.capitalize("$displayLang ($displayCountry)", locale)
+            } else {
+                StringUtils.capitalize(displayLang, locale)
+            }
+
+            binding.languageSetting.text = label
         } else {
             binding.languageSetting.setText(R.string.settings_lang_select_default)
         }
     }
 
-    private fun startCleanInsightActivity() {
+        private fun startCleanInsightActivity() {
         val intent = Intent(context, AnalyticsIntroActivity::class.java)
         startActivityForResult(intent, AnalyticsIntroActivity.CLEAN_INSIGHTS_REQUEST_CODE)
     }

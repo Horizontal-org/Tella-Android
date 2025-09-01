@@ -291,9 +291,9 @@ kích hoạt chế độ</string>
   <string name="settings.select_security">Bảo mật</string>
   <string name="settings.select_lock_timeout">Thời gian khóa</string>
   <string name="settings.sec_camera.mute_switch">Chế độ im lặng của máy ảnh</string>
-  <string name="settings.sec_camera.mute_expl">Tắt âm thanh máy ảnh để ít thu hút chú ý khi chụp ảnh.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Xóa nhanh</string>
-  <string name="settings.sec_quick.delete_expl">Hiển thị nút trượt trên màn hình chính để nhanh chóng thoát khỏi Tella trong các tình huống khẩn cấp.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Máy chủ</string>
   <string name="settings.servers.add_server.expl">Kết nối với máy chủ để thu thập và gửi dữ liệu đến tổ chức của bạn</string>
   <string name="settings.servers_auto.upload_action">Tự động tải lên máy chủ</string>
@@ -993,4 +993,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

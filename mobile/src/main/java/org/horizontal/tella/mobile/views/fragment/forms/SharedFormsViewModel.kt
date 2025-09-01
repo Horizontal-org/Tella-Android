@@ -98,8 +98,7 @@ class SharedFormsViewModel @Inject constructor(
     }
 
     private fun createFormController(
-        instance: CollectFormInstance,
-        formDef: FormDef?
+        instance: CollectFormInstance, formDef: FormDef?
     ): FormController {
         requireNotNull(formDef)
         val fem = FormEntryModel(formDef)
@@ -118,23 +117,17 @@ class SharedFormsViewModel @Inject constructor(
     }
 
     fun getBlankFormDef(form: CollectForm?) {
-        keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap { dataSource: DataSource ->
+        keyDataSource.dataSource.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMap { dataSource: DataSource ->
                 dataSource.getBlankFormDef(form).toObservable()
-            }
-            ?.subscribe(
-                { formDef: FormDef? ->
-                    if (form != null && formDef != null) {
-                        onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
-                    }
-                },
-                { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                    onFormDefError.postValue(throwable)
+            }?.subscribe({ formDef: FormDef? ->
+                if (form != null && formDef != null) {
+                    onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
                 }
-            )?.let {
+            }, { throwable: Throwable? ->
+                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                onFormDefError.postValue(throwable)
+            })?.let {
                 disposables.add(
                     it
                 )
@@ -142,41 +135,29 @@ class SharedFormsViewModel @Inject constructor(
     }
 
     fun getInstanceFormDef(instanceId: Long) {
-        disposables.add(
-            keyDataSource.dataSource
-                .flatMapSingle { dataSource: DataSource ->
-                    dataSource.getInstance(instanceId)
-                }
-                .flatMap { instance: CollectFormInstance ->
-                    MyApplication.keyRxVault.rxVault
-                        .firstOrError()
-                        .flatMapObservable { rxVault ->
-                            rxVault[instance.widgetMediaFilesIds]
-                                .toObservable()
-                                .map { vaultFiles ->
-                                    instance to vaultFiles
-                                }
-                        }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ (instance, vaultFiles) ->
-                    // Process vault files
-                    vaultFiles.forEach { file ->
-                        instance.setWidgetMediaFile(
-                            file.name,
-                            FormMediaFile.fromMediaFile(file)
-                        )
+        disposables.add(keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
+                dataSource.getInstance(instanceId)
+            }.flatMap { instance: CollectFormInstance ->
+                MyApplication.keyRxVault.rxVault.firstOrError().flatMapObservable { rxVault ->
+                        rxVault[instance.widgetMediaFilesIds].toObservable().map { vaultFiles ->
+                                instance to vaultFiles
+                            }
                     }
-                    // Post success value
-                    onInstanceFormDefSuccess.postValue(maybeCloneInstance(instance))
-                }, { throwable ->
-                    // Error handling
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
-                    onFormDefError.postValue(throwable)
+            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ (instance, vaultFiles) ->
+                // Process vault files
+                vaultFiles.forEach { file ->
+                    instance.setWidgetMediaFile(
+                        file.name, FormMediaFile.fromMediaFile(file)
+                    )
                 }
-                )
-        )
+                // Post success value
+                onInstanceFormDefSuccess.postValue(maybeCloneInstance(instance))
+            }, { throwable ->
+                // Error handling
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+                onFormDefError.postValue(throwable)
+            }))
     }
 
     private fun maybeCloneInstance(instance: CollectFormInstance): CollectFormInstance {
@@ -194,78 +175,59 @@ class SharedFormsViewModel @Inject constructor(
     }
 
     fun toggleFavorite(collectForm: CollectForm?) {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { dataSource: DataSource ->
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMapSingle { dataSource: DataSource ->
                 dataSource.toggleFavorite(collectForm)
-            }
-            .subscribe(
-                { updatedForm: CollectForm? ->
-                    updatedForm?.let { form ->
-                        onToggleFavoriteSuccess.postValue(form) // Notify UI
-                    }
+            }.subscribe({ updatedForm: CollectForm? ->
+                updatedForm?.let { form ->
+                    onToggleFavoriteSuccess.postValue(form) // Notify UI
                 }
-            ) { throwable: Throwable ->
+            }) { throwable: Throwable ->
                 FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun deleteFormInstance(id: Long) {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapCompletable { dataSource: DataSource ->
                 dataSource.deleteInstance(
                     id
                 )
-            }
-            .subscribe(
-                { onFormInstanceDeleteSuccess.postValue(true) }
-            ) { throwable: Throwable ->
+            }.subscribe({ onFormInstanceDeleteSuccess.postValue(true) }) { throwable: Throwable ->
                 FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun countCollectServers() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMapSingle { obj: DataSource -> obj.countCollectServers() }
-            .subscribe(
-                { num: Long ->
-                    onCountCollectServersEnded.postValue(
-                        num
-                    )
-                }
-            ) { throwable: Throwable ->
+            .flatMapSingle { obj: DataSource -> obj.countCollectServers() }.subscribe({ num: Long ->
+                onCountCollectServersEnded.postValue(
+                    num
+                )
+            }) { throwable: Throwable ->
                 FirebaseCrashlytics.getInstance().recordException(throwable)
                 onError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun refreshBlankForms() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { showBlankFormRefreshLoading.postValue(true) }
             .flatMap { dataSource: DataSource ->
                 dataSource.listCollectServers().toObservable()
-            }
-            .flatMap { servers: List<CollectServer> ->
+            }.flatMap { servers: List<CollectServer> ->
                 if (servers.isEmpty()) {
                     Single.just(ListFormResult()).toObservable()
                 }
                 if (!MyApplication.isConnectedToInternet(mApplication.baseContext)) {
                     throw NoConnectivityException()
                 }
-                val singles: MutableList<Single<ListFormResult>> =
-                    ArrayList()
+                val singles: MutableList<Single<ListFormResult>> = ArrayList()
                 for (server in servers) {
                     singles.add(odkRepository.formList(server))
                 }
@@ -275,34 +237,28 @@ class SharedFormsViewModel @Inject constructor(
                     val allResults = ListFormResult()
                     for (obj in objects) {
                         if (obj is ListFormResult) {
-                            val forms =
-                                obj.forms
-                            val errors =
-                                obj.errors
+                            val forms = obj.forms
+                            val errors = obj.errors
                             allResults.forms.addAll(forms)
                             allResults.errors.addAll(errors)
                         }
                     }
                     allResults
                 }.toObservable()
-            }
-            .flatMap { listFormResult ->
+            }.flatMap { listFormResult ->
                 keyDataSource.dataSource.flatMap { dataSource: DataSource ->
                     dataSource.updateBlankForms(
                         listFormResult
                     ).toObservable()
                 }
-            }
-            .doFinally { showBlankFormRefreshLoading.postValue(false) }
-            .subscribe(
-                { listFormResult: ListFormResult ->
-                    // log errors if any in result..
-                    for (error in listFormResult.errors) {
-                        FirebaseCrashlytics.getInstance().recordException(error.exception)
-                    }
-                    onBlankFormsListResult.postValue(listFormResult)
+            }.doFinally { showBlankFormRefreshLoading.postValue(false) }
+            .subscribe({ listFormResult: ListFormResult ->
+                // log errors if any in result..
+                for (error in listFormResult.errors) {
+                    FirebaseCrashlytics.getInstance().recordException(error.exception)
                 }
-            ) { throwable: Throwable? ->
+                onBlankFormsListResult.postValue(listFormResult)
+            }) { throwable: Throwable? ->
                 if (throwable is NoConnectivityException) {
                     onNoConnectionAvailable.postValue(true)
                 } else {
@@ -312,55 +268,42 @@ class SharedFormsViewModel @Inject constructor(
                     )
                     onError.postValue(throwable)
                 }
-            }
-        )
+            })
     }
 
     fun listBlankForms() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMap { dataSource: DataSource ->
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).flatMap { dataSource: DataSource ->
                 dataSource.listBlankForms().toObservable()
-            }
-            .subscribe(
-                { forms: List<CollectForm>? ->
-                    onBlankFormsListResult.postValue(
-                        ListFormResult(forms)
-                    )
-                }
-            ) { throwable: Throwable? ->
+            }.subscribe({ forms: List<CollectForm>? ->
+                onBlankFormsListResult.postValue(
+                    ListFormResult(forms)
+                )
+            }) { throwable: Throwable? ->
                 onError.postValue(
                     throwable
                 )
-            }
-        )
+            })
     }
 
     fun removeBlankFormDef(form: CollectForm?) {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapCompletable { dataSource: DataSource ->
                 dataSource.removeBlankFormDef(
                     form
                 )
-            }
-            .subscribe(
-                { onBlankFormDefRemoved.postValue(true) }
-            ) { throwable: Throwable? ->
+            }.subscribe({ onBlankFormDefRemoved.postValue(true) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
                 onError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun downloadBlankFormDef(form: CollectForm) {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { onDownloadBlankFormDefStart.postValue(true) }
             .flatMap { dataSource: DataSource ->
@@ -369,37 +312,30 @@ class SharedFormsViewModel @Inject constructor(
                 ).toObservable()
             }.flatMap { server: CollectServer? ->
                 odkRepository.getFormDef(
-                    server,
-                    form
+                    server, form
                 ).toObservable()
             }.flatMap { formDef: FormDef? ->
                 keyDataSource.dataSource.flatMap { dataSource: DataSource ->
                     dataSource.updateBlankFormDef(
-                        form,
-                        formDef
+                        form, formDef
                     ).toObservable()
                 }
-            }
-            .doFinally { onDownloadBlankFormDefStart.postValue(false) }
-            .subscribe(
-                {
-                    onDownloadBlankFormDefSuccess.postValue(
-                        form
-                    )
-                }
-            ) { throwable: Throwable? ->
+            }.subscribe({
+                onDownloadBlankFormDefStart.postValue(false)
+                onDownloadBlankFormDefSuccess.postValue(
+                    form
+                )
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
                 onFormDefError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun updateBlankFormDef(form: CollectForm) {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { onUpdateBlankFormDefStart.postValue(true) }
             .flatMap { dataSource: DataSource ->
@@ -408,90 +344,68 @@ class SharedFormsViewModel @Inject constructor(
                 ).toObservable()
             }.flatMap { server: CollectServer? ->
                 odkRepository.getFormDef(
-                    server,
-                    form
+                    server, form
                 ).toObservable()
             }.flatMap { formDef: FormDef? ->
                 keyDataSource.dataSource.flatMap { dataSource: DataSource ->
                     dataSource.updateBlankCollectFormDef(
-                        form,
-                        formDef
+                        form, formDef
                     ).toObservable()
                 }
-            }
-            .doFinally { onUpdateBlankFormDefStart.postValue(false) }
-            .subscribe(
-                { formDef: FormDef? ->
-                    onUpdateBlankFormDefSuccess.postValue(
-                        Pair(
-                            form,
-                            formDef
-                        )
+            }.doFinally { onUpdateBlankFormDefStart.postValue(false) }
+            .subscribe({ formDef: FormDef? ->
+                onUpdateBlankFormDefSuccess.postValue(
+                    Pair(
+                        form, formDef
                     )
-                }
-            ) { throwable: Throwable? ->
+                )
+            }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun listDraftFormInstances() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.listDraftForms() }
-            .subscribe(
-                { forms: List<CollectFormInstance> ->
-                    onDraftFormInstanceListSuccess.postValue(forms)
-                },
-                { throwable: Throwable? ->
-                    onFormInstanceListError.postValue(
-                        throwable!!
-                    )
-                }
-            )
-        )
+            .subscribe({ forms: List<CollectFormInstance> ->
+                onDraftFormInstanceListSuccess.postValue(forms)
+            }, { throwable: Throwable? ->
+                onFormInstanceListError.postValue(
+                    throwable!!
+                )
+            }))
     }
 
     fun listSubmitFormInstances() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.listSentForms() }
-            .subscribe(
-                { forms: List<CollectFormInstance> ->
-                    onSubmittedFormInstanceListSuccess.postValue(
-                        forms
-                    )
-                },
-                { throwable: Throwable? ->
-                    onFormInstanceListError.postValue(
-                        throwable
-                    )
-                }
-            )
-        )
+            .subscribe({ forms: List<CollectFormInstance> ->
+                onSubmittedFormInstanceListSuccess.postValue(
+                    forms
+                )
+            }, { throwable: Throwable? ->
+                onFormInstanceListError.postValue(
+                    throwable
+                )
+            }))
     }
 
     fun listOutboxFormInstances() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapSingle { obj: DataSource -> obj.listPendingForms() }
-            .subscribe(
-                { forms: List<CollectFormInstance> ->
-                    onOutboxFormInstanceListSuccess.postValue(
-                        forms
-                    )
-                },
-                { throwable: Throwable? ->
-                    onFormInstanceListError.postValue(
-                        throwable
-                    )
-                }
-            )
-        )
+            .subscribe({ forms: List<CollectFormInstance> ->
+                onOutboxFormInstanceListSuccess.postValue(
+                    forms
+                )
+            }, { throwable: Throwable? ->
+                onFormInstanceListError.postValue(
+                    throwable
+                )
+            }))
     }
 
     fun userCancel() {
@@ -500,51 +414,39 @@ class SharedFormsViewModel @Inject constructor(
     }
 
     fun deleteCachedForms() {
-        disposables.add(keyDataSource.dataSource
-            .subscribeOn(Schedulers.io())
+        disposables.add(keyDataSource.dataSource.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .flatMapCompletable { dataSource: DataSource ->
                 dataSource.removeCachedForms()
-            }
-            .subscribe(
-                { onFormCacheCleared.postValue(true) }
-            ) { throwable: Throwable? ->
+            }.subscribe({ onFormCacheCleared.postValue(true) }) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
                 onError.postValue(throwable)
-            }
-        )
+            })
     }
 
     fun getFormInstance(instanceId: Long) {
-        disposables.add(
-            keyDataSource.dataSource
-                .flatMapSingle { dataSource: DataSource ->
-                    dataSource.getInstance(instanceId)
-                }
-                .flatMap { instance: CollectFormInstance ->
-                    // Convert the Single to Observable
-                    MyApplication.keyRxVault.rxVault
-                        .firstOrError()
-                        .flatMapObservable { rxVault ->  // Use flatMapObservable instead
-                            rxVault[instance.widgetMediaFilesIds]
-                                .toObservable()  // Convert List to Observable
-                                .map { vaultFiles ->
-                                    instance to vaultFiles
-                                }
-                        }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ (instance, vaultFiles) ->
-                    instance.setCollectInstanceAttachments(vaultFiles)
-                    _collectFormInstance.postValue(instance)
-                }, { throwable ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
-                    onError.postValue(throwable)
-                })
+        disposables.add(keyDataSource.dataSource.flatMapSingle { dataSource: DataSource ->
+                dataSource.getInstance(instanceId)
+            }.flatMap { instance: CollectFormInstance ->
+                // Convert the Single to Observable
+                MyApplication.keyRxVault.rxVault.firstOrError()
+                    .flatMapObservable { rxVault ->  // Use flatMapObservable instead
+                        rxVault[instance.widgetMediaFilesIds].toObservable()  // Convert List to Observable
+                            .map { vaultFiles ->
+                                instance to vaultFiles
+                            }
+                    }
+            }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ (instance, vaultFiles) ->
+                instance.setCollectInstanceAttachments(vaultFiles)
+                _collectFormInstance.postValue(instance)
+            }, { throwable ->
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+                onError.postValue(throwable)
+            })
         )
     }
 }

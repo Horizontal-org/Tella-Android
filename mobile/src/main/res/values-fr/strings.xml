@@ -292,7 +292,7 @@
   <string name="settings.sec_camera.mute_switch">Mode silencieux de l’appareil photo</string>
   <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Suppression rapide</string>
-  <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Serveurs</string>
   <string name="settings.servers.add_server.expl">Connectez-vous à des serveurs pour collecter et envoyer des données à votre organisation</string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -997,4 +997,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

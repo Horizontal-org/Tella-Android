@@ -87,6 +87,8 @@ import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
 import org.hzontal.shared_ui.pinview.ResourceUtils.getColor
 import org.hzontal.shared_ui.utils.DialogUtils
+import timber.log.Timber
+import java.io.FileNotFoundException
 
 
 @AndroidEntryPoint
@@ -696,13 +698,29 @@ class AttachmentsFragment :
             viewModel.mediaExported.observe(this, ::onMediaExported)
             viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
             viewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+            viewModel.importError.observe(this, ::onImportError)
         }
+    }
+
+    private fun onImportError(error: Throwable) {
+        val messageResId = when (error) {
+            is FileNotFoundException -> R.string.error_file_not_found
+            else -> R.string.gallery_toast_fail_importing_file
+        }
+        DialogUtils.showBottomMessage(
+            baseActivity,
+            getString(messageResId),
+            true
+        )
+        Timber.d(error, javaClass.name)
     }
 
     private fun onRenameConflictError(isConflict: Boolean) {
         if (isConflict) {
-            showToast(getString(R.string.file_name_taken))
-        }
+            DialogUtils.showBottomMessage(
+                baseActivity, getString(R.string.file_name_taken), true
+            )
+            }
     }
 
     private fun onGetFilesSuccess(files: List<VaultFile?>) {

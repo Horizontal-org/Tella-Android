@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.Observable
@@ -50,6 +51,9 @@ class QuestionAttachmentModel @Inject constructor(
 
     private val _onImportError = SingleLiveEvent<Throwable?>()
     val onImportError: LiveData<Throwable?> get() = _onImportError
+
+    private val _duplicateNameError = MutableLiveData<Boolean>()
+    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
 
     fun getFiles(
         filter: IMediaFileRecordRepository.Filter?,

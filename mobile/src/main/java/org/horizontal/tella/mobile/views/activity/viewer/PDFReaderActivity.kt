@@ -96,6 +96,7 @@ class PDFReaderActivity : BaseLockActivity() {
                     mediaFileDeletedConfirmation.showConfirmDelete
                 )
             }
+
         }
     }
 

@@ -73,6 +73,6 @@ interface IUwaziApi {
         @Header(COOKIE) cookies: List<String>,
         @Header(X_REQUESTED_WITH) requested: String = "XMLHttpRequest",
         @Header(BYPASS_CAPTCHA_HEADER) bypassCaptcha: Boolean = true
-    ): Single<UwaziEntityRow>
+    ):  Single<Response<Void>>
 }
 

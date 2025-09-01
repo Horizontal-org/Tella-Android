@@ -291,9 +291,9 @@ borrado rápido</string>
   <string name="settings.select_security">Seguridad</string>
   <string name="settings.select_lock_timeout">Tiempo límite para el bloqueo</string>
   <string name="settings.sec_camera.mute_switch">Modo silencioso de la cámara</string>
-  <string name="settings.sec_camera.mute_expl">Apaga el sonido del obturador de la cámara para llamar menos la atención al tomar fotos.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Borrado rápido</string>
-  <string name="settings.sec_quick.delete_expl">Muestra un botón deslizante en la pantalla de inicio para salir rápidamente de Tella en situaciones de emergencia.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servidores</string>
   <string name="settings.servers.add_server.expl">Conéctate a servidores para recopilar y enviar datos a tu organización</string>
   <string name="settings.servers_auto.upload_action">Carga automática al servidor</string>
@@ -531,12 +531,12 @@ Pulsa sobre una entidad para seguir trabajando en ella.</string>
     <item quantity="other">%d months ago</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">A week ago</item>
-    <item quantity="other">%d weeks ago</item>
+    <item quantity="one">Hace una semana</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
-    <item quantity="one">One day ago</item>
-    <item quantity="other">%d days ago</item>
+    <item quantity="one">Hace un dia</item>
+    <item quantity="other"></item>
   </plurals>
   <plurals name="Util_ellapsedTime_Hours">
     <item quantity="one">An hour ago</item>
@@ -859,11 +859,11 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
   <string name="back">VOLVER</string>
   <string name="encrypting">Cifrando </string>
   <string name="Sensitive_Chnage_Title">⚠️ Cambios sensibles en la próxima versión</string>
-  <string name="Sensitive_Chnage_Description">The next version of Tella (to be released on 15 July 2024) will include major technical improvements. These changes carry a small risk that some files are lost when updating to the new version.
+  <string name="Sensitive_Chnage_Description">La próxima versión de Tella (que se lanzará el 15 de julio de 2024) incluirá importantes mejoras técnicas. Estos cambios conllevan un pequeño riesgo de pérdida de archivos al actualizar a la nueva versión.
 
- If you store sensitive files in Tella, we advise you to copy them to a safe place outside of Tella before the update.
+Si almacena archivos confidenciales en Tella, le recomendamos copiarlos a un lugar seguro fuera de Tella antes de la actualización.
 
- Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
+Pulse \"Más información\" a continuación para obtener más información sobre los próximos cambios y obtener instrucciones sobre cómo exportar todos los archivos de Tella.</string>
   <string name="Learn_More">SABER MÁS</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
@@ -927,7 +927,7 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
   <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
   <string name="settings_add.server.selection_dialog.title">¿A qué tipo de servidor deseas conectarte?</string>
   <string name="unavailable_connections">Conexiones no disponibles</string>
-  <string name="unavailable_connections_desc">Para las siguientes categorías, solo se puede habilitar una conexión a la vez. Para agregar una nueva conexión, borra la actual.</string>
+  <string name="unavailable_connections_desc">Para las siguientes categorías, solo se puede habilitar una conexión a la vez. Para agregar una nueva conexión, borra la actual accediendo a Configuración - Conexiones.</string>
   <string name="no_permission_to_folder_google_drive">No tienes permisos para conectarte a esta carpeta.</string>
   <string name="settings.servers.title_server.settings2">Conexiones</string>
   <string name="settings.servers.add_server.expl2">Si trabajas con una organización, conéctate a su servidor para enviar archivos y datos. Tu organización debería proporcionarte los detalles del servidor.</string>
@@ -937,7 +937,9 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
   <string name="Drafts_Header_Message">Estos son reportes en los que estás trabajando.</string>
   <string name="Outboxes_Header_Message">Estos reportes están listos para ser enviados</string>
   <string name="Submitted_Header_Message">Estos son reportes que has enviado exitosamente.</string>
-  <string name="Connections_description">Aprende más sobre las conexiones disponibles aquí. Si trabajas con una organización, puedes preguntarles cuál conexión usar.</string>
+  <string name="Connections_description">Aprende más sobre las conexiones disponibles aquí. 
+Si trabajas con una organización, puedes preguntarles 
+cuál conexión usar.</string>
   <string name="Connections_description_selection">Aprende más sobre las conexiones disponibles aquí</string>
   <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="NextCloud">Nextcloud</string>
@@ -986,5 +988,6 @@ Este feedback es anónimo, así que asegúrate de incluir tu información de con
   <string name="delete_report">¿Borrar reporte?</string>
   <string name="report_submitted_msg">El reporte se envió correctamente.</string>
   <string name="Collect_MediaWidget_Attach_File">Adjuntar archivo</string>
-  <string name="form_successfully_submitted">%1$s eviado correctamente</string>
+  <string name="form_successfully_submitted">%1$s enviado correctamente</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

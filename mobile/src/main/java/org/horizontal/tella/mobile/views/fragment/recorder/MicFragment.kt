@@ -200,7 +200,9 @@ class MicFragment : MetadataBaseLockFragment(),
             if (isUnique) {
                 recordingName.text = currentRecordName
             } else {
-                showToast(getString(R.string.file_name_taken))
+                DialogUtils.showBottomMessage(
+                    metadataActivity, getString(R.string.file_name_taken), true
+                )
             }
         }
     }

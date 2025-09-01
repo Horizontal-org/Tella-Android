@@ -43,6 +43,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -255,6 +256,10 @@ public class MediaFileHandler {
             ByteArrayOutputStream imageJpegStream = new ByteArrayOutputStream();
             ByteArrayOutputStream thumbJpegStream = new ByteArrayOutputStream();
 
+            DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+            if (doc == null || !doc.exists()) {
+                throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
+            }
             try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
                 Bitmap bitmap = modifyOrientation(BitmapFactory.decodeStream(inputStream), inputStream);
                 Bitmap thumb = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth() / 10, bitmap.getHeight() / 10);
@@ -282,7 +287,6 @@ public class MediaFileHandler {
                     .blockingGet();
         });
     }
-
 
     public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
         // create thumb
@@ -378,14 +382,17 @@ public class MediaFileHandler {
     public static Single<VaultFile> importVideoUri(Context context, Uri uri, String parentID) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         String mimeType = context.getContentResolver().getType(uri);
+
+        DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+        if (doc == null || !doc.exists()) {
+            throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
+        }
+
         try {
             retriever.setDataSource(context, uri);
 
-            // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             long duration = Long.parseLong(time);
-
-            // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
             InputStream is = context.getContentResolver().openInputStream(uri);
@@ -403,39 +410,38 @@ public class MediaFileHandler {
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
-
             throw e;
         } finally {
             try {
                 retriever.release();
-            } catch (Exception ignore) {
-            }
+            } catch (Exception ignore) {}
         }
     }
+
 
     public static Single<VaultFile> importOthersUri(Context context, Uri uri, String parentId) throws Exception {
         String mimeType = context.getContentResolver().getType(uri);
 
+        DocumentFile doc = DocumentFile.fromSingleUri(context, uri);
+        if (doc == null || !doc.exists()) {
+            throw new FileNotFoundException(context.getString(R.string.error_file_not_found));
+        }
+
         try {
-
             InputStream is = context.getContentResolver().openInputStream(uri);
-
-            assert DocumentFile.fromSingleUri(context, uri) != null;
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
             return rxVault
                     .builder(is)
                     .setMimeType(mimeType)
                     .setAnonymous(true)
-                    .setName(DocumentFile.fromSingleUri(context, uri).getName())
+                    .setName(doc.getName())
                     .setType(VaultFile.Type.FILE)
                     .build(parentId)
                     .subscribeOn(Schedulers.io());
-
         } catch (Exception e) {
             FirebaseCrashlytics.getInstance().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
-
             throw e;
         }
     }

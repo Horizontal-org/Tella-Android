@@ -462,7 +462,8 @@ abstract class BaseReportsEntryFragment :
                 isValidFile(file)
             }.also {
                 if (it.size != vaultFileList.size) {
-                    showToast(getString(R.string.nextcloud_file_size_limit))
+                    DialogUtils.showBottomMessage(
+                        baseActivity, getString(R.string.nextcloud_file_size_limit), true)
                 }
             }
         } else {

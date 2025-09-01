@@ -144,7 +144,9 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                 })
     }
 
-    private fun submitWhiteListedEntity(server: UWaziUploadServer, entity: UwaziEntityInstance) {
+    private fun submitWhiteListedEntity(
+        server: UWaziUploadServer, entity: UwaziEntityInstance
+    ) {
         disposables.add(
             repository.submitWhiteListedEntity(
                 server = server,
@@ -162,23 +164,26 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { progress.postValue(EntityStatus.SUBMISSION_ERROR) }
-                .flatMap {
-                    entity.status = EntityStatus.SUBMITTED
-                    entity.formPartStatus = FormMediaFileStatus.SUBMITTED
-                    keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
+                .doOnSuccess { response ->
+                    if (response.isSuccessful) {
+                        // Update local entity as submitted
+                        entity.status = EntityStatus.SUBMITTED
+                        entity.formPartStatus = FormMediaFileStatus.SUBMITTED
+                        keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
+                        progress.postValue(EntityStatus.SUBMITTED)
+                    } else {
+                        // Handle server error
+                        progress.postValue(EntityStatus.SUBMISSION_ERROR)
+                        error.postValue(Throwable("Server error: ${response.code()}"))
+                    }
                 }
-                .subscribe({
-                    progress.postValue(EntityStatus.SUBMITTED)
-                }
-                ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(
-                        throwable
-                            ?: throw NullPointerException("Expression 'throwable' must not be null")
-                    )
+                .subscribe({}, { throwable ->
+                    // Network or other error
+                    FirebaseCrashlytics.getInstance().recordException(throwable)
                     error.postValue(throwable)
                     progress.postValue(EntityStatus.SUBMISSION_ERROR)
                 })
+        )
     }
 
     private fun UwaziEntityInstance.createEntityRequest() = SendEntityRequest(
@@ -367,6 +372,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
             }
         )
     }
+
     override fun onCleared() {
         disposables.dispose()
         super.onCleared()

@@ -14,8 +14,8 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 204
-        versionName "2.16.0"
+        versionCode 211
+        versionName "2.17.0"
         multiDexEnabled true
 
         ndk {

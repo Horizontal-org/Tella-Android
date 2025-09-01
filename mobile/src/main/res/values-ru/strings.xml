@@ -290,9 +290,9 @@
   <string name="settings.select_security">Security</string>
   <string name="settings.select_lock_timeout">Lock Timeout</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
-  <string name="settings.sec_camera.mute_expl">Выключите звук затвора камеры, чтобы привлекать меньше внимания при съемке фотографий.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
-  <string name="settings.sec_quick.delete_expl">Показывает скользящую кнопку на главном экране для быстрого выхода из Tella в экстренных ситуациях.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>
   <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -1013,4 +1013,5 @@ Would you like to share analytics with the Tella team?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>
