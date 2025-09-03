@@ -15,7 +15,7 @@
         app:arrowBackIconContentDescription="@string/connect_manually"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:startTitle="@string/verification" />
+        app:startTitle="@string/connect_manually" />
 
 
     <ImageView
