@@ -71,7 +71,7 @@
                 android:hint="@string/ip_address"
                 android:imeOptions="actionNext"
                 android:importantForAutofill="no"
-                android:inputType="textNoSuggestions"
+                android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@color/wa_white"
                 android:textDirection="ltr"

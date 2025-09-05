@@ -1097,4 +1097,8 @@ Would you like to share analytics with the Tella team?</string>
 1.\tMake sure that this sequence matches what\n \t\tis shown on the recipient’s device.\n2.\tYou need to confirm the connection first.\n3.\tAfter that, the recipient will be able to\n \t\tconfirm the connection and start receiving\n\t\tfiles.\n\nIf the sequence on your device does not match the sequence on the sender’s device,\nthe connection may not be secure and should be discarded.
 </string>
 
+    <string name="nearby_sharing_title">Nearby Sharing</string>
+    <string name="nearby_sharing_description">Enable this feature to share files with devices near you, without an Internet connection.</string>
+
+
 </resources>

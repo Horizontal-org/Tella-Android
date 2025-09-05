@@ -1,6 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.vault.adapters.connections
 
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -23,10 +22,6 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
         twoLinesReportTypeTextView = view.findViewById(R.id.two_line_server_name_textView)
         reportTypeImg = view.findViewById(R.id.server_img)
 
-        // Set the default padding
-       // val defaultPadding = view.context.resources.getDimensionPixelSize(R.dimen.hide_tella_small_margin)
-      //  view.setPadding(view.paddingLeft, defaultPadding, view.paddingRight, view.paddingBottom)
-
         when (item.type) {
             ServerType.UWAZI -> {
                 reportTypeTextView.text = view.context.getString(R.string.Home_BottomNav_Uwazi)
@@ -38,6 +33,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.TELLA_UPLOAD -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Reports)
                 reportTypeImg.setImageDrawable(
@@ -48,6 +44,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.TELLA_RESORCES -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Resources)
                 reportTypeImg.setImageDrawable(
@@ -58,6 +55,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.ODK_COLLECT -> {
                 reportTypeTextView.text = view.context.getText(R.string.Home_BottomNav_Forms)
                 reportTypeImg.setImageDrawable(
@@ -68,6 +66,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.GOOGLE_DRIVE -> {
                 reportTypeTextView.text = view.context.getText(R.string.google_drive)
                 reportTypeImg.setImageDrawable(
@@ -78,6 +77,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.DROP_BOX -> {
                 reportTypeTextView.text = view.context.getString(R.string.dropbox)
                 reportTypeImg.setImageDrawable(
@@ -88,6 +88,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.NEXTCLOUD -> {
                 reportTypeTextView.text = view.context.getString(R.string.NextCloud)
                 reportTypeImg.setImageDrawable(
@@ -98,6 +99,7 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
+
             ServerType.PEERTOPEER -> {
                 twoLinesReportTypeTextView.text = view.context.getText(R.string.NearBySharing)
                 reportTypeImg.setImageDrawable(
@@ -108,7 +110,8 @@ class ServerViewHolder(val view: View) : BaseViewHolder<ServerDataItem>(view) {
                     )
                 )
             }
-            else -> { // todo create default server type
+
+            else -> {
             }
         }
 

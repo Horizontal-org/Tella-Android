@@ -141,6 +141,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         initDropBoxEvents();
         initNextCloudEvents();
         initListeners();
+        initNearbySharingView();
     }
 
     private void initObservers() {
@@ -186,6 +187,19 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         nextCloudServersViewModel.getError().observe(this, this::showConnectionsError);
         nextCloudServersViewModel.getServerCreated().observe(this, this::onCreatedNextCloudServer);
         nextCloudServersViewModel.getServerRemoved().observe(this, this::onRemovedNextCloudServer);
+    }
+
+    private void initNearbySharingView() {
+        binding.nearbySharingSwitch.mSwitch.setChecked(Preferences.isEnableHomeNearby());
+        binding.nearbySharingSwitch.setTextAndAction(R.string.action_learn_more, () -> {
+            maybeChangeTemporaryTimeout(() -> {
+                Util.startBrowserIntent(getApplicationContext(), getString(R.string.config_nearby_sharing_url));
+                return null;
+            });
+            return Unit.INSTANCE;
+        });
+
+        binding.nearbySharingSwitch.mSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Preferences.setEnableHomeNearby(isChecked));
     }
 
     private void initDropBoxEvents() {
@@ -399,8 +413,7 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
     private void showChooseServerTypeDialog() {
 
         BottomSheetUtils.showBinaryTypeSheet(this.getSupportFragmentManager(), this, getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.settings_add_server_selection_dialog_title), getString(R.string.Connections_description_selection), getString(R.string.Connections_description), this::browseIntent, getString(R.string.action_cancel), //TODO CHECk THIS
-                getString(R.string.action_ok),
-                getString(R.string.settings_docu_add_server_dialog_select_odk), getString(R.string.settings_docu_add_server_dialog_select_tella_web), getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi), getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive), getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox), getString(R.string.settings_docu_add_server_dialog_select_next_cloud), getString(R.string.unavailable_connections), getString(R.string.unavailable_connections_desc), servers.stream().anyMatch(server -> server instanceof GoogleDriveServer), servers.stream().anyMatch(server -> server instanceof DropBoxServer), servers.stream().anyMatch(server -> server instanceof NextCloudServer), new BottomSheetUtils.IServerChoiceActions() {
+                getString(R.string.action_ok), getString(R.string.settings_docu_add_server_dialog_select_odk), getString(R.string.settings_docu_add_server_dialog_select_tella_web), getString(R.string.settings_docu_add_server_dialog_select_tella_uwazi), getString(R.string.settings_docu_add_server_dialog_select_tella_google_drive), getString(R.string.settings_docu_add_server_dialog_select_tella_dropbox), getString(R.string.settings_docu_add_server_dialog_select_next_cloud), getString(R.string.unavailable_connections), getString(R.string.unavailable_connections_desc), servers.stream().anyMatch(server -> server instanceof GoogleDriveServer), servers.stream().anyMatch(server -> server instanceof DropBoxServer), servers.stream().anyMatch(server -> server instanceof NextCloudServer), new BottomSheetUtils.IServerChoiceActions() {
 
                     @Override
                     public void addDropBoxServer() {

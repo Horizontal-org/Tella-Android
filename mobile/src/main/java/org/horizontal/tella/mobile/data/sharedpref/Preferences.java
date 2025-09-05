@@ -126,6 +126,14 @@ public class Preferences {
         setBoolean(SharedPrefs.ERASE_FORMS, value);
     }
 
+    public static boolean isEnableHomeNearby() {
+        return getBoolean(SharedPrefs.ENABLE_HOME_NEARBY_SHARING, false);
+    }
+
+    public static void setEnableHomeNearby(boolean value) {
+        setBoolean(SharedPrefs.ENABLE_HOME_NEARBY_SHARING, value);
+    }
+
     public static boolean isPanicGeolocationActive() {
         return getBoolean(SharedPrefs.PANIC_GEOLOCATION, true);
     }

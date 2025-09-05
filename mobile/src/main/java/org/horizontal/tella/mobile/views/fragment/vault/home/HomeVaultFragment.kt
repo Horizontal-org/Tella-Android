@@ -56,6 +56,7 @@ import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActiviti
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.CollectFormEntryActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
+import org.horizontal.tella.mobile.views.activity.ServersSettingsActivity
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsActions
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsIntroActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
@@ -462,6 +463,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
             }
 
+            ServerType.ADD_BUTTON -> {
+                baseActivity.startActivity(
+                    Intent(
+                        baseActivity,
+                        ServersSettingsActivity::class.java
+                    )
+                )
+            }
+
             else -> {}
         }
     }
@@ -748,18 +758,24 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     }
 
     private fun handleServerCountsSuccess(serverCounts: ServerCounts) {
-        // Handle each server type
+        serversList?.clear()
+
         handleGoogleDriveServers(serverCounts.googleDriveServers)
         handleDropBoxServers(serverCounts.dropBoxServers)
         handleNextCloudServers(serverCounts.nextCloudServers)
         handleTellaUploadServers(serverCounts.tellaUploadServers)
         handleCollectServers(serverCounts.collectServers)
         handleUwaziServers(serverCounts.uwaziServers)
-        serversList?.add(ServerDataItem(ArrayList(), ServerType.PEERTOPEER))
 
-        // Check if we need to show connections
+        if (Preferences.isEnableHomeNearby()) {
+            serversList?.add(ServerDataItem(emptyList(), ServerType.PEERTOPEER))
+        }
+
+        serversList?.add(ServerDataItem(emptyList(), ServerType.ADD_BUTTON))
+
         maybeShowConnections()
     }
+
 
     private fun handleServerCountsError(error: Throwable?) {
         error?.let {
