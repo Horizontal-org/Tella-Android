@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -12,9 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.TlsVersion
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
@@ -33,6 +37,7 @@ import java.io.InputStream
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.Collections
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
@@ -42,12 +47,10 @@ import javax.net.ssl.X509TrustManager
 class TellaPeerToPeerClient @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) {
-
-
     suspend fun registerPeerDevice(
         ip: String,
         port: String,
-        expectedFingerprint: String, // DER SHA-256 HEX from getPublicKeyHash
+        expectedFingerprint: String,
         pin: String,
     ): RegisterPeerResult = withContext(Dispatchers.IO) {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
@@ -66,24 +69,32 @@ class TellaPeerToPeerClient @Inject constructor(
             .url(url)
             .post(requestBody)
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+            // Encourage short-lived TLS sessions to avoid half-closed sockets across platforms.
+            .addHeader("Connection", "close")
             .build()
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
                 val body = response.body?.string().orEmpty()
+                Timber.d("registerPeerDevice: code=%d headers=%s body=%s",
+                    response.code, response.headers, body.take(600))
 
                 if (response.isSuccessful) {
-                    return@use parseSessionIdFromResponse(body)
-                }
-
-                return@use when (response.code) {
-                    400 -> RegisterPeerResult.InvalidFormat
-                    401 -> RegisterPeerResult.InvalidPin
-                    403 -> RegisterPeerResult.RejectedByReceiver
-                    409 -> RegisterPeerResult.Conflict
-                    429 -> RegisterPeerResult.TooManyRequests
-                    500 -> RegisterPeerResult.ServerError
-                    else -> RegisterPeerResult.Failure(Exception("Unhandled error ${response.code}: $body"))
+                    when (val parsed = parseSessionIdFromResponse(body)) {
+                        is RegisterPeerResult.Success -> parsed
+                        is RegisterPeerResult.Failure -> parsed
+                        else -> RegisterPeerResult.Failure(Exception("Unexpected success response shape"))
+                    }
+                } else {
+                    when (response.code) {
+                        400 -> RegisterPeerResult.InvalidFormat
+                        401 -> RegisterPeerResult.InvalidPin
+                        403 -> RegisterPeerResult.RejectedByReceiver
+                        409 -> RegisterPeerResult.Conflict
+                        429 -> RegisterPeerResult.TooManyRequests
+                        500 -> RegisterPeerResult.ServerError
+                        else -> RegisterPeerResult.Failure(Exception("Unhandled error ${response.code}: $body"))
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -95,7 +106,7 @@ class TellaPeerToPeerClient @Inject constructor(
     suspend fun prepareUpload(
         ip: String,
         port: String,
-        expectedFingerprint: String, // DER HEX
+        expectedFingerprint: String, // SPKI SHA-256 hex
         title: String,
         files: List<VaultFile>,
         sessionId: String
@@ -124,11 +135,13 @@ class TellaPeerToPeerClient @Inject constructor(
                 .url(url)
                 .post(requestBody)
                 .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+                .addHeader("Connection", "close")
                 .build()
 
             client.newCall(request).execute().use { response ->
                 val responseBody = response.body?.string().orEmpty()
-                return@withContext if (response.isSuccessful) {
+                Timber.d("prepareUpload: code=%d body=%s", response.code, responseBody.take(600))
+                if (response.isSuccessful) {
                     parseTransmissionId(responseBody)
                 } else {
                     Timber.e("Server error ${response.code}: ${response.message}")
@@ -144,7 +157,7 @@ class TellaPeerToPeerClient @Inject constructor(
     suspend fun uploadFileWithProgress(
         ip: String,
         port: String,
-        expectedFingerprint: String, // DER HEX
+        expectedFingerprint: String, // SPKI SHA-256 hex
         sessionId: String,
         fileId: String,
         transmissionId: String,
@@ -153,7 +166,7 @@ class TellaPeerToPeerClient @Inject constructor(
         fileName: String,
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
     ): Boolean = withContext(Dispatchers.IO) {
-        Timber.d("session id from the client = $sessionId")
+        Timber.d("session id from the client = %s", sessionId)
         val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
 
         val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
@@ -163,20 +176,17 @@ class TellaPeerToPeerClient @Inject constructor(
             .url(url)
             .put(requestBody)
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
+            .addHeader("Connection", "close")
             .build()
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                if (response.isSuccessful) {
-                    Timber.d("Upload successful for $fileId")
-                    true
-                } else {
-                    Timber.e("Upload failed for $fileId with code ${response.code}")
-                    false
-                }
+                val ok = response.isSuccessful
+                Timber.d("uploadFileWithProgress(%s): %s", fileId, if (ok) "OK" else "FAIL ${response.code}")
+                ok
             }
         } catch (e: Exception) {
-            Timber.e(e, "Exception while uploading $fileId")
+            Timber.e(e, "Exception while uploading %s", fileId)
             false
         }
     }
@@ -197,10 +207,14 @@ class TellaPeerToPeerClient @Inject constructor(
             .url(url)
             .post(requestBody)
             .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+            .addHeader("Connection", "close")
             .build()
 
         return@withContext try {
-            client.newCall(request).execute().use { response ->
+            client.newCall(request)
+
+                .execute().use { response ->
+                Timber.d("closeConnection: code=%d", response.code)
                 response.isSuccessful
             }
         } catch (e: Exception) {
@@ -211,14 +225,31 @@ class TellaPeerToPeerClient @Inject constructor(
 
     // ---------------- Internals ----------------
 
-    private fun parseSessionIdFromResponse(body: String): RegisterPeerResult =
-        try {
+    private fun parseSessionIdFromResponse(body: String): RegisterPeerResult {
+        return try {
             val json = JSONObject(body)
-            RegisterPeerResult.Success(json.getString("sessionId"))
+
+            // Optional: some servers send { success: true/false }
+            val successFlag = json.optBoolean("success", true)
+
+            // Required: non-empty sessionId
+            val sessionId = json.optString("sessionId", "").trim()
+
+            when {
+                !successFlag -> {
+                    val msg = json.optString("message", json.optString("error", "Registration rejected"))
+                    RegisterPeerResult.Failure(Exception(msg))
+                }
+                sessionId.isEmpty() -> {
+                    RegisterPeerResult.Failure(Exception("Missing or empty sessionId"))
+                }
+                else -> RegisterPeerResult.Success(sessionId)
+            }
         } catch (e: Exception) {
             Timber.e(e, "Malformed JSON response: %s", body)
             RegisterPeerResult.Failure(Exception("Malformed JSON: ${e.message}"))
         }
+    }
 
     private fun parseTransmissionId(body: String): PrepareUploadResult =
         try {
@@ -239,10 +270,11 @@ class TellaPeerToPeerClient @Inject constructor(
         }
 
     /**
-     * Build an OkHttp client that:
-     *  - Validates the server by DER-hash HEX (your getPublicKeyHash).
-     *  - Routes sockets over Wi-Fi (LAN).
-     *  - Relaxes hostname verification (safe because we hard-pin).
+     * OkHttp client that:
+     *  - Pins the server by SPKI SHA-256 hex (your CertificateUtils.getPublicKeyHash).
+     *  - Optionally binds sockets to a Wi-Fi Network if one is active/validated.
+     *  - Relaxes hostname verification (IP literal + hard pin).
+     *  - Uses TLS 1.2/1.3 spec to ease cross-platform handshakes (iOS -9816).
      */
     private fun getClientWithFingerprintValidation(
         ip: String,
@@ -252,15 +284,13 @@ class TellaPeerToPeerClient @Inject constructor(
 
         val trustManager = object : X509TrustManager {
             override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-            override fun checkClientTrusted(chain: Array<out X509Certificate>, authType: String?) = Unit
-            override fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String?) {
-                val serverCert = chain.firstOrNull()
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                val serverCert = chain?.firstOrNull()
                     ?: throw CertificateException("Empty certificate chain")
                 val actualHex = normalizeHex(CertificateUtils.getPublicKeyHash(serverCert))
                 if (actualHex != expected) {
-                    throw CertificateException(
-                        "Certificate DER hash mismatch.\nExpected: $expected\nGot:      $actualHex"
-                    )
+                    throw CertificateException("Certificate DER hash mismatch. Expected: $expected, Got: $actualHex")
                 }
             }
         }
@@ -269,26 +299,111 @@ class TellaPeerToPeerClient @Inject constructor(
             init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
         }
 
+        val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+            .allEnabledCipherSuites()
+            .build()
+
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
-            .hostnameVerifier { _, _ -> true } // IP literal + pinning → OK
+            .hostnameVerifier { _, _ -> true }
+            .connectionSpecs(listOf(tlsSpec, ConnectionSpec.CLEARTEXT))
+            .protocols(listOf(Protocol.HTTP_1_1))
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
 
-        // Route over Wi-Fi (same network path as FingerprintFetcher)
-        findWifiNetwork(appContext)?.let { builder.socketFactory(it.socketFactory) }
+        pickWifiNetwork(appContext)?.let { network ->
+            builder.socketFactory(network.socketFactory)
+        }
 
         return builder.build()
     }
 
-    private fun findWifiNetwork(context: Context): Network? {
+
+    @Suppress("DEPRECATION")
+    private fun pickWifiNetwork(context: Context): Network? {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // Prefer active validated Wi-Fi on API 23+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cm.activeNetwork?.let { n ->
+                cm.getNetworkCapabilities(n)?.let { caps ->
+                    if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    ) return n
+                }
+            }
+        }
+
+        // Otherwise, any Wi-Fi with INTERNET capability
         return cm.allNetworks.firstOrNull { n ->
-            cm.getNetworkCapabilities(n)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+            cm.getNetworkCapabilities(n)?.let { caps ->
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            } == true
         }
     }
 
     private fun normalizeHex(hexLike: String): String =
         hexLike.trim().replace(":", "").replace("\\s".toRegex(), "").lowercase()
+
+
+
+    /** Trust-all, *only* for manual handshake like /ping before we have a pin. */
+    private fun newInsecureClientForHandshake(network: Network?): OkHttpClient {
+        val trustAll = object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+        }
+
+        val ssl = SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf<TrustManager>(trustAll), SecureRandom())
+        }
+
+        val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+            .allEnabledCipherSuites()
+            .build()
+
+        return OkHttpClient.Builder()
+            .sslSocketFactory(ssl.socketFactory, trustAll)
+            .hostnameVerifier { _, _ -> true }
+            .connectionSpecs(listOf(tlsSpec))
+            .protocols(listOf(Protocol.HTTP_1_1))
+            .apply { network?.let { socketFactory(it.socketFactory) } }
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .build()
+    }
+
+    suspend fun pingBeforeRegister(ip: String, port: String): Boolean = withContext(Dispatchers.IO) {
+        val network = pickWifiNetwork(appContext)
+        val client = newInsecureClientForHandshake(network)
+
+        // Use the real path your server exposes; many backends use /api/v1/ping
+        val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
+
+        val req = Request.Builder()
+            .url(url)
+            .get()
+            .addHeader("Connection", "close")
+            .build()
+
+        runCatching {
+            client.newCall(req).execute().use { resp ->
+                // consider any HTTP code as “host reachable”
+                Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
+                resp.code in 100..599
+            }
+        }.getOrElse {
+            Timber.w(it, "Ping failed for $url")
+            false
+        }
+    }
+
+
+
 }

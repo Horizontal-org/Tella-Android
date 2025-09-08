@@ -151,6 +151,16 @@ class PeerToPeerViewModel @Inject constructor(
 
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
+            // Optional fast reachability check
+            val reachable = runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
+            if (!reachable) {
+                bottomSheetError.postValue(
+                    "Connection failed" to "Host not reachable on this Wi-Fi. Check IP/Port and that both devices are on the same network."
+                )
+                return@launch
+            }
+
+            // Then do the real cert fetch (still needed to get the SPKI hash)
             FingerprintFetcher.fetch(context, ip, port.toInt())
                 .onSuccess { hash ->
                     p2PState.hash = hash
@@ -166,6 +176,8 @@ class PeerToPeerViewModel @Inject constructor(
                 }
         }
     }
+
+
 
     // -------------------- SAVE-ON-ARRIVAL CORE --------------------
 

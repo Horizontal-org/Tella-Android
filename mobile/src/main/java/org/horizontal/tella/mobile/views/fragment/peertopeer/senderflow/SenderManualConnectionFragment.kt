@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.P2PSecurity
 import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
@@ -31,6 +32,7 @@ class SenderManualConnectionFragment :
         peerServerStarterManager.stopServer()
         PeerKeyProvider.reset()
         viewModel.p2PState.clear()
+        P2PSecurity.allowInsecureManualHandshake = true
         initView()
         initListeners()
         initObservers()
@@ -66,6 +68,8 @@ class SenderManualConnectionFragment :
 
     private fun initObservers() {
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
+            P2PSecurity.allowInsecureManualHandshake = false
+
             bundle.putString("payload", hash)
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }

@@ -8,9 +8,13 @@ object PeerApiRoutes {
     const val CLOSE = "/api/v1/close-connection"
 
 
-    fun buildUrl(ip: String, port: String, endpoint: String): String {
-        return "https://$ip:$port$endpoint"
+    fun buildUrl(ip: String, port: String, endpoint: String, secure: Boolean = true): String {
+        val scheme = if (secure) "https" else "http"
+        // Ensure endpoint starts with "/"
+        val normalized = if (endpoint.startsWith("/")) endpoint else "/$endpoint"
+        return "$scheme://$ip:$port$normalized"
     }
+
 
     fun buildUploadUrl(ip: String, port: String, sessionId: String, fileId: String, transmissionId: String): String {
         val baseUrl = buildUrl(ip, port, UPLOAD)
