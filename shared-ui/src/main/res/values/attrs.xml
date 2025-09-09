@@ -139,4 +139,16 @@
         <attr name="collapsibleBody" format="string" />
         <attr name="defaultExpanded" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="TipsCardView">
+        <attr name="tipsTitle" format="string" />
+        <attr name="tipsDescription" format="string" />
+        <attr name="tipsIcon" format="reference" />
+        <attr name="tipsCardDescription" format="reference"/>
+        <attr name="tipsCardTitle" format="reference"/>
+        <attr name="tipsCardColor" format="color|reference" />
+        <attr name="tipsTitleColor" format="color|reference" />
+        <attr name="tipsTextColor" format="color|reference" />
+        <attr name="tipsCornerRadius" format="dimension" />
+    </declare-styleable>
 </resources>
