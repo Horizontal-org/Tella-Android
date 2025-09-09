@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_connectHotspotScreen_to_scanQrCodeScreen"
             app:destination="@id/scanQrCodeScreen" />
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_tipsToConnectFragment"
+            app:destination="@id/tipsToConnectFragment" />
 
     </fragment>
 
@@ -156,11 +159,18 @@
             android:id="@+id/action_uploadSenderFragment_to_peerToPeerResultFragment"
             app:destination="@id/peerToPeerResultFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/peerToPeerResultFragment"
         android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerResultFragment"
         android:label="PeerToPeerResultFragment"
         tools:layout="@layout/fragment_peer_to_peer_result" />
+
+    <fragment
+        android:id="@+id/tipsToConnectFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.common.TipsConnectFragment"
+        android:label="TipsConnectFragment"
+        tools:layout="@layout/fragment_tips_connect" />
 
 
 </navigation>

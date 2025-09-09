@@ -19,14 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-            app:startTitle="@string/wifi" />
+            app:startTitle="@string/get_connected" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
         android:id="@+id/deviceImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/icon_wifi"
+        android:background="@drawable/ic_p2p_sharing"
         app:layout_constraintBottom_toTopOf="@+id/titleTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="@string/get_connected"
+        android:text="@string/nearby_sharing"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/titleDescTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,46 +58,35 @@
         android:layout_marginTop="@dimen/activity_horizontal_small_margin"
         android:gravity="start"
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
-        android:text="@string/wifi_connection_instruction"
+        android:text="@string/nearby_sharing_intro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
-    <org.hzontal.shared_ui.textviews.CollapsibleTextView
-        android:id="@+id/tipsTextView"
+    <org.hzontal.shared_ui.textviews.TipsCardView
+        android:id="@+id/tipsCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="@dimen/activity_horizontal_large_margin"
-        android:paddingVertical="@dimen/activity_horizontal_margin"
-        app:collapsibleBody="@string/tips_to_connect_body"
-        app:collapsibleTitle="@string/tips_to_connect_title"
-        app:defaultExpanded="true"
+        android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleDescTextView" />
-
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        app:layout_constraintTop_toBottomOf="@id/titleDescTextView"
+        app:tipsDescription="@string/tips_to_connect_wifi"
+        app:tipsTitle="@string/tips_to_connect_title"
+        app:tipsIcon="@drawable/orange_help_24"
+        />
 
     <View
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:background="@color/wa_white_20"
-        app:layout_constraintTop_toBottomOf="@id/tipsTextView" />
+        app:layout_constraintTop_toBottomOf="@id/tipsCard" />
 
-    <org.hzontal.shared_ui.buttons.DualTextCheckView
-        android:id="@+id/currentWifiText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator"
-        app:leftText="@string/current_wifi_network" />
 
     <org.hzontal.shared_ui.buttons.DualTextCheckView
         android:id="@+id/currentWifi"
@@ -107,11 +96,9 @@
         android:layout_marginTop="12dp"
         app:checkboxVisible="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentWifiText"
+        app:layout_constraintTop_toBottomOf="@+id/separator"
         app:leftText="@string/same_wifi_text" />
-
 
     <TextView
         android:id="@+id/next_btn"
