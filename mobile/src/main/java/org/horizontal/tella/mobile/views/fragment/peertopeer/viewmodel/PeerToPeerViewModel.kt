@@ -88,8 +88,6 @@ class PeerToPeerViewModel @Inject constructor(
     private val _closeConnection = SingleLiveEvent<Boolean>()
     val closeConnection: SingleLiveEvent<Boolean> get() = _closeConnection
 
-    // ---------- Save-on-arrival state ----------
-    // Track files being saved/done by transmissionId to prevent duplicate saves.
     private val savingOrDone: MutableSet<String> =
         Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>())
     private var totalFilesExpected = 0

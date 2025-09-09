@@ -25,6 +25,7 @@ class ConnectHotspotFragment :
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.updateNetworkInfo()
         initObservers()
         initListeners()
     }
@@ -59,20 +60,26 @@ class ConnectHotspotFragment :
 
     private fun updateNextButtonState(connectionType: ConnectionType?) {
         val isEligibleConnection =
-            connectionType != ConnectionType.NONE && connectionType != ConnectionType.CELLULAR
+            connectionType == ConnectionType.WIFI || connectionType == ConnectionType.HOTSPOT
+
+        binding.currentWifi.setCheckboxEnabled(isEligibleConnection)
+
         val shouldEnable = isEligibleConnection && isCheckboxChecked
 
-        binding.nextBtn.setOnClickListener(if (shouldEnable) {
-            { onNextClicked() }
-        } else {
-            { }
-        })
+        binding.nextBtn.isEnabled = shouldEnable
+        binding.nextBtn.isClickable = shouldEnable
+
+        binding.nextBtn.alpha = if (shouldEnable) 1f else 0.5f
+
+        binding.nextBtn.setOnClickListener(
+            if (shouldEnable) { { onNextClicked() } } else { { /* no-op */ } }
+        )
 
         binding.nextBtn.setTextColor(
             getColor(baseActivity, if (shouldEnable) R.color.wa_white else R.color.wa_white_40)
         )
-        binding.currentWifi.setCheckboxEnabled(isEligibleConnection)
     }
+
 
     private fun onNextClicked() {
         if (viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT)

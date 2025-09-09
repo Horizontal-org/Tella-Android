@@ -92,7 +92,7 @@
         android:id="@+id/currentWifi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="12dp"
         app:checkboxVisible="true"
         app:layout_constraintEnd_toEndOf="parent"

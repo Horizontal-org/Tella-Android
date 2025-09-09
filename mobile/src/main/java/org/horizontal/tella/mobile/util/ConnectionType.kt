@@ -3,6 +3,8 @@ package org.horizontal.tella.mobile.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.LinkProperties
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -19,7 +21,6 @@ enum class ConnectionType {
 
 data class NetworkInfo(
     val connectionType: ConnectionType,
-    val ssid: String?,
     val ipAddress: String?,
     var port: String = "53317"
 )
@@ -29,87 +30,78 @@ class NetworkInfoManager(private val context: Context) {
     private val _networkInfo = MutableLiveData<NetworkInfo>()
     val networkInfo: LiveData<NetworkInfo> = _networkInfo
 
-    private var currentNetworkInfo: NetworkInfo = NetworkInfo(ConnectionType.NONE, null, null)
+    private var currentNetworkInfo: NetworkInfo = NetworkInfo(ConnectionType.NONE, null)
 
     @RequiresApi(Build.VERSION_CODES.M)
-    @SuppressLint("MissingPermission", "DiscouragedPrivateApi")
+    @SuppressLint("MissingPermission")
     fun fetchCurrentNetworkInfo() {
-        val connectivityManager =
-            ContextCompat.getSystemService(context, ConnectivityManager::class.java)
-        val network = connectivityManager?.activeNetwork
-        val capabilities = connectivityManager?.getNetworkCapabilities(network)
+        val cm = ContextCompat.getSystemService(context, ConnectivityManager::class.java)
+        val network: Network? = cm?.activeNetwork
+        val caps: NetworkCapabilities? = cm?.getNetworkCapabilities(network)
+
+        if (caps == null) {
+            post(ConnectionType.NONE, null)
+            return
+        }
+
+        val ip = getActiveIpv4(cm, network) ?: getFallbackIpv4()
 
         when {
-            capabilities == null -> {
-                _networkInfo.postValue(NetworkInfo(ConnectionType.NONE, null, null))
+            caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                post(ConnectionType.WIFI, ip)
             }
 
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                val wifiManager =
-                    context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
-
-                val wifiInfo = wifiManager?.connectionInfo
-                val ssid = when {
-                    wifiInfo?.ssid != null && wifiInfo.ssid != WifiManager.UNKNOWN_SSID ->
-                        wifiInfo.ssid.trim('"')
-                    else -> "Unknown WiFi"
+            caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                if (isDeviceHotspotEnabled(context)) {
+                    post(ConnectionType.HOTSPOT, ip) // treat hotspot + cellular as HOTSPOT
+                } else {
+                    post(ConnectionType.NONE, null)   // cellular alone → NONE
                 }
-
-                val ipAddress = getLocalIpAddress()
-                _networkInfo.postValue(NetworkInfo(ConnectionType.WIFI, ssid, ipAddress))
-            }
-
-            isDeviceHotspotEnabled(context) -> {
-                val hotspotSSID = getDeviceHotspotSSID(context) ?: "Hotspot"
-                val hotspotIpAddress = getLocalIpAddress() // more reliable than hardcoded
-                _networkInfo.postValue(NetworkInfo(ConnectionType.HOTSPOT, hotspotSSID, hotspotIpAddress))
-            }
-
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                _networkInfo.postValue(NetworkInfo(ConnectionType.CELLULAR, null, null))
             }
 
             else -> {
-                _networkInfo.postValue(NetworkInfo(ConnectionType.NONE, null, null))
+                post(ConnectionType.NONE, null)
             }
         }
+    }
 
-        currentNetworkInfo = _networkInfo.value ?: NetworkInfo(ConnectionType.NONE, null, null)
+    private fun post(type: ConnectionType, ip: String?) {
+        val info = NetworkInfo(type, ip)
+        _networkInfo.postValue(info)
+        currentNetworkInfo = info
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun getActiveIpv4(cm: ConnectivityManager?, network: Network?): String? {
+        if (cm == null || network == null) return null
+        val lp: LinkProperties = cm.getLinkProperties(network) ?: return null
+        return lp.linkAddresses
+            .mapNotNull { it.address }
+            .firstOrNull { it is Inet4Address && !it.isLoopbackAddress }
+            ?.hostAddress
+    }
+
+    private fun getFallbackIpv4(): String? {
+        return try {
+            NetworkInterface.getNetworkInterfaces()
+                .toList()
+                .flatMap { it.inetAddresses.toList() }
+                .firstOrNull { it is Inet4Address && !it.isLoopbackAddress }
+                ?.hostAddress
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun isDeviceHotspotEnabled(context: Context): Boolean {
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiManager =
+            context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         return try {
             val method = wifiManager.javaClass.getDeclaredMethod("isWifiApEnabled")
             method.isAccessible = true
             method.invoke(wifiManager) as? Boolean ?: false
         } catch (e: Exception) {
-            e.printStackTrace()
             false
-        }
-    }
-
-    private fun getDeviceHotspotSSID(context: Context): String? {
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        return try {
-            val method = wifiManager.javaClass.getDeclaredMethod("getWifiApConfiguration")
-            method.isAccessible = true
-            val config = method.invoke(wifiManager)
-            val ssidField = config?.javaClass?.getDeclaredField("SSID")
-            ssidField?.isAccessible = true
-            ssidField?.get(config) as? String
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    private fun getLocalIpAddress(): String? {
-        return try {
-            NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
-                .firstOrNull { !it.isLoopbackAddress && it is Inet4Address }?.hostAddress
-        } catch (e: Exception) {
-            null
         }
     }
 }
