@@ -13,6 +13,7 @@
     <string name="config_nearby_sharing_url" translatable="false">https://tella-app.org/nearby-sharing</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
+        <item>az</item>
         <item>be</item>
         <item>en</item>
         <item>es</item>

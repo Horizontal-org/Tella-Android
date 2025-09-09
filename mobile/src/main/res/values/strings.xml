@@ -1099,6 +1099,23 @@ Would you like to share analytics with the Tella team?</string>
 
     <string name="nearby_sharing_title">Nearby Sharing</string>
     <string name="nearby_sharing_description">Enable this feature to share files with devices near you, without an Internet connection.</string>
+    <string name="nearby_sharing_intro">Share files directly with a device near you, with or without an Internet connection.\n\nTo get started, join the same Wi-Fi network as the recipient. Nearby Sharing will work even if the Wi-Fi network is not connected to the Internet.</string>
+    <string name="tips_to_connect_wifi">Learn more about connecting to Wi-Fi for Nearby Sharing.</string>
+    <string name="tips_section_setup">Setting up</string>
+    <string name="tips_setup_intro">
+        There are 2 ways to connect your devices through Wi-Fi:
+    </string>
+    <string name="tips_setup_list">
+1. Using a Wi-Fi router, such as at home or work\n2. Setting up a Wi-Fi hotspot from a device, such as a phone, tablet, or computer\n\ta. One user creates a hotspot connection by going to \ttheir device’s settings.\n\tb. The other user connects to that hotspot.
+</string>
 
+    <string name="tips_section_join">Joining the same network</string>
+    <string name="tips_join_body">
+        Once the Wi-Fi network is set up, go to your devices’ settings and verify that you are both on the same Wi-Fi network.
+    </string>
+
+    <string name="tips_section_more">More tips</string>
+    <string name="tips_more_bullets">• The Wi-Fi network does not need to have internet access. As long as the Wi-Fi router or hotspot is powered on and functioning, it can be used for Nearby Sharing even without being online
+• Make sure to disable any active VPN connections.</string>
 
 </resources>
