@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.views.activity.onboarding
 
-hhhimport android.os.Bundle
+import android.os.Bundle
 import android.view.View
 import org.horizontal.tella.mobile.databinding.OnboardNearbySharingFragmentBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment

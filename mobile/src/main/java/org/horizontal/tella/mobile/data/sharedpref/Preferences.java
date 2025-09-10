@@ -127,7 +127,7 @@ public class Preferences {
     }
 
     public static boolean isEnableHomeNearby() {
-        return getBoolean(SharedPrefs.ENABLE_HOME_NEARBY_SHARING, false);
+        return getBoolean(SharedPrefs.ENABLE_HOME_NEARBY_SHARING, true);
     }
 
     public static void setEnableHomeNearby(boolean value) {
