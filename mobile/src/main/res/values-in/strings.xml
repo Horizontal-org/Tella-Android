@@ -992,4 +992,5 @@ Apakah Anda ingin membagikan analitik kepada tim Tella?</string>
   <string name="stop">stop</string>
   <string name="view_files">VIEW FILES</string>
     <string name="result">result</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 </resources>

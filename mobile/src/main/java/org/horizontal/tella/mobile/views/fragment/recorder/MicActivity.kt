@@ -171,7 +171,9 @@ class MicActivity : MetadataActivity(),
             if (isUnique) {
                 recordingName.text = currentRecordName
             } else {
-                showToast(getString(R.string.file_name_taken))
+                DialogUtils.showBottomMessage(
+                    this, getString(R.string.file_name_taken), true
+                )
             }
         }
     }

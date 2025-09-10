@@ -290,9 +290,9 @@
   <string name="settings.select_security">Kungarira.</string>
   <string name="settings.select_lock_timeout">Nguvha ho kuvharika.</string>
   <string name="settings.sec_camera.mute_switch">Kunhalala ko camera.</string>
-  <string name="settings.sec_camera.mute_expl">Djima kurira ko camera kuti swissazika kana hovhissa mupikija.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Kulassa chopassi.</string>
-  <string name="settings.sec_quick.delete_expl">Kukombidja bhathani lo mbudha papopapo pa Tella ngokukassika.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Mudjeke.</string>
   <string name="settings.servers.add_server.expl">Kubhathana no mudjeke kuti u tole no ku tumira mashoko kuno bato lako.</string>
   <string name="settings.servers_auto.upload_action">Kuthola mashoko chiriporipocho pa mudjeke.</string>
@@ -977,6 +977,7 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="report_submitted_msg">Tsamba yako yatumirwa swakanaka</string>
   <string name="Collect_MediaWidget_Attach_File">Kuisa gwaro mapwepo</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
     <string name="send_files_title">Send files</string>
     <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>

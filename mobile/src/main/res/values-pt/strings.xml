@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Sair do formulário?</string>
   <string name="verification_prompt_dialog_title">Habilitar o GPS?</string>
   <string name="collect_tab.title_blank">Em branco</string>
-  <string name="action_cancel">cancel</string>
+  <string name="action_cancel">cancelar</string>
   <string name="settings_menu.item_contact">Fale conosco</string>
   <string name="collect_dialog.text_download.progress">Baixando o formulário</string>
   <string name="collect_toast_download.completed">Transferência concluída</string>
-  <string name="action_delete">delete</string>
+  <string name="action_delete">excluir</string>
   <string name="collect.draft_tab.title">Rascunho</string>
   <string name="collect.blank_action_download.form">Baixar</string>
   <string name="settings_text_empty.field">Este campo não pode ficar vazio.</string>
@@ -23,8 +23,8 @@
   <string name="action_ok">Está bem</string>
   <string name="collect.form_toast_validation.error">Esta resposta é inválida</string>
   <string name="collect.form_error_response.mandatory">Essa resposta é obrigatória.</string>
-  <string name="homescreen_heading_quick.delete">Quick Delete
-mode activation</string>
+  <string name="homescreen_heading_quick.delete">Modo Deletar Rápido
+ativado</string>
   <string name="settings.about_list.item_privacy.policy">Política de Privacidade</string>
   <string name="recorder_toast_fail.recording">Erro ao gravar o áudio. Por favor, tente novamente</string>
   <string name="recorder_content.desc_blinking.red.dot">Gravando áudio…</string>
@@ -85,8 +85,8 @@ mode activation</string>
   <string name="permission_dialog.expl_device.storage">Para exportar arquivos, Tella precisa de permissão para gravar no armazenamento do aparelho.</string>
   <string name="gallery_toast_fail.deleting.files">Erro ao excluir arquivos. Por favor, tente novamente.</string>
   <plurals name="gallery_toast_files.exported">
-    <item quantity="one">%1$d file saved to the device</item>
-    <item quantity="other">%1$d files saved to the device</item>
+    <item quantity="one">%1$d arquivo salvo no dispositivo</item>
+    <item quantity="other">%1$d arquivos salvos no dispositivo</item>
   </plurals>
   <string name="gallery_delete.files_dialog.title">Excluir o arquivo?</string>
   <string name="gallery_delete.files_dialog.expl">O arquivo selecionado será excluído permanentemente da sua galeria.</string>
@@ -188,8 +188,8 @@ mode activation</string>
   <string name="collect.form_signature_toast_fail.saving">Um erro ocorreu ao salvar a assinatura. Por favor, tente novamente</string>
   <string name="collect.form_acknowledge_select.expl">OK. Por favor continue.</string>
   <plurals name="collect.end_meta_number.of.elements">
-    <item quantity="one">%d file</item>
-    <item quantity="other">%d files</item>
+    <item quantity="one">%d arquivo</item>
+    <item quantity="other">%d arquivos</item>
   </plurals>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
@@ -293,7 +293,7 @@ mode activation</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
   <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
-  <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>
   <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
   <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -374,7 +374,7 @@ mode activation</string>
   <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
   <string name="onboard.title_files">Encrypted files &amp; folders</string>
   <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
-  <string name="onboard.title_lock_finish">Lock</string>
+  <string name="onboard.title_lock_finish">Bloqueio</string>
   <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
   <string name="onboard.title_all_done">You’re all done!</string>
   <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
@@ -1003,6 +1003,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
     <string name="send_files_title">Send files</string>
     <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>

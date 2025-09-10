@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.entity.uwazi.TranslationRow
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziRow
 import org.horizontal.tella.mobile.domain.repository.uwazi.IUwaziUserRepository
 import org.horizontal.tella.mobile.util.StringUtils
+import retrofit2.Response
 import timber.log.Timber
 
 class UwaziRepository : IUwaziUserRepository {
@@ -291,7 +292,7 @@ class UwaziRepository : IUwaziUserRepository {
         attachments: List<MultipartBody.Part?>,
         attachmentsOriginalName: List<String>,
         documents: List<MultipartBody.Part?>
-    ): Single<UwaziEntityRow> {
+    ):  Single<Response<Void>> {
         return uwaziApi.submitWhiteListedEntity(
             attachments = attachments,
             documents = documents,

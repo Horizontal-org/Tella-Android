@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">Ləğv et</string>
+  <string name="LockSelect_Action_Back">Geri</string>
+  <string name="LockSelect_Action_Confirm">Növbəti</string>
+  <string name="LockPatternConfirm_Action_Confirm">Naxışınızı təsdiqləyin</string>
+  <string name="LockSelect_Action_Continue">Növbəti</string>
+  <string name="LockPatternSet_Draw_Pattern">Kilidi açmaq üçün naxış çəkin</string>
+  <string name="UnlockPattern_DrawToUnlock">Tella kilidini açmaq üçün naxış çəkin</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">Yeni kilidaçma naxışınız</string>
+  <string name="LockPatternSet_Pattern_Recorded">Naxış qeyd olundu</string>
+  <string name="UnlockPattern_PatternTooShort">Azı altı nöqtəni birləşdirən naxış çəkin</string>
+  <string name="LockPatternSet_RecordingPattern">Bitirəndə barmağınızı çəkin</string>
+  <string name="LockPatternSet_Action_Redraw">Aydın</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Naxış yanlışdır, yenə cəhd edin</string>
+  <string name="LockPatternSet_Message_PatternStarted">Naxış başlandı</string>
+  <string name="LockPatternSet_Message_PatternCleared">Naxış təmizləndi</string>
+  <string name="LockPatternSet_Message_CellAdded">Şəbəkə hazırdır</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
+  <string name="LockPatternSet_Message_PatternDetected">Naxış hazırdır</string>
+  <string name="UnLockPattern_PatternArea">Naxış məkanı.</string>
+  <string name="UnLockPattern_Message_DrawPattern">Tella-nı açmaq üçün naxışınızı çəkin</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">Yenə cəhd edin. Naxışınız uyğun gəlmir.</string>
+  <string name="LockPinSet_Message_EnterPin">PIN-i yaz</string>
+  <string name="UnlockPin_Message_EnterPin">Tella-nı açmaq üçün PIN-inizi yazın</string>
+  <string name="LockPinSet_Message_Hint">Azı 6 rəqəm yazın. Doğum gününüzün tarixi kimi asan təxmin ediləcək rəqəmlərdən istifadə etməyin.</string>
+  <string name="LockPinSet_Message_Confirm">PIN-i təsdiqlə</string>
+  <string name="LockPinConfirm_Message_Confirm">Dəqiqləşdirmək üçün PIN-i bir dəfə də qeyd et</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">Yenə cəhd edin. PIN-iniz uyğun gəlmir.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN yanlışdır,
+yenə cəhd edin</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">Parolu yazın</string>
+  <string name="LockPasswordSet_Message_Hint">Azı 6 işarə yazın və, məsələn, \"parol\" kimi asan təxmin ediləcək parollardan istifadə etməyin. Parolunuz nə qədər uzun olarsa, bir o qədər təhlükəsiz olar.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Yenə cəhd edin. Parollarınız uyğun gəlmir.</string>
+  <string name="LockSuccess_Message_AllDone">Hazırdır!</string>
+  <string name="LockSuccess_Message_Hint">Ayarlara keçib kilid seçiminizi dəyişə və Tella-nı bir az da fərdiləşdirə bilərsiz.</string>
+  <string name="LockSuccess_Action_GoToTella">Tella-ya keç</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Parol yanlışdır, yenə cəhd edin</string>
+  <string name="UnlockPassword_Message_EnterPassword">Tella-nı açmaq üçün
+parolu yazın</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">Parolunuzu təsdiqləyin</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Parolunuzu bir dəfə də yazın, sadəcə əmin olmaq üçün.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">Kilidinizi dəyişmək üçün
+ öz parolunuzu 
+ yazın</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">Kilidinizi dəyişmək üçün
+ öz naxışınızı 
+ çəkin</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">Kilidi dəyişmək üçün
+ hazırkı PIN-inizi yazın</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">Kamuflyajı dəyişmək
+ üçün parolunuzu
+ yazın</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">Kamuflyajı dəyişmək
+ üçün naxışınızı
+çəkin</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">Kamuflyajı dəyişmək 
+ üçün PIN-i yazın</string>
+  <string name="Settings_Action_SetLock">Kilid</string>
+  <string name="Settings_Message_LockChanged">Kilidin dəyişdi!</string>
+</resources>

@@ -303,7 +303,7 @@ class PrepareUploadFragment :
                     // Navigate
                     navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                 } else {
-                    showToast("No file selected")
+                    baseActivity.showToast("No file selected")
                 }
             } else {
                 showSubmitReportErrorSnackBar()

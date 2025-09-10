@@ -104,6 +104,7 @@ object MediaFile {
     private const val FILE_TYPE_MS_EXCEL = 105
     private const val FILE_TYPE_MS_POWERPOINT = 106
     private const val FILE_TYPE_ZIP = 107
+    private const val FILE_TYPE_ODT = 108
     private val sFileTypeMap =
             HashMap<String, MediaFileType>()
     private val sMimeTypeMap =
@@ -178,7 +179,7 @@ object MediaFile {
     }
 
     fun isTextFileType(fileType: Int): Boolean {
-        return fileType in FILE_TYPE_TEXT..FILE_TYPE_ZIP
+        return fileType in FILE_TYPE_TEXT..FILE_TYPE_ODT
     }
 
     private fun getFileType(path: String?): MediaFileType? {
@@ -412,6 +413,12 @@ object MediaFile {
                 "audio/flac",
                 MtpConstants.FORMAT_FLAC
         )
+        addFileType(
+            "ODT",
+            FILE_TYPE_ODT,
+            "application/vnd.oasis.opendocument.text"
+        )
+        addFileType("DOCX", FILE_TYPE_MS_WORD, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
         addFileType("ZIP", FILE_TYPE_ZIP, "application/zip")
         addFileType("MPG", FILE_TYPE_MP2PS, "video/mp2p")
         addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p")

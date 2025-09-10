@@ -1117,5 +1117,6 @@ Would you like to share analytics with the Tella team?</string>
     <string name="tips_section_more">More tips</string>
     <string name="tips_more_bullets">• The Wi-Fi network does not need to have internet access. As long as the Wi-Fi router or hotspot is powered on and functioning, it can be used for Nearby Sharing even without being online
 • Make sure to disable any active VPN connections.</string>
+    <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
 
 </resources>

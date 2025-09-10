@@ -291,9 +291,9 @@
   <string name="settings.select_security">امنیت</string>
   <string name="settings.select_lock_timeout">زمان قفل شدن</string>
   <string name="settings.sec_camera.mute_switch">حالت سکوت دوربین</string>
-  <string name="settings.sec_camera.mute_expl">برای این که هنگام عکسبرداری کمتر جلب توجه کنید، صدای شاتر دوربین را قطع کنید.</string>
+  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
   <string name="settings.sec_quick.delete_switch">حذف سریع</string>
-  <string name="settings.sec_quick.delete_expl">یک دکمه لغزان روی صفحه اصلی نمایش می‌دهد تا امکان خروج فوری از Tella در شرایط اضطراری فراهم شود.</string>
+  <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">سرورها</string>
   <string name="settings.servers.add_server.expl">برای جمع‌آوری و ارسال داده به سازمان خود، به سرورها وصل شوید.</string>
   <string name="settings.servers_auto.upload_action">بارگذاری خودکار بر روی سرور</string>
@@ -1000,6 +1000,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="report_submitted_msg">Your report has successfully been submitted.</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
+  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
     <string name="send_files_title">Send files</string>
     <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>

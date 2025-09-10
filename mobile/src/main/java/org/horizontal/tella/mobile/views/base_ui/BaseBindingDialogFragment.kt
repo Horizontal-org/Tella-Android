@@ -58,12 +58,6 @@ abstract class BaseBindingDialogFragment<VB : ViewBinding>(
         }
     }
 
-    protected fun showToast(message: String) {
-        if (isAdded) {
-            baseActivity.showToast(message)
-        }
-    }
-
     protected open fun nav(): NavController {
         return NavControllerProvider(this).navController
     }

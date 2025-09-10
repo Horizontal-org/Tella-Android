@@ -18,8 +18,8 @@ public interface IVaultDatabase {
     boolean move(VaultFile vaultFile, String newParent);
     List<VaultFile> get(String[] ids);
     boolean delete(VaultFile file, IVaultFileDeleter deleter);
+    VaultFile getByHash(String hash);
     void destroy();
-
     interface IVaultFileDeleter {
         boolean delete(VaultFile vaultFile);
     }
