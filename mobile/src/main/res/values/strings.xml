@@ -396,6 +396,7 @@ connecting to a server</string>
     <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
     <string name="onboard.calculator_button">Select calculator</string>
     <string name="onboard.calculator_expl">Tella will be hidden behind a functional Calculator app. Unlock Tella by entering your PIN on the calculator followed by =</string>
+    <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
     <string name="settings.general_recent_files_switch_title">Recent files</string>
     <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
     <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
@@ -1118,5 +1119,4 @@ Would you like to share analytics with the Tella team?</string>
     <string name="tips_more_bullets">• The Wi-Fi network does not need to have internet access. As long as the Wi-Fi router or hotspot is powered on and functioning, it can be used for Nearby Sharing even without being online
 • Make sure to disable any active VPN connections.</string>
     <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
-
 </resources>

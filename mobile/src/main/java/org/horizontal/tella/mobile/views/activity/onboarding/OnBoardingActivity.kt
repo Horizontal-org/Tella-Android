@@ -39,7 +39,9 @@ private const val ONBOARDING_CAMERA_VIEW_INDEX = 1
 private const val ONBOARDING_RECORDER_VIEW_INDEX = 2
 private const val ONBOARDING_FILES_VIEW_INDEX = 3
 private const val ONBOARDING_COLLECT_DATA_VIEW = 4
-private const val ONBOARDING_LOCK_VIEW_INDEX = 5
+private const val ONBOARDING_NEARBY_SHARING_VIEW_INDEX = 5
+private const val ONBOARDING_LOCK_VIEW_INDEX = 6
+
 
 @AndroidEntryPoint
 class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
@@ -62,7 +64,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         setContentView(binding.root)
         applyEdgeToEdge(binding.root)
         // Instantiate a ViewPager and a Tablayout
-        if (!isOnboardLockSet && !isFromSettings) initViewPager(6)
+        if (!isOnboardLockSet && !isFromSettings) initViewPager(7)
 
         // Instantiate next and back buttons
         initButtons()
@@ -349,6 +351,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 ONBOARDING_RECORDER_VIEW_INDEX -> OnBoardRecorderFragment()
                 ONBOARDING_FILES_VIEW_INDEX -> OnBoardFilesFragment()
                 ONBOARDING_COLLECT_DATA_VIEW -> OnboardCollectDataFragment()
+                ONBOARDING_NEARBY_SHARING_VIEW_INDEX -> OnBoardNearbySharingFragment()
                 ONBOARDING_LOCK_VIEW_INDEX -> OnBoardLockFragment()
                 else -> OnBoardIntroFragment()
             }
