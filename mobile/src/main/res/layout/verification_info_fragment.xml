@@ -109,7 +109,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connect_btn"
         app:text="@string/discard_and_start_over"
-        app:text_all_caps="true"
         />
 
 

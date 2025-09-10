@@ -73,7 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shareFilesDescriptionTv"
         app:text="@string/send_files"
-        app:text_all_caps="true"
         app:text_round_bold="true" />
 
     <org.hzontal.shared_ui.buttons.RoundButton
@@ -87,7 +86,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toBottomOf="@+id/sendFilesBtn"
         app:text="@string/receive_files"
-        app:text_all_caps="true"
         app:text_round_bold="true"
         tools:layout_editor_absoluteX="24dp" />
 

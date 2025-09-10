@@ -63,7 +63,6 @@
         app:text_color="@color/btn_dark_letter"
         android:text="@string/view_files"
         app:check_state="true"
-        app:text_all_caps="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

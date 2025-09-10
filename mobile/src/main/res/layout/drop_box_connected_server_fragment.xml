@@ -74,7 +74,6 @@
         android:background="@drawable/bg_round_orange_btn"
         app:text_color="@color/btn_dark_letter"
         app:text="@string/go_to_dropbox"
-        app:text_all_caps="true"
         app:check_state="false"
         app:layout_constraintTop_toBottomOf="@+id/sheet_subtitle"
         app:layout_constraintEnd_toEndOf="parent"

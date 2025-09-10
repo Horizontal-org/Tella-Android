@@ -52,7 +52,7 @@ class RoundButton @JvmOverloads constructor(
                 mChecked = typedArray.getBoolean(R.styleable.RoundButton_check_state, false)
                 tintColor = typedArray.getColor(R.styleable.RoundButton_tint_color, -1)
                 textColor = typedArray.getColor(R.styleable.RoundButton_text_color, -1)
-                isTextAllCaps = typedArray.getBoolean(R.styleable.RoundButton_text_all_caps, false)
+                isTextAllCaps = typedArray.getBoolean(R.styleable.RoundButton_text_all_caps, true)
                 isTextBold = typedArray.getBoolean(R.styleable.RoundButton_text_round_bold, false)
                 defaultBackground = typedArray.getResourceId(
                     R.styleable.RoundButton_default_background,
@@ -136,7 +136,6 @@ class RoundButton @JvmOverloads constructor(
         else ContextCompat.getDrawable(context, defaultBackground)
     }
 
-    //TODO FIX TEXT ALLCAPS EVERY WHERE
     private fun setTextCaps(isTextAllCaps: Boolean) {
         binding.sheetTextView.isAllCaps = isTextAllCaps
     }
