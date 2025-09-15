@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
+import org.horizontal.tella.mobile.data.peertopeer.FingerprintResult
 import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
@@ -89,7 +90,7 @@ class PeerToPeerViewModel @Inject constructor(
     val closeConnection: SingleLiveEvent<Boolean> get() = _closeConnection
 
     private val savingOrDone: MutableSet<String> =
-        Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>())
+        Collections.newSetFromMap(ConcurrentHashMap())
     private var totalFilesExpected = 0
     private var savedCount = 0
     private var targetFolderId: String? = null
@@ -149,8 +150,9 @@ class PeerToPeerViewModel @Inject constructor(
 
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
-            // Optional fast reachability check
-            val reachable = runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
+            // 1) Optional fast reachability (your existing TCP probe inside peerClient)
+            val reachable =
+                runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
             if (!reachable) {
                 bottomSheetError.postValue(
                     "Connection failed" to "Host not reachable on this Wi-Fi. Check IP/Port and that both devices are on the same network."
@@ -158,26 +160,57 @@ class PeerToPeerViewModel @Inject constructor(
                 return@launch
             }
 
-            // Then do the real cert fetch (still needed to get the SPKI hash)
-            FingerprintFetcher.fetch(context, ip, port.toInt())
-                .onSuccess { hash ->
-                    p2PState.hash = hash
-                    _getHashSuccess.postValue(hash)
-                    runCatching { ServerPinger.notifyServer(ip, port.toInt()) }
-                        .onFailure { Timber.e(it, "Failed to ping server after fetching hash") }
+            // 2) PRE-PIN TLS handshake (no HTTP): read leaf cert → compute hashes
+            val fpRes: Result<FingerprintResult> =
+                FingerprintFetcher.fetch(context, ip, port.toInt())
+            if (fpRes.isFailure) {
+                val e = fpRes.exceptionOrNull()
+                bottomSheetError.postValue(
+                    "Connection failed" to ("Couldn’t read peer certificate. " + (e?.message ?: ""))
+                )
+                return@launch
+            }
+
+            val fp = fpRes.getOrNull()!! 
+
+            p2PState.hash = fp.certHex
+            _getHashSuccess.postValue(fp.certHex)
+
+            // 3) Pinned ping using CERT hash (verifies no MITM and that server cert didn’t change)
+            val pinnedPingOk = runCatching {
+                ServerPinger.notifyServerPinnedByCert(
+                    context = context,
+                    ip = ip,
+                    port = port.toInt(),
+                    expectedCertSha256Hex = fp.certHex
+                )
+            }.isSuccess
+
+
+            // 4) Register (make sure peerClient internally uses the same CERT-hash pinning)
+            when (val reg = peerClient.registerPeerDevice(ip, port, fp.certHex, pin)) {
+                is RegisterPeerResult.Success -> {
+                    if (p2PState.session == null) p2PState.session =
+                        P2PSharedState.createNewSession()
+                    p2PState.session?.sessionId = reg.sessionId
+                    _registrationSuccess.postValue(true)
                 }
-                .onFailure {
+
+                RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
+                RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
+                RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")
+                RegisterPeerResult.TooManyRequests -> bottomMessageError.postValue("Too many requests, try again later")
+                RegisterPeerResult.ServerError -> bottomMessageError.postValue("Server error, try again later")
+                RegisterPeerResult.RejectedByReceiver -> bottomMessageError.postValue("Receiver rejected the registration")
+                is RegisterPeerResult.Failure -> {
+                    Timber.e(reg.exception, "Connection failure")
                     bottomSheetError.postValue(
-                        "Connection failed" to
-                                "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                        "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
                     )
                 }
+            }
         }
     }
-
-
-
-    // -------------------- SAVE-ON-ARRIVAL CORE --------------------
 
     private fun initCountersIfNeeded() {
         val session = p2PState.session ?: return
@@ -220,7 +253,6 @@ class PeerToPeerViewModel @Inject constructor(
             )
         )
     }
-
 
 
     private fun obtainTargetFolderId(): String {
@@ -275,9 +307,11 @@ class PeerToPeerViewModel @Inject constructor(
                             MediaFileHandler.saveJpegPhoto(bytes, folderId).blockingGet()
                         }
                     }
+
                     isVideoFileType(pf.file.fileType) -> {
                         MediaFileHandler.saveMp4Video(f, folderId)
                     }
+
                     else -> {
                         vault.builder(f.inputStream())
                             .setName(f.name)
@@ -392,10 +426,12 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
-                    if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
+                    if (p2PState.session == null) p2PState.session =
+                        P2PSharedState.createNewSession()
                     p2PState.session?.sessionId = result.sessionId
                     _registrationSuccess.postValue(true)
                 }
+
                 RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
                 RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
                 RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")

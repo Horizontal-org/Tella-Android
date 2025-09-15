@@ -387,9 +387,8 @@ class TellaPeerToPeerClient @Inject constructor(
         val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
 
         val req = Request.Builder()
-            .url(url)
-            .get()
-            .addHeader("Connection", "close")
+            .url("https://$ip:$port/api/v1/ping")
+            .post(okhttp3.RequestBody.create(null, ByteArray(0))) // or "".toRequestBody(null)
             .build()
 
         runCatching {
