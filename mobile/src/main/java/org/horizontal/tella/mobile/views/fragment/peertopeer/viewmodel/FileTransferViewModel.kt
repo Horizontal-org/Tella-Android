@@ -1,8 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hzontal.tella_vault.VaultFile
@@ -82,7 +79,7 @@ class FileTransferViewModel @Inject constructor(
 
                 is PrepareUploadResult.Forbidden -> {
                     withContext(Dispatchers.Main) {
-                        Timber.w("Upload rejected by receiver")
+                        Timber.w("Rejected")
                         _prepareRejected.value = Event(true)
                     }
                 }
