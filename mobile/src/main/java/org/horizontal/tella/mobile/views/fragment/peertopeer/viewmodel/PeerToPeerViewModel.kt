@@ -13,8 +13,11 @@ import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
@@ -52,13 +55,22 @@ class PeerToPeerViewModel @Inject constructor(
     val p2PState: P2PSharedState
 ) : ViewModel() {
 
+    // ------------------- Public state / deps -------------------
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
     var isManualConnection: Boolean = true
     var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
 
+    val clientHash = peerToPeerManager.clientConnected
+    private val networkInfoManager = NetworkInfoManager(context)
+    val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
+
+    // ------------------- Events to the UI -------------------
     private val _registrationSuccess = SingleLiveEvent<Boolean>()
     val registrationSuccess: SingleLiveEvent<Boolean> get() = _registrationSuccess
+
+    private val _registrationServerSuccess = SingleLiveEvent<Boolean>()
+    val registrationServerSuccess: SingleLiveEvent<Boolean> get() = _registrationServerSuccess
 
     private val _getHashSuccess = SingleLiveEvent<String>()
     val getHashSuccess: SingleLiveEvent<String> get() = _getHashSuccess
@@ -66,13 +78,8 @@ class PeerToPeerViewModel @Inject constructor(
     val bottomMessageError = SingleLiveEvent<String>()
     val bottomSheetError = SingleLiveEvent<Pair<String, String>>()
 
-    val clientHash = peerToPeerManager.clientConnected
-
-    private val _registrationServerSuccess = SingleLiveEvent<Boolean>()
-    val registrationServerSuccess: SingleLiveEvent<Boolean> get() = _registrationServerSuccess
-
-    private val _incomingPrepareRequest = SingleLiveEvent<PrepareUploadRequest?>()
-    val incomingPrepareRequest: SingleLiveEvent<PrepareUploadRequest?> get() = _incomingPrepareRequest
+    private val _incomingPrepareRequest = MutableSharedFlow<PrepareUploadRequest>(replay = 1, extraBufferCapacity = 1)
+    val incomingPrepareRequest: SharedFlow<PrepareUploadRequest> = _incomingPrepareRequest.asSharedFlow()
 
     private val _incomingRequest = MutableStateFlow<IncomingRegistration?>(null)
     val incomingRequest: StateFlow<IncomingRegistration?> get() = _incomingRequest
@@ -80,22 +87,39 @@ class PeerToPeerViewModel @Inject constructor(
     private val _uploadProgress = SingleLiveEvent<UploadProgressState?>()
     val uploadProgress: SingleLiveEvent<UploadProgressState?> get() = _uploadProgress
 
-    private val networkInfoManager = NetworkInfoManager(context)
-    val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
-
     private val _bottomSheetProgress = MutableLiveData<BottomSheetProgressState>()
     val bottomSheetProgress: LiveData<BottomSheetProgressState> get() = _bottomSheetProgress
 
     private val _closeConnection = SingleLiveEvent<Boolean>()
     val closeConnection: SingleLiveEvent<Boolean> get() = _closeConnection
 
+    // ------------------- Manual verify UI flags -------------------
+    private val _canTapConfirm = MutableLiveData(false)
+    val canTapConfirm: LiveData<Boolean> get() = _canTapConfirm
+
+    private val _waitingForOtherSide = MutableLiveData(false)
+    val waitingForOtherSide: LiveData<Boolean> get() = _waitingForOtherSide
+
+    // Cache for "pre-accept" when recipient taps before the request arrives
+    private var preConfirmRegistration: Boolean = false
+
+    // Keep connection params until user taps Confirm (sender path)
+    private data class PendingConnectParams(
+        val ip: String,
+        val port: String,
+        val hash: String,
+        val pin: String
+    )
+    private var pendingParams: PendingConnectParams? = null
+
+    // ------------------- Save counters -------------------
     private val savingOrDone: MutableSet<String> =
         Collections.newSetFromMap(ConcurrentHashMap())
     private var totalFilesExpected = 0
     private var savedCount = 0
     private var targetFolderId: String? = null
-    // -------------------------------------------
 
+    // ------------------- Init: subscribe to streams -------------------
     init {
         observePrepareUploadEvents()
         observeRegistrationEvents()
@@ -104,12 +128,11 @@ class PeerToPeerViewModel @Inject constructor(
         observeCloseConnectionEvents()
     }
 
+    // ------------------- Observers -------------------
     private fun observePrepareUploadEvents() {
         viewModelScope.launch {
-            PeerEventManager.prepareUploadEvents.collect {
-                PeerEventManager.getPendingPrepareUploadRequest()?.let { request ->
-                    _incomingPrepareRequest.postValue(request)
-                }
+            PeerEventManager.prepareUploadRequests.collect { request ->
+                _incomingPrepareRequest.tryEmit(request)   // your _incomingPrepareRequest already has replay = 1
             }
         }
     }
@@ -118,6 +141,10 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.registrationEvents.collect { success ->
                 _registrationServerSuccess.postValue(success)
+                if (success) {
+                    _waitingForOtherSide.postValue(false)
+                    _canTapConfirm.postValue(false) // will navigate away
+                }
             }
         }
     }
@@ -126,7 +153,6 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.closeConnectionEvent.collect { success ->
                 if (success) {
-                    // Set CLOSED now; final emission will happen when all files are saved/failed
                     p2PState.session?.status = SessionStatus.CLOSED
                     emitFinalIfReady(SessionStatus.CLOSED)
                 }
@@ -138,21 +164,61 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.registrationRequests.collect { (registrationId, payload) ->
                 if (registrationId.isEmpty()) return@collect
+
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
+
                 if (!p2PState.isUsingManualConnection) {
+                    // Auto mode: accept immediately
                     PeerEventManager.confirmRegistration(registrationId, true)
                     _registrationSuccess.postValue(true)
                     PeerEventManager.clearRegistrationRequest()
+                    return@collect
+                }
+
+                // Manual mode: if the recipient tapped confirm earlier, accept now.
+                if (preConfirmRegistration) {
+                    PeerEventManager.confirmRegistration(registrationId, true)
+                    PeerEventManager.clearRegistrationRequest()
+                    preConfirmRegistration = false
+                } else {
+                    // Otherwise, allow tapping now (if UI wants to reflect it)
+                    _canTapConfirm.postValue(true)
                 }
             }
         }
     }
 
+    private fun observeUploadProgress() {
+        viewModelScope.launch {
+            PeerEventManager.uploadProgressStateFlow.collect { state ->
+                initCountersIfNeeded()
+                _uploadProgress.postValue(state)
+
+                // Save each FINISHED file exactly once (by transmissionId)
+                state.files.forEach { pf ->
+                    val txId = pf.transmissionId
+                    if (txId != null &&
+                        pf.status == P2PFileStatus.FINISHED &&
+                        !savingOrDone.contains(txId)
+                    ) {
+                        viewModelScope.launch(Dispatchers.IO) { saveOneFile(pf) }
+                    }
+                }
+
+                emitFinalIfReady(state.sessionStatus)
+            }
+        }
+    }
+
+    // ------------------- Manual verification entry points -------------------
+
+    /**
+     * Called after IP/port/PIN are entered and TLS cert is fetched.
+     * In manual mode we DO NOT auto-register. We enable the "Confirm & connect" button instead.
+     */
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
-            // 1) Optional fast reachability (your existing TCP probe inside peerClient)
-            val reachable =
-                runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
+            val reachable = runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
             if (!reachable) {
                 bottomSheetError.postValue(
                     "Connection failed" to "Host not reachable on this Wi-Fi. Check IP/Port and that both devices are on the same network."
@@ -160,23 +226,18 @@ class PeerToPeerViewModel @Inject constructor(
                 return@launch
             }
 
-            // 2) PRE-PIN TLS handshake (no HTTP): read leaf cert → compute hashes
-            val fpRes: Result<FingerprintResult> =
-                FingerprintFetcher.fetch(context, ip, port.toInt())
+            val fpRes: Result<FingerprintResult> = FingerprintFetcher.fetch(context, ip, port.toInt())
             if (fpRes.isFailure) {
-                val e = fpRes.exceptionOrNull()
                 bottomSheetError.postValue(
-                    "Connection failed" to ("Couldn’t read peer certificate. " + (e?.message ?: ""))
+                    "Connection failed" to ("Couldn’t read peer certificate. " + (fpRes.exceptionOrNull()?.message ?: ""))
                 )
                 return@launch
             }
 
-            val fp = fpRes.getOrNull()!! 
-
+            val fp = fpRes.getOrNull()!!
             p2PState.hash = fp.certHex
             _getHashSuccess.postValue(fp.certHex)
 
-            // 3) Pinned ping using CERT hash (verifies no MITM and that server cert didn’t change)
             val pinnedPingOk = runCatching {
                 ServerPinger.notifyServerPinnedByCert(
                     context = context,
@@ -186,16 +247,85 @@ class PeerToPeerViewModel @Inject constructor(
                 )
             }.isSuccess
 
+            // Manual verification path: wait for user tap
+            p2PState.isUsingManualConnection = true
+            pendingParams = PendingConnectParams(ip, port, fp.certHex, pin)
+            _canTapConfirm.postValue(true)
+            _waitingForOtherSide.postValue(false)
+        }
+    }
 
-            // 4) Register (make sure peerClient internally uses the same CERT-hash pinning)
-            when (val reg = peerClient.registerPeerDevice(ip, port, fp.certHex, pin)) {
+    /** Sender tapped confirm: actually initiate /register on peer (using cached params). */
+    // In PeerToPeerViewModel
+    fun onUserTappedConfirmAndConnect() {
+        _canTapConfirm.postValue(false)
+        _waitingForOtherSide.postValue(true)
+
+        val params = pendingParams
+        if (params != null) {
+            startRegistration(params.ip, params.port, params.hash, params.pin)
+            return
+        }
+
+        // Fallback: try using current state or re-run handshake
+        val ip = p2PState.ip
+        val port = p2PState.port
+        val pin = p2PState.pin.orEmpty()
+        val hash = p2PState.hash
+
+        if (hash.isNotBlank()) {
+            startRegistration(ip, port, hash, pin)
+        } else {
+            viewModelScope.launch {
+                handleCertificate(ip, port, pin)
+                pendingParams?.let { startRegistration(it.ip, it.port, it.hash, it.pin) }
+                    ?: run {
+                        _waitingForOtherSide.postValue(false)
+                        _canTapConfirm.postValue(true)
+                    }
+            }
+        }
+    }
+
+
+
+    /** Recipient tapped confirm: allow pre-accept before request arrives. */
+    fun onRecipientConfirmTapped() {
+        _canTapConfirm.postValue(false)
+        _waitingForOtherSide.postValue(true) // "Waiting for the sender…"
+
+        val current = _incomingRequest.value
+        if (current != null) {
+            onUserConfirmedRegistration(current.registrationId)
+        } else {
+            preConfirmRegistration = true
+        }
+    }
+
+    /** Recipient send acceptance to server. Do NOT post local registrationSuccess here. */
+    fun onUserConfirmedRegistration(registrationId: String) {
+        viewModelScope.launch {
+            PeerEventManager.confirmRegistration(registrationId, true)
+            PeerEventManager.clearRegistrationRequest()
+        }
+    }
+
+    fun onUserRejectedRegistration(registrationId: String) {
+        viewModelScope.launch {
+            PeerEventManager.confirmRegistration(registrationId, false)
+            PeerEventManager.clearRegistrationRequest()
+        }
+    }
+
+    /** Sender/initiator path: call server /register */
+    fun startRegistration(ip: String, port: String, hash: String, pin: String) {
+        viewModelScope.launch {
+            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
                 is RegisterPeerResult.Success -> {
-                    if (p2PState.session == null) p2PState.session =
-                        P2PSharedState.createNewSession()
-                    p2PState.session?.sessionId = reg.sessionId
-                    _registrationSuccess.postValue(true)
+                    if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
+                    p2PState.session?.sessionId = result.sessionId
+                    _registrationSuccess.postValue(true) // Used by sender UI
                 }
-
                 RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
                 RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
                 RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")
@@ -203,7 +333,7 @@ class PeerToPeerViewModel @Inject constructor(
                 RegisterPeerResult.ServerError -> bottomMessageError.postValue("Server error, try again later")
                 RegisterPeerResult.RejectedByReceiver -> bottomMessageError.postValue("Receiver rejected the registration")
                 is RegisterPeerResult.Failure -> {
-                    Timber.e(reg.exception, "Connection failure")
+                    Timber.e(result.exception, "Connection failure")
                     bottomSheetError.postValue(
                         "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
                     )
@@ -212,17 +342,16 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
+    // ------------------- Prepare/Upload/Save logic (unchanged from your version) -------------------
+
     private fun initCountersIfNeeded() {
         val session = p2PState.session ?: return
         if (totalFilesExpected == 0) {
             totalFilesExpected = session.files.size
             savedCount = session.files.values.count { it.status == P2PFileStatus.SAVED }
-            // Mark already terminal as “done” to avoid reprocessing
             session.files.values.forEach { pf ->
                 val tx = pf.transmissionId
-                if (!tx.isNullOrBlank() &&
-                    (pf.status == P2PFileStatus.SAVED || pf.status == P2PFileStatus.FAILED)
-                ) {
+                if (!tx.isNullOrBlank() && (pf.status == P2PFileStatus.SAVED || pf.status == P2PFileStatus.FAILED)) {
                     savingOrDone.add(tx)
                 }
             }
@@ -237,7 +366,6 @@ class PeerToPeerViewModel @Inject constructor(
         val final = when (session.status) {
             SessionStatus.CLOSED -> SessionStatus.CLOSED
             SessionStatus.SENDING, SessionStatus.SAVING -> computeFinalStatus()
-            // If server already marked FINISHED/FINISHED_WITH_ERRORS we keep it
             SessionStatus.FINISHED, SessionStatus.FINISHED_WITH_ERRORS -> session.status
             else -> computeFinalStatus()
         }
@@ -247,13 +375,12 @@ class PeerToPeerViewModel @Inject constructor(
         _uploadProgress.postValue(
             UploadProgressState(
                 title = session.title.orEmpty(),
-                sessionStatus = final,     // <-- TERMINAL
+                sessionStatus = final,
                 files = session.files.values.toList(),
                 percent = 100
             )
         )
     }
-
 
     private fun obtainTargetFolderId(): String {
         targetFolderId?.let { return it }
@@ -273,10 +400,8 @@ class PeerToPeerViewModel @Inject constructor(
 
     private fun saveOneFile(pf: ProgressFile) {
         val txId = pf.transmissionId ?: return
-        // Guard to avoid duplicate saves
         if (!savingOrDone.add(txId)) return
 
-        // First save → switch session to SAVING (so UI doesn’t navigate early)
         if (p2PState.session?.status == SessionStatus.SENDING) {
             p2PState.session?.status = SessionStatus.SAVING
             _uploadProgress.postValue(
@@ -284,7 +409,7 @@ class PeerToPeerViewModel @Inject constructor(
                     title = p2PState.session?.title.orEmpty(),
                     sessionStatus = SessionStatus.SAVING,
                     files = p2PState.session?.files?.values?.toList().orEmpty(),
-                    percent = 100 // transport might have reached 100; keep UI bar full while saving
+                    percent = 100
                 )
             )
         }
@@ -307,11 +432,9 @@ class PeerToPeerViewModel @Inject constructor(
                             MediaFileHandler.saveJpegPhoto(bytes, folderId).blockingGet()
                         }
                     }
-
                     isVideoFileType(pf.file.fileType) -> {
                         MediaFileHandler.saveMp4Video(f, folderId)
                     }
-
                     else -> {
                         vault.builder(f.inputStream())
                             .setName(f.name)
@@ -326,8 +449,6 @@ class PeerToPeerViewModel @Inject constructor(
                 null
             }
 
-            // Mark SAVED only after DB write succeeds
-            // NOTE: use transmissionId key; ensure your session map is keyed accordingly.
             val txKey = pf.transmissionId
             if (txKey != null) {
                 p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.SAVED
@@ -339,7 +460,6 @@ class PeerToPeerViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e(e, "Saving to vault failed for file ${pf.file.fileName}")
             pf.status = P2PFileStatus.FAILED
-            // do not increment savedCount on failure
         } finally {
             postBottomSheetProgress()
             maybeFinalizeAfterSave()
@@ -374,10 +494,6 @@ class PeerToPeerViewModel @Inject constructor(
 
     private fun emitFinalIfReady(triggerStatus: SessionStatus) {
         val session = p2PState.session ?: return
-
-        // Only finish when:
-        // - session is terminal (by sender or by logic), AND
-        // - all files are saved/failed locally
         if (!sessionIsTerminal(triggerStatus)) return
         if (!allFilesSavedOrFailed()) return
 
@@ -397,79 +513,12 @@ class PeerToPeerViewModel @Inject constructor(
         )
     }
 
-    private fun observeUploadProgress() {
-        viewModelScope.launch {
-            PeerEventManager.uploadProgressStateFlow.collect { state ->
-                initCountersIfNeeded()
-
-                // Forward raw transport progress (SENDING) from the server
-                _uploadProgress.postValue(state)
-
-                // Save each FINISHED file exactly once (by transmissionId)
-                state.files.forEach { pf ->
-                    val txId = pf.transmissionId
-                    if (txId != null &&
-                        pf.status == P2PFileStatus.FINISHED &&
-                        !savingOrDone.contains(txId)
-                    ) {
-                        viewModelScope.launch(Dispatchers.IO) { saveOneFile(pf) }
-                    }
-                }
-
-                // If the sender is done/cancelled, finalize when all files are saved/failed
-                emitFinalIfReady(state.sessionStatus)
-            }
-        }
-    }
-
-    fun startRegistration(ip: String, port: String, hash: String, pin: String) {
-        viewModelScope.launch {
-            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
-                is RegisterPeerResult.Success -> {
-                    if (p2PState.session == null) p2PState.session =
-                        P2PSharedState.createNewSession()
-                    p2PState.session?.sessionId = result.sessionId
-                    _registrationSuccess.postValue(true)
-                }
-
-                RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
-                RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
-                RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")
-                RegisterPeerResult.TooManyRequests -> bottomMessageError.postValue("Too many requests, try again later")
-                RegisterPeerResult.ServerError -> bottomMessageError.postValue("Server error, try again later")
-                RegisterPeerResult.RejectedByReceiver -> bottomMessageError.postValue("Receiver rejected the registration")
-                is RegisterPeerResult.Failure -> {
-                    Timber.e(result.exception, "Connection failure")
-                    bottomSheetError.postValue(
-                        "Connection failed" to
-                                "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                    )
-                }
-            }
-        }
-    }
-
-    fun onUserConfirmedRegistration(registrationId: String) {
-        viewModelScope.launch {
-            PeerEventManager.confirmRegistration(registrationId, true)
-            _registrationSuccess.postValue(true)
-            PeerEventManager.clearRegistrationRequest()
-        }
-    }
-
-    fun onUserRejectedRegistration(registrationId: String) {
-        viewModelScope.launch {
-            PeerEventManager.confirmRegistration(registrationId, false)
-            PeerEventManager.clearRegistrationRequest()
-        }
-    }
-
+    // ------------------- Misc -------------------
     fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
         PeerEventManager.resolveUserDecision(sessionId, accepted)
     }
 
     fun clearPrepareRequest() {
-        _incomingPrepareRequest.value = null
         hasNavigatedToSuccessFragment = false
     }
 

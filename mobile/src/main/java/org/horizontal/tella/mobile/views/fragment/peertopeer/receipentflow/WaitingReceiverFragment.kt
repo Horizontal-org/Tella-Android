@@ -3,8 +3,11 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -20,6 +23,7 @@ class WaitingReceiverFragment :
     BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+    private var navigated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar()
@@ -34,20 +38,25 @@ class WaitingReceiverFragment :
                 navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
             }
         }
-
         binding.waitingText.text = getString(R.string.waiting_for_the_sender_to_share_files)
     }
 
     private fun observeIncomingPrepareRequest() {
-        viewModel.incomingPrepareRequest.observe(viewLifecycleOwner) { request ->
-            if (request != null && !viewModel.hasNavigatedToSuccessFragment) {
-                viewModel.hasNavigatedToSuccessFragment = true
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
+                viewModel.incomingPrepareRequest.collect { request ->
+                    if (!navigated &&
+                        isAdded &&
+                        findNavController().currentDestination?.id == R.id.waitingReceiverFragment
+                    ) {
+                        navigated = true
 
-                val fileCount = request.files.size
-                bundle.putInt("fileCount", fileCount)
-                bundle.putString("sessionId", request.sessionId)
+                        bundle.putInt("fileCount", request.files.size)
+                        bundle.putString("sessionId", request.sessionId)
 
-                navManager().navigateFromWaitingReceiverFragmentToRecipientSuccessFragment()
+                        navManager().navigateFromWaitingReceiverFragmentToRecipientSuccessFragment()
+                    }
+                }
             }
         }
     }
@@ -67,8 +76,4 @@ class WaitingReceiverFragment :
             }
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.clearPrepareRequest()
-    }
 }
