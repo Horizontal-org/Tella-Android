@@ -52,7 +52,7 @@
     <TextView
         android:id="@+id/shareFilesDescriptionTv"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:paddingHorizontal="@dimen/activity_horizontal_margin"
+        android:paddingHorizontal="@dimen/activity_horizontal_large_margin"
         android:text="@string/share_files_description"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/sendFilesBtn"

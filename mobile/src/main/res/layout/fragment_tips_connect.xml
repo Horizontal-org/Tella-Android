@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-            app:startTitle="@string/get_connected" />
+            app:startTitle="@string/tips_to_connect_title" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Content -->
@@ -44,15 +44,8 @@
                     style="@style/Tella_Main_White_Text.MeduimbBold"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
-                    android:text="@string/tips_section_setup" />
+                    android:text="@string/nearbysharing_tips_to_connect_settingup" />
 
-                <TextView
-                    android:id="@+id/section1Body"
-                    style="@style/Tella_Main_White_Text.Meduim"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/wa_white"
-                    android:lineSpacingExtra="2dp"
-                    android:text="@string/tips_setup_intro" />
 
                 <!-- Numbered list -->
 
@@ -61,7 +54,7 @@
                     style="@style/Tella_Main_White_Text.Meduim"
                     android:layout_marginTop="6dp"
                     android:lineSpacingExtra="3dp"
-                    android:text="@string/tips_setup_list"
+                    android:text="@string/nearbysharing_tips_to_connect_settingup_expl"
                     android:textColor="@color/wa_white" />
 
                 <com.google.android.material.divider.MaterialDivider

@@ -73,7 +73,7 @@
         app:layout_constraintBottom_toTopOf="@+id/discardBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:text="@string/waiting_for_the_sender" />
+        app:text="@string/confirm_and_connect" />
 
     <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/discardBtn"
