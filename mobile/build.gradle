@@ -15,7 +15,7 @@ android {
         minSdkVersion versions.minSdk
         compileSdkVersion versions.compileSdk
         targetSdkVersion versions.targetSdk
-        versionCode 205
+        versionCode 211
         versionName "3.0.0"
         multiDexEnabled true
 
@@ -30,7 +30,7 @@ android {
         String dropboxKey = localProperties['DROPBOX_APP_KEY']
         if (dropboxKey == null) {
             logger.warn("No value provided for DROPBOX_APP_KEY.  Specify a value in a examples/android/local.properties file. You can register for one at https://developers.dropbox.com/")
-            dropboxKey = ""
+            dropboxKey = "2j6ouobejsb3n82"
         }
         buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
         manifestPlaceholders = [dropboxKey: dropboxKey]
@@ -55,12 +55,12 @@ android {
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             debuggable false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
