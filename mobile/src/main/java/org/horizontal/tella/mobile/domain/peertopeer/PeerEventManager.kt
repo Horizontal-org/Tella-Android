@@ -32,12 +32,11 @@ object PeerEventManager {
     )
     val registrationRequests = _registrationRequests.asSharedFlow()
 
-    // Optional: refactor this one later too
-    private val _prepareUploadEvents = MutableSharedFlow<Unit>(
-        replay = 0,
-        extraBufferCapacity = 1
-    )
-    val prepareUploadEvents = _prepareUploadEvents.asSharedFlow()
+
+    private val _prepareUploadRequests =
+        MutableSharedFlow<PrepareUploadRequest>(replay = 1, extraBufferCapacity = 1)
+    val prepareUploadRequests = _prepareUploadRequests.asSharedFlow()
+
 
     private var pendingPrepareUploadRequest: PrepareUploadRequest? = null
 
@@ -61,20 +60,13 @@ object PeerEventManager {
         closeConnectionEvent.emit(true)
     }
 
-    // Trigger upload preparation request, storing the data separately
     suspend fun emitPrepareUploadRequest(request: PrepareUploadRequest): Boolean {
         val deferred = CompletableDeferred<Boolean>()
         decisionMap[request.sessionId] = deferred
-        pendingPrepareUploadRequest = request
-        _prepareUploadEvents.emit(Unit)
-        return deferred.await()
+        _prepareUploadRequests.emit(request)  // emit actual payload; late subscribers will receive it
+        return deferred.await()               // await user decision on recipient
     }
 
-    fun getPendingPrepareUploadRequest(): PrepareUploadRequest? {
-        return pendingPrepareUploadRequest.also {
-            pendingPrepareUploadRequest = null // Clear once accessed
-        }
-    }
 
     fun resolveUserDecision(sessionId: String, accepted: Boolean) {
         decisionMap.remove(sessionId)?.complete(accepted)
