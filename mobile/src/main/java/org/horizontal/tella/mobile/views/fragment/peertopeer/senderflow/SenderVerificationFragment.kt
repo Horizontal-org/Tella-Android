@@ -34,20 +34,15 @@ class SenderVerificationFragment :
     private fun initView() {
         binding.warningTextView.text = getString(R.string.hash_sender_description)
         binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+        binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
     }
 
     private fun initListeners() {
-
-        binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
-
         binding.confirmAndConnectBtn.setOnClickListener {
+            // Disable & show waiting immediately
+            binding.confirmAndConnectBtn.isEnabled = false
             binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
-            viewModel.startRegistration(
-                ip = viewModel.p2PState.ip,
-                port = viewModel.p2PState.port,
-                hash = viewModel.p2PState.hash,
-                pin = viewModel.p2PState.pin.toString()
-            )
+            viewModel.onUserTappedConfirmAndConnect()
         }
 
         binding.discardBtn.setOnClickListener {
@@ -56,14 +51,30 @@ class SenderVerificationFragment :
     }
 
     private fun initObservers() {
+        // Manual mode
         viewModel.isManualConnection = true
+
+        // Button enable/disable from VM
+        viewModel.canTapConfirm.observe(viewLifecycleOwner) { canTap ->
+            binding.confirmAndConnectBtn.isEnabled = canTap
+            if (canTap) {
+                binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+            }
+        }
+        viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
+            if (waiting) {
+                binding.confirmAndConnectBtn.isEnabled = false
+                binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
+            }
+        }
+
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
-                findNavController().currentBackStackEntry?.savedStateHandle
-                    ?.set("registrationSuccess", true)
+                findNavController().currentBackStackEntry?.savedStateHandle?.set("registrationSuccess", true)
                 navManager().navigateConnectManuallyVerificationFragmentToprepareUploadFragment()
             }
         }
+
         viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
             DialogUtils.showBottomMessage(baseActivity, message, true)
         }
@@ -77,12 +88,9 @@ class SenderVerificationFragment :
                 getString(R.string.try_again),
                 null
             ) {
-                viewModel.startRegistration(
-                    ip = viewModel.p2PState.ip,
-                    port = viewModel.p2PState.port,
-                    hash = viewModel.p2PState.hash,
-                    pin = viewModel.p2PState.pin.toString()
-                )
+                // Allow retry: re-enable confirm
+                binding.confirmAndConnectBtn.isEnabled = true
+                binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
             }
         }
     }
