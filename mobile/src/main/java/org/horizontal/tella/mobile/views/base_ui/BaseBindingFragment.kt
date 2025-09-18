@@ -78,7 +78,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
             .setPadding(24)
             .setDismissOnClick(true)
             .setCancelable(true)
-            .show<Tooltip>()
+            .show()
     }
 
     open fun back() {

@@ -32,7 +32,7 @@ buildscript {
     versions.coroutinesAndroid = '1.5.2'
     versions.gson = '2.9.0'
     versions.legacyV4 = '1.0.0'
-    versions.tooltip = '1.0.0-alpha06-SNAPSHOT'
+    versions.tooltip = '0.2.0'
     versions.retrofit2KotliCoroutinesAdapter = '0.9.2'
     versions.desugar = '1.1.5'
     versions.multidex = '2.0.1'
