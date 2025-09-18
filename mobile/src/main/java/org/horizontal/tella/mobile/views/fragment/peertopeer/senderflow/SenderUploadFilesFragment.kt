@@ -23,7 +23,6 @@ class SenderUploadFilesFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.uploadAllFiles()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
         showFormEndView()
         observeUploadProgress()

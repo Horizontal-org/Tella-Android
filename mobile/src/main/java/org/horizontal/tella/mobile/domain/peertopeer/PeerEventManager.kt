@@ -34,11 +34,8 @@ object PeerEventManager {
 
 
     private val _prepareUploadRequests =
-        MutableSharedFlow<PrepareUploadRequest>(replay = 1, extraBufferCapacity = 1)
+        MutableSharedFlow<PrepareUploadRequest>(replay = 0, extraBufferCapacity = 1)
     val prepareUploadRequests = _prepareUploadRequests.asSharedFlow()
-
-
-    private var pendingPrepareUploadRequest: PrepareUploadRequest? = null
 
     private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
