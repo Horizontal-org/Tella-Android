@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/peer_to_peer_graph"
+    app:startDestination="@id/startNearBySharingFragment">
+
+    <fragment
+        android:id="@+id/startNearBySharingFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.StartNearBySharingFragment"
+        android:label="StartNearBySharingFragment"
+        tools:layout="@layout/start_near_by_sharing_fragment">
+        <action
+            android:id="@+id/action_startNearBySharingFragment_to_connectHotspotFragment"
+            app:destination="@id/connectHotspotScreen" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/connectHotspotScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ConnectHotspotFragment"
+        android:label="ConnectHotspotFragment"
+        tools:layout="@layout/connect_hotspot_layout">
+
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_qrCodeScreen"
+            app:destination="@id/qrCodeScreen" />
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_scanQrCodeScreen"
+            app:destination="@id/scanQrCodeScreen" />
+        <action
+            android:id="@+id/action_connectHotspotScreen_to_tipsToConnectFragment"
+            app:destination="@id/tipsToConnectFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/connectManuallyVerificationFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderVerificationFragment"
+        android:label="ConnectManuallyVerificationScreen"
+        tools:layout="@layout/connect_manually_verification">
+        <action
+            android:id="@+id/action_connectManuallyVerificationFragment_to_prepareUploadFragment"
+            app:destination="@id/prepareUploadFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scanQrCodeScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.ScanQrCodeFragment"
+        android:label="ScanQrCodeScreen"
+        tools:layout="@layout/scan_qrcode_fragment">
+        <action
+            android:id="@+id/action_scanQrCodeScreen_to_prepareUploadFragment"
+            app:destination="@id/prepareUploadFragment" />
+        <action
+            android:id="@+id/action_scanQrCodeScreen_to_senderManualConnectionScreen"
+            app:destination="@id/senderManualConnectionScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/qrCodeScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.QRCodeFragment"
+        android:label="QrCodeScreen"
+        tools:layout="@layout/fragment_qr_code">
+        <action
+            android:id="@+id/action_qrCodeScreen_to_deviceInfoScreen"
+            app:destination="@id/deviceInfoScreen" />
+        <action
+            android:id="@+id/action_qrCodeScreen_to_waitingReceiverFragment"
+            app:destination="@id/waitingReceiverFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/deviceInfoScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.ShowDeviceInfoFragment"
+        android:label="DeviceInfoScreen"
+        tools:layout="@layout/show_device_info_layout">
+        <action
+            android:id="@+id/action_deviceInfoScreen_to_recipientVerificationScreen"
+            app:destination="@id/recipientVerificationScreen" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/recipientVerificationScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientVerificationFragment"
+        android:label="RecipientVerificationScreen"
+        tools:layout="@layout/connect_manually_verification">
+        <action
+            android:id="@+id/action_recipientVerificationScreen_to_waitingReceiverFragment"
+            app:destination="@id/waitingReceiverFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipientUploadFilesFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientUploadFilesFragment"
+        android:label="recipientUploadFilesFragment"
+        tools:layout="@layout/fragment_upload_files">
+        <action
+            android:id="@+id/action_recipientUploadFilesFragment_to_peerToPeerResultFragment"
+            app:destination="@id/peerToPeerResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/prepareUploadFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PrepareUploadFragment"
+        android:label="PrepareUploadFragment"
+        tools:layout="@layout/fragment_prepare_upload">
+        <action
+            android:id="@+id/action_prepareUploadFragment_to_waitingSenderFragment"
+            app:destination="@id/waitingSenderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/senderManualConnectionScreen"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderManualConnectionFragment"
+        android:label="SenderManualConnectionScreen"
+        tools:layout="@layout/sender_manual_connection">
+        <action
+            android:id="@+id/action_senderManualConnectionScreen_to_connectManuallyVerificationScreen"
+            app:destination="@id/connectManuallyVerificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/waitingReceiverFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.WaitingReceiverFragment"
+        android:label="WaitingReceiverFragment"
+        tools:layout="@layout/fragment_waiting">
+        <action
+            android:id="@+id/action_waitingReceiverFragment_to_recipientSuccessFragment"
+            app:destination="@id/recipientSuccessFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recipientSuccessFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.RecipientSuccessFragment"
+        android:label="RecipientSuccessFragment"
+        tools:layout="@layout/fragment_recipient_success">
+        <action
+            android:id="@+id/action_recipientSuccessFragment_to_recipientUploadFilesFragment"
+            app:destination="@id/recipientUploadFilesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/waitingSenderFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.WaitingSenderFragment"
+        android:label="WaitingSenderFragment"
+        tools:layout="@layout/fragment_waiting">
+        <action
+            android:id="@+id/action_waitingSenderFragment_to_uploadFilesFragment"
+            app:destination="@id/uploadSenderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/uploadSenderFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.SenderUploadFilesFragment"
+        android:label="UploadFilesFragment"
+        tools:layout="@layout/fragment_upload_files">
+        <action
+            android:id="@+id/action_uploadSenderFragment_to_peerToPeerResultFragment"
+            app:destination="@id/peerToPeerResultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/peerToPeerResultFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerResultFragment"
+        android:label="PeerToPeerResultFragment"
+        tools:layout="@layout/fragment_peer_to_peer_result" />
+
+    <fragment
+        android:id="@+id/tipsToConnectFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.peertopeer.common.TipsConnectFragment"
+        android:label="TipsConnectFragment"
+        tools:layout="@layout/fragment_tips_connect" />
+
+
+</navigation>

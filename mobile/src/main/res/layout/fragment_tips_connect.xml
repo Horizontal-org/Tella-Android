@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple">
+
+    <!-- Top app bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <org.hzontal.shared_ui.appbar.ToolbarComponent
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+            app:startTitle="@string/tips_to_connect_title" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Section: Setting up -->
+                <TextView
+                    android:id="@+id/section1Title"
+                    style="@style/Tella_Main_White_Text.MeduimbBold"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:text="@string/nearbysharing_tips_to_connect_settingup" />
+
+
+                <!-- Numbered list -->
+
+                <TextView
+                    android:id="@+id/section1List"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/nearbysharing_tips_to_connect_settingup_expl"
+                    android:textColor="@color/wa_white" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/activity_vertical_margin"
+                    app:dividerColor="@color/wa_white_20"  />
+
+                <!-- Section: Joining same network -->
+                <TextView
+                    android:id="@+id/section2Title"
+                    style="@style/Tella_Main_White_Text.MeduimbBold"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:text="@string/tips_section_join" />
+
+                <TextView
+                    android:id="@+id/section2Body"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/wa_white"
+                    android:lineSpacingExtra="2dp"
+                    android:text="@string/tips_join_body" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/activity_vertical_margin"
+                    app:dividerColor="@color/wa_white_20" />
+
+                <!-- Section: More tips -->
+                <TextView
+                    android:id="@+id/section3Title"
+                    style="@style/Tella_Main_White_Text.MeduimbBold"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:text="@string/tips_section_more" />
+
+                <!-- Bullets -->
+                <TextView
+                    android:id="@+id/section3Bullets"
+                    style="@style/Tella_Main_White_Text.Meduim"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/wa_white"
+                    android:lineSpacingExtra="3dp"
+                    android:text="@string/tips_more_bullets" />
+            </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -324,7 +324,6 @@ class AttachmentsFragment :
     private fun createVaultManageFilesAction(): VaultSheetUtils.IVaultManageFiles {
         return object : VaultSheetUtils.IVaultManageFiles {
             override fun goToCamera() {
-
                 val intent = Intent(activity, CameraActivity::class.java)
                 intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                 baseActivity.startActivity(intent)

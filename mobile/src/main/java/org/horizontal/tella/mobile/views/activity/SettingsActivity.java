@@ -72,14 +72,14 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         }
 
         disposables = MyApplication.bus().createCompositeDisposable();
-        disposables.wire(LocaleChangedEvent.class, new EventObserver<LocaleChangedEvent>() {
+        disposables.wire(LocaleChangedEvent.class, new EventObserver<>() {
             @Override
             public void onNext(@NotNull LocaleChangedEvent event) {
                 recreate();
             }
         });
 
-        disposables.wire(CloseSettingsActivityEvent.class, new EventObserver<CloseSettingsActivityEvent>() {
+        disposables.wire(CloseSettingsActivityEvent.class, new EventObserver<>() {
             @Override
             public void onNext(@NotNull CloseSettingsActivityEvent event) {
                 finish();

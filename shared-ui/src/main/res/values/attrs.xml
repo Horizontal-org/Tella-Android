@@ -14,11 +14,20 @@
         <attr name="rightImg" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="DualTextCheckView">
+        <attr name="rightText" format="reference|string"/>
+        <attr name="leftText" format="reference|string"/>
+        <attr name="checkboxVisible" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="RoundButton">
         <attr name="text" format="reference|string" />
         <attr name="check_state" format="boolean" />
         <attr name="tint_color" format="color|reference" />
         <attr name="text_color" format="color|reference" />
+        <attr name="text_all_caps" format="boolean"/>
+        <attr name="text_round_bold" format="boolean"/>
+        <attr name="default_background" format="reference"/>
     </declare-styleable>
 
 
@@ -123,5 +132,23 @@
 
     <declare-styleable name="ViewPagerComponent">
         <attr name="tabTitles" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="CollapsibleTextView">
+        <attr name="collapsibleTitle" format="string" />
+        <attr name="collapsibleBody" format="string" />
+        <attr name="defaultExpanded" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="TipsCardView">
+        <attr name="tipsTitle" format="string" />
+        <attr name="tipsDescription" format="string" />
+        <attr name="tipsIcon" format="reference" />
+        <attr name="tipsCardDescription" format="reference"/>
+        <attr name="tipsCardTitle" format="reference"/>
+        <attr name="tipsCardColor" format="color|reference" />
+        <attr name="tipsTitleColor" format="color|reference" />
+        <attr name="tipsTextColor" format="color|reference" />
+        <attr name="tipsCornerRadius" format="dimension" />
     </declare-styleable>
 </resources>

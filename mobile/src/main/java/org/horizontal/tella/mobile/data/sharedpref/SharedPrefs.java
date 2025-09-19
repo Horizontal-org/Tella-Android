@@ -32,6 +32,8 @@ public class SharedPrefs {
 
     static final String REMAINING_UNLOCK_ATTEMPTS = "remaining_unlock_attempts";
     static final String ERASE_FORMS = "erase_forms";
+
+    static final String ENABLE_HOME_NEARBY_SHARING = "enable_home_nearby_sharing";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
     static final String SECRET_MODE_ENABLED = "secret_password_enabled";

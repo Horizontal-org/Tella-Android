@@ -1,8 +1,8 @@
 package org.horizontal.tella.mobile.util
 
 import android.os.Bundle
+import androidx.navigation.navOptions
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.reports.di.NavControllerProvider
 
 class NavigationManager(
@@ -56,9 +56,11 @@ class NavigationManager(
     fun navigateFromGoogleDriveEntryScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_newGoogleDriveScreen_to_googleDriveSendScreen)
     }
+
     fun navigateFromNextCloudEntryScreenToNextCloudSendScreen() {
         navigateToWithBundle(R.id.action_newNextCloudScreen_to_nextCloudSendScreen)
     }
+
     fun navigateFromGoogleDriveMainScreenToGoogleDriveSendScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSendScreen)
     }
@@ -66,6 +68,7 @@ class NavigationManager(
     fun navigateFromNextCloudMainScreenToNextCloudSendScreen() {
         navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSendScreen)
     }
+
     fun navigateFromGoogleDriveScreenToGoogleDriveSubmittedScreen() {
         navigateToWithBundle(R.id.action_googleDriveScreen_to_googleDriveSubmittedScreen)
     }
@@ -73,6 +76,7 @@ class NavigationManager(
     fun navigateFromNextCloudScreenToNextCloudSubmittedScreen() {
         navigateToWithBundle(R.id.action_nextCloudScreen_to_nextCloudSubmittedScreen)
     }
+
     fun navigateFromDropBoxScreenToDropBoxSubmittedScreen() {
         navigateToWithBundle(R.id.action_dropBoxScreen_to_dropBoxSubmittedScreen)
     }
@@ -141,7 +145,8 @@ class NavigationManager(
     fun navigateToNextCloudCreateFolderScreen() {
         navigateToWithBundle(R.id.action_loginNextCloudScreen_to_nextCloudNewFolderScreen)
     }
-    fun actionNextCloudNewFolderScreenToSuccessfulScreen(){
+
+    fun actionNextCloudNewFolderScreenToSuccessfulScreen() {
         navigateToWithBundle(R.id.action_nextCloudNewFolderScreen_to_successfulSetServerFragment)
     }
 
@@ -165,4 +170,87 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_selectSharedDriveFragment_to_googleDriveConnectedServerFragment)
     }
 
+    fun navigateFromStartNearBySharingFragmentToConnectHotspotFragment() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_connectHotspotFragment)
+    }
+
+    fun navigateFromActionConnectHotspotScreenToQrCodeScreen() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_qrCodeScreen)
+    }
+
+    fun navigateFromActionConnectHotspotScreenToScanQrCodeScreen() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_scanQrCodeScreen)
+    }
+
+    fun navigateFromScanQrCodeToDeviceInfo() {
+        navigateToWithBundle(R.id.action_qrCodeScreen_to_deviceInfoScreen)
+    }
+
+    fun navigateFromScanQrCodeToPrepareUploadFragment() {
+        navigateToWithBundle(R.id.action_scanQrCodeScreen_to_prepareUploadFragment)
+    }
+
+    fun navigateFromScanQrCodeToSenderManualConnectionScreen() {
+        navigateToWithBundle(R.id.action_scanQrCodeScreen_to_senderManualConnectionScreen)
+    }
+
+    fun navigateFromSenderManualConnectionToConnectManuallyVerification() {
+        navigateToWithBundle(R.id.action_senderManualConnectionScreen_to_connectManuallyVerificationScreen)
+    }
+
+    fun navigateFromDeviceInfoScreenTRecipientVerificationScreen() {
+        navigateToWithBundle(R.id.action_deviceInfoScreen_to_recipientVerificationScreen)
+    }
+
+    fun navigateFromQrCodeScreenToWaitingReceiverFragment() {
+        navigateToWithBundle(R.id.action_qrCodeScreen_to_waitingReceiverFragment)
+    }
+
+    fun navigateFromPrepareUploadFragmentToWaitingSenderFragment() {
+        navigateToWithBundle(R.id.action_prepareUploadFragment_to_waitingSenderFragment)
+    }
+
+    fun navigateConnectManuallyVerificationFragmentToprepareUploadFragment() {
+        navigateToWithBundle(R.id.action_connectManuallyVerificationFragment_to_prepareUploadFragment)
+    }
+
+    fun navigateFromRecipientVerificationScreenToWaitingReceiverFragment() {
+        navigateToWithBundle(R.id.action_recipientVerificationScreen_to_waitingReceiverFragment)
+    }
+
+    fun navigateFromWaitingReceiverFragmentToRecipientSuccessFragment() {
+        navigateToWithBundle(R.id.action_waitingReceiverFragment_to_recipientSuccessFragment)
+    }
+
+    fun navigateFromWaitingSenderFragmentToUploadFilesFragment() {
+        navigateToWithBundle(R.id.action_waitingSenderFragment_to_uploadFilesFragment)
+    }
+
+    fun navigateFromUploadSenderFragmentToPeerToPeerResultFragment() {
+        navigateToWithBundle(R.id.action_uploadSenderFragment_to_peerToPeerResultFragment)
+    }
+
+    fun navigateFromRecipientUploadFilesFragmentToPeerToPeerResultFragment() {
+        navigateToWithBundle(R.id.action_recipientUploadFilesFragment_to_peerToPeerResultFragment)
+    }
+
+    fun navigateFromRecipientSuccessFragmentToRecipientUploadFilesFragment() {
+        navigateToWithBundle(R.id.action_recipientSuccessFragment_to_recipientUploadFilesFragment)
+    }
+
+    fun navigateFromConnectHotspotScreenToTipsToConnectFragment() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_tipsToConnectFragment)
+    }
+
+    fun navigateBackToStartNearBySharingFragmentAndClearBackStack() {
+        navControllerProvider.navController.navigate(
+            R.id.startNearBySharingFragment,
+            bundle,
+            navOptions {
+                popUpTo(R.id.startNearBySharingFragment) {
+                    inclusive = true
+                }
+            }
+        )
+    }
 }
