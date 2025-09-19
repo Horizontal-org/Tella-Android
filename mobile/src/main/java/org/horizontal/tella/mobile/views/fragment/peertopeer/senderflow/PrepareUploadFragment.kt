@@ -287,7 +287,7 @@ class PrepareUploadFragment :
                             fileName = vaultFile.name,
                             size = vaultFile.size,
                             fileType = vaultFile.mimeType ?: "application/octet-stream",
-                            sha256 = vaultFile.hash,
+                            //sha256 = vaultFile.hash,
                             thumbnail = vaultFile.thumb ?: ByteArray(0)
                         )
 
