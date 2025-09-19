@@ -38,7 +38,7 @@ class RecipientVerificationFragment :
 
     private fun initUI() = with(binding) {
         // Simpler instruction text (update your string as needed)
-        warningTextView.text = getString(R.string.hash_receipient_description)
+        sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_recipient)
         hashContentTextView.text = viewModel.p2PState.hash.formatHash()
 
         // IMPORTANT: button is enabled immediately

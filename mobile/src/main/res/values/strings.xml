@@ -1016,7 +1016,8 @@ Would you like to share analytics with the Tella team?</string>
     <string name="port">Port</string>
     <string name="verification">Verification</string>
     <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
-    <string name="nearbySharing_verifyConnection">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+    <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
+    <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
     <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
     <string name="confirm_and_connect">Confirm and connect</string>
     <string name="wifi">Wi-Fi</string>
@@ -1085,19 +1086,9 @@ Would you like to share analytics with the Tella team?</string>
     <string name="view_files_action">View Files</string>
     <string name="view_files">VIEW FILES</string>
     <string name="result">Results</string>
-    <string name="hash_receipient_description">1. \tMake sure that this sequence matches what\n \t\t\tis shown on the sender’s device.\n
-2. \tThe sender needs to confirm the\n   \t\t\tconnection first. \n
-3.  \tAfter that, you will be able to confirm the\n \t\t\tconnection and start sharing files \n\n
-
-    If the sequence on your device does not match \nthe sequence on the sender’s device, the\n connection may not be secure and should be\n discarded.
-  </string>
   <string name="waiting_for_the_sender">Waiting for sender …</string>
-  <string name="waiting_for_the_recipient">Waiting for recipient …</string>
 
-  <string name="hash_sender_description">
-1.\tMake sure that this sequence matches what\n \t\tis shown on the recipient’s device.\n2.\tYou need to confirm the connection first.\n3.\tAfter that, the recipient will be able to\n \t\tconfirm the connection and start receiving\n\t\tfiles.\n\nIf the sequence on your device does not match the sequence on the sender’s device,\nthe connection may not be secure and should be discarded.
-</string>
-
+    <string name="waiting_for_the_recipient">Waiting for recipient …</string>
     <string name="nearby_sharing_title">Nearby Sharing</string>
     <string name="nearby_sharing_description">Enable this feature to share files with devices near you, without an Internet connection.</string>
     <string name="nearby_sharing_intro">Share files directly with a device near you, with\nor without an Internet connection.\n\nTo get started, join the same Wi-Fi network as the recipient. Nearby Sharing will work even if the Wi-Fi network is not connected to the Internet.</string>

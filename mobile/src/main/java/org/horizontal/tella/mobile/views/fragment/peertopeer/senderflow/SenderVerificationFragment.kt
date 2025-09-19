@@ -32,7 +32,7 @@ class SenderVerificationFragment :
     }
 
     private fun initView() {
-        binding.warningTextView.text = getString(R.string.hash_sender_description)
+        binding.sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_sender)
         binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
         binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
     }
