@@ -1016,7 +1016,8 @@ Would you like to share analytics with the Tella team?</string>
     <string name="port">Port</string>
     <string name="verification">Verification</string>
     <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
-    <string name="sequence_mismatch_warning">If the sequence on your device does not match the sequence on the sender’s device, the connection may not be secure and should be discarded.</string>
+    <string name="nearbySharing_verifyConnection">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+    <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
     <string name="confirm_and_connect">Confirm and connect</string>
     <string name="wifi">Wi-Fi</string>
     <string name="get_connected">Get connected</string>
@@ -1041,7 +1042,6 @@ Would you like to share analytics with the Tella team?</string>
     <string name="enter_recipient_info">Enter the recipient’s device\n information to find it on the network</string>
     <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
     <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
-    <string name="sequence_mismatch_warning_recipient">If the sequence on your device does not match the sequence on the recipient’s device, the connection may not be secure and should be discarded.</string>
     <string name="discard_and_start_over">Discard and start over</string>
     <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
     <string name="prepare_upload_message">The sender is trying to send you %1$d files</string>
