@@ -1016,8 +1016,8 @@ Would you like to share analytics with the Tella team?</string>
     <string name="port">Port</string>
     <string name="verification">Verification</string>
     <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
-    <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
-    <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+    <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
+    <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
     <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
     <string name="confirm_and_connect">Confirm and connect</string>
     <string name="wifi">Wi-Fi</string>
