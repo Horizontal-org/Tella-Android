@@ -75,7 +75,7 @@ abstract class BaseFragment : Fragment() {
                 .setPadding(24)
                 .setDismissOnClick(true)
                 .setCancelable(true)
-                .show<Tooltip>()
+                .show()
     }
 
     open fun back() {
