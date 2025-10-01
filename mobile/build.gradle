@@ -45,7 +45,13 @@ android {
             universalApk true
         }
     }
-
+    configurations.configureEach {
+        resolutionStrategy.force(
+                "com.google.dagger:dagger-compiler:2.53.1",
+                "com.google.dagger:hilt-android-compiler:2.53.1",
+                "com.google.dagger:dagger-spi:2.53.1"
+        )
+    }
     configurations.all {
         exclude group: "org.slf4j", module: "slf4j-log4j12"
         exclude group: "log4j", module: "log4j"
@@ -68,12 +74,12 @@ android {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true
 
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding = true

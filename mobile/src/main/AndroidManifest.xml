@@ -2,38 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk
+        android:minSdkVersion="21"
+        android:targetSdkVersion="35" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:node="replace" />
-    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
-    <uses-permission
-        android:name="android.permission.MANAGE_DOCUMENTS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_ALL_DOWNLOADS" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" /> -->
-    <!-- <uses-permission android:name="android.permission.READ_CALL_LOG" /> -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- <uses-permission android:name="android.permission.SEND_SMS" /> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <queries>
         <intent>
@@ -49,15 +46,14 @@
         android:icon="@mipmap/tella_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:localeConfig="@xml/locales_config"
         android:networkSecurityConfig="@xml/configure_localhost_media_file_http_server"
         android:roundIcon="@mipmap/tella_icon_round"
-        android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup"
-        tools:targetApi="n">
+        tools:replace="android:allowBackup">
 
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
@@ -79,14 +75,6 @@
                 android:resource="@xml/encrypted_file_paths" />
         </provider>
 
-        <!-- <receiver
-            android:name=".util.OpenPassword"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-            </intent-filter>
-        </receiver> -->
         <activity
             android:name=".views.activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -109,7 +97,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -123,7 +110,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -137,7 +123,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -153,7 +138,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         <activity-alias
             android:name="org.horizontal.tella.mobile.views.activity.AliasCalculator"
             android:enabled="false"
@@ -163,7 +147,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -176,7 +159,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -189,7 +171,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -202,7 +183,6 @@
             android:targetActivity="org.horizontal.tella.mobile.views.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
@@ -302,7 +282,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         <activity-alias
             android:name="org.horizontal.tella.mobile.views.activity.AliasPlayNow"
             android:enabled="false"
@@ -363,7 +342,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         <activity-alias
             android:name="org.horizontal.tella.mobile.views.activity.AliasWeather"
             android:enabled="false"
@@ -399,7 +377,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity-alias> <!-- activity aliases -->
+        </activity-alias>
         <activity-alias
             android:name="org.horizontal.tella.mobile.views.activity.AliasCalculate"
             android:enabled="false"
@@ -497,9 +475,6 @@
             </intent-filter>
         </activity-alias>
 
-
-        <!-- activity aliases end -->
-
         <activity
             android:name=".views.activity.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -512,10 +487,8 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="open.settings.activity"
                     android:scheme="tella_scheme" />
@@ -538,13 +511,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.horizontal.tella.mobile.views.activity.SettingsActivity" />
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="open.collect.manage.servers.activity"
                     android:scheme="tella_scheme" />
@@ -589,7 +559,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/CameraTheme" />
-
         <activity
             android:name=".views.fragment.recorder.MicActivity"
             android:launchMode="singleTop"
@@ -626,7 +595,6 @@
             android:name=".views.settings.SettingsCalculatorActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.activity.viewer.PDFReaderActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
@@ -634,30 +602,23 @@
         <activity
             android:name=".views.activity.analytics.AnalyticsIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.dialog.uwazi.UwaziConnectFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.dialog.googledrive.GoogleDriveConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.dialog.dropbox.DropBoxConnectFlowActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"> <!-- Added launchMode -->
-
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".views.dialog.reports.ReportsConnectFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".views.dialog.nextcloud.NextCloudLoginFlowActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -684,18 +645,12 @@
             android:configChanges="orientation|keyboard"
             android:exported="true"
             android:launchMode="singleTask">
-            <!-- Your activity starting authorization flow should also configured with android:launchMode="singleTask".
-                 If that activity is configured with android:taskAffinity, this AuthActivity should also configured
-                 with the same android:taskAffinity so the auth result can be correctly passed back. -->
             <intent-filter>
                 <data android:scheme="db-${dropboxKey}" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
 
     </application>
