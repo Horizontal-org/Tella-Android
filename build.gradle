@@ -1,14 +1,13 @@
-ext {
-    var = '4.7.1'
-}// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
     ext.versions = [:]
     versions.compileSdk = 35
-    versions.minSdk = 21
+    versions.minSdk = 23
     versions.targetSdk = 35
-    versions.kotlin = '1.9.24'
+
+
+    // ----- your existing versions (unchanged) -----
     versions.sqlcipher = '4.6.0'
     versions.sqlite = '2.4.0'
     versions.biometric = '1.0.1'
@@ -39,7 +38,6 @@ buildscript {
     versions.lifecycleExtensions = '2.2.0'
     versions.navigationRuntime = '2.5.1'
     versions.navigationFragment = '2.5.1'
-    versions.databindingRuntime = '7.4.2'
     versions.firebaseBom = '26.1.0'
     versions.okhttp3LoggingInterceptor = '4.12.0'
     versions.squareupTape = '1.2.3'
@@ -63,16 +61,26 @@ buildscript {
     versions.crashlyticsGradle = '2.4.1'
     versions.retrofit = "2.9.0"
     versions.buildToolsVersion = "30.0.2"
-    versions.workermanger = "2.7.1"
-    versions.hilt_version = "1.2.0"
-    versions.hilt_android = "2.52"
-    versions.hilt_viewmodel = '1.0.0-alpha03'
+    versions.workermanger = "2.9.1"
+
+    ext.versions.kotlin = '2.2.0'
+
+// Google Hilt that works with Kotlin 2.1.x
+    ext.versions.hilt_android = '2.53.1'
+    ext.versions.hilt_android_compiler = '2.53.1'
+
+  // AndroidX Hilt 1.2.0 matches 2.1.x metadata
+    ext.versions.androidx_hilt = '1.2.0'
+
+  // Nextcloud built for Kotlin 2.1.x
+    ext.versions.nextcloud = '2.21.0'
+
     versions.leakCanaryVersion = "3.0-alpha-1"
-    versions.hilt_android_compiler = "2.53.1"
-    versions.permissionDispatcher = "4.8.0"
+    versions.permissionDispatcher = "4.9.2"
     versions.googlePlayServices = "17.0.0"
     versions.pdf_viewer = "2.8.2"
-    versions.nextcloud = "2.22.0"
+
+
     versions.fidoVersion = "4.1.0-patch1"
     versions.divviup = "0.2.0"
     versions.credentialsVersion = '1.2.2'
@@ -85,42 +93,52 @@ buildscript {
     versions.googleApiClientGsonVersion = '1.34.0'
     versions.dropboxVersion = '7.0.0'
 
-
     repositories {
-        mavenCentral()
-        jcenter()
-        // fabric.io
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
         google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' } // required for Nextcloud
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:8.6.1'
-        classpath "com.google.gms:google-services:$versions.googleServices"
-        classpath "com.google.firebase:firebase-crashlytics-gradle:$versions.crashlyticsGradle"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.50'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+        classpath "com.google.gms:google-services:${versions.googleServices}"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.crashlyticsGradle}"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:${versions.hilt_android}"
+        classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
+
     }
 }
 
 allprojects {
     repositories {
-        google()  // Google's Maven repository
+        google()
         mavenCentral()
-        jcenter()
-//        maven {
-//            url 'https://maven.google.com/'
-//            name 'Google'
-//        }
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url 'https://jitpack.io' }
+    }
+    configurations.configureEach {
+        // Hilt + Kotlin metadata helper; safe to keep
+      //  resolutionStrategy.force "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
+        // Keep the project-wide removal of the SLF4J bridge to avoid logging dupes
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    }
+}
+
+// Align all Kotlin artifacts to the root plugin version
+subprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "org.jetbrains.kotlin" &&
+                    details.requested.name.startsWith("kotlin-")) {
+                details.useVersion(rootProject.ext.versions.kotlin)
+                details.because("Align Kotlin libs with Kotlin Gradle plugin ${rootProject.ext.versions.kotlin}")
+            }
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+    delete fileTree(dir: rootDir, includes: ['**/.DS_Store'])
 }

@@ -23,7 +23,6 @@ import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import dagger.hilt.android.AndroidEntryPoint
-import org.checkerframework.common.returnsreceiver.qual.This
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable

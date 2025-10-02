@@ -1,15 +1,14 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android' // align plugin id
 }
 
 android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-
+        minSdk versions.minSdk          // AGP 8 syntax
+        targetSdk versions.targetSdk    // AGP 8 syntax
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -20,27 +19,31 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // Java/Kotlin 17 (matches app module)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    buildFeatures {
-        viewBinding = true
-    }
+    kotlinOptions { jvmTarget = '17' }
+
+    buildFeatures { viewBinding = true }
+
     namespace 'org.hzontal.shared_ui'
 }
 
 dependencies {
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
     implementation "androidx.core:core-ktx:$versions.ktx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "com.google.android.material:material:$versions.material"
+
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "joda-time:joda-time:2.9.9"
     implementation "com.jakewharton.timber:timber:$versions.timber"
+
     api "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
     api "androidx.navigation:navigation-ui-ktx:$versions.navigationUI"

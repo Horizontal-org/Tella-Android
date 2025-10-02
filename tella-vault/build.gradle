@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -33,6 +33,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -40,22 +41,30 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
+
     namespace 'com.hzontal.tella_vault'
 }
 
 dependencies {
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
     implementation "androidx.core:core-ktx:$versions.ktx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "com.google.android.material:material:$versions.material"
+
     api "io.reactivex.rxjava2:rxjava:$versions.rxjava"
     implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
-    //sqlite dependency
+
+    // SQLite / SQLCipher
     api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
     api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
+
+    // Retrofit (Gson converter exposed to consumers)
     api "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 
     implementation project(path: ':tella-keys')
+
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
