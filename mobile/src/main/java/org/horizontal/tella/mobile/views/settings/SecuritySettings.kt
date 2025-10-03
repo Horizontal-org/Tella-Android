@@ -3,7 +3,6 @@ package org.horizontal.tella.mobile.views.settings
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
@@ -17,12 +16,6 @@ import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.ui.password.PasswordUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
-import org.hzontal.shared_ui.utils.DialogUtils
-import org.hzontal.tella.keys.config.IUnlockRegistryHolder
-import org.hzontal.tella.keys.config.UnlockRegistry
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.databinding.FragmentSecuritySettingsBinding
@@ -31,6 +24,12 @@ import org.horizontal.tella.mobile.util.FailedUnlockManager
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionConfirmed
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showConfirmSheet
+import org.hzontal.shared_ui.utils.DialogUtils
+import org.hzontal.tella.keys.config.IUnlockRegistryHolder
+import org.hzontal.tella.keys.config.UnlockRegistry
 import timber.log.Timber
 
 
@@ -342,7 +341,8 @@ class SecuritySettings :
             ) == UnlockRegistry.Method.TELLA_PIN && Preferences.getAppAlias()
                 .equals(cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias)
         ) {
-            showConfirmSheet(requireActivity().supportFragmentManager,
+            showConfirmSheet(
+                requireActivity().supportFragmentManager,
                 null,
                 getString(R.string.settings_sec_change_lock_type_warning),
                 getString(R.string.action_continue),
@@ -380,8 +380,10 @@ class SecuritySettings :
 
         intent?.putExtra(RETURN_ACTIVITY, returnCall.getActivityOrder())
         intent?.putExtra(IS_FROM_SETTINGS, true)
-        startActivity(intent)
-        baseActivity.finish()
+        intent?.let {
+            startActivity(intent)
+            baseActivity.finish()
+        }
     }
 
     private fun setupQuickExitSwitch(quickExitSwitch: SwitchCompat) {

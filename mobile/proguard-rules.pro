@@ -179,3 +179,23 @@
 # Hilt
 -keep class * extends java.lang.annotation.Annotation { *; }
 -keep @javax.inject.Inject class * { *; }
+
+
+# Keep Gson adapters and creators (prevents stripping registration code)
+-keep class * extends com.google.gson.TypeAdapter { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory { *; }
+-keep class * implements com.google.gson.JsonSerializer { *; }
+-keep class * implements com.google.gson.JsonDeserializer { *; }
+-keep class * implements com.google.gson.InstanceCreator { *; }
+
+# Keep fields annotated with @SerializedName so Gson can bind correctly
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Keep the polymorphic base and ALL its subtypes used at runtime
+-keep class org.horizontal.tella.mobile.domain.entity.googledrive.Config { *; }
+-keep class * extends org.horizontal.tella.mobile.domain.entity.googledrive.Config { *; }
+
+# Make sure we keep useful metadata
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
