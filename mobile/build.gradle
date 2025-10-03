@@ -10,9 +10,6 @@ plugins {
 
 /** Avoid duplicate logging classes app-wide */
 configurations.all {
-//    resolutionStrategy {
-//  force("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
-//    }
     exclude group: "org.slf4j", module: "jcl-over-slf4j"
     exclude group: "log4j", module: "log4j"
 }
@@ -81,7 +78,21 @@ android {
 
     packaging {
         resources {
-            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/NOTICE']
+            excludes += [
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    "META-INF/versions/9/OSGI-INF/*",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/*.md",
+                    "META-INF/*.txt",
+            ]
+            pickFirsts += [
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            ]
         }
     }
 }
@@ -110,7 +121,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
 
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
-    api "androidx.navigation:navigation-ui-ktx:$versions.navigationUI"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
@@ -121,11 +131,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-    implementation("com.squareup.retrofit2:converter-simplexml:${versions.retrofit}") {
-        exclude group: 'xpp3', module: 'xpp3'
-        exclude group: 'stax', module: 'stax-api'
-        exclude group: 'stax', module: 'stax'
-    }
+    implementation("com.squareup.retrofit2:retrofit:${versions.retrofit}")
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
     implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
@@ -146,9 +152,6 @@ dependencies {
 
     // digest auth
     implementation "io.github.rburgst:okhttp-digest:$versions.burgstallerOkhttpDigest"
-
-    implementation "org.opendatakit:opendatakit-javarosa:$versions.javarosa"
-    implementation "net.sf.kxml:kxml2:$versions.kxml2"
 
     // Keep ONE commons-io
     implementation "commons-io:commons-io:$versions.commonsIo"
@@ -203,31 +206,39 @@ dependencies {
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
     implementation 'commons-httpclient:commons-httpclient:3.1'
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    // Nextcloud SDK – keep transitive deps
-    implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
-        // keep transitive = true (default). Do NOT exclude commons-logging here.
-        exclude group: 'org.ogce', module: 'xpp3'        // fine to exclude xpp3
-        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-        // this bridges commons-logging -> slf4j; exclude to use commons-logging directly
-        // DO NOT exclude 'commons-logging'
-    }
 
     // Apache HttpClient 3.x stack required by OwnCloudClient
-    implementation 'commons-httpclient:commons-httpclient:3.1'
-    implementation 'commons-logging:commons-logging:1.2'
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     // PermissionsDispatcher
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher"
-    kapt         "com.github.permissions-dispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher"
 
     // Nextcloud HW security
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
+    // Add exclusions to prevent other libraries from pulling in xmlpull
+    implementation ("org.opendatakit:opendatakit-javarosa:$versions.javarosa"){
+        exclude group: "net.sf.kxml", module: "kxml2"
+        exclude group: "xmlpull", module: "xmlpull"
+        exclude group: "xpp3",   module: "xpp3"
+    }
+
+    implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
+        exclude group: 'org.ogce', module: 'xpp3'
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+        exclude group: 'xmlpull', module: 'xmlpull'
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+
+    implementation("com.squareup.retrofit2:converter-simplexml:$versions.retrofit") { exclude group: 'xpp3', module: 'xpp3' }
+    compileOnly "com.google.code.findbugs:annotations:3.0.1"
+
 }
 
 def getLocalProperties() {
