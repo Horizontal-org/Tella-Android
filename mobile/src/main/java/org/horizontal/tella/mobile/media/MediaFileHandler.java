@@ -39,6 +39,8 @@ import com.hzontal.utils.MediaFile;
 import org.apache.commons.io.IOUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -146,68 +148,133 @@ public class MediaFileHandler {
     }
 
     public static void exportMediaFile(Context context, VaultFile vaultFile, @Nullable Uri envDirUri) throws IOException {
-
-        String envDirType;
+        // Decide target "collection" for app-specific fallback
+        final String envDirType;
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_PICTURES;
         } else if (MediaFile.INSTANCE.isVideoFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_MOVIES;
         } else if (MediaFile.INSTANCE.isAudioFileType(vaultFile.mimeType)) {
             envDirType = Environment.DIRECTORY_MUSIC;
-        } else { // this should not happen anyway..
+        } else {
             envDirType = Environment.DIRECTORY_DOCUMENTS;
         }
 
-        InputStream is = null;
-        OutputStream os = null;
-
-        File path = null;
-        if (envDirUri == null) {
-            if (Build.VERSION.SDK_INT >= 29) {
-                path = context.getExternalFilesDir(envDirType);
-            } else {
-                path = Environment.getExternalStoragePublicDirectory(envDirType);
-            }
-        } else {
-            DocumentFile documentFile = DocumentFile.fromTreeUri(context, envDirUri);
-            if (documentFile != null) {
-                DocumentFile newDocumentFile = documentFile.createFile(vaultFile.mimeType, vaultFile.name);
-                ContentResolver contentResolver = context.getContentResolver();
-                assert newDocumentFile != null;
-                os = contentResolver.openOutputStream(newDocumentFile.getUri());
-            }
-        }
-        File file = null;
-        if (path != null) {
-            file = new File(path.getAbsolutePath(), MyApplication.keyRxVault.getRxVault().blockingFirst().getFile(vaultFile).getName());
-        }
-
+        // Source stream (from vault)
+        InputStream src = null;
         try {
-            if (path != null) {
-                if (!path.exists()) path.mkdirs();
-            }
-
-            is = MyApplication.vault.getStream(vaultFile);
-            if (is == null) {
-                throw new IOException();
-            }
-
-            if (os == null) {
-                os = new FileOutputStream(file);
-            }
-
-            IOUtils.copy(is, os);
-            if (file != null) {
-                MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
-            }
+            src = MyApplication.vault.getStream(vaultFile);
         } catch (VaultException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
-        } finally {
-            FileUtil.close(is);
-            FileUtil.close(os);
+            throw new RuntimeException(e);
+        }
+        if (src == null) throw new IOException("Vault stream is null for file: " + vaultFile.id);
+
+        // --- SAF branch (user-chosen folder) ---
+        if (envDirUri != null) {
+            DocumentFile tree = DocumentFile.fromTreeUri(context, envDirUri);
+            if (tree == null || !tree.canWrite()) {
+                throw new IOException("TreeUri not writable or null: " + envDirUri);
+            }
+
+            // Ensure unique target name to avoid provider slowdowns/collisions
+            final String mime = vaultFile.mimeType != null ? vaultFile.mimeType : "application/octet-stream";
+            String baseName = vaultFile.name != null ? vaultFile.name : "file";
+            String name = baseName;
+
+            // If a file with same name exists, add (1), (2)...
+            DocumentFile existing = tree.findFile(name);
+            int i = 1;
+            while (existing != null && existing.exists()) {
+                name = appendIndex(baseName, i++);
+                existing = tree.findFile(name);
+            }
+
+            DocumentFile outDoc = tree.createFile(mime, name);
+            if (outDoc == null) throw new IOException("Failed to create target doc: " + name);
+
+            // Use "w" to truncate/overwrite if the provider supports modes (fallback to default otherwise)
+            try (InputStream in = new BufferedInputStream(src, 1 << 20);
+                 OutputStream os = openOutputStreamCompat(context.getContentResolver(), outDoc.getUri(), "w");
+                 BufferedOutputStream out = new BufferedOutputStream(os, 1 << 20)) {
+                copyLarge(in, out);
+            }
+            return;
+        }
+
+        // --- App-specific external dir branch (no picker) ---
+        final File basePath;
+        if (Build.VERSION.SDK_INT >= 29) {
+            basePath = context.getExternalFilesDir(envDirType);
+        } else {
+            // NOTE: requires WRITE_EXTERNAL_STORAGE on <29 if you used public dirs.
+            basePath = Environment.getExternalStoragePublicDirectory(envDirType);
+        }
+        if (basePath == null) throw new IOException("External files dir unavailable for: " + envDirType);
+        if (!basePath.exists() && !basePath.mkdirs()) {
+            throw new IOException("Failed to create directory: " + basePath);
+        }
+
+        File srcFile = MyApplication.keyRxVault.getRxVault().blockingFirst().getFile(vaultFile);
+        String targetName = srcFile.getName();
+        File outFile = uniqueFile(basePath, targetName);
+
+        try (InputStream in = new BufferedInputStream(src, 1 << 20);
+             FileOutputStream fos = new FileOutputStream(outFile);
+             BufferedOutputStream out = new BufferedOutputStream(fos, 1 << 20)) {
+            copyLarge(in, out);
+            out.flush();
+            fos.getFD().sync(); // help durability for big files
+        }
+
+        // Notify media database (so it appears in gallery players)
+        MediaScannerConnection.scanFile(context, new String[]{ outFile.getAbsolutePath() }, null, null);
+    }
+
+    /** Buffered copy with 1 MiB chunks (much faster for large videos). */
+    private static void copyLarge(InputStream in, OutputStream out) throws IOException {
+        byte[] buf = new byte[1 << 20]; // 1 MiB
+        int n;
+        long copied = 0L;
+        while ((n = in.read(buf)) >= 0) {
+            out.write(buf, 0, n);
+            copied += n;
+            // Optional: flush every ~4 MiB to keep SAF providers happy
+            if ((copied & ((1 << 22) - 1)) == 0) out.flush();
         }
     }
 
+    /** Append (1), (2)... before file extension. */
+    private static String appendIndex(String baseName, int idx) {
+        int dot = baseName.lastIndexOf('.');
+        if (dot > 0) {
+            String name = baseName.substring(0, dot);
+            String ext = baseName.substring(dot);
+            return name + " (" + idx + ")" + ext;
+        } else {
+            return baseName + " (" + idx + ")";
+        }
+    }
+
+    /** Create a unique file in a directory mirroring SAF logic. */
+    private static File uniqueFile(File dir, String baseName) {
+        File f = new File(dir, baseName);
+        if (!f.exists()) return f;
+        int i = 1;
+        while (true) {
+            f = new File(dir, appendIndex(baseName, i++));
+            if (!f.exists()) return f;
+        }
+    }
+
+    /** Use mode when possible; fall back to default openOutputStream(uri). */
+    private static OutputStream openOutputStreamCompat(ContentResolver cr, Uri uri, String mode) throws FileNotFoundException {
+        try {
+            // API 26+: openOutputStream(uri, mode) exists
+            return cr.openOutputStream(uri, mode);
+        } catch (Throwable ignored) {
+            return cr.openOutputStream(uri);
+        }
+    }
     public static Single<VaultFile> saveBitmapAsJpeg(Bitmap bitmap, @Nullable String parent) {
         String uid = UUID.randomUUID().toString();
 
