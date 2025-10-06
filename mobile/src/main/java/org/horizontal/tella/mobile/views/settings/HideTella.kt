@@ -30,10 +30,10 @@ class HideTella : BaseFragment() {
         (baseActivity as OnFragmentSelected?)?.setToolbarLabel(R.string.settings_servers_hide_tella_title)
 
         val btnOneDesc = view.findViewById<TextView>(R.id.subtitle_btn_one)
-        btnOneDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_change_name_icon_subtitle)))
+        btnOneDesc.text = Html.fromHtml(getString(R.string.settings_servers_setup_change_name_icon_subtitle))
 
         val btnTwoDesc = view.findViewById<TextView>(R.id.subtitle_btn_two)
-        btnTwoDesc.setText(Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_subtitle)))
+        btnTwoDesc.text = Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_subtitle))
 
         val hideNotPossible = view.findViewById<TextView>(R.id.hide_behind_calc_not_possible)
         hideNotPossible.text = Html.fromHtml(getString(R.string.settings_servers_setup_hide_behind_calculator_not_possible))
@@ -51,12 +51,12 @@ class HideTella : BaseFragment() {
                 baseActivity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
             }
             btnTwoLabel.setAlpha(0.65f)
-            btnTwo.setClickable(false)
+            btnTwo.isClickable = false
             btnTwo.setOnClickListener { }
         } else {
             hideNotPossible.visibility = View.GONE
             btnTwoLabel.setAlpha(1f)
-            btnTwo.setClickable(true)
+            btnTwo.isClickable = true
             btnTwo.setOnClickListener {
                 val intent = Intent(baseActivity, SettingsCalculatorActivity::class.java)
                 baseActivity.startActivity(intent)

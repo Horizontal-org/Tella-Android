@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/wa_purple"
+    android:clickable="true"
+    android:focusable="true"
     android:paddingEnd="21dp"
     android:paddingStart="21dp">
 
