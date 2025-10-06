@@ -17,6 +17,7 @@ configurations.all {
 android {
     namespace 'org.horizontal.tella.mobile'
     compileSdk versions.compileSdk
+    ndkVersion "28.0.12916984"
 
     defaultConfig {
         applicationId "org.hzontal.tella"
@@ -212,7 +213,7 @@ dependencies {
 
     // Apache HttpClient 3.x stack required by OwnCloudClient
     implementation 'commons-codec:commons-codec:1.15'
-    implementation 'org.conscrypt:conscrypt-android:2.5.2'
+    implementation 'org.conscrypt:conscrypt-android:2.5.3'
 
     // PermissionsDispatcher
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher"

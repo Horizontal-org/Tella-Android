@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
 
     ext.versions = [:]
@@ -6,9 +5,7 @@ buildscript {
     versions.minSdk = 23
     versions.targetSdk = 35
 
-
-    // ----- your existing versions (unchanged) -----
-    versions.sqlcipher = '4.6.0'
+    versions.sqlcipher = '4.6.1'
     versions.sqlite = '2.4.0'
     versions.biometric = '1.0.1'
     versions.junit = '4.13'
@@ -63,14 +60,11 @@ buildscript {
     versions.workermanger = "2.9.1"
     ext.versions.kotlin = '2.2.0'
 
-// Google Hilt that works with Kotlin 2.1.x
     ext.versions.hilt_android = '2.57.1'
     ext.versions.hilt_android_compiler = '2.57.1'
 
-  // AndroidX Hilt 1.2.0 matches 2.1.x metadata
     ext.versions.androidx_hilt = '1.2.0'
 
-  // Nextcloud built for Kotlin 2.1.x
     ext.versions.nextcloud = '2.21.0'
 
     versions.leakCanaryVersion = "3.0-alpha-1"
