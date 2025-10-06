@@ -16,7 +16,7 @@ buildscript {
     versions.espressoCore = '3.3.0'
     versions.ktx = '1.6.0'
     versions.material = '1.6.0'
-    versions.appcompat = '1.4.1'
+    versions.appcompat = '1.7.1'
     versions.rxjava = '2.2.19'
     versions.apacheCommonsIo = '2.4'
     versions.timber = '4.7.1'
@@ -58,7 +58,7 @@ buildscript {
     versions.buildGradle = '4.1.3'
     versions.googleServices = '4.3.3'
     versions.crashlyticsGradle = '2.4.1'
-    versions.retrofit = "2.9.0"
+    versions.retrofit = "3.0.0"
     versions.buildToolsVersion = "30.0.2"
     versions.workermanger = "2.9.1"
     ext.versions.kotlin = '2.2.0'
