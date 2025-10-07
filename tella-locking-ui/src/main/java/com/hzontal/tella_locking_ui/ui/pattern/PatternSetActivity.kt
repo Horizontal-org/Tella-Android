@@ -18,8 +18,10 @@ class PatternSetActivity : SetPatternActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyEdgeToEdge(root)
+
         mMessageText.text = getString(R.string.UnlockPattern_PatternTooShort, minPatternSize)
-        mTopImageView.background = ContextCompat.getDrawable(this,R.drawable.pattern_draw_bg)
+        mTopImageView.background = ContextCompat.getDrawable(this, R.drawable.pattern_draw_bg)
 
     }
 
@@ -36,13 +38,14 @@ class PatternSetActivity : SetPatternActivity() {
     override fun onPatternDetected(newPattern: MutableList<PatternView.Cell>) {
         super.onPatternDetected(newPattern)
         when (mStage) {
-             Stage.Confirm,Stage.ConfirmWrong -> {
+            Stage.Confirm, Stage.ConfirmWrong -> {
                 if (newPattern == mPattern) {
                     updateStage(Stage.ConfirmCorrect);
                 } else {
                     updateStage(Stage.ConfirmWrong);
                 }
             }
+
             else -> {}
         }
     }

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.common.BaseActivity
@@ -27,10 +28,12 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
     private var isPasswordMode = true
     private var mPIN: String? = ""
     private var isRightButtonHighLighted = false
+    lateinit var root: ConstraintLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pin)
         initView()
+        applyEdgeToEdge(root)
     }
 
     private fun initView() {
@@ -47,6 +50,8 @@ abstract class BasePinActivity : BaseActivity(), PinLockListener, View.OnClickLi
         pinTopImageView = findViewById(R.id.pin_TopImg)
         pinLeftButton.text =
             getText(if (!isFromSettings) R.string.LockSelect_Action_Back else R.string.LockSelect_Action_Cancel)
+        root = findViewById<ConstraintLayout?>(R.id.root)
+
         initListeners()
     }
 
