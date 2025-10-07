@@ -1,21 +1,14 @@
 # Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in C:\Users\tomislav.randjic\AppData\Local\Android\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
 
-# Add any project specific keep options here:
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep the interfaces + concrete impls
+-keep class org.xmlpull.v1.XmlPullParser { *; }
+-keep class org.xmlpull.v1.XmlSerializer { *; }
+-keep class org.xmlpull.v1.XmlPullParserFactory { *; }
+-keep class org.kxml2.io.KXmlParser { *; }
+-keep class org.kxml2.io.KXmlSerializer { *; }
 
+-dontwarn org.xmlpull.v1.**
 # tella
 -keep class org.horizontal.tella.mobile.data.entity.** { *; }
 
@@ -27,13 +20,6 @@
 -keep public class com.evernote.android.job.v14.PlatformAlarmReceiver
 -keep public class com.evernote.android.job.JobBootReceiver
 -keep public class com.evernote.android.job.JobRescheduleService
-
-# kXML2 implementations (required by META-INF/services)
--keep class org.kxml2.io.KXmlParser { *; }
--keep class org.kxml2.io.KXmlSerializer { *; }
--keepnames class org.xmlpull.v1.XmlPullParserFactory
--keep class * implements org.xmlpull.v1.XmlPullParser { *; }
--keep class * implements org.xmlpull.v1.XmlSerializer { *; }
 
 # If you **removed** commons-httpclient and commons-logging, you don't need the dontwarns below.
 # But if anything still references them transitively, add:
@@ -78,18 +64,41 @@
     public static ** valueOf(java.lang.String);
 }
 
-# Keep the XmlPull parser/serializer implementations
+# ========== FIXED XML PARSER RULES ==========
+# Fix for XmlResourceParser conflict - THIS IS THE KEY FIX
+-dontwarn android.content.res.XmlResourceParser
+-dontwarn org.xmlpull.v1.**
+
+# Keep XML parser implementations but allow obfuscation
+-keep,allowobfuscation class * implements org.xmlpull.v1.XmlPullParser { *; }
+-keep,allowobfuscation class * implements org.xmlpull.v1.XmlSerializer { *; }
+
+# Keep kxml2 specifically
+-keep,allowobfuscation class org.kxml2.** { *; }
+-keep,allowobfuscation class net.sf.kxml2.** { *; }
+
+# Keep factory classes
+-keepnames class org.xmlpull.v1.XmlPullParserFactory
+
+# ========== END XML FIXES ==========
+
+# Keep JavaRosa classes
+-keep class org.javarosa.** { *; }
+-keep class org.opendatakit.** { *; }
+-dontwarn org.javarosa.**
+-dontwarn org.joda.time.**
+
+# --- XML pull + kxml2 ---
+-keep class org.xmlpull.v1.XmlPullParser { *; }
+-keep class org.xmlpull.v1.XmlSerializer { *; }
+-keep class org.xmlpull.v1.XmlPullParserFactory { *; }
+
 -keep class org.kxml2.io.KXmlParser { *; }
 -keep class org.kxml2.io.KXmlSerializer { *; }
 
-# Keep the Service Provider entry point and related SPI contracts
--keepnames class org.xmlpull.v1.XmlPullParserFactory
--keep class * implements org.xmlpull.v1.XmlPullParser { *; }
--keep class * implements org.xmlpull.v1.XmlSerializer { *; }
-
-# collect
--dontwarn org.joda.time.**
--keep class org.javarosa.**
+# These were fine to silence warnings
+-dontwarn org.xmlpull.v1.**
+-dontwarn android.content.res.XmlResourceParser
 
 # android job
 -dontwarn com.evernote.android.job.v24.**
@@ -154,34 +163,11 @@
   *;
 }
 
-# ADD THESE NEW RULES FOR XML PARSING:
-
-# Allow XML parser implementations to be optimized
--keepattributes Exceptions,Signature,InnerClasses,EnclosingMethod
-
-# Keep XML parser factory implementations
--keep class * implements org.xmlpull.v1.XmlPullParser {
-    public <methods>;
-}
-
-# But don't keep the actual XML parser classes that conflict with Android
--dontwarn org.xmlpull.v1.**
--dontnote org.xmlpull.v1.**
-
-# Keep necessary XML-related classes for SimpleXML
--keep class org.simpleframework.xml.** { *; }
--keep class org.simpleframework.xml.stream.** { *; }
-
-# Exclude kxml2 from optimization to prevent conflicts
--keep class org.kxml2.** { *; }
--dontwarn org.kxml2.**
-
 # Hilt
 -keep class * extends java.lang.annotation.Annotation { *; }
 -keep @javax.inject.Inject class * { *; }
 
-
-# Keep Gson adapters and creators (prevents stripping registration code)
+# Keep Gson adapters and creators
 -keep class * extends com.google.gson.TypeAdapter { *; }
 -keep class * implements com.google.gson.TypeAdapterFactory { *; }
 -keep class * implements com.google.gson.JsonSerializer { *; }
@@ -199,3 +185,5 @@
 
 # Make sure we keep useful metadata
 -keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+-dontwarn org.kxml2.io.KXml**
