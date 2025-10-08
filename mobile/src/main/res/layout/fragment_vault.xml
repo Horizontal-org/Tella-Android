@@ -61,8 +61,7 @@
             android:padding="3dp"
             android:progressDrawable="@drawable/panic_seek_var_progress"
             android:thumb="@drawable/ic_progress_bg"
-            android:splitTrack="false"
-            />
+            android:splitTrack="false"/>
 
         <TextView
             android:id="@+id/deleteTv"
