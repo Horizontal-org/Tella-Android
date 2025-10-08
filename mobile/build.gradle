@@ -12,7 +12,7 @@ plugins {
 configurations.all {
     exclude group: "org.slf4j", module: "jcl-over-slf4j"
     exclude group: "log4j", module: "log4j"
-    exclude group: "xmlpull", module: "xmlpull"  // ADD THIS LINE
+    exclude group: "xmlpull", module: "xmlpull"
 
     resolutionStrategy {
         force 'net.sf.kxml:kxml2:2.3.0'
@@ -30,7 +30,6 @@ android {
     compileSdk versions.compileSdk
     ndkVersion "28.0.12916984"
 
-    // ADD THIS SECTION:
     packagingOptions {
         exclude 'META-INF/services/org.xmlpull.v1.XmlPullParserFactory'
         exclude 'META-INF/services/org.xmlpull.v1.XmlSerializerFactory'
@@ -69,12 +68,12 @@ android {
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             debuggable false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
