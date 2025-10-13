@@ -1,5 +1,9 @@
 # Add project specific ProGuard rules here.
 
+# ========== MISSING CLASSES - AUTO GENERATED ==========
+-dontwarn aQute.bnd.annotation.Version
+-dontwarn org.kxml2.io.KXmlParser,org.kxml2.io.KXmlSerializer
+# ========== END MISSING CLASSES ==========
 
 # Keep the interfaces + concrete impls
 -keep class org.xmlpull.v1.XmlPullParser { *; }
@@ -187,3 +191,52 @@
 -keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
 
 -dontwarn org.kxml2.io.KXml**
+
+
+# ========== SIMPLE XML FRAMEWORK RULES ==========
+-keep class org.simpleframework.xml.** { *; }
+-keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes *Annotation*
+
+# Keep all SimpleXML annotated classes and their members
+-keep @org.simpleframework.xml.Root class * {
+    *;
+}
+
+# Keep all classes that have SimpleXML annotations
+-keepclassmembers class * {
+    @org.simpleframework.xml.Attribute *;
+    @org.simpleframework.xml.Element *;
+    @org.simpleframework.xml.ElementList *;
+    @org.simpleframework.xml.ElementArray *;
+    @org.simpleframework.xml.ElementMap *;
+    @org.simpleframework.xml.Text *;
+    @org.simpleframework.xml.Transient *;
+}
+
+# Keep SimpleXML core classes and constructors
+-keep class org.simpleframework.xml.core.** {
+    *;
+}
+
+-keepclasseswithmembers class org.simpleframework.xml.core.* {
+    public <init>(...);
+}
+
+# Specifically keep the ElementListLabel constructor
+-keep class org.simpleframework.xml.core.ElementListLabel {
+    public <init>(...);
+}
+
+# Keep serializer/deserializer classes
+-keep class org.simpleframework.xml.transform.** { *; }
+-keep class org.simpleframework.xml.convert.** { *; }
+-keep class org.simpleframework.xml.filter.** { *; }
+
+# Keep package-info classes (they contain important metadata)
+-keep class **.package-info
+
+# Keep all factory classes
+-keep class org.simpleframework.xml.stream.** { *; }
+
+# ========== END SIMPLE XML RULES ==========

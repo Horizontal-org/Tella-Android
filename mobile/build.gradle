@@ -13,16 +13,6 @@ configurations.all {
     exclude group: "org.slf4j", module: "jcl-over-slf4j"
     exclude group: "log4j", module: "log4j"
     exclude group: "xmlpull", module: "xmlpull"
-
-    resolutionStrategy {
-        force 'net.sf.kxml:kxml2:2.3.0'
-        // Remove any xmlpull dependencies
-        eachDependency { DependencyResolveDetails details ->
-            if (details.requested.group == 'xmlpull' && details.requested.name == 'xmlpull') {
-                details.useTarget("net.sf.kxml:kxml2:2.3.0")
-            }
-        }
-    }
 }
 
 android {
@@ -34,6 +24,31 @@ android {
         exclude 'META-INF/services/org.xmlpull.v1.XmlPullParserFactory'
         exclude 'META-INF/services/org.xmlpull.v1.XmlSerializerFactory'
         pickFirst 'META-INF/services/javax.xml.stream.*'
+        // Handle XML parser conflicts by picking first
+        pickFirst 'META-INF/services/org.xmlpull.v1.XmlPullParser'
+        pickFirst 'META-INF/services/org.xmlpull.v1.XmlSerializer'
+    }
+
+    packaging {
+        resources {
+            excludes += [
+                    // Keep your existing excludes, but ensure SimpleXML is not affected
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    "META-INF/versions/9/OSGI-INF/*",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/*.md",
+                    "META-INF/*.txt",
+            ]
+            // Make sure SimpleXML configuration files are included
+            pickFirsts += [
+                    "META-INF/services/org.simpleframework.xml.*"
+            ]
+        }
     }
 
     defaultConfig {
@@ -68,12 +83,12 @@ android {
     buildTypes {
         debug {
             debuggable true
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             debuggable false
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -241,19 +256,20 @@ dependencies {
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
 
     // Add exclusions to prevent other libraries from pulling in xmlpull
-    implementation ("org.opendatakit:opendatakit-javarosa:$versions.javarosa"){
+    // JavaRosa - allow it to use xpp3
+    implementation ("org.opendatakit:opendatakit-javarosa:$versions.javarosa") {
         exclude group: "xmlpull", module: "xmlpull"
-        exclude group: "xpp3",   module: "xpp3"
+        // NO xpp3 exclusion - JavaRosa needs it
     }
+
     // Keep only kxml2 - it includes XmlPullParser classes
     implementation 'net.sf.kxml:kxml2:2.3.0'
-    implementation "xmlpull:xmlpull:1.1.3.4d_b4_min"
+
     // Add kdom for JavaRosa
     implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
-        exclude group: 'org.ogce', module: 'xpp3'
-        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-        exclude group: 'xmlpull', module: 'xmlpull'
         exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'xmlpull', module: 'xmlpull'
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
     }
 
     implementation("com.squareup.retrofit2:converter-simplexml:$versions.retrofit") { exclude group: 'xpp3', module: 'xpp3' }
