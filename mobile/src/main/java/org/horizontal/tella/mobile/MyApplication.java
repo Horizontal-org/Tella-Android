@@ -101,7 +101,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     Vault.Config vaultConfig;
     private static final String TAG = MyApplication.class.getSimpleName();
     public static final String DOT = ".";
-    public static final OwnCloudVersion MINIMUM_SUPPORTED_SERVER_VERSION = OwnCloudVersion.nextcloud_17;
     private static WeakReference<Context> appContext;
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app

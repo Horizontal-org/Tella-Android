@@ -194,7 +194,7 @@ mode activation</string>
   <string name="action_learn.more">Learn more</string>
   <string name="settings.servers_add.server_dialog.title">Add server</string>
   <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
-  <string name="settings.prot_select_delete.servers">Delete server settings</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Delete Tella</string>
   <string name="collect.sent_action_edit.to.resend">Edit to resend</string>
   <string name="collect_toast_form.submitted">Form submitted</string>

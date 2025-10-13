@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/space_cadet">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,182 +15,244 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <org.hzontal.shared_ui.appbar.ToolbarComponent
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-            app:startTitle="@string/Vault_FileInfo"/>
+            app:startTitle="@string/Vault_FileInfo" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Row 1: File Info -->
     <TextView
+        android:id="@+id/fileInfoLabelTv"
+        style="@style/Tella_Main_White_Text.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileInfo"
-        android:id="@+id/fileInfoLabelTv"
-        android:layout_marginTop="20dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
-        app:layout_constraintStart_toEndOf="@id/fileInfoLabelTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="Traffic Light"
-        android:id="@+id/fileInfoTv"
-        android:textSize="11sp"
-        android:layout_marginTop="20dp"
-        />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileInfoLabelTv"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
+
+    <TextView
+        android:id="@+id/fileInfoTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileInfoLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        tools:text="Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic LightTraffic Light Traffic Light Traffic Light Traffic Light Traffic Light Traffic Light" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row1Bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileInfoLabelTv,fileInfoTv" />
+
+    <!-- Row 2: File Size -->
+    <TextView
+        android:id="@+id/fileSizeLabelTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileSize"
-        android:id="@+id/fileSizeLabelTv"
-        android:layout_marginTop="12dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileInfoTv"
-        app:layout_constraintStart_toStartOf="@id/fileInfoTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="35.8 MB"
-        android:id="@+id/fileSizeTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row1Bottom" />
 
     <TextView
+        android:id="@+id/fileSizeTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileSizeLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row1Bottom"
+        tools:text="35.8 MB" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row2Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileSizeLabelTv,fileSizeTv" />
+
+    <!-- Row 3: File Format -->
+    <TextView
+        android:id="@+id/fileFormatLabelTv"
         style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileSizeLabelTv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileFormat"
-        android:id="@+id/fileFormatLabelTv"
-        android:layout_marginTop="12dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileSizeLabelTv"
-        app:layout_constraintStart_toStartOf="@id/fileSizeTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="MP4"
-        android:id="@+id/fileFormatTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row2Bottom" />
 
     <TextView
+        android:id="@+id/fileFormatTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileFormatLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row2Bottom"
+        tools:text="MP4" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row3Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileFormatLabelTv,fileFormatTv" />
+
+    <!-- Row 4: File Created -->
+    <TextView
+        android:id="@+id/fileCreatedLabelTv"
         style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileFormatLabelTv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileCreated"
-        android:id="@+id/fileCreatedLabelTv"
-        android:layout_marginTop="12dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileFormatLabelTv"
-        app:layout_constraintStart_toStartOf="@id/fileSizeTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="08-03-2021 09:33:35 +0500"
-        android:id="@+id/fileCreatedTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row3Bottom" />
 
     <TextView
+        android:id="@+id/fileCreatedTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileCreatedLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row3Bottom"
+        tools:text="08-03-2021 09:33:35 +0500" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row4Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileCreatedLabelTv,fileCreatedTv" />
+
+    <!-- Row 5: File Resolution -->
+    <TextView
+        android:id="@+id/fileResolutionLabelTv"
         style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileCreatedLabelTv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileResolution"
-        android:id="@+id/fileResolutionLabelTv"
-        android:layout_marginTop="12dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileCreatedLabelTv"
-        app:layout_constraintStart_toStartOf="@id/fileSizeTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="1024x768"
-        android:id="@+id/fileResolutionTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row4Bottom" />
 
     <TextView
+        android:id="@+id/fileResolutionTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileResolutionLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row4Bottom"
+        tools:text="1024x768" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row5Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileResolutionLabelTv,fileResolutionTv" />
+
+    <!-- Row 6: File Length -->
+    <TextView
+        android:id="@+id/fileLengthLabelTv"
         style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileResolutionLabelTv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FileLength"
-        android:id="@+id/fileLengthLabelTv"
-        android:layout_marginTop="12dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileResolutionLabelTv"
-        app:layout_constraintStart_toStartOf="@id/fileSizeTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="3:42"
-        android:id="@+id/fileLengthTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row5Bottom" />
 
     <TextView
+        android:id="@+id/fileLengthTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fileLengthLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row5Bottom"
+        tools:text="3:42" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row6Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="fileLengthLabelTv,fileLengthTv" />
+
+    <!-- Row 7: File Path -->
+    <TextView
+        android:id="@+id/filePathLabelTv"
         style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileLengthLabelTv"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:paddingHorizontal="@dimen/tella_main_vertical"
         android:text="@string/Vault_FilePath"
-        android:layout_marginTop="12dp"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row6Bottom" />
+
     <TextView
+        android:id="@+id/filePathTv"
+        style="@style/Tella_Main_White_Text.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/tella_main_vertical"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/tella_main_vertical"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/filePathLabelTv"
+        app:layout_constraintTop_toBottomOf="@id/row6Bottom"
+        tools:text="Tella/video" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/row7Bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Tella_Main_White_Text.Small"
-        app:layout_constraintTop_toBottomOf="@id/fileLengthLabelTv"
-        app:layout_constraintStart_toStartOf="@id/fileSizeTv"
-        android:paddingHorizontal="@dimen/tella_main_vertical"
-        tools:text="Tella/video"
-        android:id="@+id/filePathTv"
-        android:layout_marginTop="12dp"
-        android:textSize="11sp"
-        />
-
-
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="filePathLabelTv,filePathTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

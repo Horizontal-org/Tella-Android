@@ -1,40 +1,74 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    id 'com.google.dagger.hilt.android'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+
+}
+
+/** Avoid duplicate logging classes app-wide */
+configurations.all {
+    exclude group: "org.slf4j", module: "jcl-over-slf4j"
+    exclude group: "log4j", module: "log4j"
+    exclude group: "xmlpull", module: "xmlpull"
 }
 
 android {
+    namespace 'org.horizontal.tella.mobile'
     compileSdk versions.compileSdk
+    ndkVersion "28.0.12916984"
+
+    packagingOptions {
+        exclude 'META-INF/services/org.xmlpull.v1.XmlPullParserFactory'
+        exclude 'META-INF/services/org.xmlpull.v1.XmlSerializerFactory'
+        pickFirst 'META-INF/services/javax.xml.stream.*'
+        // Handle XML parser conflicts by picking first
+        pickFirst 'META-INF/services/org.xmlpull.v1.XmlPullParser'
+        pickFirst 'META-INF/services/org.xmlpull.v1.XmlSerializer'
+    }
+
+    packaging {
+        resources {
+            excludes += [
+                    // Keep your existing excludes, but ensure SimpleXML is not affected
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    "META-INF/versions/9/OSGI-INF/*",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/*.md",
+                    "META-INF/*.txt",
+            ]
+            // Make sure SimpleXML configuration files are included
+            pickFirsts += [
+                    "META-INF/services/org.simpleframework.xml.*"
+            ]
+        }
+    }
+
     defaultConfig {
         applicationId "org.hzontal.tella"
-        minSdkVersion versions.minSdk
-        compileSdkVersion versions.compileSdk
-        targetSdkVersion versions.targetSdk
-        versionCode 211
-        versionName "2.17.0"
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+        versionCode 212
+        versionName "2.18.0"
         multiDexEnabled true
 
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
-        }
-        packagingOptions {
-            resources.excludes.add("META-INF/*")
-        }
+        ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
 
         Properties localProperties = getLocalProperties()
         String dropboxKey = localProperties['DROPBOX_APP_KEY']
         if (dropboxKey == null) {
-            logger.warn("No value provided for DROPBOX_APP_KEY.  Specify a value in a examples/android/local.properties file. You can register for one at https://developers.dropbox.com/")
+            logger.warn("No value provided for DROPBOX_APP_KEY. Specify it in local.properties.")
             dropboxKey = ""
         }
         buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
         manifestPlaceholders = [dropboxKey: dropboxKey]
-
-        // vectorDrawables.useSupportLibrary = true // don't care about apk size, care about crashes
     }
 
     splits {
@@ -46,60 +80,72 @@ android {
         }
     }
 
-    configurations.all {
-        exclude group: "org.slf4j", module: "slf4j-log4j12"
-        exclude group: "log4j", module: "log4j"
-    }
-
     buildTypes {
         debug {
             debuggable true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             debuggable false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
 
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-    }
+    buildFeatures { viewBinding = true }
 
-    kotlinOptions {
-        jvmTarget = '11'
-    }
-    buildFeatures {
-        viewBinding = true
-    }
-    lintOptions {
-        checkReleaseBuilds false
-    }
+    lint { checkReleaseBuilds = false }
+
     hilt {
         enableExperimentalClasspathAggregation = true
         enableAggregatingTask = true
-
     }
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
 
+    packaging {
+        resources {
+            excludes += [
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    "META-INF/versions/9/OSGI-INF/*",
+                    "META-INF/DEPENDENCIES",
+                    "META-INF/LICENSE",
+                    "META-INF/LICENSE.txt",
+                    "META-INF/NOTICE",
+                    "META-INF/NOTICE.txt",
+                    "META-INF/ASL2.0",
+                    "META-INF/*.md",
+                    "META-INF/*.txt",
+            ]
+            pickFirsts += [
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+            ]
+        }
     }
-    namespace 'org.horizontal.tella.mobile'
 }
 
 dependencies {
+    // Align Kotlin libs with the root plugin (set in root to 2.1.20)
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}"
+
+    // Helps processors understand newer metadata; harmless with Kotlin 2.1.x
+    //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
+
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
+
     implementation "androidx.multidex:multidex:$versions.multidex"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation project(':tella-vault')
     implementation project(':pdfviewer')
-
     api project(':tella-locking-ui')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
@@ -108,39 +154,27 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
 
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
-    api "androidx.navigation:navigation-ui-ktx:$versions.navigationUI"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
     implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
     implementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
     implementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
-    // implementation "com.google.android.gms:play-services-gcm:$versions.googlePlayServices" // android-job, optional
 
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-    implementation("com.squareup.retrofit2:converter-simplexml:${versions.retrofit}") {
-        exclude group: 'xpp3', module: 'xpp3'
-        exclude group: 'stax', module: 'stax-api'
-        exclude group: 'stax', module: 'stax'
-    }
+    implementation("com.squareup.retrofit2:retrofit:${versions.retrofit}")
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
-    implementation("com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher") {
-        exclude module: "support-v13"
-    }
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
     implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragment"
-    implementation "androidx.databinding:databinding-runtime:$versions.databindingRuntime"
-    kapt("com.github.permissions-dispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher")
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
-    // todo: follow this, v2 should be soon
     implementation "com.jakewharton.timber:timber:$versions.timber"
-    //sqlite dependency
+
+    // sqlite
     implementation "net.zetetic:sqlcipher-android:$versions.sqlcipher"
     implementation "androidx.sqlite:sqlite-ktx:$versions.sqlite"
 
@@ -152,11 +186,9 @@ dependencies {
     // digest auth
     implementation "io.github.rburgst:okhttp-digest:$versions.burgstallerOkhttpDigest"
 
-    // collect
-    //implementation group: "org.getodk", name: "javarosa", version: "$versions.javarosa"
-    implementation "org.opendatakit:opendatakit-javarosa:$versions.javarosa"
-    implementation "net.sf.kxml:kxml2:$versions.kxml2"
+    // Keep ONE commons-io
     implementation "commons-io:commons-io:$versions.commonsIo"
+    // (remove any 'org.apache.directory.studio:org.apache.commons.io' to avoid dupes)
 
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
@@ -167,71 +199,81 @@ dependencies {
         exclude module: "animated-vector-drawble"
     }
 
-    //hilt
-    implementation "com.google.dagger:hilt-android:$versions.hilt_android"
-    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
-    //hilt-view-model
-    // implementation "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hilt_viewmodel"
-    kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
-    //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
+    // ---- Hilt (Google) ----
+    implementation "com.google.dagger:hilt-android:${versions.hilt_android}"
+    kapt "com.google.dagger:hilt-compiler:${versions.hilt_android_compiler}"
+
+    implementation "androidx.hilt:hilt-work:${versions.androidx_hilt}"
+    implementation "androidx.hilt:hilt-navigation-fragment:${versions.androidx_hilt}"
+
     implementation "com.github.nak5ive:ink-android:$versions.simplifyInk"
     implementation "com.mikhaellopez:circularimageview:$versions.circularimageview"
-    implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
     implementation "com.github.ihsanbal:LoggingInterceptor:$versions.ihsanbalLoggingInterceptor"
 
-    //worker manager
+    // WorkManager
     implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
-    implementation("androidx.hilt:hilt-work:$versions.hilt_version")
 
-    //optional - RxJava2 support
-    implementation "androidx.work:work-rxjava2:$versions.workermanger"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1"
 
-    // debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakCanaryVersion"
+    // tests
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
-
     testImplementation "junit:junit:$versions.junit"
 
-    implementation("com.vanniktech:android-image-cropper:4.3.3")
+    implementation "com.vanniktech:android-image-cropper:4.5.0"
 
     implementation "org.divviup.android:divviup-android:$versions.divviup"
 
-    implementation("com.vanniktech:android-image-cropper:4.5.0")
-
-    // Google Play Services Auth (needed for authenticating with Google)
+    // Auth / Credentials / Google APIs
     implementation "com.google.android.gms:play-services-auth:$versions.playServicesAuthVersion"
-
-    // AndroidX Credentials API for handling credentials in the app
     implementation "androidx.credentials:credentials:$versions.credentialsVersion"
     implementation "androidx.credentials:credentials-play-services-auth:$versions.credentialsVersion"
-
-    // Google Identity Library for managing user identities
     implementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
-    // Google API Client for Android (used for making API requests to Google services)
     implementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
-    // Google Drive API (used to interact with Google Drive services)
     implementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
-    // Google API Client with Gson for parsing JSON responses
     implementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
-    // Google HTTP Client for Android (used to send HTTP requests)
     implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
-    // Gson library for JSON parsing
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
+
+    // Dropbox
     implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
+    implementation 'commons-httpclient:commons-httpclient:3.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    //Next cloud
-    implementation ("com.github.nextcloud:android-library:$versions.nextcloud") {
-        exclude group: 'org.ogce', module: 'xpp3'
-        exclude group: 'commons-logging', module: 'commons-logging' // Exclude commons-logging
-        exclude group: 'org.slf4j', module: 'jcl-over-slf4j' // Optionally exclude jcl-over-slf4j
 
-    }
-    implementation "commons-httpclient:commons-httpclient:3.1@jar" // remove after entire switch to lib v2
-    implementation 'org.conscrypt:conscrypt-android:2.5.2'
+    // Apache HttpClient 3.x stack required by OwnCloudClient
+    implementation 'commons-codec:commons-codec:1.15'
+    implementation 'org.conscrypt:conscrypt-android:2.5.3'
 
+    // PermissionsDispatcher
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:$versions.permissionDispatcher"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:$versions.permissionDispatcher"
+
+    // Nextcloud HW security
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
+    // Add exclusions to prevent other libraries from pulling in xmlpull
+    // JavaRosa - allow it to use xpp3
+    implementation ("org.opendatakit:opendatakit-javarosa:$versions.javarosa") {
+        exclude group: "xmlpull", module: "xmlpull"
+        // NO xpp3 exclusion - JavaRosa needs it
+    }
+
+    // Keep only kxml2 - it includes XmlPullParser classes
+    implementation 'net.sf.kxml:kxml2:2.3.0'
+
+    // Add kdom for JavaRosa
+    implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'xmlpull', module: 'xmlpull'
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    }
+
+    implementation("com.squareup.retrofit2:converter-simplexml:$versions.retrofit") { exclude group: 'xpp3', module: 'xpp3' }
+    compileOnly "com.google.code.findbugs:annotations:3.0.1"
 
 }
 
@@ -243,6 +285,4 @@ def getLocalProperties() {
     return props
 }
 
-kapt {
-    correctErrorTypes true
-}
+kapt { correctErrorTypes true }

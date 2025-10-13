@@ -147,6 +147,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
+                            android:checked="true"
                             android:background="@drawable/checkbox_background"
                             app:buttonTint="@color/radio_buttons_color" />
                     </RelativeLayout>
@@ -160,6 +161,7 @@
                         android:paddingStart="@dimen/activity_vertical_margin"
                         android:paddingTop="8dp"
                         android:paddingEnd="@dimen/activity_vertical_margin"
+                        android:visibility="gone"
                         android:paddingBottom="8dp">
 
                         <TextView

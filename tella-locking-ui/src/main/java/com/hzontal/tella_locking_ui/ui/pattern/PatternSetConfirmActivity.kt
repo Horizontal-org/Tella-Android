@@ -1,8 +1,16 @@
 package com.hzontal.tella_locking_ui.ui.pattern
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import com.hzontal.tella_locking_ui.R
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import com.hzontal.tella_locking_ui.common.CommonStates
@@ -18,8 +26,11 @@ import javax.crypto.spec.PBEKeySpec
 class PatternSetConfirmActivity : SetPatternActivity() {
 
     private var pattern: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyEdgeToEdge(root)
+
         updateStage(Stage.Confirm)
         pattern = intent.extras?.getString(PATTERN_CELL_BYTES)
         mRightButton.isVisible = false

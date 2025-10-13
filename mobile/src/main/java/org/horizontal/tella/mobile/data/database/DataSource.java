@@ -2244,6 +2244,10 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         deleteTable(D.T_DROPBOX);
         deleteTable(D.T_DROPBOX_FORM_INSTANCE);
         deleteTable(D.T_DROPBOX_INSTANCE_VAULT_FILE);
+
+        deleteTable(D.T_NEXT_CLOUD);
+        deleteTable(D.T_NEXT_CLOUD_FORM_INSTANCE);
+        deleteTable(D.T_NEXT_CLOUD_INSTANCE_VAULT_FILE);
     }
 
     public void deleteFormsAndRelatedTables() {

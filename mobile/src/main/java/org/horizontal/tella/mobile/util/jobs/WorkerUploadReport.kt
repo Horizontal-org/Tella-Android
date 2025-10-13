@@ -1,13 +1,14 @@
 package org.horizontal.tella.mobile.util.jobs
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.hilt.work.HiltWorker
-import androidx.work.RxWorker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.rx2.await
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
 import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
@@ -28,47 +29,53 @@ class WorkerUploadReport @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val reportsRepository: ReportsRepository,
     private val statusProvider: StatusProvider,
-) : RxWorker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
 
-    @SuppressLint("RestrictedApi")
-    override fun createWork(): Single<Result> {
-        return Single.fromCallable {
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        try {
             if (!statusProvider.isOnline()) {
-                return@fromCallable Result.retry()
+                return@withContext Result.retry()
             }
 
             val mainKey = try {
                 MyApplication.getMainKeyHolder().get().key.encoded
             } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
                 Timber.e(e, "Failed to retrieve main key")
-                return@fromCallable Result.retry()
+                return@withContext Result.retry()
             }
 
             val dataSource = DataSource.getInstance(context, mainKey)
-            val reportFormInstances = getOutboxReportInstances(dataSource)
 
+            val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
                 setNoTimeOut(false)
-                return@fromCallable Result.success()
+                return@withContext Result.success()
             } else {
                 setNoTimeOut(true)
             }
 
-            val server = getServer(dataSource) ?: return@fromCallable Result.failure()
+            val server = getServer(dataSource) ?: run {
+                setNoTimeOut(false)
+                return@withContext Result.failure()
+            }
 
             for (reportInstance in reportFormInstances) {
-                val reportWithFiles = getReportBundle(dataSource, reportInstance).blockingGet()
+                val reportWithFiles = getReportBundle(dataSource, reportInstance)
 
                 if (reportWithFiles.reportApiId.isEmpty()) {
-                    val report = reportsRepository.submitReport(
-                        server, ReportBodyEntity(
-                            reportWithFiles.title, reportWithFiles.description
+                    // submitReport likely returns a Single<ReportResponse>
+                    val reportResponse = reportsRepository.submitReport(
+                        server,
+                        ReportBodyEntity(
+                            reportWithFiles.title,
+                            reportWithFiles.description
                         )
-                    ).blockingGet()
+                    ).await()
 
-                    reportWithFiles.reportApiId = report.id
+                    reportWithFiles.reportApiId = reportResponse.id
 
-                    reportsRepository.submitFiles(reportWithFiles, server, report.id)
+                    // submitFiles is assumed synchronous (as in your original code). If it returns Rx, add `.await()`.
+                    reportsRepository.submitFiles(reportWithFiles, server, reportResponse.id)
                 } else {
                     reportsRepository.submitFiles(
                         reportWithFiles, server, reportWithFiles.reportApiId
@@ -79,21 +86,32 @@ class WorkerUploadReport @AssistedInject constructor(
             }
 
             setNoTimeOut(false)
-            return@fromCallable Result.success()
-        }.onErrorReturn { error ->
-            Timber.e(error, "WorkerUploadReport failed")
-            Result.failure()
+            Result.success()
+        } catch (t: Throwable) {
+            Timber.e(t, "WorkerUploadReport failed")
+            setNoTimeOut(false)
+            Result.retry()
         }
     }
 
-    private fun getServer(dataSource: DataSource): TellaReportServer? {
-        return dataSource.listTellaUploadServers().blockingGet()
+    // --- suspend helpers (await Rx Single results on IO) ---
+
+    private suspend fun getServer(dataSource: DataSource): TellaReportServer? {
+        return dataSource.listTellaUploadServers().await()
             .firstOrNull { server -> server.isActivatedBackgroundUpload || server.isAutoUpload }
     }
 
-    private fun getAutoBackgroundServers(dataSource: DataSource): Single<List<TellaReportServer>> {
+    private suspend fun getAutoBackgroundServers(dataSource: DataSource): List<TellaReportServer> {
         return dataSource.listTellaUploadServers()
             .map { servers -> servers.filter { it.isActivatedBackgroundUpload || it.isAutoUpload } }
+            .await()
+    }
+
+    private suspend fun getOutboxReportInstances(dataSource: DataSource): List<ReportInstance> {
+        val outboxInstances = dataSource.listOutboxReportInstances().await()
+        val autoBackgroundServers = getAutoBackgroundServers(dataSource)
+        return filterInstancesByAutoBackgroundServers(outboxInstances, autoBackgroundServers)
+            .sortedByDescending { it.updated }
     }
 
     private fun filterInstancesByAutoBackgroundServers(
@@ -105,49 +123,37 @@ class WorkerUploadReport @AssistedInject constructor(
         }
     }
 
-    private fun getOutboxReportInstances(dataSource: DataSource): List<ReportInstance> {
-        val outboxInstances = dataSource.listOutboxReportInstances().blockingGet()
-        val autoBackgroundServers = getAutoBackgroundServers(dataSource).blockingGet()
-
-        return filterInstancesByAutoBackgroundServers(
-            outboxInstances,
-            autoBackgroundServers
-        ).sortedByDescending { it.updated }
-    }
-
-    private fun getReportBundle(
+    private suspend fun getReportBundle(
         dataSource: DataSource,
         reportInstance: ReportInstance
-    ): Single<ReportInstance> {
+    ): ReportInstance {
+        val files = dataSource.getReportMediaFiles(reportInstance).await()
 
-        return dataSource.getReportMediaFiles(reportInstance).flatMap { files ->
-            MyApplication.keyRxVault.rxVault
-                .firstOrError()
-                .flatMap { rxVault ->
-                    rxVault.get(files.mapNotNull { it.id }.toTypedArray())
+        val vaultFiles = MyApplication.keyRxVault.rxVault
+            .firstOrError()
+            .flatMap { rxVault ->
+                rxVault.get(files.mapNotNull { it.id }.toTypedArray())
+            }
+            .await()
+
+        val vaultFileMap = vaultFiles.associateBy { it?.id }
+        val filesResult = files.mapNotNull { formMediaFile ->
+            val vaultFile = vaultFileMap[formMediaFile.id]
+            vaultFile?.let { file ->
+                FormMediaFile.fromMediaFile(file).apply {
+                    status = formMediaFile.status
+                    uploadedSize = formMediaFile.uploadedSize
                 }
-                .map { vaultFiles ->
-                    val vaultFileMap = vaultFiles.associateBy { it?.id }
-                    val filesResult = files.mapNotNull { formMediaFile ->
-                        val vaultFile = vaultFileMap[formMediaFile.id]
-                        vaultFile?.let { file ->
-                            FormMediaFile.fromMediaFile(file).apply {
-                                status = formMediaFile.status
-                                uploadedSize = formMediaFile.uploadedSize
-                            }
-                        }
-                    }.toMutableList()
-                    reportInstance.widgetMediaFiles = filesResult
-                    reportInstance
-                }
-        }
+            }
+        }.toMutableList()
+
+        reportInstance.widgetMediaFiles = filesResult
+        return reportInstance
     }
 
     private fun setNoTimeOut(enableNoTimeout: Boolean) {
-        if (enableNoTimeout) {
-            MyApplication.getMainKeyHolder().timeout = LifecycleMainKey.NO_TIMEOUT
-        } else {
-            MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
-        }
+        MyApplication.getMainKeyHolder().timeout =
+            if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
+            else LockTimeoutManager.IMMEDIATE_SHUTDOWN
     }
 }
