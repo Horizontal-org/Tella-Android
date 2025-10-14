@@ -254,5 +254,22 @@
 }
 -keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
 
+# Google HTTP Client core types used reflectively
+-keep class com.google.api.client.googleapis.json.GoogleJsonError { *; }
+-keep class com.google.api.client.json.GenericJson { *; }
+-keep class com.google.api.client.util.GenericData { *; }
+
+# Fields annotated with @Key must be kept with original names
+-keepclassmembers class ** {
+    @com.google.api.client.util.Key <fields>;
+}
+
+# If you use these factories, keep them too (safe + small)
+-keep class com.google.api.client.json.gson.GsonFactory { *; }
+-keep class com.google.api.client.json.jackson2.JacksonFactory { *; }
+
+# Keep annotations/signatures so reflection works
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
 
 # ========== END SIMPLE XML RULES ==========
