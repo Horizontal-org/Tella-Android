@@ -239,4 +239,20 @@
 # Keep all factory classes
 -keep class org.simpleframework.xml.stream.** { *; }
 
+
+# Keep the polymorphic base and its subtypes
+-keep class org.horizontal.tella.mobile.domain.entity.reports.Author { *; }
+-keep class * extends org.horizontal.tella.mobile.domain.entity.reports.Author { *; }
+
+# If you use RuntimeTypeAdapterFactory or a custom deserializer:
+-keep class com.google.gson.typeadapters.RuntimeTypeAdapterFactory { *; }
+-keep class your.package.AuthorDeserializer { *; }
+
+# (You already have)
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+
 # ========== END SIMPLE XML RULES ==========
