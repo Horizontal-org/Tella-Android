@@ -271,5 +271,9 @@
 # Keep annotations/signatures so reflection works
 -keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
 
+-keep class org.horizontal.tella.mobile.domain.entity.uwazi.** { *; }
+-keepclassmembers class org.horizontal.tella.mobile.domain.entity.uwazi.** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
 
 # ========== END SIMPLE XML RULES ==========
