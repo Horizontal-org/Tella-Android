@@ -12,22 +12,12 @@ plugins {
 configurations.all {
     exclude group: "org.slf4j", module: "jcl-over-slf4j"
     exclude group: "log4j", module: "log4j"
-    exclude group: "xmlpull", module: "xmlpull"
 }
 
 android {
     namespace 'org.horizontal.tella.mobile'
     compileSdk versions.compileSdk
     ndkVersion "28.0.12916984"
-
-    packagingOptions {
-        exclude 'META-INF/services/org.xmlpull.v1.XmlPullParserFactory'
-        exclude 'META-INF/services/org.xmlpull.v1.XmlSerializerFactory'
-        pickFirst 'META-INF/services/javax.xml.stream.*'
-        // Handle XML parser conflicts by picking first
-        pickFirst 'META-INF/services/org.xmlpull.v1.XmlPullParser'
-        pickFirst 'META-INF/services/org.xmlpull.v1.XmlSerializer'
-    }
 
     packaging {
         resources {
@@ -55,7 +45,7 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 212
+        versionCode 213
         versionName "2.18.0"
         multiDexEnabled true
 
@@ -65,7 +55,7 @@ android {
         String dropboxKey = localProperties['DROPBOX_APP_KEY']
         if (dropboxKey == null) {
             logger.warn("No value provided for DROPBOX_APP_KEY. Specify it in local.properties.")
-            dropboxKey = ""
+            dropboxKey = "2j6ouobejsb3n82"
         }
         buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
         manifestPlaceholders = [dropboxKey: dropboxKey]
@@ -84,11 +74,13 @@ android {
         debug {
             debuggable true
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             debuggable false
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -164,7 +156,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
     implementation "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
-    implementation("com.squareup.retrofit2:retrofit:${versions.retrofit}")
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$versions.retrofit2KotliCoroutinesAdapter"
 
     implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigationRuntime"
@@ -173,10 +164,6 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
     implementation "com.jakewharton.timber:timber:$versions.timber"
-
-    // sqlite
-    implementation "net.zetetic:sqlcipher-android:$versions.sqlcipher"
-    implementation "androidx.sqlite:sqlite-ktx:$versions.sqlite"
 
     implementation "info.guardianproject.cacheword:cachewordlib:$versions.cacheword"
     implementation "com.github.bumptech.glide:glide:$versions.glide"
@@ -213,8 +200,6 @@ dependencies {
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1"
-
     // tests
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation 'org.mockito:mockito-core:3.12.4'
@@ -243,7 +228,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
 
-    // Apache HttpClient 3.x stack required by OwnCloudClient
     implementation 'commons-codec:commons-codec:1.15'
     implementation 'org.conscrypt:conscrypt-android:2.5.3'
 
@@ -267,14 +251,10 @@ dependencies {
 
     // Add kdom for JavaRosa
     implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
-        exclude group: 'xpp3', module: 'xpp3'
-        exclude group: 'xmlpull', module: 'xmlpull'
-        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+        exclude group: 'org.ogce', module: 'xpp3'
     }
 
     implementation("com.squareup.retrofit2:converter-simplexml:$versions.retrofit") { exclude group: 'xpp3', module: 'xpp3' }
-    compileOnly "com.google.code.findbugs:annotations:3.0.1"
-
 }
 
 def getLocalProperties() {

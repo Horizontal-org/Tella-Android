@@ -65,7 +65,7 @@ buildscript {
 
     ext.versions.androidx_hilt = '1.2.0'
 
-    ext.versions.nextcloud = '2.21.0'
+    ext.versions.nextcloud = '3546bd82fc'
 
     versions.leakCanaryVersion = "3.0-alpha-1"
     versions.permissionDispatcher = "4.9.2"

@@ -276,4 +276,30 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
+
+# --- Nextcloud / ownCloud Android Library models used by Gson (reflective) ---
+# Files / WebDAV models
+-keep class com.owncloud.android.lib.resources.files.model.** { *; }
+-keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
+
+# Capabilities / status / user info responses
+-keep class com.owncloud.android.lib.resources.status.** { *; }
+-keep class com.owncloud.android.lib.resources.users.** { *; }
+
+# (If you use shares/tags/activities/etc., keep their models too)
+-keep class com.owncloud.android.lib.resources.shares.** { *; }
+-keep class com.owncloud.android.lib.resources.activities.** { *; }
+-keep class com.owncloud.android.lib.resources.tags.** { *; }
+
+# Ensure Gson can see @SerializedName fields everywhere (app + libs)
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+# If you wrote any custom RemoteOperation subclasses (e.g., GetServerInfoOperation)
+# and they override the deprecated run(OwnCloudClient), KEEP them so R8 doesn’t strip it
+-keep class org.horizontal.tella.mobile.util.operations.GetServerInfoOperation { *; }
+
+
 # ========== END SIMPLE XML RULES ==========
