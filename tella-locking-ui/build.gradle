@@ -32,7 +32,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -77,11 +77,11 @@ dependencies {
 
     // Hilt (match root: 2.51.1)
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
-    kapt         "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
+    kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
 
     // AndroidX Hilt (WorkManager integration)
     implementation "androidx.hilt:hilt-work:$versions.androidx_hilt"
-    kapt         "androidx.hilt:hilt-compiler:$versions.androidx_hilt"
+    kapt "androidx.hilt:hilt-compiler:$versions.androidx_hilt"
 
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
