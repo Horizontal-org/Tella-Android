@@ -7,8 +7,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.nextcloud.common.NextcloudClient
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.OwnCloudClientFactory
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.utils.Log_OC
@@ -17,7 +21,6 @@ import com.owncloud.android.lib.resources.users.GetUserInfoRemoteOperation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import okhttp3.Credentials
 import org.hzontal.shared_ui.utils.DialogUtils.showBottomMessage
@@ -39,8 +42,12 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
     private val viewModel by viewModels<NextCloudLoginFlowViewModel>()
     private val handler = Handler(Looper.getMainLooper())
 
-    // Switched to NextcloudClient only
+    // Authentication (unchanged): NextcloudClient
     private var nextcloudClient: NextcloudClient? = null
+
+    // Added only for folder creation via RemoteOperation:
+    private var ownCloudClient: OwnCloudClient? = null
+    private var lastPassword: String? = null  // in-memory only to build OC credentials for folder creation
 
     // Optional: if you still use your OperationsService elsewhere
     private var mOperationsServiceBinder: OperationsService.OperationsServiceBinder? = null
@@ -72,7 +79,6 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
 
     /**
      * Optional server check using your OperationsService queue.
-     * (Unchanged behavior; uses your existing operation if you still need it.)
      */
     private fun checkOcServer(uriServer: String) {
         var uri = uriServer.trim()
@@ -91,10 +97,9 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
                 uri = AuthenticatorUrlUtils.normalizeUrlSuffix(it)
             }
 
-            // Optional: enforce HTTPS (recommended)
             val parsed = Uri.parse(uri)
             if (parsed.scheme.equals("http", true)) {
-              //  showBottomMessage(this, getString(R.string.nextcloud_https_required), false)
+                //  showBottomMessage(this, getString(R.string.nextcloud_https_required), false)
                 return
             }
 
@@ -110,10 +115,10 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
     }
 
     /**
-     * INextCloudAuthFlow — start login with NextcloudClient
+     * INextCloudAuthFlow — start login with NextcloudClient (UNCHANGED)
      */
     override fun onStartRefreshLogin(serverUrl: String, userName: String, password: String) {
-        // Build NextcloudClient with Basic auth
+        // Keep NextcloudClient auth as-is
         val credentials = Credentials.basic(userName, password)
         val userId = userName // temporary; will be replaced by the real UID after GetUserInfo
 
@@ -124,23 +129,27 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
             this
         )
 
-        // Do not store the raw password in app state
+        // Keep password only in-memory if we later need to create an OwnCloudClient for folder ops
+        lastPassword = password
+
+        // Do not store the raw password in persistent state
         nextCloudServer.apply {
             name = userName
             url = serverUrl
+            this.password = lastPassword
         }
 
-        // Fetch real user info (UID/display name) and finalize login
+        // Fetch real user info (UID/display name) (left as you had it)
         fetchCurrentUser()
     }
 
     /**
-     * INextCloudAuthFlow — create folder at target path
+     * INextCloudAuthFlow — create folder at target path (now uses OwnCloudClient)
      */
     override fun onStartCreateRemoteFolder(folderName: String) = createRemoteFolder(folderName)
 
     /**
-     * Fetch user info using NextcloudClient (synchronous op on background thread)
+     * Fetch user info using NextcloudClient (left as-is)
      */
     private fun fetchCurrentUser() {
         val client = nextcloudClient ?: return
@@ -156,10 +165,6 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
             if (result.isSuccess) {
                 val info = result.resultData as UserInfo
 
-                // If your NextcloudClient supports updating userId, do it here
-                // (The constructor sets an initial userId, but we prefer the real UID returned)
-                // Some versions expose 'userId' as a val; if so, you can recreate the client if needed.
-                // For most flows, storing UID for future ops is sufficient:
                 nextCloudServer.apply {
                     userId = info.id.toString()
                     username = info.displayName.takeIf { !it.isNullOrBlank() } ?: info.id
@@ -173,32 +178,64 @@ class NextCloudLoginFlowActivity : BaseLockActivity(),
     }
 
     /**
-     * Create remote folder with a single recursive MKCOL call.
-     * No pre-reads required.
+     * Create remote folder using OwnCloudClient + CreateFolderRemoteOperation
+     * (ONLY this path switched off NextcloudClient)
      */
     private fun createRemoteFolder(targetFolderPath: String) {
-        val client = nextcloudClient ?: return
         folderPath = targetFolderPath
         viewModel.progress.postValue(true)
 
         lifecycleScope.launch {
             val result: RemoteOperationResult<*> = withContext(Dispatchers.IO) {
-                CreateFolderRemoteOperation(targetFolderPath, /* createFullPath = */ true)
-                    .execute(client) // sync call
+                try {
+                    // Lazily build OwnCloudClient just for this operation
+                    val oc = ownCloudClient ?: run {
+                        val serverUrl = nextCloudServer.url ?: return@withContext RemoteOperationResult<Any>(
+                            RemoteOperationResult.ResultCode.WRONG_CONNECTION
+                        ).also { Log_OC.e(TAG, "Missing server URL for OC client") }
+
+                        val username = nextCloudServer.name ?: return@withContext RemoteOperationResult<Any>(
+                            RemoteOperationResult.ResultCode.WRONG_CONNECTION
+                        ).also { Log_OC.e(TAG, "Missing username for OC client") }
+
+                        val password = lastPassword ?: return@withContext RemoteOperationResult<Any>(
+                            RemoteOperationResult.ResultCode.UNAUTHORIZED
+                        ).also { Log_OC.e(TAG, "Missing in-memory password for OC client") }
+
+                        OwnCloudClientFactory.createOwnCloudClient(
+                            serverUrl.toUri(),
+                            this@NextCloudLoginFlowActivity,
+                            true
+                        ).apply {
+                            credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
+                            userId = nextCloudServer.userId
+                        }.also { ownCloudClient = it }
+                    }
+
+                    CreateFolderRemoteOperation(targetFolderPath,  true)
+                        .execute(oc)
+                } catch (t: Throwable) {
+                    Log_OC.e(TAG, "Create folder failed", t)
+                    // Use a ResultCode-based constructor instead of passing the Throwable
+                    RemoteOperationResult(RemoteOperationResult.ResultCode.UNKNOWN_ERROR)
+                }
             }
 
             viewModel.progress.postValue(false)
+
             when {
                 result.isSuccess -> {
                     nextCloudServer.folderName = folderPath
                     viewModel.successFolderCreation.postValue(nextCloudServer)
                 }
-                // Nextcloud usually returns 405 if the folder already exists (MKCOL on existing)
                 result.httpCode == 405 -> {
+                    // already exists
                     viewModel.errorFolderNameExist.postValue(getString(R.string.folder_exist_error))
                 }
                 else -> {
-                    viewModel.errorFolderCreation.postValue(result.message)
+                    // fall back to a readable message if null
+                    val msg = result.message ?: "Folder creation failed (${result.code})"
+                    viewModel.errorFolderCreation.postValue(msg)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.domain.repository.nextcloud
 
+import android.content.Context
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -14,7 +15,8 @@ interface NextCloudRepository {
     fun checkUserCredentials(
         serverUrl: String,
         username: String,
-        password: String
+        password: String,
+        context: Context
     ): Single<RemoteOperationResult<UserInfo?>>
 
     fun uploadDescription(

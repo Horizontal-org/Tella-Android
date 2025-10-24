@@ -172,7 +172,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         super.attachBaseContext(LocaleManager.getInstance().getLocalizedContext(newBase));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -320,7 +319,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        // FirebaseCrashlytics.getInstance().recordException(throwable);
+       FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override
