@@ -194,7 +194,7 @@ kích hoạt chế độ</string>
   <string name="action_learn.more">Tìm hiểu thêm</string>
   <string name="settings.servers_add.server_dialog.title">Thêm máy chủ</string>
   <string name="settings.prot_select_delete.forms">Xóa bản nháp và biểu mẫu đã gửi</string>
-  <string name="settings.prot_select_delete.servers">Xóa cài đặt máy chủ</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Xóa Tella</string>
   <string name="collect.sent_action_edit.to.resend">Chỉnh sửa để gửi lại</string>
   <string name="collect_toast_form.submitted">Biểu mẫu đã gửi</string>
@@ -291,7 +291,7 @@ kích hoạt chế độ</string>
   <string name="settings.select_security">Bảo mật</string>
   <string name="settings.select_lock_timeout">Thời gian khóa</string>
   <string name="settings.sec_camera.mute_switch">Chế độ im lặng của máy ảnh</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">Tắt âm thanh máy ảnh để ít thu hút chú ý khi chụp ảnh.</string>
   <string name="settings.sec_quick.delete_switch">Xóa nhanh</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Máy chủ</string>
@@ -324,7 +324,7 @@ kích hoạt chế độ</string>
   <string name="settings.prot_select_delete.vault">Xóa các tệp tin</string>
   <string name="settings.sec_delete.vault_tooltip">Xóa tất cả các tệp tin được lưu trữ trong Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Xóa tất cả các bản nháp và biểu mẫu đã gửi.</string>
-  <string name="settings.sec_delete.servers_tooltip">Xóa kết nối của bạn với máy chủ và tất cả các biểu mẫu được liên kết với chúng.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">Xóa ứng dụng và tất cả dữ liệu bên trong. Bạn sẽ được hỏi “Bạn có muốn gỡ cài đặt ứng dụng này không?” Trừ khi bạn xác nhận, Tella sẽ không bị xóa.</string>
   <string name="settings.sec_bypass_switch_title">Vượt qua kiểm duyệt</string>
   <string name="settings.sec_bypass_switch_expl">Vượt qua các cố gắng ngăn chặn Tella trong khu vực của bạn. Lưu ý rằng việc bật tính năng này sẽ khiến việc gửi dữ liệu đến máy chủ chậm hơn.</string>

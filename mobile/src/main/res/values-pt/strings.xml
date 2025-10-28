@@ -194,7 +194,7 @@ ativado</string>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
   <string name="settings.prot_select_delete.forms">Excluir rascunhos e formulários enviados</string>
-  <string name="settings.prot_select_delete.servers">Excluir as configurações do servidor</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Excluir o aplicativo Tella</string>
   <string name="collect.sent_action_edit.to.resend">Editar para reenviar</string>
   <string name="collect_toast_form.submitted">Formulário enviado</string>
