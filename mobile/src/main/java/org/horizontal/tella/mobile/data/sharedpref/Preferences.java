@@ -233,7 +233,7 @@ public class Preferences {
     }
 
     public static boolean isDeleteGalleryEnabled() {
-        return getBoolean(SharedPrefs.ERASE_GALLERY, false);
+        return getBoolean(SharedPrefs.ERASE_GALLERY, true);
     }
 
     public static void setDeleteGallery(boolean value) {

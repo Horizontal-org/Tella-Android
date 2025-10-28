@@ -324,7 +324,7 @@ mode activation</string>
   <string name="settings.prot_select_delete.vault">Delete files</string>
   <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
-  <string name="settings.sec_delete.servers_tooltip">Delete your connections to servers and all forms associated with them.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">删除应用及其含有的全部数据。你问被询问“要卸载本应用吗？”除非你确认，不然 Tella 不会被删除。</string>
   <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
   <string name="settings.sec_bypass_switch_expl">战胜在你所在地区封锁 Tella 的尝试。注意启用该选项会降低发送数据到服务器的速度。</string>

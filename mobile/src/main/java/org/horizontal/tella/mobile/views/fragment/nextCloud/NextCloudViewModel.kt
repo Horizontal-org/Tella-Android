@@ -40,6 +40,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @HiltViewModel
 class NextCloudViewModel @Inject constructor(
@@ -263,21 +264,22 @@ class NextCloudViewModel @Inject constructor(
             val serverInfo = result.first()
 
             // Build OwnCloudClient with credentials only (no userId property in new SDK)
-//            val ownCloudClient = OwnCloudClientFactory.createOwnCloudClient(
-//                Uri.parse(serverInfo.url),
-//                context,
-//                true
-//            ).apply {
-//                credentials = OwnCloudCredentialsFactory.newBasicCredentials(
-//                    serverInfo.username,
-//                    serverInfo.password
-//                )
-//            }
+            val ownCloudClient = OwnCloudClientFactory.createOwnCloudClient(
+                serverInfo.url.toUri(),
+                context,
+                true
+            ).apply {
+                credentials = OwnCloudCredentialsFactory.newBasicCredentials(
+                    serverInfo.username,
+                    serverInfo.password
+                )
+                userId = serverInfo.username
+            }
 
             if (instance.reportApiId.isEmpty()) {
-              //  createFolderAndSubmitFiles(instance, serverInfo, ownCloudClient)
+                createFolderAndSubmitFiles(instance, serverInfo, ownCloudClient)
             } else if (instance.status != EntityStatus.SUBMITTED) {
-           //     submitFiles(instance, instance.reportApiId, ownCloudClient)
+                submitFiles(instance, instance.reportApiId, ownCloudClient)
             }
         }, onError = { error ->
             _error.postValue(error)

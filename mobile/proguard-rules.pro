@@ -239,4 +239,67 @@
 # Keep all factory classes
 -keep class org.simpleframework.xml.stream.** { *; }
 
+
+# Keep the polymorphic base and its subtypes
+-keep class org.horizontal.tella.mobile.domain.entity.reports.Author { *; }
+-keep class * extends org.horizontal.tella.mobile.domain.entity.reports.Author { *; }
+
+# If you use RuntimeTypeAdapterFactory or a custom deserializer:
+-keep class com.google.gson.typeadapters.RuntimeTypeAdapterFactory { *; }
+-keep class your.package.AuthorDeserializer { *; }
+
+# (You already have)
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+# Google HTTP Client core types used reflectively
+-keep class com.google.api.client.googleapis.json.GoogleJsonError { *; }
+-keep class com.google.api.client.json.GenericJson { *; }
+-keep class com.google.api.client.util.GenericData { *; }
+
+# Fields annotated with @Key must be kept with original names
+-keepclassmembers class ** {
+    @com.google.api.client.util.Key <fields>;
+}
+
+# If you use these factories, keep them too (safe + small)
+-keep class com.google.api.client.json.gson.GsonFactory { *; }
+-keep class com.google.api.client.json.jackson2.JacksonFactory { *; }
+
+# Keep annotations/signatures so reflection works
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+-keep class org.horizontal.tella.mobile.domain.entity.uwazi.** { *; }
+-keepclassmembers class org.horizontal.tella.mobile.domain.entity.uwazi.** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+
+# --- Nextcloud / ownCloud Android Library models used by Gson (reflective) ---
+# Files / WebDAV models
+-keep class com.owncloud.android.lib.resources.files.model.** { *; }
+-keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
+
+# Capabilities / status / user info responses
+-keep class com.owncloud.android.lib.resources.status.** { *; }
+-keep class com.owncloud.android.lib.resources.users.** { *; }
+
+# (If you use shares/tags/activities/etc., keep their models too)
+-keep class com.owncloud.android.lib.resources.shares.** { *; }
+-keep class com.owncloud.android.lib.resources.activities.** { *; }
+-keep class com.owncloud.android.lib.resources.tags.** { *; }
+
+# Ensure Gson can see @SerializedName fields everywhere (app + libs)
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
+
+# If you wrote any custom RemoteOperation subclasses (e.g., GetServerInfoOperation)
+# and they override the deprecated run(OwnCloudClient), KEEP them so R8 doesn’t strip it
+-keep class org.horizontal.tella.mobile.util.operations.GetServerInfoOperation { *; }
+
+
 # ========== END SIMPLE XML RULES ==========
