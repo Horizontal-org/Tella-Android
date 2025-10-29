@@ -194,7 +194,7 @@
   <string name="action_learn.more">اطلاعات بیشتر</string>
   <string name="settings.servers_add.server_dialog.title">افزودن سرور</string>
   <string name="settings.prot_select_delete.forms">حذف فرم‌های پیش‌نویس و ارسال‌شده</string>
-  <string name="settings.prot_select_delete.servers">حذف تنظیمات سرور</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">حذف Tella</string>
   <string name="collect.sent_action_edit.to.resend">ویرایش برای ارسال دوباره</string>
   <string name="collect_toast_form.submitted">فرم ارسال شد</string>
@@ -291,7 +291,7 @@
   <string name="settings.select_security">امنیت</string>
   <string name="settings.select_lock_timeout">زمان قفل شدن</string>
   <string name="settings.sec_camera.mute_switch">حالت سکوت دوربین</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">برای این که هنگام عکسبرداری کمتر جلب توجه کنید، صدای شاتر دوربین را قطع کنید.</string>
   <string name="settings.sec_quick.delete_switch">حذف سریع</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">سرورها</string>
@@ -324,7 +324,7 @@
   <string name="settings.prot_select_delete.vault">حذف فايلها</string>
   <string name="settings.sec_delete.vault_tooltip">همه فایل‌های ذخیره‌شده در Tella حذف شود.</string>
   <string name="settings.sec_delete.forms_tooltip">همه فرم‌های پیش‌نویس و ارسال‌شده حذف شود.</string>
-  <string name="settings.sec_delete.servers_tooltip">اتصال‌های شما به سرورها و همه فرم‌های مرتبط با آن‌ها حذف شود.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">برنامه و همه داده‌های مرتبط با آن حذف شود. از شما سوال می‌شود که «آیا می‌خواهید این برنامه را حذف کنید؟» اگر تایید نکنید، Tella حذف نمی‌شود.</string>
   <string name="settings.sec_bypass_switch_title">دور زدن سانسور</string>
   <string name="settings.sec_bypass_switch_expl">اقدامات صورت‌گرفته برای مسدود کردن Tella در منطقه را خنثی کنید. توجه کنید که فعال کردن این گزینه سرعت ارسال داده به سرورها را کاهش می‌دهد.</string>

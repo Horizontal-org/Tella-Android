@@ -193,7 +193,7 @@
   <string name="action_learn.more">Узнать больше</string>
   <string name="settings.servers_add.server_dialog.title">Добавить сервер</string>
   <string name="settings.prot_select_delete.forms">Удаление черновиков и отправленных форм</string>
-  <string name="settings.prot_select_delete.servers">Очистить настройки сервера</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Удалить Tella</string>
   <string name="collect.sent_action_edit.to.resend">Редактировать для повторной отправки</string>
   <string name="collect_toast_form.submitted">Форма отправлена</string>
@@ -290,7 +290,7 @@
   <string name="settings.select_security">Security</string>
   <string name="settings.select_lock_timeout">Lock Timeout</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">Выключите звук затвора камеры, чтобы привлекать меньше внимания при съемке фотографий.</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>

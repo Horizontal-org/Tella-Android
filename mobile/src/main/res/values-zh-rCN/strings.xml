@@ -194,7 +194,7 @@ mode activation</string>
   <string name="action_learn.more">Learn more</string>
   <string name="settings.servers_add.server_dialog.title">Add server</string>
   <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
-  <string name="settings.prot_select_delete.servers">Delete server settings</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Delete Tella</string>
   <string name="collect.sent_action_edit.to.resend">Edit to resend</string>
   <string name="collect_toast_form.submitted">Form submitted</string>
@@ -677,7 +677,7 @@ connecting to a server</string>
   <string name="Reports_Select_Title">Title</string>
   <string name="Reports_Select_Description">Description</string>
   <string name="Reports_Attach_files_Here">Attach files here</string>
-  <string name="Connection_Title">Connections</string>
+  <string name="Connection_Title">连接</string>
   <string name="Reports_Saved_Draft">The report was saved as a draft</string>
   <string name="Reports_Pause">Pause</string>
   <string name="Reports_Resume">Resume</string>
