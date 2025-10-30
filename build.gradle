@@ -2,7 +2,7 @@ buildscript {
 
     ext.versions = [:]
     versions.compileSdk = 35
-    versions.minSdk = 23
+    versions.minSdk = 21
     versions.targetSdk = 35
 
     versions.sqlcipher = '4.6.1'
@@ -114,7 +114,6 @@ allprojects {
       //  resolutionStrategy.force "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
         // Keep the project-wide removal of the SLF4J bridge to avoid logging dupes
         exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
-
     }
 
 }

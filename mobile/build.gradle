@@ -5,7 +5,6 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
-
 }
 
 /** Avoid duplicate logging classes app-wide */
@@ -45,7 +44,7 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 215
+        versionCode 216
         versionName "2.18.0"
         multiDexEnabled true
 
@@ -55,7 +54,7 @@ android {
         String dropboxKey = localProperties['DROPBOX_APP_KEY']
         if (dropboxKey == null) {
             logger.warn("No value provided for DROPBOX_APP_KEY. Specify it in local.properties.")
-            dropboxKey = "2j6ouobejsb3n82"
+            dropboxKey = ""
         }
         buildConfigField "String", "DROPBOX_APP_KEY", "\"${dropboxKey}\""
         manifestPlaceholders = [dropboxKey: dropboxKey]
