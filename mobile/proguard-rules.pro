@@ -279,6 +279,7 @@
 
 
 # Keep only fields that Gson needs (annotation-driven) across the whole lib
+-keep class com.owncloud.android.lib.** { *; }
 -keepclassmembers class com.owncloud.android.lib.** {
     @com.google.gson.annotations.SerializedName <fields>;
 }
@@ -290,6 +291,12 @@
 -keep class com.owncloud.android.lib.resources.**.model.** { *; }
 -keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
 -keep class com.owncloud.android.lib.resources.files.model.** { *; }
+# ---- TELLA NEXTCLOUD INTEGRATION ----
+# Keep all Nextcloud data / repository classes (Hilt, Rx, reflection, etc.)
+-keep class org.horizontal.tella.mobile.data.nextcloud.** { *; }
+
+-keep class org.horizontal.tella.mobile.domain.entity.nextcloud.** { *; }
+
 
 # Apache HttpClient 3 & Jackrabbit WebDAV (only if used)
 -dontwarn org.apache.commons.httpclient.**
