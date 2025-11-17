@@ -262,6 +262,7 @@ class AttachmentsViewModel @Inject constructor(
             }) { throwable: Throwable? ->
                 if (throwable is DuplicateVaultFileException) {
                     _duplicateNameError.postValue(true)
+                    return@subscribe
                 }
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _importError.postValue(throwable!!)
