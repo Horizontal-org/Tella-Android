@@ -8,7 +8,6 @@ import androidx.core.net.toUri
 import com.nextcloud.common.NextcloudClient
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult

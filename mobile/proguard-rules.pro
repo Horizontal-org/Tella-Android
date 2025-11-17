@@ -186,6 +186,7 @@
 # Keep the polymorphic base and ALL its subtypes used at runtime
 -keep class org.horizontal.tella.mobile.domain.entity.googledrive.Config { *; }
 -keep class * extends org.horizontal.tella.mobile.domain.entity.googledrive.Config { *; }
+-keep class com.google.api.services.drive.model.** { *; }
 
 # Make sure we keep useful metadata
 -keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
@@ -277,29 +278,55 @@
 }
 
 
-# --- Nextcloud / ownCloud Android Library models used by Gson (reflective) ---
-# Files / WebDAV models
--keep class com.owncloud.android.lib.resources.files.model.** { *; }
--keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
-
-# Capabilities / status / user info responses
--keep class com.owncloud.android.lib.resources.status.** { *; }
--keep class com.owncloud.android.lib.resources.users.** { *; }
-
-# (If you use shares/tags/activities/etc., keep their models too)
--keep class com.owncloud.android.lib.resources.shares.** { *; }
--keep class com.owncloud.android.lib.resources.activities.** { *; }
--keep class com.owncloud.android.lib.resources.tags.** { *; }
-
-# Ensure Gson can see @SerializedName fields everywhere (app + libs)
--keepclassmembers class ** {
+# Keep only fields that Gson needs (annotation-driven) across the whole lib
+-keep class com.owncloud.android.lib.** { *; }
+-keepclassmembers class com.owncloud.android.lib.** {
     @com.google.gson.annotations.SerializedName <fields>;
 }
--keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*
 
-# If you wrote any custom RemoteOperation subclasses (e.g., GetServerInfoOperation)
-# and they override the deprecated run(OwnCloudClient), KEEP them so R8 doesn’t strip it
--keep class org.horizontal.tella.mobile.util.operations.GetServerInfoOperation { *; }
+# Make sure the annotations are kept so Gson can see them
+-keepattributes *Annotation*, Signature, EnclosingMethod, InnerClasses
+
+# Keep the actual JSON model classes used by the Nextcloud/ownCloud lib
+-keep class com.owncloud.android.lib.resources.**.model.** { *; }
+-keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
+-keep class com.owncloud.android.lib.resources.files.model.** { *; }
+# ---- TELLA NEXTCLOUD INTEGRATION ----
+# Keep all Nextcloud data / repository classes (Hilt, Rx, reflection, etc.)
+-keep class org.horizontal.tella.mobile.data.nextcloud.** { *; }
+
+-keep class org.horizontal.tella.mobile.domain.entity.nextcloud.** { *; }
+
+
+# Apache HttpClient 3 & Jackrabbit WebDAV (only if used)
+-dontwarn org.apache.commons.httpclient.**
+-dontwarn org.apache.jackrabbit.**
+
+# If javax.naming shows up from DefaultHostnameVerifier or similar:
+-dontwarn javax.naming.**
+-dontwarn javax.naming.ldap.**
+-dontwarn javax.naming.directory.**
+
+# FindBugs annotations occasionally referenced
+-dontwarn edu.umd.cs.findbugs.annotations.**
+
+
+# Keep ALL model classes used with Gson
+-keep class com.owncloud.android.lib.resources.** { *; }
+-keep class org.horizontal.tella.mobile.domain.entity.** { *; }
+
+# Keep annotations AND signature information
+-keepattributes Signature, RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+
+# Keep classes that use @SerializedName
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Keep type adapters
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
 
 
 # ========== END SIMPLE XML RULES ==========
