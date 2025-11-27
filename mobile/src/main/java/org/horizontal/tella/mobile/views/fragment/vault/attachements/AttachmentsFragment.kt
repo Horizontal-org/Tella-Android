@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -67,7 +66,6 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.Att
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
-import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.PICKER_FILE_REQUEST_CODE
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
@@ -154,7 +152,7 @@ class AttachmentsFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_more -> {
-                if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+                if (attachmentsAdapter.selectedMediaFiles.isNotEmpty()) {
                     showFileActionsSheet(null, true)
                 }
                 true
@@ -1128,7 +1126,7 @@ class AttachmentsFragment :
         val breadcrumbsSize = binding.breadcrumbsView.items.size
 
         when {
-            selectedFilesSize > 0 || (selectedFilesSize == 0 && isListCheckOn) -> {
+            selectedFilesSize > 0 || (isListCheckOn) -> {
                 selectMode = SelectMode.SELECT_ALL
                 handleSelectMode()
             }

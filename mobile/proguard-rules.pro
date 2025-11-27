@@ -277,20 +277,9 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
-
-# Keep only fields that Gson needs (annotation-driven) across the whole lib
--keep class com.owncloud.android.lib.** { *; }
--keepclassmembers class com.owncloud.android.lib.** {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
-
 # Make sure the annotations are kept so Gson can see them
 -keepattributes *Annotation*, Signature, EnclosingMethod, InnerClasses
 
-# Keep the actual JSON model classes used by the Nextcloud/ownCloud lib
--keep class com.owncloud.android.lib.resources.**.model.** { *; }
--keep class com.owncloud.android.lib.common.network.WebdavEntry { *; }
--keep class com.owncloud.android.lib.resources.files.model.** { *; }
 # ---- TELLA NEXTCLOUD INTEGRATION ----
 # Keep all Nextcloud data / repository classes (Hilt, Rx, reflection, etc.)
 -keep class org.horizontal.tella.mobile.data.nextcloud.** { *; }
@@ -312,7 +301,6 @@
 
 
 # Keep ALL model classes used with Gson
--keep class com.owncloud.android.lib.resources.** { *; }
 -keep class org.horizontal.tella.mobile.domain.entity.** { *; }
 
 # Keep annotations AND signature information
@@ -327,6 +315,76 @@
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
+
+########## NEXTCLOUD / OWNCloud – FULL KEEP ##########
+
+# Keep the whole OwnCloud / Nextcloud Android library
+-keep class com.owncloud.android.lib.** { *; }
+-dontwarn com.owncloud.android.lib.**
+
+# Keep the newer Nextcloud common client (NextcloudClient etc.)
+-keep class com.nextcloud.common.** { *; }
+-dontwarn com.nextcloud.common.**
+
+# If you use Nextcloud SSO (optional, but safe):
+-keep class com.nextcloud.android.sso.** { *; }
+-dontwarn com.nextcloud.android.sso.**
+-keep class com.nextcloud.** { *; }
+-keepclassmembers class com.nextcloud.** {
+    @com.google.gson.annotations.SerializedName <fields>;
+    @org.simpleframework.xml.* <fields>;
+}
+-keep class org.horizontal.tella.mobile.data.nextcloud.** { *; }
+-keep class org.horizontal.tella.mobile.domain.entity.nextcloud.** { *; }
+-keep class com.nextcloud.android.lib.common.OwnCloudClientFactory { *; }
+-keep class com.nextcloud.common.NextcloudClient { *; }
+-keep class dagger.** { *; }
+-dontwarn dagger.**
+-keepattributes KotlinMetadata
+
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+
+
+# Keep default constructors for Nextcloud classes
+-keepclassmembers class com.nextcloud.** {
+    public <init>();
+}
+
+# Keep all inner/nested classes
+-keep class com.nextcloud.**$* { *; }
+
+# Keep Android R classes (resource references)
+-keep class **.R$* { *; }
+
+# Keep DI generated classes (Hilt/Dagger)
+-keep class *$$InjectAdapter { *; }
+-keep class *$$ModuleAdapter { *; }
+-keep class *$$MembersInjector { *; }
+-keep class *$$Factory { *; }
+-keep class *$$Builder { *; }
+
+
+# Keep constructors for upload operations
+-keepclassmembers class com.owncloud.android.lib.resources.files.** {
+    public <init>(...);
+}
+
+# Keep ChunkedFileUploadRemoteOperation and UploadFileRemoteOperation fully
+-keep class com.owncloud.android.lib.resources.files.UploadFileRemoteOperation { *; }
+-keep class com.owncloud.android.lib.resources.files.ChunkedFileUploadRemoteOperation { *; }
+
+# Keep progress listener interface
+-keep class com.owncloud.android.lib.common.network.OnDatatransferProgressListener { *; }
+
+# Keep OkHttp/Okio streaming classes
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+
+# Keep nested classes (important for reflection)
+-keep class com.nextcloud.**$* { *; }
+
+-dontwarn org.json.**
+-keep class org.json.** { *; }
 
 
 # ========== END SIMPLE XML RULES ==========

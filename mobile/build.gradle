@@ -47,7 +47,8 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 217
+        versionCode 219
+
         versionName "2.18.0"
         multiDexEnabled true
 
@@ -85,6 +86,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
 
     compileOptions {
@@ -253,6 +255,7 @@ dependencies {
     // Add kdom for JavaRosa
     implementation("com.github.nextcloud:android-library:$versions.nextcloud") {
         exclude group: 'org.ogce', module: 'xpp3'
+        exclude group: "org.json", module: "json"
     }
 
     implementation("com.squareup.retrofit2:converter-simplexml:$versions.retrofit") { exclude group: 'xpp3', module: 'xpp3' }
