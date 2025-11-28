@@ -41,6 +41,8 @@ dependencies {
 
     api "com.jakewharton.timber:timber:$versions.timber" // todo: remove this
     api "androidx.core:core-ktx:$versions.ktx"
+    api "androidx.biometric:biometric:$versions.biometric"
+
 
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"

@@ -386,5 +386,40 @@
 -dontwarn org.json.**
 -keep class org.json.** { *; }
 
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
 
+# --- Persistence Models ---
+# Keep all entity classes used with Gson/SharedPrefs
+-keep class org.horizontal.tella.mobile.data.entity.** { *; }
+-keep class org.horizontal.tella.mobile.domain.entity.** { *; }
+
+# Keep fields annotated with @SerializedName
+-keepclassmembers class ** {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# --- JNI Bindings ---
+# Keep native methods so JNI doesn’t break
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# --- Cryptographic Keys ---
+# Keep key store wrappers and lifecycle keys
+-keep class org.hzontal.tella.keys.** { *; }
+-keep class org.hzontal.tella.keys.wrapper.** { *; }
+-keep class org.hzontal.tella.keys.key.** { *; }
+
+# --- Preferences ---
+# Keep SharedPrefs and CommonPrefs classes
+-keep class org.hzontal.shared_ui.data.CommonPrefs { *; }
+-keep class org.horizontal.tella.mobile.data.sharedpref.SharedPrefs { *; }
+-keep class org.horizontal.tella.mobile.data.sharedpref.Preferences { *; }
+
+# --- Vault ---
+# Keep Vault and KeyRxVault classes
+-keep class com.hzontal.tella_vault.Vault { *; }
+-keep class org.horizontal.tella.mobile.data.KeyRxVault { *; }
 # ========== END SIMPLE XML RULES ==========
