@@ -194,7 +194,7 @@
   <string name="action_learn.more">আরও জানুন</string>
   <string name="settings.servers_add.server_dialog.title">সার্ভার যোগ করুন</string>
   <string name="settings.prot_select_delete.forms">খসড়া এবং জমা দেওয়া ফর্মগুলি মুছুন</string>
-  <string name="settings.prot_select_delete.servers">সার্ভার সেটিংস মুছুন</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Tella মুছে ফেলুন</string>
   <string name="collect.sent_action_edit.to.resend">পুনরায় পাঠাতে সম্পাদনা করুন</string>
   <string name="collect_toast_form.submitted">ফর্ম জমা দেওয়া হয়েছে</string>
@@ -291,7 +291,7 @@
   <string name="settings.select_security">নিরাপত্তা</string>
   <string name="settings.select_lock_timeout">লক টাইমআউট</string>
   <string name="settings.sec_camera.mute_switch">ক্যামেরা সাইলেন্ট মোড</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">ফটো তোলার সময় কম মনোযোগ আকর্ষণ করতে ক্যামেরা শাটারের শব্দ বন্ধ করুন।</string>
   <string name="settings.sec_quick.delete_switch">দ্রুত মুছে ফেলুন</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">সার্ভার</string>
@@ -324,7 +324,7 @@
   <string name="settings.prot_select_delete.vault">ফাইল মুছুন</string>
   <string name="settings.sec_delete.vault_tooltip">Tella তে সংরক্ষিত সমস্ত ফাইল মুছুন।</string>
   <string name="settings.sec_delete.forms_tooltip">সমস্ত খসড়া এবং জমা দেওয়া ফর্ম মুছুন।</string>
-  <string name="settings.sec_delete.servers_tooltip">সার্ভারের সাথে আপনার সংযোগগুলি এবং তাদের সাথে সম্পর্কিত সমস্ত ফর্ম মুছুন৷</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">অ্যাপটি এবং এতে থাকা সমস্ত তথ্য মুছুন। আপনাকে জিজ্ঞাসা করা হবে \"আপনি কি এই অ্যাপটি আনইনস্টল করতে চান?\" আপনি নিশ্চিত না করা পর্যন্ত, Tella মুছে ফেলা হবে না।</string>
   <string name="settings.sec_bypass_switch_title">সেন্সরশিপ বাইপাস করুন</string>
   <string name="settings.sec_bypass_switch_expl">আপনার এলাকায় Tella ব্লক করার প্রচেষ্টাকে রুখে দিন। মনে রাখবেন যে এটি সচল করলে সার্ভারগুলিতে ডেটা প্রেরণ করা স্লো হয়ে যাবে৷</string>

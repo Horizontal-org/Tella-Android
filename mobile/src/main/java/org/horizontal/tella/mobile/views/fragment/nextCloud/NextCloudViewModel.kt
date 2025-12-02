@@ -40,6 +40,7 @@ import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @HiltViewModel
 class NextCloudViewModel @Inject constructor(
@@ -51,7 +52,8 @@ class NextCloudViewModel @Inject constructor(
     private val nextCloudRepository: NextCloudRepository,
     private val nextCloudDataSource: NextCloudDataSource,
     private val statusProvider: StatusProvider,
-    @ApplicationContext private val context: Context) : BaseReportsViewModel() {
+    @ApplicationContext private val context: Context
+) : BaseReportsViewModel() {
 
     protected val _reportProcess = MutableLiveData<Pair<UploadProgressInfo, ReportInstance>>()
     val reportProcess: LiveData<Pair<UploadProgressInfo, ReportInstance>> get() = _reportProcess
@@ -62,7 +64,6 @@ class NextCloudViewModel @Inject constructor(
     override fun deleteReport(instance: ReportInstance) {
         _progress.postValue(true)
         deleteReportUseCase.setId(instance.id)
-
         deleteReportUseCase.execute(onSuccess = {
             _instanceDeleted.postValue(instance.title)
         }, onError = {
@@ -86,16 +87,20 @@ class NextCloudViewModel @Inject constructor(
                                 .flatMap { rxVault ->
                                     rxVault.get(result.fileIds)
                                         .map { vaultFiles ->
-                                            Triple(result.instance, files, vaultFiles ?: emptyList())
+                                            Triple(
+                                                result.instance,
+                                                files,
+                                                vaultFiles ?: emptyList()
+                                            )
                                         }
                                 }
                         }
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ (instance, files, vaultFiles) ->
+                        .subscribe({ (inst, files, vaultFiles) ->
                             val filesResult = processMediaFiles(files, vaultFiles)
-                            instance.widgetMediaFiles = filesResult
-                            _reportInstance.postValue(instance)
+                            inst.widgetMediaFiles = filesResult
+                            _reportInstance.postValue(inst)
                         }, { throwable ->
                             Timber.d(throwable)
                             FirebaseCrashlytics.getInstance().recordException(throwable)
@@ -103,12 +108,8 @@ class NextCloudViewModel @Inject constructor(
                         })
                 )
             },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                _progress.postValue(false)
-            }
+            onError = { _error.postValue(it) },
+            onFinished = { _progress.postValue(false) }
         )
     }
 
@@ -148,7 +149,11 @@ class NextCloudViewModel @Inject constructor(
     }
 
     override fun getDraftFormInstance(
-        title: String, description: String, files: List<FormMediaFile>?, server: Server, id: Long?
+        title: String,
+        description: String,
+        files: List<FormMediaFile>?,
+        server: Server,
+        id: Long?
     ): ReportInstance {
         return ReportInstance(
             id = id ?: 0L,
@@ -166,113 +171,84 @@ class NextCloudViewModel @Inject constructor(
         getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
         getReportsUseCase.execute(onSuccess = { result ->
             val resultList = mutableListOf<ViewEntityTemplateItem>()
-            result.map { instance ->
+            result.forEach { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-                        onMoreClicked = { onMoreClicked(instance) })
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) }
+                    )
                 )
             }
             _submittedReportListFormInstance.postValue(resultList)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
-
 
     override fun listOutbox() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
         getReportsUseCase.execute(onSuccess = { result ->
             val resultList = mutableListOf<ViewEntityTemplateItem>()
-            result.map { instance ->
+            result.forEach { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-                        onMoreClicked = { onMoreClicked(instance) })
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) }
+                    )
                 )
             }
             _outboxReportListFormInstance.postValue(resultList)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
 
     override fun listDraftsOutboxAndSubmitted() {
         _progress.postValue(true)
 
-        // Initialize counters for lengths
-        var draftLength: Int = 0
-        var outboxLength: Int = 0
-        var submittedLength: Int = 0
+        var draftLength = 0
+        var outboxLength = 0
+        var submittedLength = 0
 
-        // Execute the Draft report retrieval
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
         getReportsUseCase.execute(
             onSuccess = { draftResult ->
-                draftLength = draftResult.size // Get the length of drafts
-
-                // Now execute the Outbox report retrieval
+                draftLength = draftResult.size
                 getReportsUseCase.setEntityStatus(EntityStatus.FINALIZED)
                 getReportsUseCase.execute(
                     onSuccess = { outboxResult ->
-                        outboxLength = outboxResult.size // Get the length of outbox
-
-                        // Now execute the Submitted report retrieval
+                        outboxLength = outboxResult.size
                         getReportsUseCase.setEntityStatus(EntityStatus.SUBMITTED)
                         getReportsUseCase.execute(
                             onSuccess = { submittedResult ->
-                                submittedLength = submittedResult.size // Get the length of submitted
-
-                                // Post the combined lengths to LiveData
-                                _reportCounts.postValue(ReportCounts(outboxLength, submittedLength,draftLength))
+                                submittedLength = submittedResult.size
+                                _reportCounts.postValue(
+                                    ReportCounts(outboxLength, submittedLength, draftLength)
+                                )
                             },
-                            onError = {
-                                _error.postValue(it)
-                            },
-                            onFinished = {
-                                _progress.postValue(false)
-                            }
+                            onError = { _error.postValue(it) },
+                            onFinished = { _progress.postValue(false) }
                         )
                     },
-                    onError = {
-                        _error.postValue(it)
-                    },
-                    onFinished = {
-                        // Handle progress here if needed
-                    }
+                    onError = { _error.postValue(it) }
                 )
             },
-            onError = {
-                _error.postValue(it)
-            },
-            onFinished = {
-                // Handle progress here if needed
-            }
+            onError = { _error.postValue(it) }
         )
     }
 
     override fun listDrafts() {
         _progress.postValue(true)
         getReportsUseCase.setEntityStatus(EntityStatus.DRAFT)
-
         getReportsUseCase.execute(onSuccess = { result ->
             val resultList = mutableListOf<ViewEntityTemplateItem>()
-
-            result.map { instance ->
+            result.forEach { instance ->
                 resultList.add(
-                    instance.toViewEntityInstanceItem(onOpenClicked = { openInstance(instance) },
-                        onMoreClicked = { onMoreClicked(instance) })
+                    instance.toViewEntityInstanceItem(
+                        onOpenClicked = { openInstance(instance) },
+                        onMoreClicked = { onMoreClicked(instance) }
+                    )
                 )
             }
             _draftListReportFormInstance.postValue(resultList)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
@@ -285,22 +261,23 @@ class NextCloudViewModel @Inject constructor(
                 updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
             }
 
-            val serverInfo = result.first();
-            // Create OwnCloudClient with the server credentials
+            val serverInfo = result.first()
+
+            // Build OwnCloudClient with credentials only (no userId property in new SDK)
             val ownCloudClient = OwnCloudClientFactory.createOwnCloudClient(
-                Uri.parse(serverInfo.url), // Server URL
-                context, // Application context
-                true // Use https (or false if http)
+                serverInfo.url.toUri(),
+                context,
+                true
             ).apply {
                 credentials = OwnCloudCredentialsFactory.newBasicCredentials(
                     serverInfo.username,
                     serverInfo.password
                 )
-                userId = serverInfo.userId
+                userId = serverInfo.username
             }
 
             if (instance.reportApiId.isEmpty()) {
-                createFolderAndSubmitFiles(instance, result.first(), ownCloudClient)
+                createFolderAndSubmitFiles(instance, serverInfo, ownCloudClient)
             } else if (instance.status != EntityStatus.SUBMITTED) {
                 submitFiles(instance, instance.reportApiId, ownCloudClient)
             }
@@ -309,7 +286,6 @@ class NextCloudViewModel @Inject constructor(
         }, onFinished = {
             _progress.postValue(false)
         })
-
     }
 
     private fun createFolderAndSubmitFiles(
@@ -349,24 +325,21 @@ class NextCloudViewModel @Inject constructor(
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    // Fetch the file stream first and create a temp file
                     Single.fromCallable {
                         val inputStream = MediaFileHandler.getStream(file)
-                        val tempFile =
-                            inputStream?.let { createTempFile(file, it) }  // Create the temp file
-                        tempFile // Return the temp file
+                        val tempFile = inputStream?.let { createTempFile(file, it) }
+                        tempFile
                     }
-                        .toFlowable()  // Convert Single to Flowable so it works with flatMap
+                        .toFlowable()
                         .flatMap { tempFile ->
-                            // Proceed with upload using the temporary file
-                            nextCloudRepository.uploadFileWithProgress(
-                                ownCloudClient,
-                                folderPath,
-                                file,
-                                tempFile // Pass the temp file to the upload method
-                            )
+                            nextCloudRepository
+                                .uploadFileWithProgress(
+                                    ownCloudClient,
+                                    folderPath,
+                                    file,
+                                    tempFile
+                                )
                                 .doOnTerminate {
-                                    // Delete the temporary file after upload completes
                                     tempFile.delete()
                                 }
                                 .doOnEach {
@@ -378,51 +351,43 @@ class NextCloudViewModel @Inject constructor(
                 }
                 .doOnTerminate { handleInstanceOnTerminate(instance) }
                 .doOnCancel { handleInstanceStatus(instance, EntityStatus.PAUSED) }
-                .doOnError {
-                    handleInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
-                }
+                .doOnError { handleInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR) }
                 .doOnNext { progressInfo: UploadProgressInfo ->
-                    updateFileStatus(instance, progressInfo) // Ensure this block is efficient
+                    updateFileStatus(instance, progressInfo)
                 }
                 .doAfterNext { progressInfo ->
-                    _reportProcess.postValue(Pair(progressInfo, instance)) // Post progress quickly
+                    _reportProcess.postValue(progressInfo to instance)
                 }
-                .observeOn(AndroidSchedulers.mainThread())  // Move results to main thread
-                .subscribeOn(Schedulers.io())  // Keep the upload process on IO thread
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe()
         )
     }
 
     private fun createTempFile(file: FormMediaFile, inputStream: InputStream): File {
-        // Create a temp file to store the content
-        val tempFile = File.createTempFile(file.name, ".tmp") // You can also specify your own file extension
-        tempFile.deleteOnExit() // Ensure temp file is deleted when the JVM exits
-
-        // Copy content from the input stream to the temp file
-        tempFile.outputStream().use { output ->
-            inputStream.copyTo(output)
+        val tempFile = File.createTempFile(file.name, ".tmp")
+        tempFile.deleteOnExit()
+        inputStream.use { inp ->
+            tempFile.outputStream().use { out -> inp.copyTo(out) }
         }
-
         return tempFile
     }
 
-    private fun handleInstanceStatus(
-        instance: ReportInstance, status: EntityStatus
-    ) {
+    private fun handleInstanceStatus(instance: ReportInstance, status: EntityStatus) {
         instance.status = status
-        nextCloudDataSource.saveInstance(instance).subscribeOn(Schedulers.io())
-            .subscribe({
-            }, { throwable ->
-                throwable.printStackTrace()
-            })
+        nextCloudDataSource.saveInstance(instance)
+            .subscribeOn(Schedulers.io())
+            .subscribe({}, { it.printStackTrace() })
         _instanceProgress.postValue(instance)
     }
 
     private fun updateFileStatus(instance: ReportInstance, progressInfo: UploadProgressInfo) {
         val file = instance.widgetMediaFiles.first { it.id == progressInfo.fileId }
         file.apply {
-            status =
-                if (progressInfo.status == UploadProgressInfo.Status.FINISHED) FormMediaFileStatus.SUBMITTED else FormMediaFileStatus.NOT_SUBMITTED
+            status = if (progressInfo.status == UploadProgressInfo.Status.FINISHED)
+                FormMediaFileStatus.SUBMITTED
+            else
+                FormMediaFileStatus.NOT_SUBMITTED
             uploadedSize = progressInfo.current
         }
         instance.widgetMediaFiles.first { it.id == progressInfo.fileId }.apply {
@@ -445,24 +410,15 @@ class NextCloudViewModel @Inject constructor(
         saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
-
 
     override fun saveOutbox(reportInstance: ReportInstance) {
         _progress.postValue(true)
         saveReportFormInstanceUseCase.setReportFormInstance(reportInstance)
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
 
     override fun saveDraft(reportInstance: ReportInstance, exitAfterSave: Boolean) {
@@ -471,22 +427,14 @@ class NextCloudViewModel @Inject constructor(
         saveReportFormInstanceUseCase.execute(onSuccess = { result ->
             _reportInstance.postValue(result)
             _exitAfterSave.postValue(exitAfterSave)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
 
     override fun listServers() {
         _progress.postValue(true)
         getReportsServersUseCase.execute(onSuccess = { result ->
             _serversList.postValue(result)
-        }, onError = {
-            _error.postValue(it)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        }, onError = { _error.postValue(it) }, onFinished = { _progress.postValue(false) })
     }
 
     private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
@@ -513,7 +461,4 @@ class NextCloudViewModel @Inject constructor(
         dispose()
         disposables.clear()
     }
-
 }
-
-

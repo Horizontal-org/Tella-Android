@@ -44,6 +44,7 @@ public class ConfirmPatternActivity extends BasePatternActivity
         } else {
             mNumFailedAttempts = savedInstanceState.getInt(KEY_NUM_FAILED_ATTEMPTS);
         }
+        applyEdgeToEdge(root);
     }
 
     @Override

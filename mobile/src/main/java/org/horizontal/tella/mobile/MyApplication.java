@@ -101,7 +101,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     Vault.Config vaultConfig;
     private static final String TAG = MyApplication.class.getSimpleName();
     public static final String DOT = ".";
-    public static final OwnCloudVersion MINIMUM_SUPPORTED_SERVER_VERSION = OwnCloudVersion.nextcloud_17;
     private static WeakReference<Context> appContext;
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app
@@ -173,7 +172,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         super.attachBaseContext(LocaleManager.getInstance().getLocalizedContext(newBase));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -321,7 +319,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-        // FirebaseCrashlytics.getInstance().recordException(throwable);
+       FirebaseCrashlytics.getInstance().recordException(throwable);
     }
 
     @Override

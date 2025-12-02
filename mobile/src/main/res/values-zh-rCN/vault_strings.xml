@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">All files</string>
+  <string name="Vault_Images_Title">Images</string>
+  <string name="Vault_Files_Title">Tella files</string>
+  <string name="Vault_Documents_Title">Documents</string>
+  <string name="Vault_Audios_Title">Audio</string>
+  <string name="Vault_Videos_Title">Videos</string>
+  <string name="Vault_Others_Title">Others</string>
+  <string name="Vault_Select_Title">Select files</string>
+  <string name="Vault_RecentFiles">Recent files</string>
+  <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
+  <string name="Vault_FavoriteForms_Title">Favorite forms</string>
+  <string name="Vault_Empty_Msg">Tella 中还没有任何文件。单击“+”按钮导入第一个文件，或转到相机或麦克风创建一个。还可以创建文件夹让文件井然有序。</string>
+  <string name="Vault_Move_SheetDesc">Move to another folder</string>
+  <string name="Vault_Rename_SheetAction">Rename</string>
+  <string name="Vault_Save_SheetAction">Save</string>
+  <string name="Vault_Delete_SheetAction">Delete</string>
+  <string name="Vault_Share_SheetAction">Share</string>
+  <string name="Vault_Upload_SheetAction">Upload</string>
+  <string name="Vault_File_SheetAction">File information</string>
+  <string name="Vault_FileInfo">File info</string>
+  <string name="Vault_FileSize">Size</string>
+  <string name="Vault_FileFormat">Format</string>
+  <string name="Vault_FileCreated">Created</string>
+  <string name="Vault_FileResolution">Resolution</string>
+  <string name="Vault_FileLength">Length</string>
+  <string name="Vault_FilePath">File path</string>
+  <string name="Vault_RenameFile_SheetTitle">Rename file</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Name A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Name Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Newest to oldest</string>
+  <string name="Vault_SortDateDesc_SheetAction">Oldest to newest</string>
+  <string name="Vault_ManageFiles_SheetTitle">Manage files</string>
+  <string name="Vault_DeleteFile_SheetDesc">导入文件到 Tella 后，原始文件会从设备被删除。唯一剩余的副本会在 Tella 内</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Take photo/video</string>
+  <string name="Vault_RecordAudio_SheetAction">Record audio</string>
+  <string name="Vault_Import_SheetAction">Import from device</string>
+  <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
+  <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
+  <string name="Vault_MoveHere">move here</string>
+  <string name="Vault_ViewerOther_SheetDesc">无法在 Tella 内打开此文件格式。要导出该文件到设备通过别的应用打开吗？这可能暴露文件的内容。</string>
+  <string name="Vault_Export_SheetAction">Export</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
+  <string name="Vault_FavoriteTemplates_Title">Favorite templates</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="one">File successfully moved</item>
+    <item quantity="other">Files successfully moved</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">所选文件中的一些文件当前正在连接中使用。删除可能影响还未发送的表单和报告。</string>
+  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Delete_anyway">Delete anyway</string>
+  <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
+  <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
+  <string name="Vault_deleteFileImported_SheetDesc"> 导入文件到 Tella 后，你想在设备上保留原始文件还是删除它们？
+ 
+ 如果删除，那么导入 Tella 的文件将会是唯一剩下的副本。</string>
+  <string name="Vault_FileEdit_SheetAction">Edit</string>
+</resources>

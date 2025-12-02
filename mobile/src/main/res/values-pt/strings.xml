@@ -194,7 +194,7 @@ ativado</string>
   <string name="action_learn.more">Saiba Mais</string>
   <string name="settings.servers_add.server_dialog.title">Adicionar servidor</string>
   <string name="settings.prot_select_delete.forms">Excluir rascunhos e formulários enviados</string>
-  <string name="settings.prot_select_delete.servers">Excluir as configurações do servidor</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Excluir o aplicativo Tella</string>
   <string name="collect.sent_action_edit.to.resend">Editar para reenviar</string>
   <string name="collect_toast_form.submitted">Formulário enviado</string>
@@ -324,7 +324,7 @@ ativado</string>
   <string name="settings.prot_select_delete.vault">Excluir arquivos</string>
   <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
-  <string name="settings.sec_delete.servers_tooltip">Delete your connections to servers and all forms associated with them.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
   <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
   <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>

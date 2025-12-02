@@ -46,6 +46,7 @@ public class BasePatternActivity extends BaseActivity {
         root = findViewById(R.id.rootPattern);
         root.getRootView().setBackgroundColor(ContextCompat.getColor(this, R.color.space_cadet));
         mLeftButton.setText(isFromSettings() ? getString(R.string.LockSelect_Action_Cancel) : getString(R.string.LockSelect_Action_Back));
+        applyEdgeToEdge(root);
     }
 
 

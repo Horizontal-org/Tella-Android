@@ -262,6 +262,7 @@ class AttachmentsViewModel @Inject constructor(
             }) { throwable: Throwable? ->
                 if (throwable is DuplicateVaultFileException) {
                     _duplicateNameError.postValue(true)
+                    return@subscribe
                 }
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _importError.postValue(throwable!!)
@@ -302,31 +303,33 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     fun exportMediaFiles(withMetadata: Boolean, vaultFiles: List<VaultFile?>, path: Uri?) {
-        disposables.add(Single.fromCallable {
-            val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
-            for (vaultFile in resultList) {
-                vaultFile?.let {
-                    MediaFileHandler.exportMediaFile(getApplication(), it, path)
-                    if (withMetadata && vaultFile.metadata != null) {
-                        MediaFileHandler.exportMediaFile(
-                            getApplication(),
-                            MediaFileHandler.maybeCreateMetadataMediaFile(it),
-                            path
-                        )
+        disposables.add(
+            Single.fromCallable {
+                val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
+                for (vf in resultList) {
+                    vf?.let {
+                        MediaFileHandler.exportMediaFile(getApplication(), it, path)
+                        if (withMetadata && it.metadata != null) {
+                            MediaFileHandler.exportMediaFile(
+                                getApplication(),
+                                MediaFileHandler.maybeCreateMetadataMediaFile(it),
+                                path
+                            )
+                        }
                     }
                 }
+                resultList.size
             }
-            resultList.size
-        }.subscribeOn(Schedulers.computation()).doOnSubscribe { _exportState.postValue(true) }
-            .observeOn(AndroidSchedulers.mainThread()).doFinally { _exportState.postValue(false) }
-            .subscribe({ num: Int? ->
-                num?.let { count ->
-                    _mediaExported.postValue(count)
-                }
-            }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
-                _error.postValue(throwable)
-            })
+                .subscribeOn(Schedulers.io())                 // <-- was computation()
+                .doOnSubscribe { _exportState.postValue(true) }
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally { _exportState.postValue(false) }
+                .subscribe({ count -> count?.let { _mediaExported.postValue(it) } }, { t ->
+                    FirebaseCrashlytics.getInstance().recordException(t!!)
+                    _error.postValue(t)
+                })
+        )
+
     }
 
     fun deleteFilesAfterConfirmation(

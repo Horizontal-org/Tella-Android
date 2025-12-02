@@ -10,6 +10,6 @@ class DropBoxServer @JvmOverloads constructor(
     init {
         serverType = ServerType.DROP_BOX
         setId(id)
-        name = "DropBox"
+        name = "Dropbox"
     }
 }

@@ -193,7 +193,7 @@
   <string name="action_learn.more">Kuziva swimueni.</string>
   <string name="settings.servers_add.server_dialog.title">Kuengedjera mudjeke.</string>
   <string name="settings.prot_select_delete.forms">Kulassa swassala no ndau djo mashoko.</string>
-  <string name="settings.prot_select_delete.servers">Kulassa seti yo mudjeke.</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Kulassa Tella.</string>
   <string name="collect.sent_action_edit.to.resend">Kunhoressa no kutumiraswe</string>
   <string name="collect_toast_form.submitted">Ndau djo mashoko ndjatumirwa.</string>
@@ -290,7 +290,7 @@
   <string name="settings.select_security">Kungarira.</string>
   <string name="settings.select_lock_timeout">Nguvha ho kuvharika.</string>
   <string name="settings.sec_camera.mute_switch">Kunhalala ko camera.</string>
-  <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="settings.sec_camera.mute_expl">Djima kurira ko camera kuti swissazika kana hovhissa mupikija.</string>
   <string name="settings.sec_quick.delete_switch">Kulassa chopassi.</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Mudjeke.</string>
@@ -323,7 +323,7 @@
   <string name="settings.prot_select_delete.vault">Kulassa swikwama.</string>
   <string name="settings.sec_delete.vault_tooltip">Lassa swikwama swesse swalonguedjwa pa Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Lassa swesse swasala no ndau djo mashoko dja tumwa.</string>
-  <string name="settings.sec_delete.servers_tooltip">Lassa kubhathana kako no mudjeke na swesse swiri pauri.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">Kuvissa ma albamu no swinonga swiripo.
 Unozovundjwa kuti unodha kulassa swesse here? Ussina kutendha kulassa Tella aizolaswi.</string>
   <string name="settings.sec_bypass_switch_title">Kureva swiro swaswiri usina kuchinja.</string>

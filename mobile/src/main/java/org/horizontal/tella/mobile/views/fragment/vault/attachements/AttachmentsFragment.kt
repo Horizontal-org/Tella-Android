@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -67,7 +66,6 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.Att
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFile
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.AttachmentsHelper.shareVaultFiles
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.MoveModeUIUpdater
-import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.PICKER_FILE_REQUEST_CODE
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.SelectMode
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.VAULT_FILE_ARG
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.WRITE_REQUEST_CODE
@@ -114,7 +112,26 @@ class AttachmentsFragment :
     private var withMetadata = false
     private var selectMode = SelectMode.DESELECT_ALL
     private lateinit var gridLayoutManager: GridLayoutManager
+    private var isLaunchingPicker = false
+    private var lastTreeUri: Uri? = null
 
+    private val openTree = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree()
+    ) { uri ->
+        isLaunchingPicker = false
+        if (uri != null) {
+            // Persist long-term R/W access to the picked folder
+            requireContext().contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+            lastTreeUri = uri
+
+            // Use real intent (single vs multiple) based on current selection
+            val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
+            exportVaultFiles(isMultipleFiles = isMultiple, vaultFile = vaultFile, path = uri)
+        }
+    }
 
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -135,7 +152,7 @@ class AttachmentsFragment :
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_more -> {
-                if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+                if (attachmentsAdapter.selectedMediaFiles.isNotEmpty()) {
                     showFileActionsSheet(null, true)
                 }
                 true
@@ -927,9 +944,8 @@ class AttachmentsFragment :
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == WRITE_REQUEST_CODE) {
-            context?.let {
-                performFileSearch(attachmentsAdapter.selectedMediaFiles.size == 0, vaultFile)
-            }
+            // Use isNotEmpty() to mean "multiple"
+            performFileSearch(attachmentsAdapter.selectedMediaFiles.isNotEmpty(), vaultFile)
             LockTimeoutManager().lockTimeout = Preferences.getLockTimeout()
         }
     }
@@ -1026,14 +1042,12 @@ class AttachmentsFragment :
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK && requestCode != WRITE_REQUEST_CODE) {
-            return  // user canceled evidence acquiring
-        }
+        if (!isLocationSettingsRequestCode(requestCode) && resultCode != Activity.RESULT_OK && requestCode != WRITE_REQUEST_CODE) return
         when (requestCode) {
             C.IMPORT_MULTIPLE_FILES -> handleImportMultipleFiles(data)
             C.CAMERA_CAPTURE, C.RECORDED_AUDIO -> onMediaFilesAdded()
-            WRITE_REQUEST_CODE -> performFileSearch(false, vaultFile)
-            PICKER_FILE_REQUEST_CODE -> handlePickerFileRequest(data)
+            WRITE_REQUEST_CODE -> performFileSearch(attachmentsAdapter.selectedMediaFiles.isNotEmpty(), vaultFile)
+          //  PICKER_FILE_REQUEST_CODE -> handlePickerFileRequest(data)
         }
     }
 
@@ -1070,26 +1084,14 @@ class AttachmentsFragment :
     }
 
     private fun requestStoragePermissions() {
-        baseActivity.maybeChangeTemporaryTimeout()
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                intent.addCategory("android.intent.category.DEFAULT")
-                intent.data =
-                    Uri.parse(String.format("package:%s", baseActivity.application.packageName))
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
-            } catch (e: Exception) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                startActivityForResult(intent, WRITE_REQUEST_CODE)
-            }
-        } else {
-            //below android 11
+        // SAF doesn’t need MANAGE_EXTERNAL_STORAGE; only handle <29 legacy if you still write to public dirs there
+        if (SDK_INT < Build.VERSION_CODES.Q) {
             ActivityCompat.requestPermissions(
                 baseActivity, arrayOf(WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
             )
+        } else {
+            // API 29+ : nothing to request for SAF
         }
-
     }
 
     private fun createItem(file: VaultFile): BreadcrumbItem {
@@ -1124,7 +1126,7 @@ class AttachmentsFragment :
         val breadcrumbsSize = binding.breadcrumbsView.items.size
 
         when {
-            selectedFilesSize > 0 || (selectedFilesSize == 0 && isListCheckOn) -> {
+            selectedFilesSize > 0 || (isListCheckOn) -> {
                 selectMode = SelectMode.SELECT_ALL
                 handleSelectMode()
             }
@@ -1198,17 +1200,21 @@ class AttachmentsFragment :
     }
 
     private fun performFileSearch(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
-        if (hasStoragePermissions(baseActivity)) {
-            if (SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                startActivityForResult(intent, PICKER_FILE_REQUEST_CODE)
-            } else {
-                exportVaultFiles(isMultipleFiles, vaultFile, null)
-            }
-        } else {
+        // API 29+ : SAF requires no storage permission; API <29: you might still need WRITE_EXTERNAL_STORAGE
+        if (SDK_INT < Build.VERSION_CODES.Q && !hasStoragePermissions(baseActivity)) {
             requestStoragePermissions()
+            return
         }
+
+        // If we already have a persisted folder, skip the picker
+        lastTreeUri?.let { persisted ->
+            exportVaultFiles(isMultipleFiles, vaultFile, persisted)
+            return
+        }
+
+        if (isLaunchingPicker) return // guard double taps / re-attach
+        isLaunchingPicker = true
+        openTree.launch(null) // launch once
     }
 
     private fun exportVaultFilesWithMetadataCheck(vaultFile: VaultFile?) {

@@ -23,7 +23,7 @@ import android.mtp.MtpConstants
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
-import java.util.*
+import java.util.Locale
 
 
 /**
@@ -106,21 +106,21 @@ object MediaFile {
     private const val FILE_TYPE_ZIP = 107
     private const val FILE_TYPE_ODT = 108
     private val sFileTypeMap =
-            HashMap<String, MediaFileType>()
+        HashMap<String, MediaFileType>()
     private val sMimeTypeMap =
-            HashMap<String, Int>()
+        HashMap<String, Int>()
 
     // maps file extension to MTP format code
     private val sFileTypeToFormatMap =
-            HashMap<String, Int>()
+        HashMap<String, Int>()
 
     // maps mime type to MTP format code
     private val sMimeTypeToFormatMap =
-            HashMap<String, Int>()
+        HashMap<String, Int>()
 
     // maps MTP format code to mime type
     private val sFormatToMimeTypeMap =
-            HashMap<Int, String>()
+        HashMap<Int, String>()
 
     fun addFileType(extension: String, fileType: Int, mimeType: String) {
         sFileTypeMap[extension] = MediaFileType(fileType, mimeType)
@@ -128,7 +128,7 @@ object MediaFile {
     }
 
     fun addFileType(
-            extension: String, fileType: Int, mimeType: String, mtpFormatCode: Int
+        extension: String, fileType: Int, mimeType: String, mtpFormatCode: Int
     ) {
         addFileType(extension, fileType, mimeType)
         sFileTypeToFormatMap[extension] = Integer.valueOf(mtpFormatCode)
@@ -186,7 +186,7 @@ object MediaFile {
         val lastDot = path?.lastIndexOf('.')
         if (lastDot != null) {
             return if (lastDot < 0) null else sFileTypeMap[path.substring(lastDot + 1)
-                    .toUpperCase(Locale.ROOT)]
+                .uppercase(Locale.ROOT)]
         }
         return null
     }
@@ -208,7 +208,7 @@ object MediaFile {
     private fun getFileNameFromCursor(uri: Uri?, context: Context): String? {
         val fileCursor: Cursor? = uri?.let {
             context.contentResolver
-                    .query(it, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+                .query(it, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
         }
         var fileName: String? = null
         if (fileCursor != null && fileCursor.moveToFirst()) {
@@ -254,7 +254,8 @@ object MediaFile {
         val mediaFileType = getFileType(path)
         return mediaFileType?.mimeType
     }
-   private fun isPDFFile(extension: String): Boolean {
+
+    private fun isPDFFile(extension: String): Boolean {
         val pdfExtensions = setOf("PDF")
         return pdfExtensions.contains(extension.uppercase())
     }
@@ -284,7 +285,7 @@ object MediaFile {
         val lastDot = fileName.lastIndexOf('.')
         if (lastDot > 0) {
             val extension =
-                    fileName.substring(lastDot + 1).toUpperCase(Locale.ROOT)
+                fileName.substring(lastDot + 1).uppercase(Locale.ROOT)
             val value = sFileTypeToFormatMap[extension]
             if (value != null) {
                 return value.toInt()
@@ -349,76 +350,80 @@ object MediaFile {
         addFileType("WEBP", FILE_TYPE_WEBP, "image/webp")
         addFileType("M3U", FILE_TYPE_M3U, "audio/x-mpegurl", MtpConstants.FORMAT_M3U_PLAYLIST)
         addFileType(
-                "M3U",
-                FILE_TYPE_M3U,
-                "application/x-mpegurl",
-                MtpConstants.FORMAT_M3U_PLAYLIST
+            "M3U",
+            FILE_TYPE_M3U,
+            "application/x-mpegurl",
+            MtpConstants.FORMAT_M3U_PLAYLIST
         )
         addFileType(
-                "PLS",
-                FILE_TYPE_PLS,
-                "audio/x-scpls",
-                MtpConstants.FORMAT_PLS_PLAYLIST
+            "PLS",
+            FILE_TYPE_PLS,
+            "audio/x-scpls",
+            MtpConstants.FORMAT_PLS_PLAYLIST
         )
         addFileType(
-                "WPL",
-                FILE_TYPE_WPL,
-                "application/vnd.ms-wpl",
-                MtpConstants.FORMAT_WPL_PLAYLIST
+            "WPL",
+            FILE_TYPE_WPL,
+            "application/vnd.ms-wpl",
+            MtpConstants.FORMAT_WPL_PLAYLIST
         )
         addFileType("M3U8", FILE_TYPE_HTTPLIVE, "application/vnd.apple.mpegurl")
         addFileType("M3U8", FILE_TYPE_HTTPLIVE, "audio/mpegurl")
         addFileType("M3U8", FILE_TYPE_HTTPLIVE, "audio/x-mpegurl")
         addFileType("FL", FILE_TYPE_FL, "application/x-android-drm-fl")
         addFileType(
-                "TXT",
-                FILE_TYPE_TEXT,
-                "text/plain",
-                MtpConstants.FORMAT_TEXT
+            "TXT",
+            FILE_TYPE_TEXT,
+            "text/plain",
+            MtpConstants.FORMAT_TEXT
         )
         addFileType(
-                "HTM",
-                FILE_TYPE_HTML,
-                "text/html",
-                MtpConstants.FORMAT_HTML
+            "HTM",
+            FILE_TYPE_HTML,
+            "text/html",
+            MtpConstants.FORMAT_HTML
         )
         addFileType(
-                "HTML",
-                FILE_TYPE_HTML,
-                "text/html",
-                MtpConstants.FORMAT_HTML
+            "HTML",
+            FILE_TYPE_HTML,
+            "text/html",
+            MtpConstants.FORMAT_HTML
         )
         addFileType("PDF", FILE_TYPE_PDF, "application/pdf")
         addFileType(
-                "DOC",
-                FILE_TYPE_MS_WORD,
-                "application/msword",
-                MtpConstants.FORMAT_MS_WORD_DOCUMENT
+            "DOC",
+            FILE_TYPE_MS_WORD,
+            "application/msword",
+            MtpConstants.FORMAT_MS_WORD_DOCUMENT
         )
         addFileType(
-                "XLS",
-                FILE_TYPE_MS_EXCEL,
-                "application/vnd.ms-excel",
-                MtpConstants.FORMAT_MS_EXCEL_SPREADSHEET
+            "XLS",
+            FILE_TYPE_MS_EXCEL,
+            "application/vnd.ms-excel",
+            MtpConstants.FORMAT_MS_EXCEL_SPREADSHEET
         )
         addFileType(
-                "PPT",
-                FILE_TYPE_MS_POWERPOINT,
-                "application/mspowerpoint",
-                MtpConstants.FORMAT_MS_POWERPOINT_PRESENTATION
+            "PPT",
+            FILE_TYPE_MS_POWERPOINT,
+            "application/mspowerpoint",
+            MtpConstants.FORMAT_MS_POWERPOINT_PRESENTATION
         )
         addFileType(
-                "FLAC",
-                FILE_TYPE_FLAC,
-                "audio/flac",
-                MtpConstants.FORMAT_FLAC
+            "FLAC",
+            FILE_TYPE_FLAC,
+            "audio/flac",
+            MtpConstants.FORMAT_FLAC
         )
         addFileType(
             "ODT",
             FILE_TYPE_ODT,
             "application/vnd.oasis.opendocument.text"
         )
-        addFileType("DOCX", FILE_TYPE_MS_WORD, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        addFileType(
+            "DOCX",
+            FILE_TYPE_MS_WORD,
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
         addFileType("ZIP", FILE_TYPE_ZIP, "application/zip")
         addFileType("MPG", FILE_TYPE_MP2PS, "video/mp2p")
         addFileType("MPEG", FILE_TYPE_MP2PS, "video/mp2p")

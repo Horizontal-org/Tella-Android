@@ -4,9 +4,10 @@ import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import androidx.core.net.toUri
+import com.nextcloud.common.NextcloudClient
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
-import com.owncloud.android.lib.common.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.common.UserInfo
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -22,6 +23,7 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import okhttp3.Credentials
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.repository.nextcloud.NextCloudRepository
@@ -58,21 +60,20 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     }
 
     override fun checkUserCredentials(
-        serverUrl: String, username: String, password: String
+        serverUrl: String, username: String, password: String, context: Context
     ): Single<RemoteOperationResult<UserInfo?>> {
 
-        return Single.create<RemoteOperationResult<UserInfo?>> { emitter ->
+        return Single.create { emitter ->
             try {
-                val baseUri = Uri.parse(serverUrl)
-                val credentials = OwnCloudCredentialsFactory.newBasicCredentials(username, password)
+                val credentials = Credentials.basic(username, password)
+                val userId =
+                    username // temporary; will be replaced by the real UID after GetUserInfo
 
-                if (credentials == null) {
-                    emitter.onError(Exception("Client or credentials are null"))
-                    return@create
-                }
-
-                val nextcloudClient = OwnCloudClientFactory.createNextcloudClient(
-                    baseUri, credentials.username, credentials.toOkHttpCredentials(), context, true
+                val nextcloudClient = NextcloudClient(
+                    serverUrl.toUri(),
+                    userId,
+                    credentials,
+                    context
                 )
 
                 // Use a valid method to execute the operation
@@ -102,12 +103,39 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
 
                 val finalFolderPath = generateUniqueFolderName(client, folderPath, newFolderPath)
 
-                val createFolderOperation = CreateFolderRemoteOperation(finalFolderPath, true)
+                // 2) sanitize the folder path to the format OC expects
+                val ocPath = toOcRelativePath(finalFolderPath)
+
+                // 3) try recursive create; if 409, build parents step-by-step
+                val createFolderOperation =
+                    CreateFolderRemoteOperation(ocPath, /*createFullPath=*/true)
                 val folderResult = createFolderOperation.execute(client)
-                if (!folderResult.isSuccess) {
-                    emitter.onError(Exception("Failed to create folder: ${folderResult.logMessage}"))
+
+                val effectiveResult = if (folderResult.isSuccess || folderResult.httpCode == 405) {
+                    folderResult // created or already existed
+                } else if (folderResult.httpCode == 409) {
+                    // parent missing → create per segment
+                    var current = ""
+                    var last = folderResult as RemoteOperationResult<*>
+                    for (seg in ocPath.split("/").filter { it.isNotBlank() }) {
+                        current += "/$seg"
+                        val r =
+                            CreateFolderRemoteOperation(current, /*createFullPath=*/false).execute(
+                                client
+                            )
+                        last = r
+                        if (!(r.isSuccess || r.httpCode == 405)) break
+                    }
+                    last
+                } else {
+                    folderResult
+                }
+
+                if (!effectiveResult.isSuccess && effectiveResult.httpCode != 405) {
+                    emitter.onError(Exception("Failed to create folder: ${effectiveResult.message ?: "HTTP ${effectiveResult.httpCode} / ${effectiveResult.code}"}"))
                     return@create
                 }
+
 
                 val descriptionFile = File.createTempFile("description", ".txt").apply {
                     writeText(description)
@@ -115,7 +143,8 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
 
                 val descriptionFilePath = "$finalFolderPath/description.txt"
 
-                val timeStamp: Long = System.currentTimeMillis() / 1000 // Convert to seconds if required
+                val timeStamp: Long =
+                    System.currentTimeMillis() / 1000 // Convert to seconds if required
                 val uploadOperation = UploadFileRemoteOperation(
                     descriptionFile.absolutePath, descriptionFilePath, "text/plain", timeStamp
                 )
@@ -136,6 +165,26 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 )
             }
         }
+    }
+
+    /** Convert any input into an OC relative path under /files/<uid>, e.g. "/mimamiii/tita". */
+    private fun toOcRelativePath(input: String): String {
+        var p = input.trim()
+
+        // strip scheme+host if someone sent a full URL
+        p = p.replace(Regex("^https?://[^/]+"), "")
+
+        // strip any remote.php prefix the caller might have included
+        p = p.replace(Regex("^/remote\\.php/(dav|webdav)/files/[^/]+"), "")
+
+        // collapse slashes, ensure leading slash
+        p = p.replace(Regex("/{2,}"), "/")
+        if (!p.startsWith("/")) p = "/$p"
+
+        // forbid trailing slash for MKCOL paths (OC lib is ok either way, but keep it clean)
+        if (p.length > 1 && p.endsWith("/")) p = p.dropLast(1)
+
+        return p
     }
 
     private fun generateUniqueFolderName(
@@ -187,7 +236,12 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 handleUploadResult(result, emitter, mediaFile, file)
             } catch (e: Exception) {
                 Timber.e(e, "Error uploading file: ${mediaFile.name}")
-                emitError(emitter, mediaFile, e.message ?: "Unknown error", UploadProgressInfo.Status.ERROR)
+                emitError(
+                    emitter,
+                    mediaFile,
+                    e.message ?: "Unknown error",
+                    UploadProgressInfo.Status.ERROR
+                )
             }
         }, BackpressureStrategy.LATEST)
     }
@@ -228,10 +282,34 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
                 )
                 emitter.onComplete()
             }
-            result.httpCode == 401 -> emitError(emitter, mediaFile, "Unauthorized: ${result.logMessage}", UploadProgressInfo.Status.UNAUTHORIZED)
-            result.httpCode == 409 -> emitError(emitter, mediaFile, "Conflict: ${result.logMessage}", UploadProgressInfo.Status.CONFLICT)
-            result.httpCode == -1 -> emitError(emitter, mediaFile, "Unknown host: ${result.logMessage}", UploadProgressInfo.Status.UNKNOWN_HOST)
-            else -> emitError(emitter, mediaFile, "Upload failed: ${result.logMessage}, Code: ${result.httpCode}", UploadProgressInfo.Status.ERROR)
+
+            result.httpCode == 401 -> emitError(
+                emitter,
+                mediaFile,
+                "Unauthorized: ${result.logMessage}",
+                UploadProgressInfo.Status.UNAUTHORIZED
+            )
+
+            result.httpCode == 409 -> emitError(
+                emitter,
+                mediaFile,
+                "Conflict: ${result.logMessage}",
+                UploadProgressInfo.Status.CONFLICT
+            )
+
+            result.httpCode == -1 -> emitError(
+                emitter,
+                mediaFile,
+                "Unknown host: ${result.logMessage}",
+                UploadProgressInfo.Status.UNKNOWN_HOST
+            )
+
+            else -> emitError(
+                emitter,
+                mediaFile,
+                "Upload failed: ${result.logMessage}, Code: ${result.httpCode}",
+                UploadProgressInfo.Status.ERROR
+            )
         }
     }
 
@@ -257,7 +335,8 @@ class NextCloudRepositoryImp(private val context: Context) : NextCloudRepository
     ): OnDatatransferProgressListener {
         return OnDatatransferProgressListener { current, total, _, _ ->
             val progress = (current.toFloat() / total.toFloat()) * 100
-            val status = if (current == total) UploadProgressInfo.Status.FINISHED else UploadProgressInfo.Status.OK
+            val status =
+                if (current == total) UploadProgressInfo.Status.FINISHED else UploadProgressInfo.Status.OK
 
             emitter.onNext(
                 UploadProgressInfo(

@@ -193,7 +193,7 @@
   <string name="action_learn.more">En savoir plus</string>
   <string name="settings.servers_add.server_dialog.title">Ajouter un serveur</string>
   <string name="settings.prot_select_delete.forms">Supprimer brouillons et formulaires envoyés</string>
-  <string name="settings.prot_select_delete.servers">Supprimer les paramètres des serveurs</string>
+  <string name="settings.prot_select_delete.servers">Delete Connections</string>
   <string name="settings.prot_select_delete.app">Supprimer Tella</string>
   <string name="collect.sent_action_edit.to.resend">Modifier pour renvoyer</string>
   <string name="collect_toast_form.submitted">Le formulaire a été envoyé</string>
@@ -323,7 +323,7 @@
   <string name="settings.prot_select_delete.vault">Supprimer les fichiers</string>
   <string name="settings.sec_delete.vault_tooltip">Supprimez tous les fichiers stockés dans Tella.</string>
   <string name="settings.sec_delete.forms_tooltip">Supprimer tous les formulaires brouillons et soumis.</string>
-  <string name="settings.sec_delete.servers_tooltip">Supprimez vos connexions aux serveurs et tous les formulaires qui leur sont associés.</string>
+  <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
   <string name="settings.sec_delete.app_tooltip">Supprimez l\'application et toutes les données qu\'elle contient. Il vous sera demandé \"Voulez-vous désinstaller cette application?\" Sauf confirmation de votre part, Tella ne sera pas supprimée.</string>
   <string name="settings.sec_bypass_switch_title">Contourner la censure</string>
   <string name="settings.sec_bypass_switch_expl">Surmontez les tentatives de blocage de Tella dans votre région. Notez que l\'activation de cette option ralentira l\'envoi de données aux serveurs.</string>

@@ -12,6 +12,6 @@ class GoogleDriveServer @JvmOverloads constructor(
     init {
         serverType = ServerType.GOOGLE_DRIVE
         setId(id)
-        name = "Google Drive"
+        name = "Google drive"
     }
 }

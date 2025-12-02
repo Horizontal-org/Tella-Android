@@ -1,15 +1,17 @@
 plugins {
     id 'com.android.library'
-    id 'kotlin-android'
-    id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+
 }
 
 android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -34,47 +36,58 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     namespace 'com.hzontal.tella_locking_ui'
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:versions.kotlin"
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
     api project(':tella-keys')
     api project(':shared-ui')
-    apply plugin: 'kotlin-kapt'
 
     api "androidx.appcompat:appcompat:$versions.appcompat"
     api "com.google.android.material:material:$versions.material"
-    testImplementation "junit:junit:$versions.junit"
-    androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
-
     api "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-
     api "androidx.activity:activity-ktx:$versions.activityKtx"
     api "androidx.fragment:fragment-ktx:$versions.fragmentKtx"
-
     api "androidx.lifecycle:lifecycle-process:$versions.lifecycleProcess"
     api "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycleCommonJava8"
+    api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
-    //sqlite dependency
+    // SQLCipher / SQLite
     api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
     api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
 
-    api "androidx.recyclerview:recyclerview:$versions.recyclerview"
+    // WorkManager
+    implementation "androidx.work:work-runtime-ktx:$versions.workermanger"
 
-    //hilt
+    // Hilt (match root: 2.51.1)
     implementation "com.google.dagger:hilt-android:$versions.hilt_android"
     kapt "com.google.dagger:hilt-android-compiler:$versions.hilt_android_compiler"
-    kapt "androidx.hilt:hilt-compiler:$versions.hilt_version"
+
+    // AndroidX Hilt (WorkManager integration)
+    implementation "androidx.hilt:hilt-work:$versions.androidx_hilt"
+    kapt "androidx.hilt:hilt-compiler:$versions.androidx_hilt"
+
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
+}
+
+kapt {
+    correctErrorTypes = true
 }
