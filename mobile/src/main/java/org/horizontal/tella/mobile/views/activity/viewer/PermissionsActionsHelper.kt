@@ -54,32 +54,38 @@ object PermissionsActionsHelper {
 
 
     // Check if the app has storage permissions
-     fun hasStoragePermissions(context: Context): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
+    fun hasStoragePermissions(context: Context): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10+ we rely exclusively on SAF, no “all files” permission required
+            true
         } else {
-            val result: Int = ContextCompat.checkSelfPermission(
+            val read = ContextCompat.checkSelfPermission(
                 context, Manifest.permission.READ_EXTERNAL_STORAGE
             )
-            val result1: Int = ContextCompat.checkSelfPermission(
+            val write = ContextCompat.checkSelfPermission(
                 context, Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+            read == PackageManager.PERMISSION_GRANTED && write == PackageManager.PERMISSION_GRANTED
         }
     }
 
 
-     fun BaseActivity.requestStoragePermissions(requestPermissionLauncher: ActivityResultLauncher<Intent>) {
+    fun BaseActivity.requestStoragePermissions(
+        requestPermissionLauncher: ActivityResultLauncher<Intent>
+    ) {
         this.maybeChangeTemporaryTimeout()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                .addCategory(Intent.CATEGORY_DEFAULT)
-                .setData(Uri.parse("package:${application.packageName}"))
-            requestPermissionLauncher.launch(intent)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // No-op on Android 10+ for SAF exports
+            // You can optionally show a message if needed, but no permission needed
+            return
         } else {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), WRITE_REQUEST_CODE
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                WRITE_REQUEST_CODE
             )
         }
     }
+
 }

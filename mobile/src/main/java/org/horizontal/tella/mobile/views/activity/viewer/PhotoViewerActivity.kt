@@ -99,8 +99,11 @@ class PhotoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             onMediaFileExportStatus.observe(this@PhotoViewerActivity) { status ->
                 when (status) {
                     MediaFileExportStatus.EXPORT_START -> onExportStarted()
-                    MediaFileExportStatus.EXPORT_PROGRESS -> onMediaExported()
-                    MediaFileExportStatus.EXPORT_END -> onExportEnded()
+                    MediaFileExportStatus.EXPORT_PROGRESS -> {}
+                    MediaFileExportStatus.EXPORT_END -> {
+                        onExportEnded()
+                        onMediaExported()
+                    }
                 }
             }
 

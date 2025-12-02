@@ -15,6 +15,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -147,7 +148,9 @@ public class MediaFileHandler {
         FileUtil.emptyDir(new File(context.getFilesDir(), C.TMP_DIR));
     }
 
-    public static void exportMediaFile(Context context, VaultFile vaultFile, @Nullable Uri envDirUri) throws IOException {
+    public static void exportMediaFile(Context context,
+                                       VaultFile vaultFile,
+                                       @Nullable Uri envDirUri) throws IOException {
         // Decide target "collection" for app-specific fallback
         final String envDirType;
         if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
@@ -161,47 +164,67 @@ public class MediaFileHandler {
         }
 
         // Source stream (from vault)
-        InputStream src = null;
+        InputStream src;
         try {
             src = MyApplication.vault.getStream(vaultFile);
         } catch (VaultException e) {
             throw new RuntimeException(e);
         }
-        if (src == null) throw new IOException("Vault stream is null for file: " + vaultFile.id);
+        if (src == null) {
+            throw new IOException("Vault stream is null for file: " + vaultFile.id);
+        }
 
-        // --- SAF branch (user-chosen folder) ---
+        // ---------- SAF branch ----------
         if (envDirUri != null) {
-            DocumentFile tree = DocumentFile.fromTreeUri(context, envDirUri);
-            if (tree == null || !tree.canWrite()) {
-                throw new IOException("TreeUri not writable or null: " + envDirUri);
+            ContentResolver resolver = context.getContentResolver();
+            boolean isTreeUri =
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                            && DocumentsContract.isTreeUri(envDirUri);
+
+            // Case 1: user picked a FOLDER (OPEN_DOCUMENT_TREE) -> tree uri
+            if (isTreeUri) {
+                DocumentFile tree = DocumentFile.fromTreeUri(context, envDirUri);
+                if (tree == null || !tree.canWrite()) {
+                    throw new IOException("TreeUri not writable or null: " + envDirUri);
+                }
+
+                final String mime = vaultFile.mimeType != null
+                        ? vaultFile.mimeType
+                        : "application/octet-stream";
+                String baseName = vaultFile.name != null ? vaultFile.name : "file";
+                String name = baseName;
+
+                // Ensure unique target name
+                DocumentFile existing = tree.findFile(name);
+                int i = 1;
+                while (existing != null && existing.exists()) {
+                    name = appendIndex(baseName, i++);
+                    existing = tree.findFile(name);
+                }
+
+                DocumentFile outDoc = tree.createFile(mime, name);
+                if (outDoc == null) {
+                    throw new IOException("Failed to create target doc: " + name);
+                }
+
+                try (InputStream in = new BufferedInputStream(src, 1 << 20);
+                     OutputStream os = openOutputStreamCompat(resolver, outDoc.getUri(), "w");
+                     BufferedOutputStream out = new BufferedOutputStream(os, 1 << 20)) {
+                    copyLarge(in, out);
+                }
+                return;
             }
 
-            // Ensure unique target name to avoid provider slowdowns/collisions
-            final String mime = vaultFile.mimeType != null ? vaultFile.mimeType : "application/octet-stream";
-            String baseName = vaultFile.name != null ? vaultFile.name : "file";
-            String name = baseName;
-
-            // If a file with same name exists, add (1), (2)...
-            DocumentFile existing = tree.findFile(name);
-            int i = 1;
-            while (existing != null && existing.exists()) {
-                name = appendIndex(baseName, i++);
-                existing = tree.findFile(name);
-            }
-
-            DocumentFile outDoc = tree.createFile(mime, name);
-            if (outDoc == null) throw new IOException("Failed to create target doc: " + name);
-
-            // Use "w" to truncate/overwrite if the provider supports modes (fallback to default otherwise)
+            // Case 2: user picked a SINGLE FILE (CREATE_DOCUMENT) -> document uri
             try (InputStream in = new BufferedInputStream(src, 1 << 20);
-                 OutputStream os = openOutputStreamCompat(context.getContentResolver(), outDoc.getUri(), "w");
+                 OutputStream os = openOutputStreamCompat(resolver, envDirUri, "w");
                  BufferedOutputStream out = new BufferedOutputStream(os, 1 << 20)) {
                 copyLarge(in, out);
             }
             return;
         }
 
-        // --- App-specific external dir branch (no picker) ---
+        // ---------- App-specific external dir branch (no picker) ----------
         final File basePath;
         if (Build.VERSION.SDK_INT >= 29) {
             basePath = context.getExternalFilesDir(envDirType);
@@ -209,12 +232,18 @@ public class MediaFileHandler {
             // NOTE: requires WRITE_EXTERNAL_STORAGE on <29 if you used public dirs.
             basePath = Environment.getExternalStoragePublicDirectory(envDirType);
         }
-        if (basePath == null) throw new IOException("External files dir unavailable for: " + envDirType);
+
+        if (basePath == null) {
+            throw new IOException("External files dir unavailable for: " + envDirType);
+        }
         if (!basePath.exists() && !basePath.mkdirs()) {
             throw new IOException("Failed to create directory: " + basePath);
         }
 
-        File srcFile = MyApplication.keyRxVault.getRxVault().blockingFirst().getFile(vaultFile);
+        File srcFile = MyApplication.keyRxVault
+                .getRxVault()
+                .blockingFirst()
+                .getFile(vaultFile);
         String targetName = srcFile.getName();
         File outFile = uniqueFile(basePath, targetName);
 
@@ -226,8 +255,13 @@ public class MediaFileHandler {
             fos.getFD().sync(); // help durability for big files
         }
 
-        // Notify media database (so it appears in gallery players)
-        MediaScannerConnection.scanFile(context, new String[]{ outFile.getAbsolutePath() }, null, null);
+        // Notify media database (so it appears in gallery / players)
+        MediaScannerConnection.scanFile(
+                context,
+                new String[]{outFile.getAbsolutePath()},
+                null,
+                null
+        );
     }
 
     /** Buffered copy with 1 MiB chunks (much faster for large videos). */
