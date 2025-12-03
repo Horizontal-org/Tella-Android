@@ -2,16 +2,11 @@ package org.horizontal.tella.mobile.views.activity.viewer
 
 import android.Manifest
 import android.content.Intent
-import android.os.Build
 import android.os.Handler
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.widget.Toolbar
 import com.hzontal.tella_vault.VaultFile
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
-import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
-import permissions.dispatcher.NeedsPermission
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelper.hasStoragePermissions
@@ -19,6 +14,10 @@ import org.horizontal.tella.mobile.views.activity.viewer.PermissionsActionsHelpe
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.fragment.vault.edit.VaultEditFragment
 import org.horizontal.tella.mobile.views.fragment.vault.info.VaultInfoFragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils
+import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.showVaultActionsSheet
+import permissions.dispatcher.NeedsPermission
 
 var withMetadata = false
 lateinit var filePicker: ActivityResultLauncher<Intent>
@@ -249,18 +248,24 @@ object VaultActionsHelper {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun BaseActivity.exportMediaFile() {
-        if (chosenVaultFile.metadata != null && withMetadata) {
+        if (chosenVaultFile.metadata != null) {
+            // File has metadata → ask the user what they want to export
             showExportWithMetadataDialog()
         } else {
+            // No metadata → always export only media
             withMetadata = false
             maybeChangeTemporaryTimeout {
                 performFileSearch(
-                    chosenVaultFile, withMetadata,
-                    sharedViewModel, filePicker, requestPermission
+                    chosenVaultFile,
+                    withMetadata,
+                    sharedViewModel,
+                    filePicker,
+                    requestPermission
                 )
             }
         }
     }
+
 
     // File search logic here
     fun BaseActivity.performFileSearch(
@@ -271,24 +276,14 @@ object VaultActionsHelper {
         requestPermissionLauncher: ActivityResultLauncher<Intent>
     ) {
         if (hasStoragePermissions(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                    addFlags(
-                        Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
-                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
-                                Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    )
-                }
-                filePickerLauncher.launch(intent)
-            } else {
-                vaultFile?.let {
-                    viewModel.exportNewMediaFile(
-                        withMetadata = withMetadata,
-                        vaultFile = it,
-                        path = null
-                    )
-                }
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+                addFlags(
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
             }
+            filePickerLauncher.launch(intent)
         } else {
             // This will only be triggered on < Android 10
             requestStoragePermissions(requestPermissionLauncher)
