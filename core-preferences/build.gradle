@@ -1,20 +1,17 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'org.hzontal.connections_db'
+    namespace 'org.horizontal.tella.core_preferences'
     compileSdk 35
 
     defaultConfig {
-        applicationId "org.hzontal.connections_db"
         minSdk 24
-        targetSdk 35
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -33,12 +30,8 @@ android {
 }
 
 dependencies {
-    // SQLite / SQLCipher
-    api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
-    api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
-    api "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
-    api "com.jakewharton.timber:timber:$versions.timber"
 
+    api "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
 
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'

@@ -142,6 +142,7 @@ dependencies {
     implementation project(':tella-vault')
     implementation project(':pdfviewer')
     api project(':tella-locking-ui')
+    api project(':connections-db')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
@@ -166,10 +167,12 @@ dependencies {
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
+    //TODO AHLEM CHECK THIS DEPENDENCY TO BE REMOVED FROM MOBILE
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
     implementation "info.guardianproject.cacheword:cachewordlib:$versions.cacheword"
     implementation "com.github.bumptech.glide:glide:$versions.glide"
+    //TODO AHLEM REMOVE THIS LATER
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
 
