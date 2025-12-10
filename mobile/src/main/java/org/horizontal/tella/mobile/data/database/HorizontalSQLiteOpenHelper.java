@@ -5,9 +5,25 @@ import android.content.Context;
 import static org.horizontal.tella.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
+import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.cloud.CloudDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.feedback.FeedbackDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.forms.FormsDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.media.MediaDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.reports.ReportsDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.resources.ResourcesDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.settings.SettingsDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.uwazi.UwaziDatabaseModule;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import timber.log.Timber;
 
 class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
+    
+    private final List<DatabaseModule> databaseModules;
 
     @Override
     public void onOpen(SQLiteDatabase db) {
@@ -23,21 +39,32 @@ class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
         if (!isAlreadyMigratedMainDB()) {
             migrateSqlCipher3To4IfNeeded(context, password);
         }
+        
+        // Initialize database modules
+        databaseModules = new ArrayList<>();
+        databaseModules.add(new SettingsDatabaseModule());
+        databaseModules.add(new FormsDatabaseModule());
+        databaseModules.add(new MediaDatabaseModule());
+        databaseModules.add(new ReportsDatabaseModule());
+        databaseModules.add(new UwaziDatabaseModule());
+        databaseModules.add(new FeedbackDatabaseModule());
+        databaseModules.add(new ResourcesDatabaseModule());
+        databaseModules.add(new CloudDatabaseModule());
     }
 
-    private static String objQuote(String str) {
+    public static String objQuote(String str) {
         return OBJ_QUOTE + str + OBJ_QUOTE;
     }
 
-    private static String sq(String unQuotedText) {
+    public static String sq(String unQuotedText) {
         return " " + objQuote(unQuotedText) + " ";
     }
 
-    private static String cddl(String columnName, String columnType) {
+    public static String cddl(String columnName, String columnType) {
         return objQuote(columnName) + " " + columnType;
     }
 
-    private static String cddl(String columnName, String columnType, boolean notNull) {
+    public static String cddl(String columnName, String columnType, boolean notNull) {
         return objQuote(columnName) + " " + columnType + (notNull ? " NOT NULL" : "");
     }
 
@@ -499,150 +526,42 @@ class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
 
     @Override
     public void onCreate(net.zetetic.database.sqlcipher.SQLiteDatabase db) {
-        // we have started from version 1
-
-        // DBv1
-        db.execSQL(createTableCollectServer());
-        db.execSQL(createTableMediaFile());
-        db.execSQL(createTableCollectBlankForm());
-        db.execSQL(createTableCollectFormInstance());
-        db.execSQL(createTableCollectFormInstanceMediaFile());
-        db.execSQL(createTableSettings());
-
-        // DBv2
-        db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-        db.execSQL(alterTableCollectServerAddChecked());
-
-        // DBv3
-        db.execSQL(alterTableCollectBlankFormAddUpdated());
-
-        // DBv4
-        db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-
-        // DBv5
-        db.execSQL(alterTableMediaFileAddHash());
-
-        // DBv6
-        db.execSQL(createTableTellaUploadServer());
-
-        // DBv7
-        db.execSQL(createTableMediaFileUploads());
-
-        //DBv8
-        db.execSQL(alterTableMediaFileUploadsAddMetadata());
-        db.execSQL(alterTableMediaFileUploadsAddManual());
-        db.execSQL(alterTableMediaFileUploadsAddServer());
-        db.execSQL(createTableUwaziServer());
-        db.execSQL(createTableCollectEntityUwazi());
-        db.execSQL(createTableCollectBlankTemplateUwazi());
-        db.execSQL(createTableCollectFormInstanceVaultFile());
-        db.execSQL(createTableUwaziEntityInstanceVaultFile());
-
-        //DBV9
-        db.execSQL(alterTableTellaUploadServerAddAccessToken());
-        db.execSQL(alterTableTellaUploadServerAddMetatData());
-        db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-        db.execSQL(alterTableTellaUploadServerAddProjectName());
-        db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-        db.execSQL(alterTableTellaUploadServerAddProjectID());
-        db.execSQL(createTableReportFormInstance());
-        db.execSQL(createTableReportInstanceVaultFile());
-        db.execSQL(createTableReportFileUploads());
-
-        //DBV11
-        db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-        db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-        db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-        db.execSQL(createTableFeedback());
-
-        //DBV12
-        db.execSQL(createTableResources());
-
-        //DBV13
-        db.execSQL(createTableGoogleDrive());
-        db.execSQL(createTableGoogleDriveFormInstance());
-        db.execSQL(createTableGoogleDriveInstanceVaultFile());
-
-        //DBV14
-        db.execSQL(createTableDropBox());
-        db.execSQL(createTableDropBoxFormInstance());
-        db.execSQL(createTableDropBoxInstanceVaultFile());
-
-        //DBV15
-        db.execSQL(createTableNextCloud());
-        db.execSQL(createTableNextCloudFormInstance());
-        db.execSQL(createTableNextCloudInstanceVaultFile());
+        Timber.d("Creating database with modular architecture");
+        
+        // Delegate table creation to modules
+        for (DatabaseModule module : databaseModules) {
+            try {
+                Timber.d("Creating tables for module: %s", module.getModuleName());
+                module.onCreate(db);
+            } catch (Exception e) {
+                Timber.e(e, "Error creating tables for module: %s", module.getModuleName());
+                throw new RuntimeException("Failed to create database module: " + module.getModuleName(), e);
+            }
+        }
+        
+        Timber.d("Database creation completed");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-                db.execSQL(alterTableCollectFormInstanceMediaFileAddStatus());
-                db.execSQL(alterTableCollectServerAddChecked());
-                // break;
-            case 2:
-                db.execSQL(alterTableCollectBlankFormAddUpdated());
-                // break;
-            case 3:
-                db.execSQL(alterTableCollectFormInstanceAddFormPartStatus());
-                // break;
-            case 4:
-                db.execSQL(alterTableMediaFileAddHash());
-                //  break;
-            case 5:
-                db.execSQL(createTableTellaUploadServer());
-                // break;
-            case 6:
-                db.execSQL(createTableMediaFileUploads());
-                //break;
-            case 7:
-                db.execSQL(alterTableMediaFileUploadsAddServer());
-                db.execSQL(alterTableMediaFileUploadsAddManual());
-                db.execSQL(alterTableMediaFileUploadsAddMetadata());
-                // break;
-            case 8:
-                db.execSQL(createTableUwaziServer());
-                db.execSQL(createTableCollectEntityUwazi());
-                db.execSQL(createTableCollectBlankTemplateUwazi());
-                db.execSQL(createTableCollectFormInstanceVaultFile());
-                db.execSQL(createTableUwaziEntityInstanceVaultFile());
-                //break;
-            case 9:
-                db.execSQL(alterTableTellaUploadServerAddAccessToken());
-                db.execSQL(alterTableTellaUploadServerAddMetatData());
-                db.execSQL(alterTableTellaUploadServerAddBackgourndUpload());
-                db.execSQL(alterTableTellaUploadServerAddProjectName());
-                db.execSQL(alterTableTellaUploadServerAddProjectSlug());
-                db.execSQL(alterTableTellaUploadServerAddProjectID());
-                db.execSQL(createTableReportFormInstance());
-                db.execSQL(createTableReportInstanceVaultFile());
-                db.execSQL(createTableReportFileUploads());
-                // break;
-            case 10:
-                db.execSQL(alterTableTellaUploadServerAddAutoUpload());
-                db.execSQL(alterTableTellaUploadServerAddAutoDelete());
-                db.execSQL(alterTableReportFormInstanceAddCurrentUpload());
-                //  break;
-            case 11:
-                db.execSQL(createTableFeedback());
-                // break;
-            case 12:
-                db.execSQL(createTableResources());
-                // break;
-            case 13:
-                db.execSQL(createTableGoogleDrive());
-                db.execSQL(createTableGoogleDriveFormInstance());
-                db.execSQL(createTableGoogleDriveInstanceVaultFile());
-            case 14:
-                db.execSQL(createTableDropBox());
-                db.execSQL(createTableDropBoxFormInstance());
-                db.execSQL(createTableDropBoxInstanceVaultFile());
-            case 15:
-                db.execSQL(createTableNextCloud());
-                db.execSQL(createTableNextCloudFormInstance());
-                db.execSQL(createTableNextCloudInstanceVaultFile());
+        Timber.d("Upgrading database from version %d to %d", oldVersion, newVersion);
+        
+        // Delegate upgrade to modules
+        for (DatabaseModule module : databaseModules) {
+            try {
+                if (oldVersion < module.getMinDatabaseVersion() || 
+                    oldVersion < newVersion) {
+                    Timber.d("Upgrading module: %s (min version: %d)", 
+                            module.getModuleName(), module.getMinDatabaseVersion());
+                    module.onUpgrade(db, oldVersion, newVersion);
+                }
+            } catch (Exception e) {
+                Timber.e(e, "Error upgrading module: %s", module.getModuleName());
+                throw new RuntimeException("Failed to upgrade database module: " + module.getModuleName(), e);
+            }
         }
+        
+        Timber.d("Database upgrade completed");
     }
 
 }
