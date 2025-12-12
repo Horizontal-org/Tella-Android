@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -109,35 +110,56 @@ public class MediaFileHandler {
     }
 
     public static void startSelectMediaActivity(Activity activity, @NonNull String type, @Nullable String[] extraMimeType, int requestCode) {
-        Intent intent = new Intent();
+        PackageManager pm = activity.getPackageManager();
+        
+        // Try ACTION_OPEN_DOCUMENT first (preferred for Android 4.4+)
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType(type);
-
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        
         if (extraMimeType != null) {
             intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
-
-        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        try {
-            activity.startActivityForResult(intent, requestCode);
-            return;
-        } catch (ActivityNotFoundException e) {
-            Timber.d(e, activity.getClass().getName());
+        
+        // Check if any activity can handle this intent
+        if (intent.resolveActivity(pm) != null) {
+            // Use createChooser to show all available file pickers (including Fossify, etc.)
+            Intent chooser = Intent.createChooser(intent, activity.getString(R.string.select_file_picker));
+            try {
+                activity.startActivityForResult(chooser, requestCode);
+                return;
+            } catch (ActivityNotFoundException e) {
+                Timber.d(e, "ACTION_OPEN_DOCUMENT chooser failed");
+            }
         }
-
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-
-        try {
-            activity.startActivityForResult(intent, requestCode);
-        } catch (ActivityNotFoundException e) {
-            Timber.d(e, activity.getClass().getName());
-            DialogUtils.showBottomMessage(
-                    activity,
-                    activity.getString(R.string.gallery_toast_fail_import),
-                    true
-            );
+        
+        // Fallback to ACTION_GET_CONTENT (works with more apps, including older file managers)
+        Intent fallbackIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        fallbackIntent.setType(type);
+        fallbackIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        fallbackIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        
+        if (extraMimeType != null) {
+            fallbackIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
+        
+        // Check if any activity can handle fallback intent
+        if (fallbackIntent.resolveActivity(pm) != null) {
+            Intent chooser = Intent.createChooser(fallbackIntent, activity.getString(R.string.select_file_picker));
+            try {
+                activity.startActivityForResult(chooser, requestCode);
+                return;
+            } catch (ActivityNotFoundException e) {
+                Timber.d(e, "ACTION_GET_CONTENT chooser failed");
+            }
+        }
+        
+        // If both fail, show helpful error message
+        DialogUtils.showBottomMessage(
+                activity,
+                activity.getString(R.string.gallery_toast_fail_import_no_file_manager),
+                true
+        );
     }
 
     public static void destroyGallery(@NonNull final Context context) {
