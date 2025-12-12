@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.data.database;
 
+import org.horizontal.tella.mobile.data.database.PreferencesAdapter;
+import org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper;
 import static org.horizontal.tella.mobile.data.database.D.C_PASSWORD;
 
 import android.content.ContentValues;
@@ -47,7 +49,7 @@ public class NextCloudDataSource implements ITellaNextCloudRepository, ITellaRep
 
     private NextCloudDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context, key);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }

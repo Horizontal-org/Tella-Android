@@ -14,7 +14,7 @@ class DriveServiceProvider @Inject constructor(
 ) {
     fun getDriveService(email: String): Drive {
         val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
-            context, listOf(DriveScopes.DRIVE)
+            context, listOf(DriveScopes.DRIVE_FILE)
         ).apply {
             selectedAccountName = email
         }

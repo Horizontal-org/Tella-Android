@@ -1,5 +1,8 @@
 package org.horizontal.tella.mobile.data.database;
 
+import org.horizontal.tella.mobile.data.database.PreferencesAdapter;
+import org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -41,7 +44,7 @@ public class ResourceDataSource implements ITellaResourcesRepository {
 
     private ResourceDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context, key);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

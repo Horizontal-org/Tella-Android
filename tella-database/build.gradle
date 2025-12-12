@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'org.horizontal.tella.mobile.data.database'
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    // Align Kotlin libs with the root plugin
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
+    // SQLite / SQLCipher
+    api "net.zetetic:sqlcipher-android:$versions.sqlcipher"
+    api "androidx.sqlite:sqlite-ktx:$versions.sqlite"
+
+    // RxJava
+    api "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+    api "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+
+    // Gson (for JSON serialization)
+    implementation "com.google.code.gson:gson:$versions.gsonVersion"
+
+    // Timber for logging
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+
+    // Apache Commons IO (for file operations)
+    implementation "org.apache.directory.studio:org.apache.commons.io:$versions.apacheCommonsIo"
+
+    // Project dependencies
+    api project(':tella-keys')
+    
+    // Note: Domain and entity classes are in mobile module
+    // These will be accessed via interfaces/repositories
+    // compileOnly dependencies can be added if needed for compilation
+
+    // Testing
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "androidx.test.ext:junit:$versions.testJunit"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espressoCore"
+}

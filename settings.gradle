@@ -1,3 +1,22 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 include ':tella-vault'
 include ':shared-ui'
 include ':mobile'
@@ -5,5 +24,4 @@ include ':tella-keys'
 include ':tella-locking-ui'
 include ':shared-ui'
 include ':pdfviewer'
-include ':connections-db'
-include ':core-preferences'
+include ':tella-database'

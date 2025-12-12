@@ -73,6 +73,18 @@ android {
         }
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -142,7 +154,7 @@ dependencies {
     implementation project(':tella-vault')
     implementation project(':pdfviewer')
     api project(':tella-locking-ui')
-    api project(':connections-db')
+    implementation project(':tella-database')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
