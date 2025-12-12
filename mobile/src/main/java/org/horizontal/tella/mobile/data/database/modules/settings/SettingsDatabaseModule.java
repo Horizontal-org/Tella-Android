@@ -1,11 +1,13 @@
 package org.horizontal.tella.mobile.data.database.modules.settings;
 
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
+import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
+
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
+
 import org.horizontal.tella.mobile.data.database.D;
 import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
 
-import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
-import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
 
 /**
  * Database module for Settings functionality.

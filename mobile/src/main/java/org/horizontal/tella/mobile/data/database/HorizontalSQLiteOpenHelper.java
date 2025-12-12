@@ -20,7 +20,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
+public class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
     private static final String OBJ_QUOTE = "`";
     
     private final List<DatabaseModule> databaseModules;

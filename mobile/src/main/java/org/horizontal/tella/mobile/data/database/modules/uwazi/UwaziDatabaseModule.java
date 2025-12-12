@@ -1,11 +1,12 @@
 package org.horizontal.tella.mobile.data.database.modules.uwazi;
 
-import net.zetetic.database.sqlcipher.SQLiteDatabase;
-import org.horizontal.tella.mobile.data.database.D;
-import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
-
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.cddl;
 import static org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper.sq;
+
+import net.zetetic.database.sqlcipher.SQLiteDatabase;
+
+import org.horizontal.tella.mobile.data.database.D;
+import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
 
 /**
  * Database module for Uwazi functionality.
