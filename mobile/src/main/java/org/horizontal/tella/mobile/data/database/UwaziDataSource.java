@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.database;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -61,7 +62,7 @@ public class UwaziDataSource implements IUWAZIServersRepository, ICollectUwaziTe
 
     private UwaziDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter.INSTANCE);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

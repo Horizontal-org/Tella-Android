@@ -50,7 +50,7 @@ public class GoogleDriveDataSource implements ITellaGoogleDriveRepository, ITell
 
     private GoogleDriveDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter);
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter.INSTANCE);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }

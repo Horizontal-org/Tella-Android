@@ -6,7 +6,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences
  * Adapter that bridges mobile's Preferences to tella-database's DatabasePreferences interface.
  * This allows the database module to work without depending on mobile's Preferences implementation.
  */
-object PreferencesAdapter :  {
+object PreferencesAdapter : DatabasePreferences {
     override fun isAlreadyMigratedMainDB(): Boolean {
         return Preferences.isAlreadyMigratedMainDB()
     }
@@ -19,3 +19,4 @@ object PreferencesAdapter :  {
         Preferences.setFreshInstall(value)
     }
 }
+
