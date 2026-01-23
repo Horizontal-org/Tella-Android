@@ -1,9 +1,12 @@
 package org.horizontal.tella.mobile.data.database
 
 import org.horizontal.tella.mobile.data.database.modules.DatabaseModule
+import org.horizontal.tella.mobile.data.database.modules.dropbox.DropboxDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.feedback.FeedbackDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.forms.FormsDatabaseModule
+import org.horizontal.tella.mobile.data.database.modules.googledrive.GoogleDriveDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.media.MediaDatabaseModule
+import org.horizontal.tella.mobile.data.database.modules.nextcloud.NextCloudDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.reports.ReportsDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.resources.ResourcesDatabaseModule
 import org.horizontal.tella.mobile.data.database.modules.settings.SettingsDatabaseModule
@@ -27,7 +30,11 @@ interface DatabaseModuleProvider {
 
 /**
  * Default implementation that includes all modules.
- * For F-Droid, create a variant that excludes cloud modules.
+ * For F-Droid, pass false for Google Drive and Dropbox.
+ * 
+ * Usage:
+ * - Play Store: DefaultDatabaseModuleProvider() or DefaultDatabaseModuleProvider(includeGoogleDrive = true, includeDropbox = true)
+ * - F-Droid: DefaultDatabaseModuleProvider(includeGoogleDrive = false, includeDropbox = false)
  */
 class DefaultDatabaseModuleProvider(
     private val includeGoogleDrive: Boolean = true,
@@ -48,6 +55,7 @@ class DefaultDatabaseModuleProvider(
         if (includeDropbox) {
             modules.addAll(getDropboxModules())
         }
+        // NextCloud is always included (F-Droid compatible)
         if (includeNextCloud) {
             modules.addAll(getNextCloudModules())
         }
@@ -67,19 +75,21 @@ class DefaultDatabaseModuleProvider(
         )
     }
     
-    // These will be implemented after splitting CloudDatabaseModule
     private fun getGoogleDriveModules(): List<DatabaseModule> {
-        // TODO: Return GoogleDriveDatabaseModule() after refactoring
-        return emptyList()
+        return listOf(
+            GoogleDriveDatabaseModule()
+        )
     }
     
     private fun getDropboxModules(): List<DatabaseModule> {
-        // TODO: Return DropboxDatabaseModule() after refactoring
-        return emptyList()
+        return listOf(
+            DropboxDatabaseModule()
+        )
     }
     
     private fun getNextCloudModules(): List<DatabaseModule> {
-        // TODO: Return NextCloudDatabaseModule() after refactoring
-        return emptyList()
+        return listOf(
+            NextCloudDatabaseModule()
+        )
     }
 }

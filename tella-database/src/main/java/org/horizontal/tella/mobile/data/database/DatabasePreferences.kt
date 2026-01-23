@@ -11,3 +11,9 @@ interface DatabasePreferences {
     fun setAlreadyMigratedMainDB(value: Boolean)
     fun setFreshInstall(value: Boolean)
 }
+
+
+
+
+
+

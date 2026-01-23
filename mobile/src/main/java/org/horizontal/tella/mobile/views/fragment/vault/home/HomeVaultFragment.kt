@@ -28,6 +28,7 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.BuildConfig
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -448,11 +449,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             ServerType.GOOGLE_DRIVE -> {
-                nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
+                    nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                }
             }
 
             ServerType.DROP_BOX -> {
-                nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                if (BuildConfig.ENABLE_DROPBOX) {
+                    nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                }
             }
 
             ServerType.NEXTCLOUD -> {
@@ -766,6 +771,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
     // Handle Google Drive servers
     private fun handleGoogleDriveServers(servers: List<GoogleDriveServer>?) {
+        if (!BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            // Skip Google Drive in F-Droid builds
+            return
+        }
         googleDriveServersCounted = true
         googleDriveServers?.clear()
         removeOldServersFromList(ServerType.GOOGLE_DRIVE)
@@ -778,6 +787,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
     // Handle Dropbox servers
     private fun handleDropBoxServers(servers: List<DropBoxServer>?) {
+        if (!BuildConfig.ENABLE_DROPBOX) {
+            // Skip Dropbox in F-Droid builds
+            return
+        }
         dropBoxServersCounted = true
         dropBoxServers?.clear()
         removeOldServersFromList(ServerType.DROP_BOX)

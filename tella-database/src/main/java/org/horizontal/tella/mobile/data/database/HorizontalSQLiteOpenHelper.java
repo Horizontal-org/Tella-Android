@@ -4,7 +4,10 @@ import android.content.Context;
 
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 import org.horizontal.tella.mobile.data.database.modules.DatabaseModule;
-import org.horizontal.tella.mobile.data.database.modules.cloud.CloudDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.googledrive.GoogleDriveDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.dropbox.DropboxDatabaseModule;
+import org.horizontal.tella.mobile.data.database.modules.nextcloud.NextCloudDatabaseModule;
+import org.horizontal.tella.mobile.data.database.DatabaseModuleProvider;
 import org.horizontal.tella.mobile.data.database.modules.feedback.FeedbackDatabaseModule;
 import org.horizontal.tella.mobile.data.database.modules.forms.FormsDatabaseModule;
 import org.horizontal.tella.mobile.data.database.modules.media.MediaDatabaseModule;
@@ -45,6 +48,7 @@ public class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
     
     /**
      * Factory method to create with default modules.
+     * Uses DatabaseModuleProvider to get modules.
      */
     public static HorizontalSQLiteOpenHelper create(Context context, byte[] password, DatabasePreferences preferences) {
         return new HorizontalSQLiteOpenHelper(context, password, preferences, null);
@@ -57,7 +61,17 @@ public class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
         return new HorizontalSQLiteOpenHelper(context, password, preferences, modules);
     }
     
+    /**
+     * Factory method to create with DatabaseModuleProvider.
+     */
+    public static HorizontalSQLiteOpenHelper create(Context context, byte[] password, DatabasePreferences preferences, DatabaseModuleProvider provider) {
+        List<DatabaseModule> modules = provider != null ? provider.getModules() : null;
+        return new HorizontalSQLiteOpenHelper(context, password, preferences, modules);
+    }
+    
     private List<DatabaseModule> getDefaultModules() {
+        // Default: include all modules
+        // In mobile module, use DatabaseModuleProvider with BuildConfig to conditionally include
         List<DatabaseModule> modules = new ArrayList<>();
         modules.add(new SettingsDatabaseModule());
         modules.add(new FormsDatabaseModule());
@@ -66,7 +80,11 @@ public class HorizontalSQLiteOpenHelper extends CipherOpenHelper {
         modules.add(new UwaziDatabaseModule());
         modules.add(new FeedbackDatabaseModule());
         modules.add(new ResourcesDatabaseModule());
-        modules.add(new CloudDatabaseModule());
+        // Cloud modules - included by default
+        // Mobile module should use DatabaseModuleProvider with BuildConfig to conditionally include
+        modules.add(new GoogleDriveDatabaseModule());
+        modules.add(new DropboxDatabaseModule());
+        modules.add(new NextCloudDatabaseModule());
         return modules;
     }
 

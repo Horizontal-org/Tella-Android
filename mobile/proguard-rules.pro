@@ -423,3 +423,22 @@
 -keep class com.hzontal.tella_vault.Vault { *; }
 -keep class org.horizontal.tella.mobile.data.KeyRxVault { *; }
 # ========== END SIMPLE XML RULES ==========
+
+# ========== F-DROID: REMOVE DROPBOX CLASSES ==========
+# Note: These rules are safe for both Play Store and F-Droid builds
+# For Play Store builds, Dropbox classes are actively used, so R8 won't remove them
+# For F-Droid builds, Dropbox classes are only referenced in stubs, so R8 will remove them
+# Remove all Dropbox SDK classes from F-Droid builds
+# These are only needed at compile time for interface definitions
+-dontwarn com.dropbox.core.**
+-dontwarn com.dropbox.core.v2.**
+-dontwarn com.dropbox.core.android.**
+
+# Remove Dropbox classes from the final APK (only affects unused classes)
+-assumenosideeffects class com.dropbox.core.** { *; }
+-assumenosideeffects class com.dropbox.core.v2.** { *; }
+-assumenosideeffects class com.dropbox.core.android.** { *; }
+
+# Don't keep any Dropbox classes (only affects unused classes)
+-keep class !com.dropbox.core.** { *; }
+# ========== END F-DROID DROPBOX REMOVAL ==========

@@ -44,7 +44,11 @@ public class ResourceDataSource implements ITellaResourcesRepository {
 
     private ResourceDataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter.INSTANCE);
+        // Use DatabaseModuleFactory to conditionally include modules based on build variant
+        org.horizontal.tella.mobile.data.database.DatabaseModuleProvider provider = 
+            org.horizontal.tella.mobile.data.database.DatabaseModuleFactory.createProvider();
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(
+            context, key, PreferencesAdapter.INSTANCE, provider);
         database = sqLiteOpenHelper.getWritableDatabase();
     }
 

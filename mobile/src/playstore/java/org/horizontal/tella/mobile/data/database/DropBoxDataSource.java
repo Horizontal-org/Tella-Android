@@ -42,7 +42,11 @@ public class DropBoxDataSource implements ITellaDropBoxRepository, ITellaReports
     }
 
     private DropBoxDataSource(Context context, byte[] key) {
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(context, key, PreferencesAdapter.INSTANCE);
+        // Use DatabaseModuleFactory to conditionally include modules based on build variant
+        org.horizontal.tella.mobile.data.database.DatabaseModuleProvider provider = 
+            org.horizontal.tella.mobile.data.database.DatabaseModuleFactory.createProvider();
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(
+            context, key, PreferencesAdapter.INSTANCE, provider);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }

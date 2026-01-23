@@ -1,5 +1,8 @@
 package org.horizontal.tella.mobile.data.database;
 
+import static org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX;
+import static org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE;
+
 import android.content.Context;
 
 import org.hzontal.tella.keys.key.LifecycleMainKey;
@@ -29,23 +32,37 @@ public class KeyDataSource {
 
     public void initKeyDataSource() {
         try {
-            asyncSubject.onNext(DataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            byte[] key = MyApplication.getMainKeyHolder().get().getKey().getEncoded();
+            
+            // Core data sources (always initialized)
+            asyncSubject.onNext(DataSource.getInstance(this.context, key));
             asyncSubject.onComplete();
 
-            asyncUwaziSubject.onNext(UwaziDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncUwaziSubject.onNext(UwaziDataSource.getInstance(this.context, key));
             asyncUwaziSubject.onComplete();
 
-            asyncResourceSubject.onNext(ResourceDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncResourceSubject.onNext(ResourceDataSource.getInstance(this.context, key));
             asyncResourceSubject.onComplete();
 
-            asyncGoogleDriveSubject.onNext(GoogleDriveDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
-            asyncGoogleDriveSubject.onComplete();
-
-            asyncDropBoxSubject.onNext(DropBoxDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
-            asyncDropBoxSubject.onComplete();
-
-            asyncNextCloudSubject.onNext(NextCloudDataSource.getInstance(this.context, MyApplication.getMainKeyHolder().get().getKey().getEncoded()));
+            asyncNextCloudSubject.onNext(NextCloudDataSource.getInstance(this.context, key));
             asyncNextCloudSubject.onComplete();
+
+            // Conditional cloud data sources (based on build variant)
+            if (ENABLE_GOOGLE_DRIVE) {
+                asyncGoogleDriveSubject.onNext(GoogleDriveDataSource.getInstance(this.context, key));
+                asyncGoogleDriveSubject.onComplete();
+            } else {
+                // For F-Droid builds, complete without value (or use stub implementation)
+                asyncGoogleDriveSubject.onComplete();
+            }
+
+            if (ENABLE_DROPBOX) {
+                asyncDropBoxSubject.onNext(DropBoxDataSource.getInstance(this.context, key));
+                asyncDropBoxSubject.onComplete();
+            } else {
+                // For F-Droid builds, complete without value (or use stub implementation)
+                asyncDropBoxSubject.onComplete();
+            }
         } catch (LifecycleMainKey.MainKeyUnavailableException e) {
             e.printStackTrace();
         }
