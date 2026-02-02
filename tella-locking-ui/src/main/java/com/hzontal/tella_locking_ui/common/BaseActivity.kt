@@ -17,7 +17,6 @@ import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 
-//TODO REFACTOR PREFERNCES INTO CORE MODULE
 const val SET_SECURITY_SCREEN = "set_security_screen"
 private const val SHARED_PREFS_NAME = "washington_shared_prefs"
 
@@ -34,6 +33,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
         )
@@ -41,10 +41,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun applyEdgeToEdge(view: View) {
-        // remove default system window fitting
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        // Apply insets manually
+        // Window already configured by enableEdgeToEdge() in onCreate. Apply insets so content is not drawn under system bars.
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom)

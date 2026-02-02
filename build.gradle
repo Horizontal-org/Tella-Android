@@ -11,7 +11,7 @@ buildscript {
     versions.junit = '4.13'
     versions.testJunit = '1.1.2'
     versions.espressoCore = '3.3.0'
-    versions.ktx = '1.6.0'
+    versions.ktx = '1.17.0'
     versions.material = '1.6.0'
     versions.appcompat = '1.7.1'
     versions.rxjava = '2.2.19'

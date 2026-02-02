@@ -72,18 +72,14 @@ fun Int.dpToPx(context: Context): Int {
 }
 
 fun Window.changeStatusColor(context: Context, @ColorRes colorRes: Int) {
-    val color = ContextCompat.getColor(context, colorRes)
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        statusBarColor = color
-        // enable edge-to-edge
-        setDecorFitsSystemWindows(false)  
-
+        // R+: do not call setStatusBarColor (deprecated for edge-to-edge). BaseActivity uses enableEdgeToEdge(); only set light/dark appearance.
         insetsController?.setSystemBarsAppearance(
             WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
             WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
         )
     } else {
+        val color = ContextCompat.getColor(context, colorRes)
         addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         statusBarColor = color
