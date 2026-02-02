@@ -84,8 +84,11 @@ class AudioPlayActivity : BaseLockActivity(), StyledPlayerView.ControllerVisibil
             onMediaFileExportStatus.observe(this@AudioPlayActivity) { status ->
                 when (status) {
                     MediaFileExportStatus.EXPORT_START -> onExportStarted()
-                    MediaFileExportStatus.EXPORT_PROGRESS -> onMediaExported()
-                    MediaFileExportStatus.EXPORT_END -> onExportEnded()
+                    MediaFileExportStatus.EXPORT_PROGRESS -> {}
+                    MediaFileExportStatus.EXPORT_END -> {
+                        onExportEnded()
+                        onMediaExported()
+                    }
                 }
             }
             onMediaFileDeleted.observe(this@AudioPlayActivity) { deleted ->
