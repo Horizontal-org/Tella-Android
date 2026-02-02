@@ -95,6 +95,8 @@ mode activation</string>
   <string name="gallery_dialog.expl_encrypting">Encrypting</string>
   <string name="gallery_save.to.device_dialog.progress.expl">Decrypting</string>
   <string name="gallery_toast_fail.import">There was an error opening the gallery to import the files. Please try again</string>
+  <string name="select_file_picker">Select a file manager</string>
+  <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
   <string name="gallery_toast_fail.saving.file">There was an error saving the file. Please try again</string>
   <string name="collect_toast_fail.attaching.file.to.form">There was an error attaching the file. Please try again</string>
   <string name="collect_toast_fail.fetch.form.from.server.unknown.error">There was an error downloading the form. Please try again</string>

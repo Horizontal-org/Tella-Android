@@ -44,7 +44,7 @@ object RepositoryModule {
     fun provideDriveServiceProvider(@ApplicationContext context: Context): (String) -> Drive {
         return { email ->
             val googleAccountCredential = GoogleAccountCredential.usingOAuth2(
-                context, listOf(DriveScopes.DRIVE)
+                context, listOf(DriveScopes.DRIVE_FILE)
             ).apply {
                 selectedAccountName = email
             }

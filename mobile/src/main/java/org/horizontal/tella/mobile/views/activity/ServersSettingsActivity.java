@@ -131,24 +131,34 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         tellaUploadServersViewModel.getTellaUploadServers();
 
         uwaziServersViewModel.getUwaziServers();
-        googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
-        dropBoxServersViewModel.getDropBoxServers();
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            googleDriveViewModel.getGoogleDriveServers(config.getGoogleClientId());
+        }
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX) {
+            dropBoxServersViewModel.getDropBoxServers();
+        }
         nextCloudServersViewModel.getNextCloudServers();
         initObservers();
         initUwaziEvents();
         initReportsEvents();
-        initGoogleDriveEvents();
-        initDropBoxEvents();
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            initGoogleDriveEvents();
+        }
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX) {
+            initDropBoxEvents();
+        }
         initNextCloudEvents();
         initListeners();
     }
 
     private void initObservers() {
-        //Google drive connection
-        googleDriveViewModel.getGoogleDriveServers().observe(this, this::onGoogleDriveServersLoaded);
-        googleDriveViewModel.getError().observe(this, this::showConnectionsError);
-        googleDriveViewModel.getCreatedServer().observe(this, this::onCreatedGoogleDriveServer);
-        googleDriveViewModel.getRemovedServer().observe(this, this::onRemovedGoogleDriveServer);
+        //Google drive connection (Play Store only)
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            googleDriveViewModel.getGoogleDriveServers().observe(this, this::onGoogleDriveServersLoaded);
+            googleDriveViewModel.getError().observe(this, this::showConnectionsError);
+            googleDriveViewModel.getCreatedServer().observe(this, this::onCreatedGoogleDriveServer);
+            googleDriveViewModel.getRemovedServer().observe(this, this::onRemovedGoogleDriveServer);
+        }
 
         //Uwazi connection
         uwaziServersViewModel.getListUwaziServers().observe(this, this::onUwaziServersLoaded);
@@ -175,11 +185,13 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
         serversViewModel.getServersDeleted().observe(this, deleted -> onServersDeleted());
 
 
-        //DropBox connection
-        dropBoxServersViewModel.getListDropBoxServers().observe(this, this::onDropBoxServersLoaded);
-        dropBoxServersViewModel.getError().observe(this, this::showConnectionsError);
-        dropBoxServersViewModel.getServerCreated().observe(this, this::onCreatedDropBoxServer);
-        dropBoxServersViewModel.getServerRemoved().observe(this, this::onRemovedDropBoxServer);
+        //DropBox connection (Play Store only)
+        if (org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX) {
+            dropBoxServersViewModel.getListDropBoxServers().observe(this, this::onDropBoxServersLoaded);
+            dropBoxServersViewModel.getError().observe(this, this::showConnectionsError);
+            dropBoxServersViewModel.getServerCreated().observe(this, this::onCreatedDropBoxServer);
+            dropBoxServersViewModel.getServerRemoved().observe(this, this::onRemovedDropBoxServer);
+        }
 
         //NextCloud connection
         nextCloudServersViewModel.getListNextCloudServers().observe(this, this::onNextCloudServersLoaded);

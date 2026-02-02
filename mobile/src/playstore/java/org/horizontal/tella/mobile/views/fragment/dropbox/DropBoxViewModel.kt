@@ -383,7 +383,7 @@ class DropBoxViewModel @Inject constructor(
         disposables.add(
             dropBoxRepository.createDropboxClient(server)
                 .subscribeOn(Schedulers.io())
-                .flatMap { dbxClient ->
+                .flatMap { dbxClient: DbxClientV2 ->
                     // If token is valid, create folder and submit files
                     dropBoxRepository.createDropboxFolder(
                         dbxClient,

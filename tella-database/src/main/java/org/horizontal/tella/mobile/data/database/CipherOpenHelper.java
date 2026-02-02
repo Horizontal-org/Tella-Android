@@ -5,9 +5,6 @@ import static org.horizontal.tella.mobile.data.database.D.CIPHER3_DATABASE_NAME;
 import static org.horizontal.tella.mobile.data.database.D.DATABASE_NAME;
 import static org.horizontal.tella.mobile.data.database.D.DATABASE_VERSION;
 import static org.horizontal.tella.mobile.data.database.D.MIN_DATABASE_VERSION;
-import static org.horizontal.tella.mobile.data.sharedpref.Preferences.isAlreadyMigratedMainDB;
-import static org.horizontal.tella.mobile.data.sharedpref.Preferences.setAlreadyMigratedMainDB;
-import static org.horizontal.tella.mobile.data.sharedpref.Preferences.setFreshInstall;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -31,12 +28,14 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
     final Context context;
     final byte[] password;
+    final DatabasePreferences preferences;
 
-    CipherOpenHelper(@NonNull Context context, byte[] password) {
+    CipherOpenHelper(@NonNull Context context, byte[] password, @NonNull DatabasePreferences preferences) {
         super(context, DATABASE_NAME, encodeRawKeyToStr(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
 
         this.context = context.getApplicationContext();
         this.password = password;
+        this.preferences = preferences;
     }
 
     private static char[] encodeRawKey(byte[] raw_key) {
@@ -94,13 +93,13 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         return out;
     }
 
-    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, byte[] key) {
+    public static void migrateSqlCipher3To4IfNeeded(@NonNull Context context, byte[] key, @NonNull DatabasePreferences preferences) {
         String oldDbPath = context.getDatabasePath(CIPHER3_DATABASE_NAME).getAbsolutePath();
         File oldDbFile = new File(oldDbPath);
 
         if (!oldDbFile.exists()) {
             Timber.tag(TAG).d("Old database does not exist, no migration needed.");
-            setFreshInstall(true);
+            preferences.setFreshInstall(true);
             return;
         }
 
@@ -153,7 +152,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
                 Timber.tag(TAG).d("New database file size: " + newSize + " bytes");
             }
 
-            setAlreadyMigratedMainDB(true);
+            preferences.setAlreadyMigratedMainDB(true);
             Timber.tag(TAG).d("Database migration from SQLCipher 3 to 4 was successful.");
             migrationSuccess = true;
         } catch (Exception e) {
@@ -174,7 +173,7 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     @Override
     public SQLiteDatabase getWritableDatabase() {
 
-        if (isAlreadyMigratedMainDB()) {
+        if (preferences.isAlreadyMigratedMainDB()) {
 
             return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
                 @Override

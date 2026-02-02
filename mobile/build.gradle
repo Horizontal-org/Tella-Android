@@ -73,6 +73,32 @@ android {
         }
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+
+    flavorDimensions "distribution"
+    productFlavors {
+        playstore {
+            dimension "distribution"
+            buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "true"
+            buildConfigField "boolean", "ENABLE_DROPBOX", "true"
+        }
+        fdroid {
+            dimension "distribution"
+            buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "false"
+            buildConfigField "boolean", "ENABLE_DROPBOX", "false"
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -86,8 +112,8 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
     }
+
 
     compileOptions {
         coreLibraryDesugaringEnabled = true
@@ -142,6 +168,7 @@ dependencies {
     implementation project(':tella-vault')
     implementation project(':pdfviewer')
     api project(':tella-locking-ui')
+    implementation project(':tella-database')
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
@@ -166,10 +193,12 @@ dependencies {
 
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3LoggingInterceptor"
     implementation "com.squareup:tape:$versions.squareupTape"
+    //TODO AHLEM CHECK THIS DEPENDENCY TO BE REMOVED FROM MOBILE
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
     implementation "info.guardianproject.cacheword:cachewordlib:$versions.cacheword"
     implementation "com.github.bumptech.glide:glide:$versions.glide"
+    //TODO AHLEM REMOVE THIS LATER
     implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
     implementation "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay"
 
@@ -212,20 +241,25 @@ dependencies {
 
     implementation "org.divviup.android:divviup-android:$versions.divviup"
 
-    // Auth / Credentials / Google APIs
-    implementation "com.google.android.gms:play-services-auth:$versions.playServicesAuthVersion"
+    // Credentials library (needed for interface definitions in main source set)
     implementation "androidx.credentials:credentials:$versions.credentialsVersion"
-    implementation "androidx.credentials:credentials-play-services-auth:$versions.credentialsVersion"
-    implementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
-    implementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
-    implementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
-    implementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
-    implementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
+    
+    // Auth / Credentials / Google APIs (Play Store only)
+    playstoreImplementation "com.google.android.gms:play-services-auth:$versions.playServicesAuthVersion"
+    playstoreImplementation "androidx.credentials:credentials-play-services-auth:$versions.credentialsVersion"
+    playstoreImplementation "com.google.android.libraries.identity.googleid:googleid:$versions.googleIdVersion"
+    playstoreImplementation "com.google.api-client:google-api-client-android:$versions.googleApiClientAndroidVersion"
+    playstoreImplementation "com.google.apis:google-api-services-drive:$versions.googleApiServicesDriveV3Version"
+    playstoreImplementation "com.google.api-client:google-api-client-gson:$versions.googleApiClientGsonVersion"
+    playstoreImplementation "com.google.http-client:google-http-client-android:$versions.googleHttpClientAndroidVersion"
+    // Gson is used by other modules too, keep it common
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
 
-    // Dropbox
-    implementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
-    implementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
+    // Dropbox (Play Store only)
+    playstoreImplementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
+    playstoreImplementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
+    // Dropbox SDK needed for interface compilation in F-Droid (compile-time only, excluded from APK via ProGuard)
+    fdroidImplementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     implementation 'commons-httpclient:commons-httpclient:3.1'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
