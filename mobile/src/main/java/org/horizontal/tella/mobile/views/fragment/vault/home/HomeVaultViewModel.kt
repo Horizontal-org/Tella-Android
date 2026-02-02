@@ -198,8 +198,7 @@ class HomeVaultViewModel @Inject constructor(
             Single.fromCallable {
                 val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
                 for (vaultFile in resultList) {
-                    // Uncomment this line to export the files
-                    // vaultFile?.let { mediaFileHandler.exportMediaFile(context, it) }
+                    vaultFile?.let { MediaFileHandler.exportMediaFile(appContext, it, null) }
                 }
                 vaultFiles.size
             }

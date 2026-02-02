@@ -120,16 +120,22 @@ class AttachmentsFragment :
     ) { uri ->
         isLaunchingPicker = false
         if (uri != null) {
-            // Persist long-term R/W access to the picked folder
-            requireContext().contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            )
-            lastTreeUri = uri
-
-            // Use real intent (single vs multiple) based on current selection
-            val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
-            exportVaultFiles(isMultipleFiles = isMultiple, vaultFile = vaultFile, path = uri)
+            try {
+                // Persist long-term R/W access to the picked folder
+                requireContext().contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+                lastTreeUri = uri
+            } catch (e: SecurityException) {
+                // Some providers don't support persistable permission; continue with one-time export
+            }
+            // Only export if we still have a file (fragment may have been recreated)
+            val fileToExport = vaultFile
+            if (fileToExport != null) {
+                val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
+                exportVaultFiles(isMultipleFiles = isMultiple, vaultFile = fileToExport, path = uri)
+            }
         }
     }
 
@@ -531,9 +537,9 @@ class AttachmentsFragment :
 
     private fun showBottomSheet(vaultFile: VaultFile) {
         BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
-            baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+            baseActivity.getString(R.string.Vault_SaveToDevice_SheetTitle, vaultFile.name),
             baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
-            baseActivity.getString(R.string.Vault_Export_SheetAction),
+            baseActivity.getString(R.string.Vault_SaveToDevice_SheetAction),
             baseActivity.getString(R.string.action_cancel),
             onConfirmClick = {
                 this.vaultFile = vaultFile
