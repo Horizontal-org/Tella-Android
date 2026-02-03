@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -100,6 +102,11 @@ class QuestionAttachmentModel @Inject constructor(
                 .subscribe(
                     { vaultFile -> _onMediaFileImported.postValue(vaultFile.blockingGet()) },
                     { throwable ->
+                        if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
+                            _duplicateNameError.postValue(true)
+                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            return@subscribe
+                        }
                         FirebaseCrashlytics.getInstance().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }
@@ -119,6 +126,11 @@ class QuestionAttachmentModel @Inject constructor(
                 .subscribe(
                     { vaultFile -> _onMediaFileImported.postValue(vaultFile.blockingGet()) },
                     { throwable ->
+                        if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
+                            _duplicateNameError.postValue(true)
+                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            return@subscribe
+                        }
                         FirebaseCrashlytics.getInstance().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }
@@ -138,6 +150,11 @@ class QuestionAttachmentModel @Inject constructor(
                 .subscribe(
                     { vaultFile -> _onMediaFileImported.postValue(vaultFile.blockingGet()) },
                     { throwable ->
+                        if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
+                            _duplicateNameError.postValue(true)
+                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            return@subscribe
+                        }
                         FirebaseCrashlytics.getInstance().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }

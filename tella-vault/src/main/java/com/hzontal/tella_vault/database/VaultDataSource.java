@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.hzontal.tella_vault.IVaultDatabase;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
@@ -128,6 +129,11 @@ public class VaultDataSource implements IVaultDatabase {
             database.insert(D.T_VAULT_FILE, null, values);
 
             database.setTransactionSuccessful();
+        } catch (Exception e) {
+            if (isUniqueConstraintViolation(e)) {
+                throw new FileNameAlreadyExistsException("File or folder name already exists in this location: " + vaultFile.name, e);
+            }
+            throw e;
         } finally {
             database.endTransaction();
         }
@@ -297,14 +303,29 @@ public class VaultDataSource implements IVaultDatabase {
      */
     @Override
     public VaultFile rename(String id, String name) {
-        ContentValues values = new ContentValues();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(D.C_NAME, name);
 
-        values.put(D.C_NAME, name);
+            database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
+                    new String[]{id});
 
-        database.update(D.T_VAULT_FILE, values, D.C_ID + " = ?",
-                new String[]{id});
+            return get(id);
+        } catch (Exception e) {
+            if (isUniqueConstraintViolation(e)) {
+                throw new FileNameAlreadyExistsException("File or folder name already exists: " + name, e);
+            }
+            throw e;
+        }
+    }
 
-        return get(id);
+    private static boolean isUniqueConstraintViolation(Throwable e) {
+        if (e == null) return false;
+        String msg = e.getMessage();
+        if (msg != null && (msg.contains("UNIQUE constraint") || msg.contains("constraint failed"))) {
+            return true;
+        }
+        return isUniqueConstraintViolation(e.getCause());
     }
 
     /**

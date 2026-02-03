@@ -33,6 +33,7 @@ import org.horizontal.tella.mobile.databinding.ActivityQuestionAttachmentBinding
 import org.horizontal.tella.mobile.domain.repository.IMediaFileRecordRepository
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
 import org.horizontal.tella.mobile.views.activity.viewer.PDFReaderActivity
@@ -377,8 +378,9 @@ class QuestionAttachmentActivity : MetadataActivity(), IAttachmentsMediaHandler,
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(this, getString(messageResId), true)

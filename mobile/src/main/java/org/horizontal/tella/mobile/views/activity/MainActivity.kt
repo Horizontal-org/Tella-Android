@@ -35,6 +35,7 @@ import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.hide
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.fragment.feedback.SendFeedbackFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportSubmittedFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsEntryFragment
@@ -385,8 +386,9 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(

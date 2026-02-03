@@ -42,6 +42,7 @@ import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
 import org.horizontal.tella.mobile.util.LockTimeoutManager
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.MainActivity
@@ -726,8 +727,9 @@ class AttachmentsFragment :
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(

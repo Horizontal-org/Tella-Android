@@ -2,8 +2,11 @@ package org.horizontal.tella.mobile.views.activity.camera
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -16,6 +19,7 @@ import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityModel
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import java.io.File
 import javax.inject.Inject
 
@@ -35,6 +39,9 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
 
     private val _addError = SingleLiveEvent<Throwable>()
     val addError: LiveData<Throwable> = _addError
+
+    private val _duplicateNameError = MutableLiveData<Boolean>()
+    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
 
     private val _rotationUpdate = SingleLiveEvent<Int>()
     val rotationUpdate: LiveData<Int> = _rotationUpdate
@@ -70,7 +77,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                 handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
                 _addSuccess.postValue(vaultFile)
             }, { throwable ->
-                handleAddError(throwable)
+                handleAddError(throwable, null)
             })
         )
     }
@@ -99,7 +106,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                 handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
                 _addSuccess.postValue(vaultFile)
             }, { throwable ->
-                handleAddError(throwable)
+                handleAddError(throwable, file.name)
             }))
     }
 
@@ -115,7 +122,21 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
         MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(completedActivity)))
     }
 
-    private fun handleAddError(throwable: Throwable) {
+    private fun handleAddError(throwable: Throwable, failedItemName: String?) {
+        if (throwable.isDuplicateNameOrFileExistsError()) {
+            // Remove the IN_PROGRESS item from background activities (dismiss so no failed row and no stuck indicator)
+            MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf()))
+        } else {
+            val name = failedItemName ?: "Media"
+            val failedActivity = BackgroundActivityModel(
+                id = name,
+                name = name,
+                mimeType = "",
+                status = BackgroundActivityStatus.FAILED,
+                thumb = null
+            )
+            MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(failedActivity)))
+        }
         FirebaseCrashlytics.getInstance().recordException(throwable)
         _addError.postValue(throwable)
     }

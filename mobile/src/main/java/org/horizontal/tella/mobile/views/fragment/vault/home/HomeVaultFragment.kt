@@ -319,6 +319,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         val baseActivity = activity as MainActivity
         baseActivity.setSupportActionBar(toolbar)
         maybeShowRecentBackgroundActivities()
+        // Apply current background state when view is (re)created so toolbar icon and list are correct
+        updateToolbarIcon()
     }
 
     private fun maybeShowRecentBackgroundActivities() {
