@@ -470,6 +470,9 @@ button to add a new template.</string>
   <string name="Uwazi_Submitted_Entity_Header_Title">Summary</string>
   <string name="Uwazi_Action_ViewEntity">View entity</string>
   <string name="Uwazi_Action_DeleteEntity">Delete entity</string>
+  <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+  <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
   <string name="Uwazi_WidgetSubtitle_DateFrom">From</string>
   <string name="Uwazi_WidgetSubtitle_DateTo">To</string>
   <string name="Uwazi_WidgetSubtitle_Label">Label</string>

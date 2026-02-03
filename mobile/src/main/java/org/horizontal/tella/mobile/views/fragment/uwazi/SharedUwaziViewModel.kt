@@ -48,8 +48,8 @@ class SharedUwaziViewModel @Inject constructor(
     val submittedInstances: LiveData<List<Any>> get() = _submittedInstances
     private val _outboxInstances = SingleLiveEvent<List<Any>>()
     val outboxInstances: LiveData<List<Any>> get() = _outboxInstances
-    private var _instanceDeleteD = SingleLiveEvent<Boolean>()
-    val instanceDeleteD: LiveData<Boolean> get() = _instanceDeleteD
+    private var _instanceDeleteD = SingleLiveEvent<String?>()
+    val instanceDeleteD: LiveData<String?> get() = _instanceDeleteD
 
     var onInstanceSuccess = SingleLiveEvent<UwaziEntityInstance>()
 
@@ -236,7 +236,7 @@ class SharedUwaziViewModel @Inject constructor(
             .doFinally { _progress.postValue(false) }
             .subscribe(
                 {
-                    _instanceDeleteD.postValue(true)
+                    _instanceDeleteD.postValue(instance.title)
                 }
             ) { throwable: Throwable? ->
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
