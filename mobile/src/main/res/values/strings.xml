@@ -289,6 +289,9 @@ mode activation</string>
   <string name="onboard_pin_description">Moderately secure</string>
   <string name="onboard_pattern">Pattern</string>
   <string name="onboard_pattern_description">The least secure option</string>
+  <string name="onboard_lock_warning_title">Don\'t lose your files</string>
+  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.\n\nIf you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+  <string name="onboard_lock_warning_cta">I understand</string>
   <string name="settings.sec_app.bar">Security</string>
   <string name="settings.select_security">Security</string>
   <string name="settings.select_lock_timeout">Lock Timeout</string>
@@ -378,6 +381,13 @@ mode activation</string>
   <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
   <string name="onboard.title_lock_finish">Lock</string>
   <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
+  <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
+  <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
+  <string name="onboard_lock_protect_sheet_continue">CONTINUE</string>
+  <string name="lock_update_success_done">Done</string>
+  <string name="onboard_lock_success_title">Success</string>
+  <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
+  <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="onboard.title_all_done">You’re all done!</string>
   <string name="onboard.expl_all_done">You can go to Tella now, or continue customizing Tella to set up advanced settings.</string>
   <string name="onboard.go_btn_all_done">Go to Tella</string>

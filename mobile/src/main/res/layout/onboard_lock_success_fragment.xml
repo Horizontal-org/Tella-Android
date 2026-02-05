@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/successContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <ImageView
+        android:id="@+id/successIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:contentDescription="@null"
+        android:src="@drawable/checked_circle"
+        app:layout_constraintBottom_toTopOf="@+id/successTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/successTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        style="@style/Tella_Main_White_Text.Bold"
+        android:gravity="center"
+        android:text="@string/onboard_lock_success_title"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/successMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/successIcon" />
+
+    <TextView
+        android:id="@+id/successMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/open_sans"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:text="@string/onboard_lock_success_message"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/learnMoreLink"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/successTitle" />
+
+    <TextView
+        android:id="@+id/learnMoreLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans"
+        android:padding="8dp"
+        android:text="@string/onboard_lock_success_learn_more"
+        android:textColor="@color/wa_yellow"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/nextBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/successMessage" />
+
+    <TextView
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Unlock_White_Text_Next"
+        android:text="@string/action_next"
+        android:textColor="@color/wa_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+         />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

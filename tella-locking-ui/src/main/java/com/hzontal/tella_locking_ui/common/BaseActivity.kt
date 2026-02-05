@@ -10,8 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import com.hzontal.tella_locking_ui.*
-import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
+import com.hzontal.tella_locking_ui.IS_CAMOUFLAGE
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
+import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
+import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
+import com.hzontal.tella_locking_ui.ReturnActivity
+import com.hzontal.tella_locking_ui.TellaKeysUI
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
@@ -93,9 +98,8 @@ open class BaseActivity : AppCompatActivity() {
     protected fun onSuccessConfirmUnlock() {
         if (isConfirmSettingsUpdate) {
             TellaKeysUI.getCredentialsCallback().onUpdateUnlocking()
-            val intent = Intent(this, SuccessUpdateDialog::class.java)
-            setResult(Activity.RESULT_OK)
-            startActivity(intent)
+            TellaKeysUI.getCredentialsCallback().onLockUpdateSuccess(this)
+            setResult(RESULT_OK)
             finish()
         } else {
             val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))

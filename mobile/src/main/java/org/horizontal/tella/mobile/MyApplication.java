@@ -337,6 +337,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     }
 
     @Override
+    public void onLockUpdateSuccess(android.content.Context context) {
+        android.content.Intent intent = new android.content.Intent(context, org.horizontal.tella.mobile.views.activity.LockUpdateSuccessActivity.class);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    @Override
     public void onFailedAttempts(long num) {
         ((ActivityManager) getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
     }
