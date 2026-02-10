@@ -1,13 +1,16 @@
 package org.horizontal.tella.mobile.views.fragment.googledrive.send
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
+import org.horizontal.tella.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity
 import org.horizontal.tella.mobile.views.fragment.googledrive.GoogleDriveViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 
 @AndroidEntryPoint
 class GoogleDriveSendFragment : BaseReportsSendFragment() {
@@ -17,6 +20,23 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState) // Call the base class's onViewCreated
+
+        viewModel.showSharedDriveMigrationSheet.observe(viewLifecycleOwner) { event ->
+            if (event != null) {
+                viewModel.consumeSharedDriveMigrationEvent()
+                BottomSheetUtils.showStandardSheet(
+                    baseActivity.supportFragmentManager,
+                    getString(R.string.google_drive_shared_drive_migration_sheet_title),
+                    getString(R.string.google_drive_shared_drive_migration_sheet_message),
+                    getString(R.string.create_new_folder),
+                    getString(R.string.action_cancel),
+                    {
+                        startActivity(Intent(requireContext(), GoogleDriveConnectFlowActivity::class.java))
+                    },
+                    null
+                )
+            }
+        }
 
         viewModel.reportProcess.observe(viewLifecycleOwner) { progress ->
             if (progress.second.id == this@GoogleDriveSendFragment.reportInstance?.id) {

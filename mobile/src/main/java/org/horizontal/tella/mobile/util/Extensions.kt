@@ -149,9 +149,7 @@ fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
 }
 
 private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"
-private const val NAME_FILE_ALREADY_EXISTS = "com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException"
-
-/**
+private const val NAME_FILE_ALREADY_EXISTS = "com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException"/**
  * Returns true if this throwable or any cause in the chain is a duplicate name / file exists error.
  * Uses class name so it works when the exception comes from another module (different classloader).
  */

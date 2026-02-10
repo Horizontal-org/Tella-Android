@@ -21,4 +21,10 @@ interface GoogleDriveRepositoryInterface {
         title: String,
         folderDescription: String
     ): Single<String>
+
+    /**
+     * Returns true if the folder is on a Shared Drive (driveId is non-empty in Drive API).
+     * Use this as the source of truth instead of a stored flag.
+     */
+    fun isFolderOnSharedDrive(folderId: String, email: String): Single<Boolean>
 }

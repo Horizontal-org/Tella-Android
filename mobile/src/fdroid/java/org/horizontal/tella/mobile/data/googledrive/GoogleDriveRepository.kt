@@ -45,6 +45,10 @@ class GoogleDriveRepository @Inject constructor(
     ): Single<String> {
         return Single.error(UnsupportedOperationException("Google Drive is not available in F-Droid builds"))
     }
+
+    override fun isFolderOnSharedDrive(folderId: String, email: String): Single<Boolean> {
+        return Single.just(false)
+    }
 }
 
 

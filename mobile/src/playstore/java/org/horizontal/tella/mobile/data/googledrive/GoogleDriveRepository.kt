@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.http.InputStreamContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
@@ -105,6 +106,37 @@ class GoogleDriveRepository @Inject constructor(
             }
         }
     }
+
+    /**
+     * My Drive folder → driveId null/empty. Shared Drive folder → driveId present.
+     * With DRIVE_FILE scope, files.get on a shared drive folder often returns 403 → treat as shared drive.
+     */
+    override fun isFolderOnSharedDrive(folderId: String, email: String): Single<Boolean> =
+        Single.fromCallable {
+            try {
+                val file = driveServiceProvider.getDriveService(email).files()
+                    .get(folderId)
+                    .setSupportsTeamDrives(true)
+                    .setFields("driveId")
+                    .execute()
+
+                val driveId = file.get("driveId") as? String
+                return@fromCallable !driveId.isNullOrEmpty()
+
+            } catch (e: Exception) {
+                val is403 = (e as? GoogleJsonResponseException)?.statusCode == 403
+                if (is403) {
+                    Timber.d("isFolderOnSharedDrive: 403 for folderId -> treat as shared drive")
+                    return@fromCallable true
+                }
+
+                // let it propagate to onError
+                throw e
+            }
+        }
+            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .doOnError { Timber.e(it, "Error checking if folder is on shared drive") }
+
 
     fun uploadFileWithProgress(
         folderParentId: String, email: String, mediaFile: FormMediaFile

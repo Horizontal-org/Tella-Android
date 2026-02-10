@@ -49,6 +49,9 @@ class GoogleDriveViewModel @Inject constructor(
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
+    private val _showSharedDriveMigrationSheet = MutableLiveData<Unit?>()
+    val showSharedDriveMigrationSheet: LiveData<Unit?> get() = _showSharedDriveMigrationSheet
+
 
     override fun listServers() {
         _progress.postValue(true)
@@ -318,24 +321,55 @@ class GoogleDriveViewModel @Inject constructor(
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         getReportsServersUseCase.execute(onSuccess = { result ->
-            if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
-                updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
-            }
+            val driveServer = result.firstOrNull() as? GoogleDriveServer ?: return@execute
 
-            if (!statusProvider.isOnline()) {
-                updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
-            }
-
-            if (instance.reportApiId.isEmpty()) {
-                createFolderAndSubmitFiles(instance, result.first())
-            } else if (instance.status != EntityStatus.SUBMITTED) {
-                submitFiles(instance, result.first(), instance.reportApiId)
-            }
+            // Source of truth: ask Drive API if folder is on a Shared Drive (driveId non-empty)
+            disposables.add(
+                googleDriveRepository.isFolderOnSharedDrive(driveServer.folderId, driveServer.username)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ isSharedDrive ->
+                        if (isSharedDrive) {
+                            _showSharedDriveMigrationSheet.postValue(Unit)
+                            _progress.postValue(false)
+                            return@subscribe
+                        }
+                        proceedWithSubmit(instance, driveServer, backButtonPressed)
+                    }, { error ->
+                        _error.postValue(error)
+                        _progress.postValue(false)
+                    })
+            )
         }, onError = { error ->
             _error.postValue(error)
         }, onFinished = {
             _progress.postValue(false)
         })
+    }
+
+    private fun proceedWithSubmit(instance: ReportInstance, driveServer: GoogleDriveServer, backButtonPressed: Boolean) {
+        if (instance.serverId != driveServer.id) {
+            instance.serverId = driveServer.id
+            googleDriveDataSource.saveInstance(instance)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        }
+        if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
+            updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+        }
+        if (!statusProvider.isOnline()) {
+            updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
+            _progress.postValue(false)
+            return
+        }
+        if (instance.reportApiId.isEmpty()) {
+            createFolderAndSubmitFiles(instance, driveServer)
+        } else if (instance.status != EntityStatus.SUBMITTED) {
+            submitFiles(instance, driveServer, instance.reportApiId)
+        } else {
+            _progress.postValue(false)
+        }
     }
 
     private fun updateInstanceStatus(instance: ReportInstance, status: EntityStatus) {
@@ -369,8 +403,13 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
+        // We already validated via API (isFolderOnSharedDrive) before submit; 403 here is something else (quota, token, etc.)
         _error.postValue(error)
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
+    }
+
+    fun consumeSharedDriveMigrationEvent() {
+        _showSharedDriveMigrationSheet.postValue(null)
     }
 
 

@@ -66,7 +66,8 @@ android {
 
     splits {
         abi {
-            enable true
+            // Only enable for release; debug gets a single APK so "Run" works on any device/emulator (ABIs "").
+            enable gradle.startParameter.taskNames.any { it.toLowerCase().contains("release") }
             reset()
             include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             universalApk true

@@ -45,6 +45,9 @@ class GoogleDriveViewModel @Inject constructor(
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
+    private val _showSharedDriveMigrationSheet = MutableLiveData<Unit?>()
+    val showSharedDriveMigrationSheet: LiveData<Unit?> get() = _showSharedDriveMigrationSheet
+
     override fun listServers() {
         _serversList.postValue(emptyList())
     }
@@ -109,6 +112,10 @@ class GoogleDriveViewModel @Inject constructor(
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         _error.postValue(UnsupportedOperationException("Google Drive is not available in F-Droid builds"))
+    }
+
+    fun consumeSharedDriveMigrationEvent() {
+        _showSharedDriveMigrationSheet.postValue(null)
     }
 
     override fun clearDisposable() {
