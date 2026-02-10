@@ -10,14 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import com.hzontal.tella_locking_ui.*
-import com.hzontal.tella_locking_ui.ui.SuccessUpdateDialog
+import com.hzontal.tella_locking_ui.IS_CAMOUFLAGE
+import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
+import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
+import com.hzontal.tella_locking_ui.R
+import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
+import com.hzontal.tella_locking_ui.ReturnActivity
+import com.hzontal.tella_locking_ui.TellaKeysUI
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 
-//TODO REFACTOR PREFERNCES INTO CORE MODULE
 const val SET_SECURITY_SCREEN = "set_security_screen"
 private const val SHARED_PREFS_NAME = "washington_shared_prefs"
 
@@ -34,6 +38,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE
         )
@@ -41,10 +46,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun applyEdgeToEdge(view: View) {
-        // remove default system window fitting
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        // Apply insets manually
+        // Window already configured by enableEdgeToEdge() in onCreate. Apply insets so content is not drawn under system bars.
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
@@ -96,9 +98,8 @@ open class BaseActivity : AppCompatActivity() {
     protected fun onSuccessConfirmUnlock() {
         if (isConfirmSettingsUpdate) {
             TellaKeysUI.getCredentialsCallback().onUpdateUnlocking()
-            val intent = Intent(this, SuccessUpdateDialog::class.java)
-            setResult(Activity.RESULT_OK)
-            startActivity(intent)
+            TellaKeysUI.getCredentialsCallback().onLockUpdateSuccess(this)
+            setResult(RESULT_OK)
             finish()
         } else {
             val intent = Intent(this, Class.forName(ReturnActivity.SETTINGS.activityName))

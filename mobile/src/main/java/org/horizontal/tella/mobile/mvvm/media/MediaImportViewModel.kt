@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Observable
@@ -64,8 +65,10 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
                 .subscribe({ vaultFile ->
                     _mediaFileLiveData.postValue(vaultFile)
                 }, { throwable ->
-                    if (throwable is DuplicateVaultFileException) {
+                    if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                         _duplicateNameError.postValue(true)
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        return@subscribe
                     }
                     FirebaseCrashlytics.getInstance().recordException(throwable)
                     _importError.postValue(throwable)

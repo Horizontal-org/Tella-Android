@@ -12,5 +12,6 @@ interface OnBoardActivityInterface {
     fun enableSwipe(isSwipeable: Boolean,isTabLayoutVisible: Boolean)
     fun showButtons(isNextButtonVisible : Boolean,isBackButtonVisible: Boolean)
     fun hideViewpager()
+    fun showViewpager()
 
 }

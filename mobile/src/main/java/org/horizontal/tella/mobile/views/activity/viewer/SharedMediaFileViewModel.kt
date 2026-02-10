@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -90,7 +91,10 @@ class SharedMediaFileViewModel @Inject constructor(
                     },
                     { throwable ->
                         FirebaseCrashlytics.getInstance().recordException(throwable)
-                        _error.postValue(R.string.file_name_taken)
+                        _error.postValue(
+                            if (throwable is FileNameAlreadyExistsException) R.string.file_name_taken
+                            else R.string.gallery_toast_fail_saving_file
+                        )
                     }
                 )
         )

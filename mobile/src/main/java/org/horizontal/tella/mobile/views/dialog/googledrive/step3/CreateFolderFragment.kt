@@ -11,6 +11,7 @@ import org.horizontal.tella.mobile.databinding.FragmentCreateFolderBinding
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.dialog.googledrive.SharedGoogleDriveViewModel
+import org.horizontal.tella.mobile.views.dialog.IS_UPDATE_SERVER
 import org.horizontal.tella.mobile.views.dialog.googledrive.setp0.OBJECT_KEY
 import timber.log.Timber
 
@@ -37,6 +38,7 @@ class CreateFolderFragment : BaseBindingFragment<FragmentCreateFolderBinding>(
             Timber.d("Drive Folder ID: $folderId")
             googleDriveServer.folderId = folderId
             bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
+            bundle.putBoolean(IS_UPDATE_SERVER, arguments?.getBoolean(IS_UPDATE_SERVER, false) ?: false)
             navManager().navigateFromCreateFolderFragmentToGoogleDriveConnectedServerFragment()
         }
 

@@ -70,17 +70,35 @@ public class GoogleDriveDataSource implements ITellaGoogleDriveRepository, ITell
     @NonNull
     @Override
     public Single<GoogleDriveServer> saveGoogleDriveServer(@NonNull GoogleDriveServer server) {
-        return Single.fromCallable(() -> updateGoogleDriveServer(server)).compose(applySchedulers());
+        return Single.fromCallable(() -> saveOrUpdateGoogleDriveServer(server)).compose(applySchedulers());
     }
 
-    private GoogleDriveServer updateGoogleDriveServer(GoogleDriveServer server) {
+    private GoogleDriveServer saveOrUpdateGoogleDriveServer(GoogleDriveServer server) {
         ContentValues values = new ContentValues();
         values.put(D.C_USERNAME, server.getUsername());
         values.put(D.C_GOOGLE_DRIVE_FOLDER_ID, server.getFolderId());
         values.put(D.C_GOOGLE_DRIVE_FOLDER_NAME, server.getFolderName());
         values.put(D.C_GOOGLE_DRIVE_SERVER_NAME, server.getName());
+        if (server.getId() > 0) {
+            database.update(D.T_GOOGLE_DRIVE, values, D.C_ID + " = ?", new String[]{String.valueOf(server.getId())});
+            return server;
+        }
         server.setId(database.insert(D.T_GOOGLE_DRIVE, null, values));
         return server;
+    }
+
+    /**
+     * Updates only folder id and name for an existing server (e.g. after migration/reconnect).
+     */
+    @NonNull
+    public Single<Boolean> updateGoogleDriveServerFolder(long serverId, String folderId, String folderName) {
+        return Single.fromCallable(() -> {
+            ContentValues values = new ContentValues();
+            values.put(D.C_GOOGLE_DRIVE_FOLDER_ID, folderId);
+            values.put(D.C_GOOGLE_DRIVE_FOLDER_NAME, folderName);
+            int updated = database.update(D.T_GOOGLE_DRIVE, values, D.C_ID + " = ?", new String[]{String.valueOf(serverId)});
+            return updated > 0;
+        }).compose(applySchedulers());
     }
 
 

@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportBundleUs
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsServersUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
+import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
@@ -48,6 +49,10 @@ class GoogleDriveViewModel @Inject constructor(
 
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
+
+    /** When non-null, show the reconnect sheet (folder not accessible with DRIVE_FILE). */
+    private val _showReconnectSheet = MutableLiveData<GoogleDriveServer?>()
+    val showReconnectSheet: LiveData<GoogleDriveServer?> get() = _showReconnectSheet
 
 
     override fun listServers() {
@@ -241,7 +246,7 @@ class GoogleDriveViewModel @Inject constructor(
                 disposables.add(
                     googleDriveDataSource.getReportMediaFiles(result.instance)
                         .flatMap { files ->  // files: List<FormMediaFile>
-                            MyApplication.keyRxVault.getRxVault()
+                            MyApplication.keyRxVault.rxVault
                                 .firstOrError()
                                 .flatMap { rxVault ->  // rxVault: RxVault
                                     rxVault.get(result.fileIds)
@@ -317,25 +322,49 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
-        getReportsServersUseCase.execute(onSuccess = { result ->
-            if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
-                updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+        getReportsServersUseCase.execute(
+            onSuccess = { result ->
+                val driveServer = result.firstOrNull() as? GoogleDriveServer ?: return@execute
+                if (!Preferences.isGoogleDriveReconnectPromptShown()) {
+                    Preferences.setGoogleDriveReconnectPromptShown(true)
+                    _showReconnectSheet.postValue(driveServer)
+                    _progress.postValue(false)
+                    return@execute
+                }
+                proceedWithSubmit(instance, driveServer, backButtonPressed)
+            },
+            onError = { error ->
+                _error.postValue(error)
+            },
+            onFinished = {
+                _progress.postValue(false)
             }
+        )
+    }
 
-            if (!statusProvider.isOnline()) {
-                updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
-            }
-
-            if (instance.reportApiId.isEmpty()) {
-                createFolderAndSubmitFiles(instance, result.first())
-            } else if (instance.status != EntityStatus.SUBMITTED) {
-                submitFiles(instance, result.first(), instance.reportApiId)
-            }
-        }, onError = { error ->
-            _error.postValue(error)
-        }, onFinished = {
+    private fun proceedWithSubmit(instance: ReportInstance, driveServer: GoogleDriveServer, backButtonPressed: Boolean) {
+        if (instance.serverId != driveServer.id) {
+            instance.serverId = driveServer.id
+            googleDriveDataSource.saveInstance(instance)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        }
+        if (backButtonPressed && instance.status != EntityStatus.SUBMITTED) {
+            updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
+        }
+        if (!statusProvider.isOnline()) {
+            updateInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
             _progress.postValue(false)
-        })
+            return
+        }
+        if (instance.reportApiId.isEmpty()) {
+            createFolderAndSubmitFiles(instance, driveServer)
+        } else if (instance.status != EntityStatus.SUBMITTED) {
+            submitFiles(instance, driveServer, instance.reportApiId)
+        } else {
+            _progress.postValue(false)
+        }
     }
 
     private fun updateInstanceStatus(instance: ReportInstance, status: EntityStatus) {
@@ -369,10 +398,30 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     private fun handleSubmissionError(instance: ReportInstance, error: Throwable) {
+        // We already validated via API (isFolderOnSharedDrive) before submit; 403 here is something else (quota, token, etc.)
         _error.postValue(error)
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
     }
 
+
+    fun consumeReconnectEvent() {
+        _showReconnectSheet.postValue(null)
+    }
+
+    /**
+     * Update an existing server's folder (e.g. after migration/reconnect from the sheet).
+     */
+    fun updateServerFolder(serverId: Long, folderId: String, folderName: String) {
+        disposables.add(
+            googleDriveDataSource.updateGoogleDriveServerFolder(serverId, folderId, folderName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { listServers() },
+                    { _error.postValue(it) }
+                )
+        )
+    }
 
     private fun submitFiles(
         instance: ReportInstance, server: GoogleDriveServer, reportApiId: String

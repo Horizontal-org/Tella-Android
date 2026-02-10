@@ -137,10 +137,11 @@ class GoogleDriveRepository @Inject constructor(
                 val fileContent =
                     InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
-                // Upload the file to Google Drive
+                // Upload the file to Google Drive (setSupportsTeamDrives for Team/Shared Drives)
                 val uploadedFile = driveServiceProvider.getDriveService(email).files()
                     .create(fileMetadata, fileContent)
-                    .setFields("id") // Request only the file ID back
+                    .setSupportsTeamDrives(true)
+                    .setFields("id")
                     .execute()
 
                 // Emit final progress as complete

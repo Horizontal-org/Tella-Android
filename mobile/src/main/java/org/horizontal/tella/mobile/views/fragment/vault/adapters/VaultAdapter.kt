@@ -93,10 +93,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun removeRecentFiles() {
-        adapterScope.launch {
-            items.removeAll(recentFiles)
-            updateItems()
-        }
+        if (recentFiles.isEmpty()) return
+        recentFiles.clear()
+        updateItems()
     }
 
     fun removeFavoriteForms() {

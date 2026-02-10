@@ -123,13 +123,13 @@ class SelectGoogleDriveFragment :
 
     private fun navigateToCreateFolderFragment() {
         bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
-        navManager().navigateFromSelectGoogleDriveToCreateFolderFragment()
+      //  navManager().navigateFromSelectGoogleDriveToCreateFolderFragment()
     }
 
     private fun navigateToSelectSharedDriveFragment() {
         sharedViewModel.sharedDrives.value?.let {
             bundle.putString(OBJECT_KEY, Gson().toJson(googleDriveServer))
-            navManager().navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment()
+         //   navManager().navigateFromSelectGoogleDriveFragmentToSelectSharedDriveFragment()
         } ?: run {
             Timber.d("No shared drives data to pass.")
         }

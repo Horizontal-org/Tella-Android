@@ -7,6 +7,7 @@ import org.horizontal.tella.mobile.data.database.GoogleDriveDataSource
 import org.horizontal.tella.mobile.data.googledrive.GoogleDriveRepository
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
 import org.horizontal.tella.mobile.domain.entity.Server
+import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
@@ -44,6 +45,12 @@ class GoogleDriveViewModel @Inject constructor(
 
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
+
+    private val _showSharedDriveMigrationSheet = MutableLiveData<GoogleDriveServer?>()
+    val showSharedDriveMigrationSheet: LiveData<GoogleDriveServer?> get() = _showSharedDriveMigrationSheet
+
+    private val _showReconnectSheet = MutableLiveData<GoogleDriveServer?>()
+    val showReconnectSheet: LiveData<GoogleDriveServer?> get() = _showReconnectSheet
 
     override fun listServers() {
         _serversList.postValue(emptyList())
@@ -110,6 +117,15 @@ class GoogleDriveViewModel @Inject constructor(
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
         _error.postValue(UnsupportedOperationException("Google Drive is not available in F-Droid builds"))
     }
+
+    fun consumeSharedDriveMigrationEvent() {
+        _showSharedDriveMigrationSheet.postValue(null)
+    }
+
+    fun consumeReconnectEvent() {
+        _showReconnectSheet.postValue(null)
+    }
+    fun updateServerFolder(serverId: Long, folderId: String, folderName: String) {}
 
     override fun clearDisposable() {
         disposables.clear()

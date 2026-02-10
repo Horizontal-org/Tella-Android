@@ -38,6 +38,7 @@ import org.horizontal.tella.mobile.javarosa.IFormParserContract
 import org.horizontal.tella.mobile.javarosa.IFormSaverContract
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.util.PermissionUtil.showRationale
 import org.horizontal.tella.mobile.util.Util
 import org.horizontal.tella.mobile.util.hide
@@ -727,8 +728,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(

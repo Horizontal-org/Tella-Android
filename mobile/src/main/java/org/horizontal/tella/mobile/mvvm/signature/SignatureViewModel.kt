@@ -1,9 +1,12 @@
 package org.horizontal.tella.mobile.mvvm.signature
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,6 +29,9 @@ class SignatureViewModel  @Inject constructor(): ViewModel() {
     private val _addError = SingleLiveEvent<Throwable>()
     val addError: LiveData<Throwable> get() = _addError
 
+    private val _duplicateNameError = MutableLiveData<Boolean>()
+    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
+
     fun addPngImage(png: ByteArray) {
         disposables.add(
             Observable.fromCallable { MediaFileHandler.savePngImage(png) }
@@ -36,6 +42,11 @@ class SignatureViewModel  @Inject constructor(): ViewModel() {
                 .subscribe({ mediaFile ->
                     _addSuccess.postValue(mediaFile)
                 }, { throwable ->
+                    if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
+                        _duplicateNameError.postValue(true)
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        return@subscribe
+                    }
                     FirebaseCrashlytics.getInstance().recordException(throwable)
                     _addError.postValue(throwable)
                 })

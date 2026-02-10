@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.UwaziSubmittedAdapter
@@ -45,8 +46,15 @@ class OutboxUwaziFragment : UwaziListFragment() {
                 }
             }
 
-            instanceDeleteD.observe(viewLifecycleOwner) {
-                listOutBox()
+            instanceDeleteD.observe(viewLifecycleOwner) { deletedTitle ->
+                deletedTitle?.let { title ->
+                    DialogUtils.showBottomMessage(
+                        requireActivity(),
+                        getString(R.string.Uwazi_Entity_Deleted_Toast, title),
+                        false
+                    )
+                    listOutBox()
+                }
             }
 
             showInstanceSheetMore.observe(viewLifecycleOwner) {

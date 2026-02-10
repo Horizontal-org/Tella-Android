@@ -30,11 +30,14 @@ import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.CamouflageAliasChangedEvent
 import org.horizontal.tella.mobile.bus.event.LocaleChangedEvent
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
+import org.horizontal.tella.mobile.data.sharedpref.Preferences
+import org.horizontal.tella.mobile.data.sharedpref.SharedPrefs
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.hide
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.fragment.feedback.SendFeedbackFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportSubmittedFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsEntryFragment
@@ -118,6 +121,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         setContentView(R.layout.activity_main2)
         setupNavigation()
         initializeListeners()
+
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
         if (intent.hasExtra(PHOTO_VIDEO_FILTER)) {
@@ -385,8 +389,9 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(

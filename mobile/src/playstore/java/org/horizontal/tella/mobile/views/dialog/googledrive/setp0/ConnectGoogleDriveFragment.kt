@@ -69,7 +69,7 @@ class ConnectGoogleDriveFragment :
 
     // Extracted method to handle navigation
     private fun navigateToSelectGoogleDriveFragment() {
-        navManager().navigateFromGoogleDriveConnectFragmentToSelectGoogleDriveFragment()
+        navManager().navigateFromGoogleDriveConnectFragmentToCreateFolderFragment()
     }
 
     private fun copyFields(server: GoogleDriveServer): GoogleDriveServer {
