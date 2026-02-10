@@ -125,11 +125,6 @@ class GoogleDriveViewModel @Inject constructor(
     fun consumeReconnectEvent() {
         _showReconnectSheet.postValue(null)
     }
-
-    fun checkSharedDriveOnReportsEntry() {}
-
-    fun maybeShowDriveMigrationSheetOnEntry() {}
-
     fun updateServerFolder(serverId: Long, folderId: String, folderName: String) {}
 
     override fun clearDisposable() {

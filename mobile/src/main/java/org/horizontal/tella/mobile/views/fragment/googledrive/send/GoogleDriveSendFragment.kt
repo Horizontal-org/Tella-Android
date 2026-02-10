@@ -36,21 +36,6 @@ class GoogleDriveSendFragment : BaseReportsSendFragment() {
 
         super.onViewCreated(view, savedInstanceState) // Call the base class's onViewCreated
 
-        viewModel.showSharedDriveMigrationSheet.observe(viewLifecycleOwner) { server ->
-            if (server != null) {
-                viewModel.consumeSharedDriveMigrationEvent()
-                BottomSheetUtils.showStandardSheet(
-                    baseActivity.supportFragmentManager,
-                    getString(R.string.google_drive_shared_drive_migration_sheet_title),
-                    getString(R.string.google_drive_shared_drive_migration_sheet_message),
-                    getString(R.string.create_new_folder),
-                    getString(R.string.action_cancel),
-                    { launchConnectFlowForMigration(server) },
-                    null
-                )
-            }
-        }
-
         viewModel.showReconnectSheet.observe(viewLifecycleOwner) { server ->
             if (server != null) {
                 viewModel.consumeReconnectEvent()

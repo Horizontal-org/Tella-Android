@@ -16,7 +16,6 @@ import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
-import org.horizontal.tella.mobile.domain.entity.googledrive.DriveFolderLocation
 import org.horizontal.tella.mobile.domain.entity.googledrive.Folder
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
@@ -105,24 +104,6 @@ class GoogleDriveRepository @Inject constructor(
                 emitter.onError(e)
             }
         }
-    }
-
-    override fun getFolderLocation(folderId: String, email: String): Single<DriveFolderLocation> {
-        return Single.fromCallable {
-            val file = driveServiceProvider.getDriveService(email).files()
-                .get(folderId)
-                .setSupportsTeamDrives(true)
-                .setFields("driveId,mimeType")
-                .execute()
-            @Suppress("UNCHECKED_CAST")
-            val driveId = file.get("driveId") as? String
-            if (!driveId.isNullOrEmpty()) DriveFolderLocation.SHARED_DRIVE else DriveFolderLocation.MY_DRIVE
-        }
-            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-            .onErrorReturn { e ->
-                Timber.e(e, "getFolderLocation failed -> UNKNOWN")
-                DriveFolderLocation.UNKNOWN
-            }
     }
 
     fun uploadFileWithProgress(

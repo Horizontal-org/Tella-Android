@@ -50,10 +50,6 @@ class GoogleDriveViewModel @Inject constructor(
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
-    /** When non-null, show the shared-drive migration sheet; value is the server to migrate. */
-    private val _showSharedDriveMigrationSheet = MutableLiveData<GoogleDriveServer?>()
-    val showSharedDriveMigrationSheet: LiveData<GoogleDriveServer?> get() = _showSharedDriveMigrationSheet
-
     /** When non-null, show the reconnect sheet (folder not accessible with DRIVE_FILE). */
     private val _showReconnectSheet = MutableLiveData<GoogleDriveServer?>()
     val showReconnectSheet: LiveData<GoogleDriveServer?> get() = _showReconnectSheet
@@ -250,7 +246,7 @@ class GoogleDriveViewModel @Inject constructor(
                 disposables.add(
                     googleDriveDataSource.getReportMediaFiles(result.instance)
                         .flatMap { files ->  // files: List<FormMediaFile>
-                            MyApplication.keyRxVault.getRxVault()
+                            MyApplication.keyRxVault.rxVault
                                 .firstOrError()
                                 .flatMap { rxVault ->  // rxVault: RxVault
                                     rxVault.get(result.fileIds)
@@ -407,9 +403,6 @@ class GoogleDriveViewModel @Inject constructor(
         updateInstanceStatus(instance, EntityStatus.SUBMISSION_ERROR)
     }
 
-    fun consumeSharedDriveMigrationEvent() {
-        _showSharedDriveMigrationSheet.postValue(null)
-    }
 
     fun consumeReconnectEvent() {
         _showReconnectSheet.postValue(null)
