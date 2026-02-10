@@ -30,6 +30,8 @@ import org.horizontal.tella.mobile.bus.EventObserver
 import org.horizontal.tella.mobile.bus.event.CamouflageAliasChangedEvent
 import org.horizontal.tella.mobile.bus.event.LocaleChangedEvent
 import org.horizontal.tella.mobile.bus.event.RecentBackgroundActivitiesEvent
+import org.horizontal.tella.mobile.data.sharedpref.Preferences
+import org.horizontal.tella.mobile.data.sharedpref.SharedPrefs
 import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
@@ -119,6 +121,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         setContentView(R.layout.activity_main2)
         setupNavigation()
         initializeListeners()
+
         // todo: check this..
         //SafetyNetCheck.setApiKey(getString(R.string.share_in_report));
         if (intent.hasExtra(PHOTO_VIDEO_FILTER)) {

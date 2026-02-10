@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportBundleUs
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsServersUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.GetReportsUseCase
 import org.horizontal.tella.mobile.domain.usecases.googledrive.SaveReportFormInstanceUseCase
+import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsViewModel
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportCounts
@@ -49,8 +50,13 @@ class GoogleDriveViewModel @Inject constructor(
     protected val _instanceProgress = MutableLiveData<ReportInstance>()
     val instanceProgress: MutableLiveData<ReportInstance> get() = _instanceProgress
 
-    private val _showSharedDriveMigrationSheet = MutableLiveData<Unit?>()
-    val showSharedDriveMigrationSheet: LiveData<Unit?> get() = _showSharedDriveMigrationSheet
+    /** When non-null, show the shared-drive migration sheet; value is the server to migrate. */
+    private val _showSharedDriveMigrationSheet = MutableLiveData<GoogleDriveServer?>()
+    val showSharedDriveMigrationSheet: LiveData<GoogleDriveServer?> get() = _showSharedDriveMigrationSheet
+
+    /** When non-null, show the reconnect sheet (folder not accessible with DRIVE_FILE). */
+    private val _showReconnectSheet = MutableLiveData<GoogleDriveServer?>()
+    val showReconnectSheet: LiveData<GoogleDriveServer?> get() = _showReconnectSheet
 
 
     override fun listServers() {
@@ -320,31 +326,24 @@ class GoogleDriveViewModel @Inject constructor(
     }
 
     override fun submitReport(instance: ReportInstance, backButtonPressed: Boolean) {
-        getReportsServersUseCase.execute(onSuccess = { result ->
-            val driveServer = result.firstOrNull() as? GoogleDriveServer ?: return@execute
-
-            // Source of truth: ask Drive API if folder is on a Shared Drive (driveId non-empty)
-            disposables.add(
-                googleDriveRepository.isFolderOnSharedDrive(driveServer.folderId, driveServer.username)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ isSharedDrive ->
-                        if (isSharedDrive) {
-                            _showSharedDriveMigrationSheet.postValue(Unit)
-                            _progress.postValue(false)
-                            return@subscribe
-                        }
-                        proceedWithSubmit(instance, driveServer, backButtonPressed)
-                    }, { error ->
-                        _error.postValue(error)
-                        _progress.postValue(false)
-                    })
-            )
-        }, onError = { error ->
-            _error.postValue(error)
-        }, onFinished = {
-            _progress.postValue(false)
-        })
+        getReportsServersUseCase.execute(
+            onSuccess = { result ->
+                val driveServer = result.firstOrNull() as? GoogleDriveServer ?: return@execute
+                if (!Preferences.isGoogleDriveReconnectPromptShown()) {
+                    Preferences.setGoogleDriveReconnectPromptShown(true)
+                    _showReconnectSheet.postValue(driveServer)
+                    _progress.postValue(false)
+                    return@execute
+                }
+                proceedWithSubmit(instance, driveServer, backButtonPressed)
+            },
+            onError = { error ->
+                _error.postValue(error)
+            },
+            onFinished = {
+                _progress.postValue(false)
+            }
+        )
     }
 
     private fun proceedWithSubmit(instance: ReportInstance, driveServer: GoogleDriveServer, backButtonPressed: Boolean) {
@@ -412,6 +411,24 @@ class GoogleDriveViewModel @Inject constructor(
         _showSharedDriveMigrationSheet.postValue(null)
     }
 
+    fun consumeReconnectEvent() {
+        _showReconnectSheet.postValue(null)
+    }
+
+    /**
+     * Update an existing server's folder (e.g. after migration/reconnect from the sheet).
+     */
+    fun updateServerFolder(serverId: Long, folderId: String, folderName: String) {
+        disposables.add(
+            googleDriveDataSource.updateGoogleDriveServerFolder(serverId, folderId, folderName)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { listServers() },
+                    { _error.postValue(it) }
+                )
+        )
+    }
 
     private fun submitFiles(
         instance: ReportInstance, server: GoogleDriveServer, reportApiId: String

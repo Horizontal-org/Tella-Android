@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import io.reactivex.Single
+import org.horizontal.tella.mobile.domain.entity.googledrive.DriveFolderLocation
 import org.horizontal.tella.mobile.domain.entity.googledrive.Folder
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 
@@ -23,8 +24,8 @@ interface GoogleDriveRepositoryInterface {
     ): Single<String>
 
     /**
-     * Returns true if the folder is on a Shared Drive (driveId is non-empty in Drive API).
-     * Use this as the source of truth instead of a stored flag.
+     * Returns where the folder lives. With DRIVE_FILE scope, API errors (403/404) mean
+     * "not app-accessible" and are returned as UNKNOWN, not as SHARED_DRIVE.
      */
-    fun isFolderOnSharedDrive(folderId: String, email: String): Single<Boolean>
+    fun getFolderLocation(folderId: String, email: String): Single<DriveFolderLocation>
 }

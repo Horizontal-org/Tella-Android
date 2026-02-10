@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.http.InputStreamContent
 import com.google.api.services.drive.model.File
 import com.google.api.services.drive.model.FileList
@@ -17,6 +16,7 @@ import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
+import org.horizontal.tella.mobile.domain.entity.googledrive.DriveFolderLocation
 import org.horizontal.tella.mobile.domain.entity.googledrive.Folder
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
@@ -107,36 +107,23 @@ class GoogleDriveRepository @Inject constructor(
         }
     }
 
-    /**
-     * My Drive folder → driveId null/empty. Shared Drive folder → driveId present.
-     * With DRIVE_FILE scope, files.get on a shared drive folder often returns 403 → treat as shared drive.
-     */
-    override fun isFolderOnSharedDrive(folderId: String, email: String): Single<Boolean> =
-        Single.fromCallable {
-            try {
-                val file = driveServiceProvider.getDriveService(email).files()
-                    .get(folderId)
-                    .setSupportsTeamDrives(true)
-                    .setFields("driveId")
-                    .execute()
-
-                val driveId = file.get("driveId") as? String
-                return@fromCallable !driveId.isNullOrEmpty()
-
-            } catch (e: Exception) {
-                val is403 = (e as? GoogleJsonResponseException)?.statusCode == 403
-                if (is403) {
-                    Timber.d("isFolderOnSharedDrive: 403 for folderId -> treat as shared drive")
-                    return@fromCallable true
-                }
-
-                // let it propagate to onError
-                throw e
-            }
+    override fun getFolderLocation(folderId: String, email: String): Single<DriveFolderLocation> {
+        return Single.fromCallable {
+            val file = driveServiceProvider.getDriveService(email).files()
+                .get(folderId)
+                .setSupportsTeamDrives(true)
+                .setFields("driveId,mimeType")
+                .execute()
+            @Suppress("UNCHECKED_CAST")
+            val driveId = file.get("driveId") as? String
+            if (!driveId.isNullOrEmpty()) DriveFolderLocation.SHARED_DRIVE else DriveFolderLocation.MY_DRIVE
         }
             .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-            .doOnError { Timber.e(it, "Error checking if folder is on shared drive") }
-
+            .onErrorReturn { e ->
+                Timber.e(e, "getFolderLocation failed -> UNKNOWN")
+                DriveFolderLocation.UNKNOWN
+            }
+    }
 
     fun uploadFileWithProgress(
         folderParentId: String, email: String, mediaFile: FormMediaFile
@@ -169,10 +156,11 @@ class GoogleDriveRepository @Inject constructor(
                 val fileContent =
                     InputStreamContent(mediaFile.mimeType, requestBody.publicInputStream)
 
-                // Upload the file to Google Drive
+                // Upload the file to Google Drive (setSupportsTeamDrives for Team/Shared Drives)
                 val uploadedFile = driveServiceProvider.getDriveService(email).files()
                     .create(fileMetadata, fileContent)
-                    .setFields("id") // Request only the file ID back
+                    .setSupportsTeamDrives(true)
+                    .setFields("id")
                     .execute()
 
                 // Emit final progress as complete

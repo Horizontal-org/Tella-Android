@@ -194,14 +194,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         registerActivityLifecycleCallbacks(this);
 
-        // provide custom configuration
-     /*   Configuration myConfig = new Configuration.Builder()
-                .setMinimumLoggingLevel(android.util.Log.INFO)
-                .build();*/
-
-        //initialize WorkManager
-        //  WorkManager.initialize(this, myConfig);
-
         System.setProperty("javax.net.debug", "ssl,handshake");
 
 
