@@ -47,9 +47,9 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 221
+        versionCode 223
 
-        versionName "2.18.1"
+        versionName "2.19.0"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
