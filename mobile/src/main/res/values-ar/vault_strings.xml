@@ -47,10 +47,8 @@
   <string name="Vault_ImportDelete_SheetAction">استيراد الملف الأصلي وحذفه</string>
   <string name="Vault_CreateFolder_SheetTitle">إنشاء مجلد جديد</string>
   <string name="Vault_MoveHere">النقل هنا</string>
-  <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف في Tella. هل ترغب في حفظ الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ قد يؤدي ذلك إلى الكشف عن محتوى الملف.</string>
+  <string name="Vault_ViewerOther_SheetDesc">لا يمكن فتح صيغة الملف على Tella. هل ترغب في تصدير الملف على الجهاز لفتحه باستخدام تطبيق مختلف؟ يمكن أن يؤدي هذا الأمر إلى الكشف عن محتوى الملف. </string>
   <string name="Vault_Export_SheetAction">تصدير</string>
-  <string name="Vault_SaveToDevice_SheetTitle">حفظ \"%1$s\" على الجهاز؟</string>
-  <string name="Vault_SaveToDevice_SheetAction">حفظ على الجهاز</string>
   <plurals name="Vault_Items">
     <item quantity="one">items</item>
     <item quantity="other"></item>
@@ -70,4 +68,6 @@
  
   إذا قمت بحذفه، فسيكون الملف المستورد إلى Tella هو النسخة الوحيدة المتبقية.</string>
   <string name="Vault_FileEdit_SheetAction">تعديل</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

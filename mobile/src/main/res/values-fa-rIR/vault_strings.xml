@@ -68,4 +68,6 @@
  
  اگر آن را حذف کنید، فایل واردشده در Tella یگانه نسخه باقی‌مانده خواهد بود.</string>
   <string name="Vault_FileEdit_SheetAction">ویرایش</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

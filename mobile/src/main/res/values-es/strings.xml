@@ -989,5 +989,26 @@ cuál conexión usar.</string>
   <string name="report_submitted_msg">El reporte se envió correctamente.</string>
   <string name="Collect_MediaWidget_Attach_File">Adjuntar archivo</string>
   <string name="form_successfully_submitted">%1$s enviado correctamente</string>
-  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
+  <string name="error_file_not_found">El archivo que está tratando de importar no se encuentra disponible. Por favor intente nuevamente.</string>
+  <string name="select_file_picker">Seleccione un gestor de archivos</string>
+  <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
+  <string name="onboard_lock_warning_title">No pierda sus archivos</string>
+  <string name="onboard_lock_warning_message">Tu bloqueo es la única forma de acceder a sus archivos de Tella.
+
+Si olvida su bloqueo, no hay forma de recuperarlo. Sus datos en Tella se perderán para siempre.</string>
+  <string name="onboard_lock_warning_cta">Entendido</string>
+  <string name="onboard_lock_protect_sheet_title">Proteja su método de bloqueo</string>
+  <string name="onboard_lock_protect_sheet_message">Asegúrese de recordar tu método de bloqueo o guardarlo en algún lugar seguro como un gestor de contraseñas.</string>
+  <string name="onboard_lock_protect_sheet_continue">CONTINUAR</string>
+  <string name="lock_update_success_done">Hecho</string>
+  <string name="onboard_lock_success_title">Éxito</string>
+  <string name="onboard_lock_success_message">¡El bloqueo está configurado! Puede cambiarlo cuando quiera en la configuración de Tella.</string>
+  <string name="onboard_lock_success_learn_more">Conozca más sobre los Métodos de Bloqueo en Tella</string>
+  <string name="Uwazi_DeleteEntity_SheetTitle">¿Confirma que desea borrar esta entidad?</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">¿Estás segura(o) de que quieres borrar este formulario de tu dispositivo? Ten en cuenta que como ya fue enviado, los datos permanecerán en el servidor de tu organización.</string>
+  <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\"  ha sido borrado.</string>
+  <string name="google_drive_shared_drive_migration_sheet_title">Crear una nueva carpeta de Google Drive</string>
+  <string name="google_drive_shared_drive_migration_sheet_message">Tella ya no admite unidades compartidas. Para seguir enviando informes a Google Drive, crea una nueva carpeta personal.</string>
+  <string name="google_drive_reconnect_sheet_title">Reconectar Google Drive</string>
+  <string name="google_drive_reconnect_sheet_message">Esta carpeta ya no está disponible. Para seguir enviando informes, cree una nueva carpeta o reconecte su cuenta.</string>
 </resources>
