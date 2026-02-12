@@ -70,4 +70,6 @@
  Если вы удалите его, файл, импортированный в Tella, будет единственной оставшейся копией. 
 </string>
   <string name="Vault_FileEdit_SheetAction">Править</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

@@ -68,4 +68,6 @@
  
 আপনি এটি মুছে ফেললে, Tella-এ ইমপোর্ট করা ফাইলটিই একমাত্র কপি অবশিষ্ট থাকবে৷</string>
   <string name="Vault_FileEdit_SheetAction">সম্পাদনা করুন</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>
