@@ -37,6 +37,9 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Use Google-recommended API for edge-to-edge (avoids deprecated setStatusBarColor path)
         WindowCompat.enableEdgeToEdge(window)
+        // Set window background to transparent so fragment backgrounds show through
+        // This prevents white bars from showing in system bar areas when edge-to-edge is enabled
+        window.setBackgroundDrawableResource(android.R.color.transparent)
         setThemeStyle()
         supportFragmentManager.setupForAccessibility(this)
         // start with preventing showing screen in tasks?
