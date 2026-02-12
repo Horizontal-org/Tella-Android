@@ -2,7 +2,9 @@ package org.horizontal.tella.mobile.views.dialog.uwazi.step1
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Patterns
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -74,6 +76,13 @@ class EnterServerFragment : BaseFragment() {
         if (serverUwazi != null) {
             binding.url.setText(serverUwazi!!.url)
         }
+        binding.url.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.urlLayout.error = null
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun initListeners() {
@@ -106,7 +115,7 @@ class EnterServerFragment : BaseFragment() {
             layout.error = getString(R.string.settings_text_empty_field)
             validated = false
         } else {
-            url = url.trim { it <= ' ' }
+            url = url.trim { it <= ' ' }.trimEnd('/')
             field.setText(url)
             if (!Patterns.WEB_URL.matcher(url).matches()) {
                 layout.error = getString(R.string.settings_docu_error_not_valid_URL)
@@ -144,6 +153,10 @@ class EnterServerFragment : BaseFragment() {
 
             progress.observe(viewLifecycleOwner) {
                 binding.progressBar.isVisible = it
+            }
+
+            serverUrlError.observe(viewLifecycleOwner) { messageResId ->
+                binding.urlLayout.error = getString(messageResId)
             }
         }
     }
