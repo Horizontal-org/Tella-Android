@@ -68,4 +68,6 @@
 
 Si lo eliminas, el archivo importado en Tella será la única copia que quede.</string>
   <string name="Vault_FileEdit_SheetAction">Editar</string>
+  <string name="Vault_SaveToDevice_SheetTitle">¿Confirma grabar \"%1$s\" en el dispositivo?</string>
+  <string name="Vault_SaveToDevice_SheetAction">GRABAR EN EL DISPOSITIVO</string>
 </resources>

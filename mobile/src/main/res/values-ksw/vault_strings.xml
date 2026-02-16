@@ -68,4 +68,6 @@
 
 နမ့ၢ်ထူးသံကွံာ်အီၤန့ၣ်ဒီး, ကအိၣ်တ့ၢ်ဒၣ်ထဲလၢ လံာ်တြံာ်အဒိ လၢနဆှၢနုာ်လီၤပာ်အီၤဆူ Tella အပူၤအံၤန့ၣ်လီၤ.</string>
   <string name="Vault_FileEdit_SheetAction">ကဘှီဘၣ်က့ၤအီၤလီၤ</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

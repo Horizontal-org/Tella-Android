@@ -67,4 +67,6 @@
   <string name="Vault_deleteFileImported_SheetDesc"> Setelah mengimpor berkas ke Tella, apakah Anda ingin menyimpan berkas aslinya di perangkat Anda atau menghapusnya?
  Jika Anda menghapusnya, berkas yang diimpor ke Tella akan menjadi satu-satunya salinan.</string>
   <string name="Vault_FileEdit_SheetAction">Sunting</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

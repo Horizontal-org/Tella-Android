@@ -990,4 +990,25 @@ Gostaria de partilhar dados com a equipa do Tella?</string>
   <string name="Collect_MediaWidget_Attach_File">Anexar arquivo</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
   <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
+  <string name="select_file_picker">Select a file manager</string>
+  <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
+  <string name="onboard_lock_warning_title">Don\'t lose your files</string>
+  <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.
+
+If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+  <string name="onboard_lock_warning_cta">I understand</string>
+  <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
+  <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
+  <string name="onboard_lock_protect_sheet_continue">CONTINUE</string>
+  <string name="lock_update_success_done">Done</string>
+  <string name="onboard_lock_success_title">Success</string>
+  <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
+  <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
+  <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Tem a certeza de que pretende eliminar este formulário do seu dispositivo? Note que, uma vez que já foi submetido, os dados permanecerão no servidor da sua organização.</string>
+  <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
+  <string name="google_drive_shared_drive_migration_sheet_title">Create a new Google Drive folder</string>
+  <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
+  <string name="google_drive_reconnect_sheet_title">Reconnect Google Drive</string>
+  <string name="google_drive_reconnect_sheet_message">This folder is no longer accessible. To continue submitting reports, please create a new folder or reconnect your account.</string>
 </resources>
