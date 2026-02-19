@@ -164,25 +164,25 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
             )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSuccess { response ->
+                .flatMap { response ->
                     if (response.isSuccessful) {
-                        // Update local entity as submitted
                         entity.status = EntityStatus.SUBMITTED
                         entity.formPartStatus = FormMediaFileStatus.SUBMITTED
                         keyDataSource.uwaziDataSource.blockingFirst().saveEntityInstance(entity)
-                        progress.postValue(EntityStatus.SUBMITTED)
                     } else {
-                        // Handle server error
-                        progress.postValue(EntityStatus.SUBMISSION_ERROR)
-                        error.postValue(Throwable("Server error: ${response.code()}"))
+                        Single.error(Throwable("Server error: ${response.code()}"))
                     }
                 }
-                .subscribe({}, { throwable ->
-                    // Network or other error
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
-                    error.postValue(throwable)
-                    progress.postValue(EntityStatus.SUBMISSION_ERROR)
-                })
+                .subscribe(
+                    {
+                        progress.postValue(EntityStatus.SUBMITTED)
+                    },
+                    { throwable ->
+                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        error.postValue(throwable)
+                        progress.postValue(EntityStatus.SUBMISSION_ERROR)
+                    }
+                )
         )
     }
 
