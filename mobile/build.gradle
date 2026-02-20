@@ -5,7 +5,6 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
-    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 /** Avoid duplicate logging classes app-wide */

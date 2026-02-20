@@ -988,7 +988,6 @@ cuál conexión usar.</string>
   <string name="delete_report">¿Borrar reporte?</string>
   <string name="report_submitted_msg">El reporte se envió correctamente.</string>
   <string name="Collect_MediaWidget_Attach_File">Adjuntar archivo</string>
-  <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
   <string name="form_successfully_submitted">%1$s enviado correctamente</string>
   <string name="error_file_not_found">El archivo que está tratando de importar no se encuentra disponible. Por favor intente nuevamente.</string>
   <string name="select_file_picker">Seleccione un gestor de archivos</string>
