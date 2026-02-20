@@ -5,6 +5,7 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 /** Avoid duplicate logging classes app-wide */
@@ -45,11 +46,11 @@ android {
 
     defaultConfig {
         applicationId "org.hzontal.tella"
-        minSdk versions.minSdk
-        targetSdk versions.targetSdk
-        versionCode 224
-
-        versionName "2.19.0"
+        minSdkVersion versions.minSdk
+        compileSdkVersion versions.compileSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 212
+        versionName "3.0.0"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
@@ -276,6 +277,21 @@ dependencies {
     // Nextcloud HW security
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
+    //QR CODE SCAN/GENERATE LIBRARY
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    //ktor imp
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
+    implementation("io.ktor:ktor-server-core:2.3.9")
+    implementation("io.ktor:ktor-server-netty:2.3.9")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.9")
+    implementation("io.ktor:ktor-server-cio:2.3.9")
+    implementation "io.ktor:ktor-server-call-logging:2.3.9" // or your current version
+
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3' // Use the latest version
+
 
     // Add exclusions to prevent other libraries from pulling in xmlpull
     // JavaRosa - allow it to use xpp3

@@ -15,6 +15,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -43,6 +44,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseRepor
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsEntryFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsSendFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.MainReportFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.PeerToPeerFlags
 import org.horizontal.tella.mobile.views.fragment.recorder.MicFragment
 import org.horizontal.tella.mobile.views.fragment.reports.send.ReportsSendFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.SubmittedPreviewFragment
@@ -255,6 +257,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach {
             it.onActivityResult(requestCode, resultCode, data)
         }
+
     }
 
     private fun isLocationSettingsRequestCode(requestCode: Int): Boolean {
@@ -370,6 +373,10 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
         super.onResume()
         startLocationMetadataListening()
         mOrientationEventListener!!.enable()
+        if (PeerToPeerFlags.cancelled) {
+            PeerToPeerFlags.cancelled = false
+            DialogUtils.showBottomMessage(this, "Nearby sharing was cancelled.", false)
+        }
     }
 
     override fun onPause() {
@@ -468,4 +475,19 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
                     .e(getString(R.string.could_not_find_uwazientryfragment))
         }
     }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        intent?.getStringExtra("navigateTo")?.let { destination ->
+            if (destination == "attachments_screen") {
+                // Avoid navigating if already on the screen
+                if (navController.currentDestination?.id != R.id.attachments_screen) {
+                    navController.navigate(R.id.attachments_screen)
+                }
+            }
+        }
+    }
+
+
 }

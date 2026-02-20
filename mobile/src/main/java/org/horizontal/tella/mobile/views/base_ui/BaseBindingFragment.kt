@@ -111,5 +111,4 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
         _binding = null
         isViewInitialized = false
     }
-
 }

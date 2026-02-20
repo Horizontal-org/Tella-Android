@@ -142,4 +142,11 @@
     <string name="feedback_sent_msg">Your feedback has been sent</string>
     <string name="share_feedback_action">share feedback</string>
     <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
+    <string name="send_files_title">Send files</string>
+    <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
+    <string name="failed_to_open_location_settings">Failed to open location settings.</string>
+    <string name="stop_sharing_files">Stop sharing files?</string>
+    <string name="stop">stop</string>
+    <string name="view_files">VIEW FILES</string>
+    <string name="result">result</string>
 </resources>

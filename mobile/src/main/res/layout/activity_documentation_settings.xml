@@ -247,6 +247,19 @@
                     </LinearLayout>
                 </LinearLayout>
 
+
+                <org.hzontal.shared_ui.switches.TellaSwitchWithMessage
+                    android:id="@+id/nearby_sharing_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/activity_vertical_margin"
+                    android:background="@drawable/rounded_light_purple_background"
+                    app:explainText="@string/nearby_sharing_description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/data_share_layout"
+                    app:titleText="@string/nearby_sharing_title" />
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </RelativeLayout>

@@ -1025,4 +1025,11 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
   <string name="google_drive_reconnect_sheet_title">Reconnect Google Drive</string>
   <string name="google_drive_reconnect_sheet_message">This folder is no longer accessible. To continue submitting reports, please create a new folder or reconnect your account.</string>
+    <string name="send_files_title">Send files</string>
+    <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
+  <string name="failed_to_open_location_settings">Failed to open location settings.</string>
+  <string name="stop_sharing_files">Stop sharing files?</string>
+  <string name="stop">stop</string>
+  <string name="view_files">VIEW FILES</string>
+    <string name="result">result</string>
 </resources>

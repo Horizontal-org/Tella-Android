@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/wa_purple">
+
+            <org.hzontal.shared_ui.appbar.ToolbarComponent
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:arrowBackIcon="@drawable/ic_back_white"
+                app:arrowBackIconContentDescription="@string/action_go_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:rightIconContentDescription="@string/action_save"
+                app:startTitle="@string/receive_files" />
+        <TextView
+            android:id="@+id/waiting_text"
+            style="@style/Tella_Main_White_TextExtraLargeBold"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_large_margin"
+            android:text="@string/prepare_upload_message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <TextView
+            android:id="@+id/question_text"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_large_margin"
+            android:text="Would you like to accept them?"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/waiting_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/clock_Img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/ic_files"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/waiting_text"
+            app:layout_constraintVertical_chainStyle="packed" />
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/accept_btn"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg_round_orange_btn"
+            app:text_color="@color/btn_dark_letter"
+            app:text="@string/accept"
+            app:check_state="false"
+            app:layout_constraintBottom_toTopOf="@+id/reject_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/question_text" />
+
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/reject_btn"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            app:check_state="false"
+            android:layout_marginHorizontal="@dimen/activity_horizontal_large_margin"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            app:text="@string/reject"
+            app:layout_constraintTop_toBottomOf="@+id/accept_btn" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

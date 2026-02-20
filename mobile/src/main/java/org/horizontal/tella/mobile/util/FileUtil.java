@@ -62,9 +62,9 @@ public class FileUtil {
 
     @Nullable
     public static String getMimeType(@NonNull String filename) {
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                MimeTypeMap.getFileExtensionFromUrl(filename.toLowerCase())
-        );
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filename.toLowerCase());
+        // Return the corresponding MIME type or null if unknown
+        return extension != null ? MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : null;
     }
 
   /*  public static MediaFile.Type getMediaFileType(@NonNull String filename) {

@@ -32,7 +32,8 @@ abstract class BaseActivity : AppCompatActivity() {
     var isManualOrientation = false
     private lateinit var container: ViewGroup
     private lateinit var loading: View
-    @Inject lateinit var divviupUtils : DivviupUtils
+    @Inject
+    lateinit var divviupUtils: DivviupUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Use Google-recommended API for edge-to-edge (avoids deprecated setStatusBarColor path)
@@ -147,7 +148,7 @@ abstract class BaseActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    fun addFragment(container : Int, fragment: Fragment, tag : String ){
+    fun addFragment(container: Int, fragment: Fragment, tag: String) {
         val existingFragment = supportFragmentManager.findFragmentByTag(tag)
         if (existingFragment == null) {
             supportFragmentManager.beginTransaction()

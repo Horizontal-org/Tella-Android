@@ -423,3 +423,7 @@
 -keep class com.hzontal.tella_vault.Vault { *; }
 -keep class org.horizontal.tella.mobile.data.KeyRxVault { *; }
 # ========== END SIMPLE XML RULES ==========
+
+
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**

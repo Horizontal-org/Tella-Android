@@ -11,6 +11,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.hasAcceptedAnalytics
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isShowVaultAnalyticsSection
 import org.horizontal.tella.mobile.data.sharedpref.Preferences.isTimeToShowReminderAnalytics
+import org.horizontal.tella.mobile.domain.entity.ServerType
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.connections.ServerDataItem
@@ -57,16 +58,20 @@ class VaultAdapter(private val onClick: VaultClickListener) :
         return oldList.zip(newList).all { (oldItem, newItem) -> oldItem == newItem }
     }
 
-    fun addConnectionServers(connectionsList: List<ServerDataItem>) {
-        val sortedConnectionsList = connectionsList.sortedBy { server -> server.type }
-        val newConnectionsItem = DataItem.ConnectionsItem(sortedConnectionsList)
+    private fun ServerType.rank(): Int = when (this) {
+        ServerType.ADD_BUTTON -> Int.MAX_VALUE  // always last
+        else -> ordinal                          // or a custom map if you want a specific order
+    }
 
-        // Check if the current connections are the same as the new ones
-        if (favoriteForms.isEmpty() || !areListsEqual(
-                connectionsList.first().servers, newConnectionsItem.item
-            )
-        ) {
-            connections = mutableListOf(newConnectionsItem)
+    fun addConnectionServers(connectionsList: List<ServerDataItem>) {
+        val ordered = connectionsList.sortedWith(
+            compareBy<ServerDataItem> { it.type.rank() }
+                .thenBy { it.type.name } // secondary, harmless
+        )
+        val newItem = DataItem.ConnectionsItem(ordered)
+        val same = connections.firstOrNull()?.item == newItem.item
+        if (!same) {
+            connections = mutableListOf(newItem)
             updateItems()
         }
     }
