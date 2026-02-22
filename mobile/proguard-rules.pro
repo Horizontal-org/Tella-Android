@@ -5,6 +5,19 @@
 -dontwarn org.kxml2.io.KXmlParser,org.kxml2.io.KXmlSerializer
 # ========== END MISSING CLASSES ==========
 
+# ========== Netty/Ktor on Android - JVM-only classes not present on Android ==========
+# Netty tcnative (OpenSSL native bindings - Android uses Conscrypt/JDK SSL)
+-dontwarn io.netty.internal.tcnative.**
+# java.lang.management (not on Android - used by Ktor debug detector)
+-dontwarn java.lang.management.**
+# Log4j2 (optional Netty logging backend)
+-dontwarn org.apache.logging.log4j.**
+# Jetty NPN (deprecated ALPN predecessor, not on Android)
+-dontwarn org.eclipse.jetty.npn.**
+# Reactor BlockHound (reactive blocking detection, not on Android)
+-dontwarn reactor.blockhound.**
+# ========== END Netty/Ktor ==========
+
 # Keep the interfaces + concrete impls
 -keep class org.xmlpull.v1.XmlPullParser { *; }
 -keep class org.xmlpull.v1.XmlSerializer { *; }

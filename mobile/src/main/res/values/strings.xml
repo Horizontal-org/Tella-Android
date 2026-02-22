@@ -194,7 +194,7 @@ mode activation</string>
     <string name="action_learn.more">Learn more</string>
     <string name="settings.servers_add.server_dialog.title">Add server</string>
     <string name="settings.prot_select_delete.forms">Delete draft and submitted forms</string>
-    <string name="settings.prot_select_delete.servers">Delete server settings</string>
+    <string name="settings.prot_select_delete.servers">Delete Connections</string>
     <string name="settings.prot_select_delete.app">Delete Tella</string>
     <string name="collect.sent_action_edit.to.resend">Edit to resend</string>
     <string name="collect_toast_form.submitted">Form submitted</string>
@@ -293,7 +293,7 @@ mode activation</string>
     <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
     <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
     <string name="settings.sec_quick.delete_switch">Quick delete</string>
-    <string name="settings.sec_quick.delete_expl">Shows a sliding button on the homescreen to quickly exit Tella in emergency situations.</string>
+    <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
     <string name="settings.servers.title_server.settings">Servers</string>
     <string name="settings.servers.add_server.expl">Connect to servers to collect and send data to your organization</string>
     <string name="settings.servers_auto.upload_action">Auto-upload to server</string>
@@ -324,7 +324,7 @@ mode activation</string>
     <string name="settings.prot_select_delete.vault">Delete files</string>
     <string name="settings.sec_delete.vault_tooltip">Delete all the files stored in Tella.</string>
     <string name="settings.sec_delete.forms_tooltip">Delete all draft and submitted forms.</string>
-    <string name="settings.sec_delete.servers_tooltip">Delete your connections to servers and all forms associated with them.</string>
+    <string name="settings.sec_delete.servers_tooltip">Delete your Connections and all data associated with them.</string>
     <string name="settings.sec_delete.app_tooltip">Delete the app and all the data it contains. You will be asked “Do you want to uninstall this app?” Unless you confirm, Tella will not be deleted.</string>
     <string name="settings.sec_bypass_switch_title">Bypass censorship</string>
     <string name="settings.sec_bypass_switch_expl">Overcome attempts to block Tella in your region. Note that enabling this will make it slower to send data to the servers.</string>
@@ -396,7 +396,6 @@ connecting to a server</string>
     <string name="onboard.hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.</string>
     <string name="onboard.calculator_button">Select calculator</string>
     <string name="onboard.calculator_expl">Tella will be hidden behind a functional Calculator app. Unlock Tella by entering your PIN on the calculator followed by =</string>
-    <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
     <string name="settings.general_recent_files_switch_title">Recent files</string>
     <string name="settings.general_recent_files_switch_expl">Show previews of and a shortcut to your recent files on Tella’s homescreen.</string>
     <string name="settings.general_favorite_forms_switch_title">Favorite forms</string>
@@ -799,8 +798,9 @@ they are uploaded to this project as a report.</string>
     <string name="Edit_Dialog_confirm_exit_title">Unsaved changes</string>
     <string name="Edit_Dialog_confirm_exit">Your changes have not been saved. Would you like to save before exiting?</string>
     <string name="action_exit_without_saving">EXIT WITHOUT SAVING</string>
-    <string name="incorrect_pattern">Incorrect Pattern</string>
-    <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
+    <string name="incorrect_pattern">Incorrect Pattern.
+
+</string>
     <string name="incorrect_pin">Incorrect Pin.
 
 </string>
@@ -1004,6 +1004,28 @@ Would you like to share analytics with the Tella team?</string>
     <string name="report_submitted_msg">Your report has successfully been submitted.</string>
     <string name="Collect_MediaWidget_Attach_File">Attach file</string>
     <string name="form_successfully_submitted">%1$s successfully submitted</string>
+    <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
+    <string name="select_file_picker">Select a file manager</string>
+    <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
+    <string name="onboard_lock_warning_title">Don\'t lose your files</string>
+    <string name="onboard_lock_warning_message">Your lock is the only way to access your Tella files.
+
+If you forget your lock, there is currently no way to recover it. Your data inside Tella will be lost forever.</string>
+    <string name="onboard_lock_warning_cta">I understand</string>
+    <string name="onboard_lock_protect_sheet_title">Protect your lock</string>
+    <string name="onboard_lock_protect_sheet_message">Make sure to remember your lock or save it somewhere safe like a password manager.</string>
+    <string name="onboard_lock_protect_sheet_continue">CONTINUE</string>
+    <string name="lock_update_success_done">Done</string>
+    <string name="onboard_lock_success_title">Success</string>
+    <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
+    <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
+    <string name="Uwazi_DeleteEntity_SheetTitle">Delete entity?</string>
+    <string name="Uwazi_Subtitle_RemoveSubmittedEntity">Are you sure you want to delete this form from your device? Note that because it was already submitted, the data will remain on your organization\'s server.</string>
+    <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" has been deleted.</string>
+    <string name="google_drive_shared_drive_migration_sheet_title">Create a new Google Drive folder</string>
+    <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
+    <string name="google_drive_reconnect_sheet_title">Reconnect Google Drive</string>
+    <string name="google_drive_reconnect_sheet_message">This folder is no longer accessible. To continue submitting reports, please create a new folder or reconnect your account.</string>
     <string name="connect_to_device">Connect to device</string>
     <string name="qr_code_sender_instruction">Show this QR code for the\n sender to scan</string>
     <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
@@ -1086,7 +1108,7 @@ Would you like to share analytics with the Tella team?</string>
     <string name="view_files_action">View Files</string>
     <string name="view_files">VIEW FILES</string>
     <string name="result">Results</string>
-  <string name="waiting_for_the_sender">Waiting for sender …</string>
+    <string name="waiting_for_the_sender">Waiting for sender …</string>
 
     <string name="waiting_for_the_recipient">Waiting for recipient …</string>
     <string name="nearby_sharing_title">Nearby Sharing</string>
@@ -1110,5 +1132,7 @@ Would you like to share analytics with the Tella team?</string>
     <string name="tips_section_more">More tips</string>
     <string name="tips_more_bullets">• The Wi-Fi network does not need to have\n \t internet access. As long as the Wi-Fi router\n \t or hotspot is powered on and functioning,\n \t it can be used for Nearby Sharing even\n \t without being online\n
 • Make sure to disable any active VPN connections.</string>
-    <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
+    <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
+    <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
+
 </resources>
