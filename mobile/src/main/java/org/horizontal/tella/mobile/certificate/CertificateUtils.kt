@@ -18,6 +18,7 @@ import java.util.Date
 import java.util.UUID
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
@@ -71,5 +72,28 @@ object CertificateUtils {
         val hash = digest.digest(certificate.encoded)
         return hash.joinToString("") { "%02x".format(it) } // <-- fix here
     }
-    
+
+    /**
+     * Returns the system default X509TrustManager (validates against device CA store).
+     * Use this for all TLS connections instead of trust-all to satisfy CVE-2025-TELLA3-001.
+     */
+    fun getDefaultTrustManager(): X509TrustManager {
+        val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        tmf.init(null as KeyStore?)
+        val trustManagers = tmf.trustManagers
+        require(trustManagers.size == 1 && trustManagers[0] is X509TrustManager) {
+            "Unexpected default trust managers: ${trustManagers.contentToString()}"
+        }
+        return trustManagers[0] as X509TrustManager
+    }
+
+    /**
+     * Returns an SSLContext initialized with the system default TrustManager.
+     */
+    fun getDefaultSSLContext(): SSLContext {
+        val tm = getDefaultTrustManager()
+        return SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf<TrustManager>(tm), SecureRandom())
+        }
+    }
 }

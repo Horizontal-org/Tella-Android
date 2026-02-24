@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.data.peertopeer
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.horizontal.tella.mobile.certificate.CertificateUtils
 import okhttp3.Dns
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -23,13 +24,13 @@ object ServerPinger {
         try {
             val network = FingerprintFetcher.pickWifiNetwork(context)
 
-            val trustAll: X509TrustManager = FingerprintFetcher.TrustAllCerts()
+            val trustManager = CertificateUtils.getDefaultTrustManager()
             val sslContext = SSLContext.getInstance("TLS").apply {
-                init(null, arrayOf(trustAll), SecureRandom())
+                init(null, arrayOf(trustManager), SecureRandom())
             }
 
             val builder = OkHttpClient.Builder()
-                .sslSocketFactory(sslContext.socketFactory, trustAll)
+                .sslSocketFactory(sslContext.socketFactory, trustManager)
                 .hostnameVerifier { _, _ -> true } // connect by IP
                 .connectTimeout(7, TimeUnit.SECONDS)
                 .readTimeout(7, TimeUnit.SECONDS)

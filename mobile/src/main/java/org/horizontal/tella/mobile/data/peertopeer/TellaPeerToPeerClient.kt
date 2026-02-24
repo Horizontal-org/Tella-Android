@@ -351,16 +351,11 @@ class TellaPeerToPeerClient @Inject constructor(
 
 
 
-    /** Trust-all, *only* for manual handshake like /ping before we have a pin. */
-    private fun newInsecureClientForHandshake(network: Network?): OkHttpClient {
-        val trustAll = object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-        }
-
+    /** Discovery client for /ping before we have a pin; uses system CA validation (no trust-all). */
+    private fun newDiscoveryClient(network: Network?): OkHttpClient {
+        val trustManager = CertificateUtils.getDefaultTrustManager()
         val ssl = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf<TrustManager>(trustAll), SecureRandom())
+            init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
         }
 
         val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
@@ -369,7 +364,7 @@ class TellaPeerToPeerClient @Inject constructor(
             .build()
 
         return OkHttpClient.Builder()
-            .sslSocketFactory(ssl.socketFactory, trustAll)
+            .sslSocketFactory(ssl.socketFactory, trustManager)
             .hostnameVerifier { _, _ -> true }
             .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
@@ -381,7 +376,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
     suspend fun pingBeforeRegister(ip: String, port: String): Boolean = withContext(Dispatchers.IO) {
         val network = pickWifiNetwork(appContext)
-        val client = newInsecureClientForHandshake(network)
+        val client = newDiscoveryClient(network)
 
         // Use the real path your server exposes; many backends use /api/v1/ping
         val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)

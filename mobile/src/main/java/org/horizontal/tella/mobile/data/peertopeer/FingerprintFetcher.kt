@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import org.horizontal.tella.mobile.certificate.CertificateUtils
 import okhttp3.CertificatePinner
 import okhttp3.Dns
 import okhttp3.OkHttpClient
@@ -26,7 +27,6 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 import kotlin.coroutines.resume
 
@@ -55,7 +55,7 @@ object FingerprintFetcher {
                 // 1) Quick TCP probe (fail fast if nothing listening)
                 probeTcp(ip, port, wifi)
 
-                // 2) TLS handshake (trust-all) to read leaf cert
+                // 2) TLS handshake (system CA validation) to read leaf cert
                 createBoundTlsSocket(ip, port, wifi).use { tls ->
                     val cert = tls.session.peerCertificates.first() as X509Certificate
                     return@withContext kotlin.Result.success(fingerprintFromCert(cert))
@@ -94,13 +94,13 @@ object FingerprintFetcher {
         hostForRequests: String,
         network: Network? = null
     ): OkHttpClient {
-        val trustAll: X509TrustManager = TrustAllCerts()
+        val trustManager = CertificateUtils.getDefaultTrustManager()
         val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf(trustAll), SecureRandom())
+            init(null, arrayOf(trustManager), SecureRandom())
         }
 
         val builder = OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory, trustAll)
+            .sslSocketFactory(sslContext.socketFactory, trustManager)
             .hostnameVerifier { _, _ -> true } // connect by IP; identity enforced by our hash check
             .addNetworkInterceptor(LeafCertHashInterceptor(expectedCertSha256Hex))
             .connectTimeout(7, TimeUnit.SECONDS)
@@ -135,13 +135,13 @@ object FingerprintFetcher {
             .add(hostForPin, okHttpPin)
             .build()
 
-        val trustAll: X509TrustManager = TrustAllCerts()
+        val trustManager = CertificateUtils.getDefaultTrustManager()
         val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf(trustAll), SecureRandom())
+            init(null, arrayOf(trustManager), SecureRandom())
         }
 
         val builder = OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory, trustAll)
+            .sslSocketFactory(sslContext.socketFactory, trustManager)
             .hostnameVerifier { _, _ -> true } // connect by IP; identity enforced by pin
             .certificatePinner(pinner)
             .connectTimeout(7, TimeUnit.SECONDS)
@@ -183,10 +183,7 @@ object FingerprintFetcher {
     // ---------------------------------------------------------------------
 
     private fun createBoundTlsSocket(ip: String, port: Int, wifi: Network?): SSLSocket {
-        val sslContext = SSLContext.getInstance("TLS").apply {
-            // Trust-all only to read the cert; real requests will be pinned
-            init(null, arrayOf<TrustManager>(TrustAllCerts()), SecureRandom())
-        }
+        val sslContext = CertificateUtils.getDefaultSSLContext()
         val factory = sslContext.socketFactory as SSLSocketFactory
 
         val s = factory.createSocket() as SSLSocket
@@ -210,12 +207,6 @@ object FingerprintFetcher {
         try { sock.connect(InetSocketAddress(ip, port), 2500) } finally {
             try { sock.close() } catch (_: Exception) {}
         }
-    }
-
-    class TrustAllCerts : X509TrustManager {
-        override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) = Unit
-        override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) = Unit
-        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
     }
 
     @Suppress("DEPRECATION")
