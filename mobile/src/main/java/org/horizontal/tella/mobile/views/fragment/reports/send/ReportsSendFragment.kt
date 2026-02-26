@@ -28,7 +28,7 @@ class ReportsSendFragment : BaseReportsSendFragment() {
         }
 
         viewModel.instanceProgress.observe(viewLifecycleOwner) { entity ->
-            if (entity.id == this@ReportsSendFragment.reportInstance?.id) {
+            if (entity != null && entity.id == this@ReportsSendFragment.reportInstance?.id) {
                 when (entity.status) {
                     EntityStatus.SUBMITTED -> {
                         viewModel.saveSubmitted(entity)
