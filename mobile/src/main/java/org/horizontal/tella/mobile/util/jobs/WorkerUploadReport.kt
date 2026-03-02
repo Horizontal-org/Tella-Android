@@ -48,6 +48,7 @@ class WorkerUploadReport @AssistedInject constructor(
 
             val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
+                Timber.i("*** Test worker *** No report instances to upload")
                 setNoTimeOut(false)
                 return@withContext Result.success()
             } else {
@@ -74,15 +75,18 @@ class WorkerUploadReport @AssistedInject constructor(
 
                     reportWithFiles.reportApiId = reportResponse.id
 
-                    // submitFiles is assumed synchronous (as in your original code). If it returns Rx, add `.await()`.
                     reportsRepository.submitFiles(reportWithFiles, server, reportResponse.id)
+                        .await()
                 } else {
                     reportsRepository.submitFiles(
                         reportWithFiles, server, reportWithFiles.reportApiId
-                    )
+                    ).await()
                 }
 
-                Timber.d("*** Test worker *** widgetMediaFiles? %s", reportWithFiles.widgetMediaFiles)
+                Timber.d(
+                    "*** Test worker *** widgetMediaFiles? %s",
+                    reportWithFiles.widgetMediaFiles
+                )
             }
 
             setNoTimeOut(false)
@@ -152,6 +156,11 @@ class WorkerUploadReport @AssistedInject constructor(
     }
 
     private fun setNoTimeOut(enableNoTimeout: Boolean) {
+        if (enableNoTimeout)
+            Timber.d("*** Test *** enableNoTimeOut")
+        else
+            Timber.d("*** Test *** disableNoTimeOut")
+
         MyApplication.getMainKeyHolder().timeout =
             if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
             else LockTimeoutManager.IMMEDIATE_SHUTDOWN
