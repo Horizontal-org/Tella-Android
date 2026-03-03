@@ -32,6 +32,9 @@ class WorkerUploadReport @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        // We need the database instance to check status in the 'finally' block
+        var dataSource: DataSource? = null
+
         try {
             if (!statusProvider.isOnline()) {
                 return@withContext Result.retry()
@@ -44,7 +47,7 @@ class WorkerUploadReport @AssistedInject constructor(
                 return@withContext Result.retry()
             }
 
-            val dataSource = DataSource.getInstance(context, mainKey)
+            dataSource = DataSource.getInstance(context, mainKey)
 
             val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
@@ -89,12 +92,20 @@ class WorkerUploadReport @AssistedInject constructor(
                 )
             }
 
-            setNoTimeOut(false)
             Result.success()
         } catch (t: Throwable) {
             Timber.e(t, "WorkerUploadReport failed")
-            setNoTimeOut(false)
             Result.retry()
+        } finally {
+            // IMPORTANT: Ensure we set up the timeout again, independently of the worker result.
+            // We only reset the timeout if the database shows no more pending reports.
+            dataSource?.let {
+                disableNoTimeoutOnlyWhenDone(it)
+            } ?: run {
+                // If we never even got a dataSource (key was locked),
+                // ensure we don't accidentally leave the timeout disabled forever.
+                setNoTimeOut(false)
+            }
         }
     }
 
@@ -164,5 +175,18 @@ class WorkerUploadReport @AssistedInject constructor(
         MyApplication.getMainKeyHolder().timeout =
             if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
             else LockTimeoutManager.IMMEDIATE_SHUTDOWN
+    }
+
+    private suspend fun disableNoTimeoutOnlyWhenDone(dataSource: DataSource) {
+        // 1. Fetch the current state of the Outbox from the database
+        val remaining = dataSource.listOutboxReportInstances().await()
+
+        // 2. Only if the Outbox is truly empty do we allow the timeout to be reset.
+        // This protects us if another worker is still processing its own list.
+        if (remaining.isEmpty()) {
+            setNoTimeOut(false)
+        } else {
+            Timber.d("*** Test worker *** Work remaining, keeping NoTimeout active")
+        }
     }
 }
