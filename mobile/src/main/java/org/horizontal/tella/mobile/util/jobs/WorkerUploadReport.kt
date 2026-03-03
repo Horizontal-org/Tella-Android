@@ -51,14 +51,16 @@ class WorkerUploadReport @AssistedInject constructor(
 
             val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
-                Timber.i("*** Test worker *** No report instances to upload")
+                Timber.d("*** Test worker *** disableNoTimeOut - no remaining work")
                 setNoTimeOut(false)
                 return@withContext Result.success()
             } else {
+                Timber.d("*** Test worker *** enableNoTimeOut!!")
                 setNoTimeOut(true)
             }
 
             val server = getServer(dataSource) ?: run {
+                Timber.d("*** Test worker *** disableNoTimeOut - Failed: no server")
                 setNoTimeOut(false)
                 return@withContext Result.failure()
             }
@@ -104,6 +106,7 @@ class WorkerUploadReport @AssistedInject constructor(
             } ?: run {
                 // If we never even got a dataSource (key was locked),
                 // ensure we don't accidentally leave the timeout disabled forever.
+                Timber.d("*** Test worker *** disableNoTimeOut - no datasource")
                 setNoTimeOut(false)
             }
         }
@@ -167,11 +170,6 @@ class WorkerUploadReport @AssistedInject constructor(
     }
 
     private fun setNoTimeOut(enableNoTimeout: Boolean) {
-        if (enableNoTimeout)
-            Timber.d("*** Test *** enableNoTimeOut")
-        else
-            Timber.d("*** Test *** disableNoTimeOut")
-
         MyApplication.getMainKeyHolder().timeout =
             if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
             else LockTimeoutManager.IMMEDIATE_SHUTDOWN
@@ -184,9 +182,10 @@ class WorkerUploadReport @AssistedInject constructor(
         // 2. Only if the Outbox is truly empty do we allow the timeout to be reset.
         // This protects us if another worker is still processing its own list.
         if (remaining.isEmpty()) {
+            Timber.d("*** Test worker *** disableNoTimeOut - no remaining reports to upload after finishing work")
             setNoTimeOut(false)
         } else {
-            Timber.d("*** Test worker *** Work remaining, keeping NoTimeout active")
+            Timber.d("*** Test worker *** Remaining report to upload after finishing work, keeping NoTimeout active")
         }
     }
 }
