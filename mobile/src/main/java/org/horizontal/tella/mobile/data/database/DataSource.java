@@ -1351,6 +1351,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
     }
 
     private List<FormMediaFile> getReportFiles(ReportInstance instance, @Nullable FormMediaFile mediaFile) {
+        // Must use report-instance-vault-file table (has c_vault_file_id, c_status, c_uploaded_size)
         List<FormMediaFile> mediaFiles = dataBaseUtils.getReportMediaFilesDB(instance, D.T_REPORT_INSTANCE_VAULT_FILE);
         if (mediaFile != null) {
             mediaFiles.add(mediaFile);
