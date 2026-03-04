@@ -55,9 +55,7 @@ class OnBoardLockFragment : BaseFragment() {
         lockPatternBtn = view.findViewById(R.id.lockPatternBtn)
         cancelBtn = view.findViewById(R.id.cancelBtn)
         if (isFromSettings) {
-            cancelBtn.visibility = View.VISIBLE
             (baseActivity as OnBoardingActivity).hideViewpager()
-
         }
         initListeners()
     }
