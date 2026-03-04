@@ -48,6 +48,7 @@ import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
 import org.horizontal.tella.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.util.VideoResolutionManager
 import org.horizontal.tella.mobile.views.activity.MainActivity
@@ -264,7 +265,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onAddError(error: Throwable) {
         val messageResId = when {
-            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error.isDuplicateNameOrFileExistsError() -> error.getDuplicateErrorMessageResId()
             else -> R.string.gallery_toast_fail_saving_file
         }
         DialogUtils.showBottomMessage(
