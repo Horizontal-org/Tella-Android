@@ -831,6 +831,7 @@ they are uploaded to this project as a report.</string>
   <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
 </string>
   <string name="feedback_title">Feedback</string>
+  <string name="feedback_contact_info_hint">Contact information (optional)</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
@@ -997,6 +998,7 @@ Would you like to share analytics with the Tella team?</string>
   <string name="folder_name">Folder name</string>
   <string name="Folder_Empty_Error">Folder name cannot be empty</string>
   <string name="file_name_taken">File name taken. Please use a different one.</string>
+  <string name="file_already_exists">File already exists.</string>
   <string name="folder_exist_error">Folder name is already taken. Please use a different one.</string>
   <string name="nextcloud_file_size_limit">For the moment, only files smaller than 20MB can be submitted to the Nextcloud server.</string>
   <string name="invalid_url">Invalid URL</string>
