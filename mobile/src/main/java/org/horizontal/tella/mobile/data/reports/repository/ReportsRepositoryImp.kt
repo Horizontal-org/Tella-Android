@@ -262,12 +262,18 @@ class ReportsRepositoryImp @Inject internal constructor(
         )
         return getStatus(url, accessToken)
             .flatMapPublisher { skipBytes: Long ->
-                appendFile(
-                    vaultFile,
-                    skipBytes,
-                    url,
-                    accessToken
-                )
+                if (skipBytes >= vaultFile.size) {
+                    // File is already fully on server, just signal completion
+                    Flowable.just(
+                        UploadProgressInfo(
+                            vaultFile,
+                            vaultFile.size,
+                            UploadProgressInfo.Status.FINISHED
+                        )
+                    )
+                } else {
+                    appendFile(vaultFile, skipBytes, url, accessToken)
+                }
             }.onErrorReturn {
                 mapThrowable(
                     it, vaultFile
