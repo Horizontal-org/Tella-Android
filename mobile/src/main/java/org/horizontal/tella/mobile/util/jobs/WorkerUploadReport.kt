@@ -37,6 +37,7 @@ class WorkerUploadReport @AssistedInject constructor(
 
         try {
             if (!statusProvider.isOnline()) {
+                Timber.d("*** Test worker *** No connectivity - will retry")
                 return@withContext Result.retry()
             }
 
@@ -55,7 +56,7 @@ class WorkerUploadReport @AssistedInject constructor(
                 setNoTimeOut(false)
                 return@withContext Result.success()
             } else {
-                Timber.d("*** Test worker *** enableNoTimeOut!!")
+                Timber.d("*** Test worker *** enableNoTimeOut - there is work remaining")
                 setNoTimeOut(true)
             }
 
@@ -78,18 +79,27 @@ class WorkerUploadReport @AssistedInject constructor(
                         )
                     ).await()
 
+                    // reportWithFiles should have an api id now
                     reportWithFiles.reportApiId = reportResponse.id
-
-                    reportsRepository.submitFiles(reportWithFiles, server, reportResponse.id)
-                        .await()
-                } else {
-                    reportsRepository.submitFiles(
-                        reportWithFiles, server, reportWithFiles.reportApiId
-                    ).await()
                 }
 
                 Timber.d(
-                    "*** Test worker *** widgetMediaFiles? %s",
+                    "*** Test worker *** about to submit files with reportApiId: %s",
+                    reportWithFiles.reportApiId
+                )
+
+                reportsRepository.submitFiles(
+                    reportWithFiles, server, reportWithFiles.reportApiId
+                ).await()
+
+                Timber.d(
+                    "*** Test worker *** stopped submitting files with reportApiId: %s",
+                    reportWithFiles.reportApiId
+                )
+
+                Timber.d(
+                    "*** Test worker *** %s - widgetMediaFiles? %s",
+                    reportWithFiles.reportApiId,
                     reportWithFiles.widgetMediaFiles
                 )
             }
