@@ -57,6 +57,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             loginEntity = LoginEntity(server.username, server.password),
             url = server.url + URL_LOGIN
         ).flatMap { response ->
+            server.apply { version = response.version }
             apiService.getProjectSlug(
                 url = server.url + slug,
                 access_token = "Bearer " + response.access_token
