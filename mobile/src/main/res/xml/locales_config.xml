@@ -10,6 +10,7 @@
     <locale android:name="kac" />
     <locale android:name="kn" />
     <locale android:name="ku" />
+    <locale android:name="lus" /> <!-- Mizo -->
     <locale android:name="ml" />
     <locale android:name="my" />
     <locale android:name="pt" />
