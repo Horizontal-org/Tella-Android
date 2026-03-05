@@ -177,7 +177,7 @@ class WorkerUploadReport @AssistedInject constructor(
 
     private suspend fun disableNoTimeoutOnlyWhenDone(dataSource: DataSource) {
         // 1. Fetch the current state of the Outbox from the database
-        val remaining = dataSource.listOutboxReportInstances().await()
+        val remaining = getOutboxReportInstances(dataSource)
 
         // 2. Only if the Outbox is truly empty do we allow the timeout to be reset.
         // This protects us if another worker is still processing its own list.
