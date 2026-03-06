@@ -30,9 +30,8 @@ interface ReportsRepository {
 
     fun upload(
         vaultFile: VaultFile,
-        urlServer: String,
-        reportId: String,
-        accessToken: String
+        server: TellaReportServer,
+        reportId: String
     ): Flowable<UploadProgressInfo>
 
     fun check(
