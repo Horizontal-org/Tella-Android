@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.dropbox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dropbox.core.v2.DbxClientV2
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -108,7 +108,7 @@ class DropBoxViewModel @Inject constructor(
                         _reportInstance.postValue(resultInstance)
                     }, { throwable ->
                         Timber.d(throwable)
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                       //  _error.postValue(R.string.default_error_msg)
                     })
             )

@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
@@ -246,7 +246,7 @@ class ResourcesViewModel @Inject constructor(
 
 
     private fun handleError(throwable: Throwable?) {
-        FirebaseCrashlytics.getInstance().recordException(
+        CrashReporterProvider.get().recordException(
             throwable ?: throw NullPointerException("Expression 'throwable' must not be null")
         )
         _error.postValue(throwable)

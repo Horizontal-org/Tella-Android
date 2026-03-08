@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -61,7 +61,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    CrashReporterProvider.get().recordException(throwable!!)
                     val exceptionType = ExceptionHandler.handleException(throwable)
                     handleException(exceptionType)
                 })
@@ -78,7 +78,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    CrashReporterProvider.get().recordException(throwable!!)
                 })
     }
 
@@ -93,7 +93,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     }
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    CrashReporterProvider.get().recordException(throwable!!)
                 })
     }
 
@@ -106,7 +106,7 @@ class SendFeedbackViewModel @Inject constructor(private val feedbackRepository: 
                     _draftFeedBackInstance.postValue(draft)
                 }) { throwable: Throwable? ->
                     Timber.d(throwable)
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    CrashReporterProvider.get().recordException(throwable!!)
                 })
     }
 

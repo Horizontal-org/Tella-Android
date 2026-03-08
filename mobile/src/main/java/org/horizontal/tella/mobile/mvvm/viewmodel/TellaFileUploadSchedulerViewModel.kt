@@ -9,7 +9,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -63,7 +63,7 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
 
                 _mediaFilesUploadScheduled.postValue(true)
             }, { throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 _mediaFilesUploadScheduleError.postValue(throwable)
             })
         )

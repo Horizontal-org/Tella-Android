@@ -18,7 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -574,7 +574,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             }
 
             override fun onCameraError(exception: CameraException) {
-                FirebaseCrashlytics.getInstance().recordException(exception)
+                CrashReporterProvider.get().recordException(exception)
             }
 
             override fun onCameraOpened(options: CameraOptions) {

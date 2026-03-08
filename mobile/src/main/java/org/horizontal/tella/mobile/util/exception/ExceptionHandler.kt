@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.util.exception
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
 import java.net.UnknownHostException
 
@@ -11,7 +11,7 @@ object ExceptionHandler {
             is NoConnectivityException,is UnknownHostException -> ExceptionType.NO_CONNECTIVITY
             else -> {
                 // Log the exception to Crashlytics or any other analytics tool
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
 
                 //TODO can implement logic to identify other exception types if needed
                 // For example, check the class or message of the exception

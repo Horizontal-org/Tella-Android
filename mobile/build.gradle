@@ -92,11 +92,13 @@ android {
             dimension "distribution"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "true"
             buildConfigField "boolean", "ENABLE_DROPBOX", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
         }
         fdroid {
             dimension "distribution"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "false"
             buildConfigField "boolean", "ENABLE_DROPBOX", "false"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
         }
     }
 
@@ -153,6 +155,13 @@ android {
     }
 }
 
+// Disable Crashlytics Gradle tasks for fdroid variants (no Firebase SDK in fdroid).
+tasks.configureEach { task ->
+    if (task.name.contains("Crashlytics") && task.name.contains("fdroid")) {
+        task.enabled = false
+    }
+}
+
 dependencies {
     // Align Kotlin libs with the root plugin (set in root to 2.1.20)
     implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
@@ -174,7 +183,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
     implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
-    implementation 'com.google.firebase:firebase-crashlytics'
+    playstoreImplementation 'com.google.firebase:firebase-crashlytics'
 
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"

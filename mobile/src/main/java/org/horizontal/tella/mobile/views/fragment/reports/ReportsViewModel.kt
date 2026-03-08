@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.reports
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -238,7 +238,7 @@ class ReportsViewModel @Inject constructor(
                             _reportInstance.postValue(instance)
                         }, { throwable ->
                             Timber.e(throwable, "Error getting report bundle")
-                            FirebaseCrashlytics.getInstance().apply {
+                            CrashReporterProvider.get().run {
                                 recordException(throwable)
                                 log("Failed to get report bundle for instance ${instance.id}")
                             }

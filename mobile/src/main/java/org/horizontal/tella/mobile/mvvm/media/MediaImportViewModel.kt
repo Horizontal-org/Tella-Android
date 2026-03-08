@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
@@ -68,10 +68,10 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
                 }, { throwable ->
                     if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                         _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         return@subscribe
                     }
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    CrashReporterProvider.get().recordException(throwable)
                     _importError.postValue(throwable)
                 })
         )

@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
@@ -103,7 +103,7 @@ class AttachmentsViewModel @Inject constructor(
                     },
                     { throwable ->
                         Timber.e(throwable, "Failed to get files")
-                        FirebaseCrashlytics.getInstance().apply {
+                        CrashReporterProvider.get().run {
                             recordException(throwable)
                             log("Failed to get files for parent: $parent")
                         }
@@ -127,7 +127,7 @@ class AttachmentsViewModel @Inject constructor(
             completable
         ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ _filesSize.postValue(it) }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 _moveFilesError.postValue(throwable)
             })
     }
@@ -155,7 +155,7 @@ class AttachmentsViewModel @Inject constructor(
             completable
         ) { objects: Array<Any?> -> objects.size }.observeOn(AndroidSchedulers.mainThread())
             .subscribe({ num: Int? -> _deletedFiles.postValue(num!!) }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 _error.postValue(throwable)
             })
     }
@@ -170,7 +170,7 @@ class AttachmentsViewModel @Inject constructor(
                 .subscribe(
                     { _deletedFile.postValue(vaultFile) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _deletedFileError.postValue(throwable)
                     }
                 )
@@ -202,7 +202,7 @@ class AttachmentsViewModel @Inject constructor(
                 .subscribe(
                     { vaultFile -> _folderCreated.postValue(vaultFile) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )
@@ -220,7 +220,7 @@ class AttachmentsViewModel @Inject constructor(
                 .subscribe(
                     { vaultFile -> _rootId.postValue(vaultFile) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )
@@ -274,7 +274,7 @@ class AttachmentsViewModel @Inject constructor(
                 } else {
                     postImportFailedToBackground(lastImportName)
                 }
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 _importError.postValue(throwable!!)
             })
     }
@@ -316,7 +316,7 @@ class AttachmentsViewModel @Inject constructor(
                         if (throwable is FileNameAlreadyExistsException || throwable is SQLiteConstraintException) {
                             _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
                         }
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )
@@ -346,7 +346,7 @@ class AttachmentsViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally { _exportState.postValue(false) }
                 .subscribe({ count -> count?.let { _mediaExported.postValue(it) } }, { t ->
-                    FirebaseCrashlytics.getInstance().recordException(t!!)
+                    CrashReporterProvider.get().recordException(t!!)
                     _error.postValue(t)
                 })
         )
@@ -365,7 +365,7 @@ class AttachmentsViewModel @Inject constructor(
                 _onConfirmDeleteFiles.postValue(Pair(vaultFiles, doesFileExist))
             }) { throwable: Throwable? ->
                 if (throwable != null) {
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    CrashReporterProvider.get().recordException(throwable)
                 }
                 _error.postValue(throwable)
             })

@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.mvvm.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import io.reactivex.disposables.CompositeDisposable
 
 open class BaseSettingsViewModel: ViewModel() {
@@ -21,7 +21,7 @@ open class BaseSettingsViewModel: ViewModel() {
     }
 
     protected fun handleError(throwable: Throwable, errorResId: Int? = null) {
-        FirebaseCrashlytics.getInstance().recordException(throwable)
+        CrashReporterProvider.get().recordException(throwable)
         errorResId?.let { _error.postValue(it) }
     }
 

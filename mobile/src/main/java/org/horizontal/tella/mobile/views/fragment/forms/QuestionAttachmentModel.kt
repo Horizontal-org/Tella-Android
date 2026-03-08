@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
@@ -104,10 +104,10 @@ class QuestionAttachmentModel @Inject constructor(
                     { throwable ->
                         if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                             _duplicateNameError.postValue(true)
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            CrashReporterProvider.get().recordException(throwable!!)
                             return@subscribe
                         }
-                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                        CrashReporterProvider.get().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }
                 )
@@ -128,10 +128,10 @@ class QuestionAttachmentModel @Inject constructor(
                     { throwable ->
                         if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                             _duplicateNameError.postValue(true)
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            CrashReporterProvider.get().recordException(throwable!!)
                             return@subscribe
                         }
-                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                        CrashReporterProvider.get().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }
                 )
@@ -152,10 +152,10 @@ class QuestionAttachmentModel @Inject constructor(
                     { throwable ->
                         if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                             _duplicateNameError.postValue(true)
-                            FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                            CrashReporterProvider.get().recordException(throwable!!)
                             return@subscribe
                         }
-                        FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                        CrashReporterProvider.get().recordException(throwable!!)
                         _onImportError.postValue(throwable)
                     }
                 )

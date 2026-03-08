@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.dialog.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -61,7 +61,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                     _isPublic.postValue(false)
                     return@subscribe
                 }
-                FirebaseCrashlytics.getInstance().recordException(error)
+                CrashReporterProvider.get().recordException(error)
                 val messageResId = when (error) {
                     is java.net.UnknownHostException -> R.string.settings_docu_error_domain_doesnt_exit
                     else -> R.string.settings_docu_error_unknown_connection_error
@@ -89,7 +89,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                     }
                 }
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -110,7 +110,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 _settings.postValue(Pair(it.serverName, list))
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
