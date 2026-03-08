@@ -3,8 +3,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id 'com.google.firebase.crashlytics'
-    id 'com.google.gms.google-services'
+}
+
+// Apply Firebase plugins only when not building for F-Droid.
+// Use -Pfdroid in F-Droid recipe; task name containing "fdroid" is a fallback.
+def isFdroidBuild = project.hasProperty('fdroid') ||
+    gradle.startParameter.taskNames.any { it.toLowerCase().contains("fdroid") }
+if (!isFdroidBuild) {
+    apply plugin: 'com.google.firebase.crashlytics'
+    apply plugin: 'com.google.gms.google-services'
 }
 
 /** Avoid duplicate logging classes app-wide */
@@ -157,7 +164,8 @@ android {
 
 // Disable Crashlytics Gradle tasks for fdroid variants (no Firebase SDK in fdroid).
 tasks.configureEach { task ->
-    if (task.name.contains("Crashlytics") && task.name.contains("fdroid")) {
+    def n = task.name.toLowerCase()
+    if (n.contains("crashlytics") && n.contains("fdroid")) {
         task.enabled = false
     }
 }
