@@ -230,11 +230,17 @@ dependencies {
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
-    // camera
-    implementation("com.otaliastudios:cameraview:$versions.cameraview") {
+    // camera - CameraView for Play Store, CameraX for F-Droid
+    playstoreImplementation("com.otaliastudios:cameraview:$versions.cameraview") {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
+    fdroidImplementation "androidx.camera:camera-core:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-camera2:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-video:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-extensions:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-lifecycle:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-view:$versions.camerax"
 
     // ---- Hilt (Google) ----
     implementation "com.google.dagger:hilt-android:${versions.hilt_android}"

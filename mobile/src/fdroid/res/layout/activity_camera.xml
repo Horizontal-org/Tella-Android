@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:keepScreenOn="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="@color/wa_black">
+
+        <ImageView
+            android:id="@+id/close"
+            style="@style/CameraTopImageStyle"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_close_white"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/action_cancel" />
+
+        <org.horizontal.tella.mobile.views.custom.CameraResolutionButton
+            android:id="@+id/resolutionButton"
+            android:background="@color/wa_black"
+            android:visibility="gone"
+            style="@style/CameraTopImageStyle"
+            android:contentDescription="@string/action_choose_resolution"
+            android:layout_toStartOf="@id/gridButton"
+            android:layout_marginStart="32dp"/>
+
+        <org.horizontal.tella.mobile.views.custom.CameraGridButton
+            android:id="@+id/gridButton"
+            style="@style/CameraTopImageStyle"
+            android:layout_marginStart="32dp"
+            android:layout_toStartOf="@id/switchButton" />
+
+        <org.horizontal.tella.mobile.views.custom.CameraSwitchButton
+            android:id="@+id/switchButton"
+            style="@style/CameraTopImageStyle"
+            android:layout_toStartOf="@id/flashButton"
+            android:layout_marginStart="32dp"/>
+
+        <org.horizontal.tella.mobile.views.custom.CameraFlashButton
+            android:id="@+id/flashButton"
+            style="@style/CameraTopImageStyle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="32dp"
+            tools:ignore="RelativeOverlap" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:keepScreenOn="true" />
+
+        <org.horizontal.tella.mobile.views.custom.CameraDurationTextView
+            android:id="@+id/durationView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:padding="2dp"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:textColor="@android:color/white" />
+
+        <FrameLayout
+            android:layout_width="32dp"
+            android:layout_height="250dp"
+            android:layout_marginStart="40dp"
+            android:contentDescription="@string/action_zoom"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <SeekBar
+                android:id="@+id/camera_zoom"
+                style="@style/CameraZoomSeekBar"
+                android:contentDescription="@string/action_zoom"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:max="100"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:rotation="270" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <org.horizontal.tella.mobile.views.custom.CameraCaptureButton
+            android:id="@+id/captureButton"
+            android:layout_width="@dimen/camera_capture_button"
+            android:layout_height="@dimen/camera_capture_button"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/Uwazi_WidgetMedia_Take_Photo"
+            android:padding="8dp"
+            android:scaleType="fitCenter" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/preview_image"
+            android:layout_width="@dimen/gallery_preview_button"
+            android:layout_height="@dimen/gallery_preview_button"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="30dp"
+            android:clickable="true"
+            android:contentDescription="@string/action_open_gallery"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/white"
+            app:civ_border_color="@color/wa_gray"
+            app:civ_border_width="2dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/camera_mode_links_margin"
+        android:layout_marginBottom="@dimen/camera_mode_links_margin"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:id="@+id/photo_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:paddingStart="50dp"
+            android:paddingEnd="0dp">
+
+            <TextView
+                android:id="@+id/photo_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/CameraModeText"
+                android:text="@string/camera_tab.title_photo"
+                android:textAlignment="center"/>
+
+            <View
+                android:id="@+id/photo_line"
+                style="@style/CameraModeLine" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/video_mode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:paddingStart="0dp"
+            android:paddingEnd="50dp">
+
+            <TextView
+                android:id="@+id/video_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/CameraModeText"
+                android:text="@string/camera_tab.title_video"
+                android:textAlignment="center"/>
+            <View
+                android:id="@+id/video_line"
+                style="@style/CameraModeLine" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
