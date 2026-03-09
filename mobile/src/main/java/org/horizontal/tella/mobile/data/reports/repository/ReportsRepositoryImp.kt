@@ -334,8 +334,8 @@ class ReportsRepositoryImp @Inject internal constructor(
      *
      * @param vaultFile The file to be uploaded.
      * @param skipBytes The number of bytes to skip when reading the file.
-     * @param baseUrl The base URL for the API endpoint.
-     * @param accessToken The access token for authentication.
+     * @param server The server the files should be uploaded to.
+     * @param reportId The ID of the report to which the file belongs.
      * @return a Flowable that emits UploadProgressInfo as the file upload progresses.
      */
     @VisibleForTesting
@@ -350,19 +350,27 @@ class ReportsRepositoryImp @Inject internal constructor(
             val uploadEmitter = UploadEmitter()
             val fileToUpload =
                 prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
-            val baseUrl = uploadFileUrl(server, reportId, vaultFile)
 
-            if (server.version == FILE_API_V2_MINIMUM_VERSION) {
-                uploadFileV2(fileToUpload, skipBytes, baseUrl, server.accessToken, emitter, vaultFile, size)
+            if (shouldUsePutFileV2(server)) {
+                uploadFileV2(fileToUpload, skipBytes, uploadFileUrl(server, reportId, vaultFile, "file/v2"), server.accessToken, emitter, vaultFile, size)
             } else {
-                uploadFile(fileToUpload, baseUrl, server.accessToken, emitter, vaultFile, size)
+                uploadFile(fileToUpload, uploadFileUrl(server, reportId, vaultFile, "file"), server.accessToken, emitter, vaultFile, size)
             }
         }, BackpressureStrategy.LATEST)
     }
 
-    private fun uploadFileUrl(server: TellaReportServer, reportId: String, vaultFile: VaultFile): String {
-        val endpointUrl = if (server.version == FILE_API_V2_MINIMUM_VERSION) "file/v2" else "file"
-        return "${server.url}$endpointUrl/$reportId/${getFileName(vaultFile)}"
+    private fun shouldUsePutFileV2(server: TellaReportServer): Boolean {
+        val currentVersion = server.version ?: return false
+
+        val current = currentVersion.split(".").map { it.toInt() }
+        val target = FILE_API_V2_MINIMUM_VERSION.split(".").map { it.toInt() }
+
+        return current[0] > target[0] || current[0] == target[0] && current[1] > target[1] ||
+                current[0] == target[0] && current[1] == target[1] && current[2] >= target[2]
+    }
+
+    private fun uploadFileUrl(server: TellaReportServer, reportId: String, vaultFile: VaultFile, path: String): String {
+        return "${server.url}$path/$reportId/${getFileName(vaultFile)}"
     }
 
     /**
