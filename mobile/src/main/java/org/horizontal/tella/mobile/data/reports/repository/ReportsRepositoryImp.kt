@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.data.http.HttpStatus
 import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
+import org.horizontal.tella.mobile.data.repository.ChunkableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
@@ -461,35 +462,64 @@ class ReportsRepositoryImp @Inject internal constructor(
      */
     @VisibleForTesting
     private fun uploadFileV2(
-    fileToUpload: SkippableMediaFileRequestBody,
-    skipBytes: Long,
-    baseUrl: String,
-    accessToken: String,
-    emitter: FlowableEmitter<UploadProgressInfo>,
-    vaultFile: VaultFile,
-    size: Long
-) {
-    // Content-Range format: bytes START-END/TOTAL (inclusive)
-    val contentRange = "bytes $skipBytes-${size - 1}/$size"
-    val contentLength = fileToUpload.contentLength()
+        fileToUpload: SkippableMediaFileRequestBody,
+        skipBytes: Long,
+        baseUrl: String,
+        accessToken: String,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) {
+        // FIXME: THIS IS JUST FOR TESTING PURPOSES
+        // --- MINIMALISTIC SPLIT LOGIC FOR TESTING ---
+        val remainingBytes = size - skipBytes
+        val splitPoint : Long = 100 * 1024
+        val skipBytes2 = skipBytes + splitPoint
 
-    val disposable = apiService.putFileV2(
-        url = baseUrl,
-        accessToken = accessToken,
-        contentRange = contentRange,
-        contentLength = contentLength,
-        contentType = vaultFile.mimeType,
-        fileInfo = null,
-        body = fileToUpload
-    )
-        .subscribe({ response ->
-            handleUploadV2Response(response, emitter, vaultFile, size)
-        }, { error ->
-            emitter.onError(UploadError(error))
-        })
+        // If we have more than 100KB, split it
+        val chunkLength1 = splitPoint
+        val chunkLength2 = remainingBytes-splitPoint
 
-    disposables.add(disposable)
-}
+        val chunkBody1 = ChunkableMediaFileRequestBody(vaultFile, skipBytes, chunkLength1)
+        val chunkBody2 = ChunkableMediaFileRequestBody(vaultFile, skipBytes2, chunkLength2)
+
+        uploadChunk(skipBytes, chunkLength1, remainingBytes, chunkBody1, baseUrl, accessToken, vaultFile, emitter)
+        uploadChunk(skipBytes2, chunkLength2, remainingBytes, chunkBody2, baseUrl, accessToken, vaultFile, emitter)
+    }
+
+    private fun uploadChunk(
+        skipBytes: Long,
+        chunkSize: Long,
+        totalBytes: Long,
+        fileToUpload: SkippableMediaFileRequestBody,
+        baseUrl: String,
+        accessToken: String,
+        vaultFile: VaultFile,
+        emitter: FlowableEmitter<UploadProgressInfo>
+    ) {
+        // Content-Range format: bytes START-END/TOTAL (inclusive)
+        val uploadedSize = skipBytes+chunkSize - 1
+        val contentRange = "bytes $skipBytes-$uploadedSize/$totalBytes"
+        val contentLength = fileToUpload.contentLength()
+
+        val disposable = apiService.putFileV2(
+            url = baseUrl,
+            accessToken = accessToken,
+            contentRange = contentRange,
+            contentLength = contentLength,
+            contentType = vaultFile.mimeType,
+            fileInfo = null,
+            body = fileToUpload
+        )
+            .subscribe({ response ->
+                handleUploadV2Response(response, emitter, vaultFile, uploadedSize)
+            }, { error ->
+                emitter.onError(UploadError(error))
+            })
+
+        disposables.add(disposable)
+    }
+
 
     /**
      * Handles the response from the server after file upload.
@@ -528,16 +558,30 @@ class ReportsRepositoryImp @Inject internal constructor(
         size: Long
     ) { //TODO handle 206 and 200
         if (!response.isSuccessful) {
+            Timber.d("Error uploading chunk: %s", response.errorBody()?.string())
             emitter.onError(UploadError(response.code()))
         } else {
-            emitter.onNext(
-                UploadProgressInfo(
-                    vaultFile,
-                    size,
-                    UploadProgressInfo.Status.FINISHED
+            if(response.code() == 206){
+                Timber.d("Successful partial upload: %s - %s", response.headers()["range"], response.headers()["content-length"])
+                emitter.onNext(
+                    UploadProgressInfo(
+                        vaultFile,
+                        size,
+                        UploadProgressInfo.Status.STARTED
+                    )
                 )
-            )
-            emitter.onComplete()
+            } else {
+                Timber.d("Successful full upload: %s", response.headers()["content-length"])
+                emitter.onNext(
+                    UploadProgressInfo(
+                        vaultFile,
+                        size,
+                        UploadProgressInfo.Status.FINISHED
+                    )
+                )
+                emitter.onComplete()
+            }
+
         }
     }
 
