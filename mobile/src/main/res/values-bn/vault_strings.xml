@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">এই ফাইল ফর্ম্যাটটি Tella দিয়ে খোলা যাবে না। আপনি কি ফাইলটি একটি ভিন্ন অ্যাপের মাধ্যমে খুলতে আপনার ডিভাইসে এক্সপোর্ট করতে চান? এটি ফাইলের বিষয়বস্তু প্রকাশ করতে পারে।</string>
   <string name="Vault_Export_SheetAction">এক্সপোর্ট</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Tella তে আপনার কাছে এখনও কোনও ফাইল নেই।</string>
   <string name="Vault_FavoriteTemplates_Title">প্রিয় টেমপ্লেট</string>

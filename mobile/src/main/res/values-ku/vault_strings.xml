@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">فۆرماتی ئەم فایلە لەناو تێلادا ناکرێتەوە. دەتەوێت فایلەکە هەناردە بکەیتە سەر ئامێرەکەت بۆ ئەوەی لە ڕێگەی ئەپێکی جیاوازەوە بیکەیتەوە؟ ئەمە لەوانەیە ناوەڕۆکی فایلەکە ئاشکرا بکات.</string>
   <string name="Vault_Export_SheetAction">هەناردن</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">تۆ هێشتا هیچ فایلێکت لە تێلادا نییە.</string>
   <string name="Vault_FavoriteTemplates_Title">قاڵبە دڵخوازەکان</string>

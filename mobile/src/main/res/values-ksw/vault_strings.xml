@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">လံာ်တြံ၁်အက့ၢ်အဂီၤဒ်အံၤတကလုာ်အံၤ တၢ်အိးထီၣ်အီၤလၢ Tellaပူၤအံၤတန့ၢ်ဘၣ်ႋ မ့ၢ်နဘၣ်သးဆှၢထီၣ်အီၤဆူနတၢ်ပီးတၢ်လီပူၤလၢ နကအိးထီၣ်ကွၢ်အီၤ ဒီးအဲး(ပ်)အဂၤအဂီၢ်န့ၣ်ဧါ?  တၢ်အံၤကပာ်ဖျါထီၣ်ဝဲ လံာ်တြံာ်အတၢ်ဂ့ၢ်တၢ်ကျိၤသ့န့ၣ်လီၤႋ</string>
   <string name="Vault_Export_SheetAction">ဆှၢထီၣ်အီၤဆူတၢ်ပီးတၢ်လီအပူၤ</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">လၢ Tella ပူၤအံၤ နလံာ်တြံာ်တအိၣ်နီတခါဒံးဘၣ်</string>
   <string name="Vault_FavoriteTemplates_Title">တၢ်ကဘျၣ်ဒိလၢယဘၣ်သးအီၤတဖၣ်</string>

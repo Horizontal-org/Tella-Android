@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">این قالب فایل را نمی‌توان در Tella باز کرد. آیا می‌خواهید فایل را به دستگاه خود منتقل کنید و آنجا با برنامه دیگری باز کنید؟ این کار ممکن است باعث افشای محتوای فایل شود.</string>
   <string name="Vault_Export_SheetAction">انتقال</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">هنوز هیچ فایلی در Tella ندارید.</string>
   <string name="Vault_FavoriteTemplates_Title">قالب‌های موردعلاقه</string>

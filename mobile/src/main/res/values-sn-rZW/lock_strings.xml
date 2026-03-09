@@ -33,7 +33,7 @@
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Ndapota edzai zvakare. Mapassword enyu haawirirane.</string>
   <string name="LockSuccess_Message_AllDone">Emwi mapera esse.</string>
   <string name="LockSuccess_Message_Hint">Unokwanissa kuchinja mavarire ita kuti Tella iete chiemo chaunodha pa seti.</string>
-  <string name="LockSuccess_Action_GoToTella">Kuenda pa Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Codi hakashata. Ndapota mbindhaswe.</string>
   <string name="UnlockPassword_Message_EnterPassword">Issa codi hako kuti uvhure Tella hako.</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">Ndiona here codi hako.</string>

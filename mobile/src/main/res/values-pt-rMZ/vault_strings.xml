@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">Este formato de ficheiro não pode ser aberto no Tella. Gostaria de exportar o ficheiro para o seu dispositivo para o abrir através de um aplicativo diferente? Isto pode expor o conteúdo do ficheiro.</string>
   <string name="Vault_Export_SheetAction">Exportar</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Ainda não tem nenhum ficheiro no Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Modelos favoritos</string>

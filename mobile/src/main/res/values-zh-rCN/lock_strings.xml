@@ -9,8 +9,8 @@
   <string name="UnlockPattern_DrawToUnlock">请输入图案解锁 Tella</string>
   <string name="LockPatternConfirm_Pattern_Confirmed">新的解锁图案</string>
   <string name="LockPatternSet_Pattern_Recorded">图案已记录</string>
-  <string name="UnlockPattern_PatternTooShort">连接至少六个点
-来输入您的图案</string>
+  <string name="UnlockPattern_PatternTooShort">绘制您的图案
+连接至少六个点</string>
   <string name="LockPatternSet_RecordingPattern">完成后松开手指</string>
   <string name="LockPatternSet_Action_Redraw">清除</string>
   <string name="LockPatternConfirm_Message_WrongPattern">图案错误，请重试</string>
@@ -24,20 +24,20 @@
   <string name="UnLockPattern_Message_IncorrectPattern">请重试，图案不匹配。</string>
   <string name="LockPinSet_Message_EnterPin">确认 PIN 码</string>
   <string name="UnlockPin_Message_EnterPin">请输入 PIN 码解锁 Tella</string>
-  <string name="LockPinSet_Message_Hint">使用至少6位数。
-避免使用可以被轻易猜到的数字，比如您的生日。</string>
+  <string name="LockPinSet_Message_Hint">使用至少 6 位数。
+避免使用容易猜到的数字，比如您的生日。</string>
   <string name="LockPinSet_Message_Confirm">确认 PIN 码</string>
   <string name="LockPinConfirm_Message_Confirm">请再次输入 PIN 码，
  以确认无误。</string>
   <string name="LockPinConfirm_Message_Error_TryAgain">请重试，PIN 码不匹配。</string>
   <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN 码错误，请重试</string>
   <string name="UnlockPassword_Message_EnterYourPassword">请输入您的密码</string>
-  <string name="LockPasswordSet_Message_Hint">至少使用 6 个字符，避免使用 \"password \"等容易被猜到的密码。密码越长越安全。</string>
+  <string name="LockPasswordSet_Message_Hint">至少使用 6 个字符，避免使用“password”等容易猜到的密码。密码越长越安全。</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">请重试。您的密码不匹配。</string>
   <string name="LockSuccess_Message_AllDone">已全部完成！</string>
   <string name="LockSuccess_Message_Hint">您随时可以在设置中更改应用锁定选项
  并进一步自定义 Tella。</string>
-  <string name="LockSuccess_Action_GoToTella">前往 tella</string>
+  <string name="LockSuccess_Action_GoToTella">前往 Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">密码错误，请重试</string>
   <string name="UnlockPassword_Message_EnterPassword">请输入密码解锁 Tella</string>
   <string name="LockPasswordConfirm_Message_ConfirmPassword">确认密码</string>
@@ -54,7 +54,7 @@
   <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">请输入当前图案，
 更改您的伪装</string>
   <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">请输入当前 PIN 码，
- 更改您的伪装   </string>
+更改您的伪装   </string>
   <string name="Settings_Action_SetLock">应用锁</string>
   <string name="Settings_Message_LockChanged">应用锁已更换！</string>
 </resources>
