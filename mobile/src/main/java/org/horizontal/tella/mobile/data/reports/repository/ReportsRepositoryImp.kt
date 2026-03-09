@@ -470,22 +470,22 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) {
-        // FIXME: THIS IS JUST FOR TESTING PURPOSES
-        // --- MINIMALISTIC SPLIT LOGIC FOR TESTING ---
         val remainingBytes = size - skipBytes
         val splitPoint : Long = 100 * 1024
+        if(splitPoint > remainingBytes){
+            val chunkBody = ChunkableMediaFileRequestBody(vaultFile, skipBytes, remainingBytes)
+            uploadChunk(chunkBody, baseUrl, accessToken, vaultFile, emitter)
+        } else {
+            val chunkBody = ChunkableMediaFileRequestBody(vaultFile, skipBytes, splitPoint)
+            uploadChunk(chunkBody, baseUrl, accessToken, vaultFile, emitter)
+            val skipBytes2 = skipBytes + splitPoint
 
-        val skipBytes2 = skipBytes + splitPoint
-
-        // If we have more than 100KB, split it
-        val chunkLength1 = splitPoint
-        val chunkLength2 = remainingBytes-splitPoint
-
-        val chunkBody1 = ChunkableMediaFileRequestBody(vaultFile, skipBytes, chunkLength1)
-        val chunkBody2 = ChunkableMediaFileRequestBody(vaultFile, skipBytes2, chunkLength2)
-
-        uploadChunk(chunkBody1, baseUrl, accessToken, vaultFile, emitter)
-        uploadChunk(chunkBody2, baseUrl, accessToken, vaultFile, emitter)
+            val uploadEmitter = UploadEmitter()
+            val fileToUpload2 =
+                prepareFileToUpload(vaultFile, skipBytes2, emitter, uploadEmitter, size)
+            // val fileToUpload2 = SkippableMediaFileRequestBody(vaultFile, skipBytes2, null)
+            uploadFileV2(fileToUpload2, skipBytes2, baseUrl, accessToken, emitter, vaultFile, size)
+        }
     }
 
     private fun uploadChunk(
