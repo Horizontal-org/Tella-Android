@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">He file format hi Tella chhungah a hawn theih loh. App dang hmanga hawng turin i device-ah export i duh em? Hian file chhunga thu awmte a tilang thei a ni. </string>
   <string name="Vault_Export_SheetAction">Export</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Tella-ah file engmah i la nei lo.</string>
   <string name="Vault_FavoriteTemplates_Title">Template duh bikte</string>

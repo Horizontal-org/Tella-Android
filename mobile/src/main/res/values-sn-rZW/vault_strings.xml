@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">Mafomati efaira iri haagoni kuvhurwa mukati meTella. Unoda kutumira faira iri kunze kumudziyo wako kuti uivhure neapp yakasiyana here? Izvi zvinogona kufumura zviri mukati mefaira.</string>
   <string name="Vault_Export_SheetAction">Kuendessa</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Aussati wa no chikwama pa Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Mufananidjo nji nondissiswa</string>

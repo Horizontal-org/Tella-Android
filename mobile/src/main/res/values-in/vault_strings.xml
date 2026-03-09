@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">Format berkas ini tidak bisa dibuka di dalam Tella. Apakah Anda ingin mengekspornya ke perangkat Anda agar bisa dibuka di aplikasi lain? Hal ini bisa mengekspos isi dari berkas tersebut.</string>
   <string name="Vault_Export_SheetAction">Mengekspor</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Anda tidak memiliki berkas apapun di dalam Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Templat favorit</string>
