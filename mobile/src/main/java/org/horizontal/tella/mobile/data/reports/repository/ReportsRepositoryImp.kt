@@ -474,6 +474,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         // --- MINIMALISTIC SPLIT LOGIC FOR TESTING ---
         val remainingBytes = size - skipBytes
         val splitPoint : Long = 100 * 1024
+
         val skipBytes2 = skipBytes + splitPoint
 
         // If we have more than 100KB, split it
@@ -483,23 +484,21 @@ class ReportsRepositoryImp @Inject internal constructor(
         val chunkBody1 = ChunkableMediaFileRequestBody(vaultFile, skipBytes, chunkLength1)
         val chunkBody2 = ChunkableMediaFileRequestBody(vaultFile, skipBytes2, chunkLength2)
 
-        uploadChunk(skipBytes, chunkLength1, remainingBytes, chunkBody1, baseUrl, accessToken, vaultFile, emitter)
-        uploadChunk(skipBytes2, chunkLength2, remainingBytes, chunkBody2, baseUrl, accessToken, vaultFile, emitter)
+        uploadChunk(chunkBody1, baseUrl, accessToken, vaultFile, emitter)
+        uploadChunk(chunkBody2, baseUrl, accessToken, vaultFile, emitter)
     }
 
     private fun uploadChunk(
-        skipBytes: Long,
-        chunkSize: Long,
-        totalBytes: Long,
-        fileToUpload: SkippableMediaFileRequestBody,
+        fileToUpload: ChunkableMediaFileRequestBody,
         baseUrl: String,
         accessToken: String,
         vaultFile: VaultFile,
         emitter: FlowableEmitter<UploadProgressInfo>
     ) {
         // Content-Range format: bytes START-END/TOTAL (inclusive)
-        val uploadedSize = skipBytes+chunkSize - 1
-        val contentRange = "bytes $skipBytes-$uploadedSize/$totalBytes"
+        val skipBytes = fileToUpload.skipBytes()
+        val uploadedSize = skipBytes+fileToUpload.chunkSize() - 1
+        val contentRange = "bytes $skipBytes-$uploadedSize/${fileToUpload.totalBytes()}"
         val contentLength = fileToUpload.contentLength()
 
         val disposable = apiService.putFileV2(

@@ -16,7 +16,7 @@ public class SkippableMediaFileRequestBody extends MediaFileRequestBody {
     private static final int CHUNK_SIZE = 128 * 1024;
     private byte[] buffer = new byte[CHUNK_SIZE];
 
-    private long skip;
+    protected long skip;
 
 
     public SkippableMediaFileRequestBody(VaultFile mediaFile, long skip, @Nullable IProgressListener progressListener) {
