@@ -494,6 +494,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) {
+        Timber.d("*** Report file upload *** %s - Starting upload", vaultFile.name)
         val disposable = apiService.putFile(fileToUpload, baseUrl, accessToken)
             .flatMap { response ->
                 if (!response.isSuccessful) {
@@ -509,15 +510,8 @@ class ReportsRepositoryImp @Inject internal constructor(
                         PARTIAL_UPLOAD_SUCCESS_CODE,
                         response.headers()["range"]
                     )
-                    // Leave as started, since we're not confident that the upload completed
-                    emitter.onNext(
-                        UploadProgressInfo(
-                            vaultFile,
-                            size,
-                            UploadProgressInfo.Status.STARTED
-                        )
-                    )
-                    emitter.onComplete()
+                    // It will be treated as a successful upload, even if 206 was received
+                    handleUploadCompletion(emitter, vaultFile, size)
                 })
             }, { error ->
                 emitter.onError(UploadError(error))
@@ -552,6 +546,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         val nextOffset = fileToUpload.endByte()
         val totalSize = fileToUpload.totalBytes()
         try {
+            Timber.d("*** Chunk upload *** %s - Starting chunk upload", vaultFile.name)
             // Synchronously execute this chunk's PUT
             val response = apiService.putFileV2(
                 url = baseUrl,
@@ -567,7 +562,11 @@ class ReportsRepositoryImp @Inject internal constructor(
                 { response ->
                     val receivedRange = response.headers()["range"]
                     // Log the received range for debugging purposes
-                    Timber.d("*** Chunk upload *** - Received range: %s", receivedRange)
+                    Timber.d(
+                        "*** Chunk upload *** %s - Received range: %s",
+                        vaultFile.name,
+                        receivedRange
+                    )
 
                     // Emit progress considering the latest uploaded chunk
                     emitter.onNext(
@@ -607,6 +606,10 @@ class ReportsRepositoryImp @Inject internal constructor(
         onPartialSuccess: (Response<Void>) -> Unit
     ) {
         if (!response.isSuccessful) {
+            Timber.d(
+                "*** Report file upload *** %s - Error: ${response.code()}",
+                vaultFile.name
+            )
             emitter.onError(UploadError(response.code()))
         } else {
             if(response.code() == PARTIAL_UPLOAD_SUCCESS_CODE){
@@ -622,6 +625,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) {
+        Timber.d("*** Report file upload *** - Success: %s", vaultFile.name)
         emitter.onNext(
             UploadProgressInfo(
                 vaultFile,
