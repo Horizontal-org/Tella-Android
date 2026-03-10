@@ -97,12 +97,14 @@ android {
     productFlavors {
         playstore {
             dimension "distribution"
+            applicationId "org.hzontal.tella"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "true"
             buildConfigField "boolean", "ENABLE_DROPBOX", "true"
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
         }
         fdroid {
             dimension "distribution"
+            applicationId "org.hzontal.tellaFOSS"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "false"
             buildConfigField "boolean", "ENABLE_DROPBOX", "false"
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
