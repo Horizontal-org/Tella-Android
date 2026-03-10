@@ -13,6 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
@@ -52,6 +53,8 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     companion object {
         const val FILE_API_V2_MINIMUM_VERSION = "1.4.0"
+        const val DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024L
+        const val PARTIAL_UPLOAD_SUCCESS_CODE = 206
     }
 
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
@@ -351,24 +354,14 @@ class ReportsRepositoryImp @Inject internal constructor(
         server: TellaReportServer,
         reportId: String
     ): Flowable<UploadProgressInfo> {
-        return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-            val size = vaultFile.size
-            val uploadEmitter = UploadEmitter()
-            val fileToUpload =
-                prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
-
-            if (shouldUsePutFileV2(server)) {
-                uploadFileV2(
-                    fileToUpload,
-                    skipBytes,
-                    uploadFileUrl(server, reportId, vaultFile, "file/v2"),
-                    server.accessToken,
-                    emitter,
-                    vaultFile,
-                    size
-                )
-            } else {
-                uploadFile(
+        if (!shouldUsePutFileV2(server)) {
+            // V1 (Original logic) for servers with older versions
+            return Flowable.create({ emitter ->
+                val size = vaultFile.size
+                val uploadEmitter = UploadEmitter()
+                val fileToUpload =
+                    prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
+                uploadFileV1(
                     fileToUpload,
                     uploadFileUrl(server, reportId, vaultFile, "file"),
                     server.accessToken,
@@ -376,8 +369,53 @@ class ReportsRepositoryImp @Inject internal constructor(
                     vaultFile,
                     size
                 )
+            }, BackpressureStrategy.LATEST)
+        }
+
+        // V2 Logic: Chunked Upload via Flowable.generate
+        return Flowable.generate(
+            { skipBytes }, // Initial state: where we start
+            BiFunction { currentOffset: Long, emitter: Emitter<UploadProgressInfo> ->
+                val totalSize = vaultFile.size
+                if (currentOffset >= totalSize) {
+                    emitter.onComplete()
+                    currentOffset
+                } else {
+                    val chunkBody = prepareChunkToUpload(
+                        totalSize,
+                        currentOffset,
+                        vaultFile
+                    )
+                    val baseUrl = uploadFileUrl(server, reportId, vaultFile, "file/v2")
+                    val accessToken = "Bearer ${server.accessToken}"
+
+                    uploadFileV2(
+                        chunkBody,
+                        currentOffset,
+                        baseUrl,
+                        accessToken,
+                        emitter,
+                        vaultFile,
+                        totalSize
+                    )
+                }
             }
-        }, BackpressureStrategy.LATEST)
+        )
+    }
+
+    private fun prepareChunkToUpload(
+        totalSize: Long,
+        currentOffset: Long,
+        vaultFile: VaultFile
+    ): ChunkableMediaFileRequestBody {
+        // TODO: Chunk size is fixed for now, eventually this should
+        //  adapt to network connection
+        val CHUNK_SIZE = DEFAULT_CHUNK_SIZE
+
+        val remaining = totalSize - currentOffset
+        val currentChunkSize = minOf(CHUNK_SIZE, remaining)
+
+        return ChunkableMediaFileRequestBody(vaultFile, currentOffset, currentChunkSize)
     }
 
     private fun shouldUsePutFileV2(server: TellaReportServer): Boolean {
@@ -448,7 +486,7 @@ class ReportsRepositoryImp @Inject internal constructor(
      * @param size The size of the file.
      */
     @VisibleForTesting
-    private fun uploadFile(
+    private fun uploadFileV1(
         fileToUpload: SkippableMediaFileRequestBody,
         baseUrl: String,
         accessToken: String,
@@ -465,14 +503,28 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
             .subscribe({ response ->
-                handleUploadResponse(response, emitter, vaultFile, size)
+                handleUploadResponse(response, emitter, vaultFile, size, {response ->
+                    Timber.w(
+                        "Unexpected %d response from server using V1 API: %s",
+                        PARTIAL_UPLOAD_SUCCESS_CODE,
+                        response.headers()["range"]
+                    )
+                    // Leave as started, since we're not confident that the upload completed
+                    emitter.onNext(
+                        UploadProgressInfo(
+                            vaultFile,
+                            size,
+                            UploadProgressInfo.Status.STARTED
+                        )
+                    )
+                    emitter.onComplete()
+                })
             }, { error ->
                 emitter.onError(UploadError(error))
             })
 
         disposables.add(disposable)
     }
-
 
     /**
      * Uploads the file to the server using the V2 endpoint (single-step upload).
@@ -484,117 +536,100 @@ class ReportsRepositoryImp @Inject internal constructor(
      * @param emitter The FlowableEmitter to emit progress updates.
      * @param vaultFile The file to be uploaded.
      * @param size The size of the file.
+     * @return the number of bytes already present on the server.
      */
     @VisibleForTesting
     private fun uploadFileV2(
-        fileToUpload: SkippableMediaFileRequestBody,
+        fileToUpload: ChunkableMediaFileRequestBody,
         skipBytes: Long,
         baseUrl: String,
         accessToken: String,
-        emitter: FlowableEmitter<UploadProgressInfo>,
+        emitter: Emitter<UploadProgressInfo>,
         vaultFile: VaultFile,
         size: Long
-    ) {
-        val remainingBytes = size - skipBytes
-        val maxChunkSize: Long = 2 * 1024 * 1024 // 2MB
-        val chunkSize: Long = minOf(maxChunkSize, remainingBytes)
+    ) : Long {
+        val currentChunkSize = fileToUpload.chunkSize()
+        val nextOffset = fileToUpload.endByte()
+        val totalSize = fileToUpload.totalBytes()
+        try {
+            // Synchronously execute this chunk's PUT
+            val response = apiService.putFileV2(
+                url = baseUrl,
+                accessToken = accessToken,
+                contentRange = "bytes $skipBytes-$nextOffset/$totalSize",
+                contentLength = currentChunkSize,
+                contentType = vaultFile.mimeType,
+                fileInfo = null,
+                body = fileToUpload
+            ).blockingGet()
 
-        val chunkBody = ChunkableMediaFileRequestBody(vaultFile, skipBytes, chunkSize)
+            handleUploadResponse(response, emitter, vaultFile, totalSize,
+                { response ->
+                    val receivedRange = response.headers()["range"]
+                    // Log the received range for debugging purposes
+                    Timber.d("*** Chunk upload *** - Received range: %s", receivedRange)
 
-        // Upload chunk and perform next chunk upload if the response is 206
-        uploadChunk(chunkBody, baseUrl, accessToken, vaultFile, emitter, { response ->
-            val receivedRange = response.headers()["range"]
-            val receivedEndByte = receivedRange?.partition { divider -> divider == '-'}?.second
-            if (!skipBytes.toString().equals(receivedEndByte)) {
-                Timber.w(
-                    "Received range does not end where expected: %s != %s - %s",
-                    skipBytes.toString(),
-                    receivedEndByte,
-                    vaultFile.path
-                )
-            }
-            val skipBytes2 = skipBytes + chunkSize
-
-            val uploadEmitter = UploadEmitter()
-            val fileToUpload2 =
-                prepareFileToUpload(vaultFile, skipBytes2, emitter, uploadEmitter, size)
-            uploadFileV2(fileToUpload2, skipBytes2, baseUrl, accessToken, emitter, vaultFile, size)
-        })
-
-    }
-
-    private fun uploadChunk(
-        fileToUpload: ChunkableMediaFileRequestBody,
-        baseUrl: String,
-        accessToken: String,
-        vaultFile: VaultFile,
-        emitter: FlowableEmitter<UploadProgressInfo>,
-        onPartialSuccess: (Response<Void>) -> Unit
-    ) {
-        // Content-Range format: bytes START-END/TOTAL (inclusive)
-        val skipBytes = fileToUpload.skipBytes()
-        val uploadEndBytes = skipBytes + fileToUpload.chunkSize() - 1
-        val contentRange = "bytes $skipBytes-$uploadEndBytes/${fileToUpload.totalBytes()}"
-        val contentLength = fileToUpload.contentLength()
-
-        val disposable = apiService.putFileV2(
-            url = baseUrl,
-            accessToken = accessToken,
-            contentRange = contentRange,
-            contentLength = contentLength,
-            contentType = vaultFile.mimeType,
-            fileInfo = null,
-            body = fileToUpload
-        )
-            .subscribe({ response ->
-                if (response.code() == 206) {
-                    Timber.d("Successful partial upload: %s", response.headers()["range"])
+                    // Emit progress considering the latest uploaded chunk
                     emitter.onNext(
                         UploadProgressInfo(
                             vaultFile,
-                            uploadEndBytes,
+                            nextOffset,
                             UploadProgressInfo.Status.STARTED
                         )
                     )
-                    onPartialSuccess(response)
-                } else {
-                    handleUploadResponse(response, emitter, vaultFile, uploadEndBytes)
-                }
-            }, { error ->
-                emitter.onError(UploadError(error))
-            })
+                })
 
-        disposables.add(disposable)
+            return if (response.isSuccessful && response.code() == PARTIAL_UPLOAD_SUCCESS_CODE) {
+                nextOffset // This becomes 'currentOffset' in the next iteration
+            } else {
+                skipBytes
+            }
+        } catch (e: Exception) {
+            emitter.onError(e)
+            return skipBytes
+        }
     }
-
 
     /**
      * Handles the response from the server after file upload.
      *
      * @param response The response from the server.
-     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param emitter The Emitter to emit progress updates.
      * @param vaultFile The file that was uploaded.
      * @param size The size of the file.
      */
     @VisibleForTesting
     private fun handleUploadResponse(
         response: Response<Void>,
-        emitter: FlowableEmitter<UploadProgressInfo>,
+        emitter: Emitter<UploadProgressInfo>,
         vaultFile: VaultFile,
-        size: Long
+        size: Long,
+        onPartialSuccess: (Response<Void>) -> Unit
     ) {
         if (!response.isSuccessful) {
             emitter.onError(UploadError(response.code()))
         } else {
-            emitter.onNext(
-                UploadProgressInfo(
-                    vaultFile,
-                    size,
-                    UploadProgressInfo.Status.FINISHED
-                )
-            )
-            emitter.onComplete()
+            if(response.code() == PARTIAL_UPLOAD_SUCCESS_CODE){
+                onPartialSuccess(response)
+            } else {
+                handleUploadCompletion(emitter, vaultFile, size)
+            }
         }
+    }
+
+    private fun handleUploadCompletion(
+        emitter: Emitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) {
+        emitter.onNext(
+            UploadProgressInfo(
+                vaultFile,
+                size,
+                UploadProgressInfo.Status.FINISHED
+            )
+        )
+        emitter.onComplete()
     }
 
     override fun cleanup() {

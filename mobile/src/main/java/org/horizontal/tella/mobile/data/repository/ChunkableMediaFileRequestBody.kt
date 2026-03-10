@@ -28,4 +28,7 @@ class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, priva
     fun totalBytes() : Long {
         return mediaFile.size
     }
+    fun endByte() : Long {
+        return skipBytes() + chunkSize() - 1
+    }
 }
