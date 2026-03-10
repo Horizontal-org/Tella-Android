@@ -387,13 +387,12 @@ class ReportsRepositoryImp @Inject internal constructor(
                         vaultFile
                     )
                     val baseUrl = uploadFileUrl(server, reportId, vaultFile, "file/v2")
-                    val accessToken = "Bearer ${server.accessToken}"
 
                     uploadFileV2(
                         chunkBody,
                         currentOffset,
                         baseUrl,
-                        accessToken,
+                        server.accessToken,
                         emitter,
                         vaultFile,
                         totalSize
