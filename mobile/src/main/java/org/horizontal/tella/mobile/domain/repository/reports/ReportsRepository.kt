@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.domain.repository.reports
 
 import com.hzontal.tella_vault.VaultFile
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +27,7 @@ interface ReportsRepository {
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
-    )
+    ): Completable
 
     fun upload(
         vaultFile: VaultFile,

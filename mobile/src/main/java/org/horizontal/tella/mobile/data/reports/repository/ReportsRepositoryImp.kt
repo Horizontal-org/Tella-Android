@@ -6,6 +6,7 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.VisibleForTesting
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
 import io.reactivex.Emitter
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
@@ -132,14 +133,13 @@ class ReportsRepositoryImp @Inject internal constructor(
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
-    ) {
+    ): Completable {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
-            return
+            return Completable.complete()
         }
 
-        disposables.add(
-            Flowable.fromIterable(instance.widgetMediaFiles)
+        return Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
                     upload(file, server.url, reportApiId, server.accessToken)
                 }
@@ -162,9 +162,8 @@ class ReportsRepositoryImp @Inject internal constructor(
                 .doAfterNext { progressInfo ->
                     reportProgress.postValue(Pair(progressInfo, instance))
                 }
+                .ignoreElements() // Converts Flowable to Completable so it can be awaited
                 .subscribeOn(Schedulers.io()) // Non-blocking operation
-                .subscribe()
-        )
     }
 
     private fun handleInstanceOnTerminate(instance: ReportInstance) {
