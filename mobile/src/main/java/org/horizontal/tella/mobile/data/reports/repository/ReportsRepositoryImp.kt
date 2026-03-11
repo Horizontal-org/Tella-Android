@@ -58,7 +58,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         const val MIN_CHUNK_SIZE_WIFI = 5.0 * 1024 * 1024
         const val MAX_CHUNK_SIZE_WIFI = 10.0 * 1024 * 1024
         const val MIN_CHUNK_SIZE = 1.0 * 1024 * 1024
-        const val MAX_CHUNK_SIZE = 5.0 * 1024 * 1024
+        const val MAX_CHUNK_SIZE = 2.0 * 1024 * 1024
         const val TARGET_UPLOAD_TIME = 3
         const val SAFETY_FACTOR = 0.6
     }
@@ -413,8 +413,6 @@ class ReportsRepositoryImp @Inject internal constructor(
         currentOffset: Long,
         vaultFile: VaultFile
     ): ChunkableMediaFileRequestBody {
-        // TODO: Chunk size is fixed for now, eventually this should
-        //  adapt to network connection
         val CHUNK_SIZE = chunkSize()
 
         val remaining = totalSize - currentOffset
