@@ -63,6 +63,86 @@ class StatusProviderImpl(private val context: Context) : StatusProvider {
                 || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                 || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
     }
+
+    /**
+     * Determines the upstream bandwidth in Kbps.
+     * Uses the Connectivity Manager to check the current connection upstream bandwidth in Kbps.
+     */
+    override fun upstreamBandwidthKbps(): Int? {
+        val cm =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return null
+        return when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> upstreamBandwidthKbpsLegacy(cm)
+            else -> upstreamBandwidthKbpsModern(cm)
+        }
+    }
+
+
+    /**
+     * For Android versions less than Marshmallow, determines the upstream bandwidth in Kbps.
+     */
+    private fun upstreamBandwidthKbpsLegacy(cm: ConnectivityManager): Int? {
+        val activeInfo = cm.activeNetworkInfo ?: return null
+
+        for (network in cm.allNetworks) {
+            val info = cm.getNetworkInfo(network) ?: continue
+
+            if (info.type == activeInfo.type && info.isConnected) {
+                val caps = cm.getNetworkCapabilities(network) ?: return null
+                return caps.linkUpstreamBandwidthKbps
+            }
+        }
+
+        return null
+    }
+
+    /**
+     * For Android versions Marshmallow and later, determines the upstream bandwidth in Kbps.
+     */
+    @SuppressLint("NewApi")
+    private fun upstreamBandwidthKbpsModern(cm: ConnectivityManager): Int? {
+        return cm.getNetworkCapabilities(cm.activeNetwork)?.linkUpstreamBandwidthKbps
+    }
+
+    /**
+     * Determines if the device is currently connected to Wi-Fi.
+     * Uses the Connectivity Manager to check if the device is currently connected
+     * to a Wi-Fi network.
+     *
+     * @return true if the device is currently connected to a Wi-Fi network, false otherwise.
+     */
+    override fun isConnectedToWifi(): Boolean {
+        val cm =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
+        return when {
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> isConnnectedTpWifiLegacy(cm)
+            else -> isConnnectedTpWifiModern(cm)
+        }
+    }
+
+    /**
+     * For Android versions less than Marshmallow, checks if the device is currently connected to Wi-Fi.
+     *
+     * @param cm Connectivity Manager to check network connectivity.
+     * @return true if the device is currently connected to a Wi-Fi network, false otherwise.
+     */
+    fun isConnnectedTpWifiLegacy(cm: ConnectivityManager): Boolean {
+        val info = cm.activeNetworkInfo ?: return false
+
+        return info.isConnected && info.type == NETWORK_TYPE_WIFI
+    }
+
+    /**
+     * For Android versions Marshmallow and later, checks if the device is currently connected to Wi-Fi.
+     *
+     * @param cm Connectivity Manager to check network connectivity.
+     * @return true if the device is currently connected to a Wi-Fi network, false otherwise.
+     */
+    @SuppressLint("NewApi")
+    fun isConnnectedTpWifiModern(cm: ConnectivityManager): Boolean {
+        val network = cm.activeNetwork ?: return false
+        val caps = cm.getNetworkCapabilities(network) ?: return false
+
+        return caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+    }
 }
 
 

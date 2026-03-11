@@ -55,6 +55,12 @@ class ReportsRepositoryImp @Inject internal constructor(
         const val FILE_API_V2_MINIMUM_VERSION = "1.4.0"
         const val DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024L
         const val PARTIAL_UPLOAD_SUCCESS_CODE = 206
+        const val MIN_CHUNK_SIZE_WIFI = 5.0 * 1024 * 1024
+        const val MAX_CHUNK_SIZE_WIFI = 10.0 * 1024 * 1024
+        const val MIN_CHUNK_SIZE = 1.0 * 1024 * 1024
+        const val MAX_CHUNK_SIZE = 5.0 * 1024 * 1024
+        const val TARGET_UPLOAD_TIME = 3
+        const val SAFETY_FACTOR = 0.6
     }
 
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
@@ -409,12 +415,32 @@ class ReportsRepositoryImp @Inject internal constructor(
     ): ChunkableMediaFileRequestBody {
         // TODO: Chunk size is fixed for now, eventually this should
         //  adapt to network connection
-        val CHUNK_SIZE = DEFAULT_CHUNK_SIZE
+        val CHUNK_SIZE = chunkSize()
 
         val remaining = totalSize - currentOffset
         val currentChunkSize = minOf(CHUNK_SIZE, remaining)
 
         return ChunkableMediaFileRequestBody(vaultFile, currentOffset, currentChunkSize)
+    }
+
+    private fun chunkSize(): Long {
+        val upstreamBandWidthKbps = statusProvider.upstreamBandwidthKbps()
+        if (upstreamBandWidthKbps != null) {
+            var minChunkSize = MIN_CHUNK_SIZE
+            var maxChunkSize = MAX_CHUNK_SIZE
+            if (statusProvider.isConnectedToWifi()) {
+                minChunkSize = MIN_CHUNK_SIZE_WIFI
+                maxChunkSize = MAX_CHUNK_SIZE_WIFI
+            }
+            val bytesPerSecond = (upstreamBandWidthKbps * 1000) / 8
+            val chunk = bytesPerSecond * TARGET_UPLOAD_TIME * SAFETY_FACTOR
+            Timber.d("*** Chunk size file upload *** Using chunk size: ${chunk.coerceIn(minChunkSize, maxChunkSize).toLong()} ")
+
+            return chunk.coerceIn(minChunkSize, maxChunkSize).toLong()
+        }
+        Timber.d("*** Chunk size file upload *** Using default: ${DEFAULT_CHUNK_SIZE} ")
+
+        return DEFAULT_CHUNK_SIZE
     }
 
     private fun shouldUsePutFileV2(server: TellaReportServer): Boolean {
