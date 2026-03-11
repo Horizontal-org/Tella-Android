@@ -111,6 +111,18 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            def storeFileEnv = project.findProperty("RELEASE_STORE_FILE") ?: System.getenv("RELEASE_STORE_FILE")
+            if (storeFileEnv != null) {
+                storeFile file(storeFileEnv)
+                storePassword project.findProperty("RELEASE_STORE_PASSWORD") ?: System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -123,6 +135,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (project.findProperty("RELEASE_STORE_FILE") != null || System.getenv("RELEASE_STORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
