@@ -101,6 +101,7 @@ android {
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "true"
             buildConfigField "boolean", "ENABLE_DROPBOX", "true"
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_GOOGLE_MAPS", "true"
         }
         fdroid {
             dimension "distribution"
@@ -108,6 +109,7 @@ android {
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "false"
             buildConfigField "boolean", "ENABLE_DROPBOX", "false"
             buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+            buildConfigField "boolean", "ENABLE_GOOGLE_MAPS", "false"
         }
     }
 
@@ -216,7 +218,7 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
     implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
     implementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
-    implementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
+    playstoreImplementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
 
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
