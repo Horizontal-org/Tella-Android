@@ -39,6 +39,7 @@ import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.util.Util
+import org.horizontal.tella.mobile.util.Version
 import retrofit2.Response
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -358,13 +359,10 @@ class ReportsRepositoryImp @Inject internal constructor(
     }
 
     private fun shouldUsePutFileV2(uploadServerConfig: UploadServerConfig): Boolean {
-        val currentVersion = uploadServerConfig.version ?: return false
+        val current = Version.parse(uploadServerConfig.version)
+        val target = Version.parse(FILE_API_V2_MINIMUM_VERSION)
 
-        val current = currentVersion.split(".").map { it.toInt() }
-        val target = FILE_API_V2_MINIMUM_VERSION.split(".").map { it.toInt() }
-
-        return current[0] > target[0] || current[0] == target[0] && current[1] > target[1] ||
-                current[0] == target[0] && current[1] == target[1] && current[2] >= target[2]
+        return current >= target
     }
 
     private fun uploadFileUrl(baseUrl: String, reportId: String, vaultFile: VaultFile, path: String): String {
