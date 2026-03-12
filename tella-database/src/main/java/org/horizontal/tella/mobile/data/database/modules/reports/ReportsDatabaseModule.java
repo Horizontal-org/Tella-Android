@@ -134,7 +134,7 @@ public class ReportsDatabaseModule implements DatabaseModule {
 
     private String alterTableTellaUploadServerAddApiVersion() {
         return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
-                cddl(D.C_TELLA_API_VERSION, D.TEXT);
+                cddl(D.C_TELLA_WEB_API_VERSION, D.TEXT);
     }
 
     private String createTableReportFormInstance() {
