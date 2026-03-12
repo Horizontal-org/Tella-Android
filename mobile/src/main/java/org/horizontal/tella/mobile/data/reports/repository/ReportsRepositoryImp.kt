@@ -56,7 +56,6 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     companion object {
         const val DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024L
-        const val PARTIAL_UPLOAD_SUCCESS_CODE = 206
         const val MIN_CHUNK_SIZE_WIFI = 5.0 * 1024 * 1024
         const val MAX_CHUNK_SIZE_WIFI = 10.0 * 1024 * 1024
         const val MIN_CHUNK_SIZE = 1.0 * 1024 * 1024
@@ -524,7 +523,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                 handleUploadResponse(response, emitter, vaultFile, size, {response ->
                     Timber.w(
                         "Unexpected %d response from server using V1 API: %s",
-                        PARTIAL_UPLOAD_SUCCESS_CODE,
+                        HttpStatus.PARTIAL_CONTENT_206,
                         response.headers()["range"]
                     )
                     // It will be treated as a successful upload, even if 206 was received
@@ -595,7 +594,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     )
                 })
 
-            return if (response.isSuccessful && response.code() == PARTIAL_UPLOAD_SUCCESS_CODE) {
+            return if (response.isSuccessful && response.code() == HttpStatus.PARTIAL_CONTENT_206) {
                 nextOffset // This becomes 'currentOffset' in the next iteration
             } else {
                 skipBytes
@@ -629,7 +628,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             )
             emitter.onError(UploadError(response.code()))
         } else {
-            if(response.code() == PARTIAL_UPLOAD_SUCCESS_CODE){
+            if(response.code() == HttpStatus.PARTIAL_CONTENT_206){
                 onPartialSuccess(response)
             } else {
                 handleUploadCompletion(emitter, vaultFile, size)
