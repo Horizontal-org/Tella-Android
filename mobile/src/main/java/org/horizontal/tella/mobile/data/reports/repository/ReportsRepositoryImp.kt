@@ -56,10 +56,10 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     companion object {
         const val DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024L
-        const val MIN_CHUNK_SIZE_WIFI = 5.0 * 1024 * 1024
-        const val MAX_CHUNK_SIZE_WIFI = 10.0 * 1024 * 1024
-        const val MIN_CHUNK_SIZE = 1.0 * 1024 * 1024
-        const val MAX_CHUNK_SIZE = 2.0 * 1024 * 1024
+        const val MIN_CHUNK_SIZE_WIFI = 5 * 1024 * 1024L
+        const val MAX_CHUNK_SIZE_WIFI = 10 * 1024 * 1024L
+        const val MIN_CHUNK_SIZE = 1 * 1024 * 1024L
+        const val MAX_CHUNK_SIZE = 2 * 1024 * 1024L
         const val TARGET_UPLOAD_TIME = 3
         const val SAFETY_FACTOR = 0.6
     }
@@ -432,10 +432,10 @@ class ReportsRepositoryImp @Inject internal constructor(
                 maxChunkSize = MAX_CHUNK_SIZE_WIFI
             }
             val bytesPerSecond = (upstreamBandWidthKbps * 1000) / 8
-            val chunk = bytesPerSecond * TARGET_UPLOAD_TIME * SAFETY_FACTOR
-            Timber.d("*** Chunk size file upload *** Using chunk size: ${chunk.coerceIn(minChunkSize, maxChunkSize).toLong()} ")
+            val chunk = (bytesPerSecond * TARGET_UPLOAD_TIME * SAFETY_FACTOR).toLong()
+            Timber.d("*** Chunk size file upload *** Using chunk size: ${chunk.coerceIn(minChunkSize, maxChunkSize)} ")
 
-            return chunk.coerceIn(minChunkSize, maxChunkSize).toLong()
+            return chunk.coerceIn(minChunkSize, maxChunkSize)
         }
         Timber.d("*** Chunk size file upload *** Using default: ${DEFAULT_CHUNK_SIZE} ")
 
