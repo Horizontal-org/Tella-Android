@@ -393,7 +393,6 @@ class ReportsRepositoryImp @Inject internal constructor(
 
                     uploadFileV2(
                         chunkBody,
-                        currentOffset,
                         baseUrl,
                         uploadServerConfig.accessToken,
                         emitter,
@@ -536,7 +535,6 @@ class ReportsRepositoryImp @Inject internal constructor(
      * Uploads the file to the server using the V2 endpoint (single-step upload).
      *
      * @param fileToUpload The file to be uploaded.
-     * @param skipBytes The number of bytes already present on the server.
      * @param baseUrl The base URL for the API endpoint.
      * @param accessToken The access token for authentication.
      * @param emitter The FlowableEmitter to emit progress updates.
@@ -547,30 +545,29 @@ class ReportsRepositoryImp @Inject internal constructor(
     @VisibleForTesting
     private fun uploadFileV2(
         fileToUpload: ChunkableMediaFileRequestBody,
-        skipBytes: Long,
         baseUrl: String,
         accessToken: String,
         emitter: Emitter<UploadProgressInfo>,
         vaultFile: VaultFile,
         size: Long
     ) : Long {
-        val currentChunkSize = fileToUpload.chunkSize()
-        val nextOffset = fileToUpload.endByte()
-        val totalSize = fileToUpload.totalBytes()
+        val chunkableFileConfig = fileToUpload.getConfig()
+        val nextOffset = chunkableFileConfig.endByte
+
         try {
             Timber.d("*** Chunk upload *** %s - Starting chunk upload", vaultFile.name)
             // Synchronously execute this chunk's PUT
             val response = apiService.putFileV2(
                 url = baseUrl,
                 accessToken = accessToken,
-                contentRange = "bytes $skipBytes-$nextOffset/$totalSize",
-                contentLength = currentChunkSize,
+                contentRange = chunkableFileConfig.contentRange(),
+                contentLength = chunkableFileConfig.chunkSize,
                 contentType = vaultFile.mimeType,
                 fileInfo = null,
                 body = fileToUpload
             ).blockingGet()
 
-            handleUploadResponse(response, emitter, vaultFile, totalSize,
+            handleUploadResponse(response, emitter, vaultFile, chunkableFileConfig.totalBytes,
                 { response ->
                     val receivedRange = response.headers()["range"]
                     // Log the received range for debugging purposes
@@ -593,11 +590,11 @@ class ReportsRepositoryImp @Inject internal constructor(
             return if (response.isSuccessful && response.code() == HttpStatus.PARTIAL_CONTENT_206) {
                 nextOffset // This becomes 'currentOffset' in the next iteration
             } else {
-                skipBytes
+                chunkableFileConfig.skipBytes
             }
         } catch (e: Exception) {
             emitter.onError(e)
-            return skipBytes
+            return chunkableFileConfig.skipBytes
         }
     }
 
@@ -608,6 +605,7 @@ class ReportsRepositoryImp @Inject internal constructor(
      * @param emitter The Emitter to emit progress updates.
      * @param vaultFile The file that was uploaded.
      * @param size The size of the file.
+     * @param onPartialSuccess A callback to handle partial success.
      */
     @VisibleForTesting
     private fun handleUploadResponse(

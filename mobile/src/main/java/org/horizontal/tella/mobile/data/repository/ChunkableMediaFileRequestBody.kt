@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.data.repository
 
 import com.hzontal.tella_vault.VaultFile
+import org.horizontal.tella.mobile.data.reports.utils.ChunkableMediaFileConfig
 
 class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, private val chunkLength: Long, progressListener: ProgressListener? = null) : SkippableMediaFileRequestBody(vaultFile, skipBytes, progressListener) {
     override fun contentLength(): Long = chunkLength
@@ -19,16 +20,12 @@ class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, priva
         }
     }
 
-    fun skipBytes(): Long {
-        return skip
-    }
-    fun chunkSize(): Long {
-        return chunkLength
-    }
-    fun totalBytes() : Long {
-        return mediaFile.size
-    }
-    fun endByte() : Long {
-        return skipBytes() + chunkSize() - 1
+    fun getConfig(): ChunkableMediaFileConfig {
+        val endByte = skip + chunkLength - 1
+        return ChunkableMediaFileConfig(
+            skip,
+            chunkLength,
+            mediaFile.size,
+            endByte)
     }
 }
