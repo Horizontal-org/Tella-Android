@@ -263,6 +263,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         progressBar = binding.content.progressBar;
         hint = binding.content.info;
         faButton = binding.fabButton;
-        map = binding.content.mapView;
+        map = binding.content.getRoot().findViewById(R.id.mapView);
     }
 }

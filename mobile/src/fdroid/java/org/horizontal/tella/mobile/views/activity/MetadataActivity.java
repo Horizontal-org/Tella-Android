@@ -262,7 +262,7 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
         listener.onContinue();
     }
 
-    private void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
+    protected void showGpsMetadataDialog(final int requestCode, final LocationSettingsCheckDoneListener listener) {
         maybeChangeTemporaryTimeout(() -> {
             BottomSheetUtils.showConfirmSheet(
                     getSupportFragmentManager(),
