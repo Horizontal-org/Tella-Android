@@ -1,20 +1,25 @@
 package org.horizontal.tella.mobile.views.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
@@ -24,27 +29,33 @@ import org.horizontal.tella.mobile.databinding.ActivityLocationMapBinding;
 import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.LocationGettingPresenter;
 import org.horizontal.tella.mobile.util.C;
-import org.horizontal.tella.mobile.util.LocationUtil;
+import org.horizontal.tella.mobile.views.custom.MapViewOverlay;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
 
-/**
- * F-Droid implementation: location picker without Google Maps.
- * Shows coordinates and uses LocationGettingPresenter; same intent contract as playstore variant.
- */
+import java.util.ArrayList;
+
 public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
 
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
 
+    private static final int PERMISSIONS_REQUEST_CODE = 1051;
+
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private TextView hint;
-    private TextView latText;
-    private TextView lngText;
-    private LinearLayout coordsContainer;
     private FloatingActionButton faButton;
+    private MapViewOverlay map;
 
     @Nullable
     private MyLocation myLocation;
+    private Marker selectedMarker;
+    private boolean virginMap = true;
     private LocationGettingPresenter locationGettingPresenter;
     private boolean readOnly;
     private ActivityLocationMapBinding binding;
@@ -69,26 +80,45 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
         }
 
-        if (!readOnly) {
-            hint.setVisibility(View.VISIBLE);
-        }
+        Context ctx = getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        if (myLocation != null) {
-            showMyLocation(myLocation);
-        } else if (readOnly) {
-            startGettingLocation();
-        }
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.getController().setZoom(18.0);
 
+        requestPermissionsIfNecessary(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.INTERNET
+        });
+        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        map.setMultiTouchControls(true);
+
+        CompassOverlay compassOverlay = new CompassOverlay(this, map);
+        compassOverlay.enableCompass();
+        map.getOverlays().add(compassOverlay);
+
+        map.addTapListener(new MapViewOverlay.OnTapListener() {
+            @Override
+            public void onMapTapped(GeoPoint geoPoint) {
+            }
+
+            @Override
+            public void onMapLongPress(Location location) {
+                if (!readOnly) {
+                    showMyLocation(MyLocation.fromLocation(location));
+                }
+            }
+        });
         faButton.setOnClickListener(view -> {
             if (locationGettingPresenter.isGPSProviderEnabled()) {
                 startGettingLocation();
             } else {
-                maybeChangeTemporaryTimeout(() -> {
-                    manageLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
-                    return null;
-                });
+                checkLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
             }
         });
+        initMapLocationAndCamera();
     }
 
     @Override
@@ -124,7 +154,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     @Override
     public void onGettingLocationStart() {
         progressBar.setVisibility(View.VISIBLE);
-        coordsContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -134,7 +163,8 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
     @Override
     public void onLocationSuccess(Location location) {
-        if (location != null) {
+        if (location != null && virginMap) {
+            virginMap = false;
             myLocation = MyLocation.fromLocation(location);
             showMyLocation(myLocation);
         }
@@ -147,7 +177,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
     @Override
     public void onGPSProviderDisabled() {
-        // no-op
+        showGpsMetadataDialog(C.GPS_PROVIDER, this::startGettingLocation);
     }
 
     @Override
@@ -155,12 +185,48 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         return this;
     }
 
-    private void showMyLocation(MyLocation location) {
-        coordsContainer.setVisibility(View.VISIBLE);
-        latText.setText(String.format(getString(R.string.collect_form_geopoint_meta_latitude),
-                LocationUtil.printCoordinate(location.getLatitude(), true)));
-        lngText.setText(String.format(getString(R.string.collect_form_geopoint_meta_longitude),
-                LocationUtil.printCoordinate(location.getLongitude(), false)));
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> toRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                toRequest.add(permission);
+            }
+        }
+        if (!toRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this, toRequest.toArray(new String[0]), PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    private void showMyLocation(@NonNull MyLocation location) {
+        GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+        if (selectedMarker != null) {
+            selectedMarker.setPosition(point);
+            selectedMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+        } else {
+            Marker marker = new Marker(map);
+            marker.setPosition(point);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            selectedMarker = marker;
+            map.getOverlays().add(selectedMarker);
+        }
+
+        map.getController().animateTo(point);
+        selectedMarker.setDraggable(!readOnly);
+    }
+
+    private void initMapLocationAndCamera() {
+        if (!readOnly) {
+            hint.setVisibility(View.VISIBLE);
+        }
+
+        if (myLocation == null || readOnly) {
+            locationGettingPresenter.startGettingLocation(!readOnly);
+        }
+
+        if (myLocation != null) {
+            showMyLocation(myLocation);
+        }
     }
 
     private void startGettingLocation() {
@@ -170,17 +236,19 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
             startGettingLocation();
         }
     }
 
     private void setResultAndFinish() {
-        if (myLocation == null) {
+        if (selectedMarker == null) {
             setCancelAndFinish();
         } else {
-            setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+            MyLocation result = new MyLocation();
+            result.setLatitude(selectedMarker.getPosition().getLatitude());
+            result.setLongitude(selectedMarker.getPosition().getLongitude());
+            setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, result));
             finish();
         }
     }
@@ -194,9 +262,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         toolbar = binding.toolbar;
         progressBar = binding.content.progressBar;
         hint = binding.content.info;
-        coordsContainer = binding.content.coordsContainer;
-        latText = binding.content.latText;
-        lngText = binding.content.lngText;
         faButton = binding.fabButton;
+        map = binding.content.mapView;
     }
 }

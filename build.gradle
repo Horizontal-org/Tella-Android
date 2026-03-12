@@ -92,11 +92,14 @@ buildscript {
         maven { url 'https://jitpack.io' } // required for Nextcloud
     }
 
+    def isFdroid = project.hasProperty('fdroid')
     dependencies {
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
-        classpath "com.google.gms:google-services:${versions.googleServices}"
-        classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.crashlyticsGradle}"
+        if (!isFdroid) {
+            classpath "com.google.gms:google-services:${versions.googleServices}"
+            classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.crashlyticsGradle}"
+        }
         classpath "com.google.dagger:hilt-android-gradle-plugin:${versions.hilt_android}"
         classpath "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
 

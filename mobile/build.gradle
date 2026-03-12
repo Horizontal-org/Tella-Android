@@ -209,7 +209,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
-    implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
+    playstoreImplementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
     playstoreImplementation 'com.google.firebase:firebase-crashlytics'
 
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
@@ -217,7 +217,7 @@ dependencies {
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
     implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
-    implementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
+    playstoreImplementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
     playstoreImplementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
 
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
@@ -260,6 +260,9 @@ dependencies {
     fdroidImplementation "androidx.camera:camera-extensions:$versions.camerax"
     fdroidImplementation "androidx.camera:camera-lifecycle:$versions.camerax"
     fdroidImplementation "androidx.camera:camera-view:$versions.camerax"
+
+    // OpenStreetMap for F-Droid location picker (no Google Maps)
+    fdroidImplementation "org.osmdroid:osmdroid-android:6.1.20"
 
     // ---- Hilt (Google) ----
     implementation "com.google.dagger:hilt-android:${versions.hilt_android}"

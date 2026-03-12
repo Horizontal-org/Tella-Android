@@ -8,6 +8,11 @@
     tools:context="org.horizontal.tella.mobile.views.activity.LocationMapActivity"
     tools:showIn="@layout/activity_location_map">
 
+    <org.horizontal.tella.mobile.views.custom.MapViewOverlay
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/info"
         style="@style/TextMapHint"
@@ -25,27 +30,4 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/coords_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/latText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/lngText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp" />
-    </LinearLayout>
 </FrameLayout>
