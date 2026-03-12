@@ -117,7 +117,7 @@ object D {
         const val C_BACKGROUND_UPLOAD = "c_background_upload"
         const val C_AUTO_UPLOAD = "c_auto_upload"
         const val C_AUTO_DELETE = "c_auto_delete"
-        const val C_TELLA_API_VERSION = "c_tella_api_version"
+        const val C_TELLA_WEB_API_VERSION = "c_tella_web_api_version"
 
         // Form columns
         const val C_FORM_ID = "c_form_id"
@@ -285,7 +285,7 @@ object D {
     @JvmField val C_BACKGROUND_UPLOAD = Columns.C_BACKGROUND_UPLOAD
     @JvmField val C_AUTO_UPLOAD = Columns.C_AUTO_UPLOAD
     @JvmField val C_AUTO_DELETE = Columns.C_AUTO_DELETE
-    @JvmField val C_TELLA_API_VERSION = Columns.C_TELLA_API_VERSION
+    @JvmField val C_TELLA_WEB_API_VERSION = Columns.C_TELLA_WEB_API_VERSION
     @JvmField val C_FORM_ID = Columns.C_FORM_ID
     @JvmField val C_FORM_DEF = Columns.C_FORM_DEF
     @JvmField val C_FORM_NAME = Columns.C_FORM_NAME
