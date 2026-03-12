@@ -2,7 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.dropbox
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dropbox.core.v2.DbxClientV2
+import org.horizontal.tella.mobile.domain.repository.dropbox.DropboxClientHandle
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -344,8 +344,8 @@ class DropBoxViewModel @Inject constructor(
                     dropBoxRepository.createDropboxClient(result.first())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ dbxClient ->
-                            submitFiles(instance, instance.reportApiId, dbxClient)
+                        .subscribe({ client ->
+                            submitFiles(instance, instance.reportApiId, client)
                         }, { error ->
                             if (error is InvalidTokenException) {
                                 if (statusProvider.isOnline()) {
@@ -383,26 +383,26 @@ class DropBoxViewModel @Inject constructor(
         disposables.add(
             dropBoxRepository.createDropboxClient(server)
                 .subscribeOn(Schedulers.io())
-                .flatMap { dbxClient: DbxClientV2 ->
+                .flatMap { client: DropboxClientHandle ->
                     // If token is valid, create folder and submit files
                     dropBoxRepository.createDropboxFolder(
-                        dbxClient,
+                        client,
                         instance.title.trim(),
                         instance.description
                     )
                         .map { folderId ->
                             Pair(
-                                dbxClient,
+                                client,
                                 folderId
                             )
                         } // Pass both client and folderId forward
                 }
                 .observeOn(AndroidSchedulers.mainThread()) // Observe on the main thread
-                .subscribe({ (dbxClient, folderId) ->
+                .subscribe({ (client, folderId) ->
                     // Folder creation successful, now update instance and submit files
                     instance.reportApiId = folderId
                     updateInstanceStatus(instance, EntityStatus.SUBMISSION_IN_PROGRESS)
-                    submitFiles(instance, folderId, dbxClient)
+                    submitFiles(instance, folderId, client)
                 }, { error ->
                     if (error is InvalidTokenException) {
                         if (statusProvider.isOnline()) {
@@ -422,7 +422,7 @@ class DropBoxViewModel @Inject constructor(
     }
 
     private fun submitFiles(
-        instance: ReportInstance, folderPath: String, dbxClient: DbxClientV2
+        instance: ReportInstance, folderPath: String, client: DropboxClientHandle
     ) {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
@@ -433,7 +433,7 @@ class DropBoxViewModel @Inject constructor(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
                     dropBoxRepository.uploadFileWithProgress(
-                        dbxClient,
+                        client,
                         folderPath,
                         file
                     )

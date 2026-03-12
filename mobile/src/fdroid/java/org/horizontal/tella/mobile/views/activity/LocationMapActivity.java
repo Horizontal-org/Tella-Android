@@ -82,6 +82,8 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        // Required for OpenStreetMap tile server: valid User-Agent or tiles return 403
+        Configuration.getInstance().setUserAgentValue(ctx.getPackageName());
 
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.getController().setZoom(18.0);
