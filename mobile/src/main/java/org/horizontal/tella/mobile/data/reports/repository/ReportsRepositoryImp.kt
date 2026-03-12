@@ -23,6 +23,13 @@ import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
 import org.horizontal.tella.mobile.data.entity.reports.mapper.mapToDomainModel
 import org.horizontal.tella.mobile.data.http.HttpStatus
 import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MIN_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MAX_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.DEFAULT_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.SAFETY_FACTOR
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.TARGET_UPLOAD_TIME
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MAX_CHUNK_SIZE_WIFI
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MIN_CHUNK_SIZE_WIFI
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
 import org.horizontal.tella.mobile.data.repository.ChunkableMediaFileRequestBody
@@ -53,17 +60,6 @@ class ReportsRepositoryImp @Inject internal constructor(
     private val dataSource: DataSource,
     private val statusProvider: StatusProvider
 ) : ReportsRepository {
-
-    companion object {
-        const val DEFAULT_CHUNK_SIZE = 1 * 1024 * 1024L
-        const val MIN_CHUNK_SIZE_WIFI = 5 * 1024 * 1024L
-        const val MAX_CHUNK_SIZE_WIFI = 10 * 1024 * 1024L
-        const val MIN_CHUNK_SIZE = 1 * 1024 * 1024L
-        const val MAX_CHUNK_SIZE = 2 * 1024 * 1024L
-        const val TARGET_UPLOAD_TIME = 3
-        const val SAFETY_FACTOR = 0.6
-    }
-
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = SingleLiveEvent<ReportInstance>()
     private val disposables = CompositeDisposable()
