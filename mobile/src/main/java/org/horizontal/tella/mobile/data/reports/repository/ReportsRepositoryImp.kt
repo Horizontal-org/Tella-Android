@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.data.http.HttpStatus
 import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
+import org.horizontal.tella.mobile.data.reports.utils.ReportsApiVersions.FILE_API_V2_MINIMUM_VERSION
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
@@ -47,10 +48,6 @@ class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
     private val dataSource: DataSource,
     private val statusProvider: StatusProvider) : ReportsRepository {
-
-    companion object {
-        const val FILE_API_V2_MINIMUM_VERSION = "1.4.0"
-    }
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = SingleLiveEvent<ReportInstance>()
     private val disposables = CompositeDisposable()
