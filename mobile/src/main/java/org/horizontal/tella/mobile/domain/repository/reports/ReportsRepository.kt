@@ -6,6 +6,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
+import org.horizontal.tella.mobile.data.reports.utils.UploadServerConfig
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.domain.entity.reports.ReportPostResult
@@ -30,7 +31,7 @@ interface ReportsRepository {
 
     fun upload(
         vaultFile: VaultFile,
-        server: TellaReportServer,
+        uploadServerConfig: UploadServerConfig,
         reportId: String
     ): Flowable<UploadProgressInfo>
 

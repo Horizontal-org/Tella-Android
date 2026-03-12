@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
 import org.horizontal.tella.mobile.data.reports.utils.ReportsApiVersions.FILE_API_V2_MINIMUM_VERSION
+import org.horizontal.tella.mobile.data.reports.utils.UploadServerConfig
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
@@ -142,7 +143,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         disposables.add(
             Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    upload(file, server, reportApiId)
+                    upload(file, UploadServerConfig(server.url, server.accessToken, server.version), reportApiId)
                 }
                 .doOnEach {
                     if (instance.status != EntityStatus.SUBMITTED) {
@@ -252,15 +253,15 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     override fun upload(
         vaultFile: VaultFile,
-        server: TellaReportServer,
+        uploadServerConfig: UploadServerConfig,
         reportId: String
     ): Flowable<UploadProgressInfo> {
         val url = StringUtils.append(
             '/',
-            server.url,
+            uploadServerConfig.url,
             "file/$reportId/${getFileName(vaultFile)}"
         )
-        return getStatus(url, server.accessToken)
+        return getStatus(url, uploadServerConfig.accessToken)
             .flatMapPublisher { skipBytes: Long ->
                 if (skipBytes >= vaultFile.size) {
                     // File is already fully on server, just signal completion
@@ -272,7 +273,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         )
                     )
                 } else {
-                    appendFile(vaultFile, skipBytes, server, reportId)
+                    appendFile(vaultFile, skipBytes, uploadServerConfig, reportId)
                 }
             }.onErrorReturn {
                 mapThrowable(
@@ -331,7 +332,7 @@ class ReportsRepositoryImp @Inject internal constructor(
      *
      * @param vaultFile The file to be uploaded.
      * @param skipBytes The number of bytes to skip when reading the file.
-     * @param server The server the files should be uploaded to.
+     * @param uploadServerConfig The config info of the server the files should be uploaded to.
      * @param reportId The ID of the report to which the file belongs.
      * @return a Flowable that emits UploadProgressInfo as the file upload progresses.
      */
@@ -339,7 +340,7 @@ class ReportsRepositoryImp @Inject internal constructor(
     private fun appendFile(
         vaultFile: VaultFile,
         skipBytes: Long,
-        server: TellaReportServer,
+        uploadServerConfig: UploadServerConfig,
         reportId: String
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
@@ -348,16 +349,16 @@ class ReportsRepositoryImp @Inject internal constructor(
             val fileToUpload =
                 prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
 
-            if (shouldUsePutFileV2(server)) {
-                uploadFileV2(fileToUpload, skipBytes, uploadFileUrl(server, reportId, vaultFile, "file/v2"), server.accessToken, emitter, vaultFile, size)
+            if (shouldUsePutFileV2(uploadServerConfig)) {
+                uploadFileV2(fileToUpload, skipBytes, uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file/v2"), uploadServerConfig.accessToken, emitter, vaultFile, size)
             } else {
-                uploadFile(fileToUpload, uploadFileUrl(server, reportId, vaultFile, "file"), server.accessToken, emitter, vaultFile, size)
+                uploadFile(fileToUpload, uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file"), uploadServerConfig.accessToken, emitter, vaultFile, size)
             }
         }, BackpressureStrategy.LATEST)
     }
 
-    private fun shouldUsePutFileV2(server: TellaReportServer): Boolean {
-        val currentVersion = server.version ?: return false
+    private fun shouldUsePutFileV2(uploadServerConfig: UploadServerConfig): Boolean {
+        val currentVersion = uploadServerConfig.version ?: return false
 
         val current = currentVersion.split(".").map { it.toInt() }
         val target = FILE_API_V2_MINIMUM_VERSION.split(".").map { it.toInt() }
@@ -366,8 +367,8 @@ class ReportsRepositoryImp @Inject internal constructor(
                 current[0] == target[0] && current[1] == target[1] && current[2] >= target[2]
     }
 
-    private fun uploadFileUrl(server: TellaReportServer, reportId: String, vaultFile: VaultFile, path: String): String {
-        return "${server.url}$path/$reportId/${getFileName(vaultFile)}"
+    private fun uploadFileUrl(baseUrl: String, reportId: String, vaultFile: VaultFile, path: String): String {
+        return "${baseUrl}$path/$reportId/${getFileName(vaultFile)}"
     }
 
     /**
