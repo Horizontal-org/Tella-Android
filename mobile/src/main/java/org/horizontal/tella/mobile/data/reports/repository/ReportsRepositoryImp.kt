@@ -362,7 +362,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         val current = Version.parse(uploadServerConfig.version)
         val target = Version.parse(FILE_API_V2_MINIMUM_VERSION)
 
-        return current >= target
+        return current != null && target != null && current >= target
     }
 
     private fun uploadFileUrl(baseUrl: String, reportId: String, vaultFile: VaultFile, path: String): String {

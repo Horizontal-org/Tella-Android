@@ -2,13 +2,12 @@ package org.horizontal.tella.mobile.util
 
 data class Version(val major: Int, val minor: Int, val patch: Int) : Comparable<Version> {
     companion object {
-        fun parse(versionString: String?): Version {
-            val parts = versionString?.split(".")?.map { it.toIntOrNull() ?: 0 }
-            return Version(
-                    major = parts?.getOrNull(0) ?: 0,
-                    minor = parts?.getOrNull(1) ?: 0,
-                    patch = parts?.getOrNull(2) ?: 0
-            )
+        fun parse(versionString: String?): Version? {
+            val parts = versionString?.split(".")?.takeIf { it.size == 3 } ?: return null
+
+            val (major, minor, patch) = parts.map { it.toIntOrNull() ?: return null }
+
+            return Version(major, minor, patch)
         }
     }
 
