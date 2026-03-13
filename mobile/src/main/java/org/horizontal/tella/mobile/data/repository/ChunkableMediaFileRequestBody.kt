@@ -8,7 +8,7 @@ class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, priva
 
     override fun writeTo(sink: okio.BufferedSink) {
         getPublicInputStream().use { inputStream ->
-            val buffer = ByteArray(8192)
+            val buffer = ByteArray(BUFFER_SIZE)
             var totalRead = 0L
             while (totalRead < chunkLength) {
                 val toRead = minOf(buffer.size.toLong(), chunkLength - totalRead).toInt()
@@ -27,5 +27,9 @@ class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, priva
             chunkLength,
             mediaFile.size,
             endByte)
+    }
+
+    companion object {
+        private const val BUFFER_SIZE = 8192
     }
 }
