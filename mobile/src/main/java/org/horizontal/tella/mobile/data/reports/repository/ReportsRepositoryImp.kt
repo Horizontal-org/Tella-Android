@@ -25,6 +25,8 @@ import org.horizontal.tella.mobile.data.http.HttpStatus
 import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
+import org.horizontal.tella.mobile.data.reports.utils.ReportsApiVersions.FILE_API_V2_MINIMUM_VERSION
+import org.horizontal.tella.mobile.data.reports.utils.UploadServerConfig
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
@@ -38,6 +40,7 @@ import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.util.Util
+import org.horizontal.tella.mobile.util.Version
 import retrofit2.Response
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -48,7 +51,6 @@ class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
     private val dataSource: DataSource,
     private val statusProvider: StatusProvider) : ReportsRepository {
-
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = SingleLiveEvent<ReportInstance>()
     private val disposables = CompositeDisposable()
@@ -58,6 +60,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             loginEntity = LoginEntity(server.username, server.password),
             url = server.url + URL_LOGIN
         ).flatMap { response ->
+            server.apply { version = response.version }
             apiService.getProjectSlug(
                 url = server.url + slug,
                 access_token = "Bearer " + response.access_token
@@ -141,7 +144,7 @@ class ReportsRepositoryImp @Inject internal constructor(
 
         return Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    upload(file, server.url, reportApiId, server.accessToken)
+                    upload(file, UploadServerConfig(server.url, server.accessToken, server.version), reportApiId)
                 }
                 .doOnEach {
                     if (instance.status != EntityStatus.SUBMITTED) {
@@ -250,16 +253,15 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     override fun upload(
         vaultFile: VaultFile,
-        urlServer: String,
-        reportId: String,
-        accessToken: String
+        uploadServerConfig: UploadServerConfig,
+        reportId: String
     ): Flowable<UploadProgressInfo> {
         val url = StringUtils.append(
             '/',
-            urlServer,
+            uploadServerConfig.url,
             "file/$reportId/${getFileName(vaultFile)}"
         )
-        return getStatus(url, accessToken)
+        return getStatus(url, uploadServerConfig.accessToken)
             .flatMapPublisher { skipBytes: Long ->
                 if (skipBytes >= vaultFile.size) {
                     // File is already fully on server, just signal completion
@@ -271,7 +273,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                         )
                     )
                 } else {
-                    appendFile(vaultFile, skipBytes, url, accessToken)
+                    appendFile(vaultFile, skipBytes, uploadServerConfig, reportId)
                 }
             }.onErrorReturn {
                 mapThrowable(
@@ -330,16 +332,16 @@ class ReportsRepositoryImp @Inject internal constructor(
      *
      * @param vaultFile The file to be uploaded.
      * @param skipBytes The number of bytes to skip when reading the file.
-     * @param baseUrl The base URL for the API endpoint.
-     * @param accessToken The access token for authentication.
+     * @param uploadServerConfig The config info of the server the files should be uploaded to.
+     * @param reportId The ID of the report to which the file belongs.
      * @return a Flowable that emits UploadProgressInfo as the file upload progresses.
      */
     @VisibleForTesting
     private fun appendFile(
         vaultFile: VaultFile,
         skipBytes: Long,
-        baseUrl: String,
-        accessToken: String
+        uploadServerConfig: UploadServerConfig,
+        reportId: String
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             val size = vaultFile.size
@@ -347,9 +349,23 @@ class ReportsRepositoryImp @Inject internal constructor(
             val fileToUpload =
                 prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
 
-            uploadFile(fileToUpload, baseUrl, accessToken, emitter, vaultFile, size)
-
+            if (shouldUsePutFileV2(uploadServerConfig)) {
+                uploadFileV2(fileToUpload, skipBytes, uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file/v2"), uploadServerConfig.accessToken, emitter, vaultFile, size)
+            } else {
+                uploadFile(fileToUpload, uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file"), uploadServerConfig.accessToken, emitter, vaultFile, size)
+            }
         }, BackpressureStrategy.LATEST)
+    }
+
+    private fun shouldUsePutFileV2(uploadServerConfig: UploadServerConfig): Boolean {
+        val current = Version.parse(uploadServerConfig.version)
+        val target = Version.parse(FILE_API_V2_MINIMUM_VERSION)
+
+        return current != null && target != null && current >= target
+    }
+
+    private fun uploadFileUrl(baseUrl: String, reportId: String, vaultFile: VaultFile, path: String): String {
+        return "${baseUrl}$path/$reportId/${getFileName(vaultFile)}"
     }
 
     /**
@@ -426,6 +442,50 @@ class ReportsRepositoryImp @Inject internal constructor(
         disposables.add(disposable)
     }
 
+
+    /**
+     * Uploads the file to the server using the V2 endpoint (single-step upload).
+     *
+     * @param fileToUpload The file to be uploaded.
+     * @param skipBytes The number of bytes already present on the server.
+     * @param baseUrl The base URL for the API endpoint.
+     * @param accessToken The access token for authentication.
+     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param vaultFile The file to be uploaded.
+     * @param size The size of the file.
+     */
+    @VisibleForTesting
+    private fun uploadFileV2(
+    fileToUpload: SkippableMediaFileRequestBody,
+    skipBytes: Long,
+    baseUrl: String,
+    accessToken: String,
+    emitter: FlowableEmitter<UploadProgressInfo>,
+    vaultFile: VaultFile,
+    size: Long
+) {
+    // Content-Range format: bytes START-END/TOTAL (inclusive)
+    val contentRange = "bytes $skipBytes-${size - 1}/$size"
+    val contentLength = fileToUpload.contentLength()
+
+    val disposable = apiService.putFileV2(
+        url = baseUrl,
+        accessToken = accessToken,
+        contentRange = contentRange,
+        contentLength = contentLength,
+        contentType = vaultFile.mimeType,
+        fileInfo = null,
+        body = fileToUpload
+    )
+        .subscribe({ response ->
+            handleUploadV2Response(response, emitter, vaultFile, size)
+        }, { error ->
+            emitter.onError(UploadError(error))
+        })
+
+    disposables.add(disposable)
+}
+
     /**
      * Handles the response from the server after file upload.
      *
@@ -441,6 +501,27 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) {
+        if (!response.isSuccessful) {
+            emitter.onError(UploadError(response.code()))
+        } else {
+            emitter.onNext(
+                UploadProgressInfo(
+                    vaultFile,
+                    size,
+                    UploadProgressInfo.Status.FINISHED
+                )
+            )
+            emitter.onComplete()
+        }
+    }
+
+    @VisibleForTesting
+    private fun handleUploadV2Response(
+        response: Response<Void>,
+        emitter: FlowableEmitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) { //TODO handle 206 and 200
         if (!response.isSuccessful) {
             emitter.onError(UploadError(response.code()))
         } else {
