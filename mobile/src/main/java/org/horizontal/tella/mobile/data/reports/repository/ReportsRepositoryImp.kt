@@ -377,12 +377,29 @@ class ReportsRepositoryImp @Inject internal constructor(
 
         // V2 Logic: Chunked Upload via Flowable.generate
         return Flowable.generate(
-            { skipBytes }, // Initial state: where we start
-            BiFunction { currentOffset: Long, emitter: Emitter<UploadProgressInfo> ->
+            {
+                // We use a Pair to track if we've sent the initial "STARTED" status
+                // and where to pick up the file transfer
+                Pair(skipBytes, false)
+            }, // Initial state: where we start
+            BiFunction { state: Pair<Long, Boolean>, emitter: Emitter<UploadProgressInfo> ->
+                val (currentOffset, startedEmitted) = state
+                // Emit the initial "STARTED" status only if it hasn't been emitted before
+                if (!startedEmitted) {
+                    emitter.onNext(
+                        UploadProgressInfo(
+                            vaultFile,
+                            currentOffset,
+                            UploadProgressInfo.Status.STARTED
+                        )
+                    )
+                    return@BiFunction Pair(currentOffset, true)
+                }
+
                 val totalSize = vaultFile.size
                 if (currentOffset >= totalSize) {
                     emitter.onComplete()
-                    currentOffset
+                    state
                 } else {
                     val chunkBody = prepareChunkToUpload(
                         totalSize,
@@ -391,7 +408,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     )
                     val baseUrl = uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file/v2")
 
-                    uploadFileV2(
+                    val nextOffset = uploadFileV2(
                         chunkBody,
                         baseUrl,
                         uploadServerConfig.accessToken,
@@ -399,6 +416,8 @@ class ReportsRepositoryImp @Inject internal constructor(
                         vaultFile,
                         totalSize
                     )
+                    // Next iteration starting point, considering the latest uploaded chunk
+                    Pair(nextOffset, true)
                 }
             }
         )
@@ -580,7 +599,7 @@ class ReportsRepositoryImp @Inject internal constructor(
                     emitter.onNext(
                         UploadProgressInfo(
                             vaultFile,
-                            chunkableFileConfig.endByte,
+                            chunkableFileConfig.endByte + 1,
                             UploadProgressInfo.Status.STARTED
                         )
                     )
