@@ -113,7 +113,7 @@ class StatusProviderImpl(private val context: Context) : StatusProvider {
     override fun isConnectedToWifi(): Boolean {
         val cm =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
         return when {
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> isConnnectedTpWifiLegacy(cm)
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> isConnectedTpWifiLegacy(cm)
             else -> isConnnectedTpWifiModern(cm)
         }
     }
@@ -124,7 +124,7 @@ class StatusProviderImpl(private val context: Context) : StatusProvider {
      * @param cm Connectivity Manager to check network connectivity.
      * @return true if the device is currently connected to a Wi-Fi network, false otherwise.
      */
-    fun isConnnectedTpWifiLegacy(cm: ConnectivityManager): Boolean {
+    fun isConnectedTpWifiLegacy(cm: ConnectivityManager): Boolean {
         val info = cm.activeNetworkInfo ?: return false
 
         return info.isConnected && info.type == NETWORK_TYPE_WIFI

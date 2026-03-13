@@ -20,13 +20,14 @@ class ChunkableMediaFileRequestBody(vaultFile: VaultFile, skipBytes: Long, priva
         }
     }
 
-    fun getConfig(): ChunkableMediaFileConfig {
+    val config: ChunkableMediaFileConfig by lazy {
         val endByte = skip + chunkLength - 1
-        return ChunkableMediaFileConfig(
+        ChunkableMediaFileConfig(
             skip,
             chunkLength,
             mediaFile.size,
-            endByte)
+            endByte
+        )
     }
 
     companion object {

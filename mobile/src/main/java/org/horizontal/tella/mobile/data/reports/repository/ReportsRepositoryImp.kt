@@ -551,8 +551,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) : Long {
-        val chunkableFileConfig = fileToUpload.getConfig()
-        val nextOffset = chunkableFileConfig.endByte
+        val chunkableFileConfig = fileToUpload.config
 
         try {
             Timber.d("*** Chunk upload *** %s - Starting chunk upload", vaultFile.name)
@@ -581,14 +580,14 @@ class ReportsRepositoryImp @Inject internal constructor(
                     emitter.onNext(
                         UploadProgressInfo(
                             vaultFile,
-                            nextOffset,
+                            chunkableFileConfig.endByte,
                             UploadProgressInfo.Status.STARTED
                         )
                     )
                 })
 
             return if (response.isSuccessful && response.code() == HttpStatus.PARTIAL_CONTENT_206) {
-                nextOffset // This becomes 'currentOffset' in the next iteration
+                chunkableFileConfig.endByte // This becomes 'currentOffset' in the next iteration
             } else {
                 chunkableFileConfig.skipBytes
             }
