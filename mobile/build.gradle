@@ -47,9 +47,9 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 227
+        versionCode 228
 
-        versionName "2.19.2"
+        versionName "2.20.0"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
@@ -224,6 +224,7 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:${versions.hilt_android_compiler}"
 
     implementation "androidx.hilt:hilt-work:${versions.androidx_hilt}"
+    kapt "androidx.hilt:hilt-compiler:${versions.androidx_hilt}"
     implementation "androidx.hilt:hilt-navigation-fragment:${versions.androidx_hilt}"
 
     implementation "com.github.nak5ive:ink-android:$versions.simplifyInk"
