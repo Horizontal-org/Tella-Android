@@ -90,6 +90,7 @@ class HomeVaultViewModel @Inject constructor(
         val rxVault = MyApplication.keyRxVault.rxVault.firstOrError().blockingGet()
 
         keyDataSource.dataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
                 if (Preferences.isDeleteGalleryEnabled()) {
@@ -99,7 +100,8 @@ class HomeVaultViewModel @Inject constructor(
 
                 if (Preferences.isDeleteServerSettingsActive()) {
                     dataSource.deleteDatabase()
-                } else if (Preferences.isEraseForms()) {
+                }
+                if (Preferences.isEraseForms()) {
                     dataSource.deleteFormsAndRelatedTables()
                 }
 

@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,6 +78,8 @@ import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
 import javax.inject.Inject
@@ -629,7 +632,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
-        countDownTextView.start(timerDuration) {
+        val duration = maxOf(1, timerDuration)
+        countDownTextView.start(duration) {
             executePanicMode()
         }
     }
@@ -647,7 +651,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun executePanicMode() {
         try {
             baseActivity.divviupUtils.runQuickDeleteEvent()
-            homeVaultViewModel.executePanicMode()
+            lifecycleScope.launch(Dispatchers.IO) {
+                homeVaultViewModel.executePanicMode()
+            }
         } catch (ignored: Throwable) {
             panicActivated = true
         }
