@@ -5,11 +5,12 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
-// Apply Firebase plugins only when not building for F-Droid.
-// F-Droid recipe MUST pass -Pfdroid explicitly; do not rely on task-name detection.
+// Apply Firebase/Google Services plugins only when not building for F-Droid.
+// Skip when: -Pfdroid is set (F-Droid CI) or the requested task is fdroid (e.g. Run from IDE).
 // Before F-Droid release: inspect fdroidRelease APK for absence of com/google/firebase,
 // com/google/android/gms, and Dropbox classes (e.g. unzip and grep or use apkanalyzer).
-def isFdroidBuild = project.hasProperty('fdroid')
+def isFdroidBuild = project.hasProperty('fdroid') ||
+    gradle.startParameter.taskNames.any { it.toLowerCase().contains("fdroid") }
 if (!isFdroidBuild) {
     apply plugin: 'com.google.firebase.crashlytics'
     apply plugin: 'com.google.gms.google-services'
@@ -163,10 +164,13 @@ android {
     }
 }
 
-// Disable Crashlytics Gradle tasks for fdroid variants (no Firebase SDK in fdroid).
+// Disable Crashlytics and Google Services processing for fdroid variants (no Firebase/Play Services in fdroid).
 tasks.configureEach { task ->
     def n = task.name.toLowerCase()
     if (n.contains("crashlytics") && n.contains("fdroid")) {
+        task.enabled = false
+    }
+    if (n.contains("googleservices") && n.contains("fdroid")) {
         task.enabled = false
     }
 }
