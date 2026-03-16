@@ -45,7 +45,7 @@ Evite utilizar números que possam ser facilmente adivinhados, como o seu aniver
 feito!</string>
   <string name="LockSuccess_Message_Hint">Pode sempre alterar a sua opção de bloqueio
  e personalizar ainda mais o Tella nas Definições.</string>
-  <string name="LockSuccess_Action_GoToTella">Aceder o tella</string>
+  <string name="LockSuccess_Action_GoToTella">Aceder o Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Palavra-passe incorrecta,
  tente novamente.</string>
   <string name="UnlockPassword_Message_EnterPassword">Introduza a sua palavra-passe para

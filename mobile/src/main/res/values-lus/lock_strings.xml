@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="LockSelect_Action_Cancel">Sut</string>
+  <string name="LockSelect_Action_Back">Let leh rawh</string>
+  <string name="LockSelect_Action_Confirm">Lehpek</string>
+  <string name="LockPatternConfirm_Action_Confirm">I pattern tichiang rawh</string>
+  <string name="LockSelect_Action_Continue">Lehpek</string>
+  <string name="LockPatternSet_Draw_Pattern">Unlock pattern rin rawh</string>
+  <string name="UnlockPattern_DrawToUnlock">Tella unlock turin pattern rin rawh</string>
+  <string name="LockPatternConfirm_Pattern_Confirmed">I unlock pattern thar</string>
+  <string name="LockPatternSet_Pattern_Recorded">Pattern save a ni</string>
+  <string name="UnlockPattern_PatternTooShort">Dot paruk tal thlunzawmin
+ i pattern rin rawh</string>
+  <string name="LockPatternSet_RecordingPattern">I zawh hunah i kutzungṭang la sawn rawh</string>
+  <string name="LockPatternSet_Action_Redraw">Paih fai</string>
+  <string name="LockPatternConfirm_Message_WrongPattern">Pattern a dik lo,
+ khawngaihin ti nawn leh rawh</string>
+  <string name="LockPatternSet_Message_PatternStarted">Pattern ṭan a ni</string>
+  <string name="LockPatternSet_Message_PatternCleared">Pattern paih fai a ni</string>
+  <string name="LockPatternSet_Message_CellAdded">Cell belh a ni</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> belh a ni</string>
+  <string name="LockPatternSet_Message_PatternDetected">Pattern zawh a ni</string>
+  <string name="UnLockPattern_PatternArea">Pattern rinna hmun.</string>
+  <string name="UnLockPattern_Message_DrawPattern">Tella unlock turin
+i pattern rin rawh</string>
+  <string name="UnLockPattern_Message_IncorrectPattern">Khawngaihin ti nawn leh rawh. I pattern a inmil lo.</string>
+  <string name="LockPinSet_Message_EnterPin">I PIN chhu lut rawh</string>
+  <string name="UnlockPin_Message_EnterPin">Tella unlock turin
+i PIN chhu lut rawh</string>
+  <string name="LockPinSet_Message_Hint">Digit 6 tal hmang rawh.
+I piancham ang chi, mi rin theih mai tur awlsam hmang suh.</string>
+  <string name="LockPinSet_Message_Confirm">I PIN tichiang rawh</string>
+  <string name="LockPinConfirm_Message_Confirm">Chian lehzual nan,
+ khawngaihin i PIN vawikhat dang chhu lut leh rawh.</string>
+  <string name="LockPinConfirm_Message_Error_TryAgain">Khawngaihin ti nawn leh rawh. I PIN a inmil lo.</string>
+  <string name="LockPinConfirm_Message_Error_IncorrectPin">PIN a dik lo,
+ khawngaihin ti nawn leh rawh</string>
+  <string name="UnlockPassword_Message_EnterYourPassword">I password chhu lut rawh</string>
+  <string name="LockPasswordSet_Message_Hint">Character 6 tal hmang la,
+ “password” ang chi mi rin awlsam tur hmang suh.
+ I password a sei poh leh
+ a him a ni mai.</string>
+  <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Khawngaihin ti nawn leh rawh. I password a inmil lo.</string>
+  <string name="LockSuccess_Message_AllDone">I inpeih
+ta!</string>
+  <string name="LockSuccess_Message_Hint">Settings-ah i lock thlangin
+ Tella hi i duh danin i siamrem thei reng a nia.</string>
+  <string name="LockSuccess_Action_GoToTella">Tella-ah lut rawh</string>
+  <string name="LockPasswordSet_Message_Error_IncorrectPassword">Password a dik lo,
+ khawngaihin ti nawn leh rawh</string>
+  <string name="UnlockPassword_Message_EnterPassword">Tella unlock turin
+i password chhu lut rawh</string>
+  <string name="LockPasswordConfirm_Message_ConfirmPassword">I password tichiang rawh</string>
+  <string name="LockPasswordConfirm_Message_EnterPasswordAgain">Chian lehzual nan,
+ khawngaihin i password vawikhat dang chhu lut leh rawh.</string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPassword">I lock thlak turin
+ i password hman lai
+ chhu lut rawh</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPattern">I lock thlak turin
+ i pattern hman lai
+ rin rawh</string>
+  <string name="LockPinSet_Settings_EnterCurrentPin">I lock thlak turin
+ i PIN hman lai chhu lut rawh   </string>
+  <string name="LockPasswordSet_Settings_EnterCurrentPasswordToChangeCamouflage">I inthup dan thlak turin
+ i password hman lai
+ chhu lut rawh</string>
+  <string name="LockPatternSet_Settings_DrawCurrentPatternToChangeCamouflage">I inthup dan thlak turin
+ i pattern hman lai
+ rin rawh</string>
+  <string name="LockPinSet_Settings_EnterCurrentPinToChangeCamouflage">I inthup dan thlak turin
+ i PIN hman lai chhu lut rawh   </string>
+  <string name="Settings_Action_SetLock">Lock</string>
+  <string name="Settings_Message_LockChanged">I lock thlak a ni tawh!</string>
+</resources>

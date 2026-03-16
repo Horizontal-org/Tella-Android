@@ -45,11 +45,20 @@ class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBin
     }
 
     private fun showDeleteBottomSheet(entityInstance: UwaziEntityInstance) {
-        BottomSheetUtils.showConfirmDelete(
+        BottomSheetUtils.showConfirmSheet(
             baseActivity.supportFragmentManager,
-            entityInstance.title,
-            getString(R.string.Uwazi_RemoveTemplate_SheetTitle)
-        ) { viewModel.confirmDelete(entityInstance) }
+            getString(R.string.Uwazi_DeleteEntity_SheetTitle),
+            getString(R.string.Uwazi_Subtitle_RemoveSubmittedEntity),
+            getString(R.string.action_delete),
+            getString(R.string.action_cancel),
+            object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        viewModel.confirmDelete(entityInstance)
+                    }
+                }
+            }
+        )
     }
 
     override fun onResume() {

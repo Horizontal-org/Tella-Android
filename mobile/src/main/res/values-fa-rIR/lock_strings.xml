@@ -43,7 +43,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">لطفا دوباره امتحان کنید. گذرواژه‌های شما همخوانی ندارند.</string>
   <string name="LockSuccess_Message_AllDone">کار شما به پایان رسید!</string>
   <string name="LockSuccess_Message_Hint">در هر زمان می‌توانید گزینه قفل را تغییر دهید و Tella را از قسمت «تنظیمات»، بیشتر سفارشی کنید.</string>
-  <string name="LockSuccess_Action_GoToTella">برو به Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">گذرواژه نادرست است،
 دوباره امتحان کنید</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to

@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +33,8 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
     private val _importError = SingleLiveEvent<Throwable>()
     val importError: LiveData<Throwable> get() = _importError
 
-    private val _duplicateNameError = MutableLiveData<Boolean>()
-    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
+    private val _duplicateErrorResId = MutableLiveData<Int?>()
+    val duplicateErrorResId: LiveData<Int?> = _duplicateErrorResId
 
     var attachment: VaultFile? = null
 
@@ -66,7 +67,7 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
                     _mediaFileLiveData.postValue(vaultFile)
                 }, { throwable ->
                     if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
-                        _duplicateNameError.postValue(true)
+                        _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
                         FirebaseCrashlytics.getInstance().recordException(throwable)
                         return@subscribe
                     }

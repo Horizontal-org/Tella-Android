@@ -42,6 +42,7 @@ import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
 import org.horizontal.tella.mobile.util.LockTimeoutManager
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
@@ -721,14 +722,14 @@ class AttachmentsFragment :
             viewModel.exportState.observe(this, ::onExportStarted)
             viewModel.mediaExported.observe(this, ::onMediaExported)
             viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
-            viewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+            viewModel.duplicateErrorResId.observe(this, ::onDuplicateErrorResId)
             viewModel.importError.observe(this, ::onImportError)
         }
     }
 
     private fun onImportError(error: Throwable) {
         val messageResId = when {
-            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error.isDuplicateNameOrFileExistsError() -> error.getDuplicateErrorMessageResId()
             error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
@@ -740,12 +741,10 @@ class AttachmentsFragment :
         Timber.d(error, javaClass.name)
     }
 
-    private fun onRenameConflictError(isConflict: Boolean) {
-        if (isConflict) {
-            DialogUtils.showBottomMessage(
-                baseActivity, getString(R.string.file_name_taken), true
-            )
-            }
+    private fun onDuplicateErrorResId(resId: Int?) {
+        if (resId != null) {
+            DialogUtils.showBottomMessage(baseActivity, getString(resId), true)
+        }
     }
 
     private fun onGetFilesSuccess(files: List<VaultFile?>) {

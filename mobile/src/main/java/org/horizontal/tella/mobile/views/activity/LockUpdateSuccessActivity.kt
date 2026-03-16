@@ -16,6 +16,7 @@ class LockUpdateSuccessActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLockUpdateSuccessBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        applyEdgeToEdge(binding.root)
         binding.doneBtn.setOnClickListener { finish() }
     }
 
