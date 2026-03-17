@@ -16,6 +16,9 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
@@ -50,6 +53,7 @@ import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.CameraDialogsUtil
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
+import org.horizontal.tella.mobile.util.ViewUtil
 import org.horizontal.tella.mobile.util.VideoResolutionManager
 import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.activity.MetadataActivity
@@ -105,6 +109,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { view, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            val top = if (statusBars.top > 0) statusBars.top else ViewUtil.getStatusBarHeight(resources)
+            view.updatePadding(top = top)
+            insets
+        }
+        ViewCompat.requestApplyInsets(binding.root)
         initView()
         initListeners()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)

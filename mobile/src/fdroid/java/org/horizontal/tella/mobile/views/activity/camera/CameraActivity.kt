@@ -37,6 +37,9 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
@@ -54,6 +57,7 @@ import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
 import org.horizontal.tella.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import org.horizontal.tella.mobile.util.C
+import org.horizontal.tella.mobile.util.ViewUtil
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
@@ -128,6 +132,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { view, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            val top = if (statusBars.top > 0) statusBars.top else ViewUtil.getStatusBarHeight(resources)
+            view.updatePadding(top = top)
+            insets
+        }
+        ViewCompat.requestApplyInsets(binding.root)
         initView()
         overridePendingTransition(R.anim.slide_in_up, R.anim.fade_out)
         metadataAttacher = MetadataAttacher(this)
