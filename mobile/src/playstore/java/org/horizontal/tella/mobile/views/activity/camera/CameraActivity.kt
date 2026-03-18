@@ -115,6 +115,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             view.updatePadding(top = top)
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            view.updatePadding(bottom = navBars.bottom)
+            insets
+        }
         ViewCompat.requestApplyInsets(binding.root)
         initView()
         initListeners()
