@@ -905,6 +905,8 @@ they are uploaded to this project as a report.</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
 
 Would you like to share analytics with the Tella team?</string>
+  <string name="Foss_Feature_Unavailable_Title">Feature unavailable</string>
+  <string name="Foss_Feature_Unavailable_Description">This feature is not compatible with the Free and Open Source version of Tella you are using.</string>
   <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="select_entities">Select entities</string>
