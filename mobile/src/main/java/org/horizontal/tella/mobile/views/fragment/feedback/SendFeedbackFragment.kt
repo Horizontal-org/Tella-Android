@@ -289,14 +289,18 @@ class SendFeedbackFragment :
             OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java).setConstraints(constraints)
                 .build()
 
-        // Enqueue the work with a unique name and keep existing work if it exists
+        // Enqueue the work with a unique name, always replacing any existing work.
+        // This ensures that if the user triggers another retry (e.g. after regaining connectivity),
+        // the latest request is honoured instead of being ignored.
         WorkManager.getInstance(baseActivity)
-            .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, oneTimeJob)
+            .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.REPLACE, oneTimeJob)
 
-        // Observe the work's status using LiveData
+        // Observe the work's status using LiveData.
+        // workInfo can be null when the work is pruned (e.g. after REPLACE) or not yet available.
         WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
-            .observeForever(object : Observer<WorkInfo> {
-                override fun onChanged(workInfo: WorkInfo) {
+            .observeForever(object : Observer<WorkInfo?> {
+                override fun onChanged(workInfo: WorkInfo?) {
+                    if (workInfo == null) return
                     // Check if the work has succeeded
                     if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                         // Show a success message with a duration of 4000 milliseconds (4 seconds)
