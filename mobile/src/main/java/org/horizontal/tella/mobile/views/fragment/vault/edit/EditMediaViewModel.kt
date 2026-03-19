@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.vault.edit
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
@@ -36,7 +36,7 @@ class EditMediaViewModel @Inject constructor() : ViewModel() {
                 .subscribe(
                     { bundle -> _saveSuccess.postValue(bundle.blockingGet()) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _saveError.postValue(throwable)
                     }
                 )

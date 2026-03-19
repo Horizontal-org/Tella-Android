@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -190,7 +190,7 @@ public class UwaziFormView extends LinearLayout {
                 try {
                     return q.setBinaryData(data);
                 } catch (Exception e) {
-                    FirebaseCrashlytics.getInstance().recordException(e);
+                    CrashReporterProvider.INSTANCE.get().recordException(e);
                     Toast.makeText(getContext(), "Error attaching data", Toast.LENGTH_LONG).show();
                 } finally {
                     q.waitingForAData = false;

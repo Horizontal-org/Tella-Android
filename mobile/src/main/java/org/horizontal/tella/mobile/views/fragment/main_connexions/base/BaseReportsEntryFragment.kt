@@ -8,7 +8,7 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -410,7 +410,7 @@ abstract class BaseReportsEntryFragment :
                     ).putExtra(VAULT_PICKER_SINGLE, false), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
     }
 
@@ -424,7 +424,7 @@ abstract class BaseReportsEntryFragment :
 
             baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
         } catch (e: java.lang.Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
     }
 
@@ -442,7 +442,7 @@ abstract class BaseReportsEntryFragment :
             bundle.putBoolean(REPORT_ENTRY, true)
             this.navManager().navigateToMicro()
         } catch (e: java.lang.Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
     }
 

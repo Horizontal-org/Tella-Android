@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Limits
@@ -90,6 +90,7 @@ class HomeVaultViewModel @Inject constructor(
         val rxVault = MyApplication.keyRxVault.rxVault.firstOrError().blockingGet()
 
         keyDataSource.dataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
             .flatMapCompletable { dataSource: DataSource ->
                 if (Preferences.isDeleteGalleryEnabled()) {
@@ -99,7 +100,8 @@ class HomeVaultViewModel @Inject constructor(
 
                 if (Preferences.isDeleteServerSettingsActive()) {
                     dataSource.deleteDatabase()
-                } else if (Preferences.isEraseForms()) {
+                }
+                if (Preferences.isEraseForms()) {
                     dataSource.deleteFormsAndRelatedTables()
                 }
 
@@ -209,7 +211,7 @@ class HomeVaultViewModel @Inject constructor(
                 .subscribe(
                     { num: Int -> _mediaExportStatus.postValue(ExportStatus.SUCCESS) },
                     { throwable: Throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _mediaExportStatus.postValue(ExportStatus.ERROR)
                     }
                 )
@@ -231,7 +233,7 @@ class HomeVaultViewModel @Inject constructor(
                         _recentFiles.value = vaultFiles
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _recentFilesError.value = throwable
                     }
                 )

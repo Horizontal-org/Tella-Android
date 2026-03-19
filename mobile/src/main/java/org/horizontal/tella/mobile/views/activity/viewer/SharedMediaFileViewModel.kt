@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,7 +73,7 @@ class SharedMediaFileViewModel @Inject constructor(
                 .subscribe(
                     { _onMediaFileExportStatus.postValue(MediaFileExportStatus.EXPORT_PROGRESS) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(R.string.gallery_toast_fail_exporting_to_device)
                     }
                 )
@@ -92,7 +92,7 @@ class SharedMediaFileViewModel @Inject constructor(
                         _onMediaFileRenamed.postValue(vaultFile)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(
                             if (throwable.isDuplicateNameOrFileExistsError()) throwable.getDuplicateErrorMessageResId()
                             else R.string.gallery_toast_fail_saving_file
@@ -114,7 +114,7 @@ class SharedMediaFileViewModel @Inject constructor(
                         _onMediaFileDeleted.postValue(isDeleted)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(R.string.gallery_toast_fail_deleting_files)
                     }
                 )
@@ -135,7 +135,7 @@ class SharedMediaFileViewModel @Inject constructor(
                         _onMediaFileDeleteConfirmed.postValue(mediaFileDeleteConfirmation)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(R.string.gallery_toast_fail_deleting_files)
                     }
                 )
@@ -154,7 +154,7 @@ class SharedMediaFileViewModel @Inject constructor(
                         _onMediaFileGot.postValue(vaultFile)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(R.string.default_error_msg)
                     }
                 )

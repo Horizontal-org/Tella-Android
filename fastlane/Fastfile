@@ -1,0 +1,31 @@
+# Fastlane configuration for Tella Android.
+# Run from the repository root: fastlane playstore | fastlane fdroid | fastlane test
+
+default_platform(:android)
+
+platform :android do
+  desc "Build the Play Store release bundle (AAB)"
+  lane :playstore do
+    gradle(
+      task: ":mobile:bundlePlaystoreRelease",
+      project_dir: "."
+    )
+  end
+
+  desc "Build the F-Droid release APK (no Firebase/Crashlytics; pass -Pfdroid)"
+  lane :fdroid do
+    gradle(
+      task: ":mobile:assembleFdroidRelease",
+      project_dir: ".",
+      properties: { "fdroid" => "true" }
+    )
+  end
+
+  desc "Run unit tests"
+  lane :test do
+    gradle(
+      task: "test",
+      project_dir: "."
+    )
+  end
+end

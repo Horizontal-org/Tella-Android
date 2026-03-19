@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.FrameLayout.LayoutParams
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import org.hzontal.shared_ui.R
@@ -94,6 +95,15 @@ object DialogUtils {
         )
         binding.txvMsg.text = msg
         frameLayout.addView(binding.root)
+
+        // Ensure the bottom message sits above the system navigation/gesture area by
+        // applying a configurable bottom margin.
+        (binding.root.layoutParams as? LayoutParams)?.let { params ->
+            params.gravity = params.gravity or android.view.Gravity.BOTTOM
+            params.bottomMargin =
+                context.resources.getDimensionPixelSize(R.dimen.main_navigation_bar_height)
+            binding.root.layoutParams = params
+        }
         binding.root.requestFocus()
         binding.root.announceForAccessibility(msg)
 

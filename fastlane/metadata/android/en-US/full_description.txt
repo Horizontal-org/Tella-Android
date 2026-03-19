@@ -1,0 +1,6 @@
+In challenging environments with limited or no internet connectivity or in the face of repression Tella makes it easier and safer to document events, whether that’s violence, human rights violations, corruption, or electoral fraud.
+ENCRYPTION: All of the content and data stored in Tella are encrypted. This means that unless the app is unlocked, all the data within Tella will remain inaccessible.
+FILE MANAGEMENT: Take photos, videos, or audio recordings directly in Tella, or import documents from your phone, and easily organize your files in folders.
+CAMOUFLAGE: Change the app icon and name to a seemingly harmless one, such as a calculator or a camera.
+QUICK DELETE: In just a few seconds, delete all the sensitive data and files stored in Tella.
+DATA-COLLECTION: Groups and organizations can collect data through forms and surveys, and received the data directly on their server.

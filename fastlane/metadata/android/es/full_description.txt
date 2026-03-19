@@ -1,0 +1,7 @@
+En contextos difíciles, con acceso restringido o sin acceso a internet o ante la posibilidad de represión Tella facilita y simplifica la manera de documentar hechos, tanto de violencia, violaciones a los derechos humanos, corrupción o fraude electoral.
+
+ENCRIPCIÓN: Todo el contenido y datos guardados en Tella están encriptados. Esto quiere decir que, a menos de que la app esté desbloqueada, será imposible acceder al contenido de la aplicación.
+MANEJO DE ARCHIVOS: Tella permite tomar photos, videos, o grabar audio directamente en la aplicación, importar documentos desde el télefono y organizar facilmente los archivos en carpetas.
+CAMUFLAJE: Es posible cambiar el ícono y el nombre de la Tella para que parezca una aplicación común y corriente, como una cámara o una calculadora funcional.
+BORRADO RÁPIDO: En sólo unos segundos se pueden borrar todos los datos sensibles y archivos guardados en Tella.
+RECOLECCIÓN DE DATOS: Grupos y organizaciónes pueden recolectar datos a través de formularios y encuestas y recibir las respuestas directamente en sus servidores.

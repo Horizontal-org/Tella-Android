@@ -4,7 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporter
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -56,11 +57,12 @@ class AttachmentsViewModelTest {
     lateinit var rxVault: RxVault
 
     @Mock
-    private lateinit var firebaseCrashlytics: FirebaseCrashlytics
+    private lateinit var crashReporter: CrashReporter
 
     @Before
     fun setUp() {
         openMocks(this)
+        CrashReporterProvider.setInstanceForTesting(crashReporter)
         val application: Application = mock(Application::class.java)
         `when`(application.applicationContext).thenReturn(mock(Context::class.java))
 
@@ -80,7 +82,7 @@ class AttachmentsViewModelTest {
         )
 
         // Create an instance of AttachmentsViewModel with the mocked dependencies
-        viewModel = AttachmentsViewModel(application, keyDataSource, rxVault)
+        viewModel = AttachmentsViewModel(application, keyDataSource)
 
         // Set the filesDataObserver on the LiveData to capture the emitted data
         viewModel.filesData.observeForever(filesDataObserver)
@@ -100,6 +102,7 @@ class AttachmentsViewModelTest {
 
     @After
     fun tearDown() {
+        CrashReporterProvider.setInstanceForTesting(null)
         RxAndroidPlugins.reset()
         viewModel.filesData.removeObserver(filesDataObserver)
         viewModel.filesSize.removeObserver(filesSizeObserver)
@@ -156,8 +159,8 @@ class AttachmentsViewModelTest {
     @Test
     fun `test moveFiles when parentId is null`() {
         viewModel.moveFiles(null, listOf(VaultFile()))
-        // Verify that no interactions with firebaseCrashlytics occurred
-        Mockito.verifyNoInteractions(firebaseCrashlytics)
+        // Verify that no interactions with crashReporter occurred
+        Mockito.verifyNoInteractions(crashReporter)
     }
 
     @Test
@@ -165,8 +168,8 @@ class AttachmentsViewModelTest {
         val parentId = "11223344-5566-4777-8899-aabbccddeeff"
 
         viewModel.moveFiles(parentId, null)
-        // Verify that no interactions with firebaseCrashlytics occurred
-        Mockito.verifyNoInteractions(firebaseCrashlytics)
+        // Verify that no interactions with crashReporter occurred
+        Mockito.verifyNoInteractions(crashReporter)
     }
 
     @Test

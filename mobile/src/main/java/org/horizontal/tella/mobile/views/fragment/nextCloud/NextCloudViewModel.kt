@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClientFactory
@@ -103,7 +103,7 @@ class NextCloudViewModel @Inject constructor(
                             _reportInstance.postValue(inst)
                         }, { throwable ->
                             Timber.d(throwable)
-                            FirebaseCrashlytics.getInstance().recordException(throwable)
+                            CrashReporterProvider.get().recordException(throwable)
                             _error.postValue(throwable)
                         })
                 )

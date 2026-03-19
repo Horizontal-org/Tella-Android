@@ -3,8 +3,17 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
-    id 'com.google.firebase.crashlytics'
-    id 'com.google.gms.google-services'
+}
+
+// Apply Firebase/Google Services plugins only when not building for F-Droid.
+// Skip when: -Pfdroid is set (F-Droid CI) or the requested task is fdroid (e.g. Run from IDE).
+// Before F-Droid release: inspect fdroidRelease APK for absence of com/google/firebase,
+// com/google/android/gms, and Dropbox classes (e.g. unzip and grep or use apkanalyzer).
+def isFdroidBuild = project.hasProperty('fdroid') ||
+    gradle.startParameter.taskNames.any { it.toLowerCase().contains("fdroid") }
+if (!isFdroidBuild) {
+    apply plugin: 'com.google.firebase.crashlytics'
+    apply plugin: 'com.google.gms.google-services'
 }
 
 /** Avoid duplicate logging classes app-wide */
@@ -38,7 +47,8 @@ android {
             ]
             // Make sure SimpleXML configuration files are included
             pickFirsts += [
-                    "META-INF/services/org.simpleframework.xml.*"
+                    "META-INF/services/org.simpleframework.xml.*",
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
             ]
         }
     }
@@ -90,13 +100,31 @@ android {
     productFlavors {
         playstore {
             dimension "distribution"
+            applicationId "org.hzontal.tella"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "true"
             buildConfigField "boolean", "ENABLE_DROPBOX", "true"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "true"
+            buildConfigField "boolean", "ENABLE_GOOGLE_MAPS", "true"
         }
         fdroid {
             dimension "distribution"
+            applicationId "org.hzontal.tellaFOSS"
             buildConfigField "boolean", "ENABLE_GOOGLE_DRIVE", "false"
             buildConfigField "boolean", "ENABLE_DROPBOX", "false"
+            buildConfigField "boolean", "ENABLE_CRASHLYTICS", "false"
+            buildConfigField "boolean", "ENABLE_GOOGLE_MAPS", "false"
+        }
+    }
+
+    signingConfigs {
+        release {
+            def storeFileEnv = project.findProperty("RELEASE_STORE_FILE") ?: System.getenv("RELEASE_STORE_FILE")
+            if (storeFileEnv != null) {
+                storeFile file(storeFileEnv)
+                storePassword project.findProperty("RELEASE_STORE_PASSWORD") ?: System.getenv("RELEASE_STORE_PASSWORD")
+                keyAlias project.findProperty("RELEASE_KEY_ALIAS") ?: System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword project.findProperty("RELEASE_KEY_PASSWORD") ?: System.getenv("RELEASE_KEY_PASSWORD")
+            }
         }
     }
 
@@ -112,6 +140,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (project.findProperty("RELEASE_STORE_FILE") != null || System.getenv("RELEASE_STORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
@@ -131,25 +162,16 @@ android {
         enableExperimentalClasspathAggregation = true
         enableAggregatingTask = true
     }
+}
 
-    packaging {
-        resources {
-            excludes += [
-                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
-                    "META-INF/versions/9/OSGI-INF/*",
-                    "META-INF/DEPENDENCIES",
-                    "META-INF/LICENSE",
-                    "META-INF/LICENSE.txt",
-                    "META-INF/NOTICE",
-                    "META-INF/NOTICE.txt",
-                    "META-INF/ASL2.0",
-                    "META-INF/*.md",
-                    "META-INF/*.txt",
-            ]
-            pickFirsts += [
-                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
-            ]
-        }
+// Disable Crashlytics and Google Services processing for fdroid variants (no Firebase/Play Services in fdroid).
+tasks.configureEach { task ->
+    def n = task.name.toLowerCase()
+    if (n.contains("crashlytics") && n.contains("fdroid")) {
+        task.enabled = false
+    }
+    if (n.contains("googleservices") && n.contains("fdroid")) {
+        task.enabled = false
     }
 }
 
@@ -158,6 +180,7 @@ dependencies {
     implementation platform("org.jetbrains.kotlin:kotlin-bom:${versions.kotlin}")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:${versions.kotlin}"
+    playstoreImplementation 'com.google.android.gms:play-services-base:18.10.0'
 
     // Helps processors understand newer metadata; harmless with Kotlin 2.1.x
     //kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
@@ -173,16 +196,16 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
 
-    implementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
-    implementation 'com.google.firebase:firebase-crashlytics'
+    playstoreImplementation platform("com.google.firebase:firebase-bom:$versions.firebaseBom")
+    playstoreImplementation 'com.google.firebase:firebase-crashlytics'
 
     api "androidx.navigation:navigation-fragment-ktx:$versions.navigationFragmentKtx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "androidx.legacy:legacy-support-v4:$versions.legacyV4"
     implementation "androidx.exifinterface:exifinterface:$versions.exifinterface"
-    implementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
-    implementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
+    playstoreImplementation "com.google.android.gms:play-services-location:$versions.googlePlayServices"
+    playstoreImplementation "com.google.android.gms:play-services-maps:$versions.googlePlayServices"
 
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"
@@ -213,11 +236,20 @@ dependencies {
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
-    // camera
-    implementation("com.otaliastudios:cameraview:$versions.cameraview") {
+    // camera - CameraView for Play Store, CameraX for F-Droid
+    playstoreImplementation("com.otaliastudios:cameraview:$versions.cameraview") {
         exclude module: "exifinterface"
         exclude module: "animated-vector-drawble"
     }
+    fdroidImplementation "androidx.camera:camera-core:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-camera2:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-video:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-extensions:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-lifecycle:$versions.camerax"
+    fdroidImplementation "androidx.camera:camera-view:$versions.camerax"
+
+    // OpenStreetMap for F-Droid location picker (no Google Maps)
+    fdroidImplementation "org.osmdroid:osmdroid-android:6.1.20"
 
     // ---- Hilt (Google) ----
     implementation "com.google.dagger:hilt-android:${versions.hilt_android}"
@@ -257,11 +289,9 @@ dependencies {
     // Gson is used by other modules too, keep it common
     implementation "com.google.code.gson:gson:$versions.gsonVersion"
 
-    // Dropbox (Play Store only)
+    // Dropbox (Play Store only; F-Droid uses DropboxClientHandle in main and a stub in src/fdroid, no SDK)
     playstoreImplementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     playstoreImplementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
-    // Dropbox SDK needed for interface compilation in F-Droid (compile-time only, excluded from APK via ProGuard)
-    fdroidImplementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     implementation 'commons-httpclient:commons-httpclient:3.1'
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")

@@ -60,6 +60,7 @@ import org.horizontal.tella.mobile.views.dialog.dropbox.DropBoxConnectFlowActivi
 import org.horizontal.tella.mobile.views.dialog.googledrive.GoogleDriveConnectFlowActivity;
 import org.horizontal.tella.mobile.views.dialog.reports.ReportsConnectFlowActivity;
 import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity;
+import org.horizontal.tella.mobile.util.FossFeatureSheetUtils;
 
 import timber.log.Timber;
 
@@ -534,12 +535,22 @@ public class ServersSettingsActivity extends BaseLockActivity implements Collect
 
     private void showGoogleDriveServerDialog(@Nullable GoogleDriveServer googleDriveServer) {
         if (googleDriveServer == null) {
+            if (!org.horizontal.tella.mobile.BuildConfig.ENABLE_GOOGLE_DRIVE) {
+                FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
+                    getSupportFragmentManager(), this, null, null);
+                return;
+            }
             startActivity(new Intent(this, GoogleDriveConnectFlowActivity.class));
         }
     }
 
     private void showDropBoxServerDialog(@Nullable DropBoxServer dropBoxServer) {
         if (dropBoxServer == null) {
+            if (!org.horizontal.tella.mobile.BuildConfig.ENABLE_DROPBOX) {
+                FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
+                    getSupportFragmentManager(), this, null, null);
+                return;
+            }
             Intent intent = new Intent(this, DropBoxConnectFlowActivity.class);
             startActivity(intent);
         }

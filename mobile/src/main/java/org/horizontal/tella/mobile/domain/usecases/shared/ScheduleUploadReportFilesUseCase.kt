@@ -6,7 +6,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.Completable
@@ -51,7 +51,7 @@ class ScheduleUploadReportFilesUseCase @Inject constructor(
                 dataSource.scheduleUploadReport(formMediaFile, uploadServerId)
             }
             .doOnError { throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
             }
     }
 

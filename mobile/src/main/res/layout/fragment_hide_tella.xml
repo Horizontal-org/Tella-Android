@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/wa_purple"
+    android:fillViewport="true">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:paddingEnd="21dp"
-    android:paddingStart="21dp">
+    android:paddingStart="21dp"
+    android:paddingBottom="@dimen/activity_vertical_larger_margin">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
@@ -17,13 +23,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
 
     <ImageView
         android:id="@+id/server_icon"
@@ -202,33 +201,35 @@
 
     <TextView
         android:id="@+id/hide_behind_calc_not_possible"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_two_btn"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        android:text="@string/settings.servers_setup_hide_behind_calculator_not_possible"
-        android:layout_marginTop="8dp"
+        android:text="@string/settings.hide_tella_change_lock_to_pin_hint"
+        android:layout_marginTop="@dimen/activity_vertical_small_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_small_margin"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
-        android:textSize="12sp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"/>
+        android:textSize="12sp"/>
 
     <TextView
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/open_sans"
-        android:layout_gravity="bottom"
         android:text="@string/LockSelect_Action_Back"
         android:textColor="@color/wa_white"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hide_behind_calc_not_possible"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guidelineBottom" />
-
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

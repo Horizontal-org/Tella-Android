@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.hzontal.tella_vault.Metadata;
 import com.hzontal.tella_vault.VaultFile;
 
@@ -29,7 +29,7 @@ public class MetadataAttacher implements IMetadataAttachPresenterContract.IPrese
                         .subscribe(
                                 updatedVaultFile -> view.onMetadataAttached(updatedVaultFile),
                                 throwable -> {
-                                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                                    CrashReporterProvider.INSTANCE.get().recordException(throwable);
                                     view.onMetadataAttachError(throwable);
                                 }
                         )

@@ -100,7 +100,7 @@ class SendFeedbackViewModelTest {
 
 
     @Test
-    fun testSubmitFeedback_Error() {
+    fun testSubmitFeedback_Error_noSubmissionSuccessEmitted() {
         // Given an error during submission
         val feedbackInstance =
             FeedbackInstance(1, FeedbackStatus.SUBMISSION_IN_PROGRESS, "test from Horizontal")

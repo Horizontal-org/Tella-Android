@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.google.gson.internal.LinkedTreeMap;
 import com.hzontal.tella_vault.MyLocation;
 
@@ -224,7 +224,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
         }
     }
 
