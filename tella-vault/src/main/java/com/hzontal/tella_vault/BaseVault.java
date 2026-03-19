@@ -7,6 +7,7 @@ import androidx.annotation.WorkerThread;
 
 import com.hzontal.tella_vault.database.VaultDataSource;
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException;
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException;
 import com.hzontal.tella_vault.filter.FilterType;
 import com.hzontal.tella_vault.filter.Limits;
 import com.hzontal.tella_vault.filter.Sort;
@@ -207,6 +208,16 @@ public abstract class BaseVault {
             throws VaultException, DuplicateVaultFileException {
         try {
             VaultFile vaultFile = new VaultFile(builder);
+
+            // Check for duplicate name in parent first (so same name + same hash shows "Name already exists")
+            VaultFile parent = database.get(parentId);
+            List<VaultFile> siblings = database.list(parent, null, null, null);
+            for (VaultFile sibling : siblings) {
+                if (vaultFile.name != null && vaultFile.name.equals(sibling.name)) {
+                    throw new FileNameAlreadyExistsException(
+                            "File or folder name already exists in this location: " + vaultFile.name);
+                }
+            }
 
             if (builder.data != null) { // not a dir
                 File file = getWritableFile(vaultFile);

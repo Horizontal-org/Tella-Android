@@ -5,7 +5,6 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import io.reactivex.Single
-import org.horizontal.tella.mobile.domain.entity.googledrive.DriveFolderLocation
 import org.horizontal.tella.mobile.domain.entity.googledrive.Folder
 import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.repository.googledrive.GoogleDriveRepositoryInterface
@@ -46,9 +45,6 @@ class GoogleDriveRepository @Inject constructor(
     ): Single<String> {
         return Single.error(UnsupportedOperationException("Google Drive is not available in F-Droid builds"))
     }
-
-    override fun getFolderLocation(folderId: String, email: String): Single<DriveFolderLocation> =
-        Single.just(DriveFolderLocation.MY_DRIVE)
 }
 
 

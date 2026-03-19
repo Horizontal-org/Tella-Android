@@ -70,10 +70,9 @@ class SendFeedbackFragment :
         // Set up click listener for the "Send Feedback" button
         binding.sendFeedbackBtn.setOnClickListener {
             if (isSubmitEnabled) {
-                // Create or update the feedback instance with the entered text
-                if (feedbackInstance == null) feedbackInstance =
-                    FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
-                else feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
+                val text = buildFeedbackText()
+                if (feedbackInstance == null) feedbackInstance = FeedbackInstance(text = text)
+                else feedbackInstance!!.text = text
 
                 // Check internet connection before attempting to submit
                 if (MyApplication.isConnectedToInternet(baseActivity)) {
@@ -128,13 +127,13 @@ class SendFeedbackFragment :
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
                             // Save feedback as a draft
+                            val text = buildFeedbackText()
                             if (feedbackInstance != null) {
-                                feedbackInstance!!.text =
-                                    binding.newFeedbackEditDescription.text.toString()
+                                feedbackInstance!!.text = text
                             } else {
                                 feedbackInstance = FeedbackInstance(
                                     status = FeedbackStatus.DRAFT,
-                                    text = binding.newFeedbackEditDescription.text.toString()
+                                    text = text
                                 )
                             }
                             viewModel.saveFeedbackDraft(feedbackInstance!!)
@@ -248,21 +247,29 @@ class SendFeedbackFragment :
     }
 
     /**
+     * Builds the single feedback text by concatenating contact information (if any) and feedback description.
+     */
+    private fun buildFeedbackText(): String {
+        val contact = binding.newFeedbackEditContact.text?.toString()?.trim().orEmpty()
+        val description = binding.newFeedbackEditDescription.text?.toString()?.trim().orEmpty()
+        return if (contact.isNotEmpty()) "$contact\n\n$description" else description
+    }
+
+    /**
      * Sets up the visibility of feedback-related views based on the feedback sharing status.
      */
     private fun setupFeedbackSwitchView() {
         if (Preferences.isFeedbackSharingEnabled()) {
-            // If feedback sharing is enabled, show the feedback button and input description
             binding.sendFeedbackBtn.isVisible = true
+            binding.textInputLayoutContact.isVisible = true
             binding.newFeedbackEditDescription.isVisible = true
             binding.textInputLayoutDescription.isVisible = true
         } else {
-            // If feedback sharing is disabled, hide the feedback button and input description
             binding.sendFeedbackBtn.isVisible = false
+            binding.textInputLayoutContact.isVisible = false
             binding.newFeedbackEditDescription.isVisible = false
             binding.textInputLayoutDescription.isVisible = false
-
-            // Clear the feedback input description and reset feedbackInstance
+            binding.newFeedbackEditContact.setText("")
             binding.newFeedbackEditDescription.setText("")
             feedbackInstance = null
         }

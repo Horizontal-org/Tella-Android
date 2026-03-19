@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="Vault_AllFiles_Title">File zawng zawngte</string>
+  <string name="Vault_Images_Title">Thlalakte</string>
+  <string name="Vault_Files_Title">Tella file-te</string>
+  <string name="Vault_Documents_Title">Document-te</string>
+  <string name="Vault_Audios_Title">Audio</string>
+  <string name="Vault_Videos_Title">Video-te</string>
+  <string name="Vault_Others_Title">A dangte</string>
+  <string name="Vault_Select_Title">File thlang rawh</string>
+  <string name="Vault_RecentFiles">File hman hnuhnungte</string>
+  <string name="Vault_PhotosAndVideos_Title">Thlalak leh Video-te</string>
+  <string name="Vault_FavoriteForms_Title">Form duh bikte</string>
+  <string name="Vault_Empty_Msg">Tella-ah file engmah i la nei lo. A hnuaia “+” button hi hmet la file dah lut rawh, emaw Camera leh Microphone hmangin siam rawh. File-te fel fai taka dah nan folder i siam thei bawk.</string>
+  <string name="Vault_Move_SheetDesc">Folder dangah sawn rawh</string>
+  <string name="Vault_Rename_SheetAction">Hming thlak</string>
+  <string name="Vault_Save_SheetAction">Save</string>
+  <string name="Vault_Delete_SheetAction">Paih rawh</string>
+  <string name="Vault_Share_SheetAction">Share</string>
+  <string name="Vault_Upload_SheetAction">Upload</string>
+  <string name="Vault_File_SheetAction">File chanchin</string>
+  <string name="Vault_FileInfo">File chanchin</string>
+  <string name="Vault_FileSize">A len zawng</string>
+  <string name="Vault_FileFormat">Format</string>
+  <string name="Vault_FileCreated">Siam hun</string>
+  <string name="Vault_FileResolution">Resolution</string>
+  <string name="Vault_FileLength">A sei zawng</string>
+  <string name="Vault_FilePath">File awmna hmun</string>
+  <string name="Vault_RenameFile_SheetTitle">File hming thlak</string>
+  <plurals name="Vault_DeleteFile_SheetTitle">
+    <item quantity="one">Delete file?</item>
+    <item quantity="other"></item>
+  </plurals>
+  <plurals name="Vault_deleteFile_SheetDesc">
+    <item quantity="one">The selected file will be permanently delated from Tella.</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_SortNameAsc_SheetAction">Hming A &gt; Z</string>
+  <string name="Vault_SortNameDesc_SheetAction">Hming Z &gt; A</string>
+  <string name="Vault_SortDateAsc_SheetAction">Thar ber atanga hlui ber</string>
+  <string name="Vault_SortDateDesc_SheetAction">Hlui ber atanga thar ber</string>
+  <string name="Vault_ManageFiles_SheetTitle">File-te enkawl rawh</string>
+  <string name="Vault_DeleteFile_SheetDesc">Tella-a file i dah luh hnuah, a original file chu i device atangin paih a ni ang. Tella-a awm chiah hi a copy bang a ni tawh ang.</string>
+  <string name="Vault_TakePhotoVideo_SheetAction">Thla la/Video la rawh</string>
+  <string name="Vault_RecordAudio_SheetAction">Audio record rawh</string>
+  <string name="Vault_Import_SheetAction">Device atanga dah luh</string>
+  <string name="Vault_ImportDelete_SheetAction">Dah lut la, a original paih nghal rawh</string>
+  <string name="Vault_CreateFolder_SheetTitle">Folder thar siam rawh</string>
+  <string name="Vault_MoveHere">hetah hian sawn rawh</string>
+  <string name="Vault_ViewerOther_SheetDesc">He file format hi Tella chhungah a hawn theih loh. App dang hmanga hawng turin i device-ah export i duh em? Hian file chhunga thu awmte a tilang thei a ni. </string>
+  <string name="Vault_Export_SheetAction">Export</string>
+  <plurals name="Vault_Items">
+    <item quantity="one">items</item>
+    <item quantity="other"></item>
+  </plurals>
+  <string name="Vault_No_Files_Title">Tella-ah file engmah i la nei lo.</string>
+  <string name="Vault_FavoriteTemplates_Title">Template duh bikte</string>
+  <plurals name="Vault_File_Successfully_Moved">
+    <item quantity="zero"></item>
+    <item quantity="one">File sawn hlawhtling a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File-te sawn hlawhtling a ni</item>
+  </plurals>
+  <string name="Vault_Confirm_delete_Description">File thlan thenkhatte hi i connection-ah hman mek a ni. Paih hian form leh report la thawn lohte a nghawng thei.</string>
+  <string name="Vault_Warning_Title">Fimkhur</string>
+  <string name="Vault_Delete_anyway">Paih lui rawh</string>
+  <string name="Vault_Keep_Original">A ORIGINAL DAH THA RAWH</string>
+  <string name="Vault_Delete_Original">A ORIGINAL PAIH RAWH</string>
+  <string name="Vault_deleteFileImported_SheetDesc"> Tella-a file i dah luh hnuah, a original file chu i device-ah dah that i duh nge paih i duh? I paih chuan, Tella-a file i dah luh chiah hi a copy awm chhun a ni tawh ang. </string>
+  <string name="Vault_FileEdit_SheetAction">Edit</string>
+  <string name="Vault_SaveToDevice_SheetTitle">\"%1$s\" hi device-ah save tûr em ni?</string>
+  <string name="Vault_SaveToDevice_SheetAction">DEVICE-AH SAVE RAWH</string>
+</resources>

@@ -17,6 +17,8 @@ import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import javax.inject.Inject
 
 
@@ -92,7 +94,7 @@ class SharedMediaFileViewModel @Inject constructor(
                     { throwable ->
                         FirebaseCrashlytics.getInstance().recordException(throwable)
                         _error.postValue(
-                            if (throwable is FileNameAlreadyExistsException) R.string.file_name_taken
+                            if (throwable.isDuplicateNameOrFileExistsError()) throwable.getDuplicateErrorMessageResId()
                             else R.string.gallery_toast_fail_saving_file
                         )
                     }

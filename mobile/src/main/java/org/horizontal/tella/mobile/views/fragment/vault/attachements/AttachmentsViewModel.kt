@@ -27,6 +27,7 @@ import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundA
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,8 +60,8 @@ class AttachmentsViewModel @Inject constructor(
     val folderCreated: LiveData<VaultFile> = _folderCreated
     private val _rootId = MutableLiveData<VaultFile>()
     val rootId: LiveData<VaultFile> = _rootId
-    private val _duplicateNameError = MutableLiveData<Boolean>()
-    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
+    private val _duplicateErrorResId = MutableLiveData<Int?>()
+    val duplicateErrorResId: LiveData<Int?> = _duplicateErrorResId
     val counterData = MutableLiveData<Int>()
 
     //TODO AHLEM FIX THIS val counterData: LiveData<Int> = _counterData
@@ -265,8 +266,7 @@ class AttachmentsViewModel @Inject constructor(
 
             }) { throwable: Throwable? ->
                 if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
-                    _duplicateNameError.postValue(true)
-                    return@subscribe
+                    _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
                 }
                 if (throwable?.isDuplicateNameOrFileExistsError() == true) {
                     // Remove the IN_PROGRESS item from background activities (dismiss so no failed row and no stuck indicator)
@@ -314,7 +314,7 @@ class AttachmentsViewModel @Inject constructor(
                     { _renameFileSuccess.postValue(it) },
                     { throwable ->
                         if (throwable is FileNameAlreadyExistsException || throwable is SQLiteConstraintException) {
-                            _duplicateNameError.postValue(true)
+                            _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
                         }
                         FirebaseCrashlytics.getInstance().recordException(throwable)
                         _error.postValue(throwable)
