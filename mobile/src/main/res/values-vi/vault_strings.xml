@@ -68,4 +68,6 @@
 
 Nếu bạn xóa nó đi, tệp nhập vào Tella sẽ là bản sao duy nhất còn lại.</string>
   <string name="Vault_FileEdit_SheetAction">Chỉnh sửa</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

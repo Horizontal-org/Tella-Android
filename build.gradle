@@ -1,9 +1,9 @@
 buildscript {
 
     ext.versions = [:]
-    versions.compileSdk = 35
+    versions.compileSdk = 36
     versions.minSdk = 21
-    versions.targetSdk = 35
+    versions.targetSdk = 36
 
     versions.sqlcipher = '4.6.1'
     versions.sqlite = '2.4.0'
@@ -11,7 +11,7 @@ buildscript {
     versions.junit = '4.13'
     versions.testJunit = '1.1.2'
     versions.espressoCore = '3.3.0'
-    versions.ktx = '1.6.0'
+    versions.ktx = '1.17.0'
     versions.material = '1.6.0'
     versions.appcompat = '1.7.1'
     versions.rxjava = '2.2.19'
@@ -65,7 +65,7 @@ buildscript {
 
     ext.versions.androidx_hilt = '1.2.0'
 
-    ext.versions.nextcloud = '3546bd82fc'
+    ext.versions.nextcloud = '2.22.0'
 
     versions.leakCanaryVersion = "3.0-alpha-1"
     versions.permissionDispatcher = "4.9.2"
@@ -74,7 +74,7 @@ buildscript {
 
 
     versions.fidoVersion = "4.1.0-patch1"
-    versions.divviup = "0.2.0"
+    versions.divviup = "0.2.1"
     versions.credentialsVersion = '1.2.2'
     versions.googleIdVersion = '1.1.1'
     versions.playServicesAuthVersion = '21.2.0'
@@ -92,7 +92,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.1'
+        classpath 'com.android.tools.build:gradle:8.9.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "com.google.gms:google-services:${versions.googleServices}"
         classpath "com.google.firebase:firebase-crashlytics-gradle:${versions.crashlyticsGradle}"
@@ -103,11 +103,25 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven { url 'https://jitpack.io' }
+    configurations.configureEach {
+        // Hilt + Kotlin metadata helper; safe to keep
+      //  resolutionStrategy.force "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
+        // Keep the project-wide removal of the SLF4J bridge to avoid logging dupes
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    }
+
+}
+
+// Align all Kotlin artifacts to the root plugin version
+subprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "org.jetbrains.kotlin" &&
+                    details.requested.name.startsWith("kotlin-")) {
+                details.useVersion(rootProject.ext.versions.kotlin)
+                details.because("Align Kotlin libs with Kotlin Gradle plugin ${rootProject.ext.versions.kotlin}")
+            }
+        }
     }
     configurations.configureEach {
         // Hilt + Kotlin metadata helper; safe to keep

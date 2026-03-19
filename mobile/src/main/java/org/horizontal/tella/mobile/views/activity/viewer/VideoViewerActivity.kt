@@ -92,8 +92,11 @@ class VideoViewerActivity : BaseLockActivity(), StyledPlayerView.ControllerVisib
             onMediaFileExportStatus.observe(this@VideoViewerActivity) { status ->
                 when (status) {
                     MediaFileExportStatus.EXPORT_START -> onExportStarted()
-                    MediaFileExportStatus.EXPORT_PROGRESS -> onMediaExported()
-                    MediaFileExportStatus.EXPORT_END -> onExportEnded()
+                    MediaFileExportStatus.EXPORT_PROGRESS -> {}
+                    MediaFileExportStatus.EXPORT_END -> {
+                        onExportEnded()
+                        onMediaExported()
+                    }
                 }
             }
             // Observer for media file deletion status.

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
+import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundA
 import org.horizontal.tella.mobile.domain.entity.background_activity.BackgroundActivityStatus
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -229,11 +231,13 @@ class AttachmentsViewModel @Inject constructor(
         // counterData.value = 0
         //  var counter = 1
         var currentUri: Uri? = null
+        var lastImportName: String? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
                 .doOnSubscribe {
                     currentUri = uri
                     val file = MediaFileHandler.getUriInfo(application, uri)
+                    lastImportName = file.name
                     val backgroundVideoFile = BackgroundActivityModel(
                         id = file.name,
                         name = file.name,
@@ -260,13 +264,30 @@ class AttachmentsViewModel @Inject constructor(
                 }
 
             }) { throwable: Throwable? ->
-                if (throwable is DuplicateVaultFileException) {
+                if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
                     _duplicateNameError.postValue(true)
                     return@subscribe
+                }
+                if (throwable?.isDuplicateNameOrFileExistsError() == true) {
+                    // Remove the IN_PROGRESS item from background activities (dismiss so no failed row and no stuck indicator)
+                    MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf()))
+                } else {
+                    postImportFailedToBackground(lastImportName)
                 }
                 FirebaseCrashlytics.getInstance().recordException(throwable!!)
                 _importError.postValue(throwable!!)
             })
+    }
+
+    private fun postImportFailedToBackground(name: String?) {
+        val failedActivity = BackgroundActivityModel(
+            id = name ?: "import",
+            name = name ?: "Import",
+            mimeType = "",
+            status = BackgroundActivityStatus.FAILED,
+            thumb = null
+        )
+        MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(failedActivity)))
     }
 
     private fun handleAddSuccess(vaultFile: VaultFile, status: BackgroundActivityStatus) {
@@ -292,7 +313,7 @@ class AttachmentsViewModel @Inject constructor(
                 .subscribe(
                     { _renameFileSuccess.postValue(it) },
                     { throwable ->
-                        if (throwable is SQLiteConstraintException) {
+                        if (throwable is FileNameAlreadyExistsException || throwable is SQLiteConstraintException) {
                             _duplicateNameError.postValue(true)
                         }
                         FirebaseCrashlytics.getInstance().recordException(throwable)

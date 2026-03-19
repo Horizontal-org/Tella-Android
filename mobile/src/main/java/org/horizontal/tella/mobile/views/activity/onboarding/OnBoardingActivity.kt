@@ -69,7 +69,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
         if (isOnboardLockSet) {
             Preferences.setFirstStart(false)
-            replaceFragmentNoAddToBackStack(OnBoardLockSetFragment(), R.id.rootOnboard)
+            replaceFragmentNoAddToBackStack(OnBoardLockSuccessFragment(), R.id.rootOnboard)
             hideViewpager()
         } else {
             if (isFromSettings) {
@@ -136,6 +136,14 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                 presenter.create(server)
                 addFragment(OnBoardHideOptionFragment(), R.id.rootOnboard)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Returning from lock setup activity: ViewPager was hidden and warning fragment was popped, so show it again
+        if (binding.viewPager.visibility == View.GONE && supportFragmentManager.backStackEntryCount == 0 && !isOnboardLockSet && !isFromSettings) {
+            showViewpager()
         }
     }
 
@@ -327,6 +335,10 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun hideViewpager() {
         binding.viewPager.visibility = View.GONE
+    }
+
+    override fun showViewpager() {
+        binding.viewPager.visibility = View.VISIBLE
     }
 
     private fun handleCustomizationCode(code: String) {

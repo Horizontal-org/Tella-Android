@@ -68,4 +68,6 @@
 
 Orijinal faylı silsəniz, Tella-ya köçürülən fayl onun yeganə surəti olacaq.</string>
   <string name="Vault_FileEdit_SheetAction">Redaktə et</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

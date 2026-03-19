@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentSubmittedUwaziBinding
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
@@ -38,14 +39,13 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
 
             submittedInstances.observe(viewLifecycleOwner) {
                 if (it.isEmpty()) {
-                    binding?.textViewEmptyOutbox?.isVisible = true
-                    binding?.submittedRecyclerView?.isVisible = false
+                    binding.textViewEmptyOutbox.isVisible = true
+                    binding.submittedRecyclerView.isVisible = false
                 } else {
                     (it as ArrayList).add(0, getString(R.string.Uwazi_Submitted_Header_Text))
-                    binding?.textViewEmptyOutbox?.isVisible = false
+                    binding.textViewEmptyOutbox.isVisible = false
                     adapterSubmitted.setEntities(it)
                 }
-
             }
 
             showInstanceSheetMore.observe(viewLifecycleOwner) {
@@ -60,8 +60,15 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
                 openEntityInstance(it)
             }
 
-            instanceDeleteD.observe(viewLifecycleOwner) {
-                listSubmitted()
+            instanceDeleteD.observe(viewLifecycleOwner) { deletedTitle ->
+                deletedTitle?.let { title ->
+                    DialogUtils.showBottomMessage(
+                        requireActivity(),
+                        getString(R.string.Uwazi_Entity_Deleted_Toast, title),
+                        false
+                    )
+                    listSubmitted()
+                }
             }
         }
     }
@@ -82,8 +89,8 @@ class SubmittedUwaziFragment : BaseBindingFragment<FragmentSubmittedUwaziBinding
                     }
                 }
             },
-            getString(R.string.action_delete) + " \"" + instance.title + "\"?",
-            requireContext().resources.getString(R.string.Uwazi_Subtitle_RemoveDraft),
+            getString(R.string.Uwazi_DeleteEntity_SheetTitle),
+            requireContext().getString(R.string.Uwazi_Subtitle_RemoveSubmittedEntity),
             requireContext().getString(R.string.action_delete),
             requireContext().getString(R.string.action_cancel),
             iconView = R.drawable.ic_eye_white

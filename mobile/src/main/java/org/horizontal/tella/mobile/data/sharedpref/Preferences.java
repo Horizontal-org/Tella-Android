@@ -443,6 +443,14 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_MIGRATION_FAILED_BOTTOM_SHEET, value);
     }
 
+    public static boolean isGoogleDriveReconnectPromptShown() {
+        return getBoolean(SharedPrefs.GOOGLE_DRIVE_RECONNECT_PROMPT_SHOWN, false);
+    }
+
+    public static void setGoogleDriveReconnectPromptShown(boolean value) {
+        setBoolean(SharedPrefs.GOOGLE_DRIVE_RECONNECT_PROMPT_SHOWN, value);
+    }
+
     public static boolean hasAcceptedImprovements() {
         return getBoolean(HAS_IMPROVEMENT_ACCEPTED, false);
     }

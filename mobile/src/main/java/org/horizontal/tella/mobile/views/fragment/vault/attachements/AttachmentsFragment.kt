@@ -42,6 +42,7 @@ import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.DialogsUtil
 import org.horizontal.tella.mobile.util.LockTimeoutManager
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.MainActivity
@@ -120,12 +121,24 @@ class AttachmentsFragment :
     ) { uri ->
         isLaunchingPicker = false
         if (uri != null) {
-            // Persist long-term R/W access to the picked folder
-            requireContext().contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-            )
-            lastTreeUri = uri
+            try {
+                // Persist long-term R/W access to the picked folder
+                requireContext().contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                )
+                lastTreeUri = uri
+            } catch (e: SecurityException) {
+                // Some providers don't support persistable permission; continue with one-time export
+            }
+            // Only export if we still have a file (fragment may have been recreated)
+            val fileToExport = vaultFile
+            if (fileToExport != null) {
+                val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
+                exportVaultFiles(isMultipleFiles = isMultiple, vaultFile = fileToExport, path = uri)
+            }
+        }
+    }
 
             // Use real intent (single vs multiple) based on current selection
             val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
@@ -531,9 +544,9 @@ class AttachmentsFragment :
 
     private fun showBottomSheet(vaultFile: VaultFile) {
         BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
-            baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+            baseActivity.getString(R.string.Vault_SaveToDevice_SheetTitle, vaultFile.name),
             baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
-            baseActivity.getString(R.string.Vault_Export_SheetAction),
+            baseActivity.getString(R.string.Vault_SaveToDevice_SheetAction),
             baseActivity.getString(R.string.action_cancel),
             onConfirmClick = {
                 this.vaultFile = vaultFile
@@ -720,8 +733,9 @@ class AttachmentsFragment :
     }
 
     private fun onImportError(error: Throwable) {
-        val messageResId = when (error) {
-            is FileNotFoundException -> R.string.error_file_not_found
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }
         DialogUtils.showBottomMessage(

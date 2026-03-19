@@ -11,6 +11,8 @@ public interface CredentialsCallback {
 
     void onUpdateUnlocking();
 
+    void onLockUpdateSuccess(android.content.Context context);
+
     void onFailedAttempts(long num);
 
     void saveRemainingAttempts(long num);

@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentSumbittedPreviewBinding
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
@@ -30,8 +31,15 @@ class SubmittedPreviewFragment : BaseBindingFragment<FragmentSumbittedPreviewBin
 
     private fun initObservers() {
         with(viewModel) {
-            instanceDeleteD.observe(viewLifecycleOwner) { deleted ->
-                if (deleted) nav().popBackStack()
+            instanceDeleteD.observe(viewLifecycleOwner) { deletedTitle ->
+                deletedTitle?.let { title ->
+                    DialogUtils.showBottomMessage(
+                        requireActivity(),
+                        getString(R.string.Uwazi_Entity_Deleted_Toast, title),
+                        false
+                    )
+                    nav().popBackStack()
+                }
             }
         }
     }

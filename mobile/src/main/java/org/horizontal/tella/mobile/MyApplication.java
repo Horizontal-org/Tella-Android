@@ -194,14 +194,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         registerActivityLifecycleCallbacks(this);
 
-        // provide custom configuration
-     /*   Configuration myConfig = new Configuration.Builder()
-                .setMinimumLoggingLevel(android.util.Log.INFO)
-                .build();*/
-
-        //initialize WorkManager
-        //  WorkManager.initialize(this, myConfig);
-
         System.setProperty("javax.net.debug", "ssl,handshake");
 
 
@@ -334,6 +326,13 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         mainKeyStore = TellaKeysUI.getMainKeyStore();
         unlockRegistry = TellaKeysUI.getUnlockRegistry();
         keyDataSource.initKeyDataSource();
+    }
+
+    @Override
+    public void onLockUpdateSuccess(android.content.Context context) {
+        android.content.Intent intent = new android.content.Intent(context, org.horizontal.tella.mobile.views.activity.LockUpdateSuccessActivity.class);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
     @Override

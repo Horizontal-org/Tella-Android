@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.data.repository.UwaziRepository
@@ -40,6 +41,8 @@ class UwaziConnectFlowViewModel : ViewModel() {
     val authenticationError: LiveData<Boolean> get() = _authenticationError
     private val _authenticationSuccess = SingleLiveEvent<Boolean>()
     val authenticationSuccess: LiveData<Boolean> get() = _authenticationSuccess
+    private val _serverUrlError = SingleLiveEvent<Int>()
+    val serverUrlError: LiveData<Int> get() = _serverUrlError
 
     fun getServerLanguage(url: String) {
         disposables.add(repository.getSettings(url)
@@ -51,12 +54,14 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 _isPublic.postValue(true)
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
-                    throwable
-                        ?: throw NullPointerException("Expression 'throwable' must not be null")
-                )
-                _isPublic.postValue(false)
-
+                val error = throwable
+                    ?: NullPointerException("Expression 'throwable' must not be null")
+                FirebaseCrashlytics.getInstance().recordException(error)
+                val messageResId = when (error) {
+                    is java.net.UnknownHostException -> R.string.settings_docu_error_domain_doesnt_exit
+                    else -> R.string.settings_docu_error_unknown_connection_error
+                }
+                _serverUrlError.postValue(messageResId)
             })
     }
 

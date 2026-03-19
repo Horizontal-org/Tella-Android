@@ -1,18 +1,13 @@
 package org.horizontal.tella.mobile.views.activity.onboarding
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.hzontal.shared_ui.buttons.InformationButton
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
-import com.hzontal.tella_locking_ui.ui.password.SetPasswordActivity
-import com.hzontal.tella_locking_ui.ui.pattern.PatternSetActivity
-import com.hzontal.tella_locking_ui.ui.pin.SetPinActivity
 import org.horizontal.tella.mobile.R
+import org.hzontal.shared_ui.buttons.InformationButton
 import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 
 class OnBoardLockFragment : BaseFragment() {
@@ -71,15 +66,15 @@ class OnBoardLockFragment : BaseFragment() {
 
         lockPasswordBtn.setOnClickListener {
             toggleButtons(passwordState = true, pinState = false, patternState = false)
-             goUnlockingActivity(SetPasswordActivity())
+            proceedWithSelection(OnBoardLockWarningFragment.LockType.PASSWORD)
         }
         lockPINdBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = true, patternState = false)
-            goUnlockingActivity(SetPinActivity())
+            proceedWithSelection(OnBoardLockWarningFragment.LockType.PIN)
         }
         lockPatternBtn.setOnClickListener {
             toggleButtons(passwordState = false, pinState = false, patternState = true)
-            goUnlockingActivity(PatternSetActivity())
+            proceedWithSelection(OnBoardLockWarningFragment.LockType.PATTERN)
         }
 
         cancelBtn.setOnClickListener {
@@ -94,11 +89,16 @@ class OnBoardLockFragment : BaseFragment() {
         lockPatternBtn.isChecked = patternState
     }
 
-    private fun goUnlockingActivity(destination : Activity){
-        val intent = Intent(baseActivity, destination::class.java)
-        intent.putExtra(IS_FROM_SETTINGS,isFromSettings)
-        startActivity(intent)
-        if (isFromSettings) baseActivity.finish()
+    /**
+     * Always show the warning fragment first (onboarding and settings). After the user taps "I understand",
+     * OnBoardLockWarningFragment proceeds to set or update the lock type.
+     */
+    private fun proceedWithSelection(lockType: OnBoardLockWarningFragment.LockType) {
+        if (!isFromSettings) (baseActivity as OnBoardingActivity).hideViewpager()
+        baseActivity.addFragment(
+            this,
+            OnBoardLockWarningFragment.newInstance(lockType, isFromSettings),
+            R.id.rootOnboard
+        )
     }
-
 }

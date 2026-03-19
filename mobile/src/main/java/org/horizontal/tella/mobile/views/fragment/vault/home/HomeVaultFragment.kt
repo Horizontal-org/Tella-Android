@@ -28,6 +28,7 @@ import com.hzontal.tella_vault.filter.Limits
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
+import org.horizontal.tella.mobile.BuildConfig
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.bus.EventCompositeDisposable
@@ -318,6 +319,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         val baseActivity = activity as MainActivity
         baseActivity.setSupportActionBar(toolbar)
         maybeShowRecentBackgroundActivities()
+        // Apply current background state when view is (re)created so toolbar icon and list are correct
+        updateToolbarIcon()
     }
 
     private fun maybeShowRecentBackgroundActivities() {
@@ -406,9 +409,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
             else -> {
                 BottomSheetUtils.showStandardSheet(baseActivity.supportFragmentManager,
-                    baseActivity.getString(R.string.Vault_Export_SheetAction) + " " + vaultFile.name + "?",
+                    baseActivity.getString(R.string.Vault_SaveToDevice_SheetTitle, vaultFile.name),
                     baseActivity.getString(R.string.Vault_ViewerOther_SheetDesc),
-                    baseActivity.getString(R.string.Vault_Export_SheetAction),
+                    baseActivity.getString(R.string.Vault_SaveToDevice_SheetAction),
                     baseActivity.getString(R.string.action_cancel),
                     onConfirmClick = { exportVaultFiles(vaultFile) })
             }
@@ -448,11 +451,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             ServerType.GOOGLE_DRIVE -> {
-                nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
+                    nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                }
             }
 
             ServerType.DROP_BOX -> {
-                nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                if (BuildConfig.ENABLE_DROPBOX) {
+                    nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                }
             }
 
             ServerType.NEXTCLOUD -> {
@@ -766,6 +773,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
     // Handle Google Drive servers
     private fun handleGoogleDriveServers(servers: List<GoogleDriveServer>?) {
+        if (!BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            // Skip Google Drive in F-Droid builds
+            return
+        }
         googleDriveServersCounted = true
         googleDriveServers?.clear()
         removeOldServersFromList(ServerType.GOOGLE_DRIVE)
@@ -778,6 +789,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
     // Handle Dropbox servers
     private fun handleDropBoxServers(servers: List<DropBoxServer>?) {
+        if (!BuildConfig.ENABLE_DROPBOX) {
+            // Skip Dropbox in F-Droid builds
+            return
+        }
         dropBoxServersCounted = true
         dropBoxServers?.clear()
         removeOldServersFromList(ServerType.DROP_BOX)
@@ -870,13 +885,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
         writePermissionGranted = hasWritePermission || minSdk29
 
+        if (writePermissionGranted) {
+            vaultFile?.let { exportVaultFiles(it) }
+            return
+        }
         val permissionsToRequest = mutableListOf<String>()
-        if (!writePermissionGranted) {
-            permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-            if (permissionsToRequest.isNotEmpty()) {
-                permissionsLauncher.launch(permissionsToRequest.toTypedArray())
-            }
+        permissionsToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (permissionsToRequest.isNotEmpty()) {
+            permissionsLauncher.launch(permissionsToRequest.toTypedArray())
         }
     }
 

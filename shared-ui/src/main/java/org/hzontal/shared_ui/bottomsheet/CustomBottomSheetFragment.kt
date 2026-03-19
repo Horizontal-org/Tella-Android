@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.FrameLayout
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
@@ -242,15 +243,13 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
         val window = dialog?.window ?: return
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Use recommended API; avoid deprecated setStatusBarColor (Play Console edge-to-edge warning).
+            WindowCompat.enableEdgeToEdge(window)
             val controller = window.insetsController
-            // Edge-to-edge support for Android 11+
             controller?.setSystemBarsAppearance(
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
-
-            window.setDecorFitsSystemWindows(false)
-            window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(requireContext(), colorInt)

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -52,7 +54,25 @@ abstract class BaseFragment : Fragment() {
         Timber.d("***** ${this.javaClass.name} onViewCreated")
 
         super.onViewCreated(view, savedInstanceState)
+        
+        // Apply edge-to-edge handling to prevent white spaces at top/bottom
+        applyEdgeToEdgeIfNeeded(view)
+        
         initView(view)
+    }
+
+    /**
+     * Apply edge-to-edge window insets handling to the root view.
+     * Override this method if a fragment needs custom edge-to-edge handling.
+     */
+    protected open fun applyEdgeToEdgeIfNeeded(view: View) {
+        // Apply window insets to the root view to handle edge-to-edge display
+        // This prevents white spaces at the top and bottom where system bars are
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+            insets
+        }
     }
 
     protected fun showToast(message: String) {

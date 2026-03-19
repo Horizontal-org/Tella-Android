@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ActivitySignatureBinding
 import org.horizontal.tella.mobile.mvvm.signature.SignatureViewModel
 import org.horizontal.tella.mobile.util.DialogsUtil
+import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.hzontal.shared_ui.utils.DialogUtils
 import java.io.ByteArrayOutputStream
@@ -61,7 +62,11 @@ class SignatureActivity : BaseLockActivity() {
 
         signatureViewModel.addSuccess.observe(this, ::onAddSuccess)
         signatureViewModel.addError.observe(this, ::onAddError)
-
+        signatureViewModel.duplicateNameError.observe(this) { isConflict ->
+            if (isConflict == true) {
+                DialogUtils.showBottomMessage(this, getString(R.string.file_name_taken), true)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -137,9 +142,13 @@ class SignatureActivity : BaseLockActivity() {
     }
 
     private fun onAddError(error: Throwable) {
+        val messageResId = when {
+            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            else -> R.string.collect_form_signature_toast_fail_saving
+        }
         DialogUtils.showBottomMessage(
             this,
-            getString(R.string.collect_form_signature_toast_fail_saving),
+            getString(messageResId),
             true
         )
     }

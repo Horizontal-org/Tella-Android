@@ -34,9 +34,12 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var loading: View
     @Inject lateinit var divviupUtils : DivviupUtils
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Let content draw behind system bars
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
+        // Use Google-recommended API for edge-to-edge (avoids deprecated setStatusBarColor path)
+        WindowCompat.enableEdgeToEdge(window)
+        // Set window background to transparent so fragment backgrounds show through
+        // This prevents white bars from showing in system bar areas when edge-to-edge is enabled
+        window.setBackgroundDrawableResource(android.R.color.transparent)
         setThemeStyle()
         supportFragmentManager.setupForAccessibility(this)
         // start with preventing showing screen in tasks?
@@ -50,10 +53,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun applyEdgeToEdge(view: View) {
-        // remove default system window fitting
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        // Apply insets manually
+        // Window already configured by enableEdgeToEdge() in onCreate.
+        // Apply insets so content is not drawn under system bars.
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom)

@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.data.database;
 
+import org.horizontal.tella.mobile.data.database.PreferencesAdapter;
+import org.horizontal.tella.mobile.data.database.HorizontalSQLiteOpenHelper;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -99,7 +101,11 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
     private DataSource(Context context, byte[] key) {
         System.loadLibrary("sqlcipher");
-        HorizontalSQLiteOpenHelper sqLiteOpenHelper = new HorizontalSQLiteOpenHelper(context, key);
+        // Use DatabaseModuleFactory to conditionally include modules based on build variant
+        org.horizontal.tella.mobile.data.database.DatabaseModuleProvider provider = 
+            org.horizontal.tella.mobile.data.database.DatabaseModuleFactory.createProvider();
+        HorizontalSQLiteOpenHelper sqLiteOpenHelper = HorizontalSQLiteOpenHelper.create(
+            context, key, PreferencesAdapter.INSTANCE, provider);
         database = sqLiteOpenHelper.getWritableDatabase();
         dataBaseUtils = new DataBaseUtils(database);
     }

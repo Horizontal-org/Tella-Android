@@ -72,18 +72,14 @@ fun Int.dpToPx(context: Context): Int {
 }
 
 fun Window.changeStatusColor(context: Context, @ColorRes colorRes: Int) {
-    val color = ContextCompat.getColor(context, colorRes)
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        statusBarColor = color
-        // enable edge-to-edge
-        setDecorFitsSystemWindows(false)  
-
+        // R+: do not call setStatusBarColor (deprecated for edge-to-edge). BaseActivity uses enableEdgeToEdge(); only set light/dark appearance.
         insetsController?.setSystemBarsAppearance(
             WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
             WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
         )
     } else {
+        val color = ContextCompat.getColor(context, colorRes)
         addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         statusBarColor = color
@@ -152,3 +148,17 @@ fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
     navigate(destinationId, bundle,)
 }
 
+private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"
+private const val NAME_FILE_ALREADY_EXISTS = "com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException"/**
+ * Returns true if this throwable or any cause in the chain is a duplicate name / file exists error.
+ * Uses class name so it works when the exception comes from another module (different classloader).
+ */
+fun Throwable.isDuplicateNameOrFileExistsError(): Boolean {
+    var t: Throwable? = this
+    while (t != null) {
+        val name = t.javaClass.name
+        if (name == NAME_DUPLICATE_VAULT_FILE || name == NAME_FILE_ALREADY_EXISTS) return true
+        t = t.cause
+    }
+    return false
+}

@@ -67,4 +67,6 @@
   <string name="Vault_deleteFileImported_SheetDesc">Ukapeja kutumira chikwama pa Tella unodha kussiya chikwama chokuthanga kana kuchilassa muvhundjo?
 Kana ukulassa chikwama pa Tella ndichona chega chainga cha sala.</string>
   <string name="Vault_FileEdit_SheetAction">Kunhoressa</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>

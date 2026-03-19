@@ -119,38 +119,53 @@ class HomeVaultViewModel @Inject constructor(
 
     // Fetch server counts
     fun countAllServers() {
-        val dropBoxCount = keyDataSource.dropBoxDataSource
-            .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listDropBoxServers() }
-
-        val googleDriveCount = keyDataSource.googleDriveDataSource
-            .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listGoogleDriveServers(config.googleClientId) }
-
         val tellaUploadCount = keyDataSource.dataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listTellaUploadServers() }
+            .flatMap { it.listTellaUploadServers() }
 
         val collectServersCount = keyDataSource.dataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listCollectServers() }
+            .flatMap { it.listCollectServers() }
 
         val uwaziServersCount = keyDataSource.uwaziDataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listUwaziServers() }
+            .flatMap { it.listUwaziServers() }
 
         val nextCloudServerCount = keyDataSource.nextCloudDataSource
+            .firstOrError()
             .subscribeOn(Schedulers.io())
-            .flatMapSingle { it.listNextCloudServers() }
+            .flatMap { it.listNextCloudServers() }
+
+        // Conditionally include Google Drive and Dropbox based on build variant
+        val dropBoxCount = if (BuildConfig.ENABLE_DROPBOX) {
+            keyDataSource.dropBoxDataSource
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .flatMap { dataSource -> dataSource.listDropBoxServers() }
+        } else {
+            Single.just(emptyList())
+        }
+
+        val googleDriveCount = if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
+            keyDataSource.googleDriveDataSource
+                .firstOrError()
+                .subscribeOn(Schedulers.io())
+                .flatMap { dataSource -> dataSource.listGoogleDriveServers(config.googleClientId) }
+        } else {
+            Single.just(emptyList())
+        }
 
         disposables.add(
             Single.zip(
-                dropBoxCount.firstOrError(),
-                googleDriveCount.firstOrError(),
-                tellaUploadCount.firstOrError(),
-                collectServersCount.firstOrError(),
-                uwaziServersCount.firstOrError(),
-                nextCloudServerCount.firstOrError()
+                dropBoxCount,
+                googleDriveCount,
+                tellaUploadCount,
+                collectServersCount,
+                uwaziServersCount,
+                nextCloudServerCount
             ) { dropboxServers: List<DropBoxServer>,
                 googleDriveServers: List<GoogleDriveServer>,
                 tellaUploadServers: List<TellaReportServer>,
@@ -183,8 +198,7 @@ class HomeVaultViewModel @Inject constructor(
             Single.fromCallable {
                 val resultList = MediaFileHandler.walkAllFiles(vaultFiles)
                 for (vaultFile in resultList) {
-                    // Uncomment this line to export the files
-                    // vaultFile?.let { mediaFileHandler.exportMediaFile(context, it) }
+                    vaultFile?.let { MediaFileHandler.exportMediaFile(appContext, it, null) }
                 }
                 vaultFiles.size
             }

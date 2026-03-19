@@ -68,4 +68,6 @@
  
   إذا قمت بحذفه، فسيكون الملف المستورد إلى Tella هو النسخة الوحيدة المتبقية.</string>
   <string name="Vault_FileEdit_SheetAction">تعديل</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>
