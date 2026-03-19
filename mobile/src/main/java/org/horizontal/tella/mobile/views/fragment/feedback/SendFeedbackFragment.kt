@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.databinding.FragmentSendFeedbackBinding
 import org.horizontal.tella.mobile.domain.entity.feedback.FeedbackInstance
 import org.horizontal.tella.mobile.domain.entity.feedback.FeedbackStatus
+import org.horizontal.tella.mobile.util.TellaReleaseNaming
 import org.horizontal.tella.mobile.util.jobs.WorkerSendFeedBack
 import org.horizontal.tella.mobile.views.activity.SettingsActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -247,12 +248,18 @@ class SendFeedbackFragment :
     }
 
     /**
-     * Builds the single feedback text by concatenating contact information (if any) and feedback description.
+     * Builds the feedback text: release label (Tella vs Tella FOSS + version + build), then contact and description.
+     * Sent to the feedback API so support emails can distinguish Play Store vs FOSS installs.
      */
     private fun buildFeedbackText(): String {
+        val releaseLine = getString(
+            R.string.feedback_metadata_release_line,
+            TellaReleaseNaming.fullReleaseLabel(requireContext())
+        )
         val contact = binding.newFeedbackEditContact.text?.toString()?.trim().orEmpty()
         val description = binding.newFeedbackEditDescription.text?.toString()?.trim().orEmpty()
-        return if (contact.isNotEmpty()) "$contact\n\n$description" else description
+        val body = if (contact.isNotEmpty()) "$contact\n\n$description" else description
+        return "$releaseLine\n\n$body"
     }
 
     /**

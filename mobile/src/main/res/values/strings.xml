@@ -279,6 +279,7 @@ mode activation</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
+  <string name="tella_foss">Tella FOSS</string>
   <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
   <string name="onboard_password">Password</string>
@@ -832,6 +833,7 @@ they are uploaded to this project as a report.</string>
   <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
 </string>
   <string name="feedback_title">Feedback</string>
+  <string name="feedback_metadata_release_line">App release: %1$s</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
