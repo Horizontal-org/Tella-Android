@@ -53,7 +53,6 @@ import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.CameraDialogsUtil
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
-import org.horizontal.tella.mobile.util.ViewUtil
 import org.horizontal.tella.mobile.util.VideoResolutionManager
 import org.horizontal.tella.mobile.views.activity.MainActivity
 import org.horizontal.tella.mobile.views.activity.MetadataActivity
@@ -111,7 +110,10 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { view, insets ->
             val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            val top = if (statusBars.top > 0) statusBars.top else ViewUtil.getStatusBarHeight(resources)
+            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            // Avoid ViewUtil.getStatusBarHeight() fallback — it duplicates inset when statusBars.top is 0
+            // under edge-to-edge, causing a black gap above the camera toolbar.
+            val top = maxOf(statusBars.top, cutout.top)
             view.updatePadding(top = top)
             insets
         }

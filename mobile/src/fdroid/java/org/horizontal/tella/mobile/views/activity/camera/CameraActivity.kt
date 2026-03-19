@@ -57,7 +57,6 @@ import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
 import org.horizontal.tella.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import org.horizontal.tella.mobile.util.C
-import org.horizontal.tella.mobile.util.ViewUtil
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
@@ -132,9 +131,15 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        // SurfaceView (default performance mode) can paint above sibling views on API 31+ / some devices.
+        binding.viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { view, insets ->
             val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            val top = if (statusBars.top > 0) statusBars.top else ViewUtil.getStatusBarHeight(resources)
+            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            // Never fall back to ViewUtil.getStatusBarHeight() here: with enableEdgeToEdge(), the system
+            // often reports statusBars.top == 0 while the fallback still adds a full status-bar inset,
+            // which shows as an empty black strip above the toolbar (Pixel / Android 12+).
+            val top = maxOf(statusBars.top, cutout.top)
             view.updatePadding(top = top)
             insets
         }
