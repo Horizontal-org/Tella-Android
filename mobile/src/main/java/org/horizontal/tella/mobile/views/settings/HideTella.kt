@@ -54,7 +54,10 @@ class HideTella : BaseFragment() {
             spannable.setSpan(StyleSpan(Typeface.BOLD), linkStart, linkEnd, 0)
             spannable.setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    baseActivity.addFragment(SecuritySettings(), R.id.my_nav_host_fragment)
+                    baseActivity.addFragment(
+                        SecuritySettings.newInstance(openLockChangeFlow = true),
+                        R.id.my_nav_host_fragment
+                    )
                 }
             }, linkStart, linkEnd, 0)
         }
