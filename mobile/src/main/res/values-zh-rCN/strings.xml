@@ -23,8 +23,8 @@
   <string name="action_ok">确定</string>
   <string name="collect.form_toast_validation.error">此回复无效</string>
   <string name="collect.form_error_response.mandatory">此回复为必填项。</string>
-  <string name="homescreen_heading_quick.delete">快速删除
-模式激活</string>
+  <string name="homescreen_heading_quick.delete">快速删除模式
+已激活</string>
   <string name="settings.about_list.item_privacy.policy">隐私政策</string>
   <string name="recorder_toast_fail.recording">录音时出错，请重试。</string>
   <string name="recorder_content.desc_blinking.red.dot">正在录音</string>
@@ -34,7 +34,7 @@
   <string name="lock_dialog.expl_save.pattern">正在保存应用锁图案</string>
   <string name="lock_dialog.expl_unlock.app">正在解锁 Tella</string>
   <string name="action_skip">跳过</string>
-  <string name="settings.docu_delete.server_dialog.expl">如删除此服务器，所有草稿和已提交的表单都会从设备上删除。仍要删除吗？</string>
+  <string name="settings.docu_delete.server_dialog.expl">如果删除此服务器，所有草稿和已提交的表单都将从您的设备中删除。是否仍要删除？</string>
   <string name="settings.docu_toast_server.deleted">服务器已删除</string>
   <string name="settings.docu_toast_server.created">服务器已创建</string>
   <string name="settings.docu_toast_server.updated">服务器已更新</string>
@@ -51,12 +51,12 @@
   <string name="collect_toast_fail.sending.form">提交表单时出错，请重试。</string>
   <string name="collect_toast_fail.form.submission.generic">提交表单时出错：%s</string>
   <string name="collect.form_toast_validation.generic.error">部分答案存在验证错误</string>
-  <string name="permission_dialog.expl_GPS">为了让文件可验证，Tella 需要记录您的位置宁需要访问 GPS 的权限。</string>
+  <string name="permission_dialog.expl_GPS">为了对文件进行验证，Tella 需要记录您的位置并需要 GPS 访问权限。</string>
   <string name="collect.form_action_select.time">选择时间</string>
   <string name="collect.form_action_select.date">选择日期</string>
   <string name="collect_dialog.expl_downloading.blank.forms">下载表格</string>
   <string name="collect.blank_toast_fail.updating.form.list">更新表单列表时出错。请重试。</string>
-  <string name="collect_toast_fail.parsing.form">显示此表单时出错。请重试。</string>
+  <string name="collect_toast_fail.parsing.form">显示表单时出错。请重试。</string>
   <string name="collect.end_action_save.send.later">保存表格</string>
   <string name="collect_action.desc_save.form">保存表单</string>
   <string name="collect.end_action.desc_save.send.later">保存表格</string>
@@ -67,14 +67,14 @@
   <string name="action_play">播放</string>
   <string name="action_record">录音</string>
   <string name="play.audio_app.bar">播放音频</string>
-  <string name="collect_dialog.text_delete.sent.form">确定要从设备删除该表单吗？注意因为表单已提交，数据会保留在您组织的服务器上。</string>
+  <string name="collect_dialog.text_delete.sent.form">是否确定从设备删除此表单？请注意，由于表单已提交，数据将保留在您所在组织的服务器上。</string>
   <string name="collect_dialog.text_delete.draft.form">是否确定删除此表单草稿？</string>
   <string name="collect_toast_form.deleted">表单已删除</string>
-  <string name="settings.lang_select.expl_default">保持 Tella 与我的设备使用相同的语言</string>
+  <string name="settings.lang_select.expl_default">保持 Tella 与设备使用相同的语言</string>
   <string name="settings.lang_select_default">默认</string>
   <string name="settings.lang_app.bar">语言</string>
   <string name="action_share">分享</string>
-  <string name="collect_toast_fail.submission.unauthorized">您没有提交此表单的权限。如果您认为这是个错误，请联系您的组织。</string>
+  <string name="collect_toast_fail.submission.unauthorized">您没有提交此表单的权限。如果您认为这是一个错误，请联系您的组织。</string>
   <string name="gallery_toast_fail.importing.file">导入文件时出错，请重试</string>
   <string name="collect.end_heading">表单结束</string>
   <string name="collect.end_toast_notification.form.not.sent.no.connection">您未连接到互联网。连接后请重试</string>
@@ -82,7 +82,7 @@
   <string name="action_discard">丢弃</string>
   <string name="collect.end_action_submit">提交</string>
   <string name="gallery_toast_fail.exporting.to.device">导出文件时出错，请重试</string>
-  <string name="permission_dialog.expl_device.storage">为了导出文件，Tella 需要获得写入设备存储的权限。</string>
+  <string name="permission_dialog.expl_device.storage">为了导出文件，Tella 需要获得设备存储的写入权限。</string>
   <string name="gallery_toast_fail.deleting.files">删除文件时出错，请重试。</string>
   <plurals name="gallery_toast_files.exported">
     <item quantity="other">%1$d 个文件已保存到设备</item>
@@ -100,11 +100,11 @@
   <string name="collect_toast_fail.fetch.form.from.server.display.error">下载表单时出错：%s</string>
   <string name="collect_toast_reason.fail.fetch.form.from.server">找不到该表单。它可能已从您组织的服务器中删除</string>
   <string name="gallery_heading_files.from.Tella.gallery">Tella 图库</string>
-  <string name="settings_select_general">一般情况</string>
+  <string name="settings_select_general">常规</string>
   <string name="collect.form_exit_dialog.expl">您的草稿将丢失。</string>
   <string name="collect.form_exit_dialog.action_save.exit">保存并退出</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">仍然退出</string>
-  <string name="settings.docu_error_not.valid.URL">这是一个无效的网址。</string>
+  <string name="settings.docu_error_not.valid.URL">这是一个无效的 URL。</string>
   <string name="home_action.label_quick.delete">删除</string>
   <string name="gallery_subheading_sort.by">排序方式</string>
   <string name="gallery_list.item_newest.to.oldest">从新到旧</string>
@@ -117,21 +117,21 @@
   <string name="settings.docu_error_no.internet">您未连接到互联网。请连接后重试。</string>
   <string name="settings.docu_dialog.action_try.again.connecting">重试</string>
   <string name="settings.about_select_tutorial">教程</string>
-  <string name="settings.camo_expl">自定义图标和名称来更好地在设备上隐藏 Tella。注意安卓系统设置中仍能看到 Tella 图标。</string>
+  <string name="settings.camo_expl">选择自定义图标和名称，可在设备上更好地隐藏 Tella。请注意，在安卓系统设置中，Tella 图标仍然可见。</string>
   <string name="gallery_action.desc_save.to.device">保存到设备</string>
   <string name="settings.docu_verification_action">验证模式</string>
-  <string name="settings.docu_verification_action.expl">通过收集您的设备和位置信息，使您的媒体文件可被验证。</string>
+  <string name="settings.docu_verification_action.expl">收集设备和位置信息，以便对您的媒体文件进行验证。</string>
   <string name="collect_no.form_heading">轻松收集数据</string>
-  <string name="collect_expl_not.connected.to.server">要接收表单和提交数据，必须先连接到兼容的服务器。询问组织获取服务器信息并<a href="tella_scheme://open.collect.manage.servers.activity">在此处设置服务器</a>。</string>
-  <string name="collect.sent_expl_no.forms">暂无已提交的表单可显示。</string>
-  <string name="collect.blank_expl_no.forms">没有要显示的表单。轻按刷新按钮检查您连接的服务器上是否有表单。</string>
+  <string name="collect_expl_not.connected.to.server">为了接收表单和提交数据，必须首先连接到兼容的服务器。请咨询您的组织获取服务器信息，并<a href="tella_scheme://open.collect.manage.servers.activity">在此处设置服务器</a>。</string>
+  <string name="collect.sent_expl_no.forms">没有已提交表单可显示。</string>
+  <string name="collect.blank_expl_no.forms">没有表单可显示。点击刷新按钮，查看在所连接的服务器上是否有可用表单。</string>
   <string name="settings.camo_heading">选择不同的名称和图标</string>
-  <string name="gallery_expl_empty">没有可显示的文件。点击 + 按钮导入文件。</string>
+  <string name="gallery_expl_empty">没有文件可显示。点击 + 按钮导入文件。</string>
   <string name="collect.blank_toast_not.connected">您未连接到互联网。请连接后重试</string>
   <string name="settings.gen_crash.reports_action">分享崩溃报告</string>
-  <string name="settings.gen_crash.reports_action.expl">崩溃报告帮助我们改进 Tella。崩溃报告自动发送并包含设备型号和安卓版本等数据。</string>
+  <string name="settings.gen_crash.reports_action.expl">崩溃报告有助于我们改进 Tella。它们会自动发送，并包含设备型号、安卓版本等数据。</string>
   <string name="collect.form_dialog.action_add.group">添加</string>
-  <string name="collect.form_dialog.title_add.additional.group">再添加一个\"%s\"？</string>
+  <string name="collect.form_dialog.title_add.additional.group">添加另一个“%s“？</string>
   <string name="collect.form_dialog.action_add.first.group">添加 ”%s“？</string>
   <string name="collect.form_dialog.expl_add.additional.group">您将能够再次回答“%s“中的所有问题。</string>
   <string name="collect.form_dialog.expl_add.first.group">您将能够回答“%s“中的所有问题。</string>
@@ -151,14 +151,14 @@
   <string name="verification.info_app.bar">验证信息</string>
   <string name="verification.info_field_filename">文件名</string>
   <string name="verification.info_field_file.path">文件路径</string>
-  <string name="verification.info_field_file.modified">文件已修改</string>
+  <string name="verification.info_field_file.modified">文件修改时间</string>
   <string name="verification.info_field_hash">文件哈希值</string>
   <string name="verification.info_field_manufacturer">制造商</string>
   <string name="verification.info_field_hardware">硬件</string>
   <string name="verification.info_field_device.id">设备 ID</string>
   <string name="verification.info_field_screen.size">屏幕尺寸</string>
   <string name="verification.info_field_language">语言</string>
-  <string name="verification.info_field_locale">本地化</string>
+  <string name="verification.info_field_locale">语言区域</string>
   <string name="verification.info_field_connection.status">连接状态</string>
   <string name="verification.info_field_network.type">网络类型</string>
   <string name="verification.info_field_wifi.mac">Wi-Fi MAC 地址</string>
@@ -168,7 +168,7 @@
   <string name="verification.info_field_location">位置</string>
   <string name="verification.info_field_location.provider">位置提供商</string>
   <string name="verification.info_field_location.speed">位置速度</string>
-  <string name="verification.info_field_cell.towers">手机信息</string>
+  <string name="verification.info_field_cell.towers">基站信息</string>
   <string name="settings.camo_calculator2">计算器</string>
   <string name="verification.info_subheading_file.metadata">文件</string>
   <string name="verification.info_subheading_device.metadata">设备</string>
@@ -176,8 +176,8 @@
   <string name="verification.info_field_metadata.not.available">不可用</string>
   <string name="verification.info_field_latitude">纬度：</string>
   <string name="verification.info_field_longitude">经度：</string>
-  <string name="verification.info_field_altitude">高度：</string>
-  <string name="verification.info_field_accuracy">准确性：</string>
+  <string name="verification.info_field_altitude">海拔：</string>
+  <string name="verification.info_field_accuracy">精度：</string>
   <string name="verification.info_field_location.time">时间：</string>
   <string name="collect.form_ranking_action_select.answer">选择答案</string>
   <string name="collect.form_ranking_action_clear.selection">清除选择</string>
@@ -192,26 +192,26 @@
   <string name="action_learn.more">了解更多</string>
   <string name="settings.servers_add.server_dialog.title">添加服务器</string>
   <string name="settings.prot_select_delete.forms">删除草稿和已提交的表单</string>
-  <string name="settings.prot_select_delete.servers">删除服务器设置</string>
+  <string name="settings.prot_select_delete.servers">删除连接</string>
   <string name="settings.prot_select_delete.app">删除 Tella</string>
   <string name="collect.sent_action_edit.to.resend">编辑并重新发送</string>
   <string name="collect_toast_form.submitted">表单已提交</string>
   <string name="collect.end_heading_confirmation.form.submitted">表单已提交</string>
   <string name="settings.docu_add.server_field_password">密码</string>
   <string name="settings.camo_error_fail.retrieve.app.name">应用程序</string>
-  <string name="collect.end_item_form.data">表格答复</string>
+  <string name="collect.end_item_form.data">表格回复</string>
   <string name="collect_toast_fail.loading.form.instance">加载表单时出错，请重试</string>
   <string name="collect_toast_fail.connection.too.weak">您的网络连接太弱，无法发送表单。请重试。</string>
   <string name="gallery_toast_file.encrypted">文件已加密</string>
   <string name="settings.docu_toast_disconnect.servers.delete">已删除所有表格和服务器</string>
-  <string name="collect.help_expl_not.connected.to.server">要接收表单并提交数据，必需先连接到服务器。询问组织获取服务器信息并设置服务器。</string>
-  <string name="collect.help_expl_odk">如果要创建自己的表单，<a href="https://hzontal.org/contact/">联系我们</a> 或使用 <a href="https://opendatakit.org/help/help-for-hire/">任何基于 Open Data Kit (ODK) 的服务</a></string>
-  <string name="collect.help_expl_no.internet">即使未连接到互联网，也可以填表。您上线后会立马提交数据。</string>
-  <string name="collect_toast_fail.data.too.large">无法提交表单，因为附件太大。请附上较小的文件。</string>
+  <string name="collect.help_expl_not.connected.to.server">为了接收表单和提交数据，必须首先连接到服务器。请咨询您的组织获取服务器信息，并设置服务器。</string>
+  <string name="collect.help_expl_odk">如果要创建自己的表单，请<a href="https://hzontal.org/contact/">联系我们</a> 或使用 <a href="https://opendatakit.org/help/help-for-hire/">任何基于 Open Data Kit (ODK) 的服务</a></string>
+  <string name="collect.help_expl_no.internet">即使未连接到互联网，也可以填写表单。上线后将立即提交数据。</string>
+  <string name="collect_toast_fail.data.too.large">由于附件太大，无法提交表单。请附加较小的文件。</string>
   <string name="collect.end_heading_submitting">正在提交</string>
-  <string name="collect.end_exit_dialog.expl">如果现在退出，提交会停止但您可以之后提交剩余文件。</string>
-  <string name="collect.end_subheading.expl_unchecked.items">未勾选的条目将保存以备稍后发送。</string>
-  <string name="collect_toast_form.saved.for.later.submission">表单已保存，待稍后提交</string>
+  <string name="collect.end_exit_dialog.expl">如果现在退出，提交将停止，但可稍后提交剩余的文件。</string>
+  <string name="collect.end_subheading.expl_unchecked.items">未选中的条目将保存，以便稍后发送。</string>
+  <string name="collect_toast_form.saved.for.later.submission">表格已保存，以便稍后提交</string>
   <string name="collect.blank_action_unpin">取消置顶</string>
   <string name="collect.blank_action_pin">置顶</string>
   <string name="verification.prompt_dialog.expl">验证模式开启但 GPS 关闭。为了记录证据的位置，请打开 GPS。</string>
@@ -221,13 +221,13 @@
   <string name="collect.blank_toast_refresh.canceled">更新已取消</string>
   <string name="collect.blank_toast_form.definition.updated">更新已完成</string>
   <string name="verification.share_dialog.title">是否想要包含验证信息？</string>
-  <string name="verification.share_dialog.expl">一个或多个所选文件包含验证数据，包括设备、网络、地理位置信息。请只在分享这些信息不会将您置于险境的情形下才进行分享。</string>
+  <string name="verification.share_dialog.expl">一个或多个所选文件包含验证数据，包括设备、网络、地理位置信息。请务必只在不会危及您安全的前提下才进行分享。</string>
   <string name="verification.share_select_media.and.verification">分享文件 + 验证信息</string>
   <string name="verification.share_select_only.media">仅分享文件</string>
   <string name="verification.info_wifi">Wi-Fi 信息</string>
-  <string name="verification.collecting_list.item_device">设备标识</string>
+  <string name="verification.collecting_list.item_device">设备认证</string>
   <string name="verification.collecting_list.item_network">网络信息</string>
-  <string name="verification.collecting_dialog.expl">Tella 正记录信息让您的文件可验证。这会花上几分钟。请确保设备的天空景色不受遮挡以获取更加结果。</string>
+  <string name="verification.collecting_dialog.expl">Tella 正在记录信息以验证您的文件。这可能需要几分钟。为了获得更好的结果，请确保您的设备视野开阔，没有遮挡物。</string>
   <string name="verification.help.info_app.bar">验证帮助</string>
   <string name="gallery_action.desc_metadata.help">验证帮助</string>
   <string name="verification.info_file.path.expl">文件在 Tella 目录中的位置。</string>
@@ -240,20 +240,20 @@
   <string name="verification.info_language.expl">设备操作系统所设置的语言。</string>
   <string name="verification.info_locale.expl">设备所设置的地理区域。</string>
   <string name="verification.info_connection.status.expl">设备是否已连接到互联网。</string>
-  <string name="verification.info_network.type.expl">如设备连接到互联网，明确是 Wi-Fi 网络还是蜂窝网络</string>
+  <string name="verification.info_network.type.expl">如果设备已连接到互联网，具体说明是连接到 Wi-Fi 网络还是蜂窝网络。</string>
   <string name="verification.info_wifi.mac.expl">设备 Wi-Fi 连接器的唯一标识符。</string>
   <string name="verification.info_ipv4.expl">标识设备互联网连接的唯一地址。</string>
   <string name="verification.info_ipv6.expl">设备互联网连接的最新标识符。</string>
-  <string name="verification.info_location.expl">设备的精确位置，包括经纬度坐标、米为单位的海拔高度、米为单位的测量精度，以及测量时间。</string>
+  <string name="verification.info_location.expl">设备的确切位置，包括经纬度坐标、海拔高度（米）、测量精度（米）和测量时间。</string>
   <string name="verification.info_location.provider.expl">如何确定位置。\"Fused\"表示使用多种方法，包括 GPS 和网络连接。</string>
   <string name="verification.info_location.speed.expl">设备的行进速度，单位为米/秒。</string>
   <string name="verification.info_cell.towers.expl">设备所连接的所有基站的识别编号。</string>
   <string name="verification.info_wifi.expl">设备附近所有 Wi-Fi 网络的名称。</string>
   <string name="collect.blank_banner_forms.updated">部分表单已更新。点击表单旁边的更新按钮以获取最新版本。</string>
-  <string name="settings.docu_auto.upload.server.selection_dialog.expl">您希望将文件上传到哪个服务器？</string>
+  <string name="settings.docu_auto.upload.server.selection_dialog.expl">将文件上传到哪个服务器？</string>
   <string name="settings.serv_add.server.selection_dialog.title">什么类型的服务器？</string>
   <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
-  <string name="settings.docu_add.server_dialog.expl">请选择要连接的服务器类型。如果不确定，请咨询您的组织。</string>
+  <string name="settings.docu_add.server_dialog.expl">选择连接的服务器类型。如果不确定，请咨询您的组织。</string>
   <string name="settings.docu_add.server_dialog.select_tus">直接上传</string>
   <string name="play.audio_action.expl_plus15s">+15 秒</string>
   <string name="play.audio_action.expl_minus15s">-15 秒</string>
@@ -265,9 +265,9 @@
   <string name="camera_video.resolution_select_1080p">高 (1080p)</string>
   <string name="camera_video.resolution_select_720p">中（720p）</string>
   <string name="camera_video.resolution_select_480p">低（480p）</string>
-  <string name="settings.docu_auto.upload_action.expl">照片、视频或录音一拍好或一导入 Tella，Tella 就会自动上传它们到服务器。</string>
+  <string name="settings.docu_auto.upload_action.expl">拍摄或录制照片、视频或音频，或将其导入到 Tella 之后，将立即上传到服务器。</string>
   <string name="settings.docu_auto.delete_action">自动删除</string>
-  <string name="settings.docu_choose.auto.upload.server_dialog.expl">您希望将文件自动上传到哪个服务器？</string>
+  <string name="settings.docu_choose.auto.upload.server_dialog.expl">将文件自动上传到哪个服务器？</string>
   <string name="settings.docu_error_must.select.auto.upload.server">必须选择服务器。</string>
   <string name="camera_tab.title_video">视频</string>
   <string name="camera_tab.title_photo">照片</string>
@@ -278,7 +278,7 @@
   <string name="meter_per_second">%f 米/秒</string>
   <string name="tella">Tella</string>
   <string name="intro_document_protect">记录和保护</string>
-  <string name="onboard_setup_lock">您希望如何锁定 Tella？</string>
+  <string name="onboard_setup_lock">如何锁定 Tella？</string>
   <string name="onboard_password">密码</string>
   <string name="onboard_password_description">最安全的选项</string>
   <string name="onboard_pin">PIN 码</string>
@@ -291,25 +291,25 @@
   <string name="settings.sec_camera.mute_switch">相机静音模式</string>
   <string name="settings.sec_camera.mute_expl">关闭相机快门声音，避免拍照时引人注意。</string>
   <string name="settings.sec_quick.delete_switch">快速删除</string>
-  <string name="settings.sec_quick.delete_expl">在主屏幕上显示一个滑动按钮，以便在紧急情况下快速退出 Tella。</string>
+  <string name="settings.sec_quick.delete_expl">在 Tella 主屏幕显示滑动按钮，以便在紧急情况下快速删除 Tella 中的文件。 </string>
   <string name="settings.servers.title_server.settings">服务器</string>
   <string name="settings.servers.add_server.expl">连接到服务器，为您的组织收集和发送数据</string>
   <string name="settings.servers_auto.upload_action">自动上传到服务器</string>
-  <string name="settings.servers_auto.upload_action.expl">文件（照片、视频或录音）一拍好或一导入 Tella 就上传到报告服务器。</string>
-  <string name="settings.servers_auto.delete_action.expl">激活后，一完成上传，Tella 就会自动删除上传的文件。</string>
+  <string name="settings.servers_auto.upload_action.expl">拍摄或录制照片、视频或音频，或将其导入到 Tella 之后，将立即上传到报告服务器。</string>
+  <string name="settings.servers_auto.delete_action.expl">如果激活，文件上传完成时，Tella 将立即自动删除这些文件。</string>
   <string name="settings.servers_auto.upload.server.selection">用于自动上传的服务器</string>
   <string name="settings.servers_add.server.forms">表格</string>
   <string name="settings.servers_add.server.reports">报告</string>
   <string name="settings.servers_choose.auto.upload.server_dialog.title">选择自动上传服务器</string>
   <string name="settings.servers_enable_auto_upload_dialog.title">启用自动上传？</string>
-  <string name="settings.servers_enable_auto_upload_dialog.expl">您的照片、视频和音频文件一被录制就会自动上传，以及当您导入文件到 Tella 时，任何文件也会被自动上传。</string>
+  <string name="settings.servers_enable_auto_upload_dialog.expl">照片、视频和音频文件在拍摄或录制完成后，将立即自动上传。任何文件在导入 Tella 后，也将自动上传。</string>
   <string name="settings.servers_disable_auto_upload_dialog.title">禁用自动上传？</string>
   <string name="settings.servers_disable_auto_upload_dialog.expl">您的文件将不再自动上传到服务器。</string>
   <string name="settings.servers_disable_auto_delete_dialog.title">禁用自动删除？</string>
-  <string name="settings.servers_disable_auto_delete_dialog.expl">上传完成后，您的文件将不再自动删除。</string>
+  <string name="settings.servers_disable_auto_delete_dialog.expl">一旦上传完成，您的文件将不再自动删除。</string>
   <string name="action_enable">启用</string>
   <string name="action_disable">禁用</string>
-  <string name="settings.servers_delete.server_dialog.title">删除\"%1$s\"服务器？</string>
+  <string name="settings.servers_delete.server_dialog.title">删除“%1$s”服务器？</string>
   <string name="action_edit">编辑</string>
   <string name="settings.server_add.server_dialog_advanced">高级</string>
   <string name="settings.docu_error_auth.required">需要验证</string>
@@ -322,27 +322,27 @@
   <string name="settings.prot_select_delete.vault">删除文件</string>
   <string name="settings.sec_delete.vault_tooltip">删除存储在 Tella 中的所有文件。</string>
   <string name="settings.sec_delete.forms_tooltip">删除所有草稿和已提交的表单。</string>
-  <string name="settings.sec_delete.servers_tooltip">删除与服务器的连接以及与之相关的所有表单。</string>
-  <string name="settings.sec_delete.app_tooltip">删除应用及其含有的全部数据。您问被询问“要卸载本应用吗？”除非您确认，不然 Tella 不会被删除。</string>
-  <string name="settings.sec_bypass_switch_title">绕过审查</string>
-  <string name="settings.sec_bypass_switch_expl">战胜在您所在地区封锁 Tella 的尝试。注意启用该选项会降低发送数据到服务器的速度。</string>
+  <string name="settings.sec_delete.servers_tooltip">删除您的连接以及与之相关的所有数据。</string>
+  <string name="settings.sec_delete.app_tooltip">删除应用以及其中的所有数据。系统将咨询“是否想要卸载本应用？”，除非确认，否则不会删除 Tella。</string>
+  <string name="settings.sec_bypass_switch_title">突破审查</string>
+  <string name="settings.sec_bypass_switch_expl">突破当地对 Tella 的封锁。请注意，启用此功能会降低向服务器发送数据的速度。</string>
   <string name="settings.servers_add_camouflage.subtitle">应用目前伪装为计算器</string>
   <string name="settings.servers_change.camouflage.method">改变伪装方法</string>
   <string name="settings.servers_remove.camouflage.method">移除伪装</string>
   <string name="settings.servers_hide_tella_title">隐藏 Tella</string>
-  <string name="settings.servers_hide_tella_desc">选择您隐藏 Tella 的首选方式</string>
+  <string name="settings.servers_hide_tella_desc">选择隐藏 Tella 的首选方式</string>
   <string name="settings.servers_setup_camouflage_title">设置伪装</string>
-  <string name="settings.servers_setup_camouflage_description">有两个伪装选项。第一个较快但不太安全；第二个较繁琐但安全性更高。</string>
+  <string name="settings.servers_setup_camouflage_description">提供两个伪装选项。第一个较快但不太安全；第二个较繁琐但安全性更高。</string>
   <string name="settings.servers_setup_change_camouflage_title">更改名称和图标</string>
   <string name="settings.servers_setup_change_camouflage_subtitle">Tella 将以不同的应用名称和图标显示在主屏幕上</string>
   <string name="settings.servers_setup_hide_behind_camouflage_title">隐藏在真实应用程序背后</string>
   <string name="settings.servers_setup_hide_behind_camouflage_subtitle">最安全的选择：将 Tella 伪装为实际可用的应用</string>
   <string name="settings.servers_setup_change_name_icon_title">更改名称和图标</string>
-  <string name="settings.servers_setup_change_name_icon_subtitle"><b>不太安全：</b> Tella 会以不同名称和图标出现在主屏幕上。轻按伪装图标会立即打开 Tella。</string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>不太安全：</b> Tella 在主屏幕上以不同的名称和图标显示。点击伪装图标即可打开 Tella。</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">伪装为计算器应用</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>更安全：</b>将 Tella 伪装在正常工作的计算器后面。在计算器内输入 PIN 码解锁 Tella。</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[只有用 PIN 锁定才能使用计算器伪装。<font color=\"#D6933B\"><b>在此给便锁定方法</font></b>]]></string>
-  <string name="settings.sec_change_lock_type_warning">如果您更改应用锁方式，伪装功能将被禁用</string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible"><![CDATA[只有使用 PIN 码应用锁才能实现计算器伪装。<font color=\"#D6933B\"><b>在此更改应用锁</font></b>]]></string>
+  <string name="settings.sec_change_lock_type_warning">更改应用锁方式之后，将禁用伪装功能</string>
   <string name="action_continue">继续</string>
   <string name="settings.camo_icamera">iCamera</string>
   <string name="settings.camo_selfie_cam">自拍相机</string>
@@ -354,22 +354,22 @@
   <string name="settings.camo_easyweather">EasyWeather</string>
   <string name="settings.camo_sunnyday">SunnyDay</string>
   <string name="settings.camo_gamestation">GameStation</string>
-  <string name="settings.camo_playnow">立即畅玩</string>
+  <string name="settings.camo_playnow">PlayNow</string>
   <string name="settings.camo_jeweldash">宝石冲刺</string>
   <string name="settings.camo_time">时间</string>
   <string name="settings.camo_stopwatch">秒表</string>
   <string name="fragment_mic">麦克风</string>
   <string name="mic_recording">正在录音</string>
   <string name="mic_rename_recording">重命名录音</string>
-  <string name="recorder_toast_recording.saved">音频录音已保存到您的 Tella 文件中</string>
+  <string name="recorder_toast_recording.saved">音频录音已保存为 Tella 文件</string>
   <string name="onboard.intro_title">欢迎使用 Tella</string>
   <string name="onboard.intro_get_started">开始</string>
   <string name="onboard.title_camera">相机</string>
-  <string name="onboard.expl_camera">直接在 Tella 中拍照和录制视频。这些文件会被自动加密并保存在 Tella 中，不会在手机的常规图库中被看到。</string>
+  <string name="onboard.expl_camera">直接在 Tella 中拍照与录制视频。这些文件将自动加密并保存到 Tella，并且在手机常规图库中不可见。</string>
   <string name="onboard.title_recorder">录音机</string>
-  <string name="onboard.expl_recorder">用 Tella 录音机录制访谈或您周围的任何声音。音频文件会被自动加密并保存在 Tella 的隐藏文件夹中。</string>
+  <string name="onboard.expl_recorder">通过 Tella 录音机录制访谈或周围的任何声音，音频文件将自动加密并保存到 Tella 隐藏文件夹。</string>
   <string name="onboard.title_files">加密文件和文件夹</string>
-  <string name="onboard.expl_files">安全地组织并存储所有文件。只要 Tella 处于锁定状态，没收或搜查设备的人就无法访问您的文件和文件夹。</string>
+  <string name="onboard.expl_files">安全存储与管理所有文件。只要 Tella 处于锁定状态，即使有人没收或搜查设备，也无法访问您的文件和文件夹。</string>
   <string name="onboard.title_lock_finish">应用锁</string>
   <string name="onboard.expl_lock_finish">应用锁已设定！可随时在“设置”中进行更改。</string>
   <string name="onboard.title_all_done">已全部完成！</string>
@@ -377,27 +377,28 @@
   <string name="onboard.go_btn_all_done">前往 Tella</string>
   <string name="onboard.advanced_btn_all_done">高级设置</string>
   <string name="onboard.title_share_data">分享您收集的数据</string>
-  <string name="onboard.expl_share_data">如果您在某个组织工作，请连接到其服务器以发送文件和数据。您的组织应为您提供服务器详细信息。</string>
+  <string name="onboard.expl_share_data">如果您和某个组织合作，请连接到其服务器以发送文件和数据。您的组织应为您提供服务器详细信息。</string>
   <string name="onboard.connect_btn_share_data">连接到服务器</string>
-  <string name="onboard.continue_btn_share_data">不连接服务器继续</string>
-  <string name="onboard.expl_hide_tella">要让在设备上找到 Tella 更加困难，可以隐藏 Tella，方法是改变 Tella 在主屏上的外观。</string>
-  <string name="onboard.default_btn_title_hide_tella">保留 tella 的默认外观</string>
+  <string name="onboard.continue_btn_share_data">继续下一步
+不连接服务器</string>
+  <string name="onboard.expl_hide_tella">为了更难在设备上找到 Tella，可通过更改它在主屏幕上的外观，将其隐藏。</string>
+  <string name="onboard.default_btn_title_hide_tella">保留 Tella 的默认外观</string>
   <string name="onboard.default_btn_subtitle_hide_tella">Tella 在主屏幕上保持可见</string>
   <string name="onboard.title_advanced_complete">高级自定义设置完成！</string>
   <string name="onboard.expl_advanced_complete">您随时可以在“设置”中继续更改您的偏好设置。</string>
   <string name="onboard.title_connected_server">已连接到服务器</string>
   <string name="onboard.expl_connected_server">Tella 已成功连接到服务器，您可以分享数据了。</string>
   <string name="onboard.expl_hide_tella_set">您的伪装已设置完成！可随时在设置中更改。</string>
-  <string name="onboard.hide_behind_calculator_not_possible">只有使用 PIN 码锁定才能实现计算器伪装。</string>
+  <string name="onboard.hide_behind_calculator_not_possible">只有使用 PIN 码应用锁才能实现计算器伪装。</string>
   <string name="onboard.calculator_button">选择计算器</string>
-  <string name="onboard.calculator_expl">Tella 将藏在一个可以正常工作的计算器背后。要解锁 Tella，请在计算器内输入 PIN 码，后面加上“=“</string>
+  <string name="onboard.calculator_expl">Tella 将隐藏在正常运行的计算器应用后面。请在计算器内输入 PIN 码，然后输入“=“即可解锁 Tella</string>
   <string name="settings.general_recent_files_switch_title">最近文件</string>
   <string name="settings.general_recent_files_switch_expl">在 Tella 主屏幕上显示最近文件的预览和快捷方式。</string>
   <string name="settings.general_favorite_forms_switch_title">收藏表格</string>
   <string name="settings.general_favorite_forms_switch_expl">在 Tella 的主屏幕上显示收藏表单的快捷方式。</string>
   <string name="settings.sec_confirm_camouflage_title">退出 Tella 以启用伪装？</string>
-  <string name="settings.sec_confirm_camouflage_desc">要重新打开 Tella，请在您的应用中找到 %s 应用图标。</string>
-  <string name="settings.sec_confirm_calc_camouflage_desc">要重新打开 Tella，从应用中寻找计算器图标。要解锁 Tella，请在计算器中输入 PIN 码，后面加上“=”。</string>
+  <string name="settings.sec_confirm_camouflage_desc">要重新打开 Tella，请从应用中查找 %s 应用图标。</string>
+  <string name="settings.sec_confirm_calc_camouflage_desc">要重新打开 Tella，从应用中查找计算器图标。请在计算器中输入 PIN 码，然后输入“=”，即可解锁 Tella。</string>
   <string name="settings.sec_confirm_exit_tella">退出 Tella</string>
   <string name="Home_BottomNav_Home">首页</string>
   <string name="Home_BottomNav_Rec">录音</string>
@@ -406,21 +407,21 @@
   <string name="Home_BottomNav_Reports">报告</string>
   <string name="Vault_Move_AppBar">移动”%s“</string>
   <string name="Vault_CreateFolder_SheetAction">创建</string>
-  <string name="ServerSettings_ServerName_ToolTip">命名您的服务器以防添加别的服务器后无法识别。可以是组织名、项目名等。</string>
+  <string name="ServerSettings_ServerName_ToolTip">为了以后添加更多服务器并进行区分，请命名您的服务器。可使用组织名或项目名等。</string>
   <plurals name="Vault_Importing_SheetProgress">
     <item quantity="other">已导入 %s 个文件</item>
   </plurals>
   <string name="Vault_Importing_SheetTitle">正在导入和加密</string>
   <string name="Rec_Exit_SheetTitle">保存录音？</string>
-  <string name="Rec_Exit_SheetText">您的录音尚未保存。退出前是否要保存？</string>
+  <string name="Rec_Exit_SheetText">您的录音尚未保存。是否在退出前保存？</string>
   <string name="Vault_AudioRecordings_AppBar">录音</string>
-  <string name="Vault_Encryting_SheetText">%d% 完成</string>
+  <string name="Vault_Encryting_SheetText">%d% 已完成</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">取消加密并删除文件？</string>
   <string name="Vault_Encrypting_Cancel_SheetText">如果取消，您的文件将丢失</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">恢复加密</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Delete">删除文件</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">更改应用锁方式并去除伪装？</string>
-  <string name="SettingSec_ChangeLock_WarningCalc_SheetText">当前计算器伪装只兼容 PIN 锁。如改变锁定方法，Tella 不会再伪装并在手机主屏幕上可见。</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetText">当前计算器伪装功能仅兼容 PIN 码。如果更改应用锁方式，Tella 将不再伪装，并显示在手机主屏幕上。</string>
   <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">移除伪装</string>
   <string name="SettingsCamo_EnterLock_Password">输入您的密码以更改伪装方式</string>
   <string name="settings.gen_select_about">关于与帮助</string>
@@ -444,12 +445,12 @@
   <string name="Uwazi_Action_RemoveTemplate">删除模板</string>
   <string name="Uwazi_Subtitle_RemoveTemplate">是否确定删除此模板？</string>
   <string name="UWAZI_Language_Header_Title">Uwazi 语言</string>
-  <string name="Uwazi_Language_Screen_Description">这个 Uwazi 集合有数种语言版本。请选择您希望下载哪种语言的模板。</string>
+  <string name="Uwazi_Language_Screen_Description">这个 Uwazi 集合有数种语言版本。请选择想要下载模板的语言。</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Expl">在 Tella 的主屏幕上显示收藏模板的快捷方式。</string>
   <string name="Uwazi_General_Favorite_Template_Switch_Title">收藏模板</string>
-  <string name="Uwazi_Templates_Empty_Description">没有保存的模板。轻按“+”按钮添加新模板。</string>
+  <string name="Uwazi_Templates_Empty_Description">尚未保存任何模板。点击 + 按钮添加新模板。</string>
   <string name="Uwazi_Submitted_Entities_Empty_Description">尚未提交实体。</string>
-  <string name="Uwazi_Outbox_Entities_Empty_Description">送件箱当前为空。准备好发送的项目会出现在此处。</string>
+  <string name="Uwazi_Outbox_Entities_Empty_Description">发件箱目前为空。准备发送的实体将在这里显示。</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">没有实体草稿。</string>
   <string name="Uwazi_Action_Save_Draft">保存草稿</string>
   <string name="Uwazi_Subtitle_RemoveDraft">是否确定删除此草稿？</string>
@@ -463,11 +464,11 @@
   <string name="Uwazi_WidgetSubtitle_DateFrom">从</string>
   <string name="Uwazi_WidgetSubtitle_DateTo">到</string>
   <string name="Uwazi_WidgetSubtitle_Label">标签</string>
-  <string name="Uwazi_WidgetSubtitle_URL">网址</string>
-  <string name="Uwazi_Info_NotValidURL">这是一个无效的网址。</string>
+  <string name="Uwazi_WidgetSubtitle_URL">URL</string>
+  <string name="Uwazi_Info_NotValidURL">这是一个无效的 URL。</string>
   <string name="Uwazi_Subtitle_MarkdownSupported">支持 Markdown</string>
-  <string name="Uwazi_Entry_Validation_MandatoryFields">您必须填写必填字段</string>
-  <string name="Uwazi_Entry_Validation_MandatoryTitle">您必须填写标题</string>
+  <string name="Uwazi_Entry_Validation_MandatoryFields">必须填写必填字段</string>
+  <string name="Uwazi_Entry_Validation_MandatoryTitle">必须填写标题</string>
   <string name="Uwazi_Submit_Later">稍后提交</string>
   <string name="Uwazi_WidgetMultiDate_AddDate">添加另一个日期</string>
   <string name="Uwazi_WidgetMultiDate_AddDateRange">添加另一个日期范围</string>
@@ -485,7 +486,7 @@
   <string name="Uwazi_WidgetMedia_Take_Photo">用相机拍照</string>
   <string name="Uwazi_WidgetMedia_Select_From_Tella">从 Tella 文件中选择</string>
   <string name="Uwazi_WidgetMedia_Select_From_Device">从设备中选择</string>
-  <string name="Uwazi_Widget_Sheet_Description">选择添加文件的方式</string>
+  <string name="Uwazi_Widget_Sheet_Description">选择文件的添加方式</string>
   <string name="Uwazi_Entity_Error_Response_Mandatory">此字段为必填项。</string>
   <string name="Uwazi_Server_Title">服务器 ： </string>
   <string name="Uwazi_Template_Title">模板 ： </string>
@@ -494,16 +495,16 @@
   </plurals>
   <string name="Uwazi_MiltiFileWidget_SelectFiles">选择文件</string>
   <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">选择 PDF 文件</string>
-  <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">主要文件</string>
-  <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">随意附加任意数量的 PDF 文件</string>
+  <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">主文档</string>
+  <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">可附加任意数量的 PDF 文件</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">选择添加 PDF 文件的方式</string>
   <string name="Uwazi_MiltiFileWidget_SupportingFiles">支持文件</string>
-  <string name="Uwazi_Drafts_Header_Text">这些是您还没提交的条目。
+  <string name="Uwazi_Drafts_Header_Text">这些是尚未提交的实体。
 
-轻按条目继续进行工作。</string>
+点击某个实体以继续处理。</string>
   <string name="Uwazi_Outbox_Header_Text">这些是准备发送或已部分发送的实体。</string>
-  <string name="Uwazi_Submitted_Header_Text">这些是您已提交的实体。</string>
-  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">选择添加文件的方式</string>
+  <string name="Uwazi_Submitted_Header_Text">这些是已提交的实体。</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">选择文件的添加方式</string>
   <string-array name="Uwazi_Language_Array">
     <item>英语</item>
     <item>阿拉伯语</item>
@@ -516,14 +517,12 @@
   </string-array>
   <string name="Collect_Action_FillForm">填写表单</string>
   <string name="Collect_Subtitle_RemoveForm">是否确定删除“%1$s“？ </string>
-  <string name="Util_ellapsedTime_Year">一年多以前</string>
+  <string name="Util_ellapsedTime_Year">一年多前</string>
   <plurals name="Util_ellapsedTime_Months">
-    <item quantity="one">A month ago</item>
-    <item quantity="other">%d months ago</item>
+    <item quantity="other">%d 个月前</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Weeks">
-    <item quantity="one">A week ago</item>
-    <item quantity="other">%d weeks ago</item>
+    <item quantity="other">%d 周前</item>
   </plurals>
   <plurals name="Util_ellapsedTime_Days">
     <item quantity="other">%d 天前</item>
@@ -537,12 +536,12 @@
   <string name="Util_ellapsedTime_Seconds">几秒钟前</string>
   <string name="Donwload_Templates_Title_Description">这些是您连接的 Uwazi 实例上可用的模板。</string>
   <string name="Uwazi_Templates_HeaderMessage">这些是您可以填写的 Uwazi 模板。</string>
-  <string name="Vault_Filter_Name">名字</string>
-  <string name="Server_Url_Screen_Title">请输入服务器网址</string>
+  <string name="Vault_Filter_Name">名称</string>
+  <string name="Server_Url_Screen_Title">请输入服务器 URL</string>
   <string name="Login_Type_Screen_Title">如果有用户名和密码，请登录，否则请使用服务器的公共访问。</string>
   <string name="Login_Text">登录</string>
   <string name="Public_Login_Text">公共访问</string>
-  <string name="Two_Factor_Authentication_Description">这个 Uwazi 实例需要两步验证。在此输入来自身份认证应用的 6 位数字码。</string>
+  <string name="Two_Factor_Authentication_Description">此 Uwazi 实例需要两步验证。请在此处输入验证器应用中显示的 6 位数字代码。</string>
   <string name="Two_Factor_Authentication_Screen_Tile">两步验证</string>
   <string name="Authentication_Code">验证码</string>
   <string name="Inavlid_Token_Msg_Error">验证码无效或已过期，请重试。</string>
@@ -556,44 +555,44 @@
   <string name="Collect_MediaWidget_AttachAudioRecording">附加录音</string>
   <string name="Uwazi_Templates_TabTitle">模板</string>
   <string name="action_no">否</string>
-  <string name="Vault_Items">条目</string>
+  <string name="Vault_Items">个条目</string>
   <string name="Vault_DeleteFile_SheetTitle">删除文件？</string>
   <string name="Vault_deleteFile_SheetDesc">所选文件将从 Tella 中永久删除。</string>
   <string name="Uwazi_Info_UrlLabelEmpty">URL 标签为空。</string>
-  <string name="Collect_EndSubtitleExpl_UncheckedItems">取消选中附件在之后发送它们。可以从送件箱完成提交。</string>
-  <string name="Collect_DialogExpl_ExitingStopSubmission">退出会停止提交表单。可以稍后从送件箱继续提交。</string>
-  <string name="Collect_DialogTitle_StopExit">停止和退出？</string>
+  <string name="Collect_EndSubtitleExpl_UncheckedItems">取消选中附件，以便稍后发送。您可以在发件箱中完成提交。</string>
+  <string name="Collect_DialogExpl_ExitingStopSubmission">退出会停止提交表单。可以稍后从发件箱继续提交。</string>
+  <string name="Collect_DialogTitle_StopExit">停止并退出？</string>
   <string name="Collect_DialogAction_KeepSubmitting">继续提交</string>
   <string name="Collect_DialogAction_StopAndExit">停止并退出</string>
   <string name="Collect_DialogInfo_FormSubmissionStopped">您的表单提交已停止。您可以从发件箱中恢复提交。</string>
   <string name="action_view">查看</string>
-  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella 即将关闭 …</string>
+  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella 即将关闭…</string>
   <string name="SettingsCamo_Dialog_TimeoutDesc">请稍候。几秒钟后，您将返回设备的主屏幕。</string>
-  <string name="SettingsCamo_Dialog_RemovingCamouflage">移除伪装 …</string>
+  <string name="SettingsCamo_Dialog_RemovingCamouflage">移除伪装…</string>
   <string name="Collect_DeleteForm_SheetTitle">删除表单？</string>
   <string name="Collect_DeleteDraftForm_SheetTitle">删除草稿？</string>
   <string name="Collect_DeleteDraftForm_SheetExpl">是否确定删除此草稿？</string>
   <string name="Collect_DeleteForm_SheetExpl">是否确定删除此表单？</string>
   <string name="Uwazi_Dialog_Draft_Title">退出实体？</string>
-  <string name="Verification_Label_meter">%f m</string>
-  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="Verification_Label_meter">%f 米</string>
+  <string name="Verification_Label_MeterPerSecond">%f 米/秒</string>
   <string name="settings_sec_security_screen">屏幕安全</string>
-  <string name="settings_sec_security_screen_expl">在 Tella 内屏蔽截图和屏幕录制，以及在最近应用列表中屏蔽屏幕预览</string>
-  <string name="settings.serv_add.server.selection_dialog.description">如果不确定，请询问您的组织。</string>
+  <string name="settings_sec_security_screen_expl">在 Tella 中禁止截图和录屏，以及在最近应用列表中禁止屏幕预览</string>
+  <string name="settings.serv_add.server.selection_dialog.description">如果不确定，请咨询您的组织。</string>
   <string name="Timeout_Warning_Title">警告</string>
   <string name="Timeout_Warning_Description">为了执行此操作，Tella 将保持解锁状态 3 分钟。</string>
   <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">您想如何设置 Tella？</string>
   <string name="onboard_full_setup">完整设置</string>
   <string name="onboard_quick_setup">快速设置</string>
-  <string name="onboard_setup_explore_custom">探索并全面自定义应用</string>
+  <string name="onboard_setup_explore_custom">探索应用，自由定制</string>
   <string name="onboard_setup_start">设置应用锁，立即开始</string>
   <string name="onboard_setup_customization">是否有自定义代码或文件？</string>
   <string name="settings.camo_clock">时钟</string>
-  <string name="onboard.intro_organization_code">我有所在机构提供的代码</string>
+  <string name="onboard.intro_organization_code">我有所在组织提供的代码</string>
   <string name="onboard.customization_title">自定义</string>
   <string name="onboard.customization_subtitle">请输入您的自定义代码</string>
-  <string name="onboard.customization_expl">您的机构可能提供一个代码，供您根据他们的设置来设置 Tella。</string>
+  <string name="onboard.customization_expl">您的组织可能提供一个代码，以便根据他们的要求来设置 Tella。</string>
   <string name="upload_toast_fail.finding.metadata.to.upload">查找文件验证信息时出现错误。请重试</string>
   <string name="upload_toast.fail.finding.file.to.upload">查找要上传的文件时出现错误。请重试</string>
   <string name="gallery_app.bar">图库</string>
@@ -617,10 +616,10 @@
   <string name="settings.docu_connect.to.servers_enable_action">连接到服务器</string>
   <string name="settings.docu_connect.to.servers_enable_action.expl">管理服务器连接，以发送数据。</string>
   <string name="settings.docu_disable.servers_dialog.title">断开服务器连接</string>
-  <string name="settings.docu_connect.to.servers_disable_dialog.expl">要完全删除服务器连接，还是只隐藏它们？隐藏会在内存中保留服务器信息，以便您可以轻松重新连接并提交数据到服务器。</string>
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">想要将服务器连接完全删除，或仅将其隐藏？隐藏时，服务器信息保留在内存中，以便快速重新连接并向服务器提交数据。</string>
   <string name="settings.docu_delete.auto.server_dialog.expl">如果删除此服务器，您的文件将不再自动上传。</string>
   <string name="settings.docu_auto.upload_action">自动上传</string>
-  <string name="settings.docu_auto.delete_action.expl">文件被上传到服务器后，Tella 会立即从设备上删除这些文件。</string>
+  <string name="settings.docu_auto.delete_action.expl">文件上传到服务器后，Tella 将立即从设备删除这些文件。</string>
   <string name="settings.docu_delete.upload.server_dialog.expl">您将无法再向此服务器上传文件。</string>
   <plurals name="upload.main_meta_number.of.files">
     <item quantity="other">%d 个文件</item>
@@ -648,15 +647,14 @@
   <string name="Settings_Reports_Go_To_Reports">前往报告</string>
   <string name="Settings_reports_Go_To_Advanced_Settings">高级设置</string>
   <string name="Setting_Reports_Share_Information_Title">分享验证信息</string>
-  <string name="Setting_Reports_Share_Information_Description">包含有关您的设备及上传报告时位置的信息，以使您的文件可验证。</string>
+  <string name="Setting_Reports_Share_Information_Description">在发送报告时，包含有关设备及位置的信息，以使您的文件可验证。</string>
   <string name="Setting_Reports_Background_Upload">后台上传</string>
-  <string name="Setting_Reports_Background_Upload_Description">进行其他任务时继续上传报告或者退出 Tella.
-警告：如启用，在完全上传所有报告前，Tella 会保持解锁状态。</string>
+  <string name="Setting_Reports_Background_Upload_Description">在执行其他任务或退出 Tella 时，可继续上传报告。 警告：如果启用，Tela 将保持解锁状态，直到所有报告上传完毕。</string>
   <string name="Setting_Reports_Settings_Completed">高级设置完成</string>
   <string name="Setting_Reports_Settings_Completed_Description">您随时可以在 Tella 设置中更改报告偏好设置。</string>
-  <string name="Drafts_Reports_Empty_Message">您的草稿箱目前为空。您尚未提交的报告将显示在此处。</string>
-  <string name="Outbox_Reports_Empty_Message">您的发件箱目前为空。准备发送的报告将显示在此处。</string>
-  <string name="Submitted_Reports_Empty_Message">您尚未提交任何报告。</string>
+  <string name="Drafts_Reports_Empty_Message">草稿箱目前为空。尚未提交的报告将在这里显示。</string>
+  <string name="Outbox_Reports_Empty_Message">发件箱目前为空。准备发送的报告将在这里显示。</string>
+  <string name="Submitted_Reports_Empty_Message">尚未提交报告。</string>
   <string name="New_Reports_Text">新建报告</string>
   <string name="Reports_Title_Screen">报告</string>
   <string name="Reports_Send_To_Text">发送报告至：</string>
@@ -671,14 +669,14 @@
   <string name="File_Uploaded_on">上传于</string>
   <string name="File_Uploaded">已上传</string>
   <string name="Delete_Report_Confirmation">是否确定删除此报告？ </string>
-  <string name="Delete_Submitted_Report_Confirmation">是否确定从记录中删除这份已发送的报告？</string>
+  <string name="Delete_Submitted_Report_Confirmation">是否确定从记录中删除已发送报告？</string>
   <string name="View_Report">查看</string>
   <string name="Delete_Report">删除</string>
   <string name="Paused_Report">已暂停</string>
   <string name="Report_Waiting_For_Connection">等待连接</string>
-  <string name="Project_Url_Screen_Title">输入项目网址</string>
+  <string name="Project_Url_Screen_Title">输入项目 URL</string>
   <string name="Report_Dialog_Draft_Title">退出报告？</string>
-  <string name="Report_Server_Already_Exist_Error">您已连接到此项目。请输入其他网址。</string>
+  <string name="Report_Server_Already_Exist_Error">您已连接到此项目。请输入其他 URL。</string>
   <string name="Report_Deleted_Confirmation">%s 已被删除。</string>
   <string name="Report_Save_Outbox_Confirmation">报告已保存到您的发件箱。准备好后即可提交。</string>
   <string name="settings.camo_micamera">MiCamera</string>
@@ -693,13 +691,13 @@
   <string name="settings.camo_plant_care">植物养护</string>
   <string name="settings.camo_workout">锻炼</string>
   <string name="settings.camo_period_tracker">经期追踪器</string>
-  <string name="Setting_Reports_Background_Upload_Disabled_Description">自动报告不能在超过一个连接上启用。要在这里开启请在其他地方停用。</string>
+  <string name="Setting_Reports_Background_Upload_Disabled_Description">自动报告不能在多个连接上启用。请在其他地方禁用此功能，然后在此处启用。</string>
   <string name="Setting_Reports_Edit_Connection">编辑连接</string>
   <string name="Setting_Reports_Connection_Name">连接名称</string>
   <string name="Setting_Reports_Auto_Report">自动报告</string>
-  <string name="Setting_Reports_Auto_Report_Description">任何时候您在 Tella 中进行照片/视频/音频录制，会自动创建一份报告并上传到此项目。</string>
+  <string name="Setting_Reports_Auto_Report_Description">每当您在 Tella 中拍摄照片、录制视频或音频时，系统将自动生成一份包含该文件的报告，并将其上传到此项目。</string>
   <string name="Setting_Reports_Auto_Delete">自动删除</string>
-  <string name="Setting_Reports_Auto_Delete_Description">文件一被作为报告上传到本项目后就自动从您的设备上删除它们。</string>
+  <string name="Setting_Reports_Auto_Delete_Description">一旦作为报告上传到此项目，文件将自动从设备上删除。</string>
   <string name="Send_Action_Label">发送</string>
   <string name="Modified_Label">已修改</string>
   <string name="Snackbar_Submit_Report_Error">如需提交报告，请输入标题，并添加说明或附加文件。</string>
@@ -742,8 +740,8 @@
   <string name="green_theme">绿色主题</string>
   <string name="yellow_theme">黄色主题</string>
   <string name="settings.sec_keep.exif_switch">导入时保留元数据</string>
-  <string name="settings.sec_keep.exif_expl">将照片和视频导入 Tella 时保留 EXIF 元数据。这包括关于图片创建时间、相机设置、位置及您的设备的数据。</string>
-  <string name="Rename_name_Hint">名字</string>
+  <string name="settings.sec_keep.exif_expl">将照片和视频导入 Tella 时，保留 EXIF 元数据，包括图像创建时间、相机设置、位置和设备等数据。</string>
+  <string name="Rename_name_Hint">名称</string>
   <string name="action_go_to_homescreen">返回主屏幕</string>
   <string name="action_show_password">显示密码</string>
   <string name="action_hide_password">隐藏密码</string>
@@ -751,9 +749,9 @@
   <string name="action_hide_pin">隐藏 pin 码</string>
   <string name="action_go_back">返回</string>
   <string name="Settings_show_unlock_attempts_remaining">显示剩余解锁尝试次数</string>
-  <string name="Settings_unlock_screen_instructions">删除 Tella 内一切内容前，在解锁屏幕上展示剩余的解锁尝试次数</string>
+  <string name="Settings_unlock_screen_instructions">在解锁界面，显示剩余的解锁失败次数，之后将删除 Tella 中的所有内容。</string>
   <string name="Settings_Delete_After_Failed_Unlock">解锁失败后删除</string>
-  <string name="Settings_Delete_After_Failed_Unlock_Descreption">删除 Tella  内的一切内容前允许多少次失败的解锁尝试。</string>
+  <string name="Settings_Delete_After_Failed_Unlock_Descreption">选择在删除 Tella 内全部内容之前，可允许的解锁失败次数。</string>
   <string name="Settings_Off_Do_Not_Delete">关闭（不删除数据）</string>
   <string name="Settings_Five_Attempts">5 次尝试</string>
   <string name="Settings_Ten_Attempts">10 次尝试</string>
@@ -761,7 +759,7 @@
   <string name="Settings_Off">关闭</string>
   <string name="Settings_On">打开</string>
   <string name="Settings_Disabled">已禁用</string>
-  <string name="Settings_remaining_attempts_before_deletion">删除 Tella 内一切内容前，在解锁屏幕上展示剩余的解锁尝试次数</string>
+  <string name="Settings_remaining_attempts_before_deletion">在解锁界面，显示剩余的解锁失败次数，之后将删除 Tella 中的所有内容。</string>
   <string name="Settings_failed_unlock_message_template">%1$d 次解锁失败后，您的 Tella 数据将被删除。</string>
   <string name="Settings_feature_not_available_camouflage">本功能在计算器伪装下不可用。要开启本功能请更改伪装。</string>
   <string name="Auto_Upload_Report">您导入的文件已自动上传为报告。</string>
@@ -788,30 +786,30 @@
   <string name="incorrect_password">密码错误。 
 
 </string>
-  <string name="attempts_remaining_singular">您还剩一次尝试机会，如失败 Tella 中的一切内容会被删除。</string>
-  <string name="attempts_remaining_plural">还剩下 %1$d 次尝试机会，超出后 Tella 中的一切内容会被删除。</string>
-  <string name="exceeded_max_attempts">您已经超出了不正确登录尝试的最大次数。所有 Tella 数据已被删除。</string>
-  <string name="Settings_General_TextJustificationTitle">文本对齐</string>
-  <string name="Settings_General_TextJustificationExpl">为了看起来整齐，将文本较长部分对齐到左边缘和右边缘。如停用，文本将左对齐或右对齐来增加可访问性。</string>
+  <string name="attempts_remaining_singular">还剩下 1 次尝试机会，之后您在 Tella 中的全部内容将被删除。</string>
+  <string name="attempts_remaining_plural">还剩下 %1$d 次尝试机会，之后您在 Tella 中的全部内容将被删除。</string>
+  <string name="exceeded_max_attempts">多次登录失败，超过允许的最大次数。您的所有 Tella 数据已被删除。</string>
+  <string name="Settings_General_TextJustificationTitle">两端对齐</string>
+  <string name="Settings_General_TextJustificationExpl">较长文本段落左右两端对齐，外观更为整洁。禁用时，文本将左对齐或右对齐，增强易读性。</string>
   <string name="Settings_General_TextSpacingTitle">增加文字间距</string>
-  <string name="Settings_General_TextSpacingExpl">将行距增加到 150%，段落间距增加到 225%。</string>
+  <string name="Settings_General_TextSpacingExpl">行距增加到 150%，段落间距增加到 225%。</string>
   <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella 即将刷新</string>
   <string name="Settings_General_BottomSheetRefreshWarningText">几秒钟后，您将返回上一屏幕。</string>
   <string name="settings.feedback_enable_sharing">启用反馈分享</string>
-  <string name="settings.feedback_warning">警告：使用本功能可能会向观察该网络的某人揭示您使用 Tella。请只在您不担心此风险的情况下使用它。</string>
-  <string name="feedback_msg">如果遇到故障，有新功能的请求，或者有任何其他反馈请告诉我们。
-本反馈匿名，因此如果向接收我们的回复请确保包含联系信息。</string>
+  <string name="settings.feedback_warning">警告：使用此功能可能向网络监视者暴露您正在使用 Tella 的事实。请仅在确认可承受这种风险时，开启此功能。</string>
+  <string name="feedback_msg">如果遇到错误、需要新功能，或有其他任何反馈，请告诉我们。
+ 这些反馈是匿名的，如果希望我们回复，请务必提供联系方式。</string>
   <string name="thanks_for_your_feedback">感谢您的反馈！</string>
   <string name="save_draft">保存草稿？</string>
   <string name="description_submit_feedback">可随时回来提交反馈意见。</string>
   <string name="feedback">反馈</string>
-  <string name="not_internet_msg">未连接到互联网。连接到网络时会自动发送反馈。</string>
+  <string name="not_internet_msg">未连接到互联网。连接成功时将自动发送反馈。</string>
   <string name="feedback_title">反馈</string>
   <string name="feedback_sent_msg">您的反馈已发送</string>
   <string name="share_feedback_action">分享反馈</string>
-  <string name="Forms_NoOutboxForms">发件箱目前为空。准备发送的表单将显示在此处。</string>
+  <string name="Forms_NoOutboxForms">发件箱目前为空。准备发送的表单将在这里显示。</string>
   <string name="Forms_NoDraftForms">没有表单草稿。</string>
-  <string name="Forms_BlankSubheadingFormsOnServers">服务器上提供的表单</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">服务器上可用的表单</string>
   <string name="Forms_BlankSubheadingDownloadedForms">这些是空白表单，您可以填写。</string>
   <string name="background_activities">后台活动</string>
   <string name="current_background_activities">这些是目前正在后台进行的活动。</string>
@@ -827,12 +825,12 @@
   <string name="Resources_DownloadedEmptyMessage">尚未下载任何资源。点击下方每个资源旁边的“下载”图标即可下载。</string>
   <string name="Resources_DownloadedEmptyMessage_NoAvailable">尚未下载任何资源。</string>
   <string name="Resources_AvailableTitle">可下载</string>
-  <string name="Resources_AvailableInfoMessage">这些资源可从您的 Tella Web 项目中下载。</string>
+  <string name="Resources_AvailableInfoMessage">以下是可从 Tella Web 项目下载的资源。</string>
   <string name="Resources_AvailableEmptyMessage">Tella Web 项目中无可下载的资源。</string>
-  <string name="Resources_RemoveFromDownloads">从下载列表中移除。</string>
+  <string name="Resources_RemoveFromDownloads">从下载中移除</string>
   <string name="Resources_RemovedResource">“%s”已从您的下载中移除。</string>
   <string name="Resources_DialogTitle_StopDownload">停止下载并退出？</string>
-  <string name="Resources_DialogMsg_StopDownload">下载进度将丢失。您总是稍后返回在此下载资源。</string>
+  <string name="Resources_DialogMsg_StopDownload">下载进度将丢失。您可稍后回来重新下载此资源。</string>
   <string name="Resources_KeepDownloading">继续下载</string>
   <string name="Resources_Exit">退出</string>
   <string name="Error_DownloadFailed">错误：下载失败</string>
@@ -842,45 +840,44 @@
   <string name="back">返回</string>
   <string name="encrypting">加密 </string>
   <string name="Sensitive_Chnage_Title">⚠️ 下一版本将有重大变更</string>
-  <string name="Sensitive_Chnage_Description">将于 24 年 7 月 15 日发布的 Tella 的下个版本会包含重大的技术改进。这些改变会带来升级到新版本时一些文件丢失的小风险。
+  <string name="Sensitive_Chnage_Description">将于 24 年 7 月 15 日发布的 Tella 的下一版本包含重大技术改进。这些更改会带来一项小风险：升级到新版本时，会丢失一些文件。
 
 如果您在 Tella 中存储了敏感文件，我们建议在更新前将它们复制到 Tella 以外的安全地方。
 
-轻按下方的“了解更多”获取即将到来的改变的更多信息以及如何从 Tella 导出全部文件的指南。</string>
+点击下方的“了解更多”，查看关于这次更新更多信息以及如何从 Tella 导出所有文件的指南。</string>
   <string name="Learn_More">了解更多</string>
   <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
-    <item quantity="one">%1$d entity selected</item>
-    <item quantity="other">%1$d entities selected</item>
+    <item quantity="other">选中 %1$d 个实体</item>
   </plurals>
   <string name="Uwazi_RelationShipWidget_Select_Entities">选择要连接到此属性的实体。</string>
   <string name="Analytics_contribute_reminder_title">您正在分享数据</string>
-  <string name="Analytics_contribute_reminder_description">提醒：我们正分享应用的分析数据来改进 Tella。转到设置可随时停止分享。</string>
-  <string name="Analytics_contribute_more_info">有关我们如何收集数据的更多信息，  </string>
-  <string name="Analytics_contribute_more_info2"> 访问此页面。</string>
+  <string name="Analytics_contribute_reminder_description">提醒：您当前正在分享应用的分析数据，以帮助改进 Tella。可随时在“设置”中停止分享。</string>
+  <string name="Analytics_contribute_more_info">有关数据如何收集的更多信息，</string>
+  <string name="Analytics_contribute_more_info2">请访问此页面。</string>
   <string name="Analytics_contribute_title">是否参与？</string>
   <string name="Analytics_contribute_description">您可随时前往“设置”选择退出。</string>
-  <string name="Analytics_contribute_info_link">有关我们如何收集数据的更多信息，请访问此页面。</string>
-  <string name="Analytics_how_works_title">如何进行</string>
+  <string name="Analytics_contribute_info_link">有关数据如何收集的更多信息，请访问此页面。</string>
+  <string name="Analytics_how_works_title">工作原理</string>
   <string name="Analytics_how_works_description">• 我们使用 DivviUp，尊重隐私的数据分析系统
 • 我们收集尽量少的数据。
-• 所有数据均匿名，永远无法关联到您。</string>
+• 所有数据均匿名，绝不会与您本人关联。</string>
   <string name="Analytics_questions_title">具体问题</string>
-  <string name="Analytics_questions_description">每项研究都会收集特定问题的数据。以下是一个示例：</string>
-  <string name="Analytics_questions_examples">🔓 一周打开 Tella 四次
-💾  有 32 个文件保存在 Tella 中
-📖  选中了西班牙语
-⚡  连接了一台服务器
-😎 开启了计算器伪装</string>
+  <string name="Analytics_questions_description">每项研究都会收集具体问题的数据。以下是一个示例：</string>
+  <string name="Analytics_questions_examples">🔓 一周打开 Tella 4 次
+💾  在 Tella 中存储 32 个文件
+📖  选择西班牙语
+⚡  连接 1 台服务器
+😎 启用计算器伪装</string>
   <string name="Analytics_share_data_title">分享您的数据以改进 Tella</string>
-  <string name="Analytics_share_data_description">加入本研究，您会帮助我们俩姐哪些功能对您重要，以及您如何使用本应用。</string>
+  <string name="Analytics_share_data_description">通过参与这项研究，您将帮助我们了解哪些功能对您重要，以及您如何使用本应用。</string>
   <string name="Analytics_respect_privacy_title">我们尊重您的隐私</string>
   <string name="Analytics_respect_privacy_description">• 我们不会访问保存在 Tella 中或者与组织分享的任何文件。
 • 我们<b>永远</b>不会分享您的数据或将数据卖给任何人。</string>
   <string name="Analytics_banner_title">分享分析数据改进 Tella</string>
-  <string name="Analytics_banner_improve_description">帮助我们理解您如何使用 Tella。所有数据均为匿名，永远无法关联到您。
+  <string name="Analytics_banner_improve_description">帮助我们理解您如何使用 Tella。所有数据均匿名，绝不会与您本人关联。
 
-要和 Tella 团队分享分析数据吗？</string>
+是否与 Tella 团队分享分析数据？</string>
   <string name="Settings_Analytics_switch_title">分享数据以改进 Tella</string>
   <string name="Settings_Analytics_switch_expl">请帮助我们了解您如何使用 Tella。您的数据绝不会与您本人关联。</string>
   <string name="select_entities">选择实体</string>
@@ -900,24 +897,25 @@
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
   <string name="create_new_folder">新建文件夹</string>
   <string name="use_shared_drive">使用共享云盘</string>
-  <string name="go_to_google_drive">转到 Google 云盘</string>
+  <string name="go_to_google_drive">前往 Google 云盘</string>
   <string name="select_google_drive">选择 Google 云盘</string>
   <string name="google_drive" translatable="false">Google Drive
 </string>
-  <string name="learn_more_about_the_types_of_drives">了解云盘种类的更多信息。</string>
-  <string name="description_google_drive">可以连接到组织的共享云盘或在您的个人云盘中新建文件夹。</string>
-  <string name="select_a_drive_to_connect">选择要连接到的云盘</string>
+  <string name="learn_more_about_the_types_of_drives">了解更多关于云盘种类的信息。</string>
+  <string name="description_google_drive">可连接组织的共享云盘，或者在您的个人云盘中新建文件夹。</string>
+  <string name="select_a_drive_to_connect">请选择连接的云盘</string>
   <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
-  <string name="settings_add.server.selection_dialog.title">您想连接到哪种服务器？</string>
-  <string name="unavailable_connections">不可用的连接</string>
-  <string name="unavailable_connections_desc">对下列分类，一次只能启用一个连接。要新增连接，请转到连接详情删除当前连接。</string>
+  <string name="settings_add.server.selection_dialog.title">想要连接哪种服务器？</string>
+  <string name="unavailable_connections">连接不可用</string>
+  <string name="unavailable_connections_desc">对于以下类别，一次只能启用一个连接。要添加新连接，
+请前往“连接”设置删除当前连接。</string>
   <string name="no_permission_to_folder_google_drive">您没有上传到此文件夹的权限。</string>
   <string name="settings.servers.title_server.settings2">连接</string>
-  <string name="settings.servers.add_server.expl2">如果您在某个组织工作，请连接到其服务器以发送文件和数据。您的组织应为您提供服务器详细信息。</string>
+  <string name="settings.servers.add_server.expl2">如果您和某个组织合作，请连接到其服务器以发送文件和数据。您的组织应提供服务器详细信息。</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
-  <string name="go_to_dropbox">转到 DROPBOX</string>
+  <string name="go_to_dropbox">前往 DROPBOX</string>
   <string name="dropbox" translatable="false">Dropbox</string>
-  <string name="Drafts_Header_Message">这些是您正在写的报告。</string>
+  <string name="Drafts_Header_Message">这些是您正在处理的报告。</string>
   <string name="Outboxes_Header_Message">这些报告已准备好提交</string>
   <string name="Submitted_Header_Message">这些是您已经成功提交的报告。</string>
   <string name="Connections_description">在此了解更多有关连接的信息。如果您和某个组织合作，可咨询他们使用哪种连接。</string>
@@ -925,14 +923,14 @@
   <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
   <string name="NextCloud">Nextcloud</string>
   <string name="NextCloud_Create_New_Folder">新建文件夹</string>
-  <string name="NextCloud_Create_New_Folder_Description">报告会被上传到 Nextcloud 上的新文件夹。在这里为这个文件夹选择一个名字。</string>
+  <string name="NextCloud_Create_New_Folder_Description">报告将上传到 Nextcloud 上的新文件夹。请在此处命名此文件夹。</string>
   <string name="NextCloud_Folder_Name">文件夹名称</string>
   <string name="Error_Connecting_To_Server_Msg">连接服务器出错。请重试。</string>
   <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
   <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
   <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
   <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
-  <string name="ssl_validator_question">仍要信任该证书吗？</string>
+  <string name="ssl_validator_question">是否仍要信任此证书？</string>
   <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
   <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
   <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
@@ -959,18 +957,18 @@
   <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
   <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
   <string name="go_to_nextcloud">前往 Nextcloud</string>
-  <string name="google_drive_create_folder_description">您的报告会上传到Google云盘上的新文件夹，请在这里选择文件夹的名称</string>
+  <string name="google_drive_create_folder_description">您的报告会上传到 Google 云端硬盘的新文件夹，请在这里命名此文件夹。</string>
   <string name="folder_name">文件夹名称</string>
-  <string name="Folder_Empty_Error">文件夹名不能为空！</string>
-  <string name="file_name_taken">文件名已被占用，请使用其他名称</string>
-  <string name="folder_exist_error">文件夹名字已被使用，请使用其他名称</string>
-  <string name="nextcloud_file_size_limit">目前只有小于20MB的文件才可以提交到nextcloud服务器</string>
-  <string name="invalid_url">无效的网址</string>
+  <string name="Folder_Empty_Error">文件夹名称不能为空</string>
+  <string name="file_name_taken">文件名已被占用，请使用其他文件名。</string>
+  <string name="folder_exist_error">文件夹名称已被占用，请使用其他名称。</string>
+  <string name="nextcloud_file_size_limit">目前，可上传到 Nextcloud 服务器的文件需小于 20 MB。</string>
+  <string name="invalid_url">无效 URL</string>
   <string name="delete_report">删除报告？</string>
-  <string name="report_submitted_msg">您的报告已提交</string>
+  <string name="report_submitted_msg">您的报告已成功提交</string>
   <string name="Collect_MediaWidget_Attach_File">附加文件</string>
-  <string name="form_successfully_submitted">已成功提交%1$s</string>
-  <string name="error_file_not_found">正尝试导入的文件不再可用。请重试。</string>
+  <string name="form_successfully_submitted">已成功提交 %1$s</string>
+  <string name="error_file_not_found">想要导入的文件不可用，请重试。</string>
   <string name="select_file_picker">请选择文件管理器</string>
   <string name="gallery_toast_fail_import_no_file_manager">未找到文件管理器应用。请安装相关应用（如 Google 文件文件极客、Fossify File Manager 或其他文件管理器）以导入文件。</string>
   <string name="onboard_lock_warning_title">小心丢失文件</string>
@@ -984,7 +982,7 @@
   <string name="onboard_lock_success_message">应用锁已设定！可随时在 Tella 的“设置”中进行更改。</string>
   <string name="onboard_lock_success_learn_more">了解更多关于 Tella 应用锁的信息</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">是否删除实体？</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">确定要从设备删除该表单吗？注意因为表单已提交，数据会保留在您组织的服务器上。</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">是否确定从设备删除此表单？请注意，由于表单已提交，数据将保留在您所在组织的服务器上。</string>
   <string name="Uwazi_Entity_Deleted_Toast">“%1$s”已删除。</string>
   <string name="google_drive_shared_drive_migration_sheet_title">新建 Google 云盘文件夹</string>
   <string name="google_drive_shared_drive_migration_sheet_message">Tella 已不再支持共享云盘。如需继续向 Google 云端硬盘提交报告，请新建个人文件夹。</string>
@@ -1010,20 +1008,20 @@
   <string name="confirm_and_connect">确认并连接</string>
   <string name="wifi">Wi-Fi</string>
   <string name="get_connected">建立连接</string>
-  <string name="wifi_connection_instruction">请确保两台设备都连接到同一个 Wi-Fi 网络。</string>
+  <string name="wifi_connection_instruction">请确保两台设备连接到同一个 Wi-Fi 网络。</string>
   <string name="tips_to_connect_title">连接技巧</string>
   <string name="tips_to_connect_body">
     1. Wi-Fi 网络无需连接到互联网。
-2. 您可以使用手机的热点功能创建自己的 Wi-Fi 网络。
-3. 禁用任何 VPN 连接。
+2. 通过手机热点功能，您可创建自己的 Wi-Fi 网络。
+3. 禁用所有 VPN 连接。
 </string>
   <string name="current_wifi_network">当前 Wi-Fi 网络</string>
-  <string name="same_wifi_text">是的，我们使用的是同一个 Wi-Fi 网络</string>
+  <string name="same_wifi_text">是的，我们使用同一个 Wi-Fi 网络</string>
   <string name="NearBySharing">附近分享</string>
   <string name="share_files_description">
     与附近设备分享文件，无需互联网连接
   1. 两台设备必须连接到同一 Wi-Fi 网络
-  2. 请确保可信任与您分享文件的人
+  2. 分享文件时，请确保可信任对方
 </string>
   <string name="send_files">发送文件</string>
   <string name="receive_files">接收文件</string>
@@ -1031,9 +1029,9 @@
   <string name="nearby_sharing">附近分享</string>
   <string name="how_it_works">工作原理</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
-  <string name="enter_recipient_info">输入接受人的设备信息，以便在网络上查找</string>
+  <string name="enter_recipient_info">输入接收人的设备信息，以便在网络上查找</string>
   <string name="make_sure_sequence_matches">请确保此序列与发送人设备上显示的序列一致。</string>
-  <string name="make_sure_sequence_matches_recipient">请确保此序列与接受人设备上显示的序列一致。</string>
+  <string name="make_sure_sequence_matches_recipient">请确保此序列与接收人设备上显示的序列一致。</string>
   <string name="discard_and_start_over">丢弃并重新开始</string>
   <string name="waiting_for_the_sender_to_share_files">等待发送人分享文件</string>
   <string name="prepare_upload_message">发送人试图向您发送 %1$d 个文件</string>
@@ -1045,7 +1043,7 @@
   <string name="ip_address">IP 地址</string>
   <string name="sender_files_rejected">发件人文件被拒绝。</string>
   <string name="the_receiver_accepted_the_files_transfer">“接收人已接受文件传输。”</string>
-  <string name="recipient_rejected_the_files">接收人已拒绝接收文件。</string>
+  <string name="recipient_rejected_the_files">接收人已拒绝接受文件。</string>
   <string name="receiving_and_encrypting_files">接收和加密文件</string>
   <string name="sending_files">正在发送文件</string>
   <string name="send_files_title">发送文件</string>
@@ -1053,28 +1051,25 @@
   <string name="failed_to_open_location_settings">无法打开位置设置。</string>
   <string name="try_again">重试</string>
   <string name="stop_sharing_files">是否停止分享文件？</string>
-  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">附近分享功能将停止。接收方将无法访问尚未完全传输的文件。</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">附近分享功能将停止。接收方将无法访问传输未完成的文件。</string>
   <string name="stop">停止</string>
   <string name="success_title">成功</string>
   <string name="failure_title">出问题了</string>
   <plurals name="success_file_received_from_sender">
-    <item quantity="one">You have successfully received %1$d file from the sender.</item>
-    <item quantity="other">You have successfully received %1$d files from the sender.</item>
+    <item quantity="other">已成功接收来自发送人的 %1$d 个文件。</item>
   </plurals>
   <plurals name="success_file_sent_to_recipient">
-    <item quantity="one">You have successfully sent %1$d file to the recipient.</item>
-    <item quantity="other">You have successfully sent %1$d files to the recipient.</item>
+    <item quantity="other">已成功发送 %1$d 个文件给接收人。</item>
   </plurals>
   <string name="partial_success_summary">仅收到 %1$d 个文件。%2$d 个文件未收到。</string>
   <plurals name="failure_file_received_expl">
-    <item quantity="one">0 files were received. %1$d file was not received.</item>
-    <item quantity="other">0 files were received. %1$d files were not received.</item>
+    <item quantity="other">已接收 0 个文件。未接收 %1$d 个文件。</item>
   </plurals>
   <string name="view_files_action">查看文件</string>
   <string name="view_files">查看文件</string>
   <string name="result">结果</string>
-  <string name="waiting_for_the_sender">等待发送人 …</string>
-  <string name="waiting_for_the_recipient">等待接收人 …</string>
+  <string name="waiting_for_the_sender">等待发送人…</string>
+  <string name="waiting_for_the_recipient">等待接收人…</string>
   <string name="nearby_sharing_title">附近分享</string>
   <string name="nearby_sharing_description">启用此功能，即可与附近的设备分享文件，无需互联网连接。</string>
   <string name="nearby_sharing_intro">无论是否连接互联网，都可直接与附近设备分享文件。 
@@ -1103,6 +1098,6 @@
  \t 也可进行“附近分享”
 
 •  请确保禁用所有正在运行的 VPN 连接。</string>
-  <string name="feedback_contact_info_hint">Contact information (optional)</string>
-  <string name="file_already_exists">File already exists.</string>
+  <string name="feedback_contact_info_hint">联系方式（可选）</string>
+  <string name="file_already_exists">文件已存在。</string>
 </resources>

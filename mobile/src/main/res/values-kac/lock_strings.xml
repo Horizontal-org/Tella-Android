@@ -36,7 +36,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Chyeju hte kalang bai chyam yu u. Na a ga makoi ni n htuk nga ai.</string>
   <string name="LockSuccess_Message_AllDone">Nang yawng galaw ngut sai!</string>
   <string name="LockSuccess_Message_Hint">Na a sumsaw lata la ai lam hpe galoi mung mai galai nhtawm, dai hta grau nna masat ai lam ni hta Tella hpe nang myit ra ai hku gram lajang la mai ai.</string>
-  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Ga makoi shut ai, chyeju hte kalang bai chyam yu u</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>

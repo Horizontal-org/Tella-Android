@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">không thể mở tệp tin ở định dạng này bên trong Tella. Bạn có muốn xuất tệp sang thiết bị của mình để mở tệp đó thông qua một ứng dụng khác không? Điều này có thể làm lộ nội dung của tệp tin. </string>
   <string name="Vault_Export_SheetAction">Xuất</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">Bạn chưa có bất kỳ tệp tin nào trong Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Biểu mẫu ưa thích</string>

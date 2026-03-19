@@ -37,7 +37,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Vui lòng thử lại. Mật khẩu của bạn không chính xác.</string>
   <string name="LockSuccess_Message_AllDone">Bạn đã hoàn tất!</string>
   <string name="LockSuccess_Message_Hint">Bạn luôn có thể thay đổi tùy chọn khóa và tùy chỉnh thêm Tella trong phần Cài đặt.</string>
-  <string name="LockSuccess_Action_GoToTella">Đến tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mật khẩu không đúng,
  vui lòng thử lại</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to
