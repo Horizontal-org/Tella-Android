@@ -47,7 +47,7 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
-        versionCode 224
+        versionCode 225
 
         versionName "2.19.0"
         multiDexEnabled true
