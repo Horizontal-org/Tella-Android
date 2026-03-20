@@ -141,12 +141,6 @@ class AttachmentsFragment :
         }
     }
 
-            // Use real intent (single vs multiple) based on current selection
-            val isMultiple = attachmentsAdapter.selectedMediaFiles.isNotEmpty()
-            exportVaultFiles(isMultipleFiles = isMultiple, vaultFile = vaultFile, path = uri)
-        }
-    }
-
     @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -338,7 +332,7 @@ class AttachmentsFragment :
     }
 
     private fun handleMoveHereClick() {
-        if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+        if (attachmentsAdapter.selectedMediaFiles.isNotEmpty()) {
             viewModel.moveFiles(
                 currentRootID, attachmentsAdapter.selectedMediaFiles
             )
