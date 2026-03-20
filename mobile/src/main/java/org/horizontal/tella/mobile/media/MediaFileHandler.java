@@ -254,6 +254,10 @@ public class MediaFileHandler {
             // NOTE: requires WRITE_EXTERNAL_STORAGE on <29 if you used public dirs.
             basePath = Environment.getExternalStoragePublicDirectory(envDirType);
         }
+        if (basePath == null) throw new IOException("External files dir unavailable for: " + envDirType);
+        if (!basePath.exists() && !basePath.mkdirs()) {
+            throw new IOException("Failed to create directory: " + basePath);
+        }
 
         if (basePath == null) {
             throw new IOException("External files dir unavailable for: " + envDirType);

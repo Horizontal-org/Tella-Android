@@ -144,6 +144,7 @@ android {
                 signingConfig signingConfigs.release
             }
         }
+
     }
 
 

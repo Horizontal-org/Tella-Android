@@ -127,6 +127,26 @@ subprojects {
             }
         }
     }
+    configurations.configureEach {
+        // Hilt + Kotlin metadata helper; safe to keep
+      //  resolutionStrategy.force "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0"
+        // Keep the project-wide removal of the SLF4J bridge to avoid logging dupes
+        exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+    }
+
+}
+
+// Align all Kotlin artifacts to the root plugin version
+subprojects {
+    configurations.configureEach {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == "org.jetbrains.kotlin" &&
+                    details.requested.name.startsWith("kotlin-")) {
+                details.useVersion(rootProject.ext.versions.kotlin)
+                details.because("Align Kotlin libs with Kotlin Gradle plugin ${rootProject.ext.versions.kotlin}")
+            }
+        }
+    }
 }
 
 task clean(type: Delete) {

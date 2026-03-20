@@ -332,7 +332,7 @@ class AttachmentsFragment :
     }
 
     private fun handleMoveHereClick() {
-        if (attachmentsAdapter.selectedMediaFiles.size > 0) {
+        if (attachmentsAdapter.selectedMediaFiles.isNotEmpty()) {
             viewModel.moveFiles(
                 currentRootID, attachmentsAdapter.selectedMediaFiles
             )
