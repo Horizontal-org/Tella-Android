@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.simplify.ink.InkView
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,7 +116,7 @@ class SignatureActivity : BaseLockActivity() {
                 signatureViewModel.addPngImage(stream.toByteArray())
             }
         } catch (exception: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(exception)
+            CrashReporterProvider.get().recordException(exception)
         }
     }
 

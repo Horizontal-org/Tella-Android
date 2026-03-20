@@ -1,7 +1,7 @@
 package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.data.database.KeyDataSource
@@ -42,7 +42,7 @@ class GoogleDriveServersViewModel @Inject constructor(
                         _googleDriveServers.postValue(list)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         //_error.postValue(throwable)
                     }
                 )

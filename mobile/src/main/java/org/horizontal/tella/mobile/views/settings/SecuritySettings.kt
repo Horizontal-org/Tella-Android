@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.views.settings
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
@@ -36,6 +37,16 @@ import timber.log.Timber
 class SecuritySettings :
     BaseBindingFragment<FragmentSecuritySettingsBinding>(FragmentSecuritySettingsBinding::inflate) {
 
+    companion object {
+        const val ARG_OPEN_LOCK_CHANGE_FLOW = "open_lock_change_flow"
+
+        /** When true, the lock re-auth / change-type flow starts as soon as the screen opens (e.g. from Hide Tella). */
+        @JvmStatic
+        fun newInstance(openLockChangeFlow: Boolean = false) = SecuritySettings().apply {
+            arguments = bundleOf(ARG_OPEN_LOCK_CHANGE_FLOW to openLockChangeFlow)
+        }
+    }
+
     private val lockTimeoutManager by lazy { LockTimeoutManager() }
     private val failedUnlockManager by lazy { FailedUnlockManager() }
     private val cm = CamouflageManager.getInstance()
@@ -43,7 +54,12 @@ class SecuritySettings :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val openLockChangeFlow = arguments?.getBoolean(ARG_OPEN_LOCK_CHANGE_FLOW) == true
         initView()
+        if (openLockChangeFlow) {
+            arguments?.putBoolean(ARG_OPEN_LOCK_CHANGE_FLOW, false)
+            view.post { checkCamouflageAndLockSetting() }
+        }
     }
 
     private fun initView() {

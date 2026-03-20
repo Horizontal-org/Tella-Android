@@ -1,0 +1,2 @@
+# Tella (Play Store) application id. F-Droid builds use org.hzontal.tellaFOSS and are built via the fdroid lane.
+app_identifier("org.hzontal.tella")

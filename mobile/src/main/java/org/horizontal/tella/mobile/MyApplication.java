@@ -23,7 +23,7 @@ import androidx.multidex.MultiDexApplication;
 import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
@@ -189,7 +189,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         // todo: implement dagger2
         CommonPrefs.getInstance().init(this);
         SharedPrefs.getInstance().init(this);
-        configureCrashlytics();
+        CrashReporterProvider.INSTANCE.init(this);
         System.loadLibrary("sqlcipher");
 
         registerActivityLifecycleCallbacks(this);
@@ -201,7 +201,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             @Override
             public void accept(Throwable throwable) {
                 Timber.d(throwable, getClass().getName());
-                FirebaseCrashlytics.getInstance().recordException(throwable);
+                CrashReporterProvider.INSTANCE.get().recordException(throwable);
             }
         });
         bus = TellaBus.create();
@@ -230,16 +230,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         insertConscrypt();
         enableStrictMode();
-    }
-
-    private void configureCrashlytics() {
-        boolean enabled = (!BuildConfig.DEBUG && Preferences.isSubmittingCrashReports());
-
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(enabled);
-
-        if (!enabled) {
-            FirebaseCrashlytics.getInstance().deleteUnsentReports();
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -311,7 +301,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onUnSuccessfulUnlock(String tag, Throwable throwable) {
-       FirebaseCrashlytics.getInstance().recordException(throwable);
+        CrashReporterProvider.INSTANCE.get().recordException(throwable);
     }
 
     @Override

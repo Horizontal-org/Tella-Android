@@ -28,7 +28,7 @@ import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -98,7 +98,7 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             return false;
         }
     }
@@ -535,7 +535,7 @@ public class MediaFileHandler {
                     .build(parentID)
                     .subscribeOn(Schedulers.io());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
             throw e;
         } finally {
@@ -567,7 +567,7 @@ public class MediaFileHandler {
                     .build(parentId)
                     .subscribeOn(Schedulers.io());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
             throw e;
         }
@@ -611,7 +611,7 @@ public class MediaFileHandler {
                         .blockingGet();
             }
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;

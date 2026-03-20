@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,6 +54,7 @@ import org.horizontal.tella.mobile.domain.entity.googledrive.GoogleDriveServer
 import org.horizontal.tella.mobile.domain.entity.nextcloud.NextCloudServer
 import org.horizontal.tella.mobile.domain.entity.reports.TellaReportServer
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
+import org.horizontal.tella.mobile.util.FossFeatureSheetUtils
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
 import org.horizontal.tella.mobile.util.setMargins
@@ -77,6 +80,8 @@ import org.hzontal.shared_ui.appbar.ToolbarComponent
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.javarosa.core.model.FormDef
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import permissions.dispatcher.NeedsPermission
 import timber.log.Timber
 import javax.inject.Inject
@@ -453,12 +458,18 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             ServerType.GOOGLE_DRIVE -> {
                 if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
                     nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                } else {
+                    FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
+                        baseActivity.supportFragmentManager, requireContext(), null, null)
                 }
             }
 
             ServerType.DROP_BOX -> {
                 if (BuildConfig.ENABLE_DROPBOX) {
                     nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                } else {
+                    FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
+                        baseActivity.supportFragmentManager, requireContext(), null, null)
                 }
             }
 
@@ -629,7 +640,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         toolbar.visibility = View.GONE
         panicModeView.visibility = View.VISIBLE
         panicModeView.alpha = 1f
-        countDownTextView.start(timerDuration) {
+        val duration = maxOf(1, timerDuration)
+        countDownTextView.start(duration) {
             executePanicMode()
         }
     }
@@ -647,7 +659,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private fun executePanicMode() {
         try {
             baseActivity.divviupUtils.runQuickDeleteEvent()
-            homeVaultViewModel.executePanicMode()
+            lifecycleScope.launch(Dispatchers.IO) {
+                homeVaultViewModel.executePanicMode()
+            }
         } catch (ignored: Throwable) {
             panicActivated = true
         }

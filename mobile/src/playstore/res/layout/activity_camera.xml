@@ -5,16 +5,21 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:background="@color/wa_black"
     android:orientation="vertical"
     android:keepScreenOn="true">
 
     <RelativeLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:background="@color/wa_black">
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@color/wa_black"
+        android:elevation="12dp">
 
         <ImageView
             android:id="@+id/close"
@@ -76,7 +81,8 @@
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="2"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:elevation="8dp" />
 
         <FrameLayout
             android:layout_width="32dp"
@@ -84,7 +90,8 @@
             android:layout_marginStart="40dp"
             android:contentDescription="@string/action_zoom"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:elevation="8dp">
 
             <SeekBar
                 android:id="@+id/camera_zoom"
@@ -102,8 +109,10 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/camera_bottom_controls"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="12dp">
 
         <org.horizontal.tella.mobile.views.custom.CameraCaptureButton
             android:id="@+id/captureButton"
@@ -132,12 +141,14 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/camera_mode_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/camera_mode_links_margin"
         android:layout_marginBottom="@dimen/camera_mode_links_margin"
         android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:elevation="12dp">
 
         <LinearLayout
             android:id="@+id/photo_mode"

@@ -18,7 +18,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -226,11 +226,11 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
             // Handle null pointer exception
             DialogUtils.showBottomMessage(
                 this, getString(R.string.gallery_toast_fail_importing_file), true)
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         } catch (e: Exception) {
             // Handle other exceptions
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         }
     }

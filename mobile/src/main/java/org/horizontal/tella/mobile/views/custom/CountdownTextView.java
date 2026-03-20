@@ -2,6 +2,8 @@ package org.horizontal.tella.mobile.views.custom;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 
 import org.horizontal.tella.mobile.R;
@@ -38,6 +40,11 @@ public class CountdownTextView extends androidx.appcompat.widget.AppCompatTextVi
     public void start(int start, final CountdownImageView.IFinishHandler handler) {
         cancel();
         setCountdownNumber(start);
+
+        if (start <= 0) {
+            new Handler(Looper.getMainLooper()).post(handler::onFinish);
+            return;
+        }
 
         timer = new CountDownTimer(start * 1000L, 200L) {
             public void onTick(long millisUntilFinished) {

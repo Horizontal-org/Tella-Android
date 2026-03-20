@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.hzontal.tella_vault.MyLocation;
 
 import org.javarosa.core.model.data.GeoPointData;
@@ -218,7 +218,7 @@ public class GeoPointWidget extends QuestionWidget implements ILocationGettingPr
                     C.SELECTED_LOCATION
             );
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             FormController.getActive().setIndexWaitingForData(null);
         }
     }

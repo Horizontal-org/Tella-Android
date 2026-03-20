@@ -279,6 +279,7 @@ mode activation</string>
   <string name="meter">%f m</string>
   <string name="meter_per_second">%f m/s</string>
   <string name="tella">Tella</string>
+  <string name="tella_foss">Tella FOSS</string>
   <string name="intro_document_protect">Document &amp; Protect</string>
   <string name="onboard_setup_lock">How would you like to lock Tella?</string>
   <string name="onboard_password">Password</string>
@@ -344,8 +345,9 @@ mode activation</string>
   <string name="settings.servers_setup_change_name_icon_subtitle"><b>Less secure:</b> Tella will appear on the home screen with a different app name and icon. Tapping on the new icon opens the actual Tella.</string>
   <string name="settings.servers_setup_hide_behind_calculator_title">hide behind a calculator app</string>
   <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>More secure:</b> Camouflage Tella behind an actual functioning calculator app. Input your PIN on the calculator to unlock Tella.</string>
-  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
- use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
+  <string name="settings.hide_tella_change_lock_to_pin_hint">Please change your lock type to PIN in the security Settings. %1$s</string>
+  <string name="settings.hide_tella_change_lock_here">Change lock here</string>
   <string name="settings.sec_change_lock_type_warning">If you change your lock method, Camouflage will be disabled</string>
   <string name="action_continue">Continue</string>
   <string name="settings.camo_icamera">iCamera</string>
@@ -831,6 +833,7 @@ they are uploaded to this project as a report.</string>
   <string name="not_internet_msg">You are not connected to the internet. Your feedback will be sent automatically when you are connected.
 </string>
   <string name="feedback_title">Feedback</string>
+  <string name="feedback_metadata_release_line">App release: %1$s</string>
   <string name="feedback_sent_msg">Your feedback has been sent</string>
   <string name="share_feedback_action">share feedback</string>
   <string name="Forms_NoOutboxForms">Your Outbox is currently empty. Forms that are ready to send will appear here.</string>
@@ -905,6 +908,8 @@ they are uploaded to this project as a report.</string>
   <string name="Analytics_banner_improve_description">Help us understand how you use Tella. All data is anonymous and can never be linked to you.
 
 Would you like to share analytics with the Tella team?</string>
+  <string name="Foss_Feature_Unavailable_Title">Feature unavailable</string>
+  <string name="Foss_Feature_Unavailable_Description">This feature is not compatible with the Free and Open Source version of Tella you are using.</string>
   <string name="Settings_Analytics_switch_title">Share data to improve Tella</string>
   <string name="Settings_Analytics_switch_expl">Help us understand how you use Tella. Your data can never be linked to you.</string>
   <string name="select_entities">Select entities</string>

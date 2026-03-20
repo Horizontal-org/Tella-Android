@@ -13,12 +13,13 @@ import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.dropbox.DropBoxServer
 import org.horizontal.tella.mobile.domain.exception.InvalidTokenException
+import org.horizontal.tella.mobile.domain.repository.dropbox.DropboxClientHandle
 import org.horizontal.tella.mobile.domain.repository.dropbox.IDropBoxRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 class DropBoxRepository @Inject constructor() : IDropBoxRepository {
-    override fun createDropboxClient(server: DropBoxServer): Single<DbxClientV2> {
+    override fun createDropboxClient(server: DropBoxServer): Single<DropboxClientHandle> {
         return Single.create { emitter ->
             try {
                 val accessToken = server.token
@@ -26,7 +27,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                 val dbxClient = DbxClientV2(config, accessToken)
                 val account = dbxClient.users().currentAccount
                 if (account != null) {
-                    emitter.onSuccess(dbxClient)
+                    emitter.onSuccess(RealDropboxClientHandle(dbxClient))
                 } else {
                     emitter.onError(InvalidTokenException("Dropbox token is invalid or expired"))
                 }
@@ -41,15 +42,16 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
     }
 
     override fun createDropboxFolder(
-        client: DbxClientV2,
+        client: DropboxClientHandle,
         folderName: String,
         description: String // Add description parameter
     ): Single<String> {
         return Single.create { emitter ->
             try {
+                val dbxClient = (client as RealDropboxClientHandle).client
                 // Create the folder path
                 val folderPath = "/$folderName"
-                val folderMetadata = client.files().createFolderV2(folderPath, true)
+                val folderMetadata = dbxClient.files().createFolderV2(folderPath, true)
 
                 // Emit the folder path on success or handle possible null value
                 folderMetadata.metadata.pathLower?.let { path ->
@@ -60,7 +62,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                         val descriptionInputStream = description.byteInputStream()
 
                         // Upload the description file to Dropbox
-                        client.files().uploadBuilder(descriptionFilePath)
+                        dbxClient.files().uploadBuilder(descriptionFilePath)
                             .withMode(WriteMode.OVERWRITE)
                             .uploadAndFinish(descriptionInputStream)
 
@@ -84,12 +86,13 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
     }
 
     override fun uploadFileWithProgress(
-        client: DbxClientV2,
+        client: DropboxClientHandle,
         folderPath: String,
         mediaFile: FormMediaFile,
     ): Flowable<UploadProgressInfo> {
         return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
             try {
+                val dbxClient = (client as RealDropboxClientHandle).client
                 // Create the request body with progress tracking
                 val requestBody = SkippableMediaFileRequestBody(
                     mediaFile,
@@ -105,7 +108,7 @@ class DropBoxRepository @Inject constructor() : IDropBoxRepository {
                 val filePath = "$folderPath/${mediaFile.name}"
 
                 // Create upload builder for Dropbox
-                val uploadBuilder = client.files()
+                val uploadBuilder = dbxClient.files()
                     .uploadBuilder(filePath)
                     .withMode(WriteMode.OVERWRITE)
 

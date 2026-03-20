@@ -32,8 +32,12 @@ class WorkerUploadReport @AssistedInject constructor(
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+        // We need the database instance to check status in the 'finally' block
+        var dataSource: DataSource? = null
+
         try {
             if (!statusProvider.isOnline()) {
+                Timber.d("*** Test worker *** No connectivity - will retry")
                 return@withContext Result.retry()
             }
 
@@ -44,17 +48,20 @@ class WorkerUploadReport @AssistedInject constructor(
                 return@withContext Result.retry()
             }
 
-            val dataSource = DataSource.getInstance(context, mainKey)
+            dataSource = DataSource.getInstance(context, mainKey)
 
             val reportFormInstances = getOutboxReportInstances(dataSource)
             if (reportFormInstances.isEmpty()) {
+                Timber.d("*** Test worker *** disableNoTimeOut - no remaining work")
                 setNoTimeOut(false)
                 return@withContext Result.success()
             } else {
+                Timber.d("*** Test worker *** enableNoTimeOut - there is work remaining")
                 setNoTimeOut(true)
             }
 
             val server = getServer(dataSource) ?: run {
+                Timber.d("*** Test worker *** disableNoTimeOut - Failed: no server")
                 setNoTimeOut(false)
                 return@withContext Result.failure()
             }
@@ -72,25 +79,46 @@ class WorkerUploadReport @AssistedInject constructor(
                         )
                     ).await()
 
+                    // reportWithFiles should have an api id now
                     reportWithFiles.reportApiId = reportResponse.id
-
-                    // submitFiles is assumed synchronous (as in your original code). If it returns Rx, add `.await()`.
-                    reportsRepository.submitFiles(reportWithFiles, server, reportResponse.id)
-                } else {
-                    reportsRepository.submitFiles(
-                        reportWithFiles, server, reportWithFiles.reportApiId
-                    )
                 }
 
-                Timber.d("*** Test worker *** widgetMediaFiles? %s", reportWithFiles.widgetMediaFiles)
+                Timber.d(
+                    "*** Test worker *** about to submit files with reportApiId: %s",
+                    reportWithFiles.reportApiId
+                )
+
+                reportsRepository.submitFiles(
+                    reportWithFiles, server, reportWithFiles.reportApiId
+                ).await()
+
+                Timber.d(
+                    "*** Test worker *** stopped submitting files with reportApiId: %s",
+                    reportWithFiles.reportApiId
+                )
+
+                Timber.d(
+                    "*** Test worker *** %s - widgetMediaFiles? %s",
+                    reportWithFiles.reportApiId,
+                    reportWithFiles.widgetMediaFiles
+                )
             }
 
-            setNoTimeOut(false)
             Result.success()
         } catch (t: Throwable) {
             Timber.e(t, "WorkerUploadReport failed")
-            setNoTimeOut(false)
             Result.retry()
+        } finally {
+            // IMPORTANT: Ensure we set up the timeout again, independently of the worker result.
+            // We only reset the timeout if the database shows no more pending reports.
+            dataSource?.let {
+                disableNoTimeoutOnlyWhenDone(it)
+            } ?: run {
+                // If we never even got a dataSource (key was locked),
+                // ensure we don't accidentally leave the timeout disabled forever.
+                Timber.d("*** Test worker *** disableNoTimeOut - no datasource")
+                setNoTimeOut(false)
+            }
         }
     }
 
@@ -155,5 +183,19 @@ class WorkerUploadReport @AssistedInject constructor(
         MyApplication.getMainKeyHolder().timeout =
             if (enableNoTimeout) LifecycleMainKey.NO_TIMEOUT
             else LockTimeoutManager.IMMEDIATE_SHUTDOWN
+    }
+
+    private suspend fun disableNoTimeoutOnlyWhenDone(dataSource: DataSource) {
+        // 1. Fetch the current state of the Outbox from the database
+        val remaining = getOutboxReportInstances(dataSource)
+
+        // 2. Only if the Outbox is truly empty do we allow the timeout to be reset.
+        // This protects us if another worker is still processing its own list.
+        if (remaining.isEmpty()) {
+            Timber.d("*** Test worker *** disableNoTimeOut - no remaining reports to upload after finishing work")
+            setNoTimeOut(false)
+        } else {
+            Timber.d("*** Test worker *** Remaining report to upload after finishing work, keeping NoTimeout active")
+        }
     }
 }
