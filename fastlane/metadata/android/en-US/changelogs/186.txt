@@ -1,0 +1,11 @@
+Android: Tella FOSS 2.11.0
+- Replaced Google Maps with OpenStreetMaps
+- Added Android CameraX support
+- Added support for privacy-preserving analytics. All analytics are disabled by default and opt-in.
+- PDFs can now be opened and viewed directly inside Tella
+- Edit media: users can crop and rotate images within Tella's encrypted container
+- Feedback(https://tella-app.org/features/#feedback) : users can now share feedback, bug reports, or improvement suggestions with the Tella team directly from inside Tella
+- Added new features in the Tella Web connection, including the ability to download and view resources uploaded by admins
+- Implemented background encryption(https://tella-app.org/features/#background-encryption) so users can continue collecting data, taking photos, videos, and audio, and importing files while the encryption process takes place.
+- Added new accessibility settings
+- Fixes to improve performance and security
