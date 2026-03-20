@@ -1,0 +1,3 @@
+Android: Tella FOSS 2.20.0
+- Mejoras de rendimiento, seguridad y estabilidad
+- Correcciones de errores y ajustes de interfaz

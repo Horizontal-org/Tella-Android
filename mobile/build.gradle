@@ -57,6 +57,7 @@ android {
         applicationId "org.hzontal.tella"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
+        // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
         versionCode 228
 
         versionName "2.20.0"
