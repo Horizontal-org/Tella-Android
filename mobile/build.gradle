@@ -117,6 +117,14 @@ android {
         }
     }
 
+    sourceSets {
+        fdroid {
+            assets {
+                exclude "config.json"
+            }
+        }
+    }
+
     signingConfigs {
         release {
             def storeFileEnv = project.findProperty("RELEASE_STORE_FILE") ?: System.getenv("RELEASE_STORE_FILE")
@@ -174,6 +182,24 @@ tasks.configureEach { task ->
     }
     if (n.contains("googleservices") && n.contains("fdroid")) {
         task.enabled = false
+    }
+}
+
+tasks.matching {
+    it.name == "mergeFdroidDebugAssets" || it.name == "mergeFdroidReleaseAssets"
+}.configureEach { task ->
+    task.doLast {
+        def mergedAssetsDir = task.hasProperty("outputDir")
+            ? task.outputDir.asFile.get()
+            : file("$buildDir/intermediates/merged_assets/${task.name.replace('merge', '').replace('Assets', '').uncapitalize()}/out")
+        if (!mergedAssetsDir.exists()) {
+            throw new GradleException("Merged assets directory not found for ${task.name}: ${mergedAssetsDir}")
+        }
+
+        def configAsset = new File(mergedAssetsDir, "config.json")
+        if (configAsset.exists() && !configAsset.delete()) {
+            throw new GradleException("Unable to remove forbidden fdroid asset: ${configAsset}")
+        }
     }
 }
 
