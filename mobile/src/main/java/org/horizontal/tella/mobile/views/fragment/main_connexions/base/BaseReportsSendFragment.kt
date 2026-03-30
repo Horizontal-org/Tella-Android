@@ -59,7 +59,11 @@ abstract class BaseReportsSendFragment :
 
     protected fun handleBackButton() {
         navigateBack()
-        reportInstance?.let { viewModel.submitReport(instance = it, true) }
+        reportInstance?.let {
+            if (it.status != EntityStatus.PAUSED) {
+                viewModel.submitReport(instance = it, true)
+            }
+        }
         if (reportInstance?.status != EntityStatus.SUBMITTED) {
             DialogUtils.showBottomMessage(
                 baseActivity, getString(R.string.Report_Available_in_Outbox), false
