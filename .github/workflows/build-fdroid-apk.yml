@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java (JDK 17)
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -26,18 +26,16 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Clean project
+      - name: Clean
         run: ./gradlew clean
 
-      - name: Build F-Droid release APK
+      - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid
 
-      - name: Show APK files (debug)
-        run: |
-          echo "=== APK OUTPUT ==="
-          find mobile/build/outputs -type f -name "*.apk" | sort
+      - name: Show APK files
+        run: find mobile/build/outputs -type f -name "*.apk" | sort
 
-      - name: Upload APK as artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tella-fdroid-apk
