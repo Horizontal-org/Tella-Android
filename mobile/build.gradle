@@ -60,9 +60,9 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
-        versionCode 228
+        versionCode 229
 
-        versionName "2.20.0"
+        versionName "2.20.1"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
