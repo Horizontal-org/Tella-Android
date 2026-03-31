@@ -123,11 +123,28 @@ class ReportsRepositoryImp @Inject internal constructor(
                         instance.apply {
                             reportApiId = reportPostResult.id
                         }
-                        submitFiles(instance, server, reportPostResult.id)
+                        disposables.add(
+                            submitFiles(instance, server, reportPostResult.id)
+                                .subscribe({}, {
+                                    throwable -> Timber.w(
+                                    "Unexpected error submitting files for report ${instance.id}: %s",
+                                    throwable.toString()
+                                    )
+                                })
+                        )
                     })
         } else {
             if (instance.status != EntityStatus.SUBMITTED) {
-                submitFiles(instance, server, instance.reportApiId)
+                    disposables.add(
+                        submitFiles(instance, server, instance.reportApiId)
+                            .subscribe({}, {
+                                    throwable -> Timber.w(
+                                "Unexpected error submitting files for report ${instance.id}: %s",
+                                throwable.toString()
+                            )
+                            })
+                    )
+
             }
         }
     }
@@ -180,10 +197,10 @@ class ReportsRepositoryImp @Inject internal constructor(
     }
 
     private fun handleInstanceOnTerminate(instance: ReportInstance) {
-        if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
-        } else {
+        if (instance.widgetMediaFiles.all { it.status == FormMediaFileStatus.SUBMITTED }) {
             handleAutoDeleteAndFinalStatus(instance)
+        } else {
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
         }
     }
 
