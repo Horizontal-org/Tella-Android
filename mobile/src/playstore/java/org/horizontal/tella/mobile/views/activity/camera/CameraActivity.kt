@@ -161,7 +161,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         viewModel.lastMediaFileSuccess.observe(this) { mediaFile -> onLastMediaFileSuccess(mediaFile) }
         viewModel.lastMediaFileError.observe(this) { throwable -> onLastMediaFileError(throwable) }
         viewModel.rotationUpdate.observe(this) { rotation -> rotateViews(rotation) }
-        uploadViewModel.mediaFilesUploadScheduled.observe(this) { onMediaFilesUploadScheduled() }
         uploadViewModel.mediaFilesUploadScheduleError.observe(this) { onMediaFilesUploadScheduleError() }
     }
 
@@ -323,19 +322,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     }
 
     override fun getContext(): Context = this
-
-    private fun onMediaFilesUploadScheduled() {
-        val isAutoUploadEnabled = Preferences.isAutoUploadEnabled()
-        val isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled()
-        val message = if (isAutoUploadEnabled && isAutoDeleteEnabled) {
-            getString(R.string.Auto_Upload_Media_Imported_Report_And_Deleted)
-        } else if (isAutoUploadEnabled) {
-            getString(R.string.Auto_Upload_Media_Report)
-        } else {
-            return
-        }
-        DialogUtils.showBottomMessage(this, message, false)
-    }
 
     private fun onMediaFilesUploadScheduleError() {}
 
