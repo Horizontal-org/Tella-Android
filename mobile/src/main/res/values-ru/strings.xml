@@ -1016,12 +1016,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Collect_MediaWidget_Attach_File">Attach file</string>
   <string name="form_successfully_submitted">%1$s successfully submitted</string>
   <string name="error_file_not_found">The file you are trying to import is no longer available. Please try again.</string>
-    <string name="send_files_title">Send files</string>
-    <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
-  <string name="failed_to_open_location_settings">Failed to open location settings.</string>
-    <string name="stop_sharing_files">Stop sharing files?</string>
-  <string name="stop">stop</string>
-  <string name="view_files">VIEW FILES</string>
     <string name="result">result</string>
   <string name="select_file_picker">Select a file manager</string>
   <string name="gallery_toast_fail_import_no_file_manager">No file manager app found. Please install a file manager app (like Google Files, Fossify File Manager, or any other file manager) to import files.</string>
@@ -1105,7 +1099,6 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
   <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
   <string name="sending_files">Sending files</string>
-  <string name="send_files_title">Send files</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="try_again">Try again</string>
@@ -1129,7 +1122,6 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   </plurals>
   <string name="view_files_action">View Files</string>
   <string name="view_files">VIEW FILES</string>
-  <string name="result">Results</string>
   <string name="waiting_for_the_sender">Waiting for sender …</string>
   <string name="waiting_for_the_recipient">Waiting for recipient …</string>
   <string name="nearby_sharing_title">Nearby Sharing</string>
