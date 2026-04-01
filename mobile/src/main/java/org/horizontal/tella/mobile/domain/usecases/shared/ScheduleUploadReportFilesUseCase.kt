@@ -37,7 +37,11 @@ class ScheduleUploadReportFilesUseCase @Inject constructor(
                     .setConstraints(constraints)
                     .build()
 
-                // Schedule the upload report work using WorkManager
+                // APPEND_OR_REPLACE ensures a new worker is queued even when one is already running.
+                // Without this, files captured during an active upload would be silently dropped by
+                // WorkManager and never uploaded. This trades off strict 1-hour report grouping
+                // (files captured mid-upload go into a separate auto-report) for correctness.
+                // TODO: revisit if same-report grouping during active uploads becomes a requirement.
                 WorkManager.getInstance(context).enqueueUniqueWork(
                     "WorkerUploadReport2",
                     ExistingWorkPolicy.APPEND_OR_REPLACE,
