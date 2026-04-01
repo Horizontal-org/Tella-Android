@@ -1,0 +1,42 @@
+name: Build F-Droid APK
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'vFoss*'
+
+jobs:
+  build-fdroid:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Clean
+        run: ./gradlew clean
+
+      - name: Build APK
+        run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid
+
+      - name: Show APK files
+        run: find mobile/build/outputs -type f -name "*.apk" | sort
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tella-fdroid-apk
+          path: mobile/build/outputs/apk/**/*.apk

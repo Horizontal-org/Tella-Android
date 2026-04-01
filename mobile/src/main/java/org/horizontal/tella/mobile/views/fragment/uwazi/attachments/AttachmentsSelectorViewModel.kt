@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.attachments
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
@@ -54,7 +54,7 @@ class AttachmentsSelectorViewModel @Inject constructor(
                         _vaultFiles.postValue(result)
                     },
                     { throwable: Throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )
@@ -73,7 +73,7 @@ class AttachmentsSelectorViewModel @Inject constructor(
                         _rootVaultFile.postValue(vaultFile)
                     },
                     { throwable: Throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )
@@ -92,7 +92,7 @@ class AttachmentsSelectorViewModel @Inject constructor(
                         _selectVaultFiles.postValue(vaultFiles)
                     },
                     { throwable: Throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)
                     }
                 )

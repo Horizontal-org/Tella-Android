@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.activity.camera
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
@@ -137,7 +137,7 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
             )
             MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(failedActivity)))
         }
-        FirebaseCrashlytics.getInstance().recordException(throwable)
+        CrashReporterProvider.get().recordException(throwable)
         _addError.postValue(throwable)
     }
 

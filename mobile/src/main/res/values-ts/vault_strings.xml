@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">Matshamelo ya arkivho leyi a ma pfumeleli kupfuleka ndzeni ka Tella. Xana u lava ku humesa  arkivho ka xitirhisiwa xa wena leswaku u yi pfula hi aplikativho lin\'wana? Lesvi svi nga ha paluxa lesvi nga ka arkivho.</string>
   <string name="Vault_Export_SheetAction">Kuhumesa</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">A wu se na vani maarkivho ka Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Swikombiso lesvi usvirhandzaka</string>

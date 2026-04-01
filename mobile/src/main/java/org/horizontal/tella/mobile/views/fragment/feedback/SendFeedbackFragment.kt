@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.databinding.FragmentSendFeedbackBinding
 import org.horizontal.tella.mobile.domain.entity.feedback.FeedbackInstance
 import org.horizontal.tella.mobile.domain.entity.feedback.FeedbackStatus
+import org.horizontal.tella.mobile.util.TellaReleaseNaming
 import org.horizontal.tella.mobile.util.jobs.WorkerSendFeedBack
 import org.horizontal.tella.mobile.views.activity.SettingsActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -70,10 +71,9 @@ class SendFeedbackFragment :
         // Set up click listener for the "Send Feedback" button
         binding.sendFeedbackBtn.setOnClickListener {
             if (isSubmitEnabled) {
-                // Create or update the feedback instance with the entered text
-                if (feedbackInstance == null) feedbackInstance =
-                    FeedbackInstance(text = binding.newFeedbackEditDescription.text.toString())
-                else feedbackInstance!!.text = binding.newFeedbackEditDescription.text.toString()
+                val text = buildFeedbackText()
+                if (feedbackInstance == null) feedbackInstance = FeedbackInstance(text = text)
+                else feedbackInstance!!.text = text
 
                 // Check internet connection before attempting to submit
                 if (MyApplication.isConnectedToInternet(baseActivity)) {
@@ -128,13 +128,13 @@ class SendFeedbackFragment :
                     override fun accept(isConfirmed: Boolean) {
                         if (isConfirmed) {
                             // Save feedback as a draft
+                            val text = buildFeedbackText()
                             if (feedbackInstance != null) {
-                                feedbackInstance!!.text =
-                                    binding.newFeedbackEditDescription.text.toString()
+                                feedbackInstance!!.text = text
                             } else {
                                 feedbackInstance = FeedbackInstance(
                                     status = FeedbackStatus.DRAFT,
-                                    text = binding.newFeedbackEditDescription.text.toString()
+                                    text = text
                                 )
                             }
                             viewModel.saveFeedbackDraft(feedbackInstance!!)
@@ -248,21 +248,35 @@ class SendFeedbackFragment :
     }
 
     /**
+     * Builds the feedback text: release label (Tella vs Tella FOSS + version + build), then contact and description.
+     * Sent to the feedback API so support emails can distinguish Play Store vs FOSS installs.
+     */
+    private fun buildFeedbackText(): String {
+        val releaseLine = getString(
+            R.string.feedback_metadata_release_line,
+            TellaReleaseNaming.fullReleaseLabel(requireContext())
+        )
+        val contact = binding.newFeedbackEditContact.text?.toString()?.trim().orEmpty()
+        val description = binding.newFeedbackEditDescription.text?.toString()?.trim().orEmpty()
+        val body = if (contact.isNotEmpty()) "$contact\n\n$description" else description
+        return "$releaseLine\n\n$body"
+    }
+
+    /**
      * Sets up the visibility of feedback-related views based on the feedback sharing status.
      */
     private fun setupFeedbackSwitchView() {
         if (Preferences.isFeedbackSharingEnabled()) {
-            // If feedback sharing is enabled, show the feedback button and input description
             binding.sendFeedbackBtn.isVisible = true
+            binding.textInputLayoutContact.isVisible = true
             binding.newFeedbackEditDescription.isVisible = true
             binding.textInputLayoutDescription.isVisible = true
         } else {
-            // If feedback sharing is disabled, hide the feedback button and input description
             binding.sendFeedbackBtn.isVisible = false
+            binding.textInputLayoutContact.isVisible = false
             binding.newFeedbackEditDescription.isVisible = false
             binding.textInputLayoutDescription.isVisible = false
-
-            // Clear the feedback input description and reset feedbackInstance
+            binding.newFeedbackEditContact.setText("")
             binding.newFeedbackEditDescription.setText("")
             feedbackInstance = null
         }
@@ -282,14 +296,18 @@ class SendFeedbackFragment :
             OneTimeWorkRequest.Builder(WorkerSendFeedBack::class.java).setConstraints(constraints)
                 .build()
 
-        // Enqueue the work with a unique name and keep existing work if it exists
+        // Enqueue the work with a unique name, always replacing any existing work.
+        // This ensures that if the user triggers another retry (e.g. after regaining connectivity),
+        // the latest request is honoured instead of being ignored.
         WorkManager.getInstance(baseActivity)
-            .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.KEEP, oneTimeJob)
+            .enqueueUniqueWork("WorkerSendFeedBack", ExistingWorkPolicy.REPLACE, oneTimeJob)
 
-        // Observe the work's status using LiveData
+        // Observe the work's status using LiveData.
+        // workInfo can be null when the work is pruned (e.g. after REPLACE) or not yet available.
         WorkManager.getInstance(baseActivity).getWorkInfoByIdLiveData(oneTimeJob.id)
-            .observeForever(object : Observer<WorkInfo> {
-                override fun onChanged(workInfo: WorkInfo) {
+            .observeForever(object : Observer<WorkInfo?> {
+                override fun onChanged(workInfo: WorkInfo?) {
+                    if (workInfo == null) return
                     // Check if the work has succeeded
                     if (workInfo.state == WorkInfo.State.SUCCEEDED) {
                         // Show a success message with a duration of 4000 milliseconds (4 seconds)

@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.fragment.dropbox
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.dropbox.core.v2.DbxClientV2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.horizontal.tella.mobile.data.database.DropBoxDataSource
 import org.horizontal.tella.mobile.data.dropbox.DropBoxRepository

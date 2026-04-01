@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.dialog.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -16,6 +16,7 @@ import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.uwazi.Language
 import org.horizontal.tella.mobile.views.adapters.uwazi.ViewLanguageItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.mappers.toViewLanguageItem
+import retrofit2.HttpException
 
 private const val TWO_FACTOR_AUTHENTICATION_CODE = 409
 private const val AUTHENTICATION_FAILED = 401
@@ -56,7 +57,11 @@ class UwaziConnectFlowViewModel : ViewModel() {
             ) { throwable: Throwable? ->
                 val error = throwable
                     ?: NullPointerException("Expression 'throwable' must not be null")
-                FirebaseCrashlytics.getInstance().recordException(error)
+                if (error is HttpException && error.code() == AUTHENTICATION_FAILED) {
+                    _isPublic.postValue(false)
+                    return@subscribe
+                }
+                CrashReporterProvider.get().recordException(error)
                 val messageResId = when (error) {
                     is java.net.UnknownHostException -> R.string.settings_docu_error_domain_doesnt_exit
                     else -> R.string.settings_docu_error_unknown_connection_error
@@ -84,7 +89,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                     }
                 }
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -105,7 +110,7 @@ class UwaziConnectFlowViewModel : ViewModel() {
                 _settings.postValue(Pair(it.serverName, list))
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )

@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -93,7 +93,7 @@ class CheckOdkServerViewModel @Inject constructor(
                 },
                 { throwable: Throwable ->
                     // Log error and post it for error handling
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    CrashReporterProvider.get().recordException(throwable)
                     _serverCheckError.postValue(throwable)  // Post error for UI to handle
                 })
         )

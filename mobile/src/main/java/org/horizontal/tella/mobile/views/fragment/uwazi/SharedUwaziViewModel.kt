@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.uwazi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -197,7 +197,7 @@ class SharedUwaziViewModel @Inject constructor(
             .flatMapSingle { dataSource: UwaziDataSource -> dataSource.toggleFavorite(template) }
             .subscribe({ listTemplates() }
             ) { throwable: Throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 error.postValue(throwable)
             }
         )
@@ -217,7 +217,7 @@ class SharedUwaziViewModel @Inject constructor(
             .subscribe(
                 { listTemplates() }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -239,7 +239,7 @@ class SharedUwaziViewModel @Inject constructor(
                     _instanceDeleteD.postValue(instance.title)
                 }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 error.postValue(throwable)
             }
         )
@@ -284,7 +284,7 @@ class SharedUwaziViewModel @Inject constructor(
                         onInstanceSuccess.postValue(maybeCloneInstance(instance))
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().apply {
+                        CrashReporterProvider.get().run {
                             recordException(throwable)
                             log("Failed to get Uwazi entity instance $instanceId")
                         }

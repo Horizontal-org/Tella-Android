@@ -2,7 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.googledrive
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Flowable
@@ -263,7 +263,7 @@ class GoogleDriveViewModel @Inject constructor(
                             _reportInstance.postValue(instance)
                         }, { throwable ->
                             Timber.d(throwable)
-                            FirebaseCrashlytics.getInstance().recordException(throwable)
+                            CrashReporterProvider.get().recordException(throwable)
                         })
                 )
             },

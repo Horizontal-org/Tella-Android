@@ -183,3 +183,19 @@ fun Throwable.isDuplicateNameOrFileExistsError(): Boolean {
     }
     return false
 }
+
+/**
+ * Returns the string res id for duplicate errors: "file already exists" for same content (hash),
+ * "file name taken" for name collision. Uses class name so it works across modules.
+ */
+fun Throwable.getDuplicateErrorMessageResId(): Int {
+    var t: Throwable? = this
+    while (t != null) {
+        when (t.javaClass.name) {
+            NAME_DUPLICATE_VAULT_FILE -> return R.string.file_already_exists
+            NAME_FILE_ALREADY_EXISTS -> return R.string.file_name_taken
+        }
+        t = t.cause
+    }
+    return R.string.file_name_taken
+}

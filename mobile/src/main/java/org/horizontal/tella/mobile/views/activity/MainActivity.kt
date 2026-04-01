@@ -19,7 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -38,6 +38,7 @@ import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.hide
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.fragment.feedback.SendFeedbackFragment
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportSubmittedFragment
@@ -138,14 +139,12 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     private fun initObservers() {
         mediaImportViewModel.mediaFileLiveData.observe(this,::onMediaFileImported)
         mediaImportViewModel.importError.observe(this, ::onImportError)
-        mediaImportViewModel.duplicateNameError.observe(this, ::onRenameConflictError)
+        mediaImportViewModel.duplicateErrorResId.observe(this, ::onDuplicateErrorResId)
     }
 
-    private fun onRenameConflictError(isConflict: Boolean) {
-        if (isConflict) {
-            DialogUtils.showBottomMessage(
-                this, getString(R.string.file_name_taken), true
-            )
+    private fun onDuplicateErrorResId(resId: Int?) {
+        if (resId != null) {
+            DialogUtils.showBottomMessage(this, getString(resId), true)
         }
     }
 
@@ -229,11 +228,11 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
             // Handle null pointer exception
             DialogUtils.showBottomMessage(
                 this, getString(R.string.gallery_toast_fail_importing_file), true)
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         } catch (e: Exception) {
             // Handle other exceptions
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         }
     }
@@ -397,7 +396,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
 
     private fun onImportError(error: Throwable) {
         val messageResId = when {
-            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error.isDuplicateNameOrFileExistsError() -> error.getDuplicateErrorMessageResId()
             error is FileNotFoundException -> R.string.error_file_not_found
             else -> R.string.gallery_toast_fail_importing_file
         }

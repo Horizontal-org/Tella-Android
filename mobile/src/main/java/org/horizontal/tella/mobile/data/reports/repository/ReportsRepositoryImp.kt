@@ -6,6 +6,7 @@ import android.webkit.MimeTypeMap
 import androidx.annotation.VisibleForTesting
 import com.hzontal.tella_vault.VaultFile
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
 import io.reactivex.Emitter
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
@@ -13,6 +14,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
@@ -22,8 +24,18 @@ import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
 import org.horizontal.tella.mobile.data.entity.reports.mapper.mapToDomainModel
 import org.horizontal.tella.mobile.data.http.HttpStatus
 import org.horizontal.tella.mobile.data.reports.remote.ReportsApiService
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MIN_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MAX_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.DEFAULT_CHUNK_SIZE
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.SAFETY_FACTOR
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.TARGET_UPLOAD_TIME
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MAX_CHUNK_SIZE_WIFI
+import org.horizontal.tella.mobile.data.reports.utils.ChunkingConfig.MIN_CHUNK_SIZE_WIFI
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_LOGIN
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.URL_PROJECT
+import org.horizontal.tella.mobile.data.repository.ChunkableMediaFileRequestBody
+import org.horizontal.tella.mobile.data.reports.utils.ReportsApiVersions.FILE_API_V2_MINIMUM_VERSION
+import org.horizontal.tella.mobile.data.reports.utils.UploadServerConfig
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
@@ -37,6 +49,7 @@ import org.horizontal.tella.mobile.domain.repository.reports.ReportsRepository
 import org.horizontal.tella.mobile.util.StatusProvider
 import org.horizontal.tella.mobile.util.StringUtils
 import org.horizontal.tella.mobile.util.Util
+import org.horizontal.tella.mobile.util.Version
 import retrofit2.Response
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -46,8 +59,8 @@ import javax.inject.Inject
 class ReportsRepositoryImp @Inject internal constructor(
     private val apiService: ReportsApiService,
     private val dataSource: DataSource,
-    private val statusProvider: StatusProvider) : ReportsRepository {
-
+    private val statusProvider: StatusProvider
+) : ReportsRepository {
     private val reportProgress = SingleLiveEvent<Pair<UploadProgressInfo, ReportInstance>>()
     private val instanceProgress = SingleLiveEvent<ReportInstance>()
     private val disposables = CompositeDisposable()
@@ -57,6 +70,7 @@ class ReportsRepositoryImp @Inject internal constructor(
             loginEntity = LoginEntity(server.username, server.password),
             url = server.url + URL_LOGIN
         ).flatMap { response ->
+            server.apply { version = response.version }
             apiService.getProjectSlug(
                 url = server.url + slug,
                 access_token = "Bearer " + response.access_token
@@ -109,11 +123,28 @@ class ReportsRepositoryImp @Inject internal constructor(
                         instance.apply {
                             reportApiId = reportPostResult.id
                         }
-                        submitFiles(instance, server, reportPostResult.id)
+                        disposables.add(
+                            submitFiles(instance, server, reportPostResult.id)
+                                .subscribe({}, {
+                                    throwable -> Timber.w(
+                                    "Unexpected error submitting files for report ${instance.id}: %s",
+                                    throwable.toString()
+                                    )
+                                })
+                        )
                     })
         } else {
             if (instance.status != EntityStatus.SUBMITTED) {
-                submitFiles(instance, server, instance.reportApiId)
+                    disposables.add(
+                        submitFiles(instance, server, instance.reportApiId)
+                            .subscribe({}, {
+                                    throwable -> Timber.w(
+                                "Unexpected error submitting files for report ${instance.id}: %s",
+                                throwable.toString()
+                            )
+                            })
+                    )
+
             }
         }
     }
@@ -132,16 +163,15 @@ class ReportsRepositoryImp @Inject internal constructor(
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
-    ) {
+    ): Completable {
         if (instance.widgetMediaFiles.isEmpty()) {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
-            return
+            return Completable.complete()
         }
 
-        disposables.add(
-            Flowable.fromIterable(instance.widgetMediaFiles)
+        return Flowable.fromIterable(instance.widgetMediaFiles)
                 .flatMap { file ->
-                    upload(file, server.url, reportApiId, server.accessToken)
+                    upload(file, UploadServerConfig(server.url, server.accessToken, server.version), reportApiId)
                 }
                 .doOnEach {
                     if (instance.status != EntityStatus.SUBMITTED) {
@@ -162,16 +192,15 @@ class ReportsRepositoryImp @Inject internal constructor(
                 .doAfterNext { progressInfo ->
                     reportProgress.postValue(Pair(progressInfo, instance))
                 }
+                .ignoreElements() // Converts Flowable to Completable so it can be awaited
                 .subscribeOn(Schedulers.io()) // Non-blocking operation
-                .subscribe()
-        )
     }
 
     private fun handleInstanceOnTerminate(instance: ReportInstance) {
-        if (!instance.widgetMediaFiles.any { it.status == FormMediaFileStatus.SUBMITTED }) {
-            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
-        } else {
+        if (instance.widgetMediaFiles.all { it.status == FormMediaFileStatus.SUBMITTED }) {
             handleAutoDeleteAndFinalStatus(instance)
+        } else {
+            handleInstanceStatus(instance, EntityStatus.SUBMISSION_PENDING)
         }
     }
 
@@ -203,7 +232,10 @@ class ReportsRepositoryImp @Inject internal constructor(
                                 .subscribeOn(Schedulers.io())
                                 .ignoreElement()
                         }
-                        .andThen(dataSource.deleteReportInstance(instance.id).subscribeOn(Schedulers.io()))
+                        .andThen(
+                            dataSource.deleteReportInstance(instance.id)
+                                .subscribeOn(Schedulers.io())
+                        )
                 }
                 .subscribe({
                     handleInstanceStatus(instance, EntityStatus.DELETED)
@@ -251,23 +283,28 @@ class ReportsRepositoryImp @Inject internal constructor(
 
     override fun upload(
         vaultFile: VaultFile,
-        urlServer: String,
-        reportId: String,
-        accessToken: String
+        uploadServerConfig: UploadServerConfig,
+        reportId: String
     ): Flowable<UploadProgressInfo> {
         val url = StringUtils.append(
             '/',
-            urlServer,
+            uploadServerConfig.url,
             "file/$reportId/${getFileName(vaultFile)}"
         )
-        return getStatus(url, accessToken)
+        return getStatus(url, uploadServerConfig.accessToken)
             .flatMapPublisher { skipBytes: Long ->
-                appendFile(
-                    vaultFile,
-                    skipBytes,
-                    url,
-                    accessToken
-                )
+                if (skipBytes >= vaultFile.size) {
+                    // File is already fully on server, just signal completion
+                    Flowable.just(
+                        UploadProgressInfo(
+                            vaultFile,
+                            vaultFile.size,
+                            UploadProgressInfo.Status.FINISHED
+                        )
+                    )
+                } else {
+                    appendFile(vaultFile, skipBytes, uploadServerConfig, reportId)
+                }
             }.onErrorReturn {
                 mapThrowable(
                     it, vaultFile
@@ -325,26 +362,125 @@ class ReportsRepositoryImp @Inject internal constructor(
      *
      * @param vaultFile The file to be uploaded.
      * @param skipBytes The number of bytes to skip when reading the file.
-     * @param baseUrl The base URL for the API endpoint.
-     * @param accessToken The access token for authentication.
+     * @param uploadServerConfig The config info of the server the files should be uploaded to.
+     * @param reportId The ID of the report to which the file belongs.
      * @return a Flowable that emits UploadProgressInfo as the file upload progresses.
      */
     @VisibleForTesting
     private fun appendFile(
         vaultFile: VaultFile,
         skipBytes: Long,
-        baseUrl: String,
-        accessToken: String
+        uploadServerConfig: UploadServerConfig,
+        reportId: String
     ): Flowable<UploadProgressInfo> {
-        return Flowable.create({ emitter: FlowableEmitter<UploadProgressInfo> ->
-            val size = vaultFile.size
-            val uploadEmitter = UploadEmitter()
-            val fileToUpload =
-                prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
+        if (!shouldUsePutFileV2(uploadServerConfig)) {
+            // V1 (Original logic) for servers with older versions
+            return Flowable.create({ emitter ->
+                val size = vaultFile.size
+                val uploadEmitter = UploadEmitter()
+                val fileToUpload =
+                    prepareFileToUpload(vaultFile, skipBytes, emitter, uploadEmitter, size)
+                uploadFileV1(
+                    fileToUpload,
+                    uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file"),
+                    uploadServerConfig.accessToken,
+                    emitter,
+                    vaultFile,
+                    size
+                )
+            }, BackpressureStrategy.LATEST)
+        }
 
-            uploadFile(fileToUpload, baseUrl, accessToken, emitter, vaultFile, size)
+        // V2 Logic: Chunked Upload via Flowable.generate
+        return Flowable.generate(
+            {
+                // We use a Pair to track if we've sent the initial "STARTED" status
+                // and where to pick up the file transfer
+                Pair(skipBytes, false)
+            }, // Initial state: where we start
+            BiFunction { state: Pair<Long, Boolean>, emitter: Emitter<UploadProgressInfo> ->
+                val (currentOffset, startedEmitted) = state
+                // Emit the initial "STARTED" status only if it hasn't been emitted before
+                if (!startedEmitted) {
+                    emitter.onNext(
+                        UploadProgressInfo(
+                            vaultFile,
+                            currentOffset,
+                            UploadProgressInfo.Status.STARTED
+                        )
+                    )
+                    return@BiFunction Pair(currentOffset, true)
+                }
 
-        }, BackpressureStrategy.LATEST)
+                val totalSize = vaultFile.size
+                if (currentOffset >= totalSize) {
+                    emitter.onComplete()
+                    state
+                } else {
+                    val chunkBody = prepareChunkToUpload(
+                        totalSize,
+                        currentOffset,
+                        vaultFile
+                    )
+                    val baseUrl = uploadFileUrl(uploadServerConfig.url, reportId, vaultFile, "file/v2")
+
+                    val nextOffset = uploadFileV2(
+                        chunkBody,
+                        baseUrl,
+                        uploadServerConfig.accessToken,
+                        emitter,
+                        vaultFile,
+                        totalSize
+                    )
+                    // Next iteration starting point, considering the latest uploaded chunk
+                    Pair(nextOffset, true)
+                }
+            }
+        )
+    }
+
+    private fun prepareChunkToUpload(
+        totalSize: Long,
+        currentOffset: Long,
+        vaultFile: VaultFile
+    ): ChunkableMediaFileRequestBody {
+        val CHUNK_SIZE = chunkSize()
+
+        val remaining = totalSize - currentOffset
+        val currentChunkSize = minOf(CHUNK_SIZE, remaining)
+
+        return ChunkableMediaFileRequestBody(vaultFile, currentOffset, currentChunkSize)
+    }
+
+    private fun chunkSize(): Long {
+        val upstreamBandWidthKbps = statusProvider.upstreamBandwidthKbps()
+        if (upstreamBandWidthKbps != null) {
+            var minChunkSize = MIN_CHUNK_SIZE
+            var maxChunkSize = MAX_CHUNK_SIZE
+            if (statusProvider.isConnectedToWifi()) {
+                minChunkSize = MIN_CHUNK_SIZE_WIFI
+                maxChunkSize = MAX_CHUNK_SIZE_WIFI
+            }
+            val bytesPerSecond = (upstreamBandWidthKbps * 1000) / 8
+            val chunk = (bytesPerSecond * TARGET_UPLOAD_TIME * SAFETY_FACTOR).toLong()
+            Timber.d("*** Chunk size file upload *** Using chunk size: ${chunk.coerceIn(minChunkSize, maxChunkSize)} ")
+
+            return chunk.coerceIn(minChunkSize, maxChunkSize)
+        }
+        Timber.d("*** Chunk size file upload *** Using default: ${DEFAULT_CHUNK_SIZE} ")
+
+        return DEFAULT_CHUNK_SIZE
+    }
+
+    private fun shouldUsePutFileV2(uploadServerConfig: UploadServerConfig): Boolean {
+        val current = Version.parse(uploadServerConfig.version)
+        val target = Version.parse(FILE_API_V2_MINIMUM_VERSION)
+
+        return current != null && target != null && current >= target
+    }
+
+    private fun uploadFileUrl(baseUrl: String, reportId: String, vaultFile: VaultFile, path: String): String {
+        return "${baseUrl}$path/$reportId/${getFileName(vaultFile)}"
     }
 
     /**
@@ -396,7 +532,7 @@ class ReportsRepositoryImp @Inject internal constructor(
      * @param size The size of the file.
      */
     @VisibleForTesting
-    private fun uploadFile(
+    private fun uploadFileV1(
         fileToUpload: SkippableMediaFileRequestBody,
         baseUrl: String,
         accessToken: String,
@@ -404,6 +540,7 @@ class ReportsRepositoryImp @Inject internal constructor(
         vaultFile: VaultFile,
         size: Long
     ) {
+        Timber.d("*** Report file upload *** %s - Starting upload", vaultFile.name)
         val disposable = apiService.putFile(fileToUpload, baseUrl, accessToken)
             .flatMap { response ->
                 if (!response.isSuccessful) {
@@ -413,7 +550,15 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
             }
             .subscribe({ response ->
-                handleUploadResponse(response, emitter, vaultFile, size)
+                handleUploadResponse(response, emitter, vaultFile, size, {response ->
+                    Timber.w(
+                        "Unexpected %d response from server using V1 API: %s",
+                        HttpStatus.PARTIAL_CONTENT_206,
+                        response.headers()["range"]
+                    )
+                    // It will be treated as a successful upload, even if 206 was received
+                    handleUploadCompletion(emitter, vaultFile, size)
+                })
             }, { error ->
                 emitter.onError(UploadError(error))
             })
@@ -422,32 +567,117 @@ class ReportsRepositoryImp @Inject internal constructor(
     }
 
     /**
+     * Uploads the file to the server using the V2 endpoint (single-step upload).
+     *
+     * @param fileToUpload The file to be uploaded.
+     * @param baseUrl The base URL for the API endpoint.
+     * @param accessToken The access token for authentication.
+     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param vaultFile The file to be uploaded.
+     * @param size The size of the file.
+     * @return the number of bytes already present on the server.
+     */
+    @VisibleForTesting
+    private fun uploadFileV2(
+        fileToUpload: ChunkableMediaFileRequestBody,
+        baseUrl: String,
+        accessToken: String,
+        emitter: Emitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long
+    ) : Long {
+        val chunkableFileConfig = fileToUpload.config
+
+        try {
+            Timber.d("*** Chunk upload *** %s - Starting chunk upload", vaultFile.name)
+            // Synchronously execute this chunk's PUT
+            val response = apiService.putFileV2(
+                url = baseUrl,
+                accessToken = accessToken,
+                contentRange = chunkableFileConfig.contentRange(),
+                contentLength = chunkableFileConfig.chunkSize,
+                contentType = vaultFile.mimeType,
+                fileInfo = null,
+                body = fileToUpload
+            ).blockingGet()
+
+            handleUploadResponse(response, emitter, vaultFile, chunkableFileConfig.totalBytes,
+                { response ->
+                    val receivedRange = response.headers()["range"]
+                    // Log the received range for debugging purposes
+                    Timber.d(
+                        "*** Chunk upload *** %s - Received range: %s",
+                        vaultFile.name,
+                        receivedRange
+                    )
+
+                    // Emit progress considering the latest uploaded chunk
+                    emitter.onNext(
+                        UploadProgressInfo(
+                            vaultFile,
+                            chunkableFileConfig.endByte + 1,
+                            UploadProgressInfo.Status.STARTED
+                        )
+                    )
+                })
+
+            return if (response.isSuccessful && response.code() == HttpStatus.PARTIAL_CONTENT_206) {
+                chunkableFileConfig.endByte // This becomes 'currentOffset' in the next iteration
+            } else {
+                chunkableFileConfig.skipBytes
+            }
+        } catch (e: Exception) {
+            emitter.onError(e)
+            return chunkableFileConfig.skipBytes
+        }
+    }
+
+    /**
      * Handles the response from the server after file upload.
      *
      * @param response The response from the server.
-     * @param emitter The FlowableEmitter to emit progress updates.
+     * @param emitter The Emitter to emit progress updates.
      * @param vaultFile The file that was uploaded.
      * @param size The size of the file.
+     * @param onPartialSuccess A callback to handle partial success.
      */
     @VisibleForTesting
     private fun handleUploadResponse(
         response: Response<Void>,
-        emitter: FlowableEmitter<UploadProgressInfo>,
+        emitter: Emitter<UploadProgressInfo>,
+        vaultFile: VaultFile,
+        size: Long,
+        onPartialSuccess: (Response<Void>) -> Unit
+    ) {
+        if (!response.isSuccessful) {
+            Timber.d(
+                "*** Report file upload *** %s - Error: ${response.code()}",
+                vaultFile.name
+            )
+            emitter.onError(UploadError(response.code()))
+        } else {
+            if(response.code() == HttpStatus.PARTIAL_CONTENT_206){
+                onPartialSuccess(response)
+            } else {
+                handleUploadCompletion(emitter, vaultFile, size)
+            }
+        }
+    }
+
+    private fun handleUploadCompletion(
+        emitter: Emitter<UploadProgressInfo>,
         vaultFile: VaultFile,
         size: Long
     ) {
-        if (!response.isSuccessful) {
-            emitter.onError(UploadError(response.code()))
-        } else {
-            emitter.onNext(
-                UploadProgressInfo(
-                    vaultFile,
-                    size,
-                    UploadProgressInfo.Status.FINISHED
-                )
+        Timber.d("*** Report file upload *** - Success: %s", vaultFile.name)
+        emitter.onNext(
+            UploadProgressInfo(
+                vaultFile,
+                size,
+                UploadProgressInfo.Status.FINISHED
             )
-            emitter.onComplete()
-        }
+        )
+        emitter.onComplete()
     }
 
     override fun cleanup() {

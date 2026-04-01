@@ -28,7 +28,7 @@ import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.exifinterface.media.ExifInterface;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 import com.hzontal.tella_vault.VaultException;
 import com.hzontal.tella_vault.VaultFile;
 import com.hzontal.tella_vault.filter.FilterType;
@@ -98,7 +98,7 @@ public class MediaFileHandler {
             return FileUtil.mkdirs(tmpPath) && ret;
         } catch (Exception e) {
             Timber.e(e);
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             return false;
         }
     }
@@ -253,6 +253,10 @@ public class MediaFileHandler {
         } else {
             // NOTE: requires WRITE_EXTERNAL_STORAGE on <29 if you used public dirs.
             basePath = Environment.getExternalStoragePublicDirectory(envDirType);
+        }
+        if (basePath == null) throw new IOException("External files dir unavailable for: " + envDirType);
+        if (!basePath.exists() && !basePath.mkdirs()) {
+            throw new IOException("Failed to create directory: " + basePath);
         }
 
         if (basePath == null) {
@@ -531,7 +535,7 @@ public class MediaFileHandler {
                     .build(parentID)
                     .subscribeOn(Schedulers.io());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
             throw e;
         } finally {
@@ -564,7 +568,7 @@ public class MediaFileHandler {
                     .build(parentId)
                     .subscribeOn(Schedulers.io());
         } catch (Exception e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
             throw e;
         }
@@ -608,7 +612,7 @@ public class MediaFileHandler {
                         .blockingGet();
             }
         } catch (IOException e) {
-            FirebaseCrashlytics.getInstance().recordException(e);
+            CrashReporterProvider.INSTANCE.get().recordException(e);
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;

@@ -1,31 +1,34 @@
 package org.horizontal.tella.mobile.util.jobs
 
 import android.content.Context
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.data.database.DataSource
-import org.horizontal.tella.mobile.domain.repository.feedback.FeedBackRepository
+import org.horizontal.tella.mobile.di.WorkerDependenciesEntryPoint
+import org.horizontal.tella.mobile.domain.exception.NoConnectivityException
 import org.horizontal.tella.mobile.util.LockTimeoutManager
-import org.horizontal.tella.mobile.util.StatusProvider
-import timber.log.Timber
 
-@HiltWorker
-class WorkerSendFeedBack @AssistedInject constructor(
-    @Assisted val context: Context,
-    @Assisted workerParams: WorkerParameters,
-    private val feedbackRepository: FeedBackRepository,
-    private val statusProvider: StatusProvider
-) : CoroutineWorker(context, workerParams) {
+class WorkerSendFeedBack(
+    appContext: Context,
+    workerParams: WorkerParameters
+) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
+            // Obtain dependencies from the Hilt application graph via entry point.
+            val appContext = applicationContext
+            val entryPoint = EntryPointAccessors.fromApplication(
+                appContext,
+                WorkerDependenciesEntryPoint::class.java
+            )
+            val feedbackRepository = entryPoint.feedbackRepository()
+            val statusProvider = entryPoint.statusProvider()
+
             if (!statusProvider.isOnline()) {
                 return@withContext Result.retry()
             }
@@ -33,11 +36,10 @@ class WorkerSendFeedBack @AssistedInject constructor(
             val mainKey = try {
                 MyApplication.getMainKeyHolder().get().key.encoded
             } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
-                Timber.e(e, "Failed to retrieve main key")
                 return@withContext Result.retry()
             }
 
-            val dataSource = DataSource.getInstance(context, mainKey)
+            val dataSource = DataSource.getInstance(appContext, mainKey)
 
             // If listFeedBackInstances() returns an Rx Single, we safely call blockingGet() on IO.
             // If you later expose a suspend version, just replace this line.
@@ -55,16 +57,20 @@ class WorkerSendFeedBack @AssistedInject constructor(
                 try {
                     feedbackRepository.submitFeedbackInstance(instance).blockingGet()
                 } catch (e: Exception) {
-                    Timber.e(e, "Submitting feedback instance failed; will retry")
-                    setNoTimeOut(false)
-                    return@withContext Result.retry()
+                    // If this is a connectivity issue, ask WorkManager to retry later.
+                    if (e is NoConnectivityException) {
+                        setNoTimeOut(false)
+                        return@withContext Result.retry()
+                    }
+                    // For non-connectivity errors, do not put the whole worker into an infinite
+                    // retry loop. The repository already marks the instance as SUBMISSION_ERROR
+                    // so we can simply continue with the next one.
                 }
             }
 
             setNoTimeOut(false)
             Result.success()
         } catch (t: Throwable) {
-            Timber.e(t, "WorkerSendFeedBack failed unexpectedly")
             setNoTimeOut(false)
             Result.retry()
         }

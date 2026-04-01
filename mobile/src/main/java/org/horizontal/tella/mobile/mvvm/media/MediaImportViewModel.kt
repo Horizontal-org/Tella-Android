@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.exceptions.DuplicateVaultFileException
 import com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException
@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.media.MediaFileHandler
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,8 +33,8 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
     private val _importError = SingleLiveEvent<Throwable>()
     val importError: LiveData<Throwable> get() = _importError
 
-    private val _duplicateNameError = MutableLiveData<Boolean>()
-    val duplicateNameError: LiveData<Boolean> = _duplicateNameError
+    private val _duplicateErrorResId = MutableLiveData<Int?>()
+    val duplicateErrorResId: LiveData<Int?> = _duplicateErrorResId
 
     var attachment: VaultFile? = null
 
@@ -66,11 +67,11 @@ class MediaImportViewModel @Inject constructor(@ApplicationContext private val c
                     _mediaFileLiveData.postValue(vaultFile)
                 }, { throwable ->
                     if (throwable is DuplicateVaultFileException || throwable is FileNameAlreadyExistsException) {
-                        _duplicateNameError.postValue(true)
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        _duplicateErrorResId.postValue(throwable.getDuplicateErrorMessageResId())
+                        CrashReporterProvider.get().recordException(throwable)
                         return@subscribe
                     }
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    CrashReporterProvider.get().recordException(throwable)
                     _importError.postValue(throwable)
                 })
         )

@@ -1,0 +1,1186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="app_name">Tella</string>
+  <string name="collect.blank_action_update.form">Update</string>
+  <string name="settings.about_app.bar">Chanchin &amp; Puihna</string>
+  <string name="collect.form_exit.unsaved_dialog.title">Form aṭangin chhuak dawn em?</string>
+  <string name="verification_prompt_dialog_title">GPS on tur em?</string>
+  <string name="collect_tab.title_blank">Ruak</string>
+  <string name="action_cancel">Sut</string>
+  <string name="settings_menu.item_contact">Min be rawh</string>
+  <string name="collect_dialog.text_download.progress">Form download mek a ni</string>
+  <string name="collect_toast_download.completed">Download zawh a ni</string>
+  <string name="action_delete">Paih</string>
+  <string name="collect.draft_tab.title">Draft</string>
+  <string name="collect.blank_action_download.form">Download</string>
+  <string name="settings_text_empty.field">He hmun hi a ruak tur a ni lo.</string>
+  <string name="home_toast_back.exit">App aṭanga chhuak turin \"Back\" button hmet nawn rawh</string>
+  <string name="settings.docu_toast_fail.load.list.connected.servers">Server list tarlan theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="settings.docu_toast_fail.create.server">Server settings siam theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="settings.docu_toast_fail.update.server">Server settings update theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="settings.docu_toast_fail.delete.server">Server settings paih theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="settings.about_list.item_faq">FAQ</string>
+  <string name="action_ok">Aw le</string>
+  <string name="collect.form_toast_validation.error">I chhanna a dik lo</string>
+  <string name="collect.form_error_response.mandatory">He chhanna hi pek ngei ngei tur.</string>
+  <string name="homescreen_heading_quick.delete">Quick Delete
+mode hman theihna</string>
+  <string name="settings.about_list.item_privacy.policy">Privacy policy</string>
+  <string name="recorder_toast_fail.recording">Audio record theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="recorder_content.desc_blinking.red.dot">Audio record mek a ni</string>
+  <string name="action_remove">Paih</string>
+  <string name="settings_app.bar">Settings</string>
+  <string name="action_save">Save</string>
+  <string name="lock_dialog.expl_save.pattern">I lock pattern save mek a ni</string>
+  <string name="lock_dialog.expl_unlock.app">Tella hawn mek a ni</string>
+  <string name="action_skip">Pelh</string>
+  <string name="settings.docu_delete.server_dialog.expl">He server hi i paih chuan, draft leh form thehluh tawh zawng zawng i device aṭangin paih a ni ang. Paih tho dawn em?</string>
+  <string name="settings.docu_toast_server.deleted">Server paih a ni</string>
+  <string name="settings.docu_toast_server.created">Server siam a ni</string>
+  <string name="settings.docu_toast_server.updated">Server update a ni</string>
+  <string name="settings.docu_dialog.title_server.settings">Server settings</string>
+  <string name="settings.docu_field_server.name">Server hming</string>
+  <string name="settings.docu_field_server.url">Server URL</string>
+  <string name="collect.sent_tab.title">Thehluh tawh</string>
+  <string name="home_expl_cancel.quick.delete">Sut turin khawilai pawh hmet rawh</string>
+  <string name="recorder_app.bar">Recorder</string>
+  <string name="settings.docu_field_username">Username</string>
+  <string name="collect.draft_meta_date.updated">Update hun: %1$s</string>
+  <string name="settings.about_app.version">Version</string>
+  <string name="collect_toast_draft.saved">Draft save a ni</string>
+  <string name="collect_toast_fail.sending.form">Form thehluh theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.form.submission.generic">Form thehluh theih a ni lo: %s</string>
+  <string name="collect.form_toast_validation.generic.error">Chhanna ṭhenkhat dik lo a awm</string>
+  <string name="permission_dialog.expl_GPS">I file te finfiah theih a nih nan, Tella in i awmna a chhinchhiah a ngai a, i GPS hman theihna a mamawh.</string>
+  <string name="collect.form_action_select.time">Hun thlang rawh</string>
+  <string name="collect.form_action_select.date">Ni thlang rawh</string>
+  <string name="collect_dialog.expl_downloading.blank.forms">Form-te download mek a ni</string>
+  <string name="collect.blank_toast_fail.updating.form.list">Form list update theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.parsing.form">He form tarlan kawngah hian dik lo a awm. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect.end_action_save.send.later">Form save rawh</string>
+  <string name="collect_action.desc_save.form">Form save rawh</string>
+  <string name="collect.end_action.desc_save.send.later">Form save rawh</string>
+  <string name="action.desc_confirm">Tichiang rawh</string>
+  <string name="collect.form_action_previous.section">A hmasa</string>
+  <string name="collect.form_action_next.section">Lehpek</string>
+  <string name="action_stop">Titawp</string>
+  <string name="action_play">Play</string>
+  <string name="action_record">Record</string>
+  <string name="play.audio_app.bar">Audio play rawh</string>
+  <string name="collect_dialog.text_delete.sent.form">He form hi i device aṭangin i paih duh takzet em? Thehluh tawh a nih avangin, a data erawh in organization server-ah a la awm ang.</string>
+  <string name="collect_dialog.text_delete.draft.form">He draft form hi i paih duh takzet em?</string>
+  <string name="collect_toast_form.deleted">Form paih a ni</string>
+  <string name="settings.lang_select.expl_default">Ka device ṭawng hman ang hi Tella-ah hman tur</string>
+  <string name="settings.lang_select_default">Default</string>
+  <string name="settings.lang_app.bar">Ṭawng</string>
+  <string name="action_share">Share</string>
+  <string name="collect_toast_fail.submission.unauthorized">He form thehlut tur hian phalna i nei lo. Tihpalh a ni in i hria a nih chuan, i organization be rawh</string>
+  <string name="gallery_toast_fail.importing.file">File lakluh (import) theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect.end_heading">Form tawpna</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">Internet i connect lo. I connect hunah i ti nawn leh dawn nia</string>
+  <string name="collect.sent_dialog.expl_discard.unsent.form">Form pumin emaw a ṭhen thehluh a ni lo. I paih duh takzet em?</string>
+  <string name="action_discard">Paih</string>
+  <string name="collect.end_action_submit">Thehlut</string>
+  <string name="gallery_toast_fail.exporting.to.device">File dahchhuah (export) theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="permission_dialog.expl_device.storage">File dahchhuak turin, Tella in i device storage hman phalna a mamawh.</string>
+  <string name="gallery_toast_fail.deleting.files">File paih theih a ni lo. Khawngaihin ti nawn leh rawh.</string>
+  <plurals name="gallery_toast_files.exported">
+    <item quantity="zero"></item>
+    <item quantity="one">File %1$d device-ah save a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %1$d device-ah save a ni</item>
+  </plurals>
+  <string name="gallery_delete.files_dialog.title">File paih dawn em?</string>
+  <string name="gallery_delete.files_dialog.expl">File i thlan hi i gallery aṭangin hlen hlenin paih a ni ang.</string>
+  <string name="gallery_save.to.device_dialog.title">Device gallery-ah save dawn em?</string>
+  <string name="gallery_save.to.device_dialog.expl">Hei hian i file chu Tella pawn aṭangin, i device gallery-ah leh app dangte hman theihin a siam ang.</string>
+  <string name="gallery_dialog.expl_encrypting">Encrypt mek a ni</string>
+  <string name="gallery_save.to.device_dialog.progress.expl">Decrypt mek a ni</string>
+  <string name="gallery_toast_fail.import">File-te lak luh (import) tura gallery hawn kawngah hian dik lo a awm. Khawngaihin ti nawn leh rawh</string>
+  <string name="gallery_toast_fail.saving.file">File save theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.attaching.file.to.form">File thun tel (attach) kawngah hian dik lo a awm. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.fetch.form.from.server.unknown.error">Form download theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.fetch.form.from.server.display.error">Form download theih a ni lo: %s</string>
+  <string name="collect_toast_reason.fail.fetch.form.from.server">Form zawn hmuh a ni lo. I organization server aṭangin paih a ni tawh thei</string>
+  <string name="gallery_heading_files.from.Tella.gallery">Tella Gallery</string>
+  <string name="settings_select_general">Tlangpui</string>
+  <string name="collect.form_exit_dialog.expl">I draft a bo ang.</string>
+  <string name="collect.form_exit_dialog.action_save.exit">SAVE LEH CHHUAK RAWH</string>
+  <string name="collect.form_exit_dialog.action_exit.anyway">CHHUAK THO RAWH</string>
+  <string name="settings.docu_error_not.valid.URL">He URL hi a dik lo.</string>
+  <string name="home_action.label_quick.delete">Paih</string>
+  <string name="gallery_subheading_sort.by">Remdan</string>
+  <string name="gallery_list.item_newest.to.oldest">A thar ber aṭanga a hlui ber</string>
+  <string name="gallery_list.item_oldest.to.newest">A hlui ber aṭanga a thar ber</string>
+  <string name="action_exit">Chhuak</string>
+  <string name="settings.prot_select_camouflage">Inthupna</string>
+  <string name="settings.docu_error_wrong.credentials">Username emaw password a dik lo.</string>
+  <string name="settings.docu_error_domain.doesnt.exit">Server URL a dik lo.</string>
+  <string name="settings.docu_error_unknown.connection.error">Server connect theih a ni lo.</string>
+  <string name="settings.docu_error_no.internet">Internet i connect lo. I connect hunah ti nawn leh rawh.</string>
+  <string name="settings.docu_dialog.action_try.again.connecting">Ti nawn leh rawh</string>
+  <string name="settings.about_select_tutorial">Zirtirna</string>
+  <string name="settings.camo_expl">Tella a inthup ṭhat lehzual theih nan icon leh hming thlang rawh. Hriat tur: Android settings-ah chuan Tella icon hi a la lang thei ang.</string>
+  <string name="gallery_action.desc_save.to.device">Device-ah save rawh</string>
+  <string name="settings.docu_verification_action">Verification mode</string>
+  <string name="settings.docu_verification_action.expl">I device leh awmna te chhinchhiaha i file te finfiah theih a nih nan.</string>
+  <string name="collect_no.form_heading">Data khawnkhawm awlsam</string>
+  <string name="collect_expl_not.connected.to.server">To receive forms and submit data, you must first connect to a compatible server. Ask your organization for the server information and <a href="tella_scheme://open.collect.manage.servers.activity">set up the server here</a>.</string>
+  <string name="collect.sent_expl_no.forms">Form thehluh tarlan tur a awm lo.</string>
+  <string name="collect.blank_expl_no.forms">Form tarlan tur a awm lo. I server connect-ah form thar a awm leh awm loh en turin refresh hmet rawh.</string>
+  <string name="settings.camo_heading">Hming leh logo dang thlang rawh</string>
+  <string name="gallery_expl_empty">File tarlan tur a awm lo. File la lut turin + button hmet rawh.</string>
+  <string name="collect.blank_toast_not.connected">Internet i connect lo. I connect hunah ti nawn leh rawh</string>
+  <string name="settings.gen_crash.reports_action">Crash report share rawh</string>
+  <string name="settings.gen_crash.reports_action.expl">Crash report hian Tella siamṭhat kawngah min pui a ni. Mahni in a in-send anga, i device leh Android version a tel ang.</string>
+  <string name="collect.form_dialog.action_add.group">Belh</string>
+  <string name="collect.form_dialog.title_add.additional.group">\"%s\" dang belh leh dawn em?</string>
+  <string name="collect.form_dialog.action_add.first.group">\"%s\" belh dawn em?</string>
+  <string name="collect.form_dialog.expl_add.additional.group">\"%s\" ami zawhna zawng zawngte hi i chhang nawn leh thei ang.</string>
+  <string name="collect.form_dialog.expl_add.first.group">\"%s\" ami zawhna zawng zawngte hi i chhang thei ang.</string>
+  <string name="collect.form_dialog.action_dont.add.group">Belh suh</string>
+  <string name="collect.form_select.attachment_app.bar">File thlang rawh</string>
+  <string name="collect.form_geopoint_app.bar">Awmna chhinchhiah rawh</string>
+  <string name="collect.form_geopoint_marker_content.desc">Awmna chhinchhiah a ni</string>
+  <string name="collect.form_geopoint_meta_latitude">Latitude: %1$s</string>
+  <string name="collect.form_geopoint_meta_longitude">Longitude: %1$s</string>
+  <string name="collect.form_geopoint_meta_altitude">Altitude: %1$s m</string>
+  <string name="collect.form_geopoint_meta_accuracy">Accuracy: %1$s m</string>
+  <string name="collect.form_attachment_meta_file.name">File hming: %s</string>
+  <string name="collect.form_meta_file.size">File size: %s</string>
+  <string name="collect.form_toast_fail.load.attachment">Attachment thun theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect.form_geopoint_banner_touch.map.select.location">Awmna chhinchhiah turin khawilai pawh second 3 chhung hmet rawh.</string>
+  <string name="gallery_action.desc_file.metadata">Verification thuchian</string>
+  <string name="verification.info_app.bar">Verification thuchian</string>
+  <string name="verification.info_field_filename">File hming</string>
+  <string name="verification.info_field_file.path">File awmna (path)</string>
+  <string name="verification.info_field_file.modified">File siamṭhat hun</string>
+  <string name="verification.info_field_hash">File hash</string>
+  <string name="verification.info_field_manufacturer">Siamtu</string>
+  <string name="verification.info_field_hardware">Hardware</string>
+  <string name="verification.info_field_device.id">Device ID</string>
+  <string name="verification.info_field_screen.size">Screen lenzawng</string>
+  <string name="verification.info_field_language">Ṭawng</string>
+  <string name="verification.info_field_locale">Awmna ram</string>
+  <string name="verification.info_field_connection.status">Connection dinhmun</string>
+  <string name="verification.info_field_network.type">Network hman chi</string>
+  <string name="verification.info_field_wifi.mac">Wi-Fi MAC</string>
+  <string name="verification.info_field_ipv4">IPv4</string>
+  <string name="verification.info_field_ipv6">IPv6</string>
+  <string name="verification.collecting_list.item_location">Awmna (Location)</string>
+  <string name="verification.info_field_location">Awmna (Location)</string>
+  <string name="verification.info_field_location.provider">Awmna chhuina</string>
+  <string name="verification.info_field_location.speed">Location speed</string>
+  <string name="verification.info_field_cell.towers">Cell info</string>
+  <string name="settings.camo_calculator2">Calculator</string>
+  <string name="verification.info_subheading_file.metadata">File</string>
+  <string name="verification.info_subheading_device.metadata">Device</string>
+  <string name="verification.info_subheading_context.metadata">Context</string>
+  <string name="verification.info_field_metadata.not.available">Tarlan theih a ni lo</string>
+  <string name="verification.info_field_latitude">Latitude:</string>
+  <string name="verification.info_field_longitude">Longitude:</string>
+  <string name="verification.info_field_altitude">Altitude:</string>
+  <string name="verification.info_field_accuracy">Dikzawng (Accuracy):</string>
+  <string name="verification.info_field_location.time">Hun:</string>
+  <string name="collect.form_ranking_action_select.answer">Chhanna thlang rawh</string>
+  <string name="collect.form_ranking_action_clear.selection">Thlan tawh paih rawh</string>
+  <string name="collect.form_signature_app.bar">I hming sign rawh</string>
+  <string name="collect.form_signature_action">Hetah hian sign rawh</string>
+  <string name="collect.form_signature_action_clear.signature">Signature paih rawh</string>
+  <string name="collect.form_signature_toast_fail.saving">Signature save theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect.form_acknowledge_select.expl">Aw le. Khawngaihin chhunzawm rawh.</string>
+  <plurals name="collect.end_meta_number.of.elements">
+    <item quantity="zero"></item>
+    <item quantity="one">File %d</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %d</item>
+  </plurals>
+  <string name="action_learn.more">Hriatchian lehzual nan</string>
+  <string name="settings.servers_add.server_dialog.title">Server belh rawh</string>
+  <string name="settings.prot_select_delete.forms">Draft leh form thehluh tawh paihna</string>
+  <string name="settings.prot_select_delete.servers">Connection paihna</string>
+  <string name="settings.prot_select_delete.app">Tella paihna</string>
+  <string name="collect.sent_action_edit.to.resend">Thehlut ṭha turin edit rawh</string>
+  <string name="collect_toast_form.submitted">Form thehluh a ni</string>
+  <string name="collect.end_heading_confirmation.form.submitted">Form thehluh a ni</string>
+  <string name="settings.docu_add.server_field_password">Password</string>
+  <string name="settings.camo_error_fail.retrieve.app.name">App</string>
+  <string name="collect.end_item_form.data">Form chhannate</string>
+  <string name="collect_toast_fail.loading.form.instance">Form tarlan theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="collect_toast_fail.connection.too.weak">I internet connection in form a thehlut zo lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="gallery_toast_file.encrypted">File encrypt a ni</string>
+  <string name="settings.docu_toast_disconnect.servers.delete">Form leh server zawng zawng paih a ni</string>
+  <string name="collect.help_expl_not.connected.to.server">Form la tur leh data thehlut turin, server i connect hmasak a ngai. Server chungchang i organization zawt la, server set up rawh.</string>
+  <string name="collect.help_expl_odk">If you would like to create your own forms, <a href="https://hzontal.org/contact/">contact us</a> or use <a href="https://opendatakit.org/help/help-for-hire/">any service based on the Open Data Kit (ODK)</a></string>
+  <string name="collect.help_expl_no.internet">Internet i connect loh pawhin form i chhang thei ang. I connect veleh thehluh a ni mai ang.</string>
+  <string name="collect_toast_fail.data.too.large">File i thun tel a len lutuk avangin he form hi thehluh theih a ni lo. File te zawk thun tel rawh</string>
+  <string name="collect.end_heading_submitting">Thehluh mek a ni</string>
+  <string name="collect.end_exit_dialog.expl">Tunah i chhuah chuan thehluh a tawp ang a, file thehluh la bangte chu nakinah i thehlut thei tho ang.</string>
+  <string name="collect.end_subheading.expl_unchecked.items">Item tick loh te chu nakina thehluh turin save a ni ang.</string>
+  <string name="collect_toast_form.saved.for.later.submission">Nakina thehluh turin form save a ni</string>
+  <string name="collect.blank_action_unpin">Unpin rawh</string>
+  <string name="collect.blank_action_pin">Pin rawh</string>
+  <string name="verification.prompt_dialog.expl">Verification mode chu ON a ni a, mahse GPS a OFF. I thil finfiahnate i awmna nen a inmil theih nan GPS ON rawh.</string>
+  <string name="verification.prompt_action_ignore">Hlamchhiah</string>
+  <string name="verification.prompt_action_enable.GPS">GPS ON rawh</string>
+  <string name="collect.blank_dialog.expl_updating.form.definitions">Form list update mek a ni…</string>
+  <string name="collect.blank_toast_refresh.canceled">Update sut a ni</string>
+  <string name="collect.blank_toast_form.definition.updated">Update zawh a ni</string>
+  <string name="verification.share_dialog.title">Verification thuchian thun tel dawn em?</string>
+  <string name="verification.share_dialog.expl">File i thlan ṭhenkhatah hian verification data (device, network leh awmna) a tel a. Him tawk a i hriat chinah chauh share ang che.</string>
+  <string name="verification.share_select_media.and.verification">File + verification thuchian share rawh</string>
+  <string name="verification.share_select_only.media">File chauh share rawh</string>
+  <string name="verification.info_wifi">Wi-Fi thuchian</string>
+  <string name="verification.collecting_list.item_device">Device hriat chianna</string>
+  <string name="verification.collecting_list.item_network">Network thuchian</string>
+  <string name="verification.collecting_dialog.expl">I file finfiah theih a nih nan Tella in thuchian a chhinchhiah mek. Minute engemaw zat a ngai thei. Fiah ṭha zawk i duh chuan van thengreng hmuh theihnaah awm ang che.</string>
+  <string name="verification.help.info_app.bar">Verification puihna</string>
+  <string name="gallery_action.desc_metadata.help">Verification puihna</string>
+  <string name="verification.info_file.path.expl">Tella folder chhunga file awmna chin.</string>
+  <string name="verification.info_hash.expl">File hriat hran theihna number bik.</string>
+  <string name="verification.info_date.time.modified.expl">Device-a he file siamṭhat leh hun.</string>
+  <string name="verification.info_manufacturer.expl">Device siamtu hming.</string>
+  <string name="verification.info_device.model.expl">Device model diktak.</string>
+  <string name="verification.info_device.id.expl">Android device hriat hran theihna number bik.</string>
+  <string name="verification.info_screen.size.expl">Device screen lenzawng diktak.</string>
+  <string name="verification.info_language.expl">Device-a ṭawng i hman.</string>
+  <string name="verification.info_locale.expl">Device in awmna tlangpui a hriat.</string>
+  <string name="verification.info_connection.status.expl">Device chu internet nen a in-connect em tih.</string>
+  <string name="verification.info_network.type.expl">Internet a connect a nih chuan, Wi-Fi emaw mobile data nge a hman tih.</string>
+  <string name="verification.info_wifi.mac.expl">Device Wi-Fi hriat hran theihna bik.</string>
+  <string name="verification.info_ipv4.expl">Device internet connection hriat hran theihna address bik.</string>
+  <string name="verification.info_ipv6.expl">Device internet connection hriat hran theihna address thar zawk.</string>
+  <string name="verification.info_location.expl">Device awmna diktak (latitude, longitude, altitude, dikzawng leh teh hun a tel).</string>
+  <string name="verification.info_location.provider.expl">Awmna chhui chhuah dan. \"Fused\" a nih chuan awlsam zawk nan hmanrua (GPS leh network) hman pawlh a ni tihna a ni.</string>
+  <string name="verification.info_location.speed.expl">Device in meter per second a hmun a sawn chak lam.</string>
+  <string name="verification.info_cell.towers.expl">Device in cell tower a connect zawng zawng number.</string>
+  <string name="verification.info_wifi.expl">Device kianga Wi-Fi network awm zawng zawng hming.</string>
+  <string name="collect.blank_banner_forms.updated">Form ṭhenkhat update a ni. Version thar ber nei turin form bula update button hmet rawh.</string>
+  <string name="settings.docu_auto.upload.server.selection_dialog.expl">Khawi server-ah nge file upload i duh?</string>
+  <string name="settings.serv_add.server.selection_dialog.title">Server eng chi nge?</string>
+  <string name="settings.docu_add.server_dialog.select_odk">Open Data Kit (ODK)</string>
+  <string name="settings.docu_add.server_dialog.expl">Server connect i duh chi thlang rawh. I chian loh chuan, i organization zawt rawh.</string>
+  <string name="settings.docu_add.server_dialog.select_tus">Direct Upload</string>
+  <string name="play.audio_action.expl_plus15s">+15s</string>
+  <string name="play.audio_action.expl_minus15s">-15s</string>
+  <string name="recorder_meta_space.available.days">Ni %1$d darkar %2$d (%3$s) a la bang</string>
+  <string name="recorder_meta_space.available.hours">Darkar %1$d minute %2$d (%3$s) a la bang</string>
+  <string name="camera_video.resolution_dialog.title">Video resolution thlang rawh</string>
+  <string name="camera_video.resolution_dialog.expl">Resolution a san poh leh video a fiah ang a, mahse file a lian thung ang.</string>
+  <string name="camera_video.resolution_select_highest">A san theih ber</string>
+  <string name="camera_video.resolution_select_1080p">Sang (1080p)</string>
+  <string name="camera_video.resolution_select_720p">Laihawl (720p)</string>
+  <string name="camera_video.resolution_select_480p">Hniam (480p)</string>
+  <string name="settings.docu_auto.upload_action.expl">Tella chuan i thlalak, video, emaw audio record te chu lak a nih emaw Tella-a dah luh a nih veleh server-ah a upload nghal ang.</string>
+  <string name="settings.docu_auto.delete_action">Auto-delete</string>
+  <string name="settings.docu_choose.auto.upload.server_dialog.expl">Khawi server-ah nge file te hi auto-upload i duh?</string>
+  <string name="settings.docu_error_must.select.auto.upload.server">Server i thlan ngei a ngai.</string>
+  <string name="camera_tab.title_video">Video</string>
+  <string name="camera_tab.title_photo">Thlalak</string>
+  <string name="action_upload">Upload</string>
+  <string name="collect.blank_action.desc_more.options">Option dangte</string>
+  <string name="action_next">Lehpek</string>
+  <string name="meter">%f m</string>
+  <string name="meter_per_second">%f m/s</string>
+  <string name="tella">Tella</string>
+  <string name="intro_document_protect">Document &amp; Humhimna</string>
+  <string name="onboard_setup_lock">Tella hi engtin nge lock i duh?</string>
+  <string name="onboard_password">Password</string>
+  <string name="onboard_password_description">A him ber</string>
+  <string name="onboard_pin">PIN</string>
+  <string name="onboard_pin_description">A him tawk viau</string>
+  <string name="onboard_pattern">Pattern</string>
+  <string name="onboard_pattern_description">A him lo ber</string>
+  <string name="settings.sec_app.bar">Himna</string>
+  <string name="settings.select_security">Himna</string>
+  <string name="settings.select_lock_timeout">Lock hun chhung</string>
+  <string name="settings.sec_camera.mute_switch">Camera ri lo</string>
+  <string name="settings.sec_camera.mute_expl">Thla i lak laia mi mit a lak loh nan camera rik dan off rawh.</string>
+  <string name="settings.sec_quick.delete_switch">Paih zung zungna</string>
+  <string name="settings.sec_quick.delete_expl">Hmanhmawh thilah Tella ami file te awlsam taka paihna turin homescreen-ah button a tarlang ang.</string>
+  <string name="settings.servers.title_server.settings">Servers</string>
+  <string name="settings.servers.add_server.expl">In organization-a data thawn tur leh la turin server connect rawh</string>
+  <string name="settings.servers_auto.upload_action">Server-ah auto-upload</string>
+  <string name="settings.servers_auto.upload_action.expl">Thla lak, video, emaw audio record te chu lak a nih emaw Tella-a dah luh a nih veleh Reports server-ah upload nghal rawh.</string>
+  <string name="settings.servers_auto.delete_action.expl">Hman a nih chuan, Tella in file upload zawh veleh a paih nghal ang.</string>
+  <string name="settings.servers_auto.upload.server.selection">Auto-upload tur server</string>
+  <string name="settings.servers_add.server.forms">FORMS</string>
+  <string name="settings.servers_add.server.reports">REPORTS</string>
+  <string name="settings.servers_choose.auto.upload.server_dialog.title">Auto-upload server thlang rawh</string>
+  <string name="settings.servers_enable_auto_upload_dialog.title">Auto-upload on dawn em?</string>
+  <string name="settings.servers_enable_auto_upload_dialog.expl">I thlalak, video, leh audio file te chu lak a nih veleh a in-upload anga, Tella a file i lak luh apiang pawh automatic in a in-upload ang.</string>
+  <string name="settings.servers_disable_auto_upload_dialog.title">Auto-upload off dawn em?</string>
+  <string name="settings.servers_disable_auto_upload_dialog.expl">I file te chu server-ah a in-upload tawh lo ang.</string>
+  <string name="settings.servers_disable_auto_delete_dialog.title">Auto-delete off dawn em?</string>
+  <string name="settings.servers_disable_auto_delete_dialog.expl">I file te chu upload a nih zawhah automatic-in a in-paih tawh lo ang.</string>
+  <string name="action_enable">On</string>
+  <string name="action_disable">Off</string>
+  <string name="settings.servers_delete.server_dialog.title">\"%1$s\" server paih dawn em?</string>
+  <string name="action_edit">Edit</string>
+  <string name="settings.server_add.server_dialog_advanced">Advanced</string>
+  <string name="settings.docu_error_auth.required">Luhluh theihna finfiah a ngai</string>
+  <string name="settings.sec_lock_timeout_immediately">Nghal in</string>
+  <string name="settings.sec_lock_timeout_1min">Minute 1</string>
+  <string name="settings.sec_lock_timeout_5min">Minute 5</string>
+  <string name="settings.sec_lock_timeout_30min">Minute 30</string>
+  <string name="settings.sec_lock_timeout_1hour">Darkar 1</string>
+  <string name="settings.sec_lock_timeout_desc">Tella lock tura hun a hman tur bituk rawh</string>
+  <string name="settings.prot_select_delete.vault">File paihna</string>
+  <string name="settings.sec_delete.vault_tooltip">Tella-a file awm zawng zawng paihna.</string>
+  <string name="settings.sec_delete.forms_tooltip">Draft leh form thehluh tawh zawng zawng paihna.</string>
+  <string name="settings.sec_delete.servers_tooltip">I Connections leh a kaihhnawih data zawng zawng paihna.</string>
+  <string name="settings.sec_delete.app_tooltip">App leh a chhunga data zawng zawng paihna. “He app hi i paih (uninstall) duh em?” tia zawh i ni ang. I nemngheh loh chuan, Tella hi paih a ni lo ang.</string>
+  <string name="settings.sec_bypass_switch_title">Dan chahna pelh</string>
+  <string name="settings.sec_bypass_switch_expl">I awmna hmuna Tella dan chah tumna te paltlang rawh. Hriat tur: Hei i on chuan server-a data thawn a muang deuh ang.</string>
+  <string name="settings.servers_add_camouflage.subtitle">I app chu tunah hian Calculator app angin thup a ni</string>
+  <string name="settings.servers_change.camouflage.method">INTHUP DAN THLAK RAWH</string>
+  <string name="settings.servers_remove.camouflage.method">INTHUPNA PAIH RAWH</string>
+  <string name="settings.servers_hide_tella_title">Tella thup rawh</string>
+  <string name="settings.servers_hide_tella_desc">Tella inthup dan tur i duh ber thlang rawh</string>
+  <string name="settings.servers_setup_camouflage_title">Inthupna siam rawh</string>
+  <string name="settings.servers_setup_camouflage_description">Inthupna pahnih a awm. A hmasa hi a rang a mahse a him lo deuh; a pahnihna hi a buaithlak deuh a mahse a him thung.</string>
+  <string name="settings.servers_setup_change_camouflage_title">HMING &amp; ICON THLAK RAWH</string>
+  <string name="settings.servers_setup_change_camouflage_subtitle">Tella chu home screen-ah hming leh icon dangin a lang ang</string>
+  <string name="settings.servers_setup_hide_behind_camouflage_title">app tak tak hnungah thup rawh</string>
+  <string name="settings.servers_setup_hide_behind_camouflage_subtitle">A him ber: Tella chu app tak tak hman theih hnungah thup rawh</string>
+  <string name="settings.servers_setup_change_name_icon_title">HMING LEH ICON THLAK RAWH</string>
+  <string name="settings.servers_setup_change_name_icon_subtitle"><b>A him tawk lo:</b> Tella chu home screen-ah hming leh icon dangin a lang ang. Icon thar hmehin Tella tak tak a inhawng ang.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_title">calculator app hnungah thup rawh</string>
+  <string name="settings.servers_setup_hide_behind_calculator_subtitle"><b>A him zawk:</b> Calculator app tak tak hnungah Tella thup rawh. Tella hawng turin calculator-ah i PIN chhu lut rawh.</string>
+  <string name="settings.servers_setup_hide_behind_calculator_not_possible">The Calculator camouflage is only possible if you
+ use a PIN lock.<font color="#D6933B"><b> Change lock here</b></font></string>
+  <string name="settings.sec_change_lock_type_warning">I lock dan i thlak chuan, Inthupna a in-off ang</string>
+  <string name="action_continue">Chhunzawm</string>
+  <string name="settings.camo_icamera">iCamera</string>
+  <string name="settings.camo_selfie_cam">Selfie Cam</string>
+  <string name="settings.camo_snap_camera">Snap Camera</string>
+  <string name="settings.camo_calculate">Calculate</string>
+  <string name="settings.camo_calculator_plus">Calculator Plus</string>
+  <string name="settings.camo_icalculator">iCalculator</string>
+  <string name="settings.camo_weather">Weather</string>
+  <string name="settings.camo_easyweather">EasyWeather</string>
+  <string name="settings.camo_sunnyday">SunnyDay</string>
+  <string name="settings.camo_gamestation">GameStation</string>
+  <string name="settings.camo_playnow">PlayNow</string>
+  <string name="settings.camo_jeweldash">Jewel Dash</string>
+  <string name="settings.camo_time">Time</string>
+  <string name="settings.camo_stopwatch">StopWatch</string>
+  <string name="fragment_mic">Microphone</string>
+  <string name="mic_recording">Record mek a ni</string>
+  <string name="mic_rename_recording">Recording hming thlak rawh</string>
+  <string name="recorder_toast_recording.saved">Audio record chu i Tella file-ah save a ni</string>
+  <string name="onboard.intro_title">Tella-ah kan lo lawm a che</string>
+  <string name="onboard.intro_get_started">Ṭan ang le</string>
+  <string name="onboard.title_camera">Camera</string>
+  <string name="onboard.expl_camera">Tella chhungah h hian thla la in video la nghal rawh. Heng file te hi automatic-a encrypt niin Tella-ah save a ni ang a, i phone gallery pangaiah a lang lo ang.</string>
+  <string name="onboard.title_recorder">Recorder</string>
+  <string name="onboard.expl_recorder">Tella voice recorder hmangin thil zawhfiahna (interviews) emaw i vela ri apiang record rawh. Audio file te hi automatic-a encrypt a ni ang a, Tella folder inthupah save a ni ang.</string>
+  <string name="onboard.title_files">File &amp; folder encrypt te</string>
+  <string name="onboard.expl_files">I file zawng zawng him takin vawng ṭhain remkhawm rawh. Tella i lock chhung chu i device rawn endik emaw laksak tumtu in i file leh folder-te an hawng thei lo ang.</string>
+  <string name="onboard.title_lock_finish">Lock</string>
+  <string name="onboard.expl_lock_finish">I lock siam peih a ni! Settings-ah i thlak thei reng a nia.</string>
+  <string name="onboard.title_all_done">I inpeih ta!</string>
+  <string name="onboard.expl_all_done">Tella-ah i lut thei tawh e, emaw Tella hi i duh danin advanced settings aṭangin i siamrem thei bawk.</string>
+  <string name="onboard.go_btn_all_done">Tella-ah lut rawh</string>
+  <string name="onboard.advanced_btn_all_done">Advanced settings</string>
+  <string name="onboard.title_share_data">I data khawnkhawmte share rawh</string>
+  <string name="onboard.expl_share_data">Organization nena in thawkho a nih chuan, file leh data thawn turin organization server connect rawh. I organization in server thuchian an pe ang che.</string>
+  <string name="onboard.connect_btn_share_data">Server connect rawh</string>
+  <string name="onboard.continue_btn_share_data">Server connect lovin chhunzawm rawh</string>
+  <string name="onboard.expl_hide_tella">I device-a zawn hmuh a harsat theih nan, i homescreen-a a landan thlakin Tella i thup thei.</string>
+  <string name="onboard.default_btn_title_hide_tella">Tella landan pangai hmang rawh</string>
+  <string name="onboard.default_btn_subtitle_hide_tella">Tella chu home screen-ah a lang ang</string>
+  <string name="onboard.title_advanced_complete">Advanced customization zawh a ni!</string>
+  <string name="onboard.expl_advanced_complete">Settings-ah i duh danin i siamrem thei reng a nia.</string>
+  <string name="onboard.title_connected_server">Server connect a ni</string>
+  <string name="onboard.expl_connected_server">Tella leh server i connect hlawhtling e, i data i share thei tawh ang.</string>
+  <string name="onboard.expl_hide_tella_set">I inthupna siam zawh a ni! Settings-ah i thlak thei reng a nia.</string>
+  <string name="onboard.hide_behind_calculator_not_possible">Calculator inthupna hi PIN lock i hman chauhvin a theih.</string>
+  <string name="onboard.calculator_button">Calculator thlang rawh</string>
+  <string name="onboard.calculator_expl">Tella chu Calculator app hman theih tak tak hnungah thup a ni ang. Tella hawng turin calculator-ah i PIN chhu lut la, chu mi hnuah = hmet ang che.</string>
+  <string name="settings.general_recent_files_switch_title">File thar te</string>
+  <string name="settings.general_recent_files_switch_expl">Tella homescreen-ah i file hman hnuhnunte lang theiin leh awlsam taka hawn theihin dah rawh.</string>
+  <string name="settings.general_favorite_forms_switch_title">Form duh berte</string>
+  <string name="settings.general_favorite_forms_switch_expl">Tella homescreen-ah i form duh berte awlsam taka hawn theihin tarlang rawh.</string>
+  <string name="settings.sec_confirm_camouflage_title">Inthupna hmang turin Tella aṭangin chhuak dawn em?</string>
+  <string name="settings.sec_confirm_camouflage_desc">Tella hawng leh turin, i app zingah %s app icon hi zawng ang che.</string>
+  <string name="settings.sec_confirm_calc_camouflage_desc">Tella hawng leh turin, i app zingah Calculator app icon hi zawng ang che. Tella hawng turin Calculator-ah i PIN chhu lut la, “=” hmet ang che.</string>
+  <string name="settings.sec_confirm_exit_tella">Tella aṭangin chhuak rawh</string>
+  <string name="Home_BottomNav_Home">Home</string>
+  <string name="Home_BottomNav_Rec">Rec</string>
+  <string name="Home_BottomNav_Camera">Camera</string>
+  <string name="Home_BottomNav_Forms">Forms</string>
+  <string name="Home_BottomNav_Reports">Reports</string>
+  <string name="Vault_Move_AppBar">\"%s\" sawn rawh</string>
+  <string name="Vault_CreateFolder_SheetAction">Siam rawh</string>
+  <string name="ServerSettings_ServerName_ToolTip">Nakinah server dang i belh huna i hriat hran theih nan i server hi hming pe rawh. Organization hming emaw, project hming emaw a ni thei.</string>
+  <plurals name="Vault_Importing_SheetProgress">
+    <item quantity="zero"></item>
+    <item quantity="one">File %s lakluh a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %s lakluh a ni</item>
+  </plurals>
+  <string name="Vault_Importing_SheetTitle">Lakluh leh encrypt mek a ni</string>
+  <string name="Rec_Exit_SheetTitle">Recording save dawn em?</string>
+  <string name="Rec_Exit_SheetText">I recording save a ni lo. I chhuah hmain save i duh em?</string>
+  <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
+  <string name="Vault_Encryting_SheetText">%d%% zawh a ni</string>
+  <string name="Vault_Encrypting_Cancel_SheetTitle">Encrypt lai titawpin file paih dawn em?</string>
+  <string name="Vault_Encrypting_Cancel_SheetText">I tihtawp chuan, i file a bo ang</string>
+  <string name="Vault_Encrypting_Cancel_SheetAction_Resume">ENCRYPT CHHUNZAWM RAWH</string>
+  <string name="Vault_Encrypting_Cancel_SheetAction_Delete">FILE PAIH RAWH</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetTitle">Lock dan thlakin inthupna paih dawn em?</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetText">I Calculator inthupna hman lai hi PIN lock nen chauh a inmil. I lock dan i thlak chuan, Tella a inthup tawh lo anga, i phone homescreen-ah a lang ang.</string>
+  <string name="SettingSec_ChangeLock_WarningCalc_SheetAction_Remove">INTHUPNA PAIH RAWH</string>
+  <string name="SettingsCamo_EnterLock_Password">I inthup dan thlak turin i password chhu lut rawh</string>
+  <string name="settings.gen_select_about">Chanchin &amp; Puihna</string>
+  <string name="settings.gen_select_language">Ṭawng</string>
+  <string name="home_action.desc_quick.exit">Chhuak rawh</string>
+  <string name="settings.camo_camera4">Camera</string>
+  <string name="settings.camo_camera3">CameraPro</string>
+  <string name="settings.camo_camera2">SuperCam</string>
+  <string name="settings.camo_camera1">EasyCam</string>
+  <string name="settings.camo_weather3">Weather now</string>
+  <string name="settings.camo_weather2">Local weather</string>
+  <string name="settings.camo_weather1">Weather</string>
+  <string name="settings.docu_add.server_dialog.select_tella_web">Tella Web</string>
+  <string name="settings.docu_add.server_dialog.select_tella_uwazi">Uwazi</string>
+  <string name="collect.outbox_tab.title">Outbox</string>
+  <string name="Collect_RemoveForm_SheetTitle">Form paih dawn em?</string>
+  <string name="fragment_uwazi">Uwazi</string>
+  <string name="Uwazi_Dowload_Temapltes_Header_Title">Template download rawh</string>
+  <string name="Uwazi_RemoveTemplate_SheetTitle">Device aṭangin paih rawh</string>
+  <string name="Uwazi_Action_FillEntity">Entity siam rawh</string>
+  <string name="Uwazi_Action_RemoveTemplate">Template paih rawh</string>
+  <string name="Uwazi_Subtitle_RemoveTemplate">He template hi i paih duh takzet em? </string>
+  <string name="UWAZI_Language_Header_Title">Uwazi ṭawng</string>
+  <string name="Uwazi_Language_Screen_Description">He Uwazi collection hi ṭawng hrang hrangin a hman theih. Template i download duhna ṭawng kha thlang rawh. </string>
+  <string name="Uwazi_General_Favorite_Template_Switch_Expl">Tella homescreen-ah i template duh berte awlsam taka hawn theihin tarlang rawh.</string>
+  <string name="Uwazi_General_Favorite_Template_Switch_Title">Template duh berte</string>
+  <string name="Uwazi_Templates_Empty_Description">Template save i nei lo. Template thar belh turin “+” button hmet rawh.</string>
+  <string name="Uwazi_Submitted_Entities_Empty_Description">Entity thehluh tawh i nei lo.</string>
+  <string name="Uwazi_Outbox_Entities_Empty_Description">I Outbox a ruak. Entity thehluh theih inpeihsa te hetah hian a lang ang.</string>
+  <string name="Uwazi_Draft_Entities_Empty_Description">Draft entity i nei lo.</string>
+  <string name="Uwazi_Action_Save_Draft">Draft save rawh</string>
+  <string name="Uwazi_Subtitle_RemoveDraft">He draft hi i paih duh takzet em?</string>
+  <string name="Uwazi_Form_MediaHeader">File thun tel</string>
+  <string name="Uwazi_EntryInstance_SavedInfo">Entity chu draft-ah save a ni.</string>
+  <string name="Uwazi_Action_EditDraft">Draft edit rawh</string>
+  <string name="Uwazi_Action_RemoveDraft">Draft paih rawh</string>
+  <string name="Uwazi_Submitted_Entity_Header_Title">Tlangpui</string>
+  <string name="Uwazi_Action_ViewEntity">Entity en rawh</string>
+  <string name="Uwazi_Action_DeleteEntity">Entity paih rawh</string>
+  <string name="Uwazi_WidgetSubtitle_DateFrom">A ṭangin</string>
+  <string name="Uwazi_WidgetSubtitle_DateTo">Thlengin</string>
+  <string name="Uwazi_WidgetSubtitle_Label">Label</string>
+  <string name="Uwazi_WidgetSubtitle_URL">URL</string>
+  <string name="Uwazi_Info_NotValidURL">He URL hi a dik lo</string>
+  <string name="Uwazi_Subtitle_MarkdownSupported">markdown hman theih</string>
+  <string name="Uwazi_Entry_Validation_MandatoryFields">A chhanna pek ngei ngei turte hi i chhan a ngai</string>
+  <string name="Uwazi_Entry_Validation_MandatoryTitle">Title i pek ngei ngei a ngai</string>
+  <string name="Uwazi_Submit_Later">Nakinah thehlut rawh</string>
+  <string name="Uwazi_WidgetMultiDate_AddDate">Ni dang belh rawh</string>
+  <string name="Uwazi_WidgetMultiDate_AddDateRange">Ni inkar dang belh rawh</string>
+  <string name="Uwazi_WidgetDateRange_Constraint">A ni pahnihna hi a hmasa zawk hnu ami a ni tur a ni</string>
+  <string name="Uwazi_MiltiFileWidget_AddMoreFiles">File dang belh rawh</string>
+  <string name="Uwazi_MiltiFileWidget_Show">File tarlang rawh</string>
+  <string name="Uwazi_MiltiFileWidget_Hide">File thup rawh</string>
+  <string name="Uwazi_MiltiFileWidget_Help">File i duh zat zat thlang rawh</string>
+  <string name="Uwazi_WidgetMedia_Select_Text">Audio emaw video file thlang rawh</string>
+  <string name="Uwazi_WidgetMedia_Select_Photos_Text">Thlalak thlang rawh</string>
+  <string name="Uwazi_WidgetMedia_Description_Text">Video emaw audio file thun tel rawh</string>
+  <string name="Uwazi_WidgetImage_Select_Text">Image file thlang rawh</string>
+  <string name="Uwazi_WidgetImage_Select_Description_Text">Image file thun tel rawh</string>
+  <string name="Uwazi_WidgetMedia_Take_Video">Camera in video la rawh</string>
+  <string name="Uwazi_WidgetMedia_Take_Photo">Camera in thla la rawh</string>
+  <string name="Uwazi_WidgetMedia_Select_From_Tella">Tella file aṭangin thlang rawh</string>
+  <string name="Uwazi_WidgetMedia_Select_From_Device">I device aṭangin thlang rawh</string>
+  <string name="Uwazi_Widget_Sheet_Description">File belh dan tur thlang rawh</string>
+  <string name="Uwazi_Entity_Error_Response_Mandatory">He chhanna hi pek ngei ngei tur.</string>
+  <string name="Uwazi_Server_Title">Server : </string>
+  <string name="Uwazi_Template_Title">Template : </string>
+  <plurals name="Uwazi_MiltiFileWidget_FilesAttached">
+    <item quantity="zero"></item>
+    <item quantity="one">File %1$d thun tel a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %1$d thun tel a ni</item>
+  </plurals>
+  <string name="Uwazi_MiltiFileWidget_SelectFiles">File thlang rawh</string>
+  <string name="Uwazi_MiltiFileWidget_SelectPdfFiles">PDF file thlang rawh</string>
+  <string name="Uwazi_MiltiFileWidget_PrimaryDocuments">Document pawimawh zual</string>
+  <string name="Uwazi_MiltiFileWidget_AttachMenyPdfFiles">PDF file i duh zat zat thun tel rawh</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddPdfFiles">PDF file belh dan tur thlang rawh</string>
+  <string name="Uwazi_MiltiFileWidget_SupportingFiles">Thlawpna file te</string>
+  <string name="Uwazi_Drafts_Header_Text">Hengte hi entity i la thehluh lohte an ni.
+
+ Chhunzawm turin entity hi hmet rawh.</string>
+  <string name="Uwazi_Outbox_Header_Text">Hengte hi entity thehluh mai theih emaw a ṭhen thehluh tawhte an ni.</string>
+  <string name="Uwazi_Submitted_Header_Text">Hengte hi entity i thehluh tawhte an ni.</string>
+  <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">File belh dan tur thlang rawh</string>
+  <string-array name="Uwazi_Language_Array">
+    <item>English</item>
+    <item>عربي</item>
+    <item>Français</item>
+  </string-array>
+  <string-array name="Uwazi_Language_Array_Translated">
+    <item>English</item>
+    <item>Arabic</item>
+    <item>French</item>
+  </string-array>
+  <string name="Collect_Action_FillForm">Form chhang rawh</string>
+  <string name="Collect_Subtitle_RemoveForm">\"%1$s\" hi i paih duh takzet em? </string>
+  <string name="Util_ellapsedTime_Year">Kum khat aia rei liamta ah khan</string>
+  <plurals name="Util_ellapsedTime_Months">
+    <item quantity="zero"></item>
+    <item quantity="one">Thla khat liamta ah khan</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Thla %d liamta ah khan</item>
+  </plurals>
+  <plurals name="Util_ellapsedTime_Weeks">
+    <item quantity="zero"></item>
+    <item quantity="one">Kar khat liam taah khan</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Kar %d liam taah khan</item>
+  </plurals>
+  <plurals name="Util_ellapsedTime_Days">
+    <item quantity="zero"></item>
+    <item quantity="one">Ni khat liam taah khan</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Ni %d liam taah khan</item>
+  </plurals>
+  <plurals name="Util_ellapsedTime_Hours">
+    <item quantity="zero"></item>
+    <item quantity="one">Darkar khat liam taah khan</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Darkar %d liam taah khan</item>
+  </plurals>
+  <plurals name="Util_ellapsedTime_Minutes">
+    <item quantity="zero"></item>
+    <item quantity="one">Minute khat liam taah khan</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Minute %d liam taah khan</item>
+  </plurals>
+  <string name="Util_ellapsedTime_Seconds">Second tlemte liamta ah khan</string>
+  <string name="Donwload_Templates_Title_Description">Heng template te hi Uwazi i connect aṭanga hman theihte an ni.</string>
+  <string name="Uwazi_Templates_HeaderMessage">Hengte hi Uwazi template i chhan theihte an ni.</string>
+  <string name="Vault_Filter_Name">Hming</string>
+  <string name="Server_Url_Screen_Title">Server URL chhu lut rawh</string>
+  <string name="Login_Type_Screen_Title">Username leh password i neih chuan log in rawh, emaw server public access hmang rawh.</string>
+  <string name="Login_Text">Log in</string>
+  <string name="Public_Login_Text">Public access</string>
+  <string name="Two_Factor_Authentication_Description">He Uwazi hmang tur hian step hnih in-finfiahna a ngai. I authenticator app aṭangin digit 6 code chhu lut rawh.</string>
+  <string name="Two_Factor_Authentication_Screen_Tile">Step hnih in-finfiahna</string>
+  <string name="Authentication_Code">Finfiahna code</string>
+  <string name="Inavlid_Token_Msg_Error">Finfiahna code a dik lo emaw a thi tawh. Khawngaihin ti nawn leh rawh.</string>
+  <string name="Connected_Successfuly_Text">Server i connect hlawhtling e, i data i share thei tawh ang.</string>
+  <string name="Login_To_Access_Text">Server luh nan log in rawh</string>
+  <string name="action_yes">Aw</string>
+  <string name="Collect_WidgetVideo_Select_Text">Video file thlang rawh</string>
+  <string name="Collect_WidgetAudio_Select_Text">Audio file thlang rawh</string>
+  <string name="Collect_MediaWidget_Attach_Photo">Thlalak thun tel rawh</string>
+  <string name="Collect_MediaWidget_Attach_Video">Video thun tel rawh</string>
+  <string name="Collect_MediaWidget_AttachAudioRecording">Audio record thun tel rawh</string>
+  <string name="Uwazi_Templates_TabTitle">Templates</string>
+  <string name="action_no">Aih</string>
+  <string name="Vault_Items">{\"zero\":\"\",\"one\":\"item\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"item-te\"}</string>
+  <string name="Vault_DeleteFile_SheetTitle">{\"zero\":\"\",\"one\":\"File paih rawh?\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File-te paih rawh?\"}</string>
+  <string name="Vault_deleteFile_SheetDesc">{\"zero\":\"\",\"one\":\"File thlan hi Tella atangin a hlenin paih a ni ang.\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File thlante hi Tella atangin a hlenin paih a ni ang.\"}</string>
+  <string name="Uwazi_Info_UrlLabelEmpty">URL label a ruak.</string>
+  <string name="Collect_EndSubtitleExpl_UncheckedItems">Nakina thehluh turin attachment te hi tick suh. I Outbox aṭangin i thehlut thei ang.</string>
+  <string name="Collect_DialogExpl_ExitingStopSubmission">I chhuah chuan i form thehluh a tawp ang. I Outbox aṭangin nakinah i thehlut chhunzawm thei ang.</string>
+  <string name="Collect_DialogTitle_StopExit">Titawp a chhuak dawn em?</string>
+  <string name="Collect_DialogAction_KeepSubmitting">Thehlut chhunzawm rawh</string>
+  <string name="Collect_DialogAction_StopAndExit">Titawp a chhuak rawh</string>
+  <string name="Collect_DialogInfo_FormSubmissionStopped">I form thehluh tih tawp a ni. Outbox aṭangin i chhunzawm thei ang.</string>
+  <string name="action_view">En rawh</string>
+  <string name="SettingsCamo_Dialog_TimeoutTitle">Tella a in-kharkhip mek …</string>
+  <string name="SettingsCamo_Dialog_TimeoutDesc">Khawngaihin nghak rawh. Second tlemte hnuah i device home screen-ah i let ang.</string>
+  <string name="SettingsCamo_Dialog_RemovingCamouflage">Inthupna paih mek a ni …</string>
+  <string name="Collect_DeleteForm_SheetTitle">Form paih dawn em?</string>
+  <string name="Collect_DeleteDraftForm_SheetTitle">Draft paih dawn em?</string>
+  <string name="Collect_DeleteDraftForm_SheetExpl">He draft hi i paih duh takzet em?</string>
+  <string name="Collect_DeleteForm_SheetExpl">He form hi i paih duh takzet em?</string>
+  <string name="Uwazi_Dialog_Draft_Title">Entity aṭangin chhuak dawn em?</string>
+  <string name="Verification_Label_meter">%f m</string>
+  <string name="Verification_Label_MeterPerSecond">%f m/s</string>
+  <string name="settings_sec_security_screen">Screen himna</string>
+  <string name="settings_sec_security_screen_expl">Tella chhungah screenshot leh screen record theih lohin siam la, recent app list-ah lang lo turin siam rawh</string>
+  <string name="settings.serv_add.server.selection_dialog.description">I chian loh chuan, i organization zawt rawh.</string>
+  <string name="Timeout_Warning_Title">Fimkhur</string>
+  <string name="Timeout_Warning_Description">He thil hi i tih chhung chuan, Tella hi minute 3 chhung a in-unlock ang.</string>
+  <string name="Home_BottomNav_Uwazi">Uwazi</string>
+  <string name="onboard_setup_text">Tella hi engtin nge set up i duh?</string>
+  <string name="onboard_full_setup">FULL SETUP</string>
+  <string name="onboard_quick_setup">QUICK SETUP</string>
+  <string name="onboard_setup_explore_custom">App hi enchiang la, i duh danin siamrem rawh</string>
+  <string name="onboard_setup_start">Lock siam la, ṭan nghal rawh</string>
+  <string name="onboard_setup_customization">Customization code/file i nei em?</string>
+  <string name="settings.camo_clock">Clock</string>
+  <string name="onboard.intro_organization_code">Ka organization aṭangin code ka nei</string>
+  <string name="onboard.customization_title">Customization</string>
+  <string name="onboard.customization_subtitle">I customization code chhu lut rawh</string>
+  <string name="onboard.customization_expl">I organization in anmahni settings anga Tella i set up theih nan code an pe thei che.</string>
+  <string name="upload_toast_fail.finding.metadata.to.upload">File verification thuchian zawn hmuh theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="upload_toast.fail.finding.file.to.upload">File upload tur zawn hmuh theih a ni lo. Khawngaihin ti nawn leh rawh</string>
+  <string name="gallery_app.bar">Gallery</string>
+  <string name="home_gallery.button">Gallery</string>
+  <string name="onboarding_action_create.pattern">Pattern siam rawh</string>
+  <string name="permission_dialog.expl_mic">Audio record turin, Tella in i microphone hman phalna a mamawh.</string>
+  <string name="home_action.expl_camera">Camera hawng turin khawilai pawh hmet rawh</string>
+  <string name="gallery_toast_file.imported.from.device">File chu i gallery-ah belh a ni</string>
+  <string name="permission_dialog.expl_camera.mic">Thlalak, video, leh audio file la turin, Tella in i camera leh microphone hman phalna a mamawh.</string>
+  <string name="permission_dialog.expl_camera">Thla la tur leh video la turin, Tella in i camera hman phalna a mamawh.</string>
+  <string name="gallery_subheading_show">Tarlang rawh</string>
+  <string name="gallery_list.item_show.all.files">A vaiin</string>
+  <string name="gallery_list.items_show.only.photos">Thlalakte</string>
+  <string name="gallery_list.items_show.only.videos">Videote</string>
+  <string name="gallery_list.items_show.only.audio">Audio record-te</string>
+  <string name="onboard.camo_heading">Inthupna</string>
+  <string name="settings.camo_calculator1">Easy Math</string>
+  <string name="settings.docu_dialog.action_hide">Thup rawh</string>
+  <string name="settings.docu_auto.upload.server.selection_select">Server</string>
+  <string name="upload_dialog.title_select.server">Server thlanna</string>
+  <string name="settings.docu_connect.to.servers_enable_action">Server connect rawh</string>
+  <string name="settings.docu_connect.to.servers_enable_action.expl">Data thawn turin server i connect dan thunun rawh.</string>
+  <string name="settings.docu_disable.servers_dialog.title">Server disconnect rawh</string>
+  <string name="settings.docu_connect.to.servers_disable_dialog.expl">I server connect te hi i paih vek dawn nge i thup ringawt dawn? I thup chuan server thuchian a la vawng anga, awlsam takin i connect lehin data i thehlut thei ang.</string>
+  <string name="settings.docu_delete.auto.server_dialog.expl">He server hi i paih chuan, i file te automatic-in a in-upload tawh lo ang.</string>
+  <string name="settings.docu_auto.upload_action">Auto-upload</string>
+  <string name="settings.docu_auto.delete_action.expl">Server-a upload a nih veleh Tella in i device aṭangin file a paih nghal ang.</string>
+  <string name="settings.docu_delete.upload.server_dialog.expl">He server-ah hian file i upload thei tawh lo ang.</string>
+  <plurals name="upload.main_meta_number.of.files">
+    <item quantity="zero"></item>
+    <item quantity="one">File khat</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %d</item>
+  </plurals>
+  <string name="upload.main_meta_number.of.files_with_average" formatted="false">%d/%d MB upload a ni</string>
+  <plurals name="upload.main_meta_number.of.files.uploaded">
+    <item quantity="zero"></item>
+    <item quantity="one">File %d upload a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">File %d upload a ni</item>
+  </plurals>
+  <plurals name="upload.main_meta_minutes.left">
+    <item quantity="zero"></item>
+    <item quantity="one">Minute %d a la bang</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Minute %d a la bang</item>
+  </plurals>
+  <string name="settings.select_customization">Customization</string>
+  <string name="Uwazi_Send_Header_Title">Entity tawpna</string>
+  <string name="Uwazi_Send_Entity_Title">Entity tawpna</string>
+  <string name="action_yes_in">AW, KA TEL VE!</string>
+  <string name="clean_insights.signed_for_days">I data share turin i inziaklut tawh.</string>
+  <string name="Javarosa_Upgrade_Warning_Description">Tella library ṭhenkhat kan update a, form zawng zawng kan download ṭhat a ngai.</string>
+  <string name="Javarosa_Upgrade_Toast">Form kan update chhung khawngaihin nghak rawh.</string>
+  <string name="Settings_Reports_Choose_Credentials">Username leh password i nei em?</string>
+  <string name="Server_Connect_Icon">server connect image</string>
+  <string name="Login_To_Access_Project_Text">Project luh nan log in rawh</string>
+  <string name="Settings_Reports_Connected_To_Project">Project connect a ni</string>
+  <string name="Settings_Reports_Advanced_Success_Title">Advanced settings zawh a ni</string>
+  <string name="Settings_Reports_Advanced_Success_Description">Tella Settings-ah i Reports duh dan i thlak thei reng a nia.</string>
+  <string name="Settings_Reports_Go_To_Reports">REPORTS-AH KAL RAWH</string>
+  <string name="Settings_reports_Go_To_Advanced_Settings">Advanced settings</string>
+  <string name="Setting_Reports_Share_Information_Title">Verification thuchian share rawh</string>
+  <string name="Setting_Reports_Share_Information_Description">I file-te finfiah theih a nih nan, report i thawnin i device leh awmna thuchian telh rawh. </string>
+  <string name="Setting_Reports_Background_Upload">Background upload</string>
+  <string name="Setting_Reports_Background_Upload_Description">Thildang i tih emaw Tella aṭanga i chhuah pawhin report upload chhunzawm rawh.
+FIMKHUR: Hei i on chuan, report zawng zawng upload zawh a nih hma chu Tella a in-lock lo ang.</string>
+  <string name="Setting_Reports_Settings_Completed">Advanced settings zawh a ni</string>
+  <string name="Setting_Reports_Settings_Completed_Description">Tella Settings-ah i Reports duh dan i thlak thei reng a nia. </string>
+  <string name="Drafts_Reports_Empty_Message">I Drafts a ruak. Report i la thehluh lohte hetah hian a lang ang.</string>
+  <string name="Outbox_Reports_Empty_Message">I Outbox a ruak. Report thehluh mai theih te hetah hian a lang ang.</string>
+  <string name="Submitted_Reports_Empty_Message">Report thehluh tawh i nei lo.</string>
+  <string name="New_Reports_Text">REPORT THAR</string>
+  <string name="Reports_Title_Screen">REPORT</string>
+  <string name="Reports_Send_To_Text">Report thawnna tur:</string>
+  <string name="Reports_Select_Your_Project">I project thlang rawh</string>
+  <string name="Reports_Select_Title">Title</string>
+  <string name="Reports_Select_Description">Hrilhfiahna</string>
+  <string name="Reports_Attach_files_Here">File-te hetah hian thun tel rawh</string>
+  <string name="Connection_Title">Connections</string>
+  <string name="Reports_Saved_Draft">Report chu draft-ah save a ni</string>
+  <string name="Reports_Pause">Chawlhtir</string>
+  <string name="Reports_Resume">Chhunzawm</string>
+  <string name="File_Uploaded_on">Upload ni</string>
+  <string name="File_Uploaded">upload a ni</string>
+  <string name="Delete_Report_Confirmation">He report hi i paih duh takzet em?</string>
+  <string name="Delete_Submitted_Report_Confirmation">He report thehluh tawh hi i records aṭanga paih i duh takzet em?</string>
+  <string name="View_Report">En rawh</string>
+  <string name="Delete_Report">Paih</string>
+  <string name="Paused_Report">Chawlhtir a ni</string>
+  <string name="Report_Waiting_For_Connection">Connection a nghak mek</string>
+  <string name="Project_Url_Screen_Title">Project URL chhu lut rawh</string>
+  <string name="Report_Dialog_Draft_Title">Report aṭangin chhuak dawn em?</string>
+  <string name="Report_Server_Already_Exist_Error">He project hi i connect sa tawh. Khawngaihin URL dang chhu lut rawh.</string>
+  <string name="Report_Deleted_Confirmation"> %s paih a ni.</string>
+  <string name="Report_Save_Outbox_Confirmation">I report chu Outbox-ah save a ni. I peih hunah i thehlut (submit) thei ang.</string>
+  <string name="settings.camo_micamera">MiCamera</string>
+  <string name="settings.camo_forecast">Forecast</string>
+  <string name="settings.camo_game_launcher">Game Launcher</string>
+  <string name="settings.camo_music">Music</string>
+  <string name="settings.camo_fitness_life">Fitness Life</string>
+  <string name="settings.camo_health">Health</string>
+  <string name="settings.camo_watch">Watch</string>
+  <string name="settings.camo_astrology">Astrology</string>
+  <string name="settings.camo_dictionary">Dictionary</string>
+  <string name="settings.camo_plant_care">Plant Care</string>
+  <string name="settings.camo_workout">Workout</string>
+  <string name="settings.camo_period_tracker">Period Tracker</string>
+  <string name="Setting_Reports_Background_Upload_Disabled_Description">Auto-report hi connection pakhat aia tamah hman theih a ni lo. Hman theih nan hmun dangah auto-report off rawh.</string>
+  <string name="Setting_Reports_Edit_Connection">Connection edit rawh</string>
+  <string name="Setting_Reports_Connection_Name">Connection hming</string>
+  <string name="Setting_Reports_Auto_Report">Auto-report</string>
+  <string name="Setting_Reports_Auto_Report_Description">Tella-a thlalak/video/audio i record apiangin, report chu automatic in siam a ni ang a, he project-ah hian upload a ni ang.</string>
+  <string name="Setting_Reports_Auto_Delete">Auto-delete</string>
+  <string name="Setting_Reports_Auto_Delete_Description">He project-a report anga upload a nih veleh file te chu i device aṭangin automatic in paih rawh.</string>
+  <string name="Send_Action_Label">THAWN RAWH</string>
+  <string name="Modified_Label">Siamṭhat a ni</string>
+  <string name="Snackbar_Submit_Report_Error">Report thehlut turin, title chhu lut la, a hrilhfiahna emaw file thun tel rawh.</string>
+  <string name="action_open_settings">settings hawng rawh</string>
+  <string name="action_refresh">refresh</string>
+  <string name="action_check">check</string>
+  <string name="action_show_location">awmna tarlang rawh</string>
+  <string name="action_fast_rewind">fast rewind</string>
+  <string name="action_fast_forward">fast forward</string>
+  <string name="action_open_bottom_sheet">bottom sheet hawng rawh</string>
+  <string name="action_add">belh rawh</string>
+  <string name="action_go_next">lehpekah kal rawh</string>
+  <string name="action_move">sawn rawh </string>
+  <string name="action_favorite">duh ber</string>
+  <string name="action_unfavorite">duh ber aṭangin paih rawh</string>
+  <string name="action_select">thlang rawh</string>
+  <string name="action_unselect">thlan sut rawh</string>
+  <string name="action_show_photo">thlalak tarlang rawh</string>
+  <string name="action_help">puihna</string>
+  <string name="action_download">download</string>
+  <string name="action_choose_resolution">resolution thlang rawh</string>
+  <string name="action_hide_gridview">grid view thup rawh</string>
+  <string name="action_show_gridview">grid view tarlang rawh</string>
+  <string name="action_switch_to_front_camera">front camera hmang rawh</string>
+  <string name="action_switch_to_back_camera">back camera hmang rawh</string>
+  <string name="action_disable_flash">flash off rawh</string>
+  <string name="action_enable_flash">flash on rawh</string>
+  <string name="action_open_gallery">gallery hawng rawh</string>
+  <string name="action_pause">chawlhtir</string>
+  <string name="action_go_to_audio_library">Audio library-ah kal rawh</string>
+  <string name="action_display_gridView">gridView-in tarlang rawh</string>
+  <string name="action_display_list">list-in tarlang rawh</string>
+  <string name="quick_exit_action">chhuak vat rawh</string>
+  <string name="action_zoom">zoom</string>
+  <string name="action_edit_recording_name">recording hming thlak rawh</string>
+  <string name="action_create_new_folder">folder thar siam rawh</string>
+  <string name="action_quick_delete">paih vat rawh</string>
+  <string name="orange_theme">orange theme</string>
+  <string name="blue_theme">blue theme</string>
+  <string name="green_theme">green theme</string>
+  <string name="yellow_theme">yellow theme</string>
+  <string name="settings.sec_keep.exif_switch">Lakluh in metadata vawngṭha rawh</string>
+  <string name="settings.sec_keep.exif_expl">Tella-ah thlalak leh video lakluh a nihin EXIF metadata vawngṭha rawh. Hemi ah hian image siam hun, camera settings, awmna leh i device thuchian a tel.</string>
+  <string name="Rename_name_Hint">Hming</string>
+  <string name="action_go_to_homescreen">home screen-ah kal rawh</string>
+  <string name="action_show_password">password tarlang rawh</string>
+  <string name="action_hide_password">password thup rawh</string>
+  <string name="action_show_pin">pin tarlang rawh</string>
+  <string name="action_hide_pin">pin thup rawh</string>
+  <string name="action_go_back">let leh rawh</string>
+  <string name="Settings_show_unlock_attempts_remaining">Unlock theih zat bang tarlang rawh</string>
+  <string name="Settings_unlock_screen_instructions">Unlock screen-ah, Tella chhunga thil awm zawng zawng paih a nih hmaa unlock theih zat bang tarlang rawh</string>
+  <string name="Settings_Delete_After_Failed_Unlock">Unlock theih loh hnuah paih rawh</string>
+  <string name="Settings_Delete_After_Failed_Unlock_Descreption">Tella chhunga thil awm zawng zawng paih a nih hmaa unlock theih loh vawi engzat nge theih dawn tih bithliah rawh.</string>
+  <string name="Settings_Off_Do_Not_Delete">Off (data paih suh)</string>
+  <string name="Settings_Five_Attempts">Vawi 5</string>
+  <string name="Settings_Ten_Attempts">Vawi 10</string>
+  <string name="Settings_Twenty_Attempts">Vawi 20</string>
+  <string name="Settings_Off">Off</string>
+  <string name="Settings_On">On</string>
+  <string name="Settings_Disabled">Off a ni</string>
+  <string name="Settings_remaining_attempts_before_deletion">Unlock screen-ah, Tella chhunga thil awm zawng zawng paih a nih hmaa unlock theih zat bang tarlang rawh</string>
+  <string name="Settings_failed_unlock_message_template">Unlock vawi %1$d i theih loh chuan i Tella data paih a ni ang</string>
+  <string name="Settings_feature_not_available_camouflage">He thil hi calculator inthupna nen a hman theih loh. Hmang thei turin i inthup dan thlak rawh.</string>
+  <string name="Auto_Upload_Report">File i lakluh te chu report angin automatic-a upload a ni.</string>
+  <string name="Auto_Upload_Media_Report">Thlalak/video i lak te chu report angin automatic-a upload a ni.</string>
+  <string name="Auto_Upload_Recording_Report">Recording i siam chu report angin automatic-a upload a ni.</string>
+  <string name="Auto_Upload_Imported_Report_And_Deleted">File i lakluh te chu report anga upload a nih hnuah automatic-a paih a ni.</string>
+  <string name="Auto_Upload_Media_Imported_Report_And_Deleted">"Thlalak/video i lak te chu report anga upload a nih hnuah automatic-a paih a ni."</string>
+  <string name="Auto_Upload_Recording_Imported_Report_And_Deleted">"Recording i siam chu report anga upload a nih hnuah automatic-a paih a ni."</string>
+  <string name="Report_Available_in_Outbox">I report chu Outbox-ah a awm</string>
+  <string name="Snackbar_Submit_Report_WithProject_Error">Report thehlut turin, project thlang la, title chhu lutin a hrilhfiahna emaw file thun tel rawh.</string>
+  <string name="action_rotate">Kual rawh</string>
+  <string name="Snackbar_file_was_deleted">File chu paih a ni.</string>
+  <string name="Snackbar_files_were_deleted">File te chu paih a ni.</string>
+  <string name="Snackbar_changes_were_saved">I tihdanglam te chu file pangai copy angin save a ni.</string>
+  <string name="Edit_Dialog_confirm_exit_title">Save loh thil tihdanglam</string>
+  <string name="Edit_Dialog_confirm_exit">I tihdanglam te save a ni lo. I chhuah hmain save i duh em?</string>
+  <string name="action_exit_without_saving">SAVE LOVIN CHHUAK RAWH</string>
+  <string name="incorrect_pattern">Pattern a dik lo.</string>
+  <string name="incorrect_pin">Pin a dik lo.</string>
+  <string name="incorrect_password">Password a dik lo.</string>
+  <string name="attempts_remaining_singular">I Tella ami paih vek a nih hmain vawi 1 i ti thei tawh ang.</string>
+  <string name="attempts_remaining_plural">I Tella ami paih vek a nih hmain vawi %1$d i ti thei tawh ang.</string>
+  <string name="exceeded_max_attempts">Login theih loh i ngah lutuk ta. I Tella data zawng zawng paih a ni ta.</string>
+  <string name="Settings_General_TextJustificationTitle">Text inrem dan</string>
+  <string name="Settings_General_TextJustificationExpl">A lan mawi zawk nan text sei deuh te chu sir tuak inzawlin rem rawh. A off chuan, chhiar awlsam zawk nan text chu a vei emaw ding lamah a in tlar ang.</string>
+  <string name="Settings_General_TextSpacingTitle">Text inkar zauh rawh</string>
+  <string name="Settings_General_TextSpacingExpl">Tlar inkar 150% ah leh paragraph inkar 225% ah zauh rawh.</string>
+  <string name="Settings_General_BottomSheetRefreshWarningTitle">Tella in refresh a ti dawn</string>
+  <string name="Settings_General_BottomSheetRefreshWarningText">Second tlemte hnuah a hmaa screen-ah khan i let leh ang.</string>
+  <string name="settings.feedback_enable_sharing">Feedback thehluh theihna on rawh</string>
+  <string name="settings.feedback_warning">FIMKHUR: he thil i hman hian network entu tuemaw hnenah Tella i hmang tih a hriattir thei. He hlauhawm hi i pawm theih chauhvin hmang ang che.</string>
+  <string name="feedback_msg">Bug i tawk emaw, thil thar telh tur rawt duh i neih emaw, sawi duh dang i neih chuan min hrilh rawh.
+He i rawtna hi tu hnen aṭanga dawn nge tih hriat theih a ni lo a, chuvangin kan chhanna i beisei chuan i biak pawh theihna tur telh ang che.</string>
+  <string name="thanks_for_your_feedback">I rawtna avangin kan lawm e!</string>
+  <string name="save_draft">Draft save dawn em?</string>
+  <string name="description_submit_feedback">I rawtna thehlut turin engtikah pawh i lo let thei ang.</string>
+  <string name="feedback">Rawtna</string>
+  <string name="not_internet_msg">Internet i connect lo. I connect hunah i rawtna hi automatic-in thehluh a ni ang.
+</string>
+  <string name="feedback_title">Rawtna</string>
+  <string name="feedback_sent_msg">I rawtna thehluh a ni</string>
+  <string name="share_feedback_action">rawtna thehlut rawh</string>
+  <string name="Forms_NoOutboxForms">I Outbox a ruak. Form thehluh theih inpeihsa te hetah hian a lang ang.</string>
+  <string name="Forms_NoDraftForms">Draft form i nei lo.</string>
+  <string name="Forms_BlankSubheadingFormsOnServers">Server-a form awmte</string>
+  <string name="Forms_BlankSubheadingDownloadedForms">Hengte hi form ruak i chhan theihte an ni.</string>
+  <string name="background_activities">Background-a thil tih mekte</string>
+  <string name="current_background_activities">Hengte hi background-a thil tih mek te an ni.</string>
+  <string name="file_encryption_in_progress">File encrypt mek a ni</string>
+  <string name="no_background_activity">Tunah hian background-a thil tih mek a awm lo.</string>
+  <string name="encryption_in_progress">File encrypt mek a ni</string>
+  <string name="encryption_exit_prompt">Background-ah file encrypt mek a awm. I chhuah chuan i file te a bo ang, i chhuak duh tho em?</string>
+  <string name="exit_discard_files">Chhuak la file paih rawh</string>
+  <string name="exit_and_discard_files">Chhuak la file paih rawh</string>
+  <string name="files_being_encrypted_message">Background-ah file encrypt mek a awm. I chhuah chuan i file te a bo ang, i chhuak duh tho em?</string>
+  <string name="Home_BottomNav_Resources">Resources</string>
+  <string name="Resources_DownloadedTitle">Download tawhte</string>
+  <string name="Resources_DownloadedEmptyMessage">Resource download i la nei lo. Ṭan turin a hnuaia resource tin bula “download” icon hi hmet rawh.</string>
+  <string name="Resources_DownloadedEmptyMessage_NoAvailable">Resource download i la nei lo.</string>
+  <string name="Resources_AvailableTitle">Download theih te</string>
+  <string name="Resources_AvailableInfoMessage">Hengte hi i Tella Web project aṭanga download theih resources te chu an ni. </string>
+  <string name="Resources_AvailableEmptyMessage">I Tella Web project aṭangin download theih resource a awm lo.</string>
+  <string name="Resources_RemoveFromDownloads">Download aṭangin paih rawh</string>
+  <string name="Resources_RemovedResource">\"%s\" chu download aṭangin paih a ni.</string>
+  <string name="Resources_DialogTitle_StopDownload">Download titawpin chhuak dawn em?</string>
+  <string name="Resources_DialogMsg_StopDownload">I thil download lai a bo ang. Nakinah download turin i let leh thei reng a nia.</string>
+  <string name="Resources_KeepDownloading">DOWNLOAD CHHUNZAWM RAWH</string>
+  <string name="Resources_Exit">CHHUAK RAWH</string>
+  <string name="Error_DownloadFailed">Dik lo a awm: Download theih a ni lo</string>
+  <string name="exit_and_discard_verification_info">Chhuak la verification thuchian paih rawh</string>
+  <string name="recording_in_progress_exit_warning">Tella in i device leh awmna thuchian a la record mek. I chhuah chuan, i file hi finfiah theih a ni lo ang.</string>
+  <string name="exit_and_discard_info">CHHUAK LA THUCHIAN PAIH RAWH</string>
+  <string name="back">LET LEHNA</string>
+  <string name="encrypting">Encrypt mek a ni </string>
+  <string name="Sensitive_Chnage_Title">⚠️ Version tharah inthlak danglamna lian a awm dawn</string>
+  <string name="Sensitive_Chnage_Description">Tella version lehpekah chuan (15 July 2024-a tlangzarh tur) thiamna lamah hmasawnna lian tak a awm dawn a. Heng inthlakna avang hian version thara update hunah file ṭhenkhat bo palh theihna chance tlem a awm.
+
+File pawimawh tak Tella-ah i dah a nih chuan, update hmain Tella pawn lamah him takin copy chhuak turin kan rawn che u.
+
+Inthlak danglamna awm tur leh Tella aṭanga file zawng zawng dahchhuah dan hriatchian lehzual nan a hnuaia ‘Hriatchian Lehzual Nan’ hi hmet rawh.</string>
+  <string name="Learn_More">HRIATCHIAN LEHZUAL NAN</string>
+  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
+  <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
+    <item quantity="zero"></item>
+    <item quantity="one">Entity %1$d thlan a ni</item>
+    <item quantity="two"></item>
+    <item quantity="few"></item>
+    <item quantity="many"></item>
+    <item quantity="other">Entity %1$d thlan a ni</item>
+  </plurals>
+  <string name="Uwazi_RelationShipWidget_Select_Entities">He property nena thlunzawm i duh entity te thlang rawh.</string>
+  <string name="Analytics_contribute_reminder_title">Data i share mek</string>
+  <string name="Analytics_contribute_reminder_description">Hriattirna: Tella thuamṭhat nan i app hman dan (analytics) i share mek a ni. Settings-ah lutin engtikah pawh i titawp thei ang.</string>
+  <string name="Analytics_contribute_more_info">Data kan khâwm dân hrechiang lehzual tûrin,</string>
+  <string name="Analytics_contribute_more_info2">he phêk hi tlawh rawh.</string>
+  <string name="Analytics_contribute_title">Ṭawiawm ve i duh em?</string>
+  <string name="Analytics_contribute_description">Settings-ah lûtin engtik lai pawhin i inhnûkdâwk (opt out) thei ang.</string>
+  <string name="Analytics_contribute_info_link">Data kan khâwm dân hrechiang lehzual tûrin, he phek hi tlawh rawh.</string>
+  <string name="Analytics_how_works_title">A thawh dân</string>
+  <string name="Analytics_how_works_description">• Analytics atân DivviUp, mimal dinhmun humhimna dâwt (privacy-respecting system) kan hmang.
+• A tlêm theipatawpin data kan la khâwm ṭhîn.
+• Data zawng zawng hi nihna thup (anonymous) a ni a, i nihna chhui theih a ni ngai lo vang.</string>
+  <string name="Analytics_questions_title">Zawhna bîkte</string>
+  <string name="Analytics_questions_description">Zirchianna tin hian zawhna bîk aṭangin data an khâwm ṭhîn. A entîrna chu hengte hi a ni:</string>
+  <string name="Analytics_questions_examples">🔓 Tella kâr khatah vawi 4 hawn a ni
+💾  File 32 Tella-ah dah a ni
+📖  Spanish ṭawng thlan a ni
+⚡  Server 1 inzawmtîr a ni
+😎 Calculator inthupna (camouflage) on a ni</string>
+  <string name="Analytics_share_data_title">Tella tihhmasawn nân i data ṭâwm rawh</string>
+  <string name="Analytics_share_data_description">He zirchiannaa tel hian, eng feature-te nge i tâna pawimawh leh app i hman dân min hriatthiamtîr dâwn a ni.</string>
+  <string name="Analytics_respect_privacy_title">I mimal dinhmun (privacy) kan zahsak che</string>
+  <string name="Analytics_respect_privacy_description">• Tella-a file i dahṭhate emaw i pâwl (organization) hnêna i thawnte rêng rêng hi luhchhuah (access) theihna kan nei lo.
+• I data hi tu hnênah mah kan hralhin kan <b>
+ṭâwm ngai lo vang</b>.</string>
+  <string name="Analytics_banner_title">Tella tihhmasawn nân analytics ṭâwm rawh</string>
+  <string name="Analytics_banner_improve_description">Tella i hman dân min hriatthiamtîr rawh. Data zawng zawng hi nihna thup (anonymous) a ni a, i nihna chhui theih a ni ngai lo vang.
+
+Tella team hnênah analytics i ṭâwm duh em?</string>
+  <string name="Settings_Analytics_switch_title">Tella i hman dân min hriatthiamtîr rawh. I data hmang hian i nihna (identity) chhui theih a ni ngai lo vang.</string>
+  <string name="Settings_Analytics_switch_expl">Tella i hman dân min hriatthiamtîr rawh. I data hmang hian i nihna (identity) chhui theih a ni ngai lo vang.</string>
+  <string name="select_entities">Entity thlang rawh</string>
+  <string name="search_for_or_select_the_entities_you_want_to_connect_to_this_property">He property nêna inzawmtîr i duh entity-te chu zawng rawh emaw thlang rawh.</string>
+  <string name="add_more_entities">Entity dang telh belh rawh</string>
+  <string name="on_select_entities_clicked_tag" translatable="false">onSelectEntitiesClicked</string>
+  <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
+  <string name="Settings_Analytics_turn_on_dialog">Analytics i inṭâwmpui (share) chhunzawm tawh lo vang. Hei hi Settings aṭangin i thlâk danglam thei reng e.</string>
+  <string name="Settings_Analytics_turn_off_dialog">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
+  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
+  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
+  <string name="unlock">Hawng rawh</string>
+  <string name="Onboard_Collect_Data">Data khâwm rawh</string>
+  <string name="Onboard_Collect_Data_Exp">Pâwl (organization) nêna in thawk a nih chuan, form, report, leh file-te chu Tella aṭangin i pâwl hnênah thawn nghâl rawh.</string>
+  <string name="action_flip_vertically">A tungzawnga let</string>
+  <string name="action_flip_horizontally">A khampheia let</string>
+  <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
+  <string name="create_new_folder">FOLDER THAR SIAM RAWH</string>
+  <string name="use_shared_drive">SHARED DRIVE HMANG RAWH</string>
+  <string name="go_to_google_drive">GOOGLE DRIVE-AH KAL RAWH</string>
+  <string name="select_google_drive">Google Drive thlang rawh</string>
+  <string name="google_drive" translatable="false">Google Drive
+</string>
+  <string name="learn_more_about_the_types_of_drives">Drive chi hrang hrangte chungchâng hrechiang lehzual rawh.</string>
+  <string name="description_google_drive">Pâwl (organization) Shared Drive-ah i inzawm thei a, a nih loh pawhin i mimal Drive-ah folder thar i siam thei bawk.</string>
+  <string name="select_a_drive_to_connect">Inzawmna tûr Drive thlang rawh</string>
+  <string name="gdrive_documentation_url" translatable="false">https://tella-app.org/g-drive/</string>
+  <string name="settings_add.server.selection_dialog.title">Eng ang server-ah nge inzawm i duh?</string>
+  <string name="unavailable_connections">Inzawmna hman theih lohte</string>
+  <string name="unavailable_connections_desc">A hnuaia hming (category) târ lante atân hian, rualin inzawmna (connection) pakhat chauh hman theih a ni. Inzawmna thar siam belh tûrin, khawngaihin Connections Settings-ah lûtin tûna i hman lai hi paih (delete) hmasa rawh.</string>
+  <string name="no_permission_to_folder_google_drive">He folder-a upload tûr hian phalna i nei lo.</string>
+  <string name="settings.servers.title_server.settings2">Inzawmnate</string>
+  <string name="settings.servers.add_server.expl2">Pâwl (organization) nêna in thawk a nih chuan, file leh data thawn tûrin an server-ah inzawm rawh. I pâwl thawhpuite chuan server chanchin (details) an pe tûr che a ni.</string>
+  <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
+  <string name="go_to_dropbox">DOPBOX AH KAL RAWH</string>
+  <string name="dropbox" translatable="false">Dropbox</string>
+  <string name="Drafts_Header_Message">Hengte hi report i thawh mekte an ni.</string>
+  <string name="Outboxes_Header_Message">Heng report te hi thehluh theih a inpeih tawh a ni</string>
+  <string name="Submitted_Header_Message">Hêngte hi report hlawhtling taka i thehluh tawhte chu an ni.</string>
+  <string name="Connections_description">Hetah hian inzawmnate (connections) chungchâng hrechiang lehzual rawh. Pâwl
+ (organization) nêna in thawk a nih chuan, eng
+ connection nge hman tûr tih an hnênah i zâwt thei ang.</string>
+  <string name="Connections_description_selection">Hetah hian inzawmnate (connections) chungchâng hrechiang lehzual rawh.</string>
+  <string name="settings.docu_add.server_dialog.select_next_cloud">Nextcloud</string>
+  <string name="NextCloud">Nextcloud</string>
+  <string name="NextCloud_Create_New_Folder">Folder thar siam rawh</string>
+  <string name="NextCloud_Create_New_Folder_Description">I report-te chu i Nextcloud-a
+ folder tharah upload a ni ang. He folder
+ hming tûr hi hetah hian thlang rawh.</string>
+  <string name="NextCloud_Folder_Name">Folder hming</string>
+  <string name="Error_Connecting_To_Server_Msg">Server inzawm a hlawhchham. Khawngaihin ti nawn leh rawh.</string>
+  <string name="ssl_validator_reason_cert_not_trusted" translatable="false">- The server certificate is not trusted</string>
+  <string name="ssl_validator_reason_cert_expired" translatable="false">- The server certificate expired</string>
+  <string name="ssl_validator_reason_cert_not_yet_valid" translatable="false">- The server certificate valid dates are in the future</string>
+  <string name="ssl_validator_reason_hostname_not_verified" translatable="false">- The URL does not match the hostname in the certificate</string>
+  <string name="ssl_validator_question">Eng pawh ni se he certificate hi rin i duh em?</string>
+  <string name="ssl_validator_not_saved" translatable="false">Could not save certificate</string>
+  <string name="ssl_validator_btn_details_see" translatable="false">Details</string>
+  <string name="ssl_validator_btn_details_hide" translatable="false">Hide</string>
+  <string name="ssl_validator_label_subject" translatable="false">Issued to:</string>
+  <string name="ssl_validator_label_issuer" translatable="false">Issued by:</string>
+  <string name="ssl_validator_label_CN" translatable="false">Common name:</string>
+  <string name="ssl_validator_label_O" translatable="false">Organization:</string>
+  <string name="ssl_validator_label_OU" translatable="false">Organizational unit:</string>
+  <string name="ssl_validator_label_C" translatable="false">Country:</string>
+  <string name="ssl_validator_label_ST" translatable="false">State:</string>
+  <string name="ssl_validator_label_L" translatable="false">Location:</string>
+  <string name="ssl_validator_label_validity" translatable="false">Validity:</string>
+  <string name="ssl_validator_label_validity_from" translatable="false">From:</string>
+  <string name="ssl_validator_label_validity_to" translatable="false">To:</string>
+  <string name="ssl_validator_label_signature" translatable="false">Signature:</string>
+  <string name="ssl_validator_label_signature_algorithm" translatable="false">Algorithm:</string>
+  <string name="digest_algorithm_not_available" translatable="false">This digest algorithm is not available on your phone.</string>
+  <string name="ssl_validator_label_certificate_fingerprint" translatable="false">Fingerprint:</string>
+  <string name="certificate_load_problem" translatable="false">There is a problem loading the certificate.</string>
+  <string name="ssl_validator_null_cert" translatable="false">The certificate could not be shown.</string>
+  <string name="ssl_validator_no_info_about_error" translatable="false">- No information about the error</string>
+  <string name="ssl_validator_header" translatable="false">The identity of the server could not be verified</string>
+  <string name="login_data_own_scheme" translatable="false">nc</string>
+  <string name="anonymous_account_type" translatable="false">AnonymousAccountType</string>
+  <string name="auth_unsupported_multiaccount" translatable="false">%1$s does not support multiple accounts</string>
+  <string name="go_to_nextcloud">Nextcloud-ah kal rawh</string>
+  <string name="google_drive_create_folder_description">I report-te chu i Google Drive-a folder tharah upload a ni ang. He folder hming tûr hi hetah hian thlang rawh.</string>
+  <string name="folder_name">Folder hming</string>
+  <string name="Folder_Empty_Error">Folder hming a ruak thei lo</string>
+  <string name="file_name_taken">File hming hi hman sa a ni. Khawngaihin a dang hmang rawh.</string>
+  <string name="folder_exist_error">Folder hming hi hman sa a ni. Khawngaihin a dang hmang rawh.</string>
+  <string name="nextcloud_file_size_limit">Tûnah rih chuan, Nextcloud server-ah file 20MB aia tête chauh thehluh theih a ni.</string>
+  <string name="invalid_url">URL a dik lo</string>
+  <string name="delete_report">Report paih tûr em ni?</string>
+  <string name="report_submitted_msg">I report chu hlawhtling taka thehluh a ni e.</string>
+  <string name="Collect_MediaWidget_Attach_File">File thil tel rawh</string>
+  <string name="form_successfully_submitted">%1$s hlawhtling takin thehluh a ni</string>
+  <string name="error_file_not_found">File lâk luh i tum hi a awm tawh lo. Khawngaihin ti nawn leh rawh.</string>
+  <string name="select_file_picker">File manager thlang rawh</string>
+  <string name="gallery_toast_fail_import_no_file_manager">File manager app hmuh a ni lo. File la lût tûrin khawngaihin file manager app (Google Files, Fossify File Manager, emaw file manager dang eng pawh) install rawh.</string>
+  <string name="onboard_lock_warning_title">I file-te ti bo suh</string>
+  <string name="onboard_lock_warning_message">I kalhna (lock) chauh hi i Tella file-a luh theihna awm chhun a ni.
+
+I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo. Tella chhûnga i data-te chu a bo hlen vang.</string>
+  <string name="onboard_lock_warning_cta">Ka hrethiam e</string>
+  <string name="onboard_lock_protect_sheet_title">I kalhna (lock) humhim rawh</string>
+  <string name="onboard_lock_protect_sheet_message">I kalhna (lock) chu hriat reng tum la, a nih loh pawhin password manager ang hmun himah vawng ṭha rawh.</string>
+  <string name="onboard_lock_protect_sheet_continue">CHHUNZAWM RAWH</string>
+  <string name="lock_update_success_done">Zo ta</string>
+  <string name="onboard_lock_success_title">Success</string>
+  <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
+  <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
+  <string name="Uwazi_DeleteEntity_SheetTitle">Entity paih tûr em ni?</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">I device aṭangin he form hi paih i duh chiang em? Thehluh tawh a nih avângin, data chu in pâwl (organization) server-ah a la awm reng thung ang.</string>
+  <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" chu paih (delete) a ni tawh.</string>
+  <string name="google_drive_shared_drive_migration_sheet_title">Google Drive folder thar siam rawh</string>
+  <string name="google_drive_shared_drive_migration_sheet_message">Tella hian shared drive a thlâwp tawh lo. Google Drive-a report thehluh chhunzawm zêl tûrin, khawngaihin mimal folder thar siam rawh.</string>
+  <string name="google_drive_reconnect_sheet_title">Google Drive inzawmtîr ṭha leh rawh</string>
+  <string name="google_drive_reconnect_sheet_message">He folder hi luh theih a ni tawh lo. Report thehluh chhunzawm zêl tûrin, khawngaihin folder thar siam rawh emaw i account inzawmtîr ṭha leh rawh.</string>
+  <string name="onboard.nearby_sharing_expl">Internet connection tel lovin i kiang hnaia device-te hnênah file thawn rawh.</string>
+  <string name="Snackbar_Submit_Files_Error">Report thehlût tûrin, khawngaihin thupui (title) chhu lût la, file thil tel rawh.</string>
+  <string name="connect_to_device">Device-ah inzawm rawh</string>
+  <string name="qr_code_sender_instruction">Thawntuin a scan theih nân he QR code hi
+ târ lang rawh</string>
+  <string name="qr_code_scan_instruction">Dawngtu QR code scan rawh</string>
+  <string name="qr_code_issue_prompt">QR code hmanah buaina i nei em?</string>
+  <string name="connect_manually">Mahnia inzawmna siam</string>
+  <string name="show_device_information">I device chanchin (information) târ lang rawh</string>
+  <string name="device_connection_instructions">I device nêna inzawm tûrin thawntuin a hnuaia
+ mite hi a chhut luh a ngai.</string>
+  <string name="connect_code">Inzawmna code</string>
+  <string name="pin">PIN</string>
+  <string name="port">Port</string>
+  <string name="verification">Finfiahna</string>
+  <string name="verify_sequence_match">Hêng nambat indawt hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="nearbySharing_verifyConnection_sender">Inzawmna a him ngei tih chian nân, a chunga nambat indawt hi dawngtu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="nearbySharing_verifyConnection_recipient">Inzawmna a him ngei tih chian nân, a chunga nambat indawt hi device danga lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="nearbySharing_verifyConnection_warning">Nambat indawtte hi a inmil loh chuan, inzawmna hi a him tâwk lo thei a, hnâwl (discard) tûr a ni.</string>
+  <string name="confirm_and_connect">Nemnghet la inzawm rawh</string>
+  <string name="wifi">Wi-Fi</string>
+  <string name="get_connected">Inzawm rawh</string>
+  <string name="wifi_connection_instruction">Device pahnihte chu Wi-Fi network thuhmunah an inzawm ve ve em tih finfiah rawh</string>
+  <string name="tips_to_connect_title">Inzawm dân tûr thurâwnte</string>
+  <string name="tips_to_connect_body">1. Wi-Fi network chu internet-a inzawm kher a ngai lo.
+2. I phone hotspot hmangin nangma Wi-Fi network i siam thei ang.
+3. VPN connection inzawm lai reng reng titâwp (disable) rawh.</string>
+  <string name="current_wifi_network">Tûna Wi-Fi network hman lai</string>
+  <string name="same_wifi_text">Aw, Wi-Fi network thuhmunah kan awm e</string>
+  <string name="NearBySharing">Nearby sharing</string>
+  <string name="share_files_description">Internet connection awm lo pawhin i kiang hnaia device-te nên file inthawn tawn rawh u
+  1. Device pahnihte chu Wi-Fi network thuhmunah an inzawm ngei tûr a ni
+  2. File i inṭâwmpui tûr chu i rin ngam mi a ni em tih finfiah rawh</string>
+  <string name="send_files">File-te thawn rawh</string>
+  <string name="receive_files">File-te dawng rawh</string>
+  <string name="learn_more_about_nearby_sharing">Nearby sharing chungchâng hrechiang lehzual rawh</string>
+  <string name="nearby_sharing">Nearby sharing</string>
+  <string name="how_it_works">A thawh dân</string>
+  <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
+  <string name="enter_recipient_info">Network-a zawn hmuh nân dawngtu device
+ chanchin (information) chhu lût rawh</string>
+  <string name="make_sure_sequence_matches">Hêng nambat indawt (sequence) hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="make_sure_sequence_matches_recipient">Hêng nambat indawt (sequence) hi dawngtu device-a lang nên a inmil thlap em tih finfiah rawh</string>
+  <string name="discard_and_start_over">Hnâwl la ṭan ṭha leh rawh</string>
+  <string name="waiting_for_the_sender_to_share_files">Thawntuin file a rawn thawn hun nghâk mêk</string>
+  <string name="prepare_upload_message">Thawntu chuan file %1$d thawn che a tum mêk</string>
+  <string name="waiting_for_the_recipient_to_accept_files">Dawngtuin file a pawm hun nghâk mêk</string>
+  <string name="accept">PAWM</string>
+  <string name="reject">HNÂWL</string>
+  <string name="exit_nearby_sharing">Nearby sharing aṭanga chhuah tûr em ni?</string>
+  <string name="your_progress_will_be_lost">I thil tih laite a bo vang.</string>
+  <string name="ip_address">IP address</string>
+  <string name="sender_files_rejected">Thawntu file-te hnâwl a ni.</string>
+  <string name="the_receiver_accepted_the_files_transfer">"Dawngtuin file thawnte chu a pawm e"</string>
+  <string name="recipient_rejected_the_files">Dawngtuin file-te a hnâwl.</string>
+  <string name="receiving_and_encrypting_files">File dawngin a thupna (encryption) siam mêk a ni</string>
+  <string name="sending_files">File thawn mêk a ni</string>
+  <string name="send_files_title">File thawnna</string>
+  <string name="location_permission_is_required_to_get_wifi_ssid">WiFi SSID la tûrin location phalna (permission) neih a ngai.</string>
+  <string name="failed_to_open_location_settings">Location settings hawn theih a ni lo.</string>
+  <string name="try_again">Ti nawn leh rawh</string>
+  <string name="stop_sharing_files">File thawn tihtâwp tûr em ni?</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing chu tihtâwp a ni ang. Dawngtuin file kim lova thawnte chu a la thei lo vang.</string>
+  <string name="stop">tihtâwp</string>
+  <string name="success_title">Hlawhtlinna</string>
+  <string name="failure_title">Thil dik lo a awm tlat</string>
+  <plurals name="success_file_received_from_sender">
+    <item quantity="zero">Pakhatmah</item>
+    <item quantity="one">Pakhat</item>
+    <item quantity="two">Pahnih</item>
+    <item quantity="few">Tlêmte</item>
+    <item quantity="many">Tam tak</item>
+    <item quantity="other">A dang</item>
+  </plurals>
+  <plurals name="success_file_sent_to_recipient">
+    <item quantity="zero">Pakhatmah</item>
+    <item quantity="one">Pakhat</item>
+    <item quantity="two">Pahnih</item>
+    <item quantity="few">Tlêmte</item>
+    <item quantity="many">Tam tak</item>
+    <item quantity="other">A dang</item>
+  </plurals>
+  <string name="partial_success_summary">File %1$d chauh dawn a ni. File %2$d dawn loh a ni.</string>
+  <plurals name="failure_file_received_expl">
+    <item quantity="zero">Pakhatmah</item>
+    <item quantity="one">Pakhat</item>
+    <item quantity="two">Pahnih</item>
+    <item quantity="few">Tlêmte</item>
+    <item quantity="many">Tam tak</item>
+    <item quantity="other">A dang</item>
+  </plurals>
+  <string name="view_files_action">File-te Enna</string>
+  <string name="view_files">FILE-TE EN RAWH</string>
+  <string name="result">Result-te</string>
+  <string name="waiting_for_the_sender">Thawntu nghâk mêk …</string>
+  <string name="waiting_for_the_recipient">Dawngtu tûr nghâk mêk …</string>
+  <string name="nearby_sharing_title">Nearby Sharing</string>
+  <string name="nearby_sharing_description">Internet connection tel lova i kiang hnaia device-te hnêna file thawn tûrin he feature hi on (enable) rawh.</string>
+  <string name="nearby_sharing_intro">Internet connection awm emaw awm lo pawhin, i kiang hnaia device awm nên file inthawn tawn nghâl rawh.
+
+A bul ṭan nân, dawngtu (recipient) nên Wi-Fi network thuhmunah inzawm rawh u. Wi-Fi network chu internet-ah inzawm lo pawh ni se Nearby Sharing hi hman theih a ni ang.</string>
+  <string name="tips_to_connect_wifi">Nearby Sharing atâna Wi-Fi inzawm dân hrechiang lehzual rawh.</string>
+  <string name="nearbysharing_tips_to_connect_settingup">Ruahmanna siam mêk</string>
+  <string name="nearbysharing_tips_to_connect_settingup_expl">.... Wi-Fi kaltlanga in device-te thlunzawm dân kawng 2 a awm:
+
+1. Wi-Fi router hman, in lama mi 
+\t emaw hnathawhnaa mi angte
+
+2. Device aṭanga Wi-Fi hotspot siam,
+\t phone, tablet, emaw computer angte aṭangin
+
+   \t\ta. Hmangtu pakhatin a device settings-ah lûtin
+\t\t hotspot connection a siam ang.
+
+   \t\tb. Hmangtu dang zâwkin chu hotspot-ah chuan inzawmna a siam ve thung ang.</string>
+  <string name="tips_section_join">Network thuhmuna inzawm tlan dân</string>
+  <string name="tips_join_body">Wi-Fi network in peihfel hnuah, in device settings-ah lût ula, in pahnihin
+Wi-Fi network thuhmunah in inzawm em tih finfiah rawh u.</string>
+  <string name="tips_section_more">Thurâwn dangte</string>
+  <string name="tips_more_bullets">• Wi-Fi network chuan internet access neih kher a
+ \t ngai lo. Wi-Fi router emaw hotspot chu a
+ \t nung a, a thawk ṭha a nih phawt chuan,
+ \t online lo chung pawhin Nearby Sharing
+ \t atân hman theih a ni
+
+• VPN connection inzawm lai reng reng titâwp (disable) ngei ang che.</string>
+  <string name="feedback_contact_info_hint">Contact information (optional)</string>
+  <string name="file_already_exists">File already exists.</string>
+</resources>

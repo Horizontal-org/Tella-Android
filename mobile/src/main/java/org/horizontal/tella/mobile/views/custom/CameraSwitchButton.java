@@ -6,8 +6,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.otaliastudios.cameraview.controls.Facing;
-
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.util.ViewUtil;
 
@@ -26,8 +24,8 @@ public class CameraSwitchButton extends AppCompatImageButton implements View.OnT
         setOnTouchListener(this);
     }
 
-    public void displayCamera(Facing facing) {
-        if (facing == Facing.BACK) {
+    public void displayCamera(boolean isBackCamera) {
+        if (isBackCamera) {
             setImageResource(R.drawable.ic_camera_rear_white);
         } else {
             setImageResource(R.drawable.ic_camera_front_white);

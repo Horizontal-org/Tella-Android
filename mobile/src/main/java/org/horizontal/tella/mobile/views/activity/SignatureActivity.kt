@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.hzontal.tella_vault.VaultFile
 import com.simplify.ink.InkView
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +17,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.ActivitySignatureBinding
 import org.horizontal.tella.mobile.mvvm.signature.SignatureViewModel
 import org.horizontal.tella.mobile.util.DialogsUtil
+import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -115,7 +116,7 @@ class SignatureActivity : BaseLockActivity() {
                 signatureViewModel.addPngImage(stream.toByteArray())
             }
         } catch (exception: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(exception)
+            CrashReporterProvider.get().recordException(exception)
         }
     }
 
@@ -143,7 +144,7 @@ class SignatureActivity : BaseLockActivity() {
 
     private fun onAddError(error: Throwable) {
         val messageResId = when {
-            error.isDuplicateNameOrFileExistsError() -> R.string.file_name_taken
+            error.isDuplicateNameOrFileExistsError() -> error.getDuplicateErrorMessageResId()
             else -> R.string.collect_form_signature_toast_fail_saving
         }
         DialogUtils.showBottomMessage(

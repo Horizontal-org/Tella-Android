@@ -793,7 +793,7 @@ Pulsa sobre una entidad para seguir trabajando en ella.</string>
   <string name="Edit_Dialog_confirm_exit_title">Cambios no guardados</string>
   <string name="Edit_Dialog_confirm_exit">Tus cambios no se han guardado. ¿Te gustaría guardarlos antes de salir?</string>
   <string name="action_exit_without_saving">SALIR SIN GUARDAR</string>
-  <string name="incorrect_pattern">Patrón Incorrecto
+  <string name="incorrect_pattern">Incorrect Pattern.
 
 </string>
   <string name="incorrect_pin">Pin Incorrecto
@@ -1011,4 +1011,131 @@ Si olvida su bloqueo, no hay forma de recuperarlo. Sus datos en Tella se perder�
   <string name="google_drive_shared_drive_migration_sheet_message">Tella ya no admite unidades compartidas. Para seguir enviando informes a Google Drive, crea una nueva carpeta personal.</string>
   <string name="google_drive_reconnect_sheet_title">Reconectar Google Drive</string>
   <string name="google_drive_reconnect_sheet_message">Esta carpeta ya no está disponible. Para seguir enviando informes, cree una nueva carpeta o reconecte su cuenta.</string>
+  <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
+  <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
+  <string name="connect_to_device">Connect to device</string>
+  <string name="qr_code_sender_instruction">Show this QR code for the
+ sender to scan</string>
+  <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
+  <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
+  <string name="connect_manually">Connect manually</string>
+  <string name="show_device_information">Show your device information </string>
+  <string name="device_connection_instructions">The sender needs to input the following to
+ connect to your device.</string>
+  <string name="connect_code">Connect code</string>
+  <string name="pin">PIN</string>
+  <string name="port">Port</string>
+  <string name="verification">Verification</string>
+  <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
+  <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
+  <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+  <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
+  <string name="confirm_and_connect">Confirm and connect</string>
+  <string name="wifi">Wi-Fi</string>
+  <string name="get_connected">Get connected</string>
+  <string name="wifi_connection_instruction">Make sure both devices are connected to the same Wi-Fi network</string>
+  <string name="tips_to_connect_title">Tips to connect</string>
+  <string name="tips_to_connect_body">
+    1. The Wi-Fi network does not need to be connected to the internet.
+2. You can create your own Wi-Fi network using your phone’s hotspot feature.
+3. Disable any VPN connections.
+</string>
+  <string name="current_wifi_network">Current Wifi network</string>
+  <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
+  <string name="NearBySharing">Nearby sharing</string>
+  <string name="share_files_description">
+    Share files with nearby devices without an Internet connection
+  1. Both devices must be connected to the same Wifi network
+  2. Make sure you trust the person you are sharing files with
+</string>
+  <string name="send_files">Send files</string>
+  <string name="receive_files">Receive files</string>
+  <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
+  <string name="nearby_sharing">Nearby sharing</string>
+  <string name="how_it_works">How it works</string>
+  <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
+  <string name="enter_recipient_info">Enter the recipient’s device
+ information to find it on the network</string>
+  <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
+  <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
+  <string name="discard_and_start_over">Discard and start over</string>
+  <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
+  <string name="prepare_upload_message">The sender is trying to send you %1$d files</string>
+  <string name="waiting_for_the_recipient_to_accept_files">Waiting for the recipient to accept files</string>
+  <string name="accept">ACCEPT</string>
+  <string name="reject">REJECT</string>
+  <string name="exit_nearby_sharing">Exit nearby sharing?</string>
+  <string name="your_progress_will_be_lost">Your progress will be lost.</string>
+  <string name="ip_address">IP address</string>
+  <string name="sender_files_rejected">Sender\'s files rejected.</string>
+  <string name="the_receiver_accepted_the_files_transfer">"The receiver accepted the files transfer "</string>
+  <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
+  <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
+  <string name="sending_files">Sending files</string>
+  <string name="send_files_title">Send files</string>
+  <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
+  <string name="failed_to_open_location_settings">Failed to open location settings.</string>
+  <string name="try_again">Try again</string>
+  <string name="stop_sharing_files">Stop sharing files?</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
+  <string name="stop">stop</string>
+  <string name="success_title">Success</string>
+  <string name="failure_title">Something went wrong</string>
+  <plurals name="success_file_received_from_sender">
+    <item quantity="one">You have successfully received %1$d file from the sender.</item>
+    <item quantity="other">You have successfully received %1$d files from the sender.</item>
+  </plurals>
+  <plurals name="success_file_sent_to_recipient">
+    <item quantity="one">You have successfully sent %1$d file to the recipient.</item>
+    <item quantity="other">You have successfully sent %1$d files to the recipient.</item>
+  </plurals>
+  <string name="partial_success_summary">Only %1$d files were received. %2$d files were not received.</string>
+  <plurals name="failure_file_received_expl">
+    <item quantity="one">0 files were received. %1$d file was not received.</item>
+    <item quantity="other">0 files were received. %1$d files were not received.</item>
+  </plurals>
+  <string name="view_files_action">View Files</string>
+  <string name="view_files">VIEW FILES</string>
+  <string name="result">Results</string>
+  <string name="waiting_for_the_sender">Waiting for sender …</string>
+  <string name="waiting_for_the_recipient">Waiting for recipient …</string>
+  <string name="nearby_sharing_title">Nearby Sharing</string>
+  <string name="nearby_sharing_description">Enable this feature to share files with devices near you, without an Internet connection.</string>
+  <string name="nearby_sharing_intro">Share files directly with a device near you, with
+or without an Internet connection.
+
+To get started, join the same Wi-Fi network as the recipient. Nearby Sharing will work even if the Wi-Fi network is not connected to the Internet.</string>
+  <string name="tips_to_connect_wifi">Learn more about connecting to Wi-Fi for Nearby Sharing.</string>
+  <string name="nearbysharing_tips_to_connect_settingup">Setting up</string>
+  <string name="nearbysharing_tips_to_connect_settingup_expl">
+    There are 2 ways to connect your devices 
+through Wi-Fi:
+
+    1. Using a Wi-Fi router, such as at home 
+\t or work
+
+    2. Setting up a Wi-Fi hotspot from a device,
+\t such as a phone, tablet, or computer
+
+       \t\ta. One user creates a hotspot connection
+\t\t by going to their device’s settings.
+
+       \t\tb. The other user connects to that hotspot.
+</string>
+  <string name="tips_section_join">Joining the same network</string>
+  <string name="tips_join_body">
+        Once the Wi-Fi network is set up, go to your
+devices’ settings and verify that you are both 
+on the same Wi-Fi network.
+    </string>
+  <string name="tips_section_more">More tips</string>
+  <string name="tips_more_bullets">• The Wi-Fi network does not need to have
+ \t internet access. As long as the Wi-Fi router
+ \t or hotspot is powered on and functioning,
+ \t it can be used for Nearby Sharing even
+ \t without being online
+
+• Make sure to disable any active VPN connections.</string>
+  <string name="feedback_contact_info_hint">Contact information (optional)</string>
+  <string name="file_already_exists">File already exists.</string>
 </resources>

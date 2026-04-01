@@ -1,0 +1,270 @@
+package org.horizontal.tella.mobile.views.activity;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hzontal.tella_vault.MyLocation;
+
+import org.horizontal.tella.mobile.R;
+import org.horizontal.tella.mobile.databinding.ActivityLocationMapBinding;
+import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContract;
+import org.horizontal.tella.mobile.mvp.presenter.LocationGettingPresenter;
+import org.horizontal.tella.mobile.util.C;
+import org.horizontal.tella.mobile.views.custom.MapViewOverlay;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+
+import java.util.ArrayList;
+
+public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
+
+    public static final String SELECTED_LOCATION = "sl";
+    public static final String CURRENT_LOCATION_ONLY = "ro";
+
+    private static final int PERMISSIONS_REQUEST_CODE = 1051;
+
+    private Toolbar toolbar;
+    private ProgressBar progressBar;
+    private TextView hint;
+    private FloatingActionButton faButton;
+    private MapViewOverlay map;
+
+    @Nullable
+    private MyLocation myLocation;
+    private Marker selectedMarker;
+    private boolean virginMap = true;
+    private LocationGettingPresenter locationGettingPresenter;
+    private boolean readOnly;
+    private ActivityLocationMapBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityLocationMapBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
+
+        myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
+        readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
+        locationGettingPresenter = new LocationGettingPresenter(this, readOnly);
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.collect_form_geopoint_app_bar);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white);
+        }
+
+        Context ctx = getApplicationContext();
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        // Required for OpenStreetMap tile server: valid User-Agent or tiles return 403
+        Configuration.getInstance().setUserAgentValue(ctx.getPackageName());
+
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        map.getController().setZoom(18.0);
+
+        requestPermissionsIfNecessary(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.INTERNET
+        });
+        map.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.ALWAYS);
+        map.setMultiTouchControls(true);
+
+        CompassOverlay compassOverlay = new CompassOverlay(this, map);
+        compassOverlay.enableCompass();
+        map.getOverlays().add(compassOverlay);
+
+        map.addTapListener(new MapViewOverlay.OnTapListener() {
+            @Override
+            public void onMapTapped(GeoPoint geoPoint) {
+            }
+
+            @Override
+            public void onMapLongPress(Location location) {
+                if (!readOnly) {
+                    showMyLocation(MyLocation.fromLocation(location));
+                }
+            }
+        });
+        faButton.setOnClickListener(view -> {
+            if (locationGettingPresenter.isGPSProviderEnabled()) {
+                startGettingLocation();
+            } else {
+                checkLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
+            }
+        });
+        initMapLocationAndCamera();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.location_map_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            myLocation = null;
+            setCancelAndFinish();
+            return true;
+        }
+
+        if (id == R.id.menu_item_select) {
+            setResultAndFinish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationGettingPresenter.destroy();
+    }
+
+    @Override
+    public void onGettingLocationStart() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onGettingLocationEnd() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLocationSuccess(Location location) {
+        if (location != null && virginMap) {
+            virginMap = false;
+            myLocation = MyLocation.fromLocation(location);
+            showMyLocation(myLocation);
+        }
+    }
+
+    @Override
+    public void onNoLocationPermissions() {
+        setCancelAndFinish();
+    }
+
+    @Override
+    public void onGPSProviderDisabled() {
+        showGpsMetadataDialog(C.GPS_PROVIDER, this::startGettingLocation);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    private void requestPermissionsIfNecessary(String[] permissions) {
+        ArrayList<String> toRequest = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                toRequest.add(permission);
+            }
+        }
+        if (!toRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this, toRequest.toArray(new String[0]), PERMISSIONS_REQUEST_CODE);
+        }
+    }
+
+    private void showMyLocation(@NonNull MyLocation location) {
+        GeoPoint point = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+        if (selectedMarker != null) {
+            selectedMarker.setPosition(point);
+            selectedMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+        } else {
+            Marker marker = new Marker(map);
+            marker.setPosition(point);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER);
+            selectedMarker = marker;
+            map.getOverlays().add(selectedMarker);
+        }
+
+        map.getController().animateTo(point);
+        selectedMarker.setDraggable(!readOnly);
+    }
+
+    private void initMapLocationAndCamera() {
+        if (!readOnly) {
+            hint.setVisibility(View.VISIBLE);
+        }
+
+        if (myLocation == null || readOnly) {
+            locationGettingPresenter.startGettingLocation(!readOnly);
+        }
+
+        if (myLocation != null) {
+            showMyLocation(myLocation);
+        }
+    }
+
+    private void startGettingLocation() {
+        locationGettingPresenter.startGettingLocation(!readOnly);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == C.GPS_PROVIDER && resultCode == RESULT_OK) {
+            startGettingLocation();
+        }
+    }
+
+    private void setResultAndFinish() {
+        if (selectedMarker == null) {
+            setCancelAndFinish();
+        } else {
+            MyLocation result = new MyLocation();
+            result.setLatitude(selectedMarker.getPosition().getLatitude());
+            result.setLongitude(selectedMarker.getPosition().getLongitude());
+            setResult(Activity.RESULT_OK, new Intent().putExtra(SELECTED_LOCATION, result));
+            finish();
+        }
+    }
+
+    private void setCancelAndFinish() {
+        setResult(Activity.RESULT_CANCELED, new Intent().putExtra(SELECTED_LOCATION, myLocation));
+        finish();
+    }
+
+    private void initView() {
+        toolbar = binding.toolbar;
+        progressBar = binding.content.progressBar;
+        hint = binding.content.info;
+        faButton = binding.fabButton;
+        map = binding.content.getRoot().findViewById(R.id.mapView);
+    }
+}

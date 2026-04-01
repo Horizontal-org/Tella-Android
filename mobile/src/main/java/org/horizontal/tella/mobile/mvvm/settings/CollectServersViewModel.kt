@@ -2,7 +2,7 @@ package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -44,7 +44,7 @@ class CollectServersViewModel @Inject constructor(
                 .subscribe(
                     { servers -> _listCollectServers.postValue(servers) },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                     }
                 )
         )

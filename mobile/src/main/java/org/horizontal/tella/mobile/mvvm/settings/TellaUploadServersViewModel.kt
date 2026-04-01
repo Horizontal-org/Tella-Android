@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.mvvm.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.mvp.presenter;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -59,7 +59,7 @@ public class CheckTUSServerPresenter implements
                         view.onServerCheckFailure(uploadProgressInfo.status);
                     }
                 }, throwable -> {
-                    FirebaseCrashlytics.getInstance().recordException(throwable);
+                    CrashReporterProvider.INSTANCE.get().recordException(throwable);
                     view.onServerCheckError(throwable);
                 })
         );

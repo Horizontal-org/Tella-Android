@@ -2,7 +2,7 @@ package org.horizontal.tella.mobile.mvvm.settings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,14 +51,14 @@ class CollectBlankFormListRefreshViewModel @Inject constructor(
 
                     // Log errors
                     listFormResult.errors.forEach { error ->
-                        FirebaseCrashlytics.getInstance().recordException(error.exception)
+                        CrashReporterProvider.get().recordException(error.exception)
                     }
 
                     // Notify success
                     _refreshSuccess.postValue(Unit)
                 }, { throwable ->
                     // Log and emit error
-                    FirebaseCrashlytics.getInstance().recordException(throwable)
+                    CrashReporterProvider.get().recordException(throwable)
                     _refreshError.postValue(throwable)
                 })
         )

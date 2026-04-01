@@ -58,10 +58,27 @@ class SharedGoogleDriveViewModel @Inject constructor(
                 _folderCreated.postValue(folderId)
 
             } catch (e: UserRecoverableAuthIOException) {
-                _authorizationIntent.value = e.intent // Pass the authorization intent
+                handleRecoverableAuth(e)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to create folder: ${e.message}"
+                val recoverable = e.cause as? UserRecoverableAuthIOException
+                if (recoverable != null) {
+                    handleRecoverableAuth(recoverable)
+                } else {
+                    _errorMessage.value = "Failed to create folder: ${e.message}"
+                }
             }
+        }
+    }
+
+    /**
+     * Handles NEED_REMOTE_CONSENT / revoked access: show re-auth intent or ask user to reconnect.
+     */
+    private fun handleRecoverableAuth(e: UserRecoverableAuthIOException) {
+        val intent = e.intent
+        if (intent != null) {
+            _authorizationIntent.value = intent
+        } else {
+            _errorMessage.value = "Google Drive access was removed. Please reconnect your account in Settings or sign in again."
         }
     }
 
@@ -128,9 +145,14 @@ class SharedGoogleDriveViewModel @Inject constructor(
                 }
                 _sharedDrives.value = sharedDriveList
             } catch (e: UserRecoverableAuthIOException) {
-                _authorizationIntent.value = e.intent // Pass the authorization intent
+                handleRecoverableAuth(e)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to retrieve shared drives: ${e.message}"
+                val recoverable = e.cause as? UserRecoverableAuthIOException
+                if (recoverable != null) {
+                    handleRecoverableAuth(recoverable)
+                } else {
+                    _errorMessage.value = "Failed to retrieve shared drives: ${e.message}"
+                }
             }
         }
     }

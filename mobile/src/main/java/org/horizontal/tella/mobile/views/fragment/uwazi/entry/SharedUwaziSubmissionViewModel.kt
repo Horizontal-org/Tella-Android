@@ -3,7 +3,7 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.entry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import com.hzontal.tella_vault.VaultFile
@@ -69,7 +69,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                 // _instance.postValue(savedInstance)
             }
             ) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -97,7 +97,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                     }
                 },
                 { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                    CrashReporterProvider.get().recordException(throwable!!)
                     error.postValue(throwable)
                 }
             )?.let {
@@ -135,7 +135,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                     progress.postValue(EntityStatus.SUBMITTED)
                 }
                 ) { throwable: Throwable? ->
-                    FirebaseCrashlytics.getInstance().recordException(
+                    CrashReporterProvider.get().recordException(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -178,7 +178,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                         progress.postValue(EntityStatus.SUBMITTED)
                     },
                     { throwable ->
-                        FirebaseCrashlytics.getInstance().recordException(throwable)
+                        CrashReporterProvider.get().recordException(throwable)
                         error.postValue(throwable)
                         progress.postValue(EntityStatus.SUBMISSION_ERROR)
                     }
@@ -363,7 +363,7 @@ class SharedUwaziSubmissionViewModel : ViewModel() {
                 if (throwable is NoConnectivityException) {
                     _connectionAvailable.postValue(true)
                 } else {
-                    FirebaseCrashlytics.getInstance().recordException(
+                    CrashReporterProvider.get().recordException(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )

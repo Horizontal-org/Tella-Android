@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -125,7 +125,7 @@ class SharedFormsViewModel @Inject constructor(
                     onGetBlankFormDefSuccess.postValue(FormPair(form, formDef))
                 }
             }, { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
             })?.let {
                 disposables.add(
@@ -155,7 +155,7 @@ class SharedFormsViewModel @Inject constructor(
                 onInstanceFormDefSuccess.postValue(maybeCloneInstance(instance))
             }, { throwable ->
                 // Error handling
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 onFormDefError.postValue(throwable)
             }))
     }
@@ -183,7 +183,7 @@ class SharedFormsViewModel @Inject constructor(
                     onToggleFavoriteSuccess.postValue(form) // Notify UI
                 }
             }) { throwable: Throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 onError.postValue(throwable)
             })
     }
@@ -196,7 +196,7 @@ class SharedFormsViewModel @Inject constructor(
                     id
                 )
             }.subscribe({ onFormInstanceDeleteSuccess.postValue(true) }) { throwable: Throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 onError.postValue(throwable)
             })
     }
@@ -209,7 +209,7 @@ class SharedFormsViewModel @Inject constructor(
                     num
                 )
             }) { throwable: Throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 onError.postValue(throwable)
             })
     }
@@ -255,14 +255,14 @@ class SharedFormsViewModel @Inject constructor(
             .subscribe({ listFormResult: ListFormResult ->
                 // log errors if any in result..
                 for (error in listFormResult.errors) {
-                    FirebaseCrashlytics.getInstance().recordException(error.exception)
+                    CrashReporterProvider.get().recordException(error.exception)
                 }
                 onBlankFormsListResult.postValue(listFormResult)
             }) { throwable: Throwable? ->
                 if (throwable is NoConnectivityException) {
                     onNoConnectionAvailable.postValue(true)
                 } else {
-                    FirebaseCrashlytics.getInstance().recordException(
+                    CrashReporterProvider.get().recordException(
                         throwable
                             ?: throw NullPointerException("Expression 'throwable' must not be null")
                     )
@@ -294,7 +294,7 @@ class SharedFormsViewModel @Inject constructor(
                     form
                 )
             }.subscribe({ onBlankFormDefRemoved.postValue(true) }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -326,7 +326,7 @@ class SharedFormsViewModel @Inject constructor(
                     form
                 )
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -360,7 +360,7 @@ class SharedFormsViewModel @Inject constructor(
                     )
                 )
             }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(throwable!!)
+                CrashReporterProvider.get().recordException(throwable!!)
                 onFormDefError.postValue(throwable)
             })
     }
@@ -419,7 +419,7 @@ class SharedFormsViewModel @Inject constructor(
             .flatMapCompletable { dataSource: DataSource ->
                 dataSource.removeCachedForms()
             }.subscribe({ onFormCacheCleared.postValue(true) }) { throwable: Throwable? ->
-                FirebaseCrashlytics.getInstance().recordException(
+                CrashReporterProvider.get().recordException(
                     throwable
                         ?: throw NullPointerException("Expression 'throwable' must not be null")
                 )
@@ -444,7 +444,7 @@ class SharedFormsViewModel @Inject constructor(
                 instance.setCollectInstanceAttachments(vaultFiles)
                 _collectFormInstance.postValue(instance)
             }, { throwable ->
-                FirebaseCrashlytics.getInstance().recordException(throwable)
+                CrashReporterProvider.get().recordException(throwable)
                 onError.postValue(throwable)
             })
         )

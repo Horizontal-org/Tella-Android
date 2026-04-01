@@ -4,7 +4,11 @@ import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.*
 import org.horizontal.tella.mobile.data.entity.reports.*
+import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.FILE_INFO
+import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.CONTENT_TYPE
+import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.CONTENT_LENGTH
 import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.AUTHORIZATION_HEADER
+import org.horizontal.tella.mobile.data.reports.utils.ParamsNetwork.CONTENT_RANGE
 import org.horizontal.tella.mobile.data.repository.SkippableMediaFileRequestBody
 
 interface ReportsApiService {
@@ -37,6 +41,17 @@ interface ReportsApiService {
         @Body
         reportBodyEntity: ReportBodyEntity,
     ): Single<ReportPostResponse>
+
+    @PUT
+    fun putFileV2(
+        @Url url: String,
+        @Header(AUTHORIZATION_HEADER) accessToken: String,
+        @Header(CONTENT_RANGE) contentRange: String,
+        @Header(CONTENT_LENGTH) contentLength: Long,
+        @Header(CONTENT_TYPE) contentType: String?,
+        @Header(FILE_INFO) fileInfo: String?,
+        @Body body: SkippableMediaFileRequestBody
+    ): Single<Response<Void>>
 
     @PUT
     fun putFile(

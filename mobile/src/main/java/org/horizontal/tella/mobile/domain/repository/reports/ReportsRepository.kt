@@ -1,11 +1,13 @@
 package org.horizontal.tella.mobile.domain.repository.reports
 
 import com.hzontal.tella_vault.VaultFile
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.entity.reports.ReportBodyEntity
+import org.horizontal.tella.mobile.data.reports.utils.UploadServerConfig
 import org.horizontal.tella.mobile.domain.entity.UploadProgressInfo
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.domain.entity.reports.ReportPostResult
@@ -26,13 +28,12 @@ interface ReportsRepository {
         instance: ReportInstance,
         server: TellaReportServer,
         reportApiId: String
-    )
+    ): Completable
 
     fun upload(
         vaultFile: VaultFile,
-        urlServer: String,
-        reportId: String,
-        accessToken: String
+        uploadServerConfig: UploadServerConfig,
+        reportId: String
     ): Flowable<UploadProgressInfo>
 
     fun check(

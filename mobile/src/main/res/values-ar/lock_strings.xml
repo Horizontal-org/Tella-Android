@@ -44,7 +44,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockSuccess_Message_AllDone">اكتمل الضبط</string>
   <string name="LockSuccess_Message_Hint">يمكنك دومًا تغيير خيار قفل التأمين 
 وزيادة تخصيص Tella من الإعدادات.</string>
-  <string name="LockSuccess_Action_GoToTella">الذهاب إلى Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">كلمة سر غير صحيحة،
 يُرجى المحاولة مرة أخرى</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to

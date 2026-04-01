@@ -16,11 +16,10 @@
   <string name="LockPatternSet_Message_PatternStarted">ವಿನ್ಯಾಸವನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗಿದೆ</string>
   <string name="LockPatternSet_Message_PatternCleared">ವಿನ್ಯಾಸವನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ</string>
   <string name="LockPatternSet_Message_CellAdded">ಸೆಲ್ ಸೇರಿಸಲಾಗಿದೆ</string>
-  <string name="LockPatternSet_Message_CellAddedVerbose">Cell <xliff:g example="3" id="cell_index">%1$d</xliff:g> added</string>
+  <string name="LockPatternSet_Message_CellAddedVerbose">ಸೆಲ್ <xliff:g example="3" id="cell_index">%1$d</xliff:g>ಸೇರಿಸಲಾಗಿದೆ</string>
   <string name="LockPatternSet_Message_PatternDetected">ವಿನ್ಯಾಸವನ್ನು ಪೂರ್ಣಗೊಳಿಸಲಾಗಿದೆ</string>
   <string name="UnLockPattern_PatternArea">ವಿನ್ಯಾಸದ ಪ್ರದೇಶ</string>
-  <string name="UnLockPattern_Message_DrawPattern">Draw your pattern to
-unlock Tella</string>
+  <string name="UnLockPattern_Message_DrawPattern">Tella ಅನ್ಲಾಕ್ ಮಾಡಲು ಮಾಧರಿ ಚಿತ್ರಿಸಿ</string>
   <string name="UnLockPattern_Message_IncorrectPattern">Please try again. Your patterns do not match.</string>
   <string name="LockPinSet_Message_EnterPin">Enter your PIN</string>
   <string name="UnlockPin_Message_EnterPin">Enter your PIN to unlock

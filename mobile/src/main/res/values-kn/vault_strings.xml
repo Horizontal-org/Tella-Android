@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="Vault_AllFiles_Title">All files</string>
-  <string name="Vault_Images_Title">Images</string>
+  <string name="Vault_Images_Title">ಚಿತ್ರಗಳು</string>
   <string name="Vault_Files_Title">Tella files</string>
-  <string name="Vault_Documents_Title">Documents</string>
-  <string name="Vault_Audios_Title">Audio</string>
-  <string name="Vault_Videos_Title">Videos</string>
-  <string name="Vault_Others_Title">Others</string>
+  <string name="Vault_Documents_Title">ದಾಖಲೆಗಳು</string>
+  <string name="Vault_Audios_Title">ಧ್ವನಿ</string>
+  <string name="Vault_Videos_Title">ವೀಡಿಯೊಗಳು</string>
+  <string name="Vault_Others_Title">ಇತರರು</string>
   <string name="Vault_Select_Title">Select files</string>
   <string name="Vault_RecentFiles">Recent files</string>
   <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
@@ -50,8 +50,8 @@
   <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened in Tella. Would you like to save the file to your device to open it through a different app? This may expose the content of the file.</string>
   <string name="Vault_Export_SheetAction">Export</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
   <string name="Vault_FavoriteTemplates_Title">Favorite templates</string>
@@ -60,7 +60,7 @@
     <item quantity="other">Files successfully moved</item>
   </plurals>
   <string name="Vault_Confirm_delete_Description">Some of the selected files are currently used in your connections. Deleting may impact forms and reports that haven’t been sent yet.</string>
-  <string name="Vault_Warning_Title">Warning</string>
+  <string name="Vault_Warning_Title">ಎಚ್ಚರಿಕೆ</string>
   <string name="Vault_Delete_anyway">ಹೇಗಾದರೂ Tella ವನ್ನು ಅಳಿಸಿ</string>
   <string name="Vault_Keep_Original">KEEP ORIGINAL</string>
   <string name="Vault_Delete_Original">DELETE ORIGINAL</string>
@@ -68,6 +68,6 @@
  
  If you delete it, the file imported into Tella will be the only copy left. </string>
   <string name="Vault_FileEdit_SheetAction">Edit</string>
-  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
-  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_SaveToDevice_SheetTitle"> \"%1$s\" ಅನ್ನು ಸಾಧನಕ್ಕೆ ಉಳಿಸಬೇಕೇ?</string>
+  <string name="Vault_SaveToDevice_SheetAction">ಸಾಧನಕ್ಕೆ ಉಳಿಸಿ</string>
 </resources>

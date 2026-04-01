@@ -43,7 +43,7 @@ Evite usar números que possam ser adivinhados facilmente, como seu aniversário
   <string name="LockSuccess_Message_AllDone">Tudo pronto!</string>
   <string name="LockSuccess_Message_Hint">Você sempre pode alterar sua opção de bloqueio 
  e personalizar ainda mais o Tella em Configurações.</string>
-  <string name="LockSuccess_Action_GoToTella">Vá para Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Senha incorreta, 
  tente novamente</string>
   <string name="UnlockPassword_Message_EnterPassword">Digite sua senha para 

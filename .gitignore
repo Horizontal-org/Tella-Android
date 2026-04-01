@@ -27,3 +27,8 @@ mobile/google-services.json
 /mobile/src/main/assets/config.json
 
 /mobile/src/main/res/values/divviup.xml
+
+# Keystores and signing (do not commit)
+*.jks
+*.keystore
+fastlane/*.json
