@@ -57,7 +57,7 @@ class TellaFileUploadSchedulerViewModel @Inject constructor(val application: App
                     .build()
 
                 WorkManager.getInstance(application)
-                .enqueueUniqueWork("WorkerUploadReport2", ExistingWorkPolicy.KEEP, oneTimeJob)
+                .enqueueUniqueWork("WorkerUploadReport2", ExistingWorkPolicy.APPEND_OR_REPLACE, oneTimeJob)
 
                 MyApplication.getMainKeyHolder().timeout = LifecycleMainKey.NO_TIMEOUT
 

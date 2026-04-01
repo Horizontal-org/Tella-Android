@@ -40,7 +40,7 @@ class ScheduleUploadReportFilesUseCase @Inject constructor(
                 // Schedule the upload report work using WorkManager
                 WorkManager.getInstance(context).enqueueUniqueWork(
                     "WorkerUploadReport2",
-                    ExistingWorkPolicy.KEEP,
+                    ExistingWorkPolicy.APPEND_OR_REPLACE,
                     oneTimeJob
                 )
 
