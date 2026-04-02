@@ -28,7 +28,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseActivity
 import org.horizontal.tella.mobile.views.dialog.CollectServerDialogFragment
 import org.horizontal.tella.mobile.views.dialog.SharedLiveData.createReportsServer
 import org.horizontal.tella.mobile.views.dialog.SharedLiveData.createServer
-import org.horizontal.tella.mobile.views.dialog.TellaUploadServerDialogFragment.TellaUploadServerDialogHandler
+import org.horizontal.tella.mobile.views.dialog.TellaUploadServerDialogHandler
 import org.horizontal.tella.mobile.views.dialog.reports.ReportsConnectFlowActivity
 import org.horizontal.tella.mobile.views.dialog.uwazi.UwaziConnectFlowActivity
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils

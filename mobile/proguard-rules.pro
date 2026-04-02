@@ -183,6 +183,11 @@
 # Hilt
 -keep class * extends java.lang.annotation.Annotation { *; }
 -keep @javax.inject.Inject class * { *; }
+# AndroidEntryPoint: keep generated Hilt_* bases (R8 minify — avoids Missing class Hilt_*)
+-keep class org.horizontal.tella.mobile.**.Hilt_* { *; }
+-keep interface org.horizontal.tella.mobile.**.*_GeneratedInjector { *; }
+# Explicit: flavor-only fragments must not be stripped before Hilt aggregating task sees them
+-keep class org.horizontal.tella.mobile.views.dialog.Hilt_CollectServerDialogFragment { *; }
 
 # Keep Gson adapters and creators
 -keep class * extends com.google.gson.TypeAdapter { *; }

@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
+import org.horizontal.tella.mobile.R
 import timber.log.Timber
 
 
@@ -169,8 +170,12 @@ fun String.formatHash(): String {
         .chunked(4) // make 4 lines
         .joinToString("\n") { it.joinToString(" ") }
 
-}private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"
-private const val NAME_FILE_ALREADY_EXISTS = "com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException"/**
+}
+
+private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"
+private const val NAME_FILE_ALREADY_EXISTS = "com.hzontal.tella_vault.exceptions.FileNameAlreadyExistsException"
+
+/**
  * Returns true if this throwable or any cause in the chain is a duplicate name / file exists error.
  * Uses class name so it works when the exception comes from another module (different classloader).
  */

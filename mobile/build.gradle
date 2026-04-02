@@ -50,7 +50,10 @@ android {
             // Make sure SimpleXML configuration files are included
             pickFirsts += [
                     "META-INF/services/org.simpleframework.xml.*",
-                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    // Netty (transitive): identical metadata in every module JAR
+                    "META-INF/io.netty.versions.properties",
+                    "META-INF/INDEX.LIST",
             ]
         }
     }
@@ -61,7 +64,6 @@ android {
         targetSdk versions.targetSdk
         // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
         versionCode 229
-
         versionName "3.0.0"
         multiDexEnabled true
 
