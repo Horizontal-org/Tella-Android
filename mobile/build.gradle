@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    // Must match root build.gradle ext.versions.kotlin — Gradle plugin portal requires an explicit version here
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.0'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 }
