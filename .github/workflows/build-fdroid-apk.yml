@@ -20,7 +20,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Set up Java 17 for Android SDK tools
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,12 +28,6 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Switch to Java 11 for build
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '11'
 
       - name: Checkout reproducible-apk-tools
         uses: actions/checkout@v4
