@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -23,8 +25,24 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Checkout reproducible-apk-tools
+        uses: actions/checkout@v4
+        with:
+          repository: obfusk/reproducible-apk-tools
+          ref: v0.3.0
+          path: reproducible-apk-tools
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
+
+      - name: Apply F-Droid prebuild changes
+        working-directory: mobile
+        run: |
+          perl -ni -e 'print unless /firebase|crashlytics|com\.google\.gms/' ../build.gradle
+          perl -ni -e 'print unless /firebase|crashlytics|com\.google\.gms/ && !/\.contains\(/ && !/ENABLE_CRASHLYTICS/' build.gradle
+          if [ -d src/main/assets ]; then
+            find src/main/assets -type f \( -name '*.json' -o -name '*.properties' \) -exec perl -0777 -pi -e 's/\r\n/\n/g' {} +
+          fi
 
       - name: Clean
         run: ./gradlew clean
@@ -32,11 +50,30 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid
 
-      - name: Show APK files
+      - name: Show APK files before fixes
         run: find mobile/build/outputs -type f -name "*.apk" | sort
+
+      - name: Apply F-Droid postbuild fixes
+        run: |
+          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release*.apk" | head -n 1)
+          test -n "$APK"
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
+          echo "APK=$APK" >> "$GITHUB_ENV"
+
+      - name: Copy final APK with release name
+        run: cp "$APK" mobile-release-Foss-229.apk
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tella-fdroid-apk
-          path: mobile/build/outputs/apk/**/*.apk
+          path: mobile-release-Foss-229.apk
+
+      - name: Upload APK to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mobile-release-Foss-229.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
