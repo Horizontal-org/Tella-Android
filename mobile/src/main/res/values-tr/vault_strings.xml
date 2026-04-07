@@ -47,11 +47,11 @@
   <string name="Vault_ImportDelete_SheetAction">Import and delete original file</string>
   <string name="Vault_CreateFolder_SheetTitle">Create a new folder</string>
   <string name="Vault_MoveHere">move here</string>
-  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened inside Tella. Would you like to export the file to your device to open it through a different app? This may expose the content of the file. </string>
+  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened in Tella. Would you like to save the file to your device to open it through a different app? This may expose the content of the file.</string>
   <string name="Vault_Export_SheetAction">Export</string>
   <plurals name="Vault_Items">
-    <item quantity="one">items</item>
-    <item quantity="other"></item>
+    <item quantity="one">item</item>
+    <item quantity="other">items</item>
   </plurals>
   <string name="Vault_No_Files_Title">You don’t have any files in Tella yet.</string>
   <string name="Vault_FavoriteTemplates_Title">Favorite templates</string>
@@ -68,4 +68,6 @@
  
  If you delete it, the file imported into Tella will be the only copy left. </string>
   <string name="Vault_FileEdit_SheetAction">Düzenle</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
+  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
 </resources>
