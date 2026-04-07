@@ -10,33 +10,78 @@ jobs:
   build-fdroid:
     runs-on: ubuntu-latest
 
+    env:
+      TZ: UTC
+      LC_ALL: C
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '11'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Checkout reproducible-apk-tools
+        uses: actions/checkout@v4
+        with:
+          repository: obfusk/reproducible-apk-tools
+          ref: v0.3.0
+          path: reproducible-apk-tools
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
+      - name: Disable Gradle caching and parallelism
+        run: |
+          echo "org.gradle.caching=false" >> gradle.properties
+          echo "org.gradle.parallel=false" >> gradle.properties
+          echo "org.gradle.configureondemand=false" >> gradle.properties
+
+      - name: Apply F-Droid prebuild changes
+        working-directory: mobile
+        run: |
+          perl -ni -e 'print unless /firebase|crashlytics|com\.google\.gms/' ../build.gradle
+          perl -ni -e 'print unless /firebase|crashlytics|com\.google\.gms/ && !/\.contains\(/ && !/ENABLE_CRASHLYTICS/' build.gradle
+          if [ -d src/main/assets ]; then
+            find src/main/assets -type f \( -name '*.json' -o -name '*.properties' \) -exec perl -0777 -pi -e 's/\r\n/\n/g' {} +
+          fi
+
       - name: Clean
-        run: ./gradlew clean
+        run: ./gradlew clean --no-daemon
 
       - name: Build APK
-        run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid
+        run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Show APK files
-        run: find mobile/build/outputs -type f -name "*.apk" | sort
+      - name: Patch reproducible-apk-tools zipalign for runner
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("reproducible-apk-tools/inplace-fix.py")
+          s = p.read_text()
+          s = s.replace('return ("zipalign", "-P", str(page_size), "4")', 'return ("zipalign", "-p", "4")')
+          p.write_text(s)
+          print("patched", p)
+          PY
+
+      - name: Apply F-Droid postbuild fixes
+        run: |
+          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+          test -n "$APK"
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
+          cp "$APK" mobile-release-Foss-229-unsigned.apk
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tella-fdroid-apk
-          path: mobile/build/outputs/apk/**/*.apk
+          name: tella-fdroid-apk-unsigned
+          path: mobile-release-Foss-229-unsigned.apk
