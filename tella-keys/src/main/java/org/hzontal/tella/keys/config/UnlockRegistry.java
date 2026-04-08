@@ -71,6 +71,20 @@ public class UnlockRegistry {
         return configs.get(getActiveMethod(context));
     }
 
+    /**
+     * Config for a registered unlock method without reading or changing the active method preference.
+     * Use when re-wrapping the main key for a lock-type change: store with the target config first,
+     * then call {@link #setActiveMethod(Context, Method)} in {@code store} success.
+     */
+    @NonNull
+    public UnlockConfig getRegisteredConfig(@NonNull Method method) {
+        UnlockConfig config = configs.get(method);
+        if (config == null) {
+            throw new IllegalStateException("No UnlockConfig registered for " + method);
+        }
+        return config;
+    }
+
     public boolean isDeviceCredentialsEnabled(@NonNull Context context) {
         if (!isDeviceCredentialsAvailable()) {
             return false;
