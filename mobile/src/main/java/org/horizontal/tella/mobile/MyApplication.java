@@ -57,6 +57,7 @@ import java.security.Security;
 import java.util.Arrays;
 
 import javax.inject.Inject;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 
@@ -80,6 +81,7 @@ import org.horizontal.tella.mobile.util.divviup.DivviupUtils;
 import org.horizontal.tella.mobile.views.activity.ExitActivity;
 import org.horizontal.tella.mobile.views.activity.MainActivity;
 import org.horizontal.tella.mobile.views.activity.onboarding.OnBoardingActivity;
+import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 
 import timber.log.Timber;
 
@@ -323,6 +325,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         android.content.Intent intent = new android.content.Intent(context, org.horizontal.tella.mobile.views.activity.LockUpdateSuccessActivity.class);
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void launchFullAppUnlock(Activity activity) {
+        BaseLockActivity.launchFullAppUnlock(activity);
     }
 
     @Override
