@@ -24,12 +24,16 @@ class ConfirmPasswordActivity : BasePasswordActivity() {
     override fun onSuccessSetPassword(password: String) {
         if (password == mConfirmPassword) {
             val keySpec = PBEKeySpec(password.toCharArray())
-            TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPasswordActivity, UnlockRegistry.Method.TELLA_PASSWORD)
-            val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPasswordActivity)
-            TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+            val config = TellaKeysUI.getUnlockRegistry()
+                .getRegisteredConfig(UnlockRegistry.Method.TELLA_PASSWORD)
+            val mainKey = generateOrGetMainKey() ?: return
+            TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                 override fun onSuccess(mainKey: MainKey) {
                     Timber.d("** MainKey stored: %s **", mainKey)
-                    // here, we store MainKey in memory -> unlock the app
+                    TellaKeysUI.getUnlockRegistry().setActiveMethod(
+                        this@ConfirmPasswordActivity,
+                        UnlockRegistry.Method.TELLA_PASSWORD
+                    )
                     TellaKeysUI.getMainKeyHolder().set(mainKey)
                     onSuccessConfirmUnlock()
                 }
