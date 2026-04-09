@@ -8,7 +8,11 @@ on:
 
 jobs:
   build-fdroid:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
+    env:
+      TZ: UTC
+      LC_ALL: C
 
     env:
       TZ: UTC
@@ -28,6 +32,14 @@ jobs:
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Install pinned Android SDK packages
+        run: |
+          yes | sdkmanager --licenses
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;35.0.0"
 
       - name: Checkout reproducible-apk-tools
         uses: actions/checkout@v4
@@ -60,16 +72,14 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Patch reproducible-apk-tools zipalign for runner
+      - name: Apply F-Droid postbuild fixes
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path("reproducible-apk-tools/inplace-fix.py")
-          s = p.read_text()
-          s = s.replace('return ("zipalign", "-P", str(page_size), "4")', 'return ("zipalign", "-p", "4")')
-          p.write_text(s)
-          print("patched", p)
-          PY
+          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+          test -n "$APK"
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
+          cp "$APK" mobile-release-Foss-229-unsigned.apk
 
       - name: Apply F-Droid postbuild fixes
         run: |

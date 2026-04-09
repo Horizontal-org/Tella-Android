@@ -377,21 +377,6 @@ class MicFragment : MetadataBaseLockFragment(),
         )
     }
 
-    private fun onMediaFilesUploadScheduled() {
-        val isAutoUploadEnabled = Preferences.isAutoUploadEnabled()
-        val isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled()
-
-        val message: String = if (isAutoUploadEnabled && isAutoDeleteEnabled) {
-            getString(R.string.Auto_Upload_Recording_Imported_Report_And_Deleted)
-        } else if (isAutoUploadEnabled) {
-            getString(R.string.Auto_Upload_Recording_Report)
-        } else {
-            return
-        }
-
-        DialogUtils.showBottomMessage(metadataActivity, message, false)
-    }
-
     private fun onMediaFilesUploadScheduleError(throwable: Throwable?) {
     }
 

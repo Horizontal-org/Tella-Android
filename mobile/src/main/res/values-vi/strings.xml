@@ -1143,4 +1143,10 @@ on the same Wi-Fi network.
 • Make sure to disable any active VPN connections.</string>
   <string name="feedback_contact_info_hint">Contact information (optional)</string>
   <string name="file_already_exists">File already exists.</string>
+  <string name="tella_foss">Tella FOSS</string>
+  <string name="settings.hide_tella_change_lock_to_pin_hint">Please change your lock type to PIN in the security Settings. %1$s</string>
+  <string name="settings.hide_tella_change_lock_here">Change lock here</string>
+  <string name="feedback_metadata_release_line">App release: %1$s</string>
+  <string name="Foss_Feature_Unavailable_Title">Feature unavailable</string>
+  <string name="Foss_Feature_Unavailable_Description">This feature is not compatible with the Free and Open Source version of Tella you are using.</string>
 </resources>
