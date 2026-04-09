@@ -1090,6 +1090,15 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="sender_files_rejected">Sender\'s files rejected.</string>
   <string name="the_receiver_accepted_the_files_transfer">"The receiver accepted the files transfer "</string>
   <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
+  <string name="peer_to_peer_error_too_many_requests">Too many requests. Wait a moment and try again.</string>
+  <string name="peer_to_peer_invalid_pin">Invalid PIN.</string>
+  <string name="peer_to_peer_invalid_request_format">Invalid request format.</string>
+  <string name="peer_to_peer_active_session_exists">A session is already active on the other device. Try again later.</string>
+  <string name="peer_to_peer_server_error_try_later">Server error. Try again later.</string>
+  <string name="peer_to_peer_receiver_rejected_registration">The recipient rejected the connection.</string>
+  <string name="peer_to_peer_prepare_invalid_data">Could not start the transfer. Check your files and try again.</string>
+  <string name="peer_to_peer_prepare_session_conflict">Another transfer may be active. Try again later.</string>
+  <string name="peer_to_peer_upload_interrupted">The transfer could not be completed. Try again later.</string>
   <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
   <string name="sending_files">Sending files</string>
   <string name="send_files_title">Send files</string>

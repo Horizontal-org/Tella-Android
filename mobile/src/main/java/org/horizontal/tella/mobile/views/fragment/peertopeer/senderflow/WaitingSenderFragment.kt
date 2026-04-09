@@ -8,6 +8,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
+import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PrepareFailureKind
 
 /**
  * Created by wafa on 3/6/2025.
@@ -25,13 +26,19 @@ class WaitingSenderFragment :
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
 
-        viewModel.prepareRejected.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { wasRejected ->
-                if (wasRejected) {
-                    findNavController().previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("transferRejected", true)
-                    findNavController().popBackStack()
+        viewModel.prepareFailure.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { kind ->
+                when (kind) {
+                    PrepareFailureKind.RECIPIENT_REJECTED -> {
+                        findNavController().previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("prepareTransferRecipientRejected", true)
+                        findNavController().popBackStack()
+                    }
+                    PrepareFailureKind.GENERIC -> {
+                        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+                        baseActivity.showToast(R.string.failure_title)
+                    }
                 }
             }
         }

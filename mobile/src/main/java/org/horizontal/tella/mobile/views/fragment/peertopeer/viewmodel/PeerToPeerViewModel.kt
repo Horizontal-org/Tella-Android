@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
@@ -326,12 +327,18 @@ class PeerToPeerViewModel @Inject constructor(
                     p2PState.session?.sessionId = result.sessionId
                     _registrationSuccess.postValue(true) // Used by sender UI
                 }
-                RegisterPeerResult.InvalidPin -> bottomMessageError.postValue("Invalid PIN")
-                RegisterPeerResult.InvalidFormat -> bottomMessageError.postValue("Invalid request format")
-                RegisterPeerResult.Conflict -> bottomMessageError.postValue("Active session already exists")
-                RegisterPeerResult.TooManyRequests -> bottomMessageError.postValue("Too many requests, try again later")
-                RegisterPeerResult.ServerError -> bottomMessageError.postValue("Server error, try again later")
-                RegisterPeerResult.RejectedByReceiver -> bottomMessageError.postValue("Receiver rejected the registration")
+                RegisterPeerResult.InvalidPin ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
+                RegisterPeerResult.InvalidFormat ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
+                RegisterPeerResult.Conflict ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
+                RegisterPeerResult.TooManyRequests ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_error_too_many_requests))
+                RegisterPeerResult.ServerError ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
+                RegisterPeerResult.RejectedByReceiver ->
+                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_receiver_rejected_registration))
                 is RegisterPeerResult.Failure -> {
                     Timber.e(result.exception, "Connection failure")
                     bottomSheetError.postValue(

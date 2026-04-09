@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.data.peertopeer.managers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.horizontal.tella.mobile.data.peertopeer.PeerServerRateLimitConfig
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
@@ -24,6 +25,7 @@ class PeerServerStarterManager @Inject constructor(
         cert: X509Certificate,
         config: KeyStoreConfig,
         p2PSharedState: P2PSharedState,
+        rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
     ) {
         if (server == null) {
             server = TellaPeerToPeerServer(
@@ -33,7 +35,8 @@ class PeerServerStarterManager @Inject constructor(
                 certificate = cert,
                 keyStoreConfig = config,
                 peerToPeerManager = peerToPeerManager,
-                p2PSharedState = p2PSharedState
+                p2PSharedState = p2PSharedState,
+                rateLimitConfig = rateLimitConfig,
             )
             server?.start()
         }

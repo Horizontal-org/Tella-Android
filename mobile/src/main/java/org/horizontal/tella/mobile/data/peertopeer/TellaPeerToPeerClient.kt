@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_T
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
 import org.horizontal.tella.mobile.data.peertopeer.network.ProgressRequestBody
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
@@ -165,7 +166,7 @@ class TellaPeerToPeerClient @Inject constructor(
         fileSize: Long,
         fileName: String,
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
-    ): Boolean = withContext(Dispatchers.IO) {
+    ): PeerUploadOutcome = withContext(Dispatchers.IO) {
         Timber.d("session id from the client = %s", sessionId)
         val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
 
@@ -181,13 +182,21 @@ class TellaPeerToPeerClient @Inject constructor(
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                val ok = response.isSuccessful
-                Timber.d("uploadFileWithProgress(%s): %s", fileId, if (ok) "OK" else "FAIL ${response.code}")
-                ok
+                when (response.code) {
+                    429 -> {
+                        Timber.w("uploadFileWithProgress(%s): rate limited (429)", fileId)
+                        PeerUploadOutcome.TooManyRequests
+                    }
+                    else -> {
+                        val ok = response.isSuccessful
+                        Timber.d("uploadFileWithProgress(%s): %s", fileId, if (ok) "OK" else "FAIL ${response.code}")
+                        if (ok) PeerUploadOutcome.Success else PeerUploadOutcome.Failed
+                    }
+                }
             }
         } catch (e: Exception) {
             Timber.e(e, "Exception while uploading %s", fileId)
-            false
+            PeerUploadOutcome.Failed
         }
     }
 
@@ -214,6 +223,9 @@ class TellaPeerToPeerClient @Inject constructor(
             client.newCall(request)
 
                 .execute().use { response ->
+                if (response.code == 429) {
+                    Timber.w("closeConnection: rate limited (429)")
+                }
                 Timber.d("closeConnection: code=%d", response.code)
                 response.isSuccessful
             }
@@ -265,6 +277,7 @@ class TellaPeerToPeerClient @Inject constructor(
             400 -> PrepareUploadResult.BadRequest
             403 -> PrepareUploadResult.Forbidden
             409 -> PrepareUploadResult.Conflict
+            429 -> PrepareUploadResult.TooManyRequests
             500 -> PrepareUploadResult.ServerError
             else -> PrepareUploadResult.Failure(Exception("Unhandled server error $code: $body"))
         }
@@ -388,6 +401,9 @@ class TellaPeerToPeerClient @Inject constructor(
 
         runCatching {
             client.newCall(req).execute().use { resp ->
+                if (resp.code == 429) {
+                    Timber.w("pingBeforeRegister: rate limited (429)")
+                }
                 // consider any HTTP code as “host reachable”
                 Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
                 resp.code in 100..599

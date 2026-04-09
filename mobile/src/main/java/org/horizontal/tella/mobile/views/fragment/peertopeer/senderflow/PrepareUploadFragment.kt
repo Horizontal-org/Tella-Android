@@ -94,13 +94,11 @@ class PrepareUploadFragment :
         //TODO HANDLE THIS IN THE NAVMANAGER
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
-            ?.getLiveData<Boolean>("transferRejected")
-            ?.observe(viewLifecycleOwner) { wasRejected ->
-                if (wasRejected) {
-                    DialogUtils.showBottomMessage(
-                        baseActivity, getString(R.string.recipient_rejected_the_files),
-                        true
-                    )
+            ?.getLiveData<Boolean>("prepareTransferRecipientRejected")
+            ?.observe(viewLifecycleOwner) { show ->
+                if (show == true) {
+                    baseActivity.showToast(R.string.recipient_rejected_the_files)
+                    navBackStackEntry.savedStateHandle.remove<Boolean>("prepareTransferRecipientRejected")
                 }
             }
         findNavController().currentBackStackEntry

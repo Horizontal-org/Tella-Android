@@ -1,9 +1,12 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.call
 import io.ktor.server.application.install
+import io.ktor.util.pipeline.intercept
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
@@ -55,11 +58,13 @@ class TellaPeerToPeerServer(
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
-    private val p2PSharedState: P2PSharedState
+    private val p2PSharedState: P2PSharedState,
+    private val rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
 ) : TellaServer {
 
     private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
+    private val rateLimiter = PeerTimedRateLimiter(rateLimitConfig)
 
     override val certificatePem: String
         get() = CertificateUtils.certificateToPem(certificate)
@@ -87,6 +92,19 @@ class TellaPeerToPeerServer(
                         ignoreUnknownKeys = true
                         isLenient = true
                     })
+                }
+
+                intercept(ApplicationCallPipeline.Call) {
+                    val clientIp = call.peerClientIpForRateLimit()
+                    val urlKey = call.peerUrlKeyForRateLimit(rateLimitConfig)
+                    if (rateLimiter.isLimited(clientIp, urlKey)) {
+                        rateLimitConfig.retryAfterSecondsWhenLimited?.let { secs ->
+                            call.response.headers.append(HttpHeaders.RetryAfter, secs.toString())
+                        }
+                        call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
+                        finish()
+                        return@intercept
+                    }
                 }
 
                 routing {

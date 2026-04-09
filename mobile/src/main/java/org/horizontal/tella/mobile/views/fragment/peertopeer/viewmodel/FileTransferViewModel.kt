@@ -16,6 +16,7 @@ import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.media.MediaFileHandler
@@ -33,8 +34,12 @@ class FileTransferViewModel @Inject constructor(
 ) : ViewModel() {
     private val _prepareResults = SingleLiveEvent<PeerPrepareUploadResponse>()
     val prepareResults: SingleLiveEvent<PeerPrepareUploadResponse> = _prepareResults
-    private val _prepareRejected = SingleLiveEvent<Event<Boolean>>()
-    val prepareRejected: SingleLiveEvent<Event<Boolean>> = _prepareRejected
+    /**
+     * Prepare failure UX aligned with iOS [SenderPrepareFileTransferVM]: 403 → stay on prepare + specific
+     * toast; any other HTTP/network outcome → pop to Nearby Sharing root + generic error toast.
+     */
+    private val _prepareFailure = SingleLiveEvent<Event<PrepareFailureKind>>()
+    val prepareFailure: SingleLiveEvent<Event<PrepareFailureKind>> = _prepareFailure
     private val _uploadProgress = SingleLiveEvent<UploadProgressState>()
     val uploadProgress: SingleLiveEvent<UploadProgressState> get() = _uploadProgress
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
@@ -80,24 +85,43 @@ class FileTransferViewModel @Inject constructor(
                 is PrepareUploadResult.Forbidden -> {
                     withContext(Dispatchers.Main) {
                         Timber.w("Rejected")
-                        _prepareRejected.value = Event(true)
+                        _prepareFailure.value = Event(PrepareFailureKind.RECIPIENT_REJECTED)
                     }
                 }
 
                 is PrepareUploadResult.BadRequest -> {
-                    Timber.e("Bad request – possibly invalid data")
+                    withContext(Dispatchers.Main) {
+                        Timber.e("Bad request – possibly invalid data")
+                        _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
                 }
 
                 is PrepareUploadResult.Conflict -> {
-                    Timber.e("Upload conflict – another session may be active")
+                    withContext(Dispatchers.Main) {
+                        Timber.e("Upload conflict – another session may be active")
+                        _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
+                }
+
+                is PrepareUploadResult.TooManyRequests -> {
+                    withContext(Dispatchers.Main) {
+                        Timber.w("Prepare upload rate limited (429)")
+                        _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
                 }
 
                 is PrepareUploadResult.ServerError -> {
-                    Timber.e("Internal server error – try again later")
+                    withContext(Dispatchers.Main) {
+                        Timber.e("Internal server error – try again later")
+                        _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
                 }
 
                 is PrepareUploadResult.Failure -> {
-                    Timber.e(result.exception, "Unhandled error during upload")
+                    withContext(Dispatchers.Main) {
+                        Timber.e(result.exception, "Unhandled error during upload")
+                        _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
                 }
 
             }
@@ -135,21 +159,33 @@ class FileTransferViewModel @Inject constructor(
 
                 try {
                     if (input != null) {
-                        val ok = peerClient.uploadFileWithProgress(
-                            ip = ip,
-                            port = port,
-                            expectedFingerprint = fingerprint,
-                            sessionId = session.sessionId.orEmpty(),
-                            fileId = pf.file.id,
-                            transmissionId = pf.transmissionId.orEmpty(),
-                            inputStream = input,
-                            fileSize = vf.size,
-                            fileName = vf.name,
-                        ) { written, _ ->
-                            pf.bytesTransferred = written.toInt()
-                            postProgress()
+                        when (
+                            peerClient.uploadFileWithProgress(
+                                ip = ip,
+                                port = port,
+                                expectedFingerprint = fingerprint,
+                                sessionId = session.sessionId.orEmpty(),
+                                fileId = pf.file.id,
+                                transmissionId = pf.transmissionId.orEmpty(),
+                                inputStream = input,
+                                fileSize = vf.size,
+                                fileName = vf.name,
+                            ) { written, _ ->
+                                pf.bytesTransferred = written.toInt()
+                                postProgress()
+                            }
+                        ) {
+                            PeerUploadOutcome.Success ->
+                                pf.status = P2PFileStatus.FINISHED
+                            PeerUploadOutcome.Failed ->
+                                pf.status = P2PFileStatus.FAILED
+                            PeerUploadOutcome.TooManyRequests -> {
+                                // iOS marks upload failed with no toast; same here.
+                                pf.status = P2PFileStatus.FAILED
+                                postProgress()
+                                return@launch
+                            }
                         }
-                        pf.status = if (ok) P2PFileStatus.FINISHED else P2PFileStatus.FAILED
                     } else {
                         pf.status = P2PFileStatus.FAILED
                     }
@@ -210,6 +246,14 @@ class FileTransferViewModel @Inject constructor(
         }
     }
 
+}
+
+enum class PrepareFailureKind {
+    /** HTTP 403 — show recipient-rejected toast and return to prepare (iOS: senderFilesRejected). */
+    RECIPIENT_REJECTED,
+
+    /** Rate limit, server error, network, etc. — exit flow and show generic error (iOS: commonError). */
+    GENERIC
 }
 
 
