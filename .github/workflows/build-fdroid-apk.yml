@@ -14,6 +14,10 @@ jobs:
       TZ: UTC
       LC_ALL: C
 
+    env:
+      TZ: UTC
+      LC_ALL: C
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,8 +72,14 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Show APK files
-        run: find mobile/build/outputs -type f -name "*.apk" | sort
+      - name: Apply F-Droid postbuild fixes
+        run: |
+          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+          test -n "$APK"
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
+          cp "$APK" mobile-release-Foss-229-unsigned.apk
 
       - name: Apply F-Droid postbuild fixes
         run: |
