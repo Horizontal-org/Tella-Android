@@ -42,6 +42,8 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.File
 import java.security.KeyPair
 import java.security.KeyStore
@@ -58,6 +60,8 @@ class TellaPeerToPeerServer(
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
+    private val rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
+    private val receiveDir: File,
     private val p2PSharedState: P2PSharedState,
     private val rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
 ) : TellaServer {
@@ -242,12 +246,17 @@ class TellaPeerToPeerServer(
                             return@put
                         }
 
-                        // temp file for the recipient VM to persist into Vault later
-                        val tmpFile = File.createTempFile(fileId, ".tmp")
-                        val output = tmpFile.outputStream().buffered()
-
+                        val tmpFile = File.createTempFile(
+                            sanitizeFileIdForTempPrefix(fileId),
+                            ".tmp",
+                            receiveDir
+                        )
+                        var completed = false
+                        var input: BufferedInputStream? = null
+                        var output: BufferedOutputStream? = null
                         try {
-                            val input = call.receiveStream().buffered()
+                            output = tmpFile.outputStream().buffered()
+                            input = call.receiveStream().buffered()
                             val totalSize = session.files.values.sumOf { it.file.size }
                             var bytesRead = 0L
                             val buffer = ByteArray(8192)
@@ -259,7 +268,6 @@ class TellaPeerToPeerServer(
                                 bytesRead += read
                                 progressFile.bytesTransferred = bytesRead.toInt()
 
-                                // Broadcast “transport” progress; keep status = SENDING
                                 val totalTransferred =
                                     session.files.values.sumOf { it.bytesTransferred }
                                 val percent =
@@ -269,17 +277,16 @@ class TellaPeerToPeerServer(
                                     UploadProgressState(
                                         title = session.title.orEmpty(),
                                         percent = percent,
-                                        sessionStatus = session.status,   // SENDING
+                                        sessionStatus = session.status,
                                         files = session.files.values.toList()
                                     )
                                 )
                             }
 
-                            progressFile.status = P2PFileStatus.FINISHED       // network finished
-                            progressFile.path =
-                                tmpFile.path                    // handoff path to recipient
+                            output.flush()
+                            progressFile.status = P2PFileStatus.FINISHED
+                            progressFile.path = tmpFile.path
 
-                            // Emit one last transport-progress tick (still SENDING)
                             val totalTransferred2 =
                                 session.files.values.sumOf { it.bytesTransferred }
                             val totalSize2 = session.files.values.sumOf { it.file.size }
@@ -290,11 +297,12 @@ class TellaPeerToPeerServer(
                                 UploadProgressState(
                                     title = session.title.orEmpty(),
                                     percent = percent2,
-                                    sessionStatus = session.status,   // still SENDING
+                                    sessionStatus = session.status,
                                     files = session.files.values.toList()
                                 )
                             )
 
+                            completed = true
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
@@ -303,7 +311,7 @@ class TellaPeerToPeerServer(
                                 UploadProgressState(
                                     title = session.title.orEmpty(),
                                     percent = 0,
-                                    sessionStatus = session.status, // SENDING
+                                    sessionStatus = session.status,
                                     files = session.files.values.toList()
                                 )
                             )
@@ -312,7 +320,21 @@ class TellaPeerToPeerServer(
                                 HttpStatusCode.InternalServerError, "Upload failed: ${e.message}"
                             )
                         } finally {
-                            output.close()
+                            try {
+                                input?.close()
+                            } catch (_: Exception) {
+                                Timber.w("P2P upload: input close failed")
+                            }
+                            try {
+                                output?.close()
+                            } catch (_: Exception) {
+                                Timber.w("P2P upload: output close failed")
+                            }
+                            if (!completed) {
+                                if (!tmpFile.delete()) {
+                                    Timber.w("P2P upload: could not delete incomplete temp %s", tmpFile.path)
+                                }
+                            }
                         }
                     }
 
@@ -364,4 +386,26 @@ class TellaPeerToPeerServer(
     }
 
     private fun isValidPin(pin: String) = pin.length == 6
+
+    /**
+     * [File.createTempFile] requires prefix length ≥ 3; strip path-like characters for safety.
+     */
+    private fun sanitizeFileIdForTempPrefix(fileId: String): String {
+        val sb = StringBuilder(fileId.length.coerceAtMost(128))
+        for (c in fileId) {
+            when {
+                c.isLetterOrDigit() -> sb.append(c)
+                c == '-' || c == '_' -> sb.append(c)
+                else -> sb.append('_')
+            }
+        }
+        var base = sb.toString().trim('_')
+        if (base.length < 3) {
+            base = "p2p_$base".trim('_')
+        }
+        if (base.length < 3) {
+            base = "p2precv"
+        }
+        return base.take(120)
+    }
 }
