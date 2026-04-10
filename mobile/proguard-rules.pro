@@ -6,6 +6,8 @@
 # ========== END MISSING CLASSES ==========
 
 # ========== Netty/Ktor on Android - JVM-only classes not present on Android ==========
+# R8 shrinks Netty channel classes; ReflectiveChannelFactory needs public no-arg ctors (NioServerSocketChannel)
+-keep class io.netty.** { *; }
 # Netty tcnative (OpenSSL native bindings - Android uses Conscrypt/JDK SSL)
 -dontwarn io.netty.internal.tcnative.**
 # java.lang.management (not on Android - used by Ktor debug detector)
