@@ -134,30 +134,28 @@ class ScanQrCodeFragment :
                 findNavController().currentBackStackEntry?.savedStateHandle
                     ?.set("registrationSuccess", true)
                 navManager().navigateFromScanQrCodeToPrepareUploadFragment()
-            } else {
-                //  handle error UI
             }
+        }
 
-            viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
-                DialogUtils.showBottomMessage(baseActivity, message, true)
-            }
+        viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
+            DialogUtils.showBottomMessage(baseActivity, message, true)
+        }
 
-            viewModel.bottomSheetError.observe(viewLifecycleOwner) { (title, description) ->
-                showStandardSheet(
-                    baseActivity.supportFragmentManager,
-                    title,
-                    description,
-                    null,
-                    getString(R.string.try_again),
-                    null
-                ) {
-                    viewModel.startRegistration(
-                        ip = viewModel.p2PState.ip,
-                        port = viewModel.p2PState.port,
-                        hash = viewModel.p2PState.hash,
-                        pin = viewModel.p2PState.pin.toString()
-                    )
-                }
+        viewModel.bottomSheetError.observe(viewLifecycleOwner) { (title, description) ->
+            showStandardSheet(
+                baseActivity.supportFragmentManager,
+                title,
+                description,
+                null,
+                getString(R.string.try_again),
+                null
+            ) {
+                viewModel.startRegistration(
+                    ip = viewModel.p2PState.ip,
+                    port = viewModel.p2PState.port,
+                    hash = viewModel.p2PState.hash,
+                    pin = viewModel.p2PState.pin.toString()
+                )
             }
         }
     }

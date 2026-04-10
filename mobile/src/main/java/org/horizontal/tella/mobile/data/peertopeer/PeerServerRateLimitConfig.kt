@@ -6,17 +6,9 @@ import java.util.concurrent.TimeUnit
 const val PEER_RATE_LIMIT_DESKTOP_BURST = 1000
 
 /**
- * Cross-platform references (local clones may live e.g. under `~/Desktop/tella-desktop`,
- * `~/Documents/Tella-iOS`):
- *
- * **Tella Desktop** — `backend/core/modules/server/service.go` (`NewRateLimitingWare`),
- * `gomod.cblgh.org/cerca v0.2.2` / `limiter.TimedRateLimiter`. With `SetLimitAllRoutes(true)`, cerca keys
- * [golang.org/x/time/rate.Limiter] by **client IP only**; the URL argument does not affect the bucket.
- *
- * **Tella iOS** — `Tella/Data/Networking/NearbySharing/NearbySharingRateLimiter.swift`: same numeric defaults
- * (burst 1000, 30s refill, 24h idle cleanup) but buckets are **per IP and route** (`ip|route`, see `makeKey`);
- * `NearbySharingServer` passes the request endpoint path. That is closer to setting [useFullUriAsKey] to true
- * on Android than to Desktop/cerca IP-only behavior.
+ * Defaults align with Desktop cerca `TimedRateLimiter`-style limits (burst 1000, 30s refill, 24h idle).
+ * With [useFullUriAsKey] false, behavior is IP-only (cerca `SetLimitAllRoutes(true)`). With true, buckets
+ * are per client IP and request path (no query string).
  */
 data class PeerServerRateLimitConfig(
     /** Nanoseconds between adding one token (Desktop: 30 seconds). */
@@ -26,11 +18,10 @@ data class PeerServerRateLimitConfig(
     /** Maximum token bucket size / initial burst (same value as Desktop burst allowance). */
     val burstAllowance: Int = PEER_RATE_LIMIT_DESKTOP_BURST,
     /**
-     * When false (default), the rate-limit bucket key is **client IP only**, matching cerca
-     * `TimedRateLimiter` with `SetLimitAllRoutes(true)`. When true, key is IP plus URI (path + query),
-     * which is stricter than Desktop/cerca.
+     * When false, bucket key is client IP only (cerca-style). When true (default), key is `ip|requestPath`
+     * using the URL path only (no query).
      */
-    val useFullUriAsKey: Boolean = false,
+    val useFullUriAsKey: Boolean = true,
     /**
      * Optional [Retry-After] response header when limited (seconds). Desktop returns 429 without this header; default null.
      */

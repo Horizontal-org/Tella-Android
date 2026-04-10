@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
@@ -60,9 +61,8 @@ class TellaPeerToPeerServer(
     private val certificate: X509Certificate,
     private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
-    private val rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
-    private val receiveDir: File,
     private val p2PSharedState: P2PSharedState,
+    private val receiveDir: File,
     private val rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
 ) : TellaServer {
 
@@ -100,12 +100,16 @@ class TellaPeerToPeerServer(
 
                 intercept(ApplicationCallPipeline.Call) {
                     val clientIp = call.peerClientIpForRateLimit()
-                    val urlKey = call.peerUrlKeyForRateLimit(rateLimitConfig)
-                    if (rateLimiter.isLimited(clientIp, urlKey)) {
+                    val routePath = call.peerRoutePathForRateLimit()
+                    if (rateLimiter.isLimited(clientIp, routePath)) {
                         rateLimitConfig.retryAfterSecondsWhenLimited?.let { secs ->
                             call.response.headers.append(HttpHeaders.RetryAfter, secs.toString())
                         }
-                        call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
+                        call.respondText(
+                            """{"error":"Too many requests"}""",
+                            ContentType.Application.Json,
+                            HttpStatusCode.TooManyRequests,
+                        )
                         finish()
                         return@intercept
                     }

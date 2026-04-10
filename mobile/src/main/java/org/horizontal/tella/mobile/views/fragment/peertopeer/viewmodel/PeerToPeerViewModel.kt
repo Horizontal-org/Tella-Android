@@ -333,8 +333,11 @@ class PeerToPeerViewModel @Inject constructor(
                     bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
                 RegisterPeerResult.Conflict ->
                     bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
-                RegisterPeerResult.TooManyRequests ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_error_too_many_requests))
+                RegisterPeerResult.TooManyRequests -> {
+                    bottomSheetError.postValue(
+                        "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                    )
+                }
                 RegisterPeerResult.ServerError ->
                     bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
                 RegisterPeerResult.RejectedByReceiver ->

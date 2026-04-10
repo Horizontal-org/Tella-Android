@@ -287,7 +287,7 @@ class TellaPeerToPeerClient @Inject constructor(
      *  - Pins the server by SPKI SHA-256 hex (your CertificateUtils.getPublicKeyHash).
      *  - Optionally binds sockets to a Wi-Fi Network if one is active/validated.
      *  - Relaxes hostname verification (IP literal + hard pin).
-     *  - Uses TLS 1.2/1.3 spec to ease cross-platform handshakes (iOS -9816).
+     *  - Uses TLS 1.2/1.3 spec to ease cross-platform handshakes.
      */
     private fun getClientWithFingerprintValidation(
         ip: String,

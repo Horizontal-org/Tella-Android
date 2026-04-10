@@ -34,7 +34,7 @@ import kotlin.coroutines.resume
  * Fingerprint payloads:
  * - spkiHex : SHA-256(SPKI) in lowercase hex (optional, useful for logs)
  * - okHttpPin: OkHttp SPKI pin string "sha256/<base64>" (optional, if you want SPKI pinning)
- * - certHex : SHA-256(leaf certificate DER) in lowercase hex (matches iOS behavior)
+ * - certHex : SHA-256(leaf certificate DER) in lowercase hex
  */
 data class FingerprintResult(
     val spkiHex: String,
@@ -85,7 +85,7 @@ object FingerprintFetcher {
 
     // ---------------------------------------------------------------------
     // Public: Build clients that ENFORCE identity
-    //   A) By certificate DER hash (matches iOS) -> Interceptor based
+    //   A) By certificate DER hash -> Interceptor based
     //   B) By SPKI pin (OkHttp native) -> Optional
     // ---------------------------------------------------------------------
 
@@ -174,7 +174,7 @@ object FingerprintFetcher {
     fun fingerprintFromCert(cert: X509Certificate): FingerprintResult {
         val okHttpPin = CertificatePinner.pin(cert)           // "sha256/<base64>" of SPKI
         val spkiHex   = sha256Hex(cert.publicKey.encoded)     // SPKI hex (optional)
-        val certHex   = sha256Hex(cert.encoded)               // ✅ CERT DER hex (matches iOS)
+        val certHex   = sha256Hex(cert.encoded)               // CERT DER hex
         return FingerprintResult(spkiHex = spkiHex, okHttpPin = okHttpPin, certHex = certHex)
     }
 
@@ -298,7 +298,7 @@ object FingerprintFetcher {
         MessageDigest.getInstance("SHA-256").digest(bytes)
             .joinToString("") { "%02x".format(it) }
 
-    // Interceptor to enforce SHA-256 over the LEAF CERTIFICATE (DER), iOS-compatible
+    // Interceptor to enforce SHA-256 over the LEAF CERTIFICATE (DER)
     private class LeafCertHashInterceptor(
         private val expectedHexLower: String
     ) : okhttp3.Interceptor {

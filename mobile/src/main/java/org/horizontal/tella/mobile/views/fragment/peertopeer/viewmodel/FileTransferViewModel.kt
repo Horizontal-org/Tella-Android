@@ -34,10 +34,7 @@ class FileTransferViewModel @Inject constructor(
 ) : ViewModel() {
     private val _prepareResults = SingleLiveEvent<PeerPrepareUploadResponse>()
     val prepareResults: SingleLiveEvent<PeerPrepareUploadResponse> = _prepareResults
-    /**
-     * Prepare failure UX aligned with iOS [SenderPrepareFileTransferVM]: 403 → stay on prepare + specific
-     * toast; any other HTTP/network outcome → pop to Nearby Sharing root + generic error toast.
-     */
+    /** 403 → recipient-rejected handling; other failures → pop to Nearby Sharing root + generic error. */
     private val _prepareFailure = SingleLiveEvent<Event<PrepareFailureKind>>()
     val prepareFailure: SingleLiveEvent<Event<PrepareFailureKind>> = _prepareFailure
     private val _uploadProgress = SingleLiveEvent<UploadProgressState>()
@@ -180,7 +177,6 @@ class FileTransferViewModel @Inject constructor(
                             PeerUploadOutcome.Failed ->
                                 pf.status = P2PFileStatus.FAILED
                             PeerUploadOutcome.TooManyRequests -> {
-                                // iOS marks upload failed with no toast; same here.
                                 pf.status = P2PFileStatus.FAILED
                                 postProgress()
                                 return@launch
@@ -249,10 +245,10 @@ class FileTransferViewModel @Inject constructor(
 }
 
 enum class PrepareFailureKind {
-    /** HTTP 403 — show recipient-rejected toast and return to prepare (iOS: senderFilesRejected). */
+    /** HTTP 403 — recipient rejected; return to prepare with a specific toast. */
     RECIPIENT_REJECTED,
 
-    /** Rate limit, server error, network, etc. — exit flow and show generic error (iOS: commonError). */
+    /** Other failures (e.g. 429, 5xx, network) — exit flow and show generic error. */
     GENERIC
 }
 

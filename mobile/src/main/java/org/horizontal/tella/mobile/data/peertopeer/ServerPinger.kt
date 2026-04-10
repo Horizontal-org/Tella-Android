@@ -63,7 +63,7 @@ object ServerPinger {
     }
 
     /**
-     * Pinned ping using CERT DER hash (matches iOS).
+     * Pinned ping using CERT DER hash.
      */
     suspend fun notifyServerPinnedByCert(
         context: Context,

@@ -4,9 +4,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Token-bucket style limiter aligned with cerca `TimedRateLimiter` (v0.2.2): `golang.org/x/time/rate`
- * with `rate.Every(refreshPeriod)` and burst allowance. When [PeerServerRateLimitConfig.useFullUriAsKey]
- * is false (Desktop default), the map key is **client IP only**, matching cerca `access(identifier)` —
- * the URL is ignored for throttling.
+ * with `rate.Every(refreshPeriod)` and burst allowance.
+ * When [PeerServerRateLimitConfig.useFullUriAsKey] is false, key is client IP only (cerca-style).
+ * When true (default), key is `ip|path`.
  */
 class PeerTimedRateLimiter(
     private val config: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
@@ -20,7 +20,7 @@ class PeerTimedRateLimiter(
     )
 
     /**
-     * @param urlKey used only when [PeerServerRateLimitConfig.useFullUriAsKey] is true.
+     * @param urlKey request path when [PeerServerRateLimitConfig.useFullUriAsKey] is true (ignored when false).
      * @return true if the request should be rejected (429), false if allowed.
      */
     fun isLimited(clientIp: String, urlKey: String): Boolean {

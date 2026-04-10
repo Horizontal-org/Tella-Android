@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.data.peertopeer
 
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.path
-import io.ktor.server.request.uri
 
 /**
  * Mirrors Tella-Desktop `RateLimitingWare.Handler` (`backend/core/modules/server/service.go`):
@@ -16,5 +15,5 @@ fun ApplicationCall.peerClientIpForRateLimit(): String {
     return host
 }
 
-fun ApplicationCall.peerUrlKeyForRateLimit(config: PeerServerRateLimitConfig): String =
-    if (config.useFullUriAsKey) request.uri else request.path()
+/** Request path (no query) for per-route rate limiting, e.g. `/api/v1/upload`. */
+fun ApplicationCall.peerRoutePathForRateLimit(): String = request.path()

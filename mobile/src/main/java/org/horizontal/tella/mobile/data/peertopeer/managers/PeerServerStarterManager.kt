@@ -53,7 +53,7 @@ class PeerServerStarterManager @Inject constructor(
                 Timber.e(e, "P2P embedded server failed to start")
                 server = null
             }
-            
+        }
     }
 
     fun stopServer() {
