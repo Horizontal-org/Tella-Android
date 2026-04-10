@@ -18,6 +18,17 @@
 -dontwarn org.eclipse.jetty.npn.**
 # Reactor BlockHound (reactive blocking detection, not on Android)
 -dontwarn reactor.blockhound.**
+# Optional Netty codec / platform deps (referenced from netty-codec but not bundled; Ktor HTTPS does not need them)
+-dontwarn com.aayushatharva.brotli4j.**
+-dontwarn com.github.luben.zstd.**
+-dontwarn com.jcraft.jzlib.**
+-dontwarn com.ning.compress.**
+-dontwarn com.oracle.svm.core.**
+-dontwarn lzma.sdk.**
+-dontwarn net.jpountz.**
+-dontwarn org.jboss.marshalling.**
+# OpenJDK-only cert APIs (Netty OpenJdkSelfSignedCertGenerator); Android uses Conscrypt / app-provided certs
+-dontwarn sun.security.x509.**
 # ========== END Netty/Ktor ==========
 
 # Keep the interfaces + concrete impls
