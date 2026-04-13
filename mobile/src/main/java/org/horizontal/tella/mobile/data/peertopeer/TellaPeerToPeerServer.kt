@@ -72,6 +72,21 @@ class TellaPeerToPeerServer(
     override val certificatePem: String
         get() = CertificateUtils.certificateToPem(certificate)
 
+    private suspend fun emitReceiveProgress(session: P2PSession) {
+        val totalTransferred = session.files.values.sumOf { it.bytesTransferred.toLong() }
+        val totalSize = session.files.values.sumOf { it.file.size }
+        val percent =
+            if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
+        PeerEventManager.onUploadProgressState(
+            UploadProgressState(
+                title = session.title.orEmpty(),
+                percent = percent,
+                sessionStatus = session.status,
+                files = session.files.values.toList()
+            )
+        )
+    }
+
     override fun start() {
         val keyStore = KeyStore.getInstance("PKCS12").apply {
             load(null, null)
@@ -265,36 +280,25 @@ class TellaPeerToPeerServer(
                         try {
                             output = tmpFile.outputStream().buffered()
                             input = call.receiveStream().buffered()
-                            val totalSize = session.files.values.sumOf { it.file.size }
                             var bytesRead = 0L
                             val buffer = ByteArray(8192)
 
-                                while (true) {
-                                    val read = input.read(buffer)
-                                    if (read == -1) break
-                                    output.write(buffer, 0, read)
-                                    bytesRead += read
-                                    progressFile.bytesTransferred = bytesRead.toInt()
-
-                                val totalTransferred =
-                                    session.files.values.sumOf { it.bytesTransferred }
-                                val percent =
-                                    if (totalSize > 0) ((totalTransferred * 100) / totalSize).toInt() else 0
-
-                                PeerEventManager.onUploadProgressState(
-                                    UploadProgressState(
-                                        title = session.title.orEmpty(),
-                                        percent = percent,
-                                        sessionStatus = session.status,
-                                        files = session.files.values.toList()
-                                    )
-                                )
+                            while (true) {
+                                val read = input.read(buffer)
+                                if (read == -1) break
+                                output.write(buffer, 0, read)
+                                bytesRead += read
+                                progressFile.bytesTransferred = bytesRead.toInt()
+                                emitReceiveProgress(session)
                             }
+
+                            // Ensure all bytes are on disk before hashing (BufferedOutputStream).
+                            output.flush()
 
                             val expected = progressFile.file.sha256?.trim().orEmpty()
                             if (expected.isEmpty()) {
                                 progressFile.status = P2PFileStatus.FAILED
-                                tmpFile.delete()
+                                emitReceiveProgress(session)
                                 call.respond(HttpStatusCode.NotAcceptable, "File hash mismatch")
                                 return@put
                             }
@@ -302,7 +306,7 @@ class TellaPeerToPeerServer(
                             val actual = PeerFileHash.sha256Hex(tmpFile)
                             if (!actual.equals(expected, ignoreCase = true)) {
                                 progressFile.status = P2PFileStatus.FAILED
-                                tmpFile.delete()
+                                emitReceiveProgress(session)
                                 call.respond(HttpStatusCode.NotAcceptable, "File hash mismatch")
                                 return@put
                             }
@@ -310,35 +314,13 @@ class TellaPeerToPeerServer(
                             progressFile.status = P2PFileStatus.FINISHED
                             progressFile.path = tmpFile.path
 
-                            val totalTransferred2 =
-                                session.files.values.sumOf { it.bytesTransferred }
-                            val totalSize2 = session.files.values.sumOf { it.file.size }
-                            val percent2 =
-                                if (totalSize2 > 0) ((totalTransferred2 * 100) / totalSize2).toInt() else 0
-
-                            PeerEventManager.onUploadProgressState(
-                                UploadProgressState(
-                                    title = session.title.orEmpty(),
-                                    percent = percent2,
-                                    sessionStatus = session.status,
-                                    files = session.files.values.toList()
-                                )
-                            )
+                            emitReceiveProgress(session)
 
                             completed = true
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
-                            tmpFile.delete()
-
-                            PeerEventManager.onUploadProgressState(
-                                UploadProgressState(
-                                    title = session.title.orEmpty(),
-                                    percent = 0,
-                                    sessionStatus = session.status,
-                                    files = session.files.values.toList()
-                                )
-                            )
+                            emitReceiveProgress(session)
 
                             call.respond(
                                 HttpStatusCode.InternalServerError, "Upload failed: ${e.message}"
@@ -348,6 +330,11 @@ class TellaPeerToPeerServer(
                                 input?.close()
                             } catch (_: Exception) {
                                 Timber.w("P2P upload: input close failed")
+                            }
+                            try {
+                                output?.flush()
+                            } catch (_: Exception) {
+                                // ignore
                             }
                             try {
                                 output?.close()
