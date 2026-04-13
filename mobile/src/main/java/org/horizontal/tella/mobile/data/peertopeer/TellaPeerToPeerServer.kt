@@ -49,8 +49,11 @@ import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 const val port = 53317
+
+private const val MAX_REGISTER_PIN_ATTEMPTS = 3
 
 class TellaPeerToPeerServer(
     private val ip: String,
@@ -67,6 +70,8 @@ class TellaPeerToPeerServer(
 
     private var serverSession: PeerResponse? = null
     private var engine: ApplicationEngine? = null
+    private val transferNonceManager = TransferNonceManager()
+    private val registerPinFailuresByNonce = ConcurrentHashMap<String, Int>()
     private val rateLimiter = PeerTimedRateLimiter(rateLimitConfig)
 
     override val certificatePem: String
@@ -150,15 +155,35 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        if (!isValidPin(request.pin) || pin != request.pin) {
-                            call.respond(HttpStatusCode.Unauthorized, "Invalid PIN")
-                            return@post
-                        }
-
+                        // Align with iOS acceptRegisterRequest: active session, then nonce / PIN limits
                         if (serverSession != null) {
                             call.respond(HttpStatusCode.Conflict, "Active session already exists")
                             return@post
                         }
+
+                        val regNonce = request.nonce
+                        if (regNonce == null || regNonce.isEmpty()) {
+                            call.respond(HttpStatusCode.BadRequest, "Invalid request format")
+                            return@post
+                        }
+
+                        if ((registerPinFailuresByNonce[regNonce] ?: 0) >= MAX_REGISTER_PIN_ATTEMPTS) {
+                            call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
+                            return@post
+                        }
+
+                        if (!isValidPin(request.pin) || pin != request.pin) {
+                            val count = (registerPinFailuresByNonce[regNonce] ?: 0) + 1
+                            registerPinFailuresByNonce[regNonce] = count
+                            if (count >= MAX_REGISTER_PIN_ATTEMPTS) {
+                                call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
+                            } else {
+                                call.respond(HttpStatusCode.Unauthorized, "Invalid PIN")
+                            }
+                            return@post
+                        }
+
+                        registerPinFailuresByNonce.remove(regNonce)
 
                         val sessionId = UUID.randomUUID().toString()
                         val session = PeerResponse(sessionId)
@@ -207,6 +232,15 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
+                        when (transferNonceManager.tryAdd(request.nonce)) {
+                            TransferNonceManager.AddResult.Empty,
+                            TransferNonceManager.AddResult.Reused -> {
+                                call.respond(HttpStatusCode.Conflict, "Invalid nonce")
+                                return@post
+                            }
+                            TransferNonceManager.AddResult.Success -> { /* continue */ }
+                        }
+
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
                         if (!accepted) {
                             call.respond(HttpStatusCode.Forbidden, "Transfer rejected by receiver")
@@ -236,14 +270,25 @@ class TellaPeerToPeerServer(
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
+                        val uploadNonce = call.parameters["nonce"]
 
                         Timber.d("UPLOAD: session=$sessionId, fileId=$fileId, tx=$transmissionId")
 
-
-
-                        if (sessionId == null || fileId == null || transmissionId == null) {
+                        // iOS beginUploadFromRequest: required ids first (400), then nonce (409), then session
+                        if (sessionId == null || fileId == null || transmissionId == null ||
+                            sessionId.isEmpty() || fileId.isEmpty() || transmissionId.isEmpty()
+                        ) {
                             call.respond(HttpStatusCode.BadRequest, "Missing path parameters")
                             return@put
+                        }
+
+                        when (transferNonceManager.tryAdd(uploadNonce)) {
+                            TransferNonceManager.AddResult.Empty,
+                            TransferNonceManager.AddResult.Reused -> {
+                                call.respond(HttpStatusCode.Conflict, "Invalid nonce")
+                                return@put
+                            }
+                            TransferNonceManager.AddResult.Success -> { /* continue */ }
                         }
 
                         val session = p2PSharedState.session
@@ -381,6 +426,7 @@ class TellaPeerToPeerServer(
                         try {
                             p2PSharedState.session?.status = SessionStatus.CLOSED
                             serverSession = null
+                            transferNonceManager.clear()
                             launch { PeerEventManager.emitCloseConnection() }
                             call.respond(HttpStatusCode.OK, mapOf("success" to true))
                         } catch (e: Exception) {
@@ -394,6 +440,8 @@ class TellaPeerToPeerServer(
     }
 
     override fun stop() {
+        transferNonceManager.clear()
+        registerPinFailuresByNonce.clear()
         engine?.stop(1000, 5000)
     }
 

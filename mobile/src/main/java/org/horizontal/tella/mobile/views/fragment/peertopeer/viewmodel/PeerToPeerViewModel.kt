@@ -45,6 +45,7 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.Upl
 import timber.log.Timber
 import java.io.File
 import java.util.Collections
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -112,6 +113,30 @@ class PeerToPeerViewModel @Inject constructor(
         val pin: String
     )
     private var pendingParams: PendingConnectParams? = null
+
+    /** Reuse registration nonce for the same target until registration succeeds (iOS RegistrationNonceContext). */
+    private data class RegistrationNonceContext(
+        val ip: String,
+        val port: String,
+        val pin: String,
+        val nonce: String,
+    ) {
+        fun matches(ip: String, port: String, pin: String) =
+            this.ip == ip && this.port == port && this.pin == pin
+    }
+
+    private var registrationNonceContext: RegistrationNonceContext? = null
+
+    private fun registrationNonceFor(ip: String, port: String, pin: String): String {
+        val normalizedPin = pin.trim()
+        val existing = registrationNonceContext
+        if (existing != null && existing.matches(ip, port, normalizedPin)) {
+            return existing.nonce
+        }
+        val nonce = UUID.randomUUID().toString()
+        registrationNonceContext = RegistrationNonceContext(ip, port, normalizedPin, nonce)
+        return nonce
+    }
 
     // ------------------- Save counters -------------------
     private val savingOrDone: MutableSet<String> =
@@ -321,8 +346,10 @@ class PeerToPeerViewModel @Inject constructor(
     /** Sender/initiator path: call server /register */
     fun startRegistration(ip: String, port: String, hash: String, pin: String) {
         viewModelScope.launch {
-            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin)) {
+            val nonce = registrationNonceFor(ip, port, pin)
+            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin, nonce)) {
                 is RegisterPeerResult.Success -> {
+                    registrationNonceContext = null
                     if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
                     p2PState.session?.sessionId = result.sessionId
                     _registrationSuccess.postValue(true) // Used by sender UI

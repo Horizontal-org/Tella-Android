@@ -53,13 +53,14 @@ class TellaPeerToPeerClient @Inject constructor(
         port: String,
         expectedFingerprint: String,
         pin: String,
+        nonce: String,
     ): RegisterPeerResult = withContext(Dispatchers.IO) {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
         Timber.d("Connecting to: $url")
 
         val payload = PeerRegisterPayload(
             pin = pin.trim(),
-            nonce = UUID.randomUUID().toString()
+            nonce = nonce,
         )
 
         val jsonPayload = Json.encodeToString(payload)
@@ -126,7 +127,12 @@ class TellaPeerToPeerClient @Inject constructor(
             )
         }
 
-        val requestPayload = PrepareUploadRequest(title, sessionId, fileItems)
+        val requestPayload = PrepareUploadRequest(
+            title = title,
+            sessionId = sessionId,
+            nonce = UUID.randomUUID().toString(),
+            files = fileItems,
+        )
         val jsonPayload = Json.encodeToString(requestPayload)
         val requestBody = jsonPayload.toRequestBody()
         val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
@@ -168,7 +174,10 @@ class TellaPeerToPeerClient @Inject constructor(
         onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
     ): PeerUploadOutcome = withContext(Dispatchers.IO) {
         Timber.d("session id from the client = %s", sessionId)
-        val url = PeerApiRoutes.buildUploadUrl(ip, port, sessionId, fileId, transmissionId)
+        val uploadNonce = UUID.randomUUID().toString()
+        val url = PeerApiRoutes.buildUploadUrl(
+            ip, port, sessionId, fileId, transmissionId, uploadNonce
+        )
 
         val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
         val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
@@ -182,17 +191,36 @@ class TellaPeerToPeerClient @Inject constructor(
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                when (response.code) {
+                val code = response.code
+                val outcome = when (code) {
                     429 -> {
                         Timber.w("uploadFileWithProgress(%s): rate limited (429)", fileId)
                         PeerUploadOutcome.TooManyRequests
                     }
-                    else -> {
-                        val ok = response.isSuccessful
-                        Timber.d("uploadFileWithProgress(%s): %s", fileId, if (ok) "OK" else "FAIL ${response.code}")
-                        if (ok) PeerUploadOutcome.Success else PeerUploadOutcome.Failed
+                    409 -> {
+                        Timber.w("uploadFileWithProgress(%s): conflict — nonce replay? (409)", fileId)
+                        PeerUploadOutcome.Failed
+                    }
+                    406 -> {
+                        Timber.w("uploadFileWithProgress(%s): not acceptable — file hash mismatch (406)", fileId)
+                        PeerUploadOutcome.Failed
+                    }
+                    else -> if (response.isSuccessful) {
+                        PeerUploadOutcome.Success
+                    } else {
+                        PeerUploadOutcome.Failed
                     }
                 }
+                Timber.d(
+                    "uploadFileWithProgress(%s): %s",
+                    fileId,
+                    when (outcome) {
+                        PeerUploadOutcome.Success -> "OK"
+                        PeerUploadOutcome.TooManyRequests -> "FAIL 429"
+                        PeerUploadOutcome.Failed -> "FAIL $code"
+                    },
+                )
+                outcome
             }
         } catch (e: Exception) {
             Timber.e(e, "Exception while uploading %s", fileId)

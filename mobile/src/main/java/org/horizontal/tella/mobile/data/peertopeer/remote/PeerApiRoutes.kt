@@ -1,5 +1,7 @@
 package org.horizontal.tella.mobile.data.peertopeer.remote
 
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+
 object PeerApiRoutes {
     const val REGISTER = "/api/v1/register"
     const val PREPARE_UPLOAD = "/api/v1/prepare-upload"
@@ -16,9 +18,23 @@ object PeerApiRoutes {
     }
 
 
-    fun buildUploadUrl(ip: String, port: String, sessionId: String, fileId: String, transmissionId: String): String {
-        val baseUrl = buildUrl(ip, port, UPLOAD)
-        return "$baseUrl?sessionId=$sessionId&fileId=$fileId&transmissionId=$transmissionId"
+    fun buildUploadUrl(
+        ip: String,
+        port: String,
+        sessionId: String,
+        fileId: String,
+        transmissionId: String,
+        nonce: String,
+    ): String {
+        val base = buildUrl(ip, port, UPLOAD).toHttpUrlOrNull()
+            ?: return "${buildUrl(ip, port, UPLOAD)}?sessionId=$sessionId&fileId=$fileId&transmissionId=$transmissionId&nonce=$nonce"
+        return base.newBuilder()
+            .addQueryParameter("sessionId", sessionId)
+            .addQueryParameter("fileId", fileId)
+            .addQueryParameter("transmissionId", transmissionId)
+            .addQueryParameter("nonce", nonce)
+            .build()
+            .toString()
     }
 
 }
