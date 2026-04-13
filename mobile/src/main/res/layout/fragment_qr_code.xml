@@ -50,6 +50,7 @@
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
         style="@style/Tella_Progress_Circular"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/qrCodeImageView"
         app:layout_constraintEnd_toEndOf="@id/qrCodeImageView"
         app:layout_constraintStart_toStartOf="@id/qrCodeImageView"

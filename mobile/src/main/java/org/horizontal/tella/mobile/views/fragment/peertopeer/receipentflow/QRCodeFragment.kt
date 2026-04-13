@@ -27,6 +27,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +35,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var payload: PeerConnectionPayload? = null
-    private lateinit var qrPayload: String
+    private var qrPayload: String? = null
 
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
@@ -45,12 +46,28 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     @Inject
     lateinit var p2PSharedState: P2PSharedState
 
+    /** Ensures only one setup runs at a time so server PIN and QR payload cannot diverge. */
+    private val qrSetupMutex = Mutex()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val ip = viewModel.currentNetworkInfo?.ipAddress
         if (!ip.isNullOrEmpty()) {
-            setupServerAndQr(ip)
+            setQrRegenerationLoading(true)
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    qrSetupMutex.withLock {
+                        setupServerAndQr(ip)
+                    }
+                } finally {
+                    if (isAdded) {
+                        setQrRegenerationLoading(false)
+                    }
+                }
+            }
+        } else {
+            setQrRegenerationLoading(false)
         }
         handleBack()
         handleConnectManually()
@@ -69,7 +86,15 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         initObservers()
     }
 
-    private fun setupServerAndQr(ip: String) {
+    private fun setQrRegenerationLoading(loading: Boolean) {
+        binding.progressCircular.isVisible = loading
+        binding.connectManuallyButton.isEnabled = !loading
+        if (loading) {
+            binding.qrCodeImageView.setImageDrawable(null)
+        }
+    }
+
+    private suspend fun setupServerAndQr(ip: String) {
         val keyPair = PeerKeyProvider.getKeyPair()
         val certificate = PeerKeyProvider.getCertificate(ip)
         val config = KeyStoreConfig()
@@ -147,10 +172,10 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private fun connectManually() {
-        payload?.let {
-            bundle.putString("payload", qrPayload)
-            navManager().navigateFromScanQrCodeToDeviceInfo()
-        }
+        val json = qrPayload ?: return
+        if (payload == null) return
+        bundle.putString("payload", json)
+        navManager().navigateFromScanQrCodeToDeviceInfo()
     }
 
     private fun initObservers() {
