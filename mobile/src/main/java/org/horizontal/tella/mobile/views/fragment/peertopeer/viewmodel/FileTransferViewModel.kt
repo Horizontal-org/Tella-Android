@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
@@ -37,6 +38,9 @@ class FileTransferViewModel @Inject constructor(
     /** 403 → recipient-rejected handling; other failures → pop to Nearby Sharing root + generic error. */
     private val _prepareFailure = SingleLiveEvent<Event<PrepareFailureKind>>()
     val prepareFailure: SingleLiveEvent<Event<PrepareFailureKind>> = _prepareFailure
+    /** Message string resource when prepare is aborted (e.g. recipient rejected or missing vault hash). */
+    private val _prepareRejected = SingleLiveEvent<Event<Int>>()
+    val prepareRejected: SingleLiveEvent<Event<Int>> = _prepareRejected
     private val _uploadProgress = SingleLiveEvent<UploadProgressState>()
     val uploadProgress: SingleLiveEvent<UploadProgressState> get() = _uploadProgress
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
@@ -53,10 +57,10 @@ class FileTransferViewModel @Inject constructor(
                             .flatMapSingle { fileId ->
                                 rxVault[fileId]
                                     .subscribeOn(Schedulers.io())
-                                    .onErrorReturn { null } // safe, allows null
+                                    .onErrorReturn { null }
                             }
-                            .filter { true } // filter out nulls
-                            .map { it } // safe to force unwrap if you're sure it's not null now
+                            .filter { true }
+                            .map { it }
                             .toList()
                     }
             }
@@ -67,6 +71,17 @@ class FileTransferViewModel @Inject constructor(
         Timber.d("session id ***prepareUploadsFromVaultFiles ${p2PSharedState.session?.sessionId}")
 
         viewModelScope.launch {
+            val missingHash = withContext(Dispatchers.IO) {
+                syncSha256FromVaultForPrepare()
+            }
+            if (missingHash) {
+                Timber.w("prepareUploadsFromVaultFiles: skipped — one or more vault files lack a hash")
+                withContext(Dispatchers.Main) {
+                    _prepareRejected.value = Event(R.string.peer_to_peer_missing_file_hash)
+                }
+                return@launch
+            }
+
             when (val result = peerClient.prepareUpload(
                 ip = p2PSharedState.ip,
                 port = p2PSharedState.port,
@@ -125,6 +140,20 @@ class FileTransferViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Copies each vault file's hash into [ProgressFile.file] for the prepare JSON.
+     * @return true if any file is missing a non-empty hash — do not call prepare.
+     */
+    private fun syncSha256FromVaultForPrepare(): Boolean {
+        val session = p2PSharedState.session ?: return true
+        for (pf in session.files.values) {
+            val vf = pf.vaultFile ?: continue
+            if (vf.hash.isNullOrBlank()) return true
+            pf.file = pf.file.copy(sha256 = vf.hash)
+        }
+        return false
+    }
+
     fun uploadAllFiles() {
         viewModelScope.launch {
             val session = p2PSharedState.session ?: return@launch
@@ -147,7 +176,6 @@ class FileTransferViewModel @Inject constructor(
                 )
             }
 
-            // upload sequentially; each file reflects its true result
             for (pf in session.files.values) {
                 val vf = pf.vaultFile ?: continue
                 val input = MediaFileHandler.getStream(vf)
@@ -194,7 +222,6 @@ class FileTransferViewModel @Inject constructor(
                 postProgress()
             }
 
-            // session is done (partial or full)
             session.status = SessionStatus.FINISHED
             _uploadProgress.postValue(
                 UploadProgressState(

@@ -94,11 +94,15 @@ class PrepareUploadFragment :
         //TODO HANDLE THIS IN THE NAVMANAGER
         val navBackStackEntry = findNavController().currentBackStackEntry
         navBackStackEntry?.savedStateHandle
-            ?.getLiveData<Boolean>("prepareTransferRecipientRejected")
-            ?.observe(viewLifecycleOwner) { show ->
-                if (show == true) {
-                    baseActivity.showToast(R.string.recipient_rejected_the_files)
-                    navBackStackEntry.savedStateHandle.remove<Boolean>("prepareTransferRecipientRejected")
+            ?.getLiveData<Int>("transferRejectedMessageRes")
+            ?.observe(viewLifecycleOwner) { messageRes ->
+                if (messageRes != null && messageRes != 0) {
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(messageRes),
+                        true
+                    )
+                    navBackStackEntry.savedStateHandle.remove<Int>("transferRejectedMessageRes")
                 }
             }
         findNavController().currentBackStackEntry
@@ -285,7 +289,7 @@ class PrepareUploadFragment :
                             fileName = vaultFile.name,
                             size = vaultFile.size,
                             fileType = vaultFile.mimeType ?: "application/octet-stream",
-                            //sha256 = vaultFile.hash,
+                            sha256 = vaultFile.hash,
                             thumbnail = vaultFile.thumb ?: ByteArray(0)
                         )
 

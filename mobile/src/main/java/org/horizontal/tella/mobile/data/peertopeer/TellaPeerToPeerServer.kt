@@ -183,6 +183,11 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
+                        if (request.files.any { it.sha256.isNullOrBlank() }) {
+                            call.respond(HttpStatusCode.BadRequest, "Missing file hash")
+                            return@post
+                        }
+
                         if (request.sessionId != serverSession?.sessionId) {
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
                             return@post
@@ -265,12 +270,12 @@ class TellaPeerToPeerServer(
                             var bytesRead = 0L
                             val buffer = ByteArray(8192)
 
-                            while (true) {
-                                val read = input.read(buffer)
-                                if (read == -1) break
-                                output.write(buffer, 0, read)
-                                bytesRead += read
-                                progressFile.bytesTransferred = bytesRead.toInt()
+                                while (true) {
+                                    val read = input.read(buffer)
+                                    if (read == -1) break
+                                    output.write(buffer, 0, read)
+                                    bytesRead += read
+                                    progressFile.bytesTransferred = bytesRead.toInt()
 
                                 val totalTransferred =
                                     session.files.values.sumOf { it.bytesTransferred }
@@ -284,10 +289,25 @@ class TellaPeerToPeerServer(
                                         sessionStatus = session.status,
                                         files = session.files.values.toList()
                                     )
-                                )
+                                }
                             }
 
-                            output.flush()
+                            val expected = progressFile.file.sha256?.trim().orEmpty()
+                            if (expected.isEmpty()) {
+                                progressFile.status = P2PFileStatus.FAILED
+                                tmpFile.delete()
+                                call.respond(HttpStatusCode.NotAcceptable, "File hash mismatch")
+                                return@put
+                            }
+
+                            val actual = PeerFileHash.sha256Hex(tmpFile)
+                            if (!actual.equals(expected, ignoreCase = true)) {
+                                progressFile.status = P2PFileStatus.FAILED
+                                tmpFile.delete()
+                                call.respond(HttpStatusCode.NotAcceptable, "File hash mismatch")
+                                return@put
+                            }
+
                             progressFile.status = P2PFileStatus.FINISHED
                             progressFile.path = tmpFile.path
 
@@ -310,6 +330,7 @@ class TellaPeerToPeerServer(
                             call.respond(HttpStatusCode.OK, "Upload complete")
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
+                            tmpFile.delete()
 
                             PeerEventManager.onUploadProgressState(
                                 UploadProgressState(

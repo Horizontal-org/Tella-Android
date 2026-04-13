@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.domain.peertopeer
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,6 +9,7 @@ data class P2PFile(
     val fileName: String,
     val size: Long,
     val fileType: String,
+    @SerialName("sha256") val sha256: String? = null,
     @Serializable(with = ByteArrayFlexibleSerializer::class)
     val thumbnail: ByteArray? = null
 ) {
@@ -21,7 +23,7 @@ data class P2PFile(
         if (fileName != other.fileName) return false
         if (size != other.size) return false
         if (fileType != other.fileType) return false
-       // if (sha256 != other.sha256) return false
+        if (sha256 != other.sha256) return false
         if (thumbnail != null) {
             if (other.thumbnail == null) return false
             if (!thumbnail.contentEquals(other.thumbnail)) return false
@@ -35,7 +37,7 @@ data class P2PFile(
         result = 31 * result + fileName.hashCode()
         result = 31 * result + size.hashCode()
         result = 31 * result + fileType.hashCode()
-     //   result = 31 * result + sha256.hashCode()
+        result = 31 * result + (sha256?.hashCode() ?: 0)
         result = 31 * result + (thumbnail?.contentHashCode() ?: 0)
         return result
     }

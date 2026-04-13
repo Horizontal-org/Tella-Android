@@ -40,6 +40,12 @@ class WaitingSenderFragment :
                         baseActivity.showToast(R.string.failure_title)
                     }
                 }
+        viewModel.prepareRejected.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { messageRes ->
+                findNavController().previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("transferRejectedMessageRes", messageRes)
+                findNavController().popBackStack()
             }
         }
 

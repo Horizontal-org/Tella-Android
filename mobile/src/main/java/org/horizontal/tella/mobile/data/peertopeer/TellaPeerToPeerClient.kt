@@ -121,7 +121,7 @@ class TellaPeerToPeerClient @Inject constructor(
                 fileName = it.name,
                 size = it.size,
                 fileType = mimeType,
-               // sha256 = it.hash,
+                sha256 = it.hash,
                 thumbnail = it.thumb
             )
         }
