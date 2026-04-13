@@ -187,6 +187,9 @@ class TellaPeerToPeerServer(
 
                         val sessionId = UUID.randomUUID().toString()
                         val session = PeerResponse(sessionId)
+                        if (p2PSharedState.session == null) {
+                            p2PSharedState.session = P2PSession()
+                        }
                         p2PSharedState.session?.sessionId = sessionId
                         serverSession = session
 
@@ -228,6 +231,11 @@ class TellaPeerToPeerServer(
                         }
 
                         if (request.sessionId != serverSession?.sessionId) {
+                            Timber.w(
+                                "PREPARE_UPLOAD rejected: sessionId mismatch (request=%s serverSession=%s)",
+                                request.sessionId,
+                                serverSession?.sessionId
+                            )
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
                             return@post
                         }
