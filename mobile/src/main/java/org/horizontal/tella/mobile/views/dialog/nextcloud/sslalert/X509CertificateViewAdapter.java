@@ -37,7 +37,7 @@ import org.horizontal.tella.mobile.databinding.SslUntrustedCertLayoutBinding;
  */
 public class X509CertificateViewAdapter implements SslUntrustedCertDialog.CertificateViewAdapter {
 
-    private X509Certificate mCertificate;
+    private final X509Certificate mCertificate;
 
     private static final String TAG = X509CertificateViewAdapter.class.getSimpleName();
 
