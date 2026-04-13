@@ -113,11 +113,12 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private fun handleBack() {
-        binding.toolbar.backClickListener = { nav().popBackStack() }
-        binding.backBtn.setOnClickListener {
+        val leave = {
             peerServerStarterManager.stopServer()
             nav().popBackStack()
         }
+        binding.toolbar.backClickListener = { leave() }
+        binding.backBtn.setOnClickListener { leave() }
     }
 
     private fun handleConnectManually() {
