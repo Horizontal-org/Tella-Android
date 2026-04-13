@@ -2,9 +2,6 @@ package org.horizontal.tella.mobile.data.peertopeer.managers
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants
 import org.horizontal.tella.mobile.data.peertopeer.PeerServerRateLimitConfig
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
@@ -24,6 +21,16 @@ class PeerServerStarterManager @Inject constructor(
 ) {
     private var server: TellaPeerToPeerServer? = null
 
+    /** Last credentials the running server was started with (avoids redundant stop/start). */
+    private var listeningIp: String? = null
+    private var listeningPin: String? = null
+
+    /**
+     * Starts or restarts the embedded server so its PIN matches the QR payload.
+     * If [ip] and [pin] match the already-running server, returns true without tearing down Netty
+     * (avoids port bind races and duplicate work when [setupServerAndQr] is triggered twice).
+     */
+    @Synchronized
     fun startServer(
         ip: String,
         keyPair: KeyPair,
@@ -32,35 +39,68 @@ class PeerServerStarterManager @Inject constructor(
         config: KeyStoreConfig,
         p2PSharedState: P2PSharedState,
         rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
-    ) {
-        if (server == null) {
+    ): Boolean {
+        if (server != null && listeningIp == ip && listeningPin == pin) {
+            return true
+        }
+        val hadServer = server != null
+        server?.let {
             try {
-                val receiveDir = p2pReceiveDir().apply { mkdirs() }
-                clearStaleReceiveFiles(receiveDir)
-                server = TellaPeerToPeerServer(
-                    ip = ip,
-                    keyPair = keyPair,
-                    pin = pin,
-                    certificate = cert,
-                    keyStoreConfig = config,
-                    peerToPeerManager = peerToPeerManager,
-                    p2PSharedState = p2PSharedState,
-                    receiveDir = receiveDir,
-                    rateLimitConfig = rateLimitConfig,
-                )
-                server?.start()
+                it.stop()
             } catch (e: Exception) {
-                Timber.e(e, "P2P embedded server failed to start")
-                server = null
+                Timber.e(e, "P2P embedded server stop before restart failed")
             }
+        }
+        server = null
+        listeningIp = null
+        listeningPin = null
+        if (hadServer) {
+            try {
+                Thread.sleep(120)
+            } catch (_: InterruptedException) {
+                Thread.currentThread().interrupt()
+            }
+        }
+        return try {
+            val receiveDir = p2pReceiveDir().apply { mkdirs() }
+            clearStaleReceiveFiles(receiveDir)
+            server = TellaPeerToPeerServer(
+                ip = ip,
+                keyPair = keyPair,
+                pin = pin,
+                certificate = cert,
+                keyStoreConfig = config,
+                peerToPeerManager = peerToPeerManager,
+                p2PSharedState = p2PSharedState,
+                receiveDir = receiveDir,
+                rateLimitConfig = rateLimitConfig,
+            )
+            server?.start()
+            listeningIp = ip
+            listeningPin = pin
+            true
+        } catch (e: Exception) {
+            Timber.e(e, "P2P embedded server failed to start")
+            server = null
+            listeningIp = null
+            listeningPin = null
+            false
         }
     }
 
+    /** Prefer calling from a background thread; Netty shutdown can take a short time. */
+    @Synchronized
     fun stopServer() {
-        CoroutineScope(Dispatchers.IO).launch {
-            server?.stop()
-            server = null
+        server?.let {
+            try {
+                it.stop()
+            } catch (e: Exception) {
+                Timber.e(e, "P2P embedded server stop failed")
+            }
         }
+        server = null
+        listeningIp = null
+        listeningPin = null
     }
 
     fun isRunning(): Boolean = server != null
