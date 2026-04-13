@@ -3,8 +3,15 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
@@ -70,30 +77,38 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
         val pin = (100000..999999).random()
         val port = port
+        val pinString = pin.toString()
 
-        p2PSharedState.pin = pin.toString()
+        val started = withContext(Dispatchers.IO) {
+            peerServerStarterManager.startServer(
+                ip,
+                keyPair,
+                pinString,
+                certificate,
+                config,
+                p2PSharedState
+            )
+        }
+        if (!started) {
+            Timber.e("P2P QR: server failed to start; not updating PIN/QR")
+            return
+        }
+
+        p2PSharedState.pin = pinString
         p2PSharedState.port = port.toString()
         p2PSharedState.hash = certHash
         p2PSharedState.ip = ip
-
-        peerServerStarterManager.startServer(
-            ip,
-            keyPair,
-            pin.toString(),
-            certificate,
-            config,
-            p2PSharedState
-        )
 
         payload = PeerConnectionPayload(
             ipAddress = ip,
             port = port,
             certificateHash = certHash,
-            pin = pin.toString()
+            pin = pinString
         )
 
-        qrPayload = Gson().toJson(payload)
-        generateQrCode(qrPayload)
+        val json = Gson().toJson(payload)
+        qrPayload = json
+        generateQrCode(json)
     }
 
 
@@ -114,8 +129,12 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun handleBack() {
         val leave = {
-            peerServerStarterManager.stopServer()
-            nav().popBackStack()
+            viewLifecycleOwner.lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    peerServerStarterManager.stopServer()
+                }
+                nav().popBackStack()
+            }
         }
         binding.toolbar.backClickListener = { leave() }
         binding.backBtn.setOnClickListener { leave() }

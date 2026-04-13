@@ -3,7 +3,11 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
@@ -90,8 +94,12 @@ class RecipientVerificationFragment :
     }
 
     private fun navigateBackAndStopServer() {
-        peerServerStarterManager.stopServer()
-        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        viewLifecycleOwner.lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                peerServerStarterManager.stopServer()
+            }
+            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+        }
     }
 
 
