@@ -106,6 +106,10 @@ class RecipientUploadFilesFragment :
             }
 
             if (isTerminal) {
+                // Sheet only auto-dismisses when progress == file count; hash/save failures can leave savedCount at 0.
+                if (files.isNotEmpty()) {
+                    progressPercentLiveData.value = files.size
+                }
                 stopServerAndNavigate()
             }
         }

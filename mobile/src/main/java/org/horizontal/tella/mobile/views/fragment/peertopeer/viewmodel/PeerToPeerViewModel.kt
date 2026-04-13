@@ -390,6 +390,7 @@ class PeerToPeerViewModel @Inject constructor(
                 percent = 100
             )
         )
+        completeBottomSheetImportIfTerminal()
     }
 
     private fun obtainTargetFolderId(): String {
@@ -425,9 +426,16 @@ class PeerToPeerViewModel @Inject constructor(
         }
 
         try {
-            val path = pf.path ?: return
+            val path = pf.path
+            if (path == null) {
+                markProgressFileSaveFailed(pf)
+                return
+            }
             val f = File(path)
-            if (!f.exists()) return
+            if (!f.exists()) {
+                markProgressFileSaveFailed(pf)
+                return
+            }
 
             val folderId = obtainTargetFolderId()
             val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
@@ -460,13 +468,21 @@ class PeerToPeerViewModel @Inject constructor(
             }
 
             val txKey = pf.transmissionId
-            if (txKey != null) {
-                p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.SAVED
+            if (vaultFile != null) {
+                if (txKey != null) {
+                    p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.SAVED
+                }
+                pf.status = P2PFileStatus.SAVED
+                pf.vaultFile = vaultFile
+                savedCount++
+                f.delete()
+            } else {
+                if (txKey != null) {
+                    p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.FAILED
+                }
+                pf.status = P2PFileStatus.FAILED
+                runCatching { f.delete() }
             }
-            pf.status = P2PFileStatus.SAVED
-            pf.vaultFile = vaultFile
-            savedCount++
-            f.delete()
         } catch (e: Exception) {
             Timber.e(e, "Saving to vault failed for file ${pf.file.fileName}")
             pf.status = P2PFileStatus.FAILED
@@ -474,6 +490,14 @@ class PeerToPeerViewModel @Inject constructor(
             postBottomSheetProgress()
             maybeFinalizeAfterSave()
         }
+    }
+
+    private fun markProgressFileSaveFailed(pf: ProgressFile) {
+        val txKey = pf.transmissionId
+        if (txKey != null) {
+            p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.FAILED
+        }
+        pf.status = P2PFileStatus.FAILED
     }
 
     private fun postBottomSheetProgress() {
@@ -504,8 +528,20 @@ class PeerToPeerViewModel @Inject constructor(
 
     private fun emitFinalIfReady(triggerStatus: SessionStatus) {
         val session = p2PState.session ?: return
-        if (!sessionIsTerminal(triggerStatus)) return
         if (!allFilesSavedOrFailed()) return
+
+        // Server progress still says SENDING after a failed hash check; we must still close the UI.
+        val canFinalize =
+            sessionIsTerminal(triggerStatus) ||
+                triggerStatus == SessionStatus.SENDING ||
+                triggerStatus == SessionStatus.SAVING
+        if (!canFinalize) return
+
+        if (session.status == SessionStatus.FINISHED ||
+            session.status == SessionStatus.FINISHED_WITH_ERRORS
+        ) {
+            return
+        }
 
         val final = when (session.status) {
             SessionStatus.CLOSED -> SessionStatus.CLOSED
@@ -518,6 +554,29 @@ class PeerToPeerViewModel @Inject constructor(
                 title = session.title.orEmpty(),
                 sessionStatus = final,
                 files = session.files.values.toList(),
+                percent = 100
+            )
+        )
+        completeBottomSheetImportIfTerminal()
+    }
+
+    /**
+     * The import sheet only dismisses when current == total ([BottomSheetUtils.showProgressImportSheet]).
+     * Hash failures never call [saveOneFile], so [savedCount] stays 0 and the sheet would hang at 0/N.
+     */
+    private fun completeBottomSheetImportIfTerminal() {
+        val session = p2PState.session ?: return
+        if (session.status != SessionStatus.FINISHED &&
+            session.status != SessionStatus.FINISHED_WITH_ERRORS &&
+            session.status != SessionStatus.CLOSED
+        ) {
+            return
+        }
+        if (totalFilesExpected <= 0) return
+        _bottomSheetProgress.postValue(
+            BottomSheetProgressState(
+                current = totalFilesExpected,
+                total = totalFilesExpected,
                 percent = 100
             )
         )
