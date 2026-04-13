@@ -65,9 +65,13 @@ class SenderUploadFilesFragment :
             endView.setUploadProgress(files, percentFloat)
 
 
-            val allFinished = state.files.all { it.status == P2PFileStatus.FINISHED }
+            val filesSettled = state.files.all {
+                it.status == P2PFileStatus.FINISHED || it.status == P2PFileStatus.FAILED
+            }
+            val sessionDone = state.sessionStatus == SessionStatus.FINISHED ||
+                state.sessionStatus == SessionStatus.FINISHED_WITH_ERRORS
 
-            if (state.sessionStatus == SessionStatus.FINISHED && allFinished) {
+            if (sessionDone && filesSettled) {
                 viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
                 navManager().navigateFromUploadSenderFragmentToPeerToPeerResultFragment()
             }

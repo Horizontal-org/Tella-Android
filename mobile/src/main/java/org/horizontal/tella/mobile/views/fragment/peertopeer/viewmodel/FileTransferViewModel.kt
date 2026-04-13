@@ -222,11 +222,20 @@ class FileTransferViewModel @Inject constructor(
                 postProgress()
             }
 
-            session.status = SessionStatus.FINISHED
+            val anyFailed = session.files.values.any { it.status == P2PFileStatus.FAILED }
+            val allFinished = session.files.values.all { it.status == P2PFileStatus.FINISHED }
+            session.status = when {
+                anyFailed -> SessionStatus.FINISHED_WITH_ERRORS
+                allFinished -> SessionStatus.FINISHED
+                else -> SessionStatus.FINISHED_WITH_ERRORS
+            }
+            val uploadedSum = session.files.values.sumOf { it.bytesTransferred.toLong() }
+            val percent =
+                if (totalSize > 0) ((uploadedSum * 100) / totalSize).toInt().coerceIn(0, 100) else 0
             _uploadProgress.postValue(
                 UploadProgressState(
                     title = session.title.orEmpty(),
-                    percent = 100,
+                    percent = if (allFinished && !anyFailed) 100 else percent,
                     sessionStatus = session.status,
                     files = session.files.values.toList()
                 )

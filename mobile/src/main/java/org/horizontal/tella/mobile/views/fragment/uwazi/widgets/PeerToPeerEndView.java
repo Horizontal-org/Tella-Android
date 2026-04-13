@@ -70,9 +70,17 @@ public class PeerToPeerEndView extends FrameLayout {
                     ? file.getVaultFile().id
                     : file.getFile().getId();
 
+            SubmittingItem item = partsListView.findViewWithTag(tagId);
+            if (item == null) continue;
+
             if (isUploadedStatus(file.getStatus())) {
-                SubmittingItem item = partsListView.findViewWithTag(tagId);
-                if (item != null) item.setPartUploaded();
+                item.setPartUploaded();
+            } else {
+                long size = file.getVaultFile() != null && file.getVaultFile().size > 0
+                        ? file.getVaultFile().size
+                        : file.getFile().getSize();
+                float filePct = size > 0 ? (file.getBytesTransferred() * 1f / size) : 0f;
+                item.setUploadProgress(Math.min(1f, Math.max(0f, filePct)));
             }
         }
 
