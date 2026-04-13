@@ -343,7 +343,8 @@ class TellaPeerToPeerServer(
                             }
                             if (!completed) {
                                 if (!tmpFile.delete()) {
-                                    Timber.w("P2P upload: could not delete incomplete temp %s", tmpFile.path)
+                                    // Rare: FS delay; avoid noisy warning for benign leftovers in cache.
+                                    Timber.d("P2P upload: temp delete deferred or failed %s", tmpFile.path)
                                 }
                             }
                         }
