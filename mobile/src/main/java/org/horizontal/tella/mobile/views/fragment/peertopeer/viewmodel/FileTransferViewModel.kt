@@ -142,14 +142,28 @@ class FileTransferViewModel @Inject constructor(
 
     /**
      * Copies each vault file's hash into [ProgressFile.file] for the prepare JSON.
+     * Reloads metadata from the vault so a hash added after picking the file is picked up.
      * @return true if any file is missing a non-empty hash — do not call prepare.
      */
     private fun syncSha256FromVaultForPrepare(): Boolean {
         val session = p2PSharedState.session ?: return true
+        val rxVault = try {
+            MyApplication.keyRxVault.getRxVault().blockingFirst()
+        } catch (e: Exception) {
+            Timber.e(e, "syncSha256FromVaultForPrepare: vault not ready")
+            return true
+        }
         for (pf in session.files.values) {
             val vf = pf.vaultFile ?: continue
-            if (vf.hash.isNullOrBlank()) return true
-            pf.file = pf.file.copy(sha256 = vf.hash)
+            val latest = try {
+                rxVault.get(vf.id).blockingGet()
+            } catch (e: Exception) {
+                Timber.d(e, "syncSha256FromVaultForPrepare: refresh failed for ${vf.id}")
+                vf
+            }
+            if (latest.hash.isNullOrBlank()) return true
+            pf.vaultFile = latest
+            pf.file = pf.file.copy(sha256 = latest.hash)
         }
         return false
     }

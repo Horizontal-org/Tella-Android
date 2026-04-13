@@ -291,6 +291,9 @@ class PrepareUploadFragment :
                         viewModel.p2PSharedState.session = it
                     }
 
+                    // Drop removed files; otherwise a stale ProgressFile (e.g. no hash) stays after user deletes it from the list.
+                    session.files.clear()
+
                     selectedFiles.forEach { vaultFile ->
                         val p2pFile = P2PFile(
                             id = vaultFile.id,
