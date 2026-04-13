@@ -105,6 +105,14 @@ class PrepareUploadFragment :
                     navBackStackEntry.savedStateHandle.remove<Int>("transferRejectedMessageRes")
                 }
             }
+        navBackStackEntry?.savedStateHandle
+            ?.getLiveData<Boolean>("prepareTransferRecipientRejected")
+            ?.observe(viewLifecycleOwner) { show ->
+                if (show == true) {
+                    baseActivity.showToast(R.string.recipient_rejected_the_files)
+                    navBackStackEntry.savedStateHandle.remove<Boolean>("prepareTransferRecipientRejected")
+                }
+            }
         findNavController().currentBackStackEntry
             ?.savedStateHandle
             ?.getLiveData<Boolean>("registrationSuccess")
