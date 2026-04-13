@@ -7,7 +7,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.call
 import io.ktor.server.application.install
-import io.ktor.util.pipeline.intercept
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.applicationEngineEnvironment
 import io.ktor.server.engine.embeddedServer
@@ -131,7 +130,7 @@ class TellaPeerToPeerServer(
                     post(PeerApiRoutes.REGISTER) {
                         val request = try {
                             call.receive<PeerRegisterPayload>()
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             call.respond(HttpStatusCode.BadRequest, "Invalid request format")
                             return@post
                         }
@@ -153,7 +152,7 @@ class TellaPeerToPeerServer(
 
                         val accepted = try {
                             PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             call.respond(HttpStatusCode.InternalServerError, "Internal error")
                             return@post
                         }
@@ -289,7 +288,7 @@ class TellaPeerToPeerServer(
                                         sessionStatus = session.status,
                                         files = session.files.values.toList()
                                     )
-                                }
+                                )
                             }
 
                             val expected = progressFile.file.sha256?.trim().orEmpty()
@@ -367,7 +366,7 @@ class TellaPeerToPeerServer(
                     post(PeerApiRoutes.CLOSE) {
                         val payload = try {
                             call.receive<Map<String, String>>()
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             call.respond(
                                 HttpStatusCode.BadRequest, "Missing or invalid JSON payload"
                             )
