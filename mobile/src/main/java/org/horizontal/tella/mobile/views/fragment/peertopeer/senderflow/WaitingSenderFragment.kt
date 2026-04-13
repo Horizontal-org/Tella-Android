@@ -21,7 +21,6 @@ class WaitingSenderFragment :
         binding.toolbar.setStartTextTitle(getString(R.string.send_files))
         binding.waitingText.text = getString(R.string.waiting_for_the_recipient_to_accept_files)
 
-        viewModel.prepareUploadsFromVaultFiles()
         binding.toolbar.backClickListener = {
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
@@ -55,12 +54,14 @@ class WaitingSenderFragment :
         viewModel.prepareResults.observe(viewLifecycleOwner) { response ->
             val fileInfos = response.files
             fileInfos.forEach { fileInfo ->
-                viewModel.p2PSharedState.session?.files?.let { filesMap ->
-                    filesMap[fileInfo.id]?.transmissionId = fileInfo.transmissionId
+                viewModel.p2PSharedState.session?.files?.get(fileInfo.id)?.let { pf ->
+                    pf.transmissionId = fileInfo.transmissionId
                 }
             }
             navManager().navigateFromWaitingSenderFragmentToUploadFilesFragment()
         }
 
+        // Start prepare only after observers are registered so SingleLiveEvent results are not lost.
+        viewModel.prepareUploadsFromVaultFiles()
     }
 }
