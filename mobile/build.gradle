@@ -71,7 +71,7 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
-        versionCode 229
+        versionCode 232
         versionName "3.0.0"
         multiDexEnabled true
 
