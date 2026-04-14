@@ -32,6 +32,13 @@ object CertificateUtils {
     }
 
     fun generateSelfSignedCertificate(keyPair: KeyPair, ipAddress: String): X509Certificate {
+        return generateSelfSignedCertificate(keyPair, listOf(ipAddress))
+    }
+
+    fun generateSelfSignedCertificate(keyPair: KeyPair, ipAddresses: List<String>): X509Certificate {
+        val uniqueIps = ipAddresses.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
+        require(uniqueIps.isNotEmpty()) { "At least one IP is required for the P2P certificate SAN." }
+
         val now = Date()
         val until = Date(now.time + 365L * 24 * 60 * 60 * 1000) // Valid for 1 year
 
@@ -42,9 +49,8 @@ object CertificateUtils {
             dn, serial, now, until, dn, keyPair.public
         )
 
-        val san = GeneralNames(
-            GeneralName(GeneralName.iPAddress, ipAddress)
-        )
+        val generalNames = uniqueIps.map { GeneralName(GeneralName.iPAddress, it) }.toTypedArray()
+        val san = GeneralNames(generalNames)
 
         certBuilder.addExtension(
             Extension.subjectAlternativeName, false, san

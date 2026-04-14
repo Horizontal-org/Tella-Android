@@ -7,6 +7,7 @@ import java.security.cert.X509Certificate
 object PeerKeyProvider {
     private var keyPair: KeyPair? = null
     private var certificate: X509Certificate? = null
+    private var certificateKey: String? = null
 
     fun getKeyPair(): KeyPair {
         if (keyPair == null) {
@@ -15,9 +16,15 @@ object PeerKeyProvider {
         return keyPair!!
     }
 
-    fun getCertificate(ipAddress: String): X509Certificate {
-        if (certificate == null) {
-            certificate = CertificateUtils.generateSelfSignedCertificate(getKeyPair(), ipAddress)
+    fun getCertificate(ipAddress: String): X509Certificate =
+        getCertificate(listOf(ipAddress))
+
+    fun getCertificate(ipAddresses: List<String>): X509Certificate {
+        val key = ipAddresses.map { it.trim() }.filter { it.isNotEmpty() }.distinct().sorted().joinToString(",")
+        require(key.isNotEmpty())
+        if (certificate == null || certificateKey != key) {
+            certificate = CertificateUtils.generateSelfSignedCertificate(getKeyPair(), ipAddresses)
+            certificateKey = key
         }
         return certificate!!
     }
@@ -25,6 +32,7 @@ object PeerKeyProvider {
     fun reset() {
         keyPair = null
         certificate = null
+        certificateKey = null
     }
 }
 
