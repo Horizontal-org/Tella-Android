@@ -23,6 +23,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.databinding.FragmentPrepareUploadBinding
+import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
@@ -287,6 +288,14 @@ class PrepareUploadFragment :
                 viewModel.p2PSharedState.session?.title = binding.reportTitleEt.text.toString()
 
                 if (selectedFiles.isNotEmpty()) {
+                    if (!NearbySharingTransferConfig.isSelectionWithinVaultLimits(selectedFiles)) {
+                        DialogUtils.showBottomMessage(
+                            baseActivity,
+                            getString(R.string.nearby_sharing_sender_transfer_content_too_large),
+                            true,
+                        )
+                        return@setOnClickListener
+                    }
                     val session = viewModel.p2PSharedState.session ?: P2PSession().also {
                         viewModel.p2PSharedState.session = it
                     }

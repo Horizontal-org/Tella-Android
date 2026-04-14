@@ -16,10 +16,12 @@ import org.horizontal.tella.mobile.bus.SingleLiveEvent
 import org.horizontal.tella.mobile.data.peertopeer.PeerFileHash
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
+import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
@@ -43,6 +45,10 @@ class FileTransferViewModel @Inject constructor(
     /** Message string resource when prepare is aborted (e.g. recipient rejected or missing vault hash). */
     private val _prepareRejected = SingleLiveEvent<Event<Int>>()
     val prepareRejected: SingleLiveEvent<Event<Int>> = _prepareRejected
+
+    private val _transferPayloadTooLarge = SingleLiveEvent<Unit>()
+    val transferPayloadTooLarge: SingleLiveEvent<Unit> get() = _transferPayloadTooLarge
+
     private val _uploadProgress = SingleLiveEvent<UploadProgressState>()
     val uploadProgress: SingleLiveEvent<UploadProgressState> get() = _uploadProgress
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
@@ -84,6 +90,15 @@ class FileTransferViewModel @Inject constructor(
                 return@launch
             }
 
+            val sessionForLimits = p2PSharedState.session
+            if (sessionForLimits != null && exceedsNearbySharingTransferLimits(sessionForLimits)) {
+                Timber.w("prepareUploadsFromVaultFiles: over max file size or count")
+                withContext(Dispatchers.Main) {
+                    _prepareRejected.value = Event(R.string.nearby_sharing_sender_transfer_content_too_large)
+                }
+                return@launch
+            }
+
             when (val result = peerClient.prepareUpload(
                 ip = p2PSharedState.ip,
                 port = p2PSharedState.port,
@@ -121,6 +136,13 @@ class FileTransferViewModel @Inject constructor(
                     withContext(Dispatchers.Main) {
                         Timber.w("Prepare upload rate limited (429)")
                         _prepareFailure.value = Event(PrepareFailureKind.GENERIC)
+                    }
+                }
+
+                is PrepareUploadResult.PayloadTooLarge -> {
+                    withContext(Dispatchers.Main) {
+                        Timber.w("Prepare upload rejected: payload too large (413)")
+                        _prepareRejected.value = Event(R.string.nearby_sharing_sender_transfer_content_too_large)
                     }
                 }
 
@@ -184,6 +206,11 @@ class FileTransferViewModel @Inject constructor(
         return false
     }
 
+    private fun exceedsNearbySharingTransferLimits(session: P2PSession): Boolean {
+        if (session.files.size > NearbySharingTransferConfig.Standard.maxFileCount) return true
+        return session.files.values.any { it.file.size > NearbySharingTransferConfig.Standard.maxFileSizeBytes }
+    }
+
     fun uploadAllFiles() {
         viewModelScope.launch {
             val session = p2PSharedState.session ?: return@launch
@@ -236,6 +263,12 @@ class FileTransferViewModel @Inject constructor(
                                 pf.status = P2PFileStatus.FAILED
                             PeerUploadOutcome.TooManyRequests -> {
                                 pf.status = P2PFileStatus.FAILED
+                                postProgress()
+                                return@launch
+                            }
+                            PeerUploadOutcome.PayloadTooLarge -> {
+                                pf.status = P2PFileStatus.FAILED
+                                _transferPayloadTooLarge.postValue(Unit)
                                 postProgress()
                                 return@launch
                             }

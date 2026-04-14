@@ -26,6 +26,9 @@ class SenderUploadFilesFragment :
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.SENDER
         showFormEndView()
         observeUploadProgress()
+        viewModel.transferPayloadTooLarge.observe(viewLifecycleOwner) {
+            baseActivity.showToast(R.string.nearby_sharing_sender_transfer_content_too_large)
+        }
         viewModel.uploadAllFiles()
         binding.cancel.setOnClickListener {
             showStandardSheet(
