@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
 import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
@@ -23,17 +21,11 @@ class RecipientVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-    private var payload: PeerConnectionPayload? = null
-
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        arguments?.getString("payload")?.let { payloadJson ->
-            payload = Gson().fromJson(payloadJson, PeerConnectionPayload::class.java)
-        }
 
         initUI()
         initListeners()
