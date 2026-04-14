@@ -35,6 +35,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
+import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingIpPreference
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.NetworkInfo
@@ -126,6 +127,9 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     private var registrationNonceContext: RegistrationNonceContext? = null
+
+    /** IPs from the last QR scan (subnet-ordered), used for “Try again” without re-scanning. */
+    private var registrationIpCandidates: List<String> = emptyList()
 
     private fun registrationNonceFor(ip: String, port: String, pin: String): String {
         val normalizedPin = pin.trim()
@@ -343,40 +347,98 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-    /** Sender/initiator path: call server /register */
+    fun collectLocalIpv4AddressesForNearbySharing(): List<String> =
+        networkInfoManager.collectAllLocalIpv4Addresses()
+
+    /** Sender/initiator path: single IP (manual entry or legacy QR). */
     fun startRegistration(ip: String, port: String, hash: String, pin: String) {
+        startRegistrationWithIpCandidates(listOf(ip), port, hash, pin)
+    }
+
+    /**
+     * Tries `/register` for each candidate IP in order. Candidates are reordered so addresses on the same
+     * IPv4 /24-style subnet as this device are tried first, then the rest.
+     */
+    fun startRegistrationWithIpCandidates(rawCandidates: List<String>, port: String, hash: String, pin: String) {
+        val distinct = rawCandidates.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
+        if (distinct.isEmpty()) return
+        val candidates = NearbySharingIpPreference.preferredNearbySharingIPOrder(
+            qrAddresses = distinct,
+            localDeviceIPv4Addresses = networkInfoManager.collectAllLocalIpv4Addresses(),
+        )
+        registrationIpCandidates = candidates
+        val pinTrimmed = pin.trim()
         viewModelScope.launch {
-            val nonce = registrationNonceFor(ip, port, pin)
-            when (val result = peerClient.registerPeerDevice(ip, port, hash, pin, nonce)) {
-                is RegisterPeerResult.Success -> {
-                    registrationNonceContext = null
-                    if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
-                    p2PState.session?.sessionId = result.sessionId
-                    _registrationSuccess.postValue(true) // Used by sender UI
-                }
-                RegisterPeerResult.InvalidPin ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
-                RegisterPeerResult.InvalidFormat ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
-                RegisterPeerResult.Conflict ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
-                RegisterPeerResult.TooManyRequests -> {
-                    bottomSheetError.postValue(
-                        "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                    )
-                }
-                RegisterPeerResult.ServerError ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
-                RegisterPeerResult.RejectedByReceiver ->
-                    bottomMessageError.postValue(context.getString(R.string.peer_to_peer_receiver_rejected_registration))
-                is RegisterPeerResult.Failure -> {
-                    Timber.e(result.exception, "Connection failure")
-                    bottomSheetError.postValue(
-                        "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                    )
+            candidates.forEachIndexed { index, ip ->
+                val nonce = registrationNonceFor(ip, port, pinTrimmed)
+                when (val result = peerClient.registerPeerDevice(ip, port, hash, pinTrimmed, nonce)) {
+                    is RegisterPeerResult.Success -> {
+                        registrationNonceContext = null
+                        if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
+                        p2PState.session?.sessionId = result.sessionId
+                        p2PState.ip = ip
+                        _registrationSuccess.postValue(true)
+                        return@launch
+                    }
+                    RegisterPeerResult.InvalidPin -> {
+                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
+                        return@launch
+                    }
+                    RegisterPeerResult.InvalidFormat -> {
+                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
+                        return@launch
+                    }
+                    RegisterPeerResult.RejectedByReceiver -> {
+                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_receiver_rejected_registration))
+                        return@launch
+                    }
+                    RegisterPeerResult.Conflict -> {
+                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
+                        return@launch
+                    }
+                    RegisterPeerResult.TooManyRequests -> {
+                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                        bottomSheetError.postValue(
+                            "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                        )
+                        return@launch
+                    }
+                    RegisterPeerResult.ServerError -> {
+                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
+                        return@launch
+                    }
+                    is RegisterPeerResult.Failure -> {
+                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                        Timber.e(result.exception, "Connection failure")
+                        bottomSheetError.postValue(
+                            "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                        )
+                        return@launch
+                    }
                 }
             }
         }
+    }
+
+    fun retryQueuedRegistration() {
+        if (registrationIpCandidates.isEmpty()) return
+        startRegistrationWithIpCandidates(
+            registrationIpCandidates,
+            p2PState.port,
+            p2PState.hash,
+            p2PState.pin.orEmpty(),
+        )
+    }
+
+    private fun shouldRetryRegisterWithNextIp(result: RegisterPeerResult): Boolean = when (result) {
+        RegisterPeerResult.Conflict,
+        RegisterPeerResult.TooManyRequests,
+        RegisterPeerResult.ServerError,
+        is RegisterPeerResult.Failure,
+        -> true
+        else -> false
     }
 
     // ------------------- Prepare/Upload/Save logic (unchanged from your version) -------------------
