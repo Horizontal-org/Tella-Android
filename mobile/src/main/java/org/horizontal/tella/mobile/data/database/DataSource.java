@@ -1330,7 +1330,15 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         if (!instances.isEmpty()) {
             ReportInstance currentInstance = instances.get(0);
 
-            if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
+            if (currentInstance.getStatus() == EntityStatus.SUBMISSION_IN_PROGRESS) {
+                // Don't modify an instance being actively uploaded — its in-memory file list in
+                // the worker would overwrite any changes we make here, destroying the new file.
+                // Create a fresh instance for this file instead; it will be uploaded by the
+                // next worker run (guaranteed by APPEND_OR_REPLACE WorkManager policy).
+                ReportInstance newReportInstance = ReportInstance.getAutoReportReportInstance(serverId, "Auto-report " + DateUtil.getDateTimeString());
+                newReportInstance.getWidgetMediaFiles().add(mediaFile);
+                reportInstance = dataBaseUtils.updateTellaReportsFormInstance(newReportInstance, D.T_REPORT_FORM_INSTANCE, D.T_REPORT_INSTANCE_VAULT_FILE);
+            } else if (Util.currentTimestamp() - currentInstance.getUpdated() > C.UPLOAD_SET_DURATION) {
                 currentInstance.setCurrent(0);
                 currentInstance.setStatus(EntityStatus.SUBMITTED);
                 currentInstance.setWidgetMediaFiles(getReportFiles(currentInstance, null));

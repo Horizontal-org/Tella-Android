@@ -19,6 +19,7 @@ import com.hzontal.tella_locking_ui.ReturnActivity
 import com.hzontal.tella_locking_ui.TellaKeysUI
 import org.hzontal.tella.keys.config.UnlockConfig
 import org.hzontal.tella.keys.config.UnlockRegistry
+import org.hzontal.tella.keys.key.LifecycleMainKey
 import org.hzontal.tella.keys.key.MainKey
 import timber.log.Timber
 
@@ -109,10 +110,19 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected fun generateOrGetMainKey(): MainKey {
+    /**
+     * @return null if the in-memory key was cleared while a new lock was being confirmed; full-app unlock was started.
+     */
+    protected fun generateOrGetMainKey(): MainKey? {
         return if (TellaKeysUI.getMainKeyStore().isStored) {
             isConfirmSettingsUpdate = true
-            TellaKeysUI.getMainKeyHolder().get()
+            val holder = TellaKeysUI.getMainKeyHolder()
+            return try {
+                holder.get()
+            } catch (e: LifecycleMainKey.MainKeyUnavailableException) {
+                TellaKeysUI.getCredentialsCallback().launchFullAppUnlock(this)
+                null
+            }
         } else {
             MainKey.generate()
         }

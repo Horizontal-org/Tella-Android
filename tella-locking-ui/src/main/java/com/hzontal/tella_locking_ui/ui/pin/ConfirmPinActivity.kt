@@ -24,12 +24,19 @@ class ConfirmPinActivity  : BasePinActivity() {
     override fun onSuccessSetPin(pin: String?) {
        if (mConfirmPin == pin) {
            val keySpec = PBEKeySpec(pin?.toCharArray())
-           TellaKeysUI.getUnlockRegistry().setActiveMethod(this@ConfirmPinActivity,UnlockRegistry.Method.TELLA_PIN)
-           val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@ConfirmPinActivity)
-           TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+           // Use target method config without setActiveMethod first: prefs must still reflect the
+           // previous lock until store succeeds, otherwise process death can leave TELLA_PIN with a
+           // pattern-wrapped key (or inconsistent prefs).
+           val config =
+               TellaKeysUI.getUnlockRegistry().getRegisteredConfig(UnlockRegistry.Method.TELLA_PIN)
+           val mainKey = generateOrGetMainKey() ?: return
+           TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
                override fun onSuccess(mainKey: MainKey) {
                    Timber.d("** MainKey stored: %s **", mainKey)
-                   // here, we store MainKey in memory -> unlock the app
+                   TellaKeysUI.getUnlockRegistry().setActiveMethod(
+                       this@ConfirmPinActivity,
+                       UnlockRegistry.Method.TELLA_PIN
+                   )
                    TellaKeysUI.getMainKeyHolder().set(mainKey)
                    onSuccessConfirmUnlock()
                }

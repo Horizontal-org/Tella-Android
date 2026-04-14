@@ -15,11 +15,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
+import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
+import org.horizontal.tella.mobile.util.BottomMessageManager
 import org.horizontal.tella.mobile.util.LocaleManager
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.ThemeStyleManager
@@ -36,6 +42,13 @@ abstract class BaseActivity : AppCompatActivity() {
     lateinit var divviupUtils: DivviupUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                BottomMessageManager.events.collect { stringRes ->
+                    DialogUtils.showBottomMessage(this@BaseActivity, getString(stringRes), false)
+                }
+            }
+        }
         // Use Google-recommended API for edge-to-edge (avoids deprecated setStatusBarColor path)
         WindowCompat.enableEdgeToEdge(window)
         // Set window background to transparent so fragment backgrounds show through

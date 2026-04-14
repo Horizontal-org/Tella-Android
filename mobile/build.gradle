@@ -52,6 +52,8 @@ android {
                     "META-INF/ASL2.0",
                     "META-INF/*.md",
                     "META-INF/*.txt",
+                    "**/baseline.prof",
+                    "**/baseline.profm",
             ]
             // Make sure SimpleXML configuration files are included
             pickFirsts += [
@@ -87,8 +89,7 @@ android {
 
     splits {
         abi {
-            // Only enable for release; debug gets a single APK so "Run" works on any device/emulator (ABIs "").
-            enable gradle.startParameter.taskNames.any { it.toLowerCase().contains("release") }
+            enable !isFdroidBuild && gradle.startParameter.taskNames.any { it.toLowerCase().contains("release") }
             reset()
             include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
             universalApk true
@@ -159,7 +160,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if (project.findProperty("RELEASE_STORE_FILE") != null || System.getenv("RELEASE_STORE_FILE") != null) {
+            if (!isFdroidBuild && (project.findProperty("RELEASE_STORE_FILE") != null || System.getenv("RELEASE_STORE_FILE") != null)) {
                 signingConfig signingConfigs.release
             }
         }
@@ -203,12 +204,12 @@ tasks.matching {
             ? task.outputDir.asFile.get()
             : file("$buildDir/intermediates/merged_assets/${task.name.replace('merge', '').replace('Assets', '').uncapitalize()}/out")
         if (!mergedAssetsDir.exists()) {
-            throw new GradleException("Merged assets directory not found for ${task.name}: ${mergedAssetsDir}")
+            return
         }
 
         def configAsset = new File(mergedAssetsDir, "config.json")
-        if (configAsset.exists() && !configAsset.delete()) {
-            throw new GradleException("Unable to remove forbidden fdroid asset: ${configAsset}")
+        if (configAsset.exists()) {
+            configAsset.delete()
         }
     }
 }

@@ -69,7 +69,8 @@ class PatternSetConfirmActivity : SetPatternActivity() {
         val keySpec = PBEKeySpec(mNewPassphrase.toCharArray())
         val config = TellaKeysUI.getUnlockRegistry().getActiveConfig(this@PatternSetConfirmActivity)
 
-        TellaKeysUI.getMainKeyStore().store(generateOrGetMainKey(), config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
+        val mainKey = generateOrGetMainKey() ?: return
+        TellaKeysUI.getMainKeyStore().store(mainKey, config.wrapper, keySpec, object : MainKeyStore.IMainKeyStoreCallback {
             override fun onSuccess(mainKey: MainKey) {
                 Timber.d("** MainKey stored: %s **", mainKey.key)
                 // here, we store MainKey in memory -> unlock the app

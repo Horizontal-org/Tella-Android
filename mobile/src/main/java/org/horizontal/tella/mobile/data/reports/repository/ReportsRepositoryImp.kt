@@ -54,6 +54,8 @@ import retrofit2.Response
 import timber.log.Timber
 import java.net.UnknownHostException
 import javax.inject.Inject
+import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.util.BottomMessageManager
 
 
 class ReportsRepositoryImp @Inject internal constructor(
@@ -239,10 +241,24 @@ class ReportsRepositoryImp @Inject internal constructor(
                 }
                 .subscribe({
                     handleInstanceStatus(instance, EntityStatus.DELETED)
+                    val stringRes = if (instance.widgetMediaFiles.all { it.mimeType?.startsWith("audio/") == true }) {
+                        R.string.Auto_Upload_Recording_Imported_Report_And_Deleted
+                    } else {
+                        R.string.Auto_Upload_Media_Imported_Report_And_Deleted
+                    }
+                    BottomMessageManager.emit(stringRes)
                 }, { throwable ->
                     throwable.printStackTrace()
                 })
 
+        } else if (instance.current == 1L) {
+            handleInstanceStatus(instance, EntityStatus.SUBMITTED)
+            val stringRes = if (instance.widgetMediaFiles.all { it.mimeType?.startsWith("audio/") == true }) {
+                R.string.Auto_Upload_Recording_Report
+            } else {
+                R.string.Auto_Upload_Media_Report
+            }
+            BottomMessageManager.emit(stringRes)
         } else {
             handleInstanceStatus(instance, EntityStatus.SUBMITTED)
         }
