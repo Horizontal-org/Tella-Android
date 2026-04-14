@@ -12,6 +12,7 @@ sealed class PrepareUploadResult {
     data object BadRequest : PrepareUploadResult()
     data object Conflict : PrepareUploadResult()
     data object TooManyRequests : PrepareUploadResult()
+    data object PayloadTooLarge : PrepareUploadResult()
     data object ServerError : PrepareUploadResult()
     data class Failure(val exception: Throwable) : PrepareUploadResult()
 }
