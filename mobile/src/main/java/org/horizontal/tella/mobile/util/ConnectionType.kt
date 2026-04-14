@@ -10,6 +10,7 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import java.util.LinkedHashSet
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.net.Inet4Address
@@ -82,15 +83,48 @@ class NetworkInfoManager(private val context: Context) {
     }
 
     private fun getFallbackIpv4(): String? {
+        return collectFallbackIpv4Addresses().firstOrNull()
+    }
+
+    /** All non-loopback IPv4 addresses from network interfaces (fallback when LinkProperties is empty). */
+    private fun collectFallbackIpv4Addresses(): List<String> {
         return try {
             NetworkInterface.getNetworkInterfaces()
                 .toList()
                 .flatMap { it.inetAddresses.toList() }
-                .firstOrNull { it is Inet4Address && !it.isLoopbackAddress }
-                ?.hostAddress
+                .filter { it is Inet4Address && !it.isLoopbackAddress }
+                .mapNotNull { it.hostAddress?.substringBefore('%')?.takeIf { h -> h.isNotBlank() } }
+                .distinct()
         } catch (_: Exception) {
-            null
+            emptyList()
         }
+    }
+
+    /**
+     * IPv4 addresses on active links (API 23+) plus interface fallback. Used to match QR multi-IP against local subnets.
+     */
+    @SuppressLint("MissingPermission")
+    fun collectAllLocalIpv4Addresses(): List<String> {
+        val out = LinkedHashSet<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val cm = ContextCompat.getSystemService(context, ConnectivityManager::class.java)
+            if (cm != null) {
+                for (network in cm.allNetworks) {
+                    val lp = cm.getLinkProperties(network) ?: continue
+                    for (la in lp.linkAddresses) {
+                        val a = la.address
+                        if (a is Inet4Address && !a.isLoopbackAddress) {
+                            val h = a.hostAddress?.substringBefore('%')
+                            if (!h.isNullOrBlank()) out.add(h)
+                        }
+                    }
+                }
+            }
+        }
+        if (out.isEmpty()) {
+            out.addAll(collectFallbackIpv4Addresses())
+        }
+        return out.toList()
     }
 
     private fun isDeviceHotspotEnabled(context: Context): Boolean {
