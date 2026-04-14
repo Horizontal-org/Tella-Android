@@ -8,7 +8,6 @@ import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-import com.hzontal.tella_vault.VaultFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
@@ -110,28 +109,17 @@ class TellaPeerToPeerClient @Inject constructor(
         port: String,
         expectedFingerprint: String, // SPKI SHA-256 hex
         title: String,
-        files: List<VaultFile>,
+        /** Plaintext file metadata: [P2PFile.sha256] and [P2PFile.size] must match the PUT body bytes. */
+        files: List<P2PFile>,
         sessionId: String
     ): PrepareUploadResult = withContext(Dispatchers.IO) {
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
-
-        val fileItems = files.map {
-            val mimeType = it.mimeType ?: CONTENT_TYPE_OCTET
-            P2PFile(
-                id = it.id,
-                fileName = it.name,
-                size = it.size,
-                fileType = mimeType,
-                sha256 = it.hash,
-                thumbnail = it.thumb
-            )
-        }
 
         val requestPayload = PrepareUploadRequest(
             title = title,
             sessionId = sessionId,
             nonce = UUID.randomUUID().toString(),
-            files = fileItems,
+            files = files,
         )
         val jsonPayload = Json.encodeToString(requestPayload)
         val requestBody = jsonPayload.toRequestBody()

@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
+import org.horizontal.tella.mobile.data.peertopeer.PeerFileHash
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
@@ -20,6 +21,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
+import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.Event
 import org.horizontal.tella.mobile.util.fromJsonToObjectList
@@ -87,7 +89,7 @@ class FileTransferViewModel @Inject constructor(
                 port = p2PSharedState.port,
                 expectedFingerprint = p2PSharedState.hash,
                 title = getTitleFromState(),
-                files = getVaultFilesFromState(),
+                files = getP2pFilesForPrepare(),
                 sessionId = getSessionId()
             )) {
                 is PrepareUploadResult.Success -> {
@@ -141,9 +143,8 @@ class FileTransferViewModel @Inject constructor(
     }
 
     /**
-     * Copies each vault file's hash into [ProgressFile.file] for the prepare JSON.
-     * Reloads metadata from the vault so a hash added after picking the file is picked up.
-     * @return true if any file is missing a non-empty hash — do not call prepare.
+     * Sets [ProgressFile.file] sha256 and size from the same decrypted stream we PUT on upload.
+     * Vault [VaultFile.hash] is the digest of ciphertext on disk, so it must not be sent to desktop.
      */
     private fun syncSha256FromVaultForPrepare(): Boolean {
         val session = p2PSharedState.session ?: return true
@@ -154,16 +155,31 @@ class FileTransferViewModel @Inject constructor(
             return true
         }
         for (pf in session.files.values) {
-            val vf = pf.vaultFile ?: continue
+            val vf = pf.vaultFile ?: return true
             val latest = try {
                 rxVault.get(vf.id).blockingGet()
             } catch (e: Exception) {
                 Timber.d(e, "syncSha256FromVaultForPrepare: refresh failed for ${vf.id}")
                 vf
             }
-            if (latest.hash.isNullOrBlank()) return true
+            val stream = MediaFileHandler.getStream(latest) ?: return true
+            val (hex, len) = try {
+                stream.use { PeerFileHash.sha256HexAndLength(it) }
+            } catch (e: Exception) {
+                Timber.e(e, "syncSha256FromVaultForPrepare: hash stream failed for ${latest.id}")
+                return true
+            }
+            if (len <= 0L) return true
+            val mimeType = latest.mimeType ?: "application/octet-stream"
             pf.vaultFile = latest
-            pf.file = pf.file.copy(sha256 = latest.hash)
+            pf.file = P2PFile(
+                id = latest.id,
+                fileName = latest.name,
+                size = len,
+                fileType = mimeType,
+                sha256 = hex,
+                thumbnail = latest.thumb,
+            )
         }
         return false
     }
@@ -175,7 +191,7 @@ class FileTransferViewModel @Inject constructor(
             val port = p2PSharedState.port
             val fingerprint = p2PSharedState.hash
 
-            val totalSize = session.files.values.sumOf { it.vaultFile?.size ?: 0L }
+            val totalSize = session.files.values.sumOf { it.file.size }
 
             fun postProgress() {
                 val uploaded = session.files.values.sumOf { it.bytesTransferred }
@@ -207,7 +223,7 @@ class FileTransferViewModel @Inject constructor(
                                 fileId = pf.file.id,
                                 transmissionId = pf.transmissionId.orEmpty(),
                                 inputStream = input,
-                                fileSize = vf.size,
+                                fileSize = pf.file.size,
                                 fileName = vf.name,
                             ) { written, _ ->
                                 pf.bytesTransferred = written.toInt()
@@ -257,11 +273,8 @@ class FileTransferViewModel @Inject constructor(
         }
     }
 
-    private fun getVaultFilesFromState(): List<VaultFile> {
-        return p2PSharedState.session?.files
-            ?.values
-            ?.mapNotNull { it.vaultFile }
-            .orEmpty()
+    private fun getP2pFilesForPrepare(): List<P2PFile> {
+        return p2PSharedState.session?.files?.values?.map { it.file }.orEmpty()
     }
 
     private fun getTitleFromState(): String {
