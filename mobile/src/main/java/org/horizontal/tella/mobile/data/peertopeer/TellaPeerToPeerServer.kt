@@ -34,6 +34,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
+import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
@@ -230,6 +231,15 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
+                        if (request.files.size > NearbySharingTransferConfig.Standard.maxFileCount) {
+                            call.respond(HttpStatusCode.PayloadTooLarge, "Content too large")
+                            return@post
+                        }
+                        if (request.files.any { it.size > NearbySharingTransferConfig.Standard.maxFileSizeBytes }) {
+                            call.respond(HttpStatusCode.PayloadTooLarge, "Content too large")
+                            return@post
+                        }
+
                         if (request.sessionId != serverSession?.sessionId) {
                             Timber.w(
                                 "PREPARE_UPLOAD rejected: sessionId mismatch (request=%s serverSession=%s)",
@@ -322,6 +332,16 @@ class TellaPeerToPeerServer(
                             return@put
                         }
 
+                        val declaredSize = progressFile.file.size
+                        if (declaredSize > NearbySharingTransferConfig.Standard.maxFileSizeBytes ||
+                            declaredSize < 0
+                        ) {
+                            progressFile.status = P2PFileStatus.FAILED
+                            emitReceiveProgress(session)
+                            call.respond(HttpStatusCode.PayloadTooLarge, "Content too large")
+                            return@put
+                        }
+
                         val tmpFile = File.createTempFile(
                             sanitizeFileIdForTempPrefix(fileId),
                             ".tmp",
@@ -339,6 +359,12 @@ class TellaPeerToPeerServer(
                             while (true) {
                                 val read = input.read(buffer)
                                 if (read == -1) break
+                                if (bytesRead + read > declaredSize) {
+                                    progressFile.status = P2PFileStatus.FAILED
+                                    emitReceiveProgress(session)
+                                    call.respond(HttpStatusCode.PayloadTooLarge, "Content too large")
+                                    return@put
+                                }
                                 output.write(buffer, 0, read)
                                 bytesRead += read
                                 progressFile.bytesTransferred = bytesRead.toInt()
