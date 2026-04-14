@@ -189,6 +189,10 @@ class TellaPeerToPeerClient @Inject constructor(
                         Timber.w("uploadFileWithProgress(%s): conflict — nonce replay? (409)", fileId)
                         PeerUploadOutcome.Failed
                     }
+                    413 -> {
+                        Timber.w("uploadFileWithProgress(%s): payload too large (413)", fileId)
+                        PeerUploadOutcome.PayloadTooLarge
+                    }
                     406 -> {
                         Timber.w("uploadFileWithProgress(%s): not acceptable — file hash mismatch (406)", fileId)
                         PeerUploadOutcome.Failed
@@ -205,6 +209,7 @@ class TellaPeerToPeerClient @Inject constructor(
                     when (outcome) {
                         PeerUploadOutcome.Success -> "OK"
                         PeerUploadOutcome.TooManyRequests -> "FAIL 429"
+                        PeerUploadOutcome.PayloadTooLarge -> "FAIL 413"
                         PeerUploadOutcome.Failed -> "FAIL $code"
                     },
                 )
@@ -293,6 +298,7 @@ class TellaPeerToPeerClient @Inject constructor(
             400 -> PrepareUploadResult.BadRequest
             403 -> PrepareUploadResult.Forbidden
             409 -> PrepareUploadResult.Conflict
+            413 -> PrepareUploadResult.PayloadTooLarge
             429 -> PrepareUploadResult.TooManyRequests
             500 -> PrepareUploadResult.ServerError
             else -> PrepareUploadResult.Failure(Exception("Unhandled server error $code: $body"))
