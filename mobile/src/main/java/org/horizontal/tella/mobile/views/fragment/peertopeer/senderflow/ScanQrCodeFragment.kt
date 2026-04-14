@@ -9,12 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
+import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.databinding.ScanQrcodeFragmentBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
@@ -64,18 +63,21 @@ class ScanQrCodeFragment :
                     barcodeView.pause()
 
                     try {
-                        val payload = Gson().fromJson(qrContent, PeerConnectionPayload::class.java)
+                        val parsed = PeerConnectionQrCodec.parse(qrContent)
+                            ?: throw IllegalArgumentException("Invalid QR payload")
+                        val cert = parsed.certificateHash?.takeIf { it.isNotBlank() }
+                            ?: throw IllegalArgumentException("Invalid QR payload")
 
-                        viewModel.p2PState.pin = payload.pin
-                        viewModel.p2PState.port = payload.port.toString()
-                        viewModel.p2PState.hash = payload.certificateHash
-                        viewModel.p2PState.ip = payload.ipAddress
+                        viewModel.p2PState.pin = parsed.pin
+                        viewModel.p2PState.port = parsed.port.toString()
+                        viewModel.p2PState.hash = cert
+                        viewModel.p2PState.ip = parsed.ipAddresses.firstOrNull().orEmpty()
 
-                        viewModel.startRegistration(
-                            ip = payload.ipAddress,
-                            port = payload.port.toString(),
-                            hash = payload.certificateHash,
-                            pin = payload.pin
+                        viewModel.startRegistrationWithIpCandidates(
+                            rawCandidates = parsed.ipAddresses,
+                            port = parsed.port.toString(),
+                            hash = cert,
+                            pin = parsed.pin,
                         )
 
                     } catch (e: Exception) {
@@ -150,12 +152,7 @@ class ScanQrCodeFragment :
                 getString(R.string.try_again),
                 null
             ) {
-                viewModel.startRegistration(
-                    ip = viewModel.p2PState.ip,
-                    port = viewModel.p2PState.port,
-                    hash = viewModel.p2PState.hash,
-                    pin = viewModel.p2PState.pin.toString()
-                )
+                viewModel.retryQueuedRegistration()
             }
         }
     }
