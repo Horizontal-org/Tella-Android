@@ -1,12 +1,12 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -24,7 +24,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.data.peertopeer.port
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionPayload
+import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import timber.log.Timber
@@ -34,7 +34,6 @@ import javax.inject.Inject
 class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCodeBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-    private var payload: PeerConnectionPayload? = null
     private var qrPayload: String? = null
 
     @Inject
@@ -49,25 +48,52 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     /** Ensures only one setup runs at a time so server PIN and QR payload cannot diverge. */
     private val qrSetupMutex = Mutex()
 
+    private var qrSetupStarted = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val ip = viewModel.currentNetworkInfo?.ipAddress
-        if (!ip.isNullOrEmpty()) {
-            setQrRegenerationLoading(true)
-            viewLifecycleOwner.lifecycleScope.launch {
-                try {
-                    qrSetupMutex.withLock {
-                        setupServerAndQr(ip)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
+                val ip = info.ipAddress
+                if (!qrSetupStarted && !ip.isNullOrEmpty()) {
+                    qrSetupStarted = true
+                    setQrRegenerationLoading(true)
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        try {
+                            qrSetupMutex.withLock {
+                                setupServerAndQr(ip)
+                            }
+                        } finally {
+                            if (isAdded) {
+                                setQrRegenerationLoading(false)
+                            }
+                        }
                     }
-                } finally {
-                    if (isAdded) {
-                        setQrRegenerationLoading(false)
-                    }
+                } else if (!qrSetupStarted && ip.isNullOrEmpty()) {
+                    setQrRegenerationLoading(false)
                 }
             }
+            viewModel.updateNetworkInfo()
         } else {
-            setQrRegenerationLoading(false)
+            val ip = viewModel.currentNetworkInfo?.ipAddress
+            if (!ip.isNullOrEmpty()) {
+                qrSetupStarted = true
+                setQrRegenerationLoading(true)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        qrSetupMutex.withLock {
+                            setupServerAndQr(ip)
+                        }
+                    } finally {
+                        if (isAdded) {
+                            setQrRegenerationLoading(false)
+                        }
+                    }
+                }
+            } else {
+                setQrRegenerationLoading(false)
+            }
         }
         handleBack()
         handleConnectManually()
@@ -94,9 +120,20 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         }
     }
 
-    private suspend fun setupServerAndQr(ip: String) {
+    private suspend fun setupServerAndQr(primaryIpHint: String) {
+        val discovered = viewModel.collectLocalIpv4AddressesForNearbySharing()
+        val allIps = buildList {
+            add(primaryIpHint.trim())
+            addAll(discovered.filter { it != primaryIpHint.trim() })
+        }.distinct().filter { it.isNotEmpty() }
+        if (allIps.isEmpty()) {
+            Timber.e("P2P QR: no local IPv4 addresses for certificate/QR")
+            return
+        }
+        val bindIp = if (allIps.contains(primaryIpHint.trim())) primaryIpHint.trim() else allIps.first()
+
         val keyPair = PeerKeyProvider.getKeyPair()
-        val certificate = PeerKeyProvider.getCertificate(ip)
+        val certificate = PeerKeyProvider.getCertificate(allIps)
         val config = KeyStoreConfig()
 
         val certHash = CertificateUtils.getPublicKeyHash(certificate)
@@ -106,7 +143,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
         val started = withContext(Dispatchers.IO) {
             peerServerStarterManager.startServer(
-                ip,
+                bindIp,
                 keyPair,
                 pinString,
                 certificate,
@@ -122,16 +159,9 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         p2PSharedState.pin = pinString
         p2PSharedState.port = port.toString()
         p2PSharedState.hash = certHash
-        p2PSharedState.ip = ip
+        p2PSharedState.ip = bindIp
 
-        payload = PeerConnectionPayload(
-            ipAddress = ip,
-            port = port,
-            certificateHash = certHash,
-            pin = pinString
-        )
-
-        val json = Gson().toJson(payload)
+        val json = PeerConnectionQrCodec.toJson(allIps, port, certHash, pinString)
         qrPayload = json
         generateQrCode(json)
     }
@@ -173,7 +203,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun connectManually() {
         val json = qrPayload ?: return
-        if (payload == null) return
         bundle.putString("payload", json)
         navManager().navigateFromScanQrCodeToDeviceInfo()
     }
