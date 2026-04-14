@@ -342,13 +342,32 @@ class TellaPeerToPeerClient @Inject constructor(
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
 
-        pickWifiNetwork(appContext)?.let { network ->
-            builder.socketFactory(network.socketFactory)
+        // For LAN / hotspot peers, binding to an arbitrary "Wi‑Fi" Network can pick the wrong interface
+        // (e.g. secondary saved Wi‑Fi) and yield EHOSTUNREACH while the default network routes correctly.
+        if (!isPrivateOrLinkLocalIpv4(ip)) {
+            pickWifiNetwork(appContext)?.let { network ->
+                builder.socketFactory(network.socketFactory)
+            }
         }
 
         return builder.build()
     }
 
+    /** True for RFC1918 / link-local so we let the OS choose the socket's outgoing interface. */
+    private fun isPrivateOrLinkLocalIpv4(ip: String): Boolean {
+        val parts = ip.trim().split('.').mapNotNull { it.toIntOrNull() }
+        if (parts.size != 4) return false
+        val a = parts[0]
+        val b = parts[1]
+        return when {
+            a == 10 -> true
+            a == 172 && b in 16..31 -> true
+            a == 192 && b == 168 -> true
+            a == 169 && b == 254 -> true
+            a == 127 -> true
+            else -> false
+        }
+    }
 
     @Suppress("DEPRECATION")
     private fun pickWifiNetwork(context: Context): Network? {
