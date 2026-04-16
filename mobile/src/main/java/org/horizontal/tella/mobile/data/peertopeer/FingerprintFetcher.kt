@@ -298,22 +298,4 @@ object FingerprintFetcher {
         MessageDigest.getInstance("SHA-256").digest(bytes)
             .joinToString("") { "%02x".format(it) }
 
-    // Interceptor to enforce SHA-256 over the LEAF CERTIFICATE (DER)
-    private class LeafCertHashInterceptor(
-        private val expectedHexLower: String
-    ) : okhttp3.Interceptor {
-        override fun intercept(chain: okhttp3.Interceptor.Chain): okhttp3.Response {
-            val resp = chain.proceed(chain.request())
-            val cert = (resp.handshake?.peerCertificates?.firstOrNull() as? X509Certificate)
-                ?: throw javax.net.ssl.SSLPeerUnverifiedException("No peer certificate")
-            val actual = sha256Hex(cert.encoded)
-            if (!actual.equals(expectedHexLower, ignoreCase = true)) {
-                resp.close()
-                throw javax.net.ssl.SSLPeerUnverifiedException(
-                    "Certificate DER hash mismatch. expected=$expectedHexLower actual=$actual"
-                )
-            }
-            return resp
-        }
-    }
 }

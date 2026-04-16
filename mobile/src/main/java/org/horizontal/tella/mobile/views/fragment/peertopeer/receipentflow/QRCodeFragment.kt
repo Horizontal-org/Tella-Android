@@ -136,7 +136,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         val certificate = PeerKeyProvider.getCertificate(allIps)
         val config = KeyStoreConfig()
 
-        val certHash = CertificateUtils.getPublicKeyHash(certificate)
+        val certHash = CertificateUtils.getLeafCertificateDerSha256Hex(certificate)
         val pin = (100000..999999).random()
         val port = port
         val pinString = pin.toString()

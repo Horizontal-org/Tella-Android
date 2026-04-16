@@ -75,11 +75,51 @@ object CertificateUtils {
         return "-----BEGIN CERTIFICATE-----\n$encoded\n-----END CERTIFICATE-----"
     }
 
-    fun getPublicKeyHash(certificate: X509Certificate): String {
+    /**
+     * SHA-256 of the leaf certificate DER ([X509Certificate.encoded]), lowercase hex.
+     * Same value as [org.horizontal.tella.mobile.data.peertopeer.FingerprintResult.certHex].
+     */
+    fun getLeafCertificateDerSha256Hex(certificate: X509Certificate): String {
         val digest = java.security.MessageDigest.getInstance("SHA-256")
         val hash = digest.digest(certificate.encoded)
-        return hash.joinToString("") { "%02x".format(it) } // <-- fix here
+        return hash.joinToString("") { "%02x".format(it) }
     }
+
+    /**
+     * Trust manager that accepts only servers whose leaf certificate DER hash matches [expectedLeafCertSha256Hex].
+     * This allows secure pinning for self-signed peers without trusting arbitrary certificates.
+     */
+    fun getLeafCertPinnedTrustManager(expectedLeafCertSha256Hex: String): X509TrustManager {
+        val expected = normalizeHex(expectedLeafCertSha256Hex)
+        return object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                val leaf = chain?.firstOrNull()
+                    ?: throw CertificateException("Empty certificate chain")
+                leaf.checkValidity()
+                val actual = normalizeHex(getLeafCertificateDerSha256Hex(leaf))
+                if (actual != expected) {
+                    throw CertificateException("Leaf certificate hash mismatch")
+                }
+            }
+        }
+    }
+
+    /**
+     * Bootstrap trust manager for first-contact fingerprint collection:
+     * it requires a present, currently-valid X.509 leaf cert, but does not require CA-chain trust.
+     */
+    fun getFingerprintCollectionTrustManager(): X509TrustManager =
+        object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                val leaf = chain?.firstOrNull()
+                    ?: throw CertificateException("Empty certificate chain")
+                leaf.checkValidity()
+            }
+        }
 
     /**
      * Returns the system default X509TrustManager (validates against device CA store).
