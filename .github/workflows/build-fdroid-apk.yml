@@ -69,12 +69,14 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Verify baseline profile reproducibility
+      - name: Apply F-Droid postbuild fixes
         run: |
-          VERSION_NAME=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' mobile/build.gradle | head -n 1)
-          VERSION_CODE=$(sed -n 's/.*versionCode \([0-9]\+\).*/\1/p' mobile/build.gradle | head -n 1)
-          test -n "$VERSION_NAME"
-          test -n "$VERSION_CODE"
+          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+          test -n "$APK"
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
+          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
+          cp "$APK" mobile-release-Foss-229-unsigned.apk
 
           mkdir -p upstream
           pushd upstream
