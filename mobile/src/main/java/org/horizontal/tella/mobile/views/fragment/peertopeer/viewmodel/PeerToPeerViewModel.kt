@@ -514,25 +514,26 @@ class PeerToPeerViewModel @Inject constructor(
             )
         }
 
-        try {
-            val path = pf.path
-            if (path == null) {
-                markProgressFileSaveFailed(pf)
-                return
-            }
-            val f = File(path)
-            if (!f.exists()) {
-                markProgressFileSaveFailed(pf)
-                return
-            }
+        val tempPath = pf.path
+        if (tempPath == null) {
+            markProgressFileSaveFailed(pf)
+            return
+        }
+        val receivedFile = File(tempPath)
+        if (!receivedFile.exists()) {
+            clearP2pReceiveHandoff(pf)
+            markProgressFileSaveFailed(pf)
+            return
+        }
 
+        try {
             val folderId = obtainTargetFolderId()
             val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
 
             val vaultFile = try {
                 when {
                     isImageFileType(pf.file.fileType) -> {
-                        val bytes = f.readBytes()
+                        val bytes = receivedFile.readBytes()
                         if (pf.file.fileType.contains("png", true)) {
                             MediaFileHandler.savePngImage(bytes)
                         } else {
@@ -540,11 +541,11 @@ class PeerToPeerViewModel @Inject constructor(
                         }
                     }
                     isVideoFileType(pf.file.fileType) -> {
-                        MediaFileHandler.saveMp4Video(f, folderId)
+                        MediaFileHandler.saveMp4Video(receivedFile, folderId)
                     }
                     else -> {
-                        vault.builder(f.inputStream())
-                            .setName(f.name)
+                        vault.builder(receivedFile.inputStream())
+                            .setName(receivedFile.name)
                             .setMimeType(pf.file.fileType)
                             .setType(VaultFile.Type.FILE)
                             .build(folderId)
@@ -564,17 +565,18 @@ class PeerToPeerViewModel @Inject constructor(
                 pf.status = P2PFileStatus.SAVED
                 pf.vaultFile = vaultFile
                 savedCount++
-                f.delete()
+                clearP2pReceiveHandoff(pf, receivedFile)
             } else {
                 if (txKey != null) {
                     p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.FAILED
                 }
                 pf.status = P2PFileStatus.FAILED
-                runCatching { f.delete() }
+                clearP2pReceiveHandoff(pf, receivedFile)
             }
         } catch (e: Exception) {
             Timber.e(e, "Saving to vault failed for file ${pf.file.fileName}")
             pf.status = P2PFileStatus.FAILED
+            clearP2pReceiveHandoff(pf, receivedFile)
         } finally {
             postBottomSheetProgress()
             maybeFinalizeAfterSave()
@@ -587,6 +589,25 @@ class PeerToPeerViewModel @Inject constructor(
             p2PState.session?.files?.get(txKey)?.status = P2PFileStatus.FAILED
         }
         pf.status = P2PFileStatus.FAILED
+    }
+
+    /**
+     * After vault/media import (or on failure), remove the P2P receive temp file and clear paths
+     * so content does not linger on disk longer than necessary.
+     */
+    private fun clearP2pReceiveHandoff(pf: ProgressFile, receivedFile: File? = null) {
+        receivedFile?.let { f ->
+            runCatching {
+                if (f.exists() && !f.delete()) {
+                    Timber.w("P2P handoff: temp delete failed %s", f.path)
+                }
+            }
+        }
+        pf.path = null
+        val tid = pf.transmissionId
+        if (tid != null) {
+            p2PState.session?.files?.get(tid)?.path = null
+        }
     }
 
     private fun postBottomSheetProgress() {
