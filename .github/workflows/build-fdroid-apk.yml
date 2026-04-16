@@ -14,10 +14,6 @@ jobs:
       TZ: UTC
       LC_ALL: C
 
-    env:
-      TZ: UTC
-      LC_ALL: C
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,6 +51,7 @@ jobs:
         run: |
           echo "org.gradle.caching=false" >> gradle.properties
           echo "org.gradle.parallel=false" >> gradle.properties
+          echo "org.gradle.workers.max=1" >> gradle.properties
           echo "org.gradle.configureondemand=false" >> gradle.properties
 
       - name: Apply F-Droid prebuild changes
@@ -72,14 +69,34 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Apply F-Droid postbuild fixes
+      - name: Verify baseline profile reproducibility
         run: |
-          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
-          test -n "$APK"
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
-          cp "$APK" mobile-release-Foss-229-unsigned.apk
+          VERSION_NAME=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' mobile/build.gradle | head -n 1)
+          VERSION_CODE=$(sed -n 's/.*versionCode \([0-9]\+\).*/\1/p' mobile/build.gradle | head -n 1)
+          test -n "$VERSION_NAME"
+          test -n "$VERSION_CODE"
+
+          mkdir -p upstream
+          pushd upstream
+          curl -L -f -o upstream.apk "https://github.com/Horizontal-org/Tella-Android/releases/download/vFoss${VERSION_NAME}(${VERSION_CODE})/mobile-release-Foss-${VERSION_CODE}.apk"
+          unzip -q upstream.apk
+          UPSTREAM_HASH=$(sha256sum assets/dexopt/baseline.prof | cut -d ' ' -f1)
+          popd
+
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            ./gradlew :mobile:clean :mobile:assembleFdroidRelease -Pfdroid --no-daemon
+            rm -rf local
+            mkdir -p local
+            unzip -q -d local mobile/build/outputs/apk/fdroid/release/mobile-fdroid-release-unsigned.apk
+            LOCAL_HASH=$(sha256sum local/assets/dexopt/baseline.prof | cut -d ' ' -f1)
+            if [ "$LOCAL_HASH" = "$UPSTREAM_HASH" ]; then
+              echo "Baseline profile hash matched on attempt $i"
+              break
+            fi
+            rm -rf local
+          done
+          test "$LOCAL_HASH" = "$UPSTREAM_HASH"
+          echo "VERSION_CODE=$VERSION_CODE" >> "$GITHUB_ENV"
 
       - name: Apply F-Droid postbuild fixes
         run: |
@@ -88,10 +105,10 @@ jobs:
           python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
           python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
           python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
-          cp "$APK" mobile-release-Foss-229-unsigned.apk
+          cp "$APK" "mobile-release-Foss-${VERSION_CODE}-unsigned.apk"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tella-fdroid-apk-unsigned
-          path: mobile-release-Foss-229-unsigned.apk
+          path: mobile-release-Foss-${{ env.VERSION_CODE }}-unsigned.apk
