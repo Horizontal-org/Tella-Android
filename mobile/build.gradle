@@ -46,8 +46,6 @@ android {
                     "META-INF/ASL2.0",
                     "META-INF/*.md",
                     "META-INF/*.txt",
-                    "**/baseline.prof",
-                    "**/baseline.profm",
             ]
             // Make sure SimpleXML configuration files are included
             pickFirsts += [
@@ -62,9 +60,9 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
-        versionCode 229
+        versionCode 232
 
-        versionName "2.20.1"
+        versionName "2.20.2"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
