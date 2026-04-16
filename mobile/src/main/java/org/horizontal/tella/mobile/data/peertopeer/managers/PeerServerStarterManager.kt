@@ -64,6 +64,9 @@ class PeerServerStarterManager @Inject constructor(
         return try {
             val receiveDir = p2pReceiveDir().apply { mkdirs() }
             clearStaleReceiveFiles(receiveDir)
+            // Legacy location (pre–noBackupFilesDir); age-clean only so in-flight paths stay valid until import.
+            val legacyDir = File(appContext.cacheDir, PeerToPeerConstants.P2P_RECEIVE_SUBDIR)
+            if (legacyDir.exists()) clearStaleReceiveFiles(legacyDir)
             server = TellaPeerToPeerServer(
                 ip = ip,
                 keyPair = keyPair,
@@ -106,12 +109,23 @@ class PeerServerStarterManager @Inject constructor(
     fun isRunning(): Boolean = server != null
 
     private fun p2pReceiveDir(): File =
-        File(appContext.cacheDir, PeerToPeerConstants.P2P_RECEIVE_SUBDIR)
+        File(appContext.noBackupFilesDir, PeerToPeerConstants.P2P_RECEIVE_SUBDIR)
 
-    /** Orphans from crashed sessions; safe before a new server instance (no active handoff yet). */
+    /**
+     * Removes only receive temp files older than [PeerToPeerConstants.P2P_RECEIVE_STALE_MAX_AGE_MS]
+     * so recent uploads (awaiting vault import) are not deleted on server restart.
+     */
     private fun clearStaleReceiveFiles(dir: File) {
+        val now = System.currentTimeMillis()
+        val maxAge = PeerToPeerConstants.P2P_RECEIVE_STALE_MAX_AGE_MS
         dir.listFiles()?.forEach { child ->
-            if (child.isFile) child.delete()
+            if (!child.isFile) return@forEach
+            val age = now - child.lastModified()
+            if (age > maxAge) {
+                if (!child.delete()) {
+                    Timber.d("P2P receive: stale file delete failed %s", child.path)
+                }
+            }
         }
     }
 }
