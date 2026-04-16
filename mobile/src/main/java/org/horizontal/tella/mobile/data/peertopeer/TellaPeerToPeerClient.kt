@@ -103,7 +103,7 @@ class TellaPeerToPeerClient @Inject constructor(
     suspend fun prepareUpload(
         ip: String,
         port: String,
-        expectedFingerprint: String, // SPKI SHA-256 hex
+        expectedFingerprint: String, // leaf cert DER SHA-256 hex (see CertificateUtils.getLeafCertificateDerSha256Hex)
         title: String,
         /** Plaintext file metadata: [P2PFile.sha256] and [P2PFile.size] must match the PUT body bytes. */
         files: List<P2PFile>,
@@ -148,7 +148,7 @@ class TellaPeerToPeerClient @Inject constructor(
     suspend fun uploadFileWithProgress(
         ip: String,
         port: String,
-        expectedFingerprint: String, // SPKI SHA-256 hex
+        expectedFingerprint: String, // leaf cert DER SHA-256 hex (see CertificateUtils.getLeafCertificateDerSha256Hex)
         sessionId: String,
         fileId: String,
         transmissionId: String,
@@ -302,9 +302,9 @@ class TellaPeerToPeerClient @Inject constructor(
 
     /**
      * OkHttp client that:
-     *  - Pins the server by SPKI SHA-256 hex (your CertificateUtils.getPublicKeyHash).
+     *  - Pins the server by leaf certificate DER SHA-256 hex (CertificateUtils.getLeafCertificateDerSha256Hex).
      *  - Optionally binds sockets to a Wi-Fi Network if one is active/validated.
-     *  - Relaxes hostname verification (IP literal + hard pin).
+     *  - Keeps default hostname verification (IP SAN must match when using IP literals).
      *  - Uses TLS 1.2/1.3 spec to ease cross-platform handshakes.
      */
     private fun getClientWithFingerprintValidation(
@@ -313,21 +313,10 @@ class TellaPeerToPeerClient @Inject constructor(
     ): OkHttpClient {
         val expected = normalizeHex(expectedFingerprintHex)
 
-        val trustManager = object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-                val serverCert = chain?.firstOrNull()
-                    ?: throw CertificateException("Empty certificate chain")
-                val actualHex = normalizeHex(CertificateUtils.getPublicKeyHash(serverCert))
-                if (actualHex != expected) {
-                    throw CertificateException("Certificate DER hash mismatch. Expected: $expected, Got: $actualHex")
-                }
-            }
-        }
+        val trustManager = CertificateUtils.getLeafCertPinnedTrustManager(expected)
 
         val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
+            init(null, arrayOf(trustManager), SecureRandom())
         }
 
         val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
@@ -337,8 +326,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
-            .hostnameVerifier { _, _ -> true }
-            .connectionSpecs(listOf(tlsSpec, ConnectionSpec.CLEARTEXT))
+                        .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
@@ -403,9 +391,9 @@ class TellaPeerToPeerClient @Inject constructor(
 
     /** Discovery client for /ping before we have a pin; uses system CA validation (no trust-all). */
     private fun newDiscoveryClient(network: Network?): OkHttpClient {
-        val trustManager = CertificateUtils.getDefaultTrustManager()
+        val trustManager = CertificateUtils.getFingerprintCollectionTrustManager()
         val ssl = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf<TrustManager>(trustManager), SecureRandom())
+            init(null, arrayOf(trustManager), SecureRandom())
         }
 
         val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
@@ -415,8 +403,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         return OkHttpClient.Builder()
             .sslSocketFactory(ssl.socketFactory, trustManager)
-            .hostnameVerifier { _, _ -> true }
-            .connectionSpecs(listOf(tlsSpec))
+                        .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
             .apply { network?.let { socketFactory(it.socketFactory) } }
             .connectTimeout(3, TimeUnit.SECONDS)

@@ -136,12 +136,15 @@ object CertificateUtils {
     }
 
     /**
-     * Returns an SSLContext initialized with the system default TrustManager.
+     * SSLContext for first-contact fingerprint collection against self-signed peers.
      */
-    fun getDefaultSSLContext(): SSLContext {
-        val tm = getDefaultTrustManager()
+    fun getFingerprintCollectionSSLContext(): SSLContext {
+        val tm = getFingerprintCollectionTrustManager()
         return SSLContext.getInstance("TLS").apply {
             init(null, arrayOf<TrustManager>(tm), SecureRandom())
         }
     }
+
+    private fun normalizeHex(hexLike: String): String =
+        hexLike.trim().replace(":", "").replace("\\s".toRegex(), "").lowercase()
 }

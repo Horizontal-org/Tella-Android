@@ -94,15 +94,13 @@ object FingerprintFetcher {
         hostForRequests: String,
         network: Network? = null
     ): OkHttpClient {
-        val trustManager = CertificateUtils.getDefaultTrustManager()
+        val trustManager = CertificateUtils.getLeafCertPinnedTrustManager(expectedCertSha256Hex)
         val sslContext = SSLContext.getInstance("TLS").apply {
             init(null, arrayOf(trustManager), SecureRandom())
         }
 
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
-            .hostnameVerifier { _, _ -> true } // connect by IP; identity enforced by our hash check
-            .addNetworkInterceptor(LeafCertHashInterceptor(expectedCertSha256Hex))
             .connectTimeout(7, TimeUnit.SECONDS)
             .readTimeout(7, TimeUnit.SECONDS)
             .writeTimeout(7, TimeUnit.SECONDS)
@@ -123,7 +121,8 @@ object FingerprintFetcher {
         return buildClientPinnedByCertHash(expectedCertSha256Hex, hostForRequests, wifi)
     }
 
-    // Optional: SPKI pinning (OkHttp-native). Keep if you want SPKI instead of DER hash.
+    // Optional: SPKI pinning (OkHttp-native). This path still uses system CA trust.
+    // Use this for CA-trusted peers, not for the self-signed bootstrap/pinning flow.
     fun buildPinnedClientWithOkPin(
         okHttpPin: String,              // must be "sha256/<base64>"
         hostForPin: String,             // same host used in the URL (IP or DNS)
@@ -142,8 +141,7 @@ object FingerprintFetcher {
 
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
-            .hostnameVerifier { _, _ -> true } // connect by IP; identity enforced by pin
-            .certificatePinner(pinner)
+                        .certificatePinner(pinner)
             .connectTimeout(7, TimeUnit.SECONDS)
             .readTimeout(7, TimeUnit.SECONDS)
             .writeTimeout(7, TimeUnit.SECONDS)
@@ -183,7 +181,7 @@ object FingerprintFetcher {
     // ---------------------------------------------------------------------
 
     private fun createBoundTlsSocket(ip: String, port: Int, wifi: Network?): SSLSocket {
-        val sslContext = CertificateUtils.getDefaultSSLContext()
+        val sslContext = CertificateUtils.getFingerprintCollectionSSLContext()
         val factory = sslContext.socketFactory as SSLSocketFactory
 
         val s = factory.createSocket() as SSLSocket

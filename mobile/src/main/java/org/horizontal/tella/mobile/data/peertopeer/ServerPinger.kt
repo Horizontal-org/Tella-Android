@@ -4,10 +4,13 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import okhttp3.ConnectionSpec
 import okhttp3.Dns
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.TlsVersion
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
@@ -24,14 +27,19 @@ object ServerPinger {
         try {
             val network = FingerprintFetcher.pickWifiNetwork(context)
 
-            val trustManager = CertificateUtils.getDefaultTrustManager()
+            val trustManager = CertificateUtils.getFingerprintCollectionTrustManager()
             val sslContext = SSLContext.getInstance("TLS").apply {
                 init(null, arrayOf(trustManager), SecureRandom())
             }
+            val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+                .allEnabledCipherSuites()
+                .build()
 
             val builder = OkHttpClient.Builder()
                 .sslSocketFactory(sslContext.socketFactory, trustManager)
-                .hostnameVerifier { _, _ -> true } // connect by IP
+                .connectionSpecs(listOf(tlsSpec))
+                .protocols(listOf(Protocol.HTTP_1_1))
                 .connectTimeout(7, TimeUnit.SECONDS)
                 .readTimeout(7, TimeUnit.SECONDS)
                 .writeTimeout(7, TimeUnit.SECONDS)
