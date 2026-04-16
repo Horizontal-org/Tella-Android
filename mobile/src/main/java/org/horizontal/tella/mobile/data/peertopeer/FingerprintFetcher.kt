@@ -47,7 +47,7 @@ object FingerprintFetcher {
     // ---------------------------------------------------------------------
     // Public: PRE-PIN handshake to read cert (no HTTP), then compute hashes
     // ---------------------------------------------------------------------
-    suspend fun fetch(context: Context, ip: String, port: Int): kotlin.Result<FingerprintResult> =
+    suspend fun fetch(context: Context, ip: String, port: Int): Result<FingerprintResult> =
         withContext(Dispatchers.IO) {
             try {
                 val wifi = getWifiNetworkPreferringValidated(context)
@@ -58,7 +58,7 @@ object FingerprintFetcher {
                 // 2) TLS handshake (system CA validation) to read leaf cert
                 createBoundTlsSocket(ip, port, wifi).use { tls ->
                     val cert = tls.session.peerCertificates.first() as X509Certificate
-                    return@withContext kotlin.Result.success(fingerprintFromCert(cert))
+                    return@withContext Result.success(fingerprintFromCert(cert))
                 }
             } catch (e: SSLHandshakeException) {
                 val msg = e.message.orEmpty()
@@ -68,24 +68,24 @@ object FingerprintFetcher {
                     msg.contains("EOF", true) ||
                     msg.contains("received fatal alert", true)
                 ) {
-                    kotlin.Result.failure(
+                    Result.failure(
                         IllegalStateException("Server on $port appears to be plain HTTP or misconfigured TLS. ${e.message}")
                     )
                 } else {
-                    kotlin.Result.failure(e)
+                    Result.failure(e)
                 }
             } catch (e: SocketTimeoutException) {
-                kotlin.Result.failure(RuntimeException("Connection timed out to $ip:$port", e))
+                Result.failure(RuntimeException("Connection timed out to $ip:$port", e))
             } catch (e: IOException) {
-                kotlin.Result.failure(IOException("I/O error to $ip:$port: ${e.message}", e))
+                Result.failure(IOException("I/O error to $ip:$port: ${e.message}", e))
             } catch (e: Throwable) {
-                kotlin.Result.failure(e)
+                Result.failure(e)
             }
         }
 
     // ---------------------------------------------------------------------
     // Public: Build clients that ENFORCE identity
-    //   A) By certificate DER hash -> Interceptor based
+    //   A) By certificate DER hash -> TrustManager-based pinning
     //   B) By SPKI pin (OkHttp native) -> Optional
     // ---------------------------------------------------------------------
 
