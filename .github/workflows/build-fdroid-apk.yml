@@ -2,6 +2,9 @@
 # Typical flow: download artifact → sign locally (apksigner) → create Git tag
 # vFoss<versionName>(<versionCode>) → publish GitHub Release with asset
 # mobile-release-Foss-<versionCode>.apk. No release upload from CI.
+#
+# Use Temurin 21 to match fdroiddata metadata (openjdk-21-jdk-headless on Debian
+# Trixie buildserver) so Binaries: CHUNKED_SHA256 verification can match.
 name: Build F-Droid APK
 
 on:
@@ -38,7 +41,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -118,6 +121,8 @@ jobs:
         run: |
           {
             echo "## F-Droid APK (unsigned, artifact only)"
+            echo ""
+            echo "Built with **Temurin 21** (same major JDK as F-Droid \`fdroid build\` / Debian Trixie)."
             echo ""
             echo "1. Download artifact **tella-fdroid-${VERSION_CODE}-unsigned**."
             echo "2. Sign on your machine, e.g. output file **mobile-release-Foss-${VERSION_CODE}.apk**."
