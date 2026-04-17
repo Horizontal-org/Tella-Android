@@ -13,7 +13,8 @@ on:
       verify_upstream_baseline:
         description: >
           After a release asset already exists, compare baseline.prof to a fresh
-          rebuild (same checks as fdroiddata). Leave disabled for normal builds.
+          rebuild after the same postbuild steps as fdroiddata (not raw Gradle
+          output). Leave disabled for normal builds.
         type: boolean
         default: false
   push:
@@ -63,7 +64,7 @@ jobs:
           path: reproducible-apk-tools
 
       - name: Make Gradle executable
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradlew ./scripts/fdroid-postprocess-apk.sh
 
       - name: Set SOURCE_DATE_EPOCH from commit
         run: |
@@ -102,14 +103,8 @@ jobs:
 
       - name: Apply F-Droid postbuild fixes (match fdroiddata recipe)
         run: |
-          OUT=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
-          test -n "$OUT"
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$OUT" --apk
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$OUT" '381d455'
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$OUT" --from-crlf 'META-INF/services/*'
-          mv "$OUT" unaligned.apk
-          python3 reproducible-apk-tools/zipalign.py --page-size 16 --pad-like-apksigner --replace unaligned.apk "$OUT"
-          cp "$OUT" "mobile-release-Foss-${VERSION_CODE}-unsigned.apk"
+          ./scripts/fdroid-postprocess-apk.sh --copy-artifact \
+            "mobile-release-Foss-${VERSION_CODE}-unsigned.apk"
 
       - name: Upload unsigned APK artifact
         uses: actions/upload-artifact@v4
@@ -154,9 +149,12 @@ jobs:
 
           for i in 1 2 3 4 5 6 7 8 9 10; do
             ./gradlew :mobile:clean :mobile:assembleFdroidRelease -Pfdroid --no-daemon
+            ./scripts/fdroid-postprocess-apk.sh
             rm -rf local
             mkdir -p local
-            unzip -q -d local mobile/build/outputs/apk/fdroid/release/mobile-fdroid-release-unsigned.apk
+            OUT=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+            test -n "$OUT"
+            unzip -q -d local "$OUT"
             LOCAL_HASH=$(sha256sum local/assets/dexopt/baseline.prof | cut -d ' ' -f1)
             echo "Local baseline.prof sha256 (attempt $i): $LOCAL_HASH"
             if [ "$LOCAL_HASH" = "$UPSTREAM_HASH" ]; then
