@@ -51,11 +51,9 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         final String kSuffix;
 
         if (sqlcipher_uses_native_key) {
-            Timber.tag(TAG).d("sqlcipher uses native method to set key");
             kPrefix = "x'";
             kSuffix = "'";
         } else {
-            Timber.tag(TAG).d("sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
             kPrefix = "x''";
             kSuffix = "''";
         }
