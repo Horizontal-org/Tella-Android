@@ -8,11 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.http.HttpResponseCache;
 import android.os.Build;
 import android.os.StrictMode;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +34,6 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import org.horizontal.tella.mobile.data.KeyRxVault;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -55,9 +52,7 @@ import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
 import java.security.Security;
 import java.util.Arrays;
 
