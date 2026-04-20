@@ -187,6 +187,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             ///        .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
             Timber.plant(new Timber.DebugTree());
             apiBuilder.setLogLevelFull();
+            // Verbose TLS tracing: debug builds only (CVE-2025-TELLA3-003).
+            System.setProperty("javax.net.debug", "ssl,handshake");
+        } else {
+            // Ensure JVM TLS debug is not left on from tooling or inherited state.
+            System.clearProperty("javax.net.debug");
         }
         // todo: implement dagger2
         CommonPrefs.getInstance().init(this);
@@ -195,9 +200,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         System.loadLibrary("sqlcipher");
 
         registerActivityLifecycleCallbacks(this);
-
-        System.setProperty("javax.net.debug", "ssl,handshake");
-
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
