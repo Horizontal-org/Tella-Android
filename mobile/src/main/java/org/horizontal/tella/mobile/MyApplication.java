@@ -412,15 +412,17 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         try {
             Conscrypt.Version version = Conscrypt.version();
-            Log_OC.i(TAG, "Using Conscrypt/"
-                    + version.major()
-                    + DOT
-                    + version.minor()
-                    + DOT + version.patch()
-                    + " for TLS");
-            SSLEngine engine = SSLContext.getDefault().createSSLEngine();
-            Log_OC.i(TAG, "Enabled protocols: " + Arrays.toString(engine.getEnabledProtocols()) + " }");
-            Log_OC.i(TAG, "Enabled ciphers: " + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+            if (BuildConfig.DEBUG) {
+                Log_OC.i(TAG, "Using Conscrypt/"
+                        + version.major()
+                        + DOT
+                        + version.minor()
+                        + DOT + version.patch()
+                        + " for TLS");
+                SSLEngine engine = SSLContext.getDefault().createSSLEngine();
+                Log_OC.i(TAG, "Enabled protocols: " + Arrays.toString(engine.getEnabledProtocols()) + " }");
+                Log_OC.i(TAG, "Enabled ciphers: " + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+            }
         } catch (NoSuchAlgorithmException e) {
             Log_OC.e(TAG, e.getMessage());
         }
