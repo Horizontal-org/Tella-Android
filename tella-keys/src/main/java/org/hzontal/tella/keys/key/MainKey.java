@@ -97,7 +97,7 @@ public class MainKey {
 
     /**
      * Generate a random AES key (256-bit).
-     * Crashes loudly if AES KeyGenerator is not available.
+     * Fails closed if key generation is unavailable or unexpectedly fails.
      */
     private static byte[] generateSecret() {
         try {
@@ -119,6 +119,12 @@ public class MainKey {
             Timber.e(ex, "MainKey.generateSecret: AES KeyGenerator not available");
             throw new IllegalStateException(
                     "Unable to generate AES key (algorithm " + KEY_ALGORITHM + " not available)", ex
+            );
+        } catch (RuntimeException ex) {
+            // Defensive handling: provider/runtime failures must never degrade into null-key flows.
+            Timber.e(ex, "MainKey.generateSecret: unexpected key generation failure");
+            throw new IllegalStateException(
+                    "Unable to generate AES key due to an unexpected runtime failure", ex
             );
         }
     }
