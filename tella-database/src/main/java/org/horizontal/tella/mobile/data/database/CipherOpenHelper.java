@@ -193,6 +193,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             migrationSuccess = true;
         } catch (Exception e) {
             Timber.tag(TAG).e(e, "Error during migration");
+        } finally {
+            Arrays.fill(keyChars, '\0');
         }
 
         // Handle the result of the migration
