@@ -40,7 +40,7 @@ public class MainKey {
         if (encoded == null || encoded.length == 0) {
             throw new IllegalStateException("MainKey: provided SecretKeySpec has no encodable key material");
         }
-        this.keyBytes = encoded;
+        this.keyBytes = encoded.clone();
     }
 
     /**
@@ -80,7 +80,7 @@ public class MainKey {
         }
         // Wipe previous key and replace
         wipe();
-        this.keyBytes = encoded;
+        this.keyBytes = encoded.clone();
     }
 
     /**
