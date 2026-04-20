@@ -3,6 +3,9 @@
   SECURITY: Cleartext must NOT be permitted globally.
   Audit finding: cleartext was previously re-introduced via base-config.
   Only localhost is allowed for local media/HTTP server; all other traffic must use HTTPS.
+
+  This resource does not enable application debug logging or logcat verbosity; it is only
+  network security policy (CVE-2025-TELLA3-003 audit: distinguish from TLS/log configuration).
 -->
 <network-security-config>
     <!-- Default: no cleartext. Do not set cleartextTrafficPermitted="true" here. -->
