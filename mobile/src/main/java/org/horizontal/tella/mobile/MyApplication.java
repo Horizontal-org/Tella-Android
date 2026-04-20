@@ -353,7 +353,12 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @NonNull
     @Override
     public Configuration getWorkManagerConfiguration() {
-        return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
+        // CVE-2025-TELLA3-003: avoid verbose WorkManager logs in production (was Log.DEBUG for all builds).
+        int minLogLevel = BuildConfig.DEBUG ? android.util.Log.DEBUG : android.util.Log.ERROR;
+        return new Configuration.Builder()
+                .setMinimumLoggingLevel(minLogLevel)
+                .setWorkerFactory(workerFactory)
+                .build();
     }
 
     @Override
