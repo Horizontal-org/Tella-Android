@@ -1,0 +1,14 @@
+Esta versión está basada en Tella Android 2.20.2 e incluye las siguientes funcionalidades:
+
+- Gran refactorización (incluyendo la incorporación de product flavors) para unificar los codebases de Tella Android y Tella FOSS en uno solo.
+- Implementación de la conexión con el servidor Nextcloud, que permite a los usuarios de Tella subir directamente los datos recopilados a Nextcloud.
+- Nuevo soporte de idiomas: bengalí, ndau, azerbaiyano, chino y mizo.
+- Mejora en el soporte de documentos:
+ Se añadieron miniaturas de vista previa para archivos de documentos.
+ Se muestran todos los tipos de documentos comunes en la carpeta de Documentos (por ejemplo: TXT, ODT, DOC, DOCX, XLS, etc.).
+- Conexión con Uwazi:
+ Se modificó el algoritmo para generar el identificador (id) para que coincida con el utilizado por Uwazi.
+- Se añadió orientación sobre la protección con bloqueo para nuevos usuarios (durante el onboarding) y al cambiar el método de bloqueo.
+- Mejoras en la conexión con Tella Web para aumentar la resiliencia frente a conexiones lentas o inestables.
+- Múltiples correcciones de errores y mejoras menores, priorizando la estabilidad y la accesibilidad.
+
