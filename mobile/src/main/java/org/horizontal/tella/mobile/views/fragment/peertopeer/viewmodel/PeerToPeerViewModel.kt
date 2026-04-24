@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hzontal.tella_vault.VaultFile
+import com.hzontal.tella_vault.rx.RxVault
 import com.hzontal.utils.MediaFile.isImageFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,7 +46,9 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.Bot
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
 import timber.log.Timber
 import java.io.File
+import java.io.FileInputStream
 import java.util.Collections
+import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -498,6 +501,43 @@ class PeerToPeerViewModel @Inject constructor(
         return folder.id
     }
 
+    /** P2P bytes are written to a temp file; vault entry should use the sender’s name. */
+    private fun vaultDisplayNameForP2pReceive(pf: ProgressFile, tempReceiveFile: File): String {
+        val raw = pf.file.fileName.trim()
+        val base = if (raw.isNotEmpty()) File(raw).name else tempReceiveFile.name
+        return base.ifBlank { "file" }
+    }
+
+    /**
+     * QuickTime / `.mov` is not handled by [MediaFileHandler.saveMp4Video] (MP4 pipeline). Store the file as-is
+     * so it lands in the transfer folder; in-app playback depends on codecs, same as other opaque imports.
+     */
+    private fun shouldStoreP2pVideoAsOpaqueContainer(pf: ProgressFile, receivedFile: File): Boolean {
+        val mime = pf.file.fileType.lowercase(Locale.US)
+        if (mime.contains("quicktime")) return true
+        return vaultDisplayNameForP2pReceive(pf, receivedFile).lowercase(Locale.US).endsWith(".mov")
+    }
+
+    private fun importP2pReceivedFileAsVaultFile(
+        vault: RxVault,
+        receivedFile: File,
+        pf: ProgressFile,
+        folderId: String,
+    ): VaultFile? = try {
+        FileInputStream(receivedFile).use { input ->
+            vault.builder(input)
+                .setName(vaultDisplayNameForP2pReceive(pf, receivedFile))
+                .setMimeType(pf.file.fileType)
+                .setAnonymous(false)
+                .setType(VaultFile.Type.FILE)
+                .build(folderId)
+                .blockingGet()
+        }
+    } catch (e: Exception) {
+        Timber.e(e, "P2P vault import failed for ${pf.file.fileName}")
+        null
+    }
+
     private fun saveOneFile(pf: ProgressFile) {
         val txId = pf.transmissionId ?: return
         if (!savingOrDone.add(txId)) return
@@ -529,27 +569,27 @@ class PeerToPeerViewModel @Inject constructor(
         try {
             val folderId = obtainTargetFolderId()
             val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
+            val displayName = vaultDisplayNameForP2pReceive(pf, receivedFile)
 
             val vaultFile = try {
                 when {
                     isImageFileType(pf.file.fileType) -> {
                         val bytes = receivedFile.readBytes()
                         if (pf.file.fileType.contains("png", true)) {
-                            MediaFileHandler.savePngImage(bytes)
+                            MediaFileHandler.savePngImage(bytes, folderId, displayName)
                         } else {
-                            MediaFileHandler.saveJpegPhoto(bytes, folderId).blockingGet()
+                            MediaFileHandler.saveJpegPhoto(bytes, folderId, displayName).blockingGet()
                         }
                     }
                     isVideoFileType(pf.file.fileType) -> {
-                        MediaFileHandler.saveMp4Video(receivedFile, folderId)
+                        if (shouldStoreP2pVideoAsOpaqueContainer(pf, receivedFile)) {
+                            importP2pReceivedFileAsVaultFile(vault, receivedFile, pf, folderId)
+                        } else {
+                            MediaFileHandler.saveMp4Video(receivedFile, folderId, false, displayName)
+                        }
                     }
                     else -> {
-                        vault.builder(receivedFile.inputStream())
-                            .setName(receivedFile.name)
-                            .setMimeType(pf.file.fileType)
-                            .setType(VaultFile.Type.FILE)
-                            .build(folderId)
-                            .blockingGet()
+                        importP2pReceivedFileAsVaultFile(vault, receivedFile, pf, folderId)
                     }
                 }
             } catch (e: Exception) {

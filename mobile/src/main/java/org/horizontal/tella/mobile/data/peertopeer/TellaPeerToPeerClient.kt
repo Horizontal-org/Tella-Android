@@ -6,11 +6,8 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
@@ -35,9 +32,9 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.InputStream
 import java.security.SecureRandom
-import java.util.Collections
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import javax.net.ssl.SSLContext
 
 class TellaPeerToPeerClient @Inject constructor(

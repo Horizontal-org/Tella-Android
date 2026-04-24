@@ -1,7 +1,5 @@
 package org.horizontal.tella.mobile.data.peertopeer
 
-import java.util.Locale
-
 /**
  * Chooses a reachable same-LAN (RFC1918) address for Nearby Sharing discovery/QR, not the TLS bind address.
  *
@@ -80,27 +78,5 @@ object P2PNetworkAddressPolicy {
         }
         withTier.sortWith(compareBy<Pair<String, Int>> { it.second }.thenBy { it.first })
         return withTier.map { it.first }
-    }
-
-    /**
-     * Human-readable reason for logging (English, for logcat / field debugging).
-     */
-    fun singleIpSelectionLog(chosen: String, orderedEligible: List<String>, rawSourcesLabeled: String): String {
-        val o = parseIpv4Octets(chosen) ?: return "invalid IP for selection: $chosen"
-        val tier = rfc1918PreferenceTier(o)
-        val tierName = when (tier) {
-            0 -> "192.168.0.0/16 (site-local, preferred)"
-            1 -> "10.0.0.0/8 (private)"
-            2 -> "172.16.0.0/12 (private)"
-            else -> "unusable for LAN advertise"
-        }
-        return String.format(
-            Locale.US,
-            "selected=%s; tier=%s; ordered_eligible=%s; raw=%s",
-            chosen,
-            tierName,
-            orderedEligible.joinToString(),
-            rawSourcesLabeled
-        )
     }
 }

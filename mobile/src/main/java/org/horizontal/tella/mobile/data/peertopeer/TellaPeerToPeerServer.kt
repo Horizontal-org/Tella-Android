@@ -13,8 +13,6 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.request.httpMethod
-import io.ktor.server.request.path
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveStream
 import io.ktor.server.response.respond
@@ -22,13 +20,13 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
-import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.NEARBY_SHARING_TLS_PORT
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSession
@@ -38,11 +36,9 @@ import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
-import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
+import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
-import org.horizontal.tella.mobile.data.peertopeer.P2PNetworkAddressPolicy
-import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.NEARBY_SHARING_TLS_PORT
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
@@ -166,7 +162,7 @@ class TellaPeerToPeerServer(
 
                 // Client presence hint (optional)
                 post(PeerApiRoutes.PING) {
-                    val clientIp = call.peerClientIpForRateLimit()
+                    call.peerClientIpForRateLimit()
                     CoroutineScope(Dispatchers.IO).launch {
                         peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
                     }
