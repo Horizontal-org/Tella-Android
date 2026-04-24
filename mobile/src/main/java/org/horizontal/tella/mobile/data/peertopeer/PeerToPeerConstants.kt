@@ -4,6 +4,9 @@ package org.horizontal.tella.mobile.data.peertopeer
  * Created by wafa on 3/7/2025.
  */
 object PeerToPeerConstants {
+
+    const val NEARBY_SHARING_TLS_PORT = 53320
+
     /**
      * App-private receive subdirectory under [android.content.Context.getNoBackupFilesDir].
      * Excluded from backup; not user-visible shared storage.

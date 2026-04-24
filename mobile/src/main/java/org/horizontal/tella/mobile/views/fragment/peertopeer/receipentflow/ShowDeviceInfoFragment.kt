@@ -10,12 +10,14 @@ import org.horizontal.tella.mobile.domain.peertopeer.ParsedPeerQr
 import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
+import timber.log.Timber
 
 class ShowDeviceInfoFragment :
     BaseBindingFragment<ShowDeviceInfoLayoutBinding>(ShowDeviceInfoLayoutBinding::inflate) {
     private val viewModel: PeerToPeerViewModel by activityViewModels()
 
     private var parsedQr: ParsedPeerQr? = null
+    private var movedToVerification = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,22 +53,18 @@ class ShowDeviceInfoFragment :
                 with(viewModel.p2PState) {
                     val p = parsedQr
                     ip = p?.ipAddresses?.firstOrNull().orEmpty()
-                    port = p?.let { it.port.toString() }.orEmpty()
+                    port = p?.port?.toString().orEmpty()
                     pin = p?.pin
                     hash = clientHash
                 }
-                navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
+                moveToVerificationIfNeeded()
             }
         }
+    }
 
-        viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                // Navigate to the next screen
-                navManager().navigateFromWaitingReceiverFragmentToRecipientSuccessFragment()
-                //  reset the LiveData state if we want to consume event once
-                viewModel.resetRegistrationState()
-            } else {
-            }
-        }
+    private fun moveToVerificationIfNeeded() {
+        if (movedToVerification) return
+        movedToVerification = true
+        navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
     }
 }

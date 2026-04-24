@@ -72,9 +72,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         return@withContext try {
             client.newCall(request).execute().use { response ->
-                val body = response.body?.string().orEmpty()
-                Timber.d("registerPeerDevice: code=%d headers=%s body=%s",
-                    response.code, response.headers, body.take(600))
+                val body = response.body.string()
 
                 if (response.isSuccessful) {
                     when (val parsed = parseSessionIdFromResponse(body)) {
@@ -95,7 +93,6 @@ class TellaPeerToPeerClient @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Timber.e(e, "registerPeerDevice request failed")
             RegisterPeerResult.Failure(e)
         }
     }
@@ -130,7 +127,7 @@ class TellaPeerToPeerClient @Inject constructor(
                 .build()
 
             client.newCall(request).execute().use { response ->
-                val responseBody = response.body?.string().orEmpty()
+                val responseBody = response.body.string()
                 Timber.d("prepareUpload: code=%d body=%s", response.code, responseBody.take(600))
                 if (response.isSuccessful) {
                     parseTransmissionId(responseBody)
@@ -178,37 +175,27 @@ class TellaPeerToPeerClient @Inject constructor(
                 val code = response.code
                 val outcome = when (code) {
                     429 -> {
-                        Timber.w("uploadFileWithProgress(%s): rate limited (429)", fileId)
                         PeerUploadOutcome.TooManyRequests
                     }
+
                     409 -> {
-                        Timber.w("uploadFileWithProgress(%s): conflict — nonce replay? (409)", fileId)
                         PeerUploadOutcome.Failed
                     }
+
                     413 -> {
-                        Timber.w("uploadFileWithProgress(%s): payload too large (413)", fileId)
                         PeerUploadOutcome.PayloadTooLarge
                     }
+
                     406 -> {
-                        Timber.w("uploadFileWithProgress(%s): not acceptable — file hash mismatch (406)", fileId)
                         PeerUploadOutcome.Failed
                     }
+
                     else -> if (response.isSuccessful) {
                         PeerUploadOutcome.Success
                     } else {
                         PeerUploadOutcome.Failed
                     }
                 }
-                Timber.d(
-                    "uploadFileWithProgress(%s): %s",
-                    fileId,
-                    when (outcome) {
-                        PeerUploadOutcome.Success -> "OK"
-                        PeerUploadOutcome.TooManyRequests -> "FAIL 429"
-                        PeerUploadOutcome.PayloadTooLarge -> "FAIL 413"
-                        PeerUploadOutcome.Failed -> "FAIL $code"
-                    },
-                )
                 outcome
             }
         } catch (e: Exception) {
@@ -240,12 +227,12 @@ class TellaPeerToPeerClient @Inject constructor(
             client.newCall(request)
 
                 .execute().use { response ->
-                if (response.code == 429) {
-                    Timber.w("closeConnection: rate limited (429)")
+                    if (response.code == 429) {
+                        Timber.w("closeConnection: rate limited (429)")
+                    }
+                    Timber.d("closeConnection: code=%d", response.code)
+                    response.isSuccessful
                 }
-                Timber.d("closeConnection: code=%d", response.code)
-                response.isSuccessful
-            }
         } catch (e: Exception) {
             Timber.e(e, "Failed to close connection")
             false
@@ -266,12 +253,15 @@ class TellaPeerToPeerClient @Inject constructor(
 
             when {
                 !successFlag -> {
-                    val msg = json.optString("message", json.optString("error", "Registration rejected"))
+                    val msg =
+                        json.optString("message", json.optString("error", "Registration rejected"))
                     RegisterPeerResult.Failure(Exception(msg))
                 }
+
                 sessionId.isEmpty() -> {
                     RegisterPeerResult.Failure(Exception("Missing or empty sessionId"))
                 }
+
                 else -> RegisterPeerResult.Success(sessionId)
             }
         } catch (e: Exception) {
@@ -305,7 +295,10 @@ class TellaPeerToPeerClient @Inject constructor(
      *  - Pins the server by leaf certificate DER SHA-256 hex (CertificateUtils.getLeafCertificateDerSha256Hex).
      *  - Optionally binds sockets to a Wi-Fi Network if one is active/validated.
      *  - Keeps default hostname verification (IP SAN must match when using IP literals).
-     *  - Uses TLS 1.2/1.3 spec to ease cross-platform handshakes.
+     *  - TLS: OkHttp is configured with [TlsVersion.TLS_1_3] first, then [TlsVersion.TLS_1_2] (prefers 1.3 on both peers when
+     *    the stack supports it; e.g. TLS 1.3 is available from Android 10 / API 29 onward). A strict 1.3-only client was
+     *    considered for parity with iOS defaults, but would block Nearby Sharing on minSdk 21 devices where 1.3 is
+     *    unavailable—so we keep 1.2+1.3, matching the product call on the cross-platform thread (Feb 18 discussion).
      */
     private fun getClientWithFingerprintValidation(
         ip: String,
@@ -326,7 +319,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
-                        .connectionSpecs(listOf(tlsSpec))
+            .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
@@ -388,7 +381,6 @@ class TellaPeerToPeerClient @Inject constructor(
         hexLike.trim().replace(":", "").replace("\\s".toRegex(), "").lowercase()
 
 
-
     /** Discovery client for /ping before we have a pin; uses system CA validation (no trust-all). */
     private fun newDiscoveryClient(network: Network?): OkHttpClient {
         val trustManager = CertificateUtils.getFingerprintCollectionTrustManager()
@@ -403,7 +395,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         return OkHttpClient.Builder()
             .sslSocketFactory(ssl.socketFactory, trustManager)
-                        .connectionSpecs(listOf(tlsSpec))
+            .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
             .apply { network?.let { socketFactory(it.socketFactory) } }
             .connectTimeout(3, TimeUnit.SECONDS)
@@ -411,33 +403,33 @@ class TellaPeerToPeerClient @Inject constructor(
             .build()
     }
 
-    suspend fun pingBeforeRegister(ip: String, port: String): Boolean = withContext(Dispatchers.IO) {
-        val network = pickWifiNetwork(appContext)
-        val client = newDiscoveryClient(network)
+    suspend fun pingBeforeRegister(ip: String, port: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val network = pickWifiNetwork(appContext)
+            val client = newDiscoveryClient(network)
 
-        // Use the real path your server exposes; many backends use /api/v1/ping
-        val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
+            // Use the real path your server exposes; many backends use /api/v1/ping
+            val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
 
-        val req = Request.Builder()
-            .url("https://$ip:$port/api/v1/ping")
-            .post(okhttp3.RequestBody.create(null, ByteArray(0))) // or "".toRequestBody(null)
-            .build()
+            val req = Request.Builder()
+                .url("https://$ip:$port/api/v1/ping")
+                .post(okhttp3.RequestBody.create(null, ByteArray(0))) // or "".toRequestBody(null)
+                .build()
 
-        runCatching {
-            client.newCall(req).execute().use { resp ->
-                if (resp.code == 429) {
-                    Timber.w("pingBeforeRegister: rate limited (429)")
+            runCatching {
+                client.newCall(req).execute().use { resp ->
+                    if (resp.code == 429) {
+                        Timber.w("pingBeforeRegister: rate limited (429)")
+                    }
+                    // consider any HTTP code as “host reachable”
+                    Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
+                    resp.code in 100..599
                 }
-                // consider any HTTP code as “host reachable”
-                Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
-                resp.code in 100..599
+            }.getOrElse {
+                Timber.w(it, "Ping failed for $url")
+                false
             }
-        }.getOrElse {
-            Timber.w(it, "Ping failed for $url")
-            false
         }
-    }
-
 
 
 }

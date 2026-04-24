@@ -5,9 +5,10 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 
 /**
- * QR payload : JSON keys `ip_address`, `port`, `certificate_hash`, `pin`.
- * Use [ipAddresses] for the decoded `ip_address` field (string or array in JSON).
- * After a successful register, the working host is kept in app state (iOS: `activeHost`), not in this DTO.
+ * QR payload aligned with iOS [ConnectionInfo] JSON ( Swift `JSONEncoder` + [CodingKeys] ):
+ * `ip_address` (JSON array of IPv4 strings), `port` (number), `certificate_hash` (hex), `pin` (string).
+ * The default `port` must match [org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.NEARBY_SHARING_TLS_PORT]
+ * and the bound P2P HTTPS listener.
  */
 data class ParsedPeerQr(
     val ipAddresses: List<String>,

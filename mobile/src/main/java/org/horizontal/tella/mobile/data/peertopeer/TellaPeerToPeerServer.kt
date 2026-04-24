@@ -7,12 +7,14 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.call
 import io.ktor.server.application.install
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.applicationEngineEnvironment
+import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveStream
 import io.ktor.server.response.respond
@@ -20,9 +22,11 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.certificate.CertificateUtils
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
@@ -37,6 +41,8 @@ import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
+import org.horizontal.tella.mobile.data.peertopeer.P2PNetworkAddressPolicy
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.NEARBY_SHARING_TLS_PORT
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
@@ -52,12 +58,15 @@ import java.security.cert.X509Certificate
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
-const val port = 53317
+const val port = NEARBY_SHARING_TLS_PORT
 
 private const val MAX_REGISTER_PIN_ATTEMPTS = 3
 
 class TellaPeerToPeerServer(
-    private val ip: String,
+    /**
+     * IPv4 shown in QR and used for TLS cert SAN; the Netty server binds to [P2PNetworkAddressPolicy.INADDR_ANY_IPV4].
+     */
+    private val advertisedHost: String,
     private val serverPort: Int = port,
     private val pin: String,
     private val keyPair: KeyPair,
@@ -70,7 +79,7 @@ class TellaPeerToPeerServer(
 ) : TellaServer {
 
     private var serverSession: PeerResponse? = null
-    private var engine: ApplicationEngine? = null
+    private var embedded: EmbeddedServer<*, *>? = null
     private val transferNonceManager = TransferNonceManager()
     private val registerPinFailuresByNonce = ConcurrentHashMap<String, Int>()
     private val rateLimiter = PeerTimedRateLimiter(rateLimitConfig)
@@ -94,6 +103,12 @@ class TellaPeerToPeerServer(
     }
 
     override fun start() {
+        Timber.e(
+            "SERVER STARTED bind=%s port=%d advertisedToPeer=%s",
+            P2PNetworkAddressPolicy.INADDR_ANY_IPV4,
+            serverPort,
+            advertisedHost,
+        )
         val keyStore = KeyStore.getInstance("PKCS12").apply {
             load(null, null)
             setKeyEntry(
@@ -101,54 +116,66 @@ class TellaPeerToPeerServer(
             )
         }
 
-        engine = embeddedServer(Netty, environment = applicationEngineEnvironment {
-            sslConnector(keyStore = keyStore,
-                keyAlias = keyStoreConfig.alias,
-                keyStorePassword = { keyStoreConfig.password },
-                privateKeyPassword = { keyStoreConfig.password }) {
-                this.host = ip
-                this.port = serverPort
+        embedded = embeddedServer(
+            Netty,
+            environment = applicationEnvironment { },
+            configure = {
+                enableHttp2 = false
+                enableH2c = false
+                sslConnector(
+                    keyStore = keyStore,
+                    keyAlias = keyStoreConfig.alias,
+                    keyStorePassword = { keyStoreConfig.password },
+                    privateKeyPassword = { keyStoreConfig.password },
+                ) {
+                    host = P2PNetworkAddressPolicy.INADDR_ANY_IPV4
+                    port = serverPort
+                    enabledProtocols = listOf("TLSv1.3", "TLSv1.2")
+                }
+            },
+        ) {
+            install(ContentNegotiation) {
+                json(kotlinx.serialization.json.Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
             }
 
-            module {
-                install(ContentNegotiation) {
-                    json(kotlinx.serialization.json.Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    })
+            intercept(ApplicationCallPipeline.Call) {
+                val clientIp = call.peerClientIpForRateLimit()
+                val routePath = call.peerRoutePathForRateLimit()
+                if (rateLimiter.isLimited(clientIp, routePath)) {
+                    rateLimitConfig.retryAfterSecondsWhenLimited?.let { secs ->
+                        call.response.headers.append(HttpHeaders.RetryAfter, secs.toString())
+                    }
+                    call.respondText(
+                        """{"error":"Too many requests"}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.TooManyRequests,
+                    )
+                    finish()
+                    return@intercept
+                }
+            }
+
+            routing {
+                // Sanity probe
+                get("/") {
+                    call.respondText("The server is running securely over HTTPS.")
                 }
 
-                intercept(ApplicationCallPipeline.Call) {
+                // Client presence hint (optional)
+                post(PeerApiRoutes.PING) {
                     val clientIp = call.peerClientIpForRateLimit()
-                    val routePath = call.peerRoutePathForRateLimit()
-                    if (rateLimiter.isLimited(clientIp, routePath)) {
-                        rateLimitConfig.retryAfterSecondsWhenLimited?.let { secs ->
-                            call.response.headers.append(HttpHeaders.RetryAfter, secs.toString())
-                        }
-                        call.respondText(
-                            """{"error":"Too many requests"}""",
-                            ContentType.Application.Json,
-                            HttpStatusCode.TooManyRequests,
-                        )
-                        finish()
-                        return@intercept
+                    CoroutineScope(Dispatchers.IO).launch {
+                        peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
                     }
+                    call.respondText("ping", status = HttpStatusCode.OK)
                 }
 
-                routing {
-                    // Sanity probe
-                    get("/") { call.respondText("The server is running securely over HTTPS.") }
-
-                    // Client presence hint (optional)
-                    post(PeerApiRoutes.PING) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
-                        }
-                        call.respondText("ping", status = HttpStatusCode.OK)
-                    }
-
-                    // 1) Register a session
-                    post(PeerApiRoutes.REGISTER) {
+                // 1) Register a session
+                post(PeerApiRoutes.REGISTER) {
+                    try {
                         val request = try {
                             call.receive<PeerRegisterPayload>()
                         } catch (_: Exception) {
@@ -156,7 +183,7 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        // Align with iOS acceptRegisterRequest: active session, then nonce / PIN limits
+                        // Active session, then nonce / PIN limits
                         if (serverSession != null) {
                             call.respond(HttpStatusCode.Conflict, "Active session already exists")
                             return@post
@@ -168,7 +195,9 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        if ((registerPinFailuresByNonce[regNonce] ?: 0) >= MAX_REGISTER_PIN_ATTEMPTS) {
+                        if ((registerPinFailuresByNonce[regNonce]
+                                ?: 0) >= MAX_REGISTER_PIN_ATTEMPTS
+                        ) {
                             call.respond(HttpStatusCode.TooManyRequests, "Too many requests")
                             return@post
                         }
@@ -196,7 +225,7 @@ class TellaPeerToPeerServer(
 
                         val accepted = try {
                             PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
-                        } catch (_: Exception) {
+                        } catch (e: Exception) {
                             call.respond(HttpStatusCode.InternalServerError, "Internal error")
                             return@post
                         }
@@ -210,10 +239,21 @@ class TellaPeerToPeerServer(
 
                         launch { PeerEventManager.emitRegistrationSuccess() }
                         call.respond(HttpStatusCode.OK, session)
+                    } catch (e: Exception) {
+                        try {
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Internal server error",
+                            )
+                        } catch (_: Exception) {
+                            // Response may already be committed
+                        }
                     }
+                }
 
-                    // 2) Prepare upload → create receiving session, STATUS = SENDING
-                    post(PeerApiRoutes.PREPARE_UPLOAD) {
+                // 2) Prepare upload → create receiving session, STATUS = SENDING
+                post(PeerApiRoutes.PREPARE_UPLOAD) {
+                    try {
                         val request = try {
                             call.receive<PrepareUploadRequest>()
                         } catch (e: Exception) {
@@ -241,11 +281,6 @@ class TellaPeerToPeerServer(
                         }
 
                         if (request.sessionId != serverSession?.sessionId) {
-                            Timber.w(
-                                "PREPARE_UPLOAD rejected: sessionId mismatch (request=%s serverSession=%s)",
-                                request.sessionId,
-                                serverSession?.sessionId
-                            )
                             call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
                             return@post
                         }
@@ -256,7 +291,9 @@ class TellaPeerToPeerServer(
                                 call.respond(HttpStatusCode.Conflict, "Invalid nonce")
                                 return@post
                             }
-                            TransferNonceManager.AddResult.Success -> { /* continue */ }
+
+                            TransferNonceManager.AddResult.Success -> { /* continue */
+                            }
                         }
 
                         val accepted = PeerEventManager.emitPrepareUploadRequest(request)
@@ -281,18 +318,27 @@ class TellaPeerToPeerServer(
                         call.respond(
                             HttpStatusCode.OK, PeerPrepareUploadResponse(files = responseFiles)
                         )
+                    } catch (e: Exception) {
+                        try {
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Internal server error",
+                            )
+                        } catch (_: Exception) {
+                        }
                     }
+                }
 
-                    // 3) Upload each file (transport-only; recipient will SAVE later)
-                    put(PeerApiRoutes.UPLOAD) {
+                // 3) Upload each file (transport-only; recipient will SAVE later)
+                put(PeerApiRoutes.UPLOAD) {
+                    try {
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
                         val uploadNonce = call.parameters["nonce"]
 
-                        Timber.d("UPLOAD: session=$sessionId, fileId=$fileId, tx=$transmissionId")
 
-                        // iOS beginUploadFromRequest: required ids first (400), then nonce (409), then session
+                        // beginUploadFromRequest: required ids first (400), then nonce (409), then session
                         if (sessionId == null || fileId == null || transmissionId == null ||
                             sessionId.isEmpty() || fileId.isEmpty() || transmissionId.isEmpty()
                         ) {
@@ -306,7 +352,9 @@ class TellaPeerToPeerServer(
                                 call.respond(HttpStatusCode.Conflict, "Invalid nonce")
                                 return@put
                             }
-                            TransferNonceManager.AddResult.Success -> { /* continue */ }
+
+                            TransferNonceManager.AddResult.Success -> { /* continue */
+                            }
                         }
 
                         val session = p2PSharedState.session
@@ -362,7 +410,10 @@ class TellaPeerToPeerServer(
                                 if (bytesRead + read > declaredSize) {
                                     progressFile.status = P2PFileStatus.FAILED
                                     emitReceiveProgress(session)
-                                    call.respond(HttpStatusCode.PayloadTooLarge, "Content too large")
+                                    call.respond(
+                                        HttpStatusCode.PayloadTooLarge,
+                                        "Content too large"
+                                    )
                                     return@put
                                 }
                                 output.write(buffer, 0, read)
@@ -400,7 +451,6 @@ class TellaPeerToPeerServer(
                         } catch (e: Exception) {
                             progressFile.status = P2PFileStatus.FAILED
                             emitReceiveProgress(session)
-
                             call.respond(
                                 HttpStatusCode.InternalServerError, "Upload failed: ${e.message}"
                             )
@@ -423,60 +473,87 @@ class TellaPeerToPeerServer(
                             if (!completed) {
                                 if (!tmpFile.delete()) {
                                     // Rare: FS delay; avoid noisy warning for benign leftovers in cache.
-                                    Timber.d("P2P upload: temp delete deferred or failed %s", tmpFile.path)
+                                    Timber.d(
+                                        "P2P upload: temp delete deferred or failed %s",
+                                        tmpFile.path
+                                    )
                                 }
                             }
                         }
-                    }
-
-                    // 4) Close session (transport finished/cancelled by sender)
-                    post(PeerApiRoutes.CLOSE) {
-                        val payload = try {
-                            call.receive<Map<String, String>>()
-                        } catch (_: Exception) {
-                            call.respond(
-                                HttpStatusCode.BadRequest, "Missing or invalid JSON payload"
-                            )
-                            return@post
-                        }
-
-                        val sessionId = payload["sessionId"]
-                        if (sessionId.isNullOrBlank()) {
-                            call.respond(HttpStatusCode.BadRequest, "Invalid request format")
-                            return@post
-                        }
-
-                        val current = serverSession
-                        if (current == null || current.sessionId != sessionId) {
-                            call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
-                            return@post
-                        }
-
-                        if (p2PSharedState.session?.status == SessionStatus.CLOSED) {
-                            call.respond(HttpStatusCode.Forbidden, "Session already closed")
-                            return@post
-                        }
-
+                    } catch (e: Exception) {
+                        Timber.e(e, "P2P /upload unhandled exception")
                         try {
-                            p2PSharedState.session?.status = SessionStatus.CLOSED
-                            serverSession = null
-                            transferNonceManager.clear()
-                            launch { PeerEventManager.emitCloseConnection() }
-                            call.respond(HttpStatusCode.OK, mapOf("success" to true))
-                        } catch (e: Exception) {
-                            Timber.e(e, "Error while closing session")
-                            call.respond(HttpStatusCode.InternalServerError, "Server error")
+                            call.respond(
+                                HttpStatusCode.InternalServerError,
+                                "Internal server error",
+                            )
+                        } catch (_: Exception) {
                         }
                     }
                 }
+
+                // 4) Close session (transport finished/cancelled by sender)
+                post(PeerApiRoutes.CLOSE) {
+                    val payload = try {
+                        call.receive<Map<String, String>>()
+                    } catch (_: Exception) {
+                        call.respond(
+                            HttpStatusCode.BadRequest, "Missing or invalid JSON payload"
+                        )
+                        return@post
+                    }
+
+                    val sessionId = payload["sessionId"]
+                    if (sessionId.isNullOrBlank()) {
+                        call.respond(HttpStatusCode.BadRequest, "Invalid request format")
+                        return@post
+                    }
+
+                    val current = serverSession
+                    if (current == null || current.sessionId != sessionId) {
+                        call.respond(HttpStatusCode.Unauthorized, "Invalid session ID")
+                        return@post
+                    }
+
+                    if (p2PSharedState.session?.status == SessionStatus.CLOSED) {
+                        call.respond(HttpStatusCode.Forbidden, "Session already closed")
+                        return@post
+                    }
+
+                    try {
+                        p2PSharedState.session?.status = SessionStatus.CLOSED
+                        serverSession = null
+                        transferNonceManager.clear()
+                        launch { PeerEventManager.emitCloseConnection() }
+                        call.respond(HttpStatusCode.OK, mapOf("success" to true))
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error while closing session")
+                        call.respond(HttpStatusCode.InternalServerError, "Server error")
+                    }
+                }
+
             }
-        }).start(wait = false)
+        }.start(wait = false)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(2_000)
+            Timber.e(
+                "SERVER READY bind=%s port=%d advertisedToPeer=%s",
+                P2PNetworkAddressPolicy.INADDR_ANY_IPV4,
+                serverPort,
+                advertisedHost,
+            )
+        }
     }
 
     override fun stop() {
         transferNonceManager.clear()
         registerPinFailuresByNonce.clear()
-        engine?.stop(1000, 5000)
+        try {
+            embedded?.stop(1000, 5000)
+        } finally {
+            embedded = null
+        }
     }
 
     private fun isValidPin(pin: String) = pin.length == 6

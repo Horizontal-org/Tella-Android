@@ -1,22 +1,25 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
-import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.WriterException
-import com.journeyapps.barcodescanner.BarcodeEncoder
-import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.P2PNetworkAddressPolicy
 import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
@@ -29,6 +32,7 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCodeBinding::inflate) {
@@ -56,13 +60,13 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
                 val ip = info.ipAddress
-                if (!qrSetupStarted && !ip.isNullOrEmpty()) {
+                if (!qrSetupStarted) {
                     qrSetupStarted = true
                     setQrRegenerationLoading(true)
                     viewLifecycleOwner.lifecycleScope.launch {
                         try {
                             qrSetupMutex.withLock {
-                                setupServerAndQr(ip)
+                                setupServerAndQr(ip.orEmpty())
                             }
                         } finally {
                             if (isAdded) {
@@ -70,29 +74,23 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
                             }
                         }
                     }
-                } else if (!qrSetupStarted && ip.isNullOrEmpty()) {
-                    setQrRegenerationLoading(false)
                 }
             }
             viewModel.updateNetworkInfo()
         } else {
             val ip = viewModel.currentNetworkInfo?.ipAddress
-            if (!ip.isNullOrEmpty()) {
-                qrSetupStarted = true
-                setQrRegenerationLoading(true)
-                viewLifecycleOwner.lifecycleScope.launch {
-                    try {
-                        qrSetupMutex.withLock {
-                            setupServerAndQr(ip)
-                        }
-                    } finally {
-                        if (isAdded) {
-                            setQrRegenerationLoading(false)
-                        }
+            qrSetupStarted = true
+            setQrRegenerationLoading(true)
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    qrSetupMutex.withLock {
+                        setupServerAndQr(ip.orEmpty())
+                    }
+                } finally {
+                    if (isAdded) {
+                        setQrRegenerationLoading(false)
                     }
                 }
-            } else {
-                setQrRegenerationLoading(false)
             }
         }
         handleBack()
@@ -106,7 +104,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
                 navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
                 //  reset the LiveData state if we want to consume event once
                 viewModel.resetRegistrationState()
-            } else {
             }
         }
         initObservers()
@@ -121,17 +118,27 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private suspend fun setupServerAndQr(primaryIpHint: String) {
+        // New receiver session: drop any stale ping event from a previous attempt.
+        peerToPeerManager.clearClientConnected()
+        Timber.d("P2P receiver session started: cleared stale ping replay cache")
+
         val discovered = viewModel.collectLocalIpv4AddressesForNearbySharing()
-        val allIps = buildList {
-            add(primaryIpHint.trim())
-            addAll(discovered.filter { it != primaryIpHint.trim() })
-        }.distinct().filter { it.isNotEmpty() }
+        val hint = primaryIpHint.trim()
+        val mergedForSelection = buildList {
+            if (hint.isNotEmpty()) add(hint)
+            for (a in discovered) {
+                if (a.isNotBlank() && a !in this) add(a)
+            }
+        }
+        val allIps = P2PNetworkAddressPolicy.filterAndOrderForAdvertise(mergedForSelection)
         if (allIps.isEmpty()) {
-            Timber.e("P2P QR: no local IPv4 addresses for certificate/QR")
+            Timber.e(
+                "P2P QR: no site-local (RFC1918) IPv4 for certificate/QR after policy filter; raw merged=%s",
+                mergedForSelection.joinToString(),
+            )
             return
         }
-        val bindIp = if (allIps.contains(primaryIpHint.trim())) primaryIpHint.trim() else allIps.first()
-
+        val advertiseToPeerPrimary = allIps.first()
         val keyPair = PeerKeyProvider.getKeyPair()
         val certificate = PeerKeyProvider.getCertificate(allIps)
         val config = KeyStoreConfig()
@@ -143,7 +150,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
         val started = withContext(Dispatchers.IO) {
             peerServerStarterManager.startServer(
-                bindIp,
+                advertiseToPeerPrimary,
                 keyPair,
                 pinString,
                 certificate,
@@ -159,7 +166,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         p2PSharedState.pin = pinString
         p2PSharedState.port = port.toString()
         p2PSharedState.hash = certHash
-        p2PSharedState.ip = bindIp
+        p2PSharedState.ip = advertiseToPeerPrimary
 
         val json = PeerConnectionQrCodec.toJson(allIps, port, certHash, pinString)
         qrPayload = json
@@ -169,16 +176,33 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun generateQrCode(content: String) {
         try {
-            val barcodeEncoder = BarcodeEncoder()
-            val bitmap: Bitmap = barcodeEncoder.encodeBitmap(
+            val sizePx = (215f * resources.displayMetrics.density).roundToInt().coerceAtLeast(215)
+            val hints = mapOf(
+                EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.H,
+                EncodeHintType.MARGIN to 0,
+            )
+            val bitMatrix = QRCodeWriter().encode(
                 content,
                 BarcodeFormat.QR_CODE,
-                600,
-                600
+                sizePx,
+                sizePx,
+                hints,
             )
+            val w = bitMatrix.width
+            val h = bitMatrix.height
+            val pixels = IntArray(w * h)
+            for (y in 0 until h) {
+                val offset = y * w
+                for (x in 0 until w) {
+                    pixels[offset + x] =
+                        if (bitMatrix.get(x, y)) Color.BLACK else Color.WHITE
+                }
+            }
+            val bitmap = createBitmap(w, h)
+            bitmap.setPixels(pixels, 0, w, 0, 0, w, h)
             binding.qrCodeImageView.setImageBitmap(bitmap)
-        } catch (e: WriterException) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+            Timber.e(e, "P2P QR: encode failed")
         }
     }
 
@@ -211,7 +235,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
                 navManager().navigateFromQrCodeScreenToWaitingReceiverFragment()
-            } else {
             }
         }
     }

@@ -348,7 +348,7 @@ class PeerToPeerViewModel @Inject constructor(
     }
 
     fun collectLocalIpv4AddressesForNearbySharing(): List<String> =
-        networkInfoManager.collectAllLocalIpv4Addresses()
+        networkInfoManager.collectNearbySharingIpv4Addresses()
 
     /** Sender/initiator path: single IP (manual entry or legacy QR). */
     fun startRegistration(ip: String, port: String, hash: String, pin: String) {

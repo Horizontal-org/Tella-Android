@@ -1029,8 +1029,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
-  <string name="qr_code_sender_instruction">Show this QR code for the
- sender to scan</string>
+  <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
   <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>

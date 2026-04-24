@@ -30,14 +30,17 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 
+    <!-- iOS: 215×215 QR, 16pt inset on white card (RecipientConnectToDeviceView) → 215+32=247dp outer. -->
     <ImageView
         android:id="@+id/qrCodeImageView"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="247dp"
+        android:layout_height="247dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/qr_scan_border"
+        android:contentDescription="@string/qr_code_sender_instruction"
         android:keepScreenOn="true"
-        android:padding="8dp"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
         app:cameraAudio="off"
         app:cameraFacing="back"
         app:cameraFlash="auto"

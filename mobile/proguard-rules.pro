@@ -29,6 +29,12 @@
 -dontwarn org.jboss.marshalling.**
 # OpenJDK-only cert APIs (Netty OpenJdkSelfSignedCertGenerator); Android uses Conscrypt / app-provided certs
 -dontwarn sun.security.x509.**
+# Netty 4.2+ optional pkitesting / CertificateBuilder (SelfSignedCertificate path, not on Android)
+-dontwarn io.netty.pkitesting.**
+# JFR (jdk.jfr.*) — not part of the Android Java API; optional Netty tracing hooks
+-dontwarn jdk.jfr.**
+# OSGi bundle metadata annotations (JCTools / shaded deps) — not used on Android
+-dontwarn org.osgi.annotation.**
 # ========== END Netty/Ktor ==========
 
 # Keep the interfaces + concrete impls

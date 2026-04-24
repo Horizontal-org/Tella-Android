@@ -8,7 +8,9 @@ import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerServer
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import java.io.File
+import java.nio.charset.StandardCharsets
 import java.security.KeyPair
+import java.security.MessageDigest
 import java.security.cert.X509Certificate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,17 +24,19 @@ class PeerServerStarterManager @Inject constructor(
     private var server: TellaPeerToPeerServer? = null
 
     /** Last credentials the running server was started with (avoids redundant stop/start). */
-    private var listeningIp: String? = null
-    private var listeningPin: String? = null
+    private var listeningAdvertisedHost: String? = null
+    /** SHA-256 of UTF-8 PIN; raw PIN is not retained after a successful start. */
+    private var listeningPinSha256: ByteArray? = null
 
     /**
      * Starts or restarts the embedded server so its PIN matches the QR payload.
-     * If [ip] and [pin] match the already-running server, returns true without tearing down Netty
+     * If [advertisedHost] and a SHA-256 of [pin] match the already-running server, returns true without tearing down Netty
      * (avoids port bind races and duplicate work when [setupServerAndQr] is triggered twice).
      */
     @Synchronized
     fun startServer(
-        ip: String,
+        /** IPv4 the peer should connect to (QR / manual), not the TLS listen address. */
+        advertisedHost: String,
         keyPair: KeyPair,
         pin: String,
         cert: X509Certificate,
@@ -40,7 +44,12 @@ class PeerServerStarterManager @Inject constructor(
         p2PSharedState: P2PSharedState,
         rateLimitConfig: PeerServerRateLimitConfig = PeerServerRateLimitConfig.DEFAULT,
     ): Boolean {
-        if (server != null && listeningIp == ip && listeningPin == pin) {
+        val lastPin = listeningPinSha256
+        if (server != null &&
+            listeningAdvertisedHost == advertisedHost &&
+            lastPin != null &&
+            pinSha256Equals(lastPin, hashPinUtf8Sha256(pin))
+        ) {
             return true
         }
         val hadServer = server != null
@@ -48,12 +57,12 @@ class PeerServerStarterManager @Inject constructor(
             try {
                 it.stop()
             } catch (e: Exception) {
-                Timber.e(e, "P2P embedded server stop before restart failed")
+                Timber.d(e, "P2P embedded server: stop before restart failed")
             }
         }
         server = null
-        listeningIp = null
-        listeningPin = null
+        listeningAdvertisedHost = null
+        listeningPinSha256 = null
         if (hadServer) {
             try {
                 Thread.sleep(120)
@@ -68,7 +77,7 @@ class PeerServerStarterManager @Inject constructor(
             val legacyDir = File(appContext.cacheDir, PeerToPeerConstants.P2P_RECEIVE_SUBDIR)
             if (legacyDir.exists()) clearStaleReceiveFiles(legacyDir)
             server = TellaPeerToPeerServer(
-                ip = ip,
+                advertisedHost = advertisedHost,
                 keyPair = keyPair,
                 pin = pin,
                 certificate = cert,
@@ -79,14 +88,14 @@ class PeerServerStarterManager @Inject constructor(
                 rateLimitConfig = rateLimitConfig,
             )
             server?.start()
-            listeningIp = ip
-            listeningPin = pin
+            listeningAdvertisedHost = advertisedHost
+            listeningPinSha256 = hashPinUtf8Sha256(pin)
             true
         } catch (e: Exception) {
-            Timber.e(e, "P2P embedded server failed to start")
+            Timber.e(e, "P2P embedded server: start failed")
             server = null
-            listeningIp = null
-            listeningPin = null
+            listeningAdvertisedHost = null
+            listeningPinSha256 = null
             false
         }
     }
@@ -96,14 +105,16 @@ class PeerServerStarterManager @Inject constructor(
     fun stopServer() {
         server?.let {
             try {
+                Timber.d("P2P embedded server: stop requested")
                 it.stop()
             } catch (e: Exception) {
-                Timber.e(e, "P2P embedded server stop failed")
+                Timber.e(e, "P2P embedded server: stop failed")
             }
         }
         server = null
-        listeningIp = null
-        listeningPin = null
+        listeningAdvertisedHost = null
+        listeningPinSha256 = null
+        Timber.d("P2P embedded server: stopped (holder cleared)")
     }
 
     fun isRunning(): Boolean = server != null
@@ -123,9 +134,15 @@ class PeerServerStarterManager @Inject constructor(
             val age = now - child.lastModified()
             if (age > maxAge) {
                 if (!child.delete()) {
-                    Timber.d("P2P receive: stale file delete failed %s", child.path)
+                    Timber.d("P2P receive: stale file delete failed")
                 }
             }
         }
     }
+
+    private fun hashPinUtf8Sha256(pin: String): ByteArray {
+        return MessageDigest.getInstance("SHA-256").digest(pin.toByteArray(StandardCharsets.UTF_8))
+    }
+
+    private fun pinSha256Equals(a: ByteArray, b: ByteArray): Boolean = MessageDigest.isEqual(a, b)
 }
