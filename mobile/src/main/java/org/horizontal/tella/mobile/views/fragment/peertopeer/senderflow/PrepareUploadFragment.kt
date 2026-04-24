@@ -212,13 +212,17 @@ class PrepareUploadFragment :
 
     private fun showCameraActivity() {
         try {
-            val intent = Intent(context, CameraActivity::class.java)
-            intent.apply {
-                putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name)
-                putExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+            // Match importMedia(): with "lock immediately", ProcessLifecycleOwner pauses before
+            // CameraActivity.onResume can apply maybeChangeTemporaryTimeout — key is cleared while
+            // the system camera permission dialog is shown unless we extend timeout first.
+            baseActivity.maybeChangeTemporaryTimeout {
+                val intent = Intent(context, CameraActivity::class.java)
+                intent.apply {
+                    putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name)
+                    putExtra(CAPTURE_WITH_AUTO_UPLOAD, false)
+                }
+                baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
             }
-
-            baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
         } catch (e: java.lang.Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
