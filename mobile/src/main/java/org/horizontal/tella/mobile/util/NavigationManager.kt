@@ -238,6 +238,9 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_recipientSuccessFragment_to_recipientUploadFilesFragment)
     }
 
+    fun popFromRecipientSuccessToWaitingReceiver(): Boolean =
+        navControllerProvider.navController.popBackStack(R.id.waitingReceiverFragment, false)
+
     fun navigateFromConnectHotspotScreenToTipsToConnectFragment() {
         navigateToWithBundle(R.id.action_connectHotspotScreen_to_tipsToConnectFragment)
     }

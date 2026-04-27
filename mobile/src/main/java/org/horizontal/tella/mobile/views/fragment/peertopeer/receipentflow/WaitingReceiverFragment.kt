@@ -23,7 +23,6 @@ class WaitingReceiverFragment :
     BaseBindingFragment<FragmentWaitingBinding>(FragmentWaitingBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
-    private var navigated = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar()
@@ -45,11 +44,11 @@ class WaitingReceiverFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.RESUMED) {
                 viewModel.incomingPrepareRequest.collect { request ->
-                    if (!navigated &&
+                    if (!viewModel.shouldSkipWaitingToPrepareSuccessNavigation() &&
                         isAdded &&
                         findNavController().currentDestination?.id == R.id.waitingReceiverFragment
                     ) {
-                        navigated = true
+                        viewModel.markNavigatedFromWaitingToPrepareSuccess()
 
                         bundle.putInt("fileCount", request.files.size)
                         bundle.putString("sessionId", request.sessionId)

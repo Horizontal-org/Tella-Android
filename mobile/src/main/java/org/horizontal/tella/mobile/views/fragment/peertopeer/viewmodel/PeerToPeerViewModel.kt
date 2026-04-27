@@ -67,6 +67,24 @@ class PeerToPeerViewModel @Inject constructor(
     var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
 
+    private var hasNavigatedFromWaitingToPrepareSuccess: Boolean = false
+
+    fun markNavigatedFromWaitingToPrepareSuccess() {
+        hasNavigatedFromWaitingToPrepareSuccess = true
+    }
+
+    fun clearWaitingToPrepareSuccessNavigationBlock() {
+        hasNavigatedFromWaitingToPrepareSuccess = false
+    }
+
+    fun discardStalePrepareOfferReplayAndNavigationGate() {
+        _incomingPrepareRequest.resetReplayCache()
+        clearWaitingToPrepareSuccessNavigationBlock()
+    }
+
+    fun shouldSkipWaitingToPrepareSuccessNavigation(): Boolean =
+        hasNavigatedFromWaitingToPrepareSuccess
+
     val clientHash = peerToPeerManager.clientConnected
     private val networkInfoManager = NetworkInfoManager(context)
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
@@ -735,6 +753,10 @@ class PeerToPeerViewModel @Inject constructor(
     // ------------------- Misc -------------------
     fun confirmPrepareUpload(sessionId: String, accepted: Boolean) {
         PeerEventManager.resolveUserDecision(sessionId, accepted)
+        if (!accepted) {
+            _incomingPrepareRequest.resetReplayCache()
+            clearWaitingToPrepareSuccessNavigationBlock()
+        }
     }
 
     fun clearPrepareRequest() {

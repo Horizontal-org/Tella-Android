@@ -39,15 +39,13 @@ class RecipientSuccessFragment : BaseBindingFragment<FragmentRecipientSuccessBin
             }
 
             rejectBtn.setOnClickListener {
-                //TODO WE MOVE THIS TO THE NAV MANAGER
                 viewModel.confirmPrepareUpload(sessionId, false)
-                // Set result safely via SavedStateHandle
                 findNavController().previousBackStackEntry
                     ?.savedStateHandle
                     ?.set("receiverDeclined", true)
-
-                // Pop back
-                findNavController().popBackStack()
+                if (!navManager().popFromRecipientSuccessToWaitingReceiver()) {
+                    findNavController().popBackStack()
+                }
             }
         }
     }
