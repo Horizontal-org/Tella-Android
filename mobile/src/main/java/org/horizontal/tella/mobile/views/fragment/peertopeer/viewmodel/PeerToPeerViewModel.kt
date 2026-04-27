@@ -64,7 +64,6 @@ class PeerToPeerViewModel @Inject constructor(
     // ------------------- Public state / deps -------------------
     var peerToPeerParticipant: PeerToPeerParticipant = PeerToPeerParticipant.SENDER
     var isManualConnection: Boolean = true
-    var hasNavigatedToSuccessFragment = false
     var currentNetworkInfo: NetworkInfo? = null
 
     private var hasNavigatedFromWaitingToPrepareSuccess: Boolean = false
@@ -759,12 +758,9 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
-    fun clearPrepareRequest() {
-        hasNavigatedToSuccessFragment = false
-    }
-
     fun resetRegistrationState() {
         _registrationServerSuccess.postValue(false)
+        _registrationSuccess.postValue(false)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)

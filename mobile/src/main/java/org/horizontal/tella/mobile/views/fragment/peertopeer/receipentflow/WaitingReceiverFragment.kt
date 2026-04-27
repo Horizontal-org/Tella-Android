@@ -34,6 +34,7 @@ class WaitingReceiverFragment :
         binding.toolbar.apply {
             setStartTextTitle(getString(R.string.receive_files))
             backClickListener = {
+                viewModel.resetRegistrationState()
                 navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
             }
         }
