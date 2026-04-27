@@ -2,13 +2,13 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
-import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.databinding.FragmentUploadFilesBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -17,7 +17,6 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPee
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,7 +33,11 @@ class RecipientUploadFilesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeUI()
+        setupToolbar()
         setupCancelButton()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            showStopSharingConfirmation()
+        }
     }
 
     private fun initializeUI() {
@@ -42,6 +45,10 @@ class RecipientUploadFilesFragment :
         observeUploadProgress()
         observeBottomSheetProgress()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.backClickListener = { showStopSharingConfirmation() }
     }
 
     private fun setupCancelButton() {
