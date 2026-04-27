@@ -87,10 +87,9 @@ class PrepareUploadFragment :
             layoutManager = gridLayoutManager
             adapter = filesRecyclerViewAdapter
         }
-        binding.toolbar.backClickListener = {
-            exitOrSave()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            showExitNearbySharingConfirmation()
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { exitOrSave()}
 
         //TODO HANDLE THIS IN THE NAVMANAGER
         val navBackStackEntry = findNavController().currentBackStackEntry
@@ -130,24 +129,31 @@ class PrepareUploadFragment :
                         ?.remove<Boolean>("registrationSuccess")
                 }
             }
-        binding.toolbar.backClickListener = {
-            BottomSheetUtils.showConfirmSheet(
-                baseActivity.supportFragmentManager,
-                getString((R.string.exit_nearby_sharing)),
-                getString(R.string.your_progress_will_be_lost),
-                getString(R.string.action_exit),
-                getString(R.string.action_cancel),
-                object : BottomSheetUtils.ActionConfirmed {
-                    override fun accept(isConfirmed: Boolean) {
-                        if (isConfirmed) {
-                            peerServerStarterManager.stopServer()
-                            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-                        }
+        binding.toolbar.backClickListener = { showExitNearbySharingConfirmation() }
+        highLightButtonsInit()
+    }
+
+    private fun showExitNearbySharingConfirmation() {
+        BottomSheetUtils.showConfirmSheet(
+            baseActivity.supportFragmentManager,
+            getString(R.string.exit_nearby_sharing),
+            getString(R.string.your_progress_will_be_lost),
+            getString(R.string.action_exit),
+            getString(R.string.action_cancel),
+            object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        discontinueNearbySharingSession()
                     }
                 }
-            )
-        }
-        highLightButtonsInit()
+            }
+        )
+    }
+
+    private fun discontinueNearbySharingSession() {
+        peerServerStarterManager.stopServer()
+        viewModel.closePeerConnection()
+        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
     }
 
     private fun highLightButtonsInit() {
@@ -162,10 +168,6 @@ class PrepareUploadFragment :
             }
 
         }
-    }
-
-    private fun exitOrSave() {
-        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
     }
 
     private fun showSelectFilesSheet() {
@@ -356,7 +358,7 @@ class PrepareUploadFragment :
     }
 
     override fun onBackPressed(): Boolean {
-        exitOrSave()
+        showExitNearbySharingConfirmation()
         return true
     }
 

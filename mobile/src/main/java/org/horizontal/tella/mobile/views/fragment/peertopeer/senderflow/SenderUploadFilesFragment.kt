@@ -30,7 +30,7 @@ class SenderUploadFilesFragment :
             baseActivity.showToast(R.string.nearby_sharing_sender_transfer_content_too_large)
         }
         viewModel.uploadAllFiles()
-        binding.cancel.setOnClickListener {
+        val stopSharing: () -> Unit = {
             showStandardSheet(
                 baseActivity.supportFragmentManager,
                 getString(R.string.stop_sharing_files),
@@ -44,7 +44,9 @@ class SenderUploadFilesFragment :
                     baseActivity.finish()
                 })
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { }
+        binding.cancel.setOnClickListener { stopSharing() }
+        binding.toolbar.backClickListener = { stopSharing() }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) { stopSharing() }
     }
 
     private fun showFormEndView() {
