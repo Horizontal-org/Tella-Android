@@ -41,10 +41,6 @@
         android:keepScreenOn="true"
         android:padding="16dp"
         android:scaleType="fitCenter"
-        app:cameraAudio="off"
-        app:cameraFacing="back"
-        app:cameraFlash="auto"
-        app:cameraMode="picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView" />

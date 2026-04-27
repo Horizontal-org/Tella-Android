@@ -1048,7 +1048,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="wifi">Wi-Fi</string>
   <string name="get_connected">Get connected</string>
   <string name="wifi_connection_instruction">Make sure both devices are connected to the same Wi-Fi network</string>
-  <string name="tips_to_connect_title">Tips to connect</string>
+  <string name="tips_to_connect_title">Nearby Sharing help</string>
   <string name="tips_to_connect_body">
     1. The Wi-Fi network does not need to be connected to the internet.
 2. You can create your own Wi-Fi network using your phone’s hotspot feature.
@@ -1057,16 +1057,12 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="current_wifi_network">Current Wifi network</string>
   <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
   <string name="NearBySharing">Nearby sharing</string>
-  <string name="share_files_description">
-    Share files with nearby devices without an Internet connection
-  1. Both devices must be connected to the same Wifi network
-  2. Make sure you trust the person you are sharing files with
-</string>
+  <string name="share_files_description">Share files with nearby devices without needing an Internet connection.</string>
   <string name="send_files">Send files</string>
   <string name="receive_files">Receive files</string>
   <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
   <string name="nearby_sharing">Nearby sharing</string>
-  <string name="how_it_works">How it works</string>
+  <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Enter the recipient’s device
  information to find it on the network</string>
@@ -1130,37 +1126,30 @@ If you forget your lock, there is currently no way to recover it. Your data insi
 or without an Internet connection.
 
 To get started, join the same Wi-Fi network as the recipient. Nearby Sharing will work even if the Wi-Fi network is not connected to the Internet.</string>
+  <string name="wifi_confirmation_title">Are you both on the same Wi-Fi network?</string>
+  <string name="wifi_confirmation_message">Both devices must be connected to the same Wi-Fi network, using local Wi-Fi or setting up a Hotspot connection.</string>
+  <string name="dont_show_again">Don\'t show again</string>
   <string name="tips_to_connect_wifi">Learn more about connecting to Wi-Fi for Nearby Sharing.</string>
-  <string name="nearbysharing_tips_to_connect_settingup">Setting up</string>
+  <string name="nearbysharing_tips_to_connect_settingup">How do I connect to a device?</string>
   <string name="nearbysharing_tips_to_connect_settingup_expl">
-    There are 2 ways to connect your devices 
-through Wi-Fi:
+There are 2 ways to connect your devices through Wi-Fi:
 
-    1. Using a Wi-Fi router, such as at home 
-\t or work
-
-    2. Setting up a Wi-Fi hotspot from a device,
-\t such as a phone, tablet, or computer
-
-       \t\ta. One user creates a hotspot connection
-\t\t by going to their device’s settings.
-
-       \t\tb. The other user connects to that hotspot.
+1. Using a local network, such as the Wi-Fi at your home or work, or a public Wi-Fi network.
+2. Setting up a Hotspot and connecting both devices to it.
 </string>
-  <string name="tips_section_join">Joining the same network</string>
+  <string name="nearbysharing_tips_to_connect_intro">There are 2 ways to connect your devices through Wi-Fi:</string>
+  <string name="nearbysharing_tips_to_connect_item_1">Using a local network, such as the Wi-Fi at your home or work, or a public Wi-Fi network.</string>
+  <string name="nearbysharing_tips_to_connect_item_2">Setting up a Hotspot and connecting both devices to it.</string>
+  <string name="tips_section_join">Do I need Internet access?</string>
   <string name="tips_join_body">
-        Once the Wi-Fi network is set up, go to your
-devices’ settings and verify that you are both 
-on the same Wi-Fi network.
+No. The Wi-Fi network does not need to have internet access. As long as the Wi-Fi router or Hotspot is powered on and functioning, it can be used for Nearby Sharing even without being online.
     </string>
   <string name="tips_section_more">More tips</string>
-  <string name="tips_more_bullets">• The Wi-Fi network does not need to have
- \t internet access. As long as the Wi-Fi router
- \t or hotspot is powered on and functioning,
- \t it can be used for Nearby Sharing even
- \t without being online
+  <string name="tips_more_bullets">• Please disable any active VPN connections.
 
-• Make sure to disable any active VPN connections.</string>
+• Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
+  <string name="tips_more_item_1">Please disable any active VPN connections.</string>
+  <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="feedback_contact_info_hint">Contact information (optional)</string>
   <string name="file_already_exists">File already exists.</string>
   <string name="tella_foss">Tella FOSS</string>

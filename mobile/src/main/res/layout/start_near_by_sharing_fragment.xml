@@ -20,7 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
-            app:startTitle="@string/nearby_sharing" />
+            app:rightIcon="@drawable/orange_help_24"
+            app:rightIconContentDescription="@string/action_help"
+            app:startTitle="@string/onboard.intro_get_started" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -52,6 +54,7 @@
     <TextView
         android:id="@+id/shareFilesDescriptionTv"
         style="@style/Tella_Main_White_Text.Meduim"
+        android:gravity="center"
         android:paddingHorizontal="@dimen/activity_horizontal_large_margin"
         android:text="@string/share_files_description"
         android:textSize="14sp"

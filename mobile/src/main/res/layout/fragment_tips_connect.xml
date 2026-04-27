@@ -101,6 +101,7 @@
                     android:textColor="@color/wa_white"
                     android:lineSpacingExtra="3dp"
                     android:text="@string/tips_more_bullets" />
+
             </LinearLayout>
     </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

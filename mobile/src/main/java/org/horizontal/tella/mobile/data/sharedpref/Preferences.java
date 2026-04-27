@@ -134,6 +134,14 @@ public class Preferences {
         setBoolean(SharedPrefs.ENABLE_HOME_NEARBY_SHARING, value);
     }
 
+    public static boolean isShowP2pWifiConfirmationSheet() {
+        return getBoolean(SharedPrefs.SHOW_P2P_WIFI_CONFIRMATION_SHEET, true);
+    }
+
+    public static void setShowP2pWifiConfirmationSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_P2P_WIFI_CONFIRMATION_SHEET, value);
+    }
+
     public static boolean isPanicGeolocationActive() {
         return getBoolean(SharedPrefs.PANIC_GEOLOCATION, true);
     }

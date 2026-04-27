@@ -162,6 +162,18 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_startNearBySharingFragment_to_connectHotspotFragment)
     }
 
+    fun navigateFromStartNearBySharingFragmentToQrCodeScreen() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_qrCodeScreen)
+    }
+
+    fun navigateFromStartNearBySharingFragmentToScanQrCodeScreen() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_scanQrCodeScreen)
+    }
+
+    fun navigateFromStartNearBySharingFragmentToTipsToConnectFragment() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_tipsToConnectFragment)
+    }
+
     fun navigateFromActionConnectHotspotScreenToQrCodeScreen() {
         navigateToWithBundle(R.id.action_connectHotspotScreen_to_qrCodeScreen)
     }
