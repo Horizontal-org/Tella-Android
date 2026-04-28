@@ -59,32 +59,24 @@ class ScanQrCodeFragment :
         barcodeView.decodeContinuous(object : BarcodeCallback {
 
             override fun barcodeResult(result: BarcodeResult?) {
-                result?.text?.let { qrContent ->
+                result?.text?.let { raw ->
+                    val trimmed = raw.trim()
+                    val parsed = PeerConnectionQrCodec.parse(trimmed) ?: return@let
+                    val cert = parsed.certificateHash?.takeIf { it.isNotBlank() } ?: return@let
+
                     barcodeView.pause()
 
-                    try {
-                        val parsed = PeerConnectionQrCodec.parse(qrContent)
-                            ?: throw IllegalArgumentException("Invalid QR payload")
-                        val cert = parsed.certificateHash?.takeIf { it.isNotBlank() }
-                            ?: throw IllegalArgumentException("Invalid QR payload")
+                    viewModel.p2PState.pin = parsed.pin
+                    viewModel.p2PState.port = parsed.port.toString()
+                    viewModel.p2PState.hash = cert
+                    viewModel.p2PState.ip = parsed.ipAddresses.firstOrNull().orEmpty()
 
-                        viewModel.p2PState.pin = parsed.pin
-                        viewModel.p2PState.port = parsed.port.toString()
-                        viewModel.p2PState.hash = cert
-                        viewModel.p2PState.ip = parsed.ipAddresses.firstOrNull().orEmpty()
-
-                        viewModel.startRegistrationWithIpCandidates(
-                            rawCandidates = parsed.ipAddresses,
-                            port = parsed.port.toString(),
-                            hash = cert,
-                            pin = parsed.pin,
-                        )
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        DialogUtils.showBottomMessage(baseActivity, "Invalid QR Code", true)
-                        // Show a message: Invalid QR Code
-                    }
+                    viewModel.startRegistrationWithIpCandidates(
+                        rawCandidates = parsed.ipAddresses,
+                        port = parsed.port.toString(),
+                        hash = cert,
+                        pin = parsed.pin,
+                    )
                 }
             }
 
