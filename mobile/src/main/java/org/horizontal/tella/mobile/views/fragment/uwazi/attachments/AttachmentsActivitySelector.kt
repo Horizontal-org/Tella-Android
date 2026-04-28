@@ -216,17 +216,44 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun handleSelectionModeWhenMediSelected() {
-        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
-        if (attachmentsAdapter.selectedMediaFiles.isNullOrEmpty() && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size == attachmentsAdapter.itemCount && selectMode != SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.ONE_SELECTION
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size < attachmentsAdapter.itemCount && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
+        val selected = attachmentsAdapter.selectedMediaFiles.size
+        updateAttachmentsToolbar(selected)
+        val selectable = attachmentsAdapter.selectableNonDirectoryCount()
+
+        if (selectMode == SelectMode.SELECT_ALL && selected == 0) {
+            syncSelectionChromeLeavingSelectModeFully()
+            return
         }
+        if (selectable == 0) return
+
+        if (selectMode == SelectMode.SELECT_ALL && selected < selectable) {
+            selectMode = SelectMode.ONE_SELECTION
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+            return
+        }
+
+        if (isListCheckOn && selectMode != SelectMode.SELECT_ALL && selected == selectable) {
+            selectMode = SelectMode.SELECT_ALL
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.ALL)
+        }
+    }
+
+    private enum class SelectAllCheckboxVisual { IDLE, PARTIAL, ALL }
+
+    private fun bindSelectAllCheckbox(visual: SelectAllCheckboxVisual) {
+        val icon = when (visual) {
+            SelectAllCheckboxVisual.IDLE -> R.drawable.ic_check
+            SelectAllCheckboxVisual.PARTIAL -> R.drawable.ic_check_box_off
+            SelectAllCheckboxVisual.ALL -> R.drawable.ic_check_box_on
+        }
+        binding.checkBoxList.setCheckDrawable(icon, this)
+    }
+
+    private fun syncSelectionChromeLeavingSelectModeFully() {
+        selectMode = SelectMode.DESELECT_ALL
+        isListCheckOn = false
+        attachmentsAdapter.enableSelectMode(false)
+        bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
     }
 
     private fun handleSelectMode() {
@@ -254,7 +281,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         selectMode = when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 isListCheckOn = true
-                SelectMode.ONE_SELECTION
+                SelectMode.SELECT_ALL
             }
 
             SelectMode.ONE_SELECTION -> {

@@ -125,6 +125,15 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
     public int getItemCount() {
         return files.size();
     }
+    public int selectableNonDirectoryCount() {
+        int n = 0;
+        for (VaultFile f : files) {
+            if (f.type != VaultFile.Type.DIRECTORY) {
+                n++;
+            }
+        }
+        return n;
+    }
 
     public void setFiles(List<VaultFile> files) {
         this.files = files;
@@ -213,9 +222,12 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
             if (selection.type == VaultFile.Type.DIRECTORY) {
                 continue;
             }
-            selectMediaFile(selection);
-            selectorVaultHandler.onMediaSelected(selection);
+            if (!selected.contains(selection)) {
+                selected.add(selection);
+            }
         }
+        notifyDataSetChanged();
+        selectorVaultHandler.onSelectionNumChange(selected.size());
     }
 
     private void checkItemState(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {

@@ -455,7 +455,7 @@ class AttachmentsFragment :
         when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 isListCheckOn = true
-                selectMode = SelectMode.ONE_SELECTION
+                selectMode = SelectMode.SELECT_ALL
 
             }
 
@@ -575,6 +575,9 @@ class AttachmentsFragment :
     }
 
     override fun onSelectionNumChange(num: Int) {
+        if (isListCheckOn) {
+            updateAttachmentsToolbar(true)
+        }
     }
 
     override fun onMediaSelected(vaultFile: VaultFile) {
@@ -585,18 +588,52 @@ class AttachmentsFragment :
         handleSelectionModeWhenMediSelected()
     }
 
+    /**
+     * Keeps header checkbox + [selectMode] aligned with adapter selection without calling
+     * [handleSelectMode] (that would run [changeSelectMode] and re-apply select-all).
+     */
     private fun handleSelectionModeWhenMediSelected() {
         updateAttachmentsToolbar(true)
-        if (attachmentsAdapter.selectedMediaFiles.isNullOrEmpty() && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size == attachmentsAdapter.itemCount && selectMode != SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.ONE_SELECTION
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size < attachmentsAdapter.itemCount && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
+
+        val selected = attachmentsAdapter.selectedMediaFiles.size
+        val listSize = attachmentsAdapter.itemCount
+
+        if (selectMode == SelectMode.SELECT_ALL && selected == 0) {
+            syncSelectionChromeLeavingSelectModeFully()
+            return
         }
+        if (listSize == 0) return
+
+        if (selectMode == SelectMode.SELECT_ALL && selected < listSize) {
+            selectMode = SelectMode.ONE_SELECTION
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+            return
+        }
+
+        if (isListCheckOn && selectMode != SelectMode.SELECT_ALL && selected == listSize) {
+            selectMode = SelectMode.SELECT_ALL
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.ALL)
+        }
+    }
+
+    private enum class SelectAllCheckboxVisual { IDLE, PARTIAL, ALL }
+
+    private fun bindSelectAllCheckbox(visual: SelectAllCheckboxVisual) {
+        val icon = when (visual) {
+            SelectAllCheckboxVisual.IDLE -> R.drawable.ic_check
+            SelectAllCheckboxVisual.PARTIAL -> R.drawable.ic_check_box_off
+            SelectAllCheckboxVisual.ALL -> R.drawable.ic_check_box_on
+        }
+        binding.checkBoxList.setCheckDrawable(icon, baseActivity)
+    }
+    private fun syncSelectionChromeLeavingSelectModeFully() {
+        selectMode = SelectMode.DESELECT_ALL
+        isListCheckOn = false
+        attachmentsAdapter.enableSelectMode(false)
+        enableMoveTheme(false)
+        bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
+        updateAttachmentsToolbar(false)
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
