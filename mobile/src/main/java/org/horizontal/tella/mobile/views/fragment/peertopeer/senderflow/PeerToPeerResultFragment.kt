@@ -49,9 +49,15 @@ class PeerToPeerResultFragment :
     }
 
     private fun setupTexts() {
-        binding.toolbar.setStartTextTitle( getString(if (allFilesTransferred) R.string.success_title else R.string.result))
-        binding.tileTv.text =
-            getString(if (allFilesTransferred) R.string.success_title else R.string.failure_title)
+        binding.toolbar.setStartTextTitle(
+            getString(if (allFilesTransferred) R.string.success_title else R.string.nearby_sharing_results_title)
+        )
+        val titleResId = when {
+            allFilesTransferred -> R.string.success_title
+            isPartialTransfer -> R.string.transfer_interrupted_title
+            else -> R.string.failure_title
+        }
+        binding.tileTv.text = getString(titleResId)
         binding.descriptionTv.text = computeSubtitle()
     }
 
@@ -137,5 +143,8 @@ class PeerToPeerResultFragment :
 
     private val noFilesTransferred: Boolean
         get() = transferredFiles?.none { it.status == successStatus } == true
+
+    private val isPartialTransfer: Boolean
+        get() = !allFilesTransferred && !noFilesTransferred
 
 }

@@ -1100,6 +1100,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="stop">stop</string>
   <string name="success_title">Success</string>
   <string name="failure_title">Something went wrong</string>
+  <string name="transfer_interrupted_title">Transfer interrupted</string>
   <plurals name="success_file_received_from_sender">
     <item quantity="one">You have successfully received %1$d file from the sender.</item>
     <item quantity="other">You have successfully received %1$d files from the sender.</item>
@@ -1117,6 +1118,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="back_to_home_action">Back to home</string>
   <string name="view_files">VIEW FILES</string>
   <string name="result">Results</string>
+  <string name="nearby_sharing_results_title">Results</string>
   <string name="waiting_for_the_sender">Waiting for sender …</string>
   <string name="waiting_for_the_recipient">Waiting for recipient …</string>
   <string name="nearby_sharing_title">Nearby Sharing</string>
