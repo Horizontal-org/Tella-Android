@@ -1034,8 +1034,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information </string>
-  <string name="device_connection_instructions">The sender needs to input the following to
- connect to your device.</string>
+  <string name="device_connection_instructions">Enter the following information as the sender to connect to your device.</string>
   <string name="connect_code">Connect code</string>
   <string name="pin">PIN</string>
   <string name="port">Port</string>
@@ -1056,16 +1055,15 @@ If you forget your lock, there is currently no way to recover it. Your data insi
 </string>
   <string name="current_wifi_network">Current Wifi network</string>
   <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
-  <string name="NearBySharing">Nearby sharing</string>
+  <string name="NearBySharing">Nearby Sharing</string>
   <string name="share_files_description">Share files with nearby devices without needing an Internet connection.</string>
   <string name="send_files">Send files</string>
   <string name="receive_files">Receive files</string>
-  <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
-  <string name="nearby_sharing">Nearby sharing</string>
+  <string name="learn_more_about_nearby_sharing">Learn more about Nearby Sharing</string>
+  <string name="nearby_sharing">Nearby Sharing</string>
   <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
-  <string name="enter_recipient_info">Enter the recipient’s device
- information to find it on the network</string>
+  <string name="enter_recipient_info">Enter the following information as the recipient to find it on the network.</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
@@ -1074,7 +1072,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="waiting_for_the_recipient_to_accept_files">Waiting for the recipient to accept files</string>
   <string name="accept">ACCEPT</string>
   <string name="reject">REJECT</string>
-  <string name="exit_nearby_sharing">Exit nearby sharing?</string>
+  <string name="exit_nearby_sharing">Exit Nearby Sharing?</string>
   <string name="your_progress_will_be_lost">Your progress will be lost.</string>
   <string name="ip_address">IP address</string>
   <string name="sender_files_rejected">Sender\'s files rejected.</string>
@@ -1098,7 +1096,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="try_again">Try again</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
-  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
   <string name="success_title">Success</string>
   <string name="failure_title">Something went wrong</string>
@@ -1116,6 +1114,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
     <item quantity="other">0 files were received. %1$d files were not received.</item>
   </plurals>
   <string name="view_files_action">View Files</string>
+  <string name="back_to_home_action">Back to home</string>
   <string name="view_files">VIEW FILES</string>
   <string name="result">Results</string>
   <string name="waiting_for_the_sender">Waiting for sender …</string>

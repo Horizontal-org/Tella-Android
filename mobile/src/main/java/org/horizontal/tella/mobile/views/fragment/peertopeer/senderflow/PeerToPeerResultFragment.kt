@@ -58,6 +58,13 @@ class PeerToPeerResultFragment :
     private fun setupButton() {
         binding.toolbar.backClickListener = { baseActivity.finish() }
 
+        val isSender = viewModel.peerToPeerParticipant == PeerToPeerParticipant.SENDER
+
+        binding.backToHomeBtn.apply {
+            visibility = if (isSender) View.VISIBLE else View.GONE
+            setOnClickListener { navigateToHome() }
+        }
+
         binding.viewFilesBtn.apply {
             val isRecipient = viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT
 
@@ -76,6 +83,14 @@ class PeerToPeerResultFragment :
                 visibility = View.GONE
             }
         }
+    }
+
+    private fun navigateToHome() {
+        val intent = Intent(requireContext(), MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun computeSubtitle(): String {
