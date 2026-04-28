@@ -100,7 +100,7 @@ class PrepareUploadFragment :
                     DialogUtils.showBottomMessage(
                         baseActivity,
                         getString(messageRes),
-                        true
+                        false
                     )
                     navBackStackEntry.savedStateHandle.remove<Int>("transferRejectedMessageRes")
                 }
@@ -109,7 +109,11 @@ class PrepareUploadFragment :
             ?.getLiveData<Boolean>("prepareTransferRecipientRejected")
             ?.observe(viewLifecycleOwner) { show ->
                 if (show == true) {
-                    baseActivity.showToast(R.string.recipient_rejected_the_files)
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(R.string.recipient_rejected_the_files),
+                        false
+                    )
                     navBackStackEntry.savedStateHandle.remove<Boolean>("prepareTransferRecipientRejected")
                 }
             }
@@ -120,7 +124,7 @@ class PrepareUploadFragment :
                 if (success == true) {
                     DialogUtils.showBottomMessage(
                         baseActivity,
-                        "Success! Connected to device",
+                        getString(R.string.nearby_sharing_connection_successful),
                         false
                     )
 
@@ -331,7 +335,11 @@ class PrepareUploadFragment :
                     // Navigate
                     navManager().navigateFromPrepareUploadFragmentToWaitingSenderFragment()
                 } else {
-                    baseActivity.showToast("No file selected")
+                    DialogUtils.showBottomMessage(
+                        baseActivity,
+                        getString(R.string.no_file_selected),
+                        false
+                    )
                 }
             } else {
                 showSubmitReportErrorSnackBar()

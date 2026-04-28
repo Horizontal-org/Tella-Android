@@ -74,7 +74,7 @@ class SenderManualConnectionFragment :
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
         }
         viewModel.bottomMessageError.observe(viewLifecycleOwner) { message ->
-            DialogUtils.showBottomMessage(baseActivity, message, true)
+            DialogUtils.showBottomMessage(baseActivity, message, false)
         }
 
         viewModel.bottomSheetError.observe(viewLifecycleOwner) { (title, description) ->

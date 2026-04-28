@@ -12,6 +12,7 @@ import org.horizontal.tella.mobile.databinding.FragmentWaitingBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PrepareFailureKind
+import org.hzontal.shared_ui.utils.DialogUtils
 import javax.inject.Inject
 
 /**
@@ -50,7 +51,7 @@ class WaitingSenderFragment :
                     }
                     PrepareFailureKind.GENERIC -> {
                         navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-                        baseActivity.showToast(R.string.failure_title)
+                        DialogUtils.showBottomMessage(baseActivity, getString(R.string.failure_title), false)
                     }
                 }
             }

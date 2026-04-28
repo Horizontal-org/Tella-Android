@@ -70,7 +70,7 @@ class WaitingReceiverFragment :
                     DialogUtils.showBottomMessage(
                         baseActivity,
                         getString(R.string.sender_files_rejected),
-                        isError = true
+                        isError = false
                     )
                 }
             }

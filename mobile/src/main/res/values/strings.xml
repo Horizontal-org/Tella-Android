@@ -1101,6 +1101,8 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="success_title">Success</string>
   <string name="failure_title">Something went wrong</string>
   <string name="transfer_interrupted_title">Transfer interrupted</string>
+  <string name="no_file_selected">No file selected</string>
+  <string name="nearby_sharing_connection_successful">Connection successful</string>
   <plurals name="success_file_received_from_sender">
     <item quantity="one">You have successfully received %1$d file from the sender.</item>
     <item quantity="other">You have successfully received %1$d files from the sender.</item>

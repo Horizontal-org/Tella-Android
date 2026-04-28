@@ -14,6 +14,7 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.PeerT
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
+import org.hzontal.shared_ui.utils.DialogUtils
 
 class SenderUploadFilesFragment :
     BaseBindingFragment<FragmentUploadFilesBinding>(FragmentUploadFilesBinding::inflate) {
@@ -27,7 +28,11 @@ class SenderUploadFilesFragment :
         showFormEndView()
         observeUploadProgress()
         viewModel.transferPayloadTooLarge.observe(viewLifecycleOwner) {
-            baseActivity.showToast(R.string.nearby_sharing_sender_transfer_content_too_large)
+            DialogUtils.showBottomMessage(
+                baseActivity,
+                getString(R.string.nearby_sharing_sender_transfer_content_too_large),
+                false
+            )
         }
         viewModel.uploadAllFiles()
         val stopSharing: () -> Unit = {

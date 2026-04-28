@@ -19,8 +19,9 @@
     <TextView
         android:id="@+id/titleTextView"
         style="@style/Tella_Main_White_TextExtraLargeBold"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/qr_code_scan_instruction"
@@ -69,9 +70,11 @@
     <TextView
         android:id="@+id/helpTextView"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="40dp"
+        android:gravity="center"
         android:text="@string/qr_code_issue_prompt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,8 +83,9 @@
     <!-- Manual Connection Button -->
     <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/connectManuallyButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="12dp"
         app:circularflow_radiusInDP="25px"
         android:backgroundTint="@color/light_purple"
@@ -95,6 +99,8 @@
     <TextView
         android:id="@+id/back_btn"
         style="@style/Unlock_White_Text_Back"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:text="@string/LockSelect_Action_Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
