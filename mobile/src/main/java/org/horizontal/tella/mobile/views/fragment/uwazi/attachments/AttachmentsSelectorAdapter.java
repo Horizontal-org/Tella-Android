@@ -210,6 +210,9 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
 
     public void selectAll() {
         for (VaultFile selection : files) {
+            if (selection.type == VaultFile.Type.DIRECTORY) {
+                continue;
+            }
             selectMediaFile(selection);
             selectorVaultHandler.onMediaSelected(selection);
         }

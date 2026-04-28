@@ -43,7 +43,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private var isOdkSelect = false
     private var filterType = FilterType.ALL
     private lateinit var attachmentsAdapter: AttachmentsSelectorAdapter
-    private var selectMode = SelectMode.SELECT_ALL
+    private var selectMode = SelectMode.DESELECT_ALL
     private var isListCheckOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
