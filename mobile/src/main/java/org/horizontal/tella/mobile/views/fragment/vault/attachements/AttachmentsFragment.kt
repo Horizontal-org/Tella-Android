@@ -90,6 +90,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import java.io.FileNotFoundException
 
+const val VAULT_PARENT_ID = "vault_parent_id"
 
 @AndroidEntryPoint
 class AttachmentsFragment :
@@ -112,6 +113,7 @@ class AttachmentsFragment :
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
     private var withMetadata = false
+    private var initialFolderTitle: String? = null
     private var selectMode = SelectMode.DESELECT_ALL
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isLaunchingPicker = false
@@ -220,9 +222,18 @@ class AttachmentsFragment :
         arguments?.getString(VAULT_FILTER)?.let {
             filterType = FilterType.valueOf(it)
         }
+        arguments?.getString(VAULT_PARENT_ID)?.let { parentId ->
+            currentRootID = parentId
+        }
         initSorting()
-        setToolbarLabel(filterType, binding.toolbar, baseActivity)
-        viewModel.getRootId()
+        if (currentRootID == null) {
+            setToolbarLabel(filterType, binding.toolbar, baseActivity)
+        } else {
+            viewModel.getFolderById(currentRootID!!)
+        }
+        if (currentRootID == null) {
+            viewModel.getRootId()
+        }
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
@@ -478,7 +489,11 @@ class AttachmentsFragment :
             }
         } else {
             binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-            setToolbarLabel(filterType, binding.toolbar, baseActivity)
+            if (initialFolderTitle != null) {
+                binding.toolbar.setStartTextTitle(initialFolderTitle!!)
+            } else {
+                setToolbarLabel(filterType, binding.toolbar, baseActivity)
+            }
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
         }
@@ -720,6 +735,10 @@ class AttachmentsFragment :
             viewModel.renameFileSuccess.observe(this, ::onRenameFileSuccess)
             viewModel.exportState.observe(this, ::onExportStarted)
             viewModel.mediaExported.observe(this, ::onMediaExported)
+            viewModel.currentFolder.observe(this) { folder ->
+                initialFolderTitle = folder.name
+                binding.toolbar.setStartTextTitle(folder.name)
+            }
             viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
             viewModel.duplicateErrorResId.observe(this, ::onDuplicateErrorResId)
             viewModel.importError.observe(this, ::onImportError)

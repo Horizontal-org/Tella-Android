@@ -166,6 +166,8 @@ class PeerToPeerViewModel @Inject constructor(
     private var savedCount = 0
     private var targetFolderId: String? = null
 
+    fun getTransferFolderId(): String? = targetFolderId
+
     private val p2pVaultImportLock = Any()
 
     // ------------------- Init: subscribe to streams -------------------

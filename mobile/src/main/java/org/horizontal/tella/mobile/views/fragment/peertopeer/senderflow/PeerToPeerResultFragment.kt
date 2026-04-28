@@ -72,9 +72,13 @@ class PeerToPeerResultFragment :
                 setText(getString(R.string.view_files_action))
                 visibility = View.VISIBLE
                 setOnClickListener {
+                    val transferFolderId = viewModel.getTransferFolderId()
                     val intent = Intent(requireContext(), MainActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        putExtra("navigateTo", "attachments_screen")
+                        putExtra(MainActivity.EXTRA_NAVIGATE_TO, "attachments_screen")
+                        if (!transferFolderId.isNullOrBlank()) {
+                            putExtra(MainActivity.EXTRA_VAULT_PARENT_ID, transferFolderId)
+                        }
                     }
                     startActivity(intent)
                     requireActivity().finish() // finish PeerToPeerActivity

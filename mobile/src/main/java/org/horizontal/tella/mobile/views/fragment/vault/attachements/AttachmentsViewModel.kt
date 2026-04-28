@@ -60,6 +60,8 @@ class AttachmentsViewModel @Inject constructor(
     val folderCreated: LiveData<VaultFile> = _folderCreated
     private val _rootId = MutableLiveData<VaultFile>()
     val rootId: LiveData<VaultFile> = _rootId
+    private val _currentFolder = MutableLiveData<VaultFile>()
+    val currentFolder: LiveData<VaultFile> = _currentFolder
     private val _duplicateErrorResId = MutableLiveData<Int?>()
     val duplicateErrorResId: LiveData<Int?> = _duplicateErrorResId
     val counterData = MutableLiveData<Int>()
@@ -215,6 +217,23 @@ class AttachmentsViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { vaultFile -> _rootId.postValue(vaultFile) },
+                    { throwable ->
+                        CrashReporterProvider.get().recordException(throwable)
+                        _error.postValue(throwable)
+                    }
+                )
+        )
+    }
+
+    fun getFolderById(folderId: String) {
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { it.get(folderId) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { vaultFile -> _currentFolder.postValue(vaultFile) },
                     { throwable ->
                         CrashReporterProvider.get().recordException(throwable)
                         _error.postValue(throwable)

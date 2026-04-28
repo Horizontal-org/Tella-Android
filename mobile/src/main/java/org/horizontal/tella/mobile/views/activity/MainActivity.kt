@@ -56,6 +56,7 @@ import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt
 import org.horizontal.tella.mobile.views.fragment.uwazi.send.UwaziSendFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.OnSelectEntitiesClickListener
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.AttachmentsFragment
+import org.horizontal.tella.mobile.views.fragment.vault.attachements.VAULT_PARENT_ID
 import org.horizontal.tella.mobile.views.fragment.vault.home.VAULT_FILTER
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
@@ -70,6 +71,8 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     IMainNavigationInterface, VerificationWorkStatusCallback, OnSelectEntitiesClickListener {
     companion object {
         const val PHOTO_VIDEO_FILTER = "gallery_filter"
+        const val EXTRA_NAVIGATE_TO = "navigateTo"
+        const val EXTRA_VAULT_PARENT_ID = "vault_parent_id"
     }
 
     private var isBackgroundWorkInProgress: Boolean = false
@@ -132,6 +135,7 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
             bundle.putString(VAULT_FILTER, FilterType.PHOTO_VIDEO.name)
             navController.navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
         }
+        handleNavigationIntent(intent)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         initObservers()
     }
@@ -477,16 +481,19 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        handleNavigationIntent(intent)
+    }
 
-        intent?.getStringExtra("navigateTo")?.let { destination ->
+    private fun handleNavigationIntent(intent: Intent?) {
+        intent?.getStringExtra(EXTRA_NAVIGATE_TO)?.let { destination ->
             if (destination == "attachments_screen") {
-                // Avoid navigating if already on the screen
+                val bundle = Bundle().apply {
+                    intent.getStringExtra(EXTRA_VAULT_PARENT_ID)?.let { putString(VAULT_PARENT_ID, it) }
+                }
                 if (navController.currentDestination?.id != R.id.attachments_screen) {
-                    navController.navigate(R.id.attachments_screen)
+                    navController.navigate(R.id.attachments_screen, bundle)
                 }
             }
         }
     }
-
-
 }
