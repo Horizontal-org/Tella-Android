@@ -59,9 +59,10 @@ class PeerToPeerResultFragment :
         binding.toolbar.backClickListener = { baseActivity.finish() }
 
         val isSender = viewModel.peerToPeerParticipant == PeerToPeerParticipant.SENDER
+        val showBackToHome = isSender || noFilesTransferred
 
         binding.backToHomeBtn.apply {
-            visibility = if (isSender) View.VISIBLE else View.GONE
+            visibility = if (showBackToHome) View.VISIBLE else View.GONE
             setOnClickListener { navigateToHome() }
         }
 
