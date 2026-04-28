@@ -56,11 +56,16 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        qrPayload?.let { cached ->
+            generateQrCode(cached)
+            setQrRegenerationLoading(false)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
                 val ip = info.ipAddress
-                if (!qrSetupStarted) {
+                if (!qrSetupStarted || qrPayload == null) {
                     qrSetupStarted = true
                     setQrRegenerationLoading(true)
                     viewLifecycleOwner.lifecycleScope.launch {
