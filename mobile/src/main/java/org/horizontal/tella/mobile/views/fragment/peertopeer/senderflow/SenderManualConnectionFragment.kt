@@ -82,16 +82,14 @@ class SenderManualConnectionFragment :
                 baseActivity.supportFragmentManager,
                 title,
                 description,
+                getString(R.string.action_ok),
                 null,
-                getString(R.string.try_again),
-                null
-            ) {
-                viewModel.handleCertificate(
-                    viewModel.p2PState.ip,
-                    viewModel.p2PState.port,
-                    viewModel.p2PState.pin.toString()
-                )
-            }
+                onConfirmClick = {
+                    viewModel.resetRegistrationState()
+                    navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+                },
+                onCancelClick = null,
+            )
         }
     }
 

@@ -78,6 +78,8 @@ object BottomSheetUtils {
 
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    cancelButton.visibility =
+                        if (cancelButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }

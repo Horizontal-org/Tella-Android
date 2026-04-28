@@ -148,12 +148,16 @@ class ScanQrCodeFragment :
                 baseActivity.supportFragmentManager,
                 title,
                 description,
-                null,
                 getString(R.string.try_again),
-                null
-            ) {
-                viewModel.retryQueuedRegistration()
-            }
+                null,
+                onConfirmClick = {
+                    if (isAdded) {
+                        viewModel.resetRegistrationState()
+                        barcodeView.resume()
+                    }
+                },
+                onCancelClick = null,
+            )
         }
     }
 }

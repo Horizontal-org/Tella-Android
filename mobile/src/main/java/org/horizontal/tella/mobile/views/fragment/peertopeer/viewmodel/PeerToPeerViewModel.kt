@@ -148,9 +148,6 @@ class PeerToPeerViewModel @Inject constructor(
 
     private var registrationNonceContext: RegistrationNonceContext? = null
 
-    /** IPs from the last QR scan (subnet-ordered), used for “Try again” without re-scanning. */
-    private var registrationIpCandidates: List<String> = emptyList()
-
     private fun registrationNonceFor(ip: String, port: String, pin: String): String {
         val normalizedPin = pin.trim()
         val existing = registrationNonceContext
@@ -386,7 +383,6 @@ class PeerToPeerViewModel @Inject constructor(
             qrAddresses = distinct,
             localDeviceIPv4Addresses = networkInfoManager.collectAllLocalIpv4Addresses(),
         )
-        registrationIpCandidates = candidates
         val pinTrimmed = pin.trim()
         viewModelScope.launch {
             candidates.forEachIndexed { index, ip ->
@@ -440,16 +436,6 @@ class PeerToPeerViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun retryQueuedRegistration() {
-        if (registrationIpCandidates.isEmpty()) return
-        startRegistrationWithIpCandidates(
-            registrationIpCandidates,
-            p2PState.port,
-            p2PState.hash,
-            p2PState.pin.orEmpty(),
-        )
     }
 
     private fun shouldRetryRegisterWithNextIp(result: RegisterPeerResult): Boolean = when (result) {

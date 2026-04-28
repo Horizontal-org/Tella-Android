@@ -84,14 +84,14 @@ class SenderVerificationFragment :
                 baseActivity.supportFragmentManager,
                 title,
                 description,
+                getString(R.string.action_ok),
                 null,
-                getString(R.string.try_again),
-                null
-            ) {
-                // Allow retry: re-enable confirm
-                binding.confirmAndConnectBtn.isEnabled = true
-                binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
-            }
+                onConfirmClick = {
+                    viewModel.resetRegistrationState()
+                    navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
+                },
+                onCancelClick = null,
+            )
         }
     }
 
