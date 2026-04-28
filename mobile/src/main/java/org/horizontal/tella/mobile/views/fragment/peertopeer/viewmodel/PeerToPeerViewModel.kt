@@ -166,6 +166,8 @@ class PeerToPeerViewModel @Inject constructor(
     private var savedCount = 0
     private var targetFolderId: String? = null
 
+    private val p2pVaultImportLock = Any()
+
     // ------------------- Init: subscribe to streams -------------------
     init {
         observePrepareUploadEvents()
@@ -488,20 +490,45 @@ class PeerToPeerViewModel @Inject constructor(
         completeBottomSheetImportIfTerminal()
     }
 
-    private fun obtainTargetFolderId(): String {
-        targetFolderId?.let { return it }
-        val title = (p2PState.session?.title ?: "").trim()
-        val finalTitle = if (title.isEmpty()) "Transfer" else title
+    private fun appendIndexedDisplayName(baseName: String, index: Int): String {
+        val dot = baseName.lastIndexOf('.')
+        return if (dot > 0) {
+            baseName.substring(0, dot) + " (" + index + ")" + baseName.substring(dot)
+        } else {
+            "$baseName ($index)"
+        }
+    }
 
-        val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
-        val root = vault.root.blockingGet()
-        val folder = vault.builder()
-            .setName(finalTitle)
-            .setType(VaultFile.Type.DIRECTORY)
-            .build(root.id)
-            .blockingGet()
-        targetFolderId = folder.id
-        return folder.id
+    /** Picks a vault name not present in [existingNames] (case-sensitive, matches vault rules). */
+    private fun uniqueVaultSiblingName(desired: String, existingNames: Set<String>): String {
+        val base = desired.trim().ifBlank { "file" }
+        if (base !in existingNames) return base
+        var i = 1
+        while (true) {
+            val candidate = appendIndexedDisplayName(base, i++)
+            if (candidate !in existingNames) return candidate
+        }
+    }
+
+    private fun obtainTargetFolderId(): String {
+        synchronized(p2pVaultImportLock) {
+            targetFolderId?.let { return it }
+            val title = (p2PState.session?.title ?: "").trim()
+            val finalTitle = title.ifEmpty { "Transfer" }
+
+            val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
+            val root = vault.root.blockingGet()
+            val siblingNames =
+                vault.list(root).blockingGet().mapNotNull { it.name }.toHashSet()
+            val folderName = uniqueVaultSiblingName(finalTitle, siblingNames)
+            val folder = vault.builder()
+                .setName(folderName)
+                .setType(VaultFile.Type.DIRECTORY)
+                .build(root.id)
+                .blockingGet()
+            targetFolderId = folder.id
+            return folder.id
+        }
     }
 
     /** P2P bytes are written to a temp file; vault entry should use the sender’s name. */
@@ -526,10 +553,11 @@ class PeerToPeerViewModel @Inject constructor(
         receivedFile: File,
         pf: ProgressFile,
         folderId: String,
+        vaultDisplayName: String,
     ): VaultFile? = try {
         FileInputStream(receivedFile).use { input ->
             vault.builder(input)
-                .setName(vaultDisplayNameForP2pReceive(pf, receivedFile))
+                .setName(vaultDisplayName)
                 .setMimeType(pf.file.fileType)
                 .setAnonymous(false)
                 .setType(VaultFile.Type.FILE)
@@ -570,34 +598,60 @@ class PeerToPeerViewModel @Inject constructor(
         }
 
         try {
-            val folderId = obtainTargetFolderId()
-            val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
-            val displayName = vaultDisplayNameForP2pReceive(pf, receivedFile)
+            val vaultFile = synchronized(p2pVaultImportLock) {
+                val folderId = obtainTargetFolderId()
+                val vault = MyApplication.keyRxVault.rxVault.blockingFirst()
+                val parent = vault.get(folderId).blockingGet()
+                val taken =
+                    vault.list(parent).blockingGet().mapNotNull { it.name }.toHashSet()
+                val displayName =
+                    uniqueVaultSiblingName(vaultDisplayNameForP2pReceive(pf, receivedFile), taken)
 
-            val vaultFile = try {
-                when {
-                    isImageFileType(pf.file.fileType) -> {
-                        val bytes = receivedFile.readBytes()
-                        if (pf.file.fileType.contains("png", true)) {
-                            MediaFileHandler.savePngImage(bytes, folderId, displayName)
-                        } else {
-                            MediaFileHandler.saveJpegPhoto(bytes, folderId, displayName).blockingGet()
+                try {
+                    when {
+                        isImageFileType(pf.file.fileType) -> {
+                            val bytes = receivedFile.readBytes()
+                            if (pf.file.fileType.contains("png", true)) {
+                                MediaFileHandler.savePngImage(bytes, folderId, displayName)
+                            } else {
+                                MediaFileHandler.saveJpegPhoto(bytes, folderId, displayName)
+                                    .blockingGet()
+                            }
+                        }
+
+                        isVideoFileType(pf.file.fileType) -> {
+                            if (shouldStoreP2pVideoAsOpaqueContainer(pf, receivedFile)) {
+                                importP2pReceivedFileAsVaultFile(
+                                    vault,
+                                    receivedFile,
+                                    pf,
+                                    folderId,
+                                    displayName,
+                                )
+                            } else {
+                                MediaFileHandler.saveMp4Video(
+                                    receivedFile,
+                                    folderId,
+                                    false,
+                                    displayName,
+                                )
+                            }
+                        }
+
+                        else -> {
+                            importP2pReceivedFileAsVaultFile(
+                                vault,
+                                receivedFile,
+                                pf,
+                                folderId,
+                                displayName,
+                            )
                         }
                     }
-                    isVideoFileType(pf.file.fileType) -> {
-                        if (shouldStoreP2pVideoAsOpaqueContainer(pf, receivedFile)) {
-                            importP2pReceivedFileAsVaultFile(vault, receivedFile, pf, folderId)
-                        } else {
-                            MediaFileHandler.saveMp4Video(receivedFile, folderId, false, displayName)
-                        }
-                    }
-                    else -> {
-                        importP2pReceivedFileAsVaultFile(vault, receivedFile, pf, folderId)
-                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to save file ${pf.file.fileName}")
+                    null
                 }
-            } catch (e: Exception) {
-                Timber.e(e, "Failed to save file ${pf.file.fileName}")
-                null
             }
 
             val txKey = pf.transmissionId
