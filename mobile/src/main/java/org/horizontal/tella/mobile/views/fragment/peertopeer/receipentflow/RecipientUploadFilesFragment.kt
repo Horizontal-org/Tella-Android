@@ -15,7 +15,6 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.senderflow.PeerToPeerParticipant
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.PeerToPeerEndView
-import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showProgressImportSheet
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import javax.inject.Inject
 
@@ -49,6 +48,7 @@ class RecipientUploadFilesFragment :
     }
 
     private fun setupToolbar() {
+        binding.toolbar.setStartTextTitle(getString(R.string.receiving_and_encrypting_files))
         binding.toolbar.backClickListener = { showStopSharingConfirmation() }
     }
 
@@ -59,8 +59,8 @@ class RecipientUploadFilesFragment :
     private fun showStopSharingConfirmation() {
         showStandardSheet(
             baseActivity.supportFragmentManager,
-            getString(R.string.stop_sharing_files),
-            getString(R.string.nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred),
+            getString(R.string.nearbysharing_stop_receiving_files),
+            getString(R.string.nearbysharing_stop_receiving_files_description),
             getString(R.string.action_continue).uppercase(),
             getString(R.string.stop).uppercase(),
             onConfirmClick = {},
@@ -93,23 +93,6 @@ class RecipientUploadFilesFragment :
             val percent = state.percent.coerceIn(0, 100)
             endView.setUploadProgress(files, percent / 100f)
 
-            /*  if (!sheetShown) {
-                sheetShown = true
-              showProgressImportSheet(
-                    baseActivity.supportFragmentManager,
-                    getString(R.string.Vault_Importing_SheetTitle),
-                    files.size,
-                    resources.getQuantityString(
-                        R.plurals.Vault_Importing_SheetProgress,
-                        files.size,
-                        files.size
-                    ),
-                    progressStatus = progressPercentLiveData,
-                    getString(R.string.action_cancel).uppercase(),
-                    viewLifecycleOwner
-                ) { /* no-op */ }
-            }*/
-
             val isTerminal = when (state.sessionStatus) {
                 SessionStatus.FINISHED,
                 SessionStatus.FINISHED_WITH_ERRORS,
@@ -128,11 +111,5 @@ class RecipientUploadFilesFragment :
         }
     }
 
-    private fun observeBottomSheetProgress() {
-        viewModel.bottomSheetProgress.observe(viewLifecycleOwner) { progress ->
-            if (!sheetShown) return@observe
-            // The sheet dismisses itself when current == total
-            progressPercentLiveData.postValue(progress.current)
-        }
-    }
+
 }

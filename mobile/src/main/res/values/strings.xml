@@ -1161,6 +1161,8 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="feedback_contact_info_hint">Contact information (optional)</string>
   <string name="file_already_exists">File already exists.</string>
+  <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
+  <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
   <string name="tella_foss">Tella FOSS</string>
   <string name="settings.hide_tella_change_lock_to_pin_hint">Please change your lock type to PIN in the security Settings. %1$s</string>
   <string name="settings.hide_tella_change_lock_here">Change lock here</string>
