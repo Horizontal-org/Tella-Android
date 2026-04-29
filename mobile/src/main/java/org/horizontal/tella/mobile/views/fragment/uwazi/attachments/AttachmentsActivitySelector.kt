@@ -67,7 +67,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
         attachmentsAdapter = AttachmentsSelectorAdapter(
             this@AttachmentsActivitySelector, this,
-            gridLayoutManager, true, isMultiplePicker
+            gridLayoutManager, false, isMultiplePicker
         )
         with(binding) {
 
@@ -75,13 +75,21 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 adapter = attachmentsAdapter
                 layoutManager = gridLayoutManager
             }
-            toolbar.backClickListener = { handleBackStack() }
+            toolbar.backClickListener = {
+                if (isListCheckOn) {
+                    syncSelectionChromeLeavingSelectModeFully()
+                } else {
+                    handleBackStack()
+                }
+            }
             gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
             listCheck.setOnClickListener(this@AttachmentsActivitySelector)
             checkBoxList.setOnClickListener(this@AttachmentsActivitySelector)
             toolbar.onRightClickListener = { setResultAndFinish() }
 
         }
+
+        bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
         updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
@@ -120,6 +128,10 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 }
             }
         }
+    }
+
+    override fun onMoreClicked(vaultFile: VaultFile) {
+        playMedia(vaultFile)
     }
 
     override fun playMedia(vaultFile: VaultFile?) {
@@ -167,8 +179,29 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun updateAttachmentsToolbar(itemsSize: Int) {
+        if (isListCheckOn) {
+            binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
+        } else {
+            binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+        }
         if (itemsSize == 0) {
-            binding.toolbar.setStartTextTitle(getString(R.string.Vault_Select_Title))
+            val titleRes = if (isListCheckOn) {
+                R.string.Vault_Select_Title
+            } else {
+                when (filterType) {
+                    FilterType.ALL -> R.string.Vault_AllFiles_Title
+                    FilterType.ALL_WITHOUT_DIRECTORY -> R.string.Vault_Files_Title
+                    FilterType.PHOTO -> R.string.Vault_Images_Title
+                    FilterType.VIDEO -> R.string.Vault_Videos_Title
+                    FilterType.AUDIO -> R.string.Vault_Audios_Title
+                    FilterType.DOCUMENTS -> R.string.Vault_Documents_Title
+                    FilterType.OTHERS -> R.string.Vault_Others_Title
+                    FilterType.PHOTO_VIDEO -> R.string.Vault_PhotosAndVideos_Title
+                    FilterType.AUDIO_VIDEO -> R.string.Vault_AllFiles_Title
+                    FilterType.PDF -> R.string.Vault_Documents_Title
+                }
+            }
+            binding.toolbar.setStartTextTitle(getString(titleRes))
             binding.toolbar.setRightIcon(-1)
         } else {
             binding.toolbar.setStartTextTitle(
@@ -254,6 +287,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         isListCheckOn = false
         attachmentsAdapter.enableSelectMode(false)
         bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
+        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
     private fun handleSelectMode() {
@@ -267,6 +301,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             }
 
             SelectMode.ONE_SELECTION -> {
+                // In select mode with no bulk selection applied.
+                attachmentsAdapter.clearSelected()
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, this)
             }
 
@@ -275,13 +311,14 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 attachmentsAdapter.selectAll()
             }
         }
+        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
     private fun changeSelectMode() {
         selectMode = when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 isListCheckOn = true
-                SelectMode.SELECT_ALL
+                SelectMode.ONE_SELECTION
             }
 
             SelectMode.ONE_SELECTION -> {
@@ -290,8 +327,8 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             }
 
             SelectMode.SELECT_ALL -> {
-                isListCheckOn = false
-                SelectMode.DESELECT_ALL
+                isListCheckOn = true
+                SelectMode.ONE_SELECTION
             }
         }
     }
@@ -366,6 +403,10 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun handleBackStack() {
+        if (isListCheckOn) {
+            syncSelectionChromeLeavingSelectModeFully()
+            return
+        }
         when {
             binding.breadcrumbsView.items.size > 1 -> {
                 if (binding.breadcrumbsView.items.size == 2) {

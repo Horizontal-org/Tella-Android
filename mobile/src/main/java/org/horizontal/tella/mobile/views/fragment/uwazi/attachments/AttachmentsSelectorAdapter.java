@@ -83,6 +83,7 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         if (vaultFile.type != VaultFile.Type.DIRECTORY) {
             checkItemState(holder, vaultFile);
         }
+        onMoreSelected(holder, vaultFile);
 
         if (vaultFile.mimeType != null) {
             if (MediaFile.INSTANCE.isImageFileType(vaultFile.mimeType)) {
@@ -207,7 +208,23 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
             } else {
                 holder.itemView.setOnClickListener(v -> checkboxClickHandler(holder, vaultFile));
             }
+        } else {
+            if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+                holder.itemView.setOnClickListener(v -> selectorVaultHandler.openFolder(vaultFile));
+            } else {
+                holder.itemView.setOnClickListener(v -> selectorVaultHandler.playMedia(vaultFile));
+            }
         }
+    }
+
+    private void onMoreSelected(AttachmentsSelectorAdapter.ViewHolder holder, VaultFile vaultFile) {
+        holder.more.setOnClickListener(v -> {
+            if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+                selectorVaultHandler.openFolder(vaultFile);
+            } else {
+                selectorVaultHandler.onMoreClicked(vaultFile);
+            }
+        });
     }
 
     private void removeAllSelections() {
@@ -297,13 +314,15 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         }
 
         void maybeEnableCheckBox(boolean selectable, VaultFile.Type type) {
+            // Match vault AttachmentsRecycleViewAdapter: overflow before selection mode, checkboxes in selection mode.
             if (type != VaultFile.Type.DIRECTORY) {
                 checkBox.setVisibility(selectable ? View.VISIBLE : View.GONE);
+                more.setVisibility(selectable ? View.GONE : View.VISIBLE);
                 checkBox.setEnabled(selectable);
             } else {
                 checkBox.setVisibility(View.GONE);
+                more.setVisibility(selectable ? View.GONE : View.VISIBLE);
             }
-
         }
     }
 
