@@ -49,13 +49,10 @@ class PeerToPeerResultFragment :
     }
 
     private fun setupTexts() {
-        binding.toolbar.setStartTextTitle(
-            getString(if (allFilesTransferred) R.string.success_title else R.string.nearby_sharing_results_title)
-        )
+        binding.toolbar.setStartTextTitle(getString(R.string.nearby_sharing_results_title))
         val titleResId = when {
             allFilesTransferred -> R.string.success_title
-            isPartialTransfer -> R.string.transfer_interrupted_title
-            else -> R.string.failure_title
+            else -> R.string.transfer_interrupted_title
         }
         binding.tileTv.text = getString(titleResId)
         binding.descriptionTv.text = computeSubtitle()

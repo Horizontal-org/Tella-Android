@@ -1,5 +1,6 @@
 package org.hzontal.shared_ui.bottomsheet
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -700,6 +701,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DownloadStatustHolder(), object : Binder<DownloadStatustHolder> {
+            @SuppressLint("SetTextI18n")
             override fun onBind(holder: DownloadStatustHolder) {
                 with(holder) {
                     progressStatus.observe(lifecycleOwner) { status ->

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:rightIconContentDescription="@string/action_save"
-        app:startTitle="@string/result" />
+        app:startTitle="@string/nearby_sharing_results_title" />
 
     <ImageView
         android:id="@+id/setupImgV"
