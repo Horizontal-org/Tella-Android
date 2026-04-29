@@ -221,7 +221,6 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
             }
         }
         binding.toolbar.backClickListener = { leave() }
-        binding.backBtn.setOnClickListener { leave() }
     }
 
     private fun handleConnectManually() {

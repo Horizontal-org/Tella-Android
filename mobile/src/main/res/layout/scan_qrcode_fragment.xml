@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="12dp"
-        app:circularflow_radiusInDP="25px"
+        app:circularflow_radiusInDP="25dp"
         android:backgroundTint="@color/light_purple"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,14 +95,5 @@
         app:layout_constraintTop_toBottomOf="@id/helpTextView"
         app:text="@string/connect_manually" />
 
-
-    <TextView
-        android:id="@+id/back_btn"
-        style="@style/Unlock_White_Text_Back"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:text="@string/LockSelect_Action_Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

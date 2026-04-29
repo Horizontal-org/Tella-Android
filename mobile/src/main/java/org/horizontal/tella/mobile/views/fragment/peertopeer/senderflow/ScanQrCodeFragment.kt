@@ -113,7 +113,6 @@ class ScanQrCodeFragment :
 
     private fun handleBack() {
         binding.toolbar.backClickListener = { nav().popBackStack() }
-        binding.backBtn.setOnClickListener { nav().popBackStack() }
     }
 
     private fun initListeners() {
