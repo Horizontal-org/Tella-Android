@@ -40,7 +40,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockSuccess_Message_AllDone">Vous avez terminé !</string>
   <string name="LockSuccess_Message_Hint">Vous pouvez toujours changer votre option de verrouillage
  et personnaliser davantage Tella dans Paramètres.</string>
-  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Mot de passe incorrect, veuillez réessayer</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>
