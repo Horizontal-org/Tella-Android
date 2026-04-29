@@ -27,9 +27,10 @@
         <TextView
             android:id="@+id/waiting_text"
             style="@style/Tella_Main_White_TextExtraLargeBold"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:paddingHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_large_margin"
-            android:text="Waiting for the recipient to accept files"
+            android:textAlignment="center"
+            android:text="Waiting for the recipient to accept files recipient to accept files"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
