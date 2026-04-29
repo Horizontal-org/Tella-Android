@@ -39,7 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/device"
-                app:layout_constraintBottom_toTopOf="@+id/titleTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,9 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
+                android:lineSpacingExtra="6dp"
                 android:text="@string/enter_recipient_info"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toTopOf="@+id/connectCode_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +131,6 @@
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:textColorHint="@color/wa_white"
                 app:errorTextAppearance="@style/TextEntryLayoutErrorStyle"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pin_layout">
@@ -165,14 +163,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/back_btn"
-            style="@style/Unlock_White_Text_Back"
-            android:text="@string/LockSelect_Action_Back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/next_btn"

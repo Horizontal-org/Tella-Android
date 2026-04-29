@@ -48,7 +48,6 @@ class SenderManualConnectionFragment :
     }
 
     private fun initListeners() = with(binding) {
-        backBtn.setOnClickListener { nav().popBackStack() }
         toolbar.backClickListener = { nav().popBackStack() }
 
         nextBtn.setOnClickListener {

@@ -43,7 +43,6 @@ class ShowDeviceInfoFragment :
     }
 
     private fun initListeners() {
-        binding.backBtn.setOnClickListener { back() }
         binding.toolbar.backClickListener = { nav().popBackStack() }
     }
 

@@ -1062,13 +1062,13 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="nearby_sharing">ಸಮೀಪದ ಹಂಚಿಕೆ</string>
   <string name="how_it_works">ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
-  <string name="enter_recipient_info">Enter the recipient’s device
+  <string name="enter_recipient_info">Enter the recipient’s device\n
  information to find it on the network</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">ತ್ಯಜಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಾರಂಭಿಸಿ</string>
   <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
-  <string name="prepare_upload_message">The sender is trying to send you %1$d files</string>
+  <string name="prepare_upload_message">The sender is trying to send you %1$d \n\nfiles</string>
   <string name="waiting_for_the_recipient_to_accept_files">ಸ್ವೀಕರಿಸುವವರು ಫೈಲ್‌ಗಳನ್ನು ಸ್ವೀಕರಿಸಲು ಕಾಯಲಾಗುತ್ತಿದೆ</string>
   <string name="accept">ಸ್ವೀಕರಿಸಿ</string>
   <string name="reject">ತಿರಸ್ಕರಿಸಿ</string>

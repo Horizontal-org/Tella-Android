@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:arrowBackIcon="@drawable/ic_close_white"
-        app:arrowBackIconContentDescription="@string/connect_manually"
+        app:arrowBackIconContentDescription="@string/action_go_back"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:startTitle="@string/connect_manually" />
@@ -94,19 +94,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/back_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pin"
         app:leftText="@string/port" />
 
-    <TextView
-        android:id="@+id/back_btn"
-        style="@style/Unlock_White_Text_Back"
-        android:text="@string/LockSelect_Action_Back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
