@@ -98,7 +98,11 @@ class RecipientUploadFilesFragment :
                     baseActivity.supportFragmentManager,
                     getString(R.string.Vault_Importing_SheetTitle),
                     files.size,
-                    resources.getQuantityString(R.plurals.Vault_Importing_SheetProgress, files.size),
+                    resources.getQuantityString(
+                        R.plurals.Vault_Importing_SheetProgress,
+                        files.size,
+                        files.size
+                    ),
                     progressStatus = progressPercentLiveData,
                     getString(R.string.action_cancel).uppercase(),
                     viewLifecycleOwner

@@ -972,7 +972,9 @@ class AttachmentsFragment :
             getString(R.string.Vault_Importing_SheetTitle),
             totalFilesToImport,
             resources.getQuantityString(
-                R.plurals.Vault_Importing_SheetProgress, totalFilesToImport
+                R.plurals.Vault_Importing_SheetProgress,
+                totalFilesToImport,
+                totalFilesToImport
             ),
             viewModel.counterData,
             getString(R.string.action_cancel).uppercase(),
