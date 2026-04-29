@@ -205,6 +205,7 @@ class PeerToPeerViewModel @Inject constructor(
             PeerEventManager.closeConnectionEvent.collect { success ->
                 if (success) {
                     p2PState.session?.status = SessionStatus.CLOSED
+                    _closeConnection.postValue(true)
                     emitFinalIfReady(SessionStatus.CLOSED)
                 }
             }
