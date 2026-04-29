@@ -74,7 +74,7 @@ class TipsConnectFragment :
                     }
 
                     override fun updateDrawState(ds: TextPaint) {
-                        ds.isUnderlineText = false
+                        ds.isUnderlineText = true
                     }
                 },
                 start,

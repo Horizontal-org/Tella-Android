@@ -28,7 +28,8 @@ class RecipientUploadFilesFragment :
     private val progressPercentLiveData = MutableLiveData<Int>()
     private var sheetShown = false
 
-    @Inject lateinit var peerServerStarterManager: PeerServerStarterManager
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +44,7 @@ class RecipientUploadFilesFragment :
     private fun initializeUI() {
         showFormEndView()
         observeUploadProgress()
-        observeBottomSheetProgress()
+        // observeBottomSheetProgress()
         viewModel.peerToPeerParticipant = PeerToPeerParticipant.RECIPIENT
     }
 
@@ -92,9 +93,9 @@ class RecipientUploadFilesFragment :
             val percent = state.percent.coerceIn(0, 100)
             endView.setUploadProgress(files, percent / 100f)
 
-            if (!sheetShown) {
+            /*  if (!sheetShown) {
                 sheetShown = true
-                showProgressImportSheet(
+              showProgressImportSheet(
                     baseActivity.supportFragmentManager,
                     getString(R.string.Vault_Importing_SheetTitle),
                     files.size,
@@ -107,12 +108,13 @@ class RecipientUploadFilesFragment :
                     getString(R.string.action_cancel).uppercase(),
                     viewLifecycleOwner
                 ) { /* no-op */ }
-            }
+            }*/
 
             val isTerminal = when (state.sessionStatus) {
                 SessionStatus.FINISHED,
                 SessionStatus.FINISHED_WITH_ERRORS,
                 SessionStatus.CLOSED -> true
+
                 else -> false  // WAITING, SENDING, SAVING → not yet
             }
 
