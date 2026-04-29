@@ -514,16 +514,16 @@ button to add a new template.</string>
     <string name="Uwazi_Submitted_Header_Text">These are entities that you have submitted.</string>
     <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Choose how you want to add files</string>
     <string-array name="Uwazi_Language_Array">
-        <item>English</item>
-        <item>عربي</item>
-        <item>Français</item>
-    </string-array>
-    <string-array name="Uwazi_Language_Array_Translated">
-        <item>English</item>
-        <item>Arabic</item>
-        <item>French</item>
-    </string-array>
-    <string name="Collect_Action_FillForm">Fill form</string>
+    <item>English</item>
+    <item>عربي</item>
+    <item>Français</item>
+  </string-array>
+  <string-array name="Uwazi_Language_Array_Translated">
+    <item>English</item>
+    <item>Arabic</item>
+    <item>French</item>
+  </string-array>
+  <string name="Collect_Action_FillForm">Fill form</string>
     <string name="Collect_Subtitle_RemoveForm">Are you sure you want to remove \"%1$s\"? </string>
     <string name="Util_ellapsedTime_Year">More than a year ago</string>
     <plurals name="Util_ellapsedTime_Months">
@@ -801,10 +801,10 @@ they are uploaded to this project as a report.</string>
     <string name="incorrect_pattern">Incorrect Pattern.
 
 </string>
-    <string name="incorrect_pin">Incorrect Pin.
+    <string name="incorrect_pin">Incorrect Pin. 
 
 </string>
-    <string name="incorrect_password">Incorrect Password.
+    <string name="incorrect_password">Incorrect Password. 
 
 </string>
     <string name="attempts_remaining_singular">You have 1 attempt remaining until
@@ -1034,7 +1034,8 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information</string>
-  <string name="device_connection_instructions">The sender needs to input the following\n to connect to your device.</string>
+  <string name="device_connection_instructions">The sender needs to input the following
+ to connect to your device.</string>
   <string name="connect_code">Connect code</string>
   <string name="pin">PIN</string>
   <string name="port">Port</string>
@@ -1063,12 +1064,16 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="nearby_sharing">Nearby Sharing</string>
   <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
-  <string name="enter_recipient_info">Enter the recipient’s device\n\n information to find it on the network.</string>
+  <string name="enter_recipient_info">Enter the recipient’s device
+
+ information to find it on the network.</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
   <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
-  <string name="prepare_upload_message">The sender is trying to send you %1$d \n\nfiles</string>
+  <string name="prepare_upload_message">The sender is trying to send you %1$d 
+
+files</string>
   <string name="prepare_upload_question">Would you like to accept them?</string>
   <string name="waiting_for_the_recipient_to_accept_files">Waiting for the recipient to accept files</string>
   <string name="accept">ACCEPT</string>

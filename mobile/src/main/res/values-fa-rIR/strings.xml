@@ -1025,14 +1025,13 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
-  <string name="qr_code_sender_instruction">Show this QR code for the
- sender to scan</string>
+  <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
   <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
-  <string name="show_device_information">Show your device information </string>
-  <string name="device_connection_instructions">The sender needs to input the following to
- connect to your device.</string>
+  <string name="show_device_information">Show your device information</string>
+  <string name="device_connection_instructions">The sender needs to input the following
+ to connect to your device.</string>
   <string name="connect_code">Connect code</string>
   <string name="pin">PIN</string>
   <string name="port">Port</string>
@@ -1045,7 +1044,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="wifi">Wi-Fi</string>
   <string name="get_connected">Get connected</string>
   <string name="wifi_connection_instruction">Make sure both devices are connected to the same Wi-Fi network</string>
-  <string name="tips_to_connect_title">Tips to connect</string>
+  <string name="tips_to_connect_title">Nearby Sharing help</string>
   <string name="tips_to_connect_body">
     1. The Wi-Fi network does not need to be connected to the internet.
 2. You can create your own Wi-Fi network using your phone’s hotspot feature.
@@ -1053,29 +1052,28 @@ If you forget your lock, there is currently no way to recover it. Your data insi
 </string>
   <string name="current_wifi_network">Current Wifi network</string>
   <string name="same_wifi_text">Yes, we are on the same Wi-Fi network</string>
-  <string name="NearBySharing">Nearby sharing</string>
-  <string name="share_files_description">
-    Share files with nearby devices without an Internet connection
-  1. Both devices must be connected to the same Wifi network
-  2. Make sure you trust the person you are sharing files with
-</string>
+  <string name="NearBySharing">Nearby Sharing</string>
+  <string name="share_files_description">Share files with nearby devices without needing an Internet connection.</string>
   <string name="send_files">Send files</string>
   <string name="receive_files">Receive files</string>
-  <string name="learn_more_about_nearby_sharing">Learn more about nearby sharing</string>
-  <string name="nearby_sharing">Nearby sharing</string>
-  <string name="how_it_works">How it works</string>
+  <string name="learn_more_about_nearby_sharing">Learn more about Nearby Sharing</string>
+  <string name="nearby_sharing">Nearby Sharing</string>
+  <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
-  <string name="enter_recipient_info">Enter the recipient’s device\n
- information to find it on the network</string>
+  <string name="enter_recipient_info">Enter the recipient’s device
+
+ information to find it on the network.</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
   <string name="waiting_for_the_sender_to_share_files">Waiting for the sender to share files</string>
-  <string name="prepare_upload_message">The sender is trying to send you %1$d \n\nfiles</string>
+  <string name="prepare_upload_message">The sender is trying to send you %1$d 
+
+files</string>
   <string name="waiting_for_the_recipient_to_accept_files">Waiting for the recipient to accept files</string>
   <string name="accept">ACCEPT</string>
   <string name="reject">REJECT</string>
-  <string name="exit_nearby_sharing">Exit nearby sharing?</string>
+  <string name="exit_nearby_sharing">Exit Nearby Sharing?</string>
   <string name="your_progress_will_be_lost">Your progress will be lost.</string>
   <string name="ip_address">IP address</string>
   <string name="sender_files_rejected">Sender\'s files rejected.</string>
@@ -1088,7 +1086,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
   <string name="try_again">Try again</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
-  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
+  <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
   <string name="success_title">Success</string>
   <string name="failure_title">Something went wrong</string>
@@ -1117,36 +1115,21 @@ or without an Internet connection.
 
 To get started, join the same Wi-Fi network as the recipient. Nearby Sharing will work even if the Wi-Fi network is not connected to the Internet.</string>
   <string name="tips_to_connect_wifi">Learn more about connecting to Wi-Fi for Nearby Sharing.</string>
-  <string name="nearbysharing_tips_to_connect_settingup">Setting up</string>
+  <string name="nearbysharing_tips_to_connect_settingup">How do I connect to a device?</string>
   <string name="nearbysharing_tips_to_connect_settingup_expl">
-    There are 2 ways to connect your devices 
-through Wi-Fi:
+There are 2 ways to connect your devices through Wi-Fi:
 
-    1. Using a Wi-Fi router, such as at home 
-\t or work
-
-    2. Setting up a Wi-Fi hotspot from a device,
-\t such as a phone, tablet, or computer
-
-       \t\ta. One user creates a hotspot connection
-\t\t by going to their device’s settings.
-
-       \t\tb. The other user connects to that hotspot.
+1. Using a local network, such as the Wi-Fi at your home or work, or a public Wi-Fi network.
+2. Setting up a Hotspot and connecting both devices to it.
 </string>
-  <string name="tips_section_join">Joining the same network</string>
+  <string name="tips_section_join">Do I need Internet access?</string>
   <string name="tips_join_body">
-        Once the Wi-Fi network is set up, go to your
-devices’ settings and verify that you are both 
-on the same Wi-Fi network.
+No. The Wi-Fi network does not need to have internet access. As long as the Wi-Fi router or Hotspot is powered on and functioning, it can be used for Nearby Sharing even without being online.
     </string>
   <string name="tips_section_more">More tips</string>
-  <string name="tips_more_bullets">• The Wi-Fi network does not need to have
- \t internet access. As long as the Wi-Fi router
- \t or hotspot is powered on and functioning,
- \t it can be used for Nearby Sharing even
- \t without being online
+  <string name="tips_more_bullets">• Please disable any active VPN connections.
 
-• Make sure to disable any active VPN connections.</string>
+• Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="feedback_contact_info_hint">Contact information (optional)</string>
   <string name="file_already_exists">File already exists.</string>
   <string name="tella_foss">Tella FOSS</string>
@@ -1155,4 +1138,29 @@ on the same Wi-Fi network.
   <string name="feedback_metadata_release_line">App release: %1$s</string>
   <string name="Foss_Feature_Unavailable_Title">Feature unavailable</string>
   <string name="Foss_Feature_Unavailable_Description">This feature is not compatible with the Free and Open Source version of Tella you are using.</string>
+  <string name="back_to_home_action">Back to home</string>
+  <string name="dont_show_again">Don\'t show again</string>
+  <string name="nearby_sharing_connection_successful">Success! Connected to device</string>
+  <string name="nearby_sharing_results_title">Results</string>
+  <string name="nearby_sharing_sender_transfer_content_too_large">Transfer is too large. Remove some files or shrink file sizes and try again.</string>
+  <string name="nearbysharing_tips_to_connect_intro">There are 2 ways to connect your devices through Wi-Fi:</string>
+  <string name="nearbysharing_tips_to_connect_item_1">Using a local network, such as the Wi-Fi at your home or work, or a public Wi-Fi network.</string>
+  <string name="nearbysharing_tips_to_connect_item_2">Setting up a Hotspot and connecting both devices to it.</string>
+  <string name="no_file_selected">No file selected</string>
+  <string name="peer_to_peer_active_session_exists">A session is already active on the other device. Try again later.</string>
+  <string name="peer_to_peer_error_too_many_requests">Too many requests. Wait a moment and try again.</string>
+  <string name="peer_to_peer_invalid_pin">Invalid PIN.</string>
+  <string name="peer_to_peer_invalid_request_format">Invalid request format.</string>
+  <string name="peer_to_peer_missing_file_hash">Some files are missing a checksum and can\'t be sent. Try again later or re-add the files.</string>
+  <string name="peer_to_peer_prepare_invalid_data">Could not start the transfer. Check your files and try again.</string>
+  <string name="peer_to_peer_prepare_session_conflict">Another transfer may be active. Try again later.</string>
+  <string name="peer_to_peer_receiver_rejected_registration">The recipient rejected the connection.</string>
+  <string name="peer_to_peer_server_error_try_later">Server error. Try again later.</string>
+  <string name="peer_to_peer_upload_interrupted">The transfer could not be completed. Try again later.</string>
+  <string name="prepare_upload_question">Would you like to accept them?</string>
+  <string name="tips_more_item_1">Please disable any active VPN connections.</string>
+  <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
+  <string name="transfer_interrupted_title">Transfer interrupted</string>
+  <string name="wifi_confirmation_message">Both devices must be connected to the same Wi-Fi network, using local Wi-Fi or setting up a Hotspot connection.</string>
+  <string name="wifi_confirmation_title">Are you both on the same Wi-Fi network?</string>
 </resources>

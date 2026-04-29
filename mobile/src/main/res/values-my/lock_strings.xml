@@ -36,7 +36,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။ သင်၏စကားဝှက်များ မကိုက်ညီပါ။</string>
   <string name="LockSuccess_Message_AllDone">အားလုံး ပြီးပါပြီ။</string>
   <string name="LockSuccess_Message_Hint">သင့်လော့ခ်ရွေးချယ်မှုကို အမြဲတမ်းပြောင်းလဲနိုင်ပြီး ဆက်တင်များတွင် Tella ကို စိတ်ကြိုက်ပြင်ဆင်နိုင်သည်။</string>
-  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">စကားဝှက် မမှန်ပါ၊ ကျေးဇူးပြု၍ ထပ်မံစမ်းကြည့်ပါ</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>
