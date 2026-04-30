@@ -76,11 +76,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 layoutManager = gridLayoutManager
             }
             toolbar.backClickListener = {
-                if (isListCheckOn) {
-                    syncSelectionChromeLeavingSelectModeFully()
-                } else {
-                    handleBackStack()
-                }
+                handleBackStack()
             }
             gridCheck.setOnClickListener(this@AttachmentsActivitySelector)
             listCheck.setOnClickListener(this@AttachmentsActivitySelector)
@@ -91,6 +87,14 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
         bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
         updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+        // Nearby sharing and reports expect to start with active multi-select.
+        if (!isMultiplePicker) {
+            isListCheckOn = true
+            selectMode = SelectMode.ONE_SELECTION
+            attachmentsAdapter.enableSelectMode(true)
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+            updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
+        }
     }
 
     private fun initObservers() {
@@ -179,11 +183,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun updateAttachmentsToolbar(itemsSize: Int) {
-        if (isListCheckOn) {
-            binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_close_white_24dp)
-        } else {
-            binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        }
+        binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         if (itemsSize == 0) {
             val titleRes = if (isListCheckOn) {
                 R.string.Vault_Select_Title
@@ -403,10 +403,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     }
 
     private fun handleBackStack() {
-        if (isListCheckOn) {
-            syncSelectionChromeLeavingSelectModeFully()
-            return
-        }
         when {
             binding.breadcrumbsView.items.size > 1 -> {
                 if (binding.breadcrumbsView.items.size == 2) {

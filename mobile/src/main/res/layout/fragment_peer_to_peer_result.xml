@@ -49,43 +49,45 @@
         android:layout_marginTop="16dp"
         android:paddingHorizontal="@dimen/activity_horizontal_margin"
         tools:text="You have successfully sent 6 files to the recipient."
-        app:layout_constraintBottom_toTopOf="@+id/view_files_btn"
+        app:layout_constraintBottom_toTopOf="@+id/action_buttons_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tileTv" />
 
-    <org.hzontal.shared_ui.buttons.RoundButton
-        android:id="@+id/view_files_btn"
-        style="@style/Tella_Main_White_TextLargeBold"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/bg_round_orange_btn"
-        android:text="@string/view_files"
-        app:check_state="true"
-        app:default_background="@drawable/bg_round_orange_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTv"
-        app:text_color="@color/btn_dark_letter" />
-
-    <org.hzontal.shared_ui.buttons.RoundButton
-        android:id="@+id/back_to_home_btn"
+    <FrameLayout
+        android:id="@+id/action_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:background="@drawable/bg_information_button"
-        android:visibility="gone"
-        app:check_state="false"
-        app:default_background="@drawable/bg_information_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTv"
-        app:text="@string/back_to_home_action"
-        app:text_color="@color/wa_white" />
+        app:layout_constraintTop_toBottomOf="@+id/descriptionTv">
+
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/view_files_btn"
+            style="@style/Tella_Main_White_TextLargeBold"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/bg_round_orange_btn"
+            android:text="@string/view_files"
+            app:check_state="true"
+            app:default_background="@drawable/bg_round_orange_btn"
+            app:text_color="@color/btn_dark_letter" />
+
+        <org.hzontal.shared_ui.buttons.RoundButton
+            android:id="@+id/back_to_home_btn"
+            style="@style/Tella_Main_White_TextLargeBold"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/bg_information_button"
+            android:visibility="gone"
+            app:check_state="false"
+            app:default_background="@drawable/bg_information_button"
+            app:text="@string/back_to_home_action"
+            app:text_color="@color/wa_white" />
+
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

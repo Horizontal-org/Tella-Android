@@ -441,6 +441,9 @@ class AttachmentsFragment :
             }
 
             SelectMode.ONE_SELECTION -> {
+                if (isHomeAllFilesSelectionStyle()) {
+                    attachmentsAdapter.clearSelected()
+                }
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, baseActivity)
             }
 
@@ -452,6 +455,25 @@ class AttachmentsFragment :
     }
 
     private fun changeSelectMode() {
+        if (isHomeAllFilesSelectionStyle()) {
+            when (selectMode) {
+                SelectMode.DESELECT_ALL -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.ONE_SELECTION
+                }
+
+                SelectMode.ONE_SELECTION -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.SELECT_ALL
+                }
+
+                SelectMode.SELECT_ALL -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.ONE_SELECTION
+                }
+            }
+            return
+        }
         when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 isListCheckOn = true
@@ -1191,8 +1213,12 @@ class AttachmentsFragment :
 
         when {
             selectedFilesSize > 0 || (isListCheckOn) -> {
-                selectMode = SelectMode.SELECT_ALL
-                handleSelectMode()
+                if (isHomeAllFilesSelectionStyle()) {
+                    syncSelectionChromeLeavingSelectModeFully()
+                } else {
+                    selectMode = SelectMode.SELECT_ALL
+                    handleSelectMode()
+                }
             }
 
             breadcrumbsSize > 1 -> {
@@ -1294,6 +1320,10 @@ class AttachmentsFragment :
                 performFileSearch(isMultipleFiles, vaultFile)
             }
         }
+    }
+
+    private fun isHomeAllFilesSelectionStyle(): Boolean {
+        return filterType == FilterType.ALL
     }
 
     private fun showExportWithMetadataDialog(isMultipleFiles: Boolean, vaultFile: VaultFile?) {
