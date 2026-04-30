@@ -1,8 +1,25 @@
+# Build unsigned fdroidRelease APK and expose it as a workflow artifact only.
+# Typical flow: download artifact → sign locally (apksigner) → create Git tag
+# vFoss<versionName>(<versionCode>) → publish GitHub Release with asset
+# mobile-release-Foss-<versionCode>.apk. No release upload from CI.
+#
+# Use Temurin 21 to match fdroiddata metadata (openjdk-21-jdk-headless on Debian
+# Trixie buildserver) so Binaries: CHUNKED_SHA256 verification can match.
 name: Build F-Droid APK
 
 on:
   workflow_dispatch:
+    inputs:
+      verify_upstream_baseline:
+        description: >
+          After a release asset already exists, compare baseline.prof to a fresh
+          rebuild after the same postbuild steps as fdroiddata (not raw Gradle
+          output). Leave disabled for normal builds.
+        type: boolean
+        default: false
   push:
+    branches:
+      - main
     tags:
       - 'vFoss*'
 
@@ -14,21 +31,18 @@ jobs:
       TZ: UTC
       LC_ALL: C
 
-    env:
-      TZ: UTC
-      LC_ALL: C
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -38,8 +52,9 @@ jobs:
           yes | sdkmanager --licenses
           sdkmanager \
             "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;35.0.0"
+            "platforms;android-36" \
+            "build-tools;36.0.0" \
+            "ndk;28.0.12916984"
 
       - name: Checkout reproducible-apk-tools
         uses: actions/checkout@v4
@@ -49,12 +64,17 @@ jobs:
           path: reproducible-apk-tools
 
       - name: Make Gradle executable
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradlew ./scripts/fdroid-postprocess-apk.sh
+
+      - name: Set SOURCE_DATE_EPOCH from commit
+        run: |
+          echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
 
       - name: Disable Gradle caching and parallelism
         run: |
           echo "org.gradle.caching=false" >> gradle.properties
           echo "org.gradle.parallel=false" >> gradle.properties
+          echo "org.gradle.workers.max=1" >> gradle.properties
           echo "org.gradle.configureondemand=false" >> gradle.properties
 
       - name: Apply F-Droid prebuild changes
@@ -72,26 +92,75 @@ jobs:
       - name: Build APK
         run: ./gradlew :mobile:assembleFdroidRelease -Pfdroid --no-daemon
 
-      - name: Apply F-Droid postbuild fixes
+      - name: Export VERSION_NAME and VERSION_CODE
         run: |
-          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
-          test -n "$APK"
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
-          cp "$APK" mobile-release-Foss-229-unsigned.apk
+          VERSION_NAME=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' mobile/build.gradle | head -n 1)
+          VERSION_CODE=$(sed -n 's/.*versionCode \([0-9]\+\).*/\1/p' mobile/build.gradle | head -n 1)
+          test -n "$VERSION_NAME" && test -n "$VERSION_CODE"
+          echo "VERSION_NAME=$VERSION_NAME" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$VERSION_CODE" >> "$GITHUB_ENV"
+          echo "Using versionName=$VERSION_NAME versionCode=$VERSION_CODE"
 
-      - name: Apply F-Droid postbuild fixes
+      - name: Apply F-Droid postbuild fixes (match fdroiddata recipe)
         run: |
-          APK=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
-          test -n "$APK"
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 sort-baseline "$APK" --apk
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-pg-map-id "$APK" '381d455'
-          python3 reproducible-apk-tools/inplace-fix.py --page-size 16 fix-newlines "$APK" --from-crlf 'META-INF/services/*'
-          cp "$APK" mobile-release-Foss-229-unsigned.apk
+          ./scripts/fdroid-postprocess-apk.sh --copy-artifact \
+            "mobile-release-Foss-${VERSION_CODE}-unsigned.apk"
 
-      - name: Upload artifact
+      - name: Upload unsigned APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: tella-fdroid-apk-unsigned
-          path: mobile-release-Foss-229-unsigned.apk
+          name: tella-fdroid-${{ env.VERSION_CODE }}-unsigned
+          path: mobile-release-Foss-${{ env.VERSION_CODE }}-unsigned.apk
+
+      - name: Job summary
+        run: |
+          {
+            echo "## F-Droid APK (unsigned, artifact only)"
+            echo ""
+            echo "Built with **Temurin 21** (same major JDK as F-Droid \`fdroid build\` / Debian Trixie)."
+            echo ""
+            echo "1. Download artifact **tella-fdroid-${VERSION_CODE}-unsigned**."
+            echo "2. Sign on your machine, e.g. output file **mobile-release-Foss-${VERSION_CODE}.apk**."
+            echo "3. Create git tag **vFoss${VERSION_NAME}(${VERSION_CODE})** on the commit you are releasing."
+            echo "4. Create the GitHub **Release** for that tag and attach **mobile-release-Foss-${VERSION_CODE}.apk** so \`Binaries:\` in fdroiddata matches."
+            echo "   Expected pattern: \`.../releases/download/vFoss${VERSION_NAME}(${VERSION_CODE})/mobile-release-Foss-${VERSION_CODE}.apk\`"
+            echo ""
+            echo "CI does **not** publish to Releases (no tag/release required for the build to succeed)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify baseline profile reproducibility (optional)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.verify_upstream_baseline == true }}
+        run: |
+          VERSION_NAME="${VERSION_NAME:?}"
+          VERSION_CODE="${VERSION_CODE:?}"
+          URL="https://github.com/${{ github.repository }}/releases/download/vFoss${VERSION_NAME}(${VERSION_CODE})/mobile-release-Foss-${VERSION_CODE}.apk"
+          echo "Upstream URL: $URL"
+
+          mkdir -p upstream
+          pushd upstream
+          if ! curl -Lsf -o upstream.apk "$URL"; then
+            echo "::error::Could not download upstream APK. Publish release asset mobile-release-Foss-${VERSION_CODE}.apk on the matching tag, then re-run with verify_upstream_baseline enabled."
+            exit 22
+          fi
+          unzip -q upstream.apk
+          UPSTREAM_HASH=$(sha256sum assets/dexopt/baseline.prof | cut -d ' ' -f1)
+          popd
+          echo "Upstream baseline.prof sha256: $UPSTREAM_HASH"
+
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            ./gradlew :mobile:clean :mobile:assembleFdroidRelease -Pfdroid --no-daemon
+            ./scripts/fdroid-postprocess-apk.sh
+            rm -rf local
+            mkdir -p local
+            OUT=$(find mobile/build/outputs/apk/fdroid/release -maxdepth 1 -type f -name "mobile-fdroid-release-unsigned.apk" | head -n 1)
+            test -n "$OUT"
+            unzip -q -d local "$OUT"
+            LOCAL_HASH=$(sha256sum local/assets/dexopt/baseline.prof | cut -d ' ' -f1)
+            echo "Local baseline.prof sha256 (attempt $i): $LOCAL_HASH"
+            if [ "$LOCAL_HASH" = "$UPSTREAM_HASH" ]; then
+              echo "Baseline profile hash matched on attempt $i"
+              break
+            fi
+            rm -rf local
+          done
+          test "$LOCAL_HASH" = "$UPSTREAM_HASH"
