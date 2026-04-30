@@ -5,6 +5,38 @@
 -dontwarn org.kxml2.io.KXmlParser,org.kxml2.io.KXmlSerializer
 # ========== END MISSING CLASSES ==========
 
+# ========== Netty/Ktor on Android - JVM-only classes not present on Android ==========
+# R8 shrinks Netty channel classes; ReflectiveChannelFactory needs public no-arg ctors (NioServerSocketChannel)
+-keep class io.netty.** { *; }
+# Netty tcnative (OpenSSL native bindings - Android uses Conscrypt/JDK SSL)
+-dontwarn io.netty.internal.tcnative.**
+# java.lang.management (not on Android - used by Ktor debug detector)
+-dontwarn java.lang.management.**
+# Log4j2 (optional Netty logging backend)
+-dontwarn org.apache.logging.log4j.**
+# Jetty NPN (deprecated ALPN predecessor, not on Android)
+-dontwarn org.eclipse.jetty.npn.**
+# Reactor BlockHound (reactive blocking detection, not on Android)
+-dontwarn reactor.blockhound.**
+# Optional Netty codec / platform deps (referenced from netty-codec but not bundled; Ktor HTTPS does not need them)
+-dontwarn com.aayushatharva.brotli4j.**
+-dontwarn com.github.luben.zstd.**
+-dontwarn com.jcraft.jzlib.**
+-dontwarn com.ning.compress.**
+-dontwarn com.oracle.svm.core.**
+-dontwarn lzma.sdk.**
+-dontwarn net.jpountz.**
+-dontwarn org.jboss.marshalling.**
+# OpenJDK-only cert APIs (Netty OpenJdkSelfSignedCertGenerator); Android uses Conscrypt / app-provided certs
+-dontwarn sun.security.x509.**
+# Netty 4.2+ optional pkitesting / CertificateBuilder (SelfSignedCertificate path, not on Android)
+-dontwarn io.netty.pkitesting.**
+# JFR (jdk.jfr.*) — not part of the Android Java API; optional Netty tracing hooks
+-dontwarn jdk.jfr.**
+# OSGi bundle metadata annotations (JCTools / shaded deps) — not used on Android
+-dontwarn org.osgi.annotation.**
+# ========== END Netty/Ktor ==========
+
 # Keep the interfaces + concrete impls
 -keep class org.xmlpull.v1.XmlPullParser { *; }
 -keep class org.xmlpull.v1.XmlSerializer { *; }
@@ -170,6 +202,11 @@
 # Hilt
 -keep class * extends java.lang.annotation.Annotation { *; }
 -keep @javax.inject.Inject class * { *; }
+# AndroidEntryPoint: keep generated Hilt_* bases (R8 minify — avoids Missing class Hilt_*)
+-keep class org.horizontal.tella.mobile.**.Hilt_* { *; }
+-keep interface org.horizontal.tella.mobile.**.*_GeneratedInjector { *; }
+# Explicit: flavor-only fragments must not be stripped before Hilt aggregating task sees them
+-keep class org.horizontal.tella.mobile.views.dialog.Hilt_CollectServerDialogFragment { *; }
 
 # Keep Gson adapters and creators
 -keep class * extends com.google.gson.TypeAdapter { *; }
@@ -423,3 +460,7 @@
 -keep class com.hzontal.tella_vault.Vault { *; }
 -keep class org.horizontal.tella.mobile.data.KeyRxVault { *; }
 # ========== END SIMPLE XML RULES ==========
+
+
+-keep class org.bouncycastle.** { *; }
+-dontwarn org.bouncycastle.**

@@ -117,6 +117,7 @@ public class MediaFileHandler {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.setType(type);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         
         if (extraMimeType != null) {
             intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
@@ -416,6 +417,17 @@ public class MediaFileHandler {
     }
 
     public static Single<VaultFile> saveJpegPhoto(@NonNull byte[] jpegPhoto, @Nullable String parent) throws Exception {
+        return saveJpegPhoto(jpegPhoto, parent, null);
+    }
+
+    /**
+     * @param vaultFileName when non-null and non-blank (e.g. P2P receive), stored under this vault name instead of a random id-based name
+     */
+    public static Single<VaultFile> saveJpegPhoto(
+            @NonNull byte[] jpegPhoto,
+            @Nullable String parent,
+            @Nullable String vaultFileName
+    ) throws Exception {
         // create thumb
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inSampleSize = 8;
@@ -438,16 +450,20 @@ public class MediaFileHandler {
         input.reset();
 
         String uid = UUID.randomUUID().toString();
+        boolean useSenderName = !TextUtils.isEmpty(vaultFileName);
+        String name = useSenderName ? vaultFileName.trim() : uid + ".jpg";
         RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
         RxVaultFileBuilder rxVaultFileBuilder = rxVault
                 .builder(input)
                 .setMimeType("image/jpeg")
-                .setName(uid + ".jpg")
-                .setAnonymous(true)
+                .setName(name)
+                .setAnonymous(!useSenderName)
                 .setType(VaultFile.Type.FILE)
-                .setId(uid)
                 .setThumb(getThumbByteArray(thumb));
+        if (!useSenderName) {
+            rxVaultFileBuilder.setId(uid);
+        }
 
         // Ensure the Bitmap object is recycled to free up memory
         thumb.recycle();
@@ -467,6 +483,18 @@ public class MediaFileHandler {
 
 
     public static VaultFile savePngImage(@NonNull byte[] pngImage) {
+        return savePngImage(pngImage, null, null);
+    }
+
+    /**
+     * @param parent          when non-null, file is created under this folder; when null, behavior matches legacy {@link #savePngImage(byte[])} (vault root)
+     * @param vaultFileName   when non-null and non-blank, stored under this vault name instead of a random id-based name
+     */
+    public static VaultFile savePngImage(
+            @NonNull byte[] pngImage,
+            @Nullable String parent,
+            @Nullable String vaultFileName
+    ) {
         // create thumb
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -478,17 +506,26 @@ public class MediaFileHandler {
         // encode png
         InputStream input = new ByteArrayInputStream(pngImage);
         String uid = UUID.randomUUID().toString();
+        boolean useSenderName = !TextUtils.isEmpty(vaultFileName);
+        String name = useSenderName ? vaultFileName.trim() : uid + ".png";
         RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
-        return rxVault
+        RxVaultFileBuilder b = rxVault
                 .builder(input)
-                .setId(uid)
                 .setMimeType("image/png")
-                .setName(uid + ".png")
-                .setAnonymous(true)
+                .setName(name)
+                .setAnonymous(!useSenderName)
                 .setType(VaultFile.Type.FILE)
-                .setThumb(getThumbByteArray(thumb))
-                .build()
+                .setThumb(getThumbByteArray(thumb));
+        if (!useSenderName) {
+            b.setId(uid);
+        }
+        if (parent == null) {
+            return b.build()
+                    .subscribeOn(Schedulers.io())
+                    .blockingGet();
+        }
+        return b.build(parent)
                 .subscribeOn(Schedulers.io())
                 .blockingGet();
     }
@@ -558,6 +595,7 @@ public class MediaFileHandler {
             InputStream is = context.getContentResolver().openInputStream(uri);
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
+            assert DocumentFile.fromSingleUri(context, uri) != null;
             return rxVault
                     .builder(is)
                     .setMimeType(mimeType)
@@ -575,6 +613,27 @@ public class MediaFileHandler {
 
     @WorkerThread
     public static VaultFile saveMp4Video(File video, String parent) throws IOException {
+        return saveMp4Video(video, parent, true);
+    }
+
+    /**
+     * @param deleteSourceAfterImport false for P2P receive temps (caller deletes after vault import).
+     */
+    @WorkerThread
+    public static VaultFile saveMp4Video(File video, String parent, boolean deleteSourceAfterImport) throws IOException {
+        return saveMp4Video(video, parent, deleteSourceAfterImport, null);
+    }
+
+    /**
+     * @param vaultFileName when non-null and non-blank (e.g. P2P receive), stored under this vault name instead of a random id-based name
+     */
+    @WorkerThread
+    public static VaultFile saveMp4Video(
+            File video,
+            String parent,
+            boolean deleteSourceAfterImport,
+            @Nullable String vaultFileName
+    ) throws IOException {
         FileInputStream vis = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
@@ -582,24 +641,34 @@ public class MediaFileHandler {
             vis = new FileInputStream(video);
             retriever.setDataSource(vis.getFD());
 
-            // duration
             String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            long durationMs = 0L;
+            if (time != null && !time.isEmpty()) {
+                try {
+                    durationMs = Long.parseLong(time);
+                } catch (NumberFormatException e) {
+                    Timber.w("saveMp4Video: invalid duration, using 0");
+                }
+            }
 
-            // thumbnail
             byte[] thumb = getThumbByteArray(retriever.getFrameAtTime());
 
             String uid = UUID.randomUUID().toString();
+            boolean useSenderName = !TextUtils.isEmpty(vaultFileName);
+            String name = useSenderName ? vaultFileName.trim() : uid + ".mp4";
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
 
             RxVaultFileBuilder rxVaultFileBuilder = rxVault
                     .builder(new FileInputStream(video))
                     .setAnonymous(false)
-                    .setId(uid)
-                    .setDuration(Long.parseLong(time))
+                    .setDuration(durationMs)
                     .setType(VaultFile.Type.FILE)
-                    .setName(uid + ".mp4")
+                    .setName(name)
                     .setMimeType("video/mp4")
                     .setThumb(thumb);
+            if (!useSenderName) {
+                rxVaultFileBuilder.setId(uid);
+            }
 
             if (parent == null) {
                 return rxVaultFileBuilder
@@ -615,9 +684,15 @@ public class MediaFileHandler {
             Timber.e(e, MediaFileHandler.class.getName());
 
             throw e;
+        } catch (RuntimeException e) {
+            CrashReporterProvider.INSTANCE.get().recordException(e);
+            Timber.e(e, MediaFileHandler.class.getName());
+            throw new IOException("Video import failed", e);
         } finally {
             FileUtil.close(vis);
-            FileUtil.delete(video);
+            if (deleteSourceAfterImport) {
+                FileUtil.delete(video);
+            }
             try {
                 retriever.release();
             } catch (Exception ignore) {

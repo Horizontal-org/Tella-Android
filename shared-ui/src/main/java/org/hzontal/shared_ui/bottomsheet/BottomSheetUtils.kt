@@ -1,5 +1,6 @@
 package org.hzontal.shared_ui.bottomsheet
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -78,6 +79,8 @@ object BottomSheetUtils {
 
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    cancelButton.visibility =
+                        if (cancelButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
                 }
             }
@@ -354,7 +357,7 @@ object BottomSheetUtils {
                     setupButton(buttonFourDeactivated, buttonFourLabel)
                     setupButton(buttonFiveDeactivated, buttonFiveLabel)
                     setupButton(buttonSixDeactivated, buttonSixLabel)
-                    unavailableConnexionText.text = unavailableConnexionLabel;
+                    unavailableConnexionText.text = unavailableConnexionLabel
                     unavailableConnexionTextDesc.text = unavailableConnexionDesc
 
                     // Set button click listeners using a helper method
@@ -698,6 +701,7 @@ object BottomSheetUtils {
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
                 .cancellable(true).statusBarColor(R.color.space_cadet)
         customSheetFragment.holder(DownloadStatustHolder(), object : Binder<DownloadStatustHolder> {
+            @SuppressLint("SetTextI18n")
             override fun onBind(holder: DownloadStatustHolder) {
                 with(holder) {
                     progressStatus.observe(lifecycleOwner) { status ->
@@ -723,7 +727,6 @@ object BottomSheetUtils {
         customSheetFragment.transparentBackground()
         customSheetFragment.launch()
     }
-
 
     class ConfirmImageSheetHolder : PageHolder() {
         lateinit var actionButton: TextView

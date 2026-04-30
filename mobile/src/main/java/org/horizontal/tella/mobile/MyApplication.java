@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.hilt.work.HiltWorkerFactory;
 import androidx.lifecycle.ProcessLifecycleOwner;
+import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 import androidx.work.Configuration;
 
@@ -33,9 +34,9 @@ import com.hzontal.tella_locking_ui.ui.pattern.PatternUnlockActivity;
 import com.hzontal.tella_locking_ui.ui.pin.PinUnlockActivity;
 import com.hzontal.tella_vault.Vault;
 import com.owncloud.android.lib.common.utils.Log_OC;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import org.horizontal.tella.mobile.data.KeyRxVault;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.hzontal.shared_ui.data.CommonPrefs;
 
 import org.conscrypt.Conscrypt;
@@ -51,7 +52,6 @@ import org.hzontal.tella.keys.wrapper.PBEKeyWrapper;
 import org.hzontal.tella.keys.wrapper.UnencryptedKeyWrapper;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.Arrays;
@@ -103,7 +103,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     Vault.Config vaultConfig;
     private static final String TAG = MyApplication.class.getSimpleName();
     public static final String DOT = ".";
-    private static WeakReference<Context> appContext;
     private long startTime;
     private long totalTimeSpent = 0; // Store total time spent in the app
     private int activityReferences = 0;
@@ -169,6 +168,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        MultiDex.install(this);
         CommonPrefs.getInstance().init(newBase);
         SharedPrefs.getInstance().init(newBase);
         super.attachBaseContext(LocaleManager.getInstance().getLocalizedContext(newBase));
@@ -187,6 +187,11 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
             ///        .detectAll().penaltyLog()/*.penaltyDeath()*/.build()); // todo: catch those..
             Timber.plant(new Timber.DebugTree());
             apiBuilder.setLogLevelFull();
+            // Verbose TLS tracing: debug builds only (CVE-2025-TELLA3-003).
+            System.setProperty("javax.net.debug", "ssl,handshake");
+        } else {
+            // Ensure JVM TLS debug is not left on from tooling or inherited state.
+            System.clearProperty("javax.net.debug");
         }
         // todo: implement dagger2
         CommonPrefs.getInstance().init(this);
@@ -195,9 +200,6 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         System.loadLibrary("sqlcipher");
 
         registerActivityLifecycleCallbacks(this);
-
-        System.setProperty("javax.net.debug", "ssl,handshake");
-
 
         RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
             @Override
@@ -232,6 +234,7 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         TellaKeysUI.initialize(mainKeyStore, mainKeyHolder, unlockRegistry, this, Preferences.getFailedUnlockOption(), Preferences.getUnlockRemainingAttempts(), Preferences.isShowUnlockRemainingAttempts());
         insertConscrypt();
         enableStrictMode();
+        setupBouncyCastleProvider();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -350,7 +353,12 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
     @NonNull
     @Override
     public Configuration getWorkManagerConfiguration() {
-        return new Configuration.Builder().setMinimumLoggingLevel(android.util.Log.DEBUG).setWorkerFactory(workerFactory).build();
+        // CVE-2025-TELLA3-003: avoid verbose WorkManager logs in production (was Log.DEBUG for all builds).
+        int minLogLevel = BuildConfig.DEBUG ? android.util.Log.DEBUG : android.util.Log.ERROR;
+        return new Configuration.Builder()
+                .setMinimumLoggingLevel(minLogLevel)
+                .setWorkerFactory(workerFactory)
+                .build();
     }
 
     @Override
@@ -404,15 +412,17 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
         try {
             Conscrypt.Version version = Conscrypt.version();
-            Log_OC.i(TAG, "Using Conscrypt/"
-                    + version.major()
-                    + DOT
-                    + version.minor()
-                    + DOT + version.patch()
-                    + " for TLS");
-            SSLEngine engine = SSLContext.getDefault().createSSLEngine();
-            Log_OC.i(TAG, "Enabled protocols: " + Arrays.toString(engine.getEnabledProtocols()) + " }");
-            Log_OC.i(TAG, "Enabled ciphers: " + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+            if (BuildConfig.DEBUG) {
+                Log_OC.i(TAG, "Using Conscrypt/"
+                        + version.major()
+                        + DOT
+                        + version.minor()
+                        + DOT + version.patch()
+                        + " for TLS");
+                SSLEngine engine = SSLContext.getDefault().createSSLEngine();
+                Log_OC.i(TAG, "Enabled protocols: " + Arrays.toString(engine.getEnabledProtocols()) + " }");
+                Log_OC.i(TAG, "Enabled ciphers: " + Arrays.toString(engine.getEnabledCipherSuites()) + " }");
+            }
         } catch (NoSuchAlgorithmException e) {
             Log_OC.e(TAG, e.getMessage());
         }
@@ -436,5 +446,16 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
         }
     }
 
+
+    private void setupBouncyCastleProvider() {
+        try {
+            if (Security.getProvider("BC") == null) {
+                Security.addProvider(new BouncyCastleProvider());
+                Timber.i("BouncyCastle provider registered");
+            }
+        } catch (Exception e) {
+            Timber.e(e, "Failed to register BouncyCastle provider");
+        }
+    }
 
 }

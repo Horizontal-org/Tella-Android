@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    // Must match root build.gradle ext.versions.kotlin — Gradle plugin portal requires an explicit version here
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.2.0'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
 }
@@ -24,6 +26,10 @@ configurations.all {
         force "com.android.tools:desugar_jdk_libs:2.1.3"
         force "com.google.android.gms:play-services-base:$versions.playServicesBase"
         force "com.google.android.gms:play-services-basement:$versions.playServicesBase"
+        // Ktor (root versions.ktor) targets coroutines 1.7.x; 1.9+ drops internal APIs → NoSuchMethodError (LockFreeLinkedListHead.addLast)
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+        force "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3"
     }
 }
 
@@ -50,7 +56,10 @@ android {
             // Make sure SimpleXML configuration files are included
             pickFirsts += [
                     "META-INF/services/org.simpleframework.xml.*",
-                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+                    "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                    // Netty (transitive): identical metadata in every module JAR
+                    "META-INF/io.netty.versions.properties",
+                    "META-INF/INDEX.LIST",
             ]
         }
     }
@@ -60,9 +69,8 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         // F-Droid fastlane changelog: fastlane/metadata/android/en-US/changelogs/<versionCode>.txt
-        versionCode 233
-
-        versionName "2.20.2"
+        versionCode 235
+        versionName "3.0.0"
         multiDexEnabled true
 
         ndk { abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" }
@@ -322,8 +330,8 @@ dependencies {
     playstoreImplementation "com.dropbox.core:dropbox-core-sdk:$versions.dropboxVersion"
     playstoreImplementation "com.dropbox.core:dropbox-android-sdk:$versions.dropboxVersion"
     implementation 'commons-httpclient:commons-httpclient:3.1'
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
 
     implementation 'commons-codec:commons-codec:1.15'
@@ -336,6 +344,20 @@ dependencies {
     // Nextcloud HW security
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido:$versions.fidoVersion"
     implementation "com.github.nextcloud-deps.hwsecurity:hwsecurity-fido2:$versions.fidoVersion"
+
+    //QR CODE SCAN/GENERATE LIBRARY
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    // ktor: Netty required for HTTPS (CIO engine has no TLS in 2.3.x). Keep io.netty in proguard-rules.pro.
+    implementation("io.ktor:ktor-serialization-kotlinx-json:${versions.ktor}")
+    implementation("io.ktor:ktor-server-core:${versions.ktor}")
+    implementation("io.ktor:ktor-server-netty:${versions.ktor}")
+    implementation("io.ktor:ktor-server-content-negotiation:${versions.ktor}")
+    implementation "io.ktor:ktor-server-call-logging:${versions.ktor}"
+
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3' // Use the latest version
+
 
     // Add exclusions to prevent other libraries from pulling in xmlpull
     // JavaRosa - allow it to use xpp3

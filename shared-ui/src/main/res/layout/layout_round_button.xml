@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:gravity="center"
+        android:textFontWeight="700"
         tools:text=",e,f eazfazef"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,6 +21,7 @@
         android:textColor="@color/wa_white"
         android:fontFamily="@font/open_sans"
         android:textSize="18sp"
+        android:textAllCaps="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

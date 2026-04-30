@@ -85,6 +85,28 @@ public class VaultDataSource implements IVaultDatabase {
     }
 
     /**
+     * Closes the vault {@link SQLiteDatabase} and releases the {@link VaultSQLiteOpenHelper} singleton
+     * so a later {@link #getInstance} can run with new key material. Call from the same place you
+     * clear the main key (e.g. app lock), before unlock supplies a new key.
+     */
+    public static synchronized void releaseForLock() {
+        if (dataSource != null) {
+            try {
+                if (dataSource.database != null && dataSource.database.isOpen()) {
+                    dataSource.database.close();
+                }
+            } catch (Exception e) {
+                Timber.w(e, "Error closing vault database on lock");
+            } finally {
+                dataSource.database = null;
+                dataSource = null;
+                gson = null;
+            }
+        }
+        VaultSQLiteOpenHelper.closeAndReleaseInstance();
+    }
+
+    /**
      * Retrieves the root vault file.
      *
      * @return The root VaultFile object.

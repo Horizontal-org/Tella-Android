@@ -69,7 +69,8 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
                     thumb = null
                 )
                 _addingInProgress.postValue(true)
-                MyApplication.bus().post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
+                MyApplication.bus()
+                    .post(RecentBackgroundActivitiesEvent(mutableListOf(backgroundVideoFile)))
             }
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { _addingInProgress.postValue(false) }
@@ -81,7 +82,6 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
             })
         )
     }
-
 
     fun addMp4Video(file: File, parent: String?) {
         disposables.add(Observable.fromCallable { MediaFileHandler.saveMp4Video(file, parent) }
@@ -145,11 +145,13 @@ class SharedCameraViewModel @Inject constructor() : ViewModel() {
         disposables.add(
             MediaFileHandler.getLastVaultFileFromDb().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ vaultFiles ->   if (!vaultFiles.isNullOrEmpty()) {
-                    _lastMediaFileSuccess.postValue(vaultFiles[0])
-                } else {
-                    _lastMediaFileError.postValue(Throwable("No media files found"))
-                } },
+                .subscribe({ vaultFiles ->
+                    if (!vaultFiles.isNullOrEmpty()) {
+                        _lastMediaFileSuccess.postValue(vaultFiles[0])
+                    } else {
+                        _lastMediaFileError.postValue(Throwable("No media files found"))
+                    }
+                },
                     { throwable -> _lastMediaFileError.postValue(throwable) })
         )
     }

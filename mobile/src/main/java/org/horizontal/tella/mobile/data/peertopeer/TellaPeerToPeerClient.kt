@@ -1,0 +1,432 @@
+package org.horizontal.tella.mobile.data.peertopeer
+
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.os.Build
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import okhttp3.ConnectionSpec
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.TlsVersion
+import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
+import org.horizontal.tella.mobile.data.peertopeer.network.ProgressRequestBody
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
+import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
+import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
+import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
+import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
+import org.json.JSONObject
+import timber.log.Timber
+import java.io.InputStream
+import java.security.SecureRandom
+import java.util.UUID
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.net.ssl.SSLContext
+
+class TellaPeerToPeerClient @Inject constructor(
+    @ApplicationContext private val appContext: Context
+) {
+    suspend fun registerPeerDevice(
+        ip: String,
+        port: String,
+        expectedFingerprint: String,
+        pin: String,
+        nonce: String,
+    ): RegisterPeerResult = withContext(Dispatchers.IO) {
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.REGISTER)
+        Timber.d("Connecting to: $url")
+
+        val payload = PeerRegisterPayload(
+            pin = pin.trim(),
+            nonce = nonce,
+        )
+
+        val jsonPayload = Json.encodeToString(payload)
+        val requestBody = jsonPayload.toRequestBody()
+        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+            // Encourage short-lived TLS sessions to avoid half-closed sockets across platforms.
+            .addHeader("Connection", "close")
+            .build()
+
+        return@withContext try {
+            client.newCall(request).execute().use { response ->
+                val body = response.body.string()
+
+                if (response.isSuccessful) {
+                    when (val parsed = parseSessionIdFromResponse(body)) {
+                        is RegisterPeerResult.Success -> parsed
+                        is RegisterPeerResult.Failure -> parsed
+                        else -> RegisterPeerResult.Failure(Exception("Unexpected success response shape"))
+                    }
+                } else {
+                    when (response.code) {
+                        400 -> RegisterPeerResult.InvalidFormat
+                        401 -> RegisterPeerResult.InvalidPin
+                        403 -> RegisterPeerResult.RejectedByReceiver
+                        409 -> RegisterPeerResult.Conflict
+                        429 -> RegisterPeerResult.TooManyRequests
+                        500 -> RegisterPeerResult.ServerError
+                        else -> RegisterPeerResult.Failure(Exception("Unhandled error ${response.code}: $body"))
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            RegisterPeerResult.Failure(e)
+        }
+    }
+
+    suspend fun prepareUpload(
+        ip: String,
+        port: String,
+        expectedFingerprint: String, // leaf cert DER SHA-256 hex (see CertificateUtils.getLeafCertificateDerSha256Hex)
+        title: String,
+        /** Plaintext file metadata: [P2PFile.sha256] and [P2PFile.size] must match the PUT body bytes. */
+        files: List<P2PFile>,
+        sessionId: String
+    ): PrepareUploadResult = withContext(Dispatchers.IO) {
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PREPARE_UPLOAD)
+
+        val requestPayload = PrepareUploadRequest(
+            title = title,
+            sessionId = sessionId,
+            nonce = UUID.randomUUID().toString(),
+            files = files,
+        )
+        val jsonPayload = Json.encodeToString(requestPayload)
+        val requestBody = jsonPayload.toRequestBody()
+        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+
+        try {
+            val request = Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+                .addHeader("Connection", "close")
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                val responseBody = response.body.string()
+                Timber.d("prepareUpload: code=%d body=%s", response.code, responseBody.take(600))
+                if (response.isSuccessful) {
+                    parseTransmissionId(responseBody)
+                } else {
+                    Timber.e("Server error ${response.code}: ${response.message}")
+                    handleServerError(response.code, responseBody)
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Exception during prepareUpload")
+            PrepareUploadResult.Failure(e)
+        }
+    }
+
+    suspend fun uploadFileWithProgress(
+        ip: String,
+        port: String,
+        expectedFingerprint: String, // leaf cert DER SHA-256 hex (see CertificateUtils.getLeafCertificateDerSha256Hex)
+        sessionId: String,
+        fileId: String,
+        transmissionId: String,
+        inputStream: InputStream,
+        fileSize: Long,
+        fileName: String,
+        onProgress: (bytesWritten: Long, totalBytes: Long) -> Unit
+    ): PeerUploadOutcome = withContext(Dispatchers.IO) {
+        Timber.d("session id from the client = %s", sessionId)
+        val uploadNonce = UUID.randomUUID().toString()
+        val url = PeerApiRoutes.buildUploadUrl(
+            ip, port, sessionId, fileId, transmissionId, uploadNonce
+        )
+
+        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+        val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
+
+        val request = Request.Builder()
+            .url(url)
+            .put(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_OCTET)
+            .addHeader("Connection", "close")
+            .build()
+
+        return@withContext try {
+            client.newCall(request).execute().use { response ->
+                val code = response.code
+                val outcome = when (code) {
+                    429 -> {
+                        PeerUploadOutcome.TooManyRequests
+                    }
+
+                    409 -> {
+                        PeerUploadOutcome.Failed
+                    }
+
+                    413 -> {
+                        PeerUploadOutcome.PayloadTooLarge
+                    }
+
+                    406 -> {
+                        PeerUploadOutcome.Failed
+                    }
+
+                    else -> if (response.isSuccessful) {
+                        PeerUploadOutcome.Success
+                    } else {
+                        PeerUploadOutcome.Failed
+                    }
+                }
+                outcome
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Exception while uploading %s", fileId)
+            PeerUploadOutcome.Failed
+        }
+    }
+
+    suspend fun closeConnection(
+        ip: String,
+        port: String,
+        expectedFingerprint: String,
+        sessionId: String
+    ): Boolean = withContext(Dispatchers.IO) {
+        val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.CLOSE)
+
+        val payload = Json.encodeToString(mapOf("sessionId" to sessionId))
+        val requestBody = payload.toRequestBody()
+        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+
+        val request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .addHeader(CONTENT_TYPE, CONTENT_TYPE_JSON)
+            .addHeader("Connection", "close")
+            .build()
+
+        return@withContext try {
+            client.newCall(request)
+
+                .execute().use { response ->
+                    if (response.code == 429) {
+                        Timber.w("closeConnection: rate limited (429)")
+                    }
+                    Timber.d("closeConnection: code=%d", response.code)
+                    response.isSuccessful
+                }
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to close connection")
+            false
+        }
+    }
+
+    // ---------------- Internals ----------------
+
+    private fun parseSessionIdFromResponse(body: String): RegisterPeerResult {
+        return try {
+            val json = JSONObject(body)
+
+            // Optional: some servers send { success: true/false }
+            val successFlag = json.optBoolean("success", true)
+
+            // Required: non-empty sessionId
+            val sessionId = json.optString("sessionId", "").trim()
+
+            when {
+                !successFlag -> {
+                    val msg =
+                        json.optString("message", json.optString("error", "Registration rejected"))
+                    RegisterPeerResult.Failure(Exception(msg))
+                }
+
+                sessionId.isEmpty() -> {
+                    RegisterPeerResult.Failure(Exception("Missing or empty sessionId"))
+                }
+
+                else -> RegisterPeerResult.Success(sessionId)
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Malformed JSON response: %s", body)
+            RegisterPeerResult.Failure(Exception("Malformed JSON: ${e.message}"))
+        }
+    }
+
+    private fun parseTransmissionId(body: String): PrepareUploadResult =
+        try {
+            val response = Json.decodeFromString<PeerPrepareUploadResponse>(body)
+            PrepareUploadResult.Success(response.files)
+        } catch (e: Exception) {
+            Timber.e(e, "Invalid JSON response: %s", body)
+            PrepareUploadResult.Failure(Exception("Malformed server response"))
+        }
+
+    private fun handleServerError(code: Int, body: String): PrepareUploadResult =
+        when (code) {
+            400 -> PrepareUploadResult.BadRequest
+            403 -> PrepareUploadResult.Forbidden
+            409 -> PrepareUploadResult.Conflict
+            413 -> PrepareUploadResult.PayloadTooLarge
+            429 -> PrepareUploadResult.TooManyRequests
+            500 -> PrepareUploadResult.ServerError
+            else -> PrepareUploadResult.Failure(Exception("Unhandled server error $code: $body"))
+        }
+
+    /**
+     * OkHttp client that:
+     *  - Pins the server by leaf certificate DER SHA-256 hex (CertificateUtils.getLeafCertificateDerSha256Hex).
+     *  - Optionally binds sockets to a Wi-Fi Network if one is active/validated.
+     *  - Keeps default hostname verification (IP SAN must match when using IP literals).
+     *  - TLS: OkHttp is configured with [TlsVersion.TLS_1_3] first, then [TlsVersion.TLS_1_2] (prefers 1.3 on both peers when
+     *    the stack supports it; e.g. TLS 1.3 is available from Android 10 / API 29 onward). A strict 1.3-only client was
+     *    considered for parity with iOS defaults, but would block Nearby Sharing on minSdk 21 devices where 1.3 is
+     *    unavailable—so we keep 1.2+1.3, matching the product call on the cross-platform thread (Feb 18 discussion).
+     */
+    private fun getClientWithFingerprintValidation(
+        ip: String,
+        expectedFingerprintHex: String
+    ): OkHttpClient {
+        val expected = normalizeHex(expectedFingerprintHex)
+
+        val trustManager = CertificateUtils.getLeafCertPinnedTrustManager(expected)
+
+        val sslContext = SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf(trustManager), SecureRandom())
+        }
+
+        val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+            .allEnabledCipherSuites()
+            .build()
+
+        val builder = OkHttpClient.Builder()
+            .sslSocketFactory(sslContext.socketFactory, trustManager)
+            .connectionSpecs(listOf(tlsSpec))
+            .protocols(listOf(Protocol.HTTP_1_1))
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .writeTimeout(20, TimeUnit.SECONDS)
+
+        // For LAN / hotspot peers, binding to an arbitrary "Wi‑Fi" Network can pick the wrong interface
+        // (e.g. secondary saved Wi‑Fi) and yield EHOSTUNREACH while the default network routes correctly.
+        if (!isPrivateOrLinkLocalIpv4(ip)) {
+            pickWifiNetwork(appContext)?.let { network ->
+                builder.socketFactory(network.socketFactory)
+            }
+        }
+
+        return builder.build()
+    }
+
+    /** True for RFC1918 / link-local so we let the OS choose the socket's outgoing interface. */
+    private fun isPrivateOrLinkLocalIpv4(ip: String): Boolean {
+        val parts = ip.trim().split('.').mapNotNull { it.toIntOrNull() }
+        if (parts.size != 4) return false
+        val a = parts[0]
+        val b = parts[1]
+        return when {
+            a == 10 -> true
+            a == 172 && b in 16..31 -> true
+            a == 192 && b == 168 -> true
+            a == 169 && b == 254 -> true
+            a == 127 -> true
+            else -> false
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun pickWifiNetwork(context: Context): Network? {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // Prefer active validated Wi-Fi on API 23+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cm.activeNetwork?.let { n ->
+                cm.getNetworkCapabilities(n)?.let { caps ->
+                    if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    ) return n
+                }
+            }
+        }
+
+        // Otherwise, any Wi-Fi with INTERNET capability
+        return cm.allNetworks.firstOrNull { n ->
+            cm.getNetworkCapabilities(n)?.let { caps ->
+                caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
+                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            } == true
+        }
+    }
+
+    private fun normalizeHex(hexLike: String): String =
+        hexLike.trim().replace(":", "").replace("\\s".toRegex(), "").lowercase()
+
+
+    /** Discovery client for /ping before we have a pin; uses system CA validation (no trust-all). */
+    private fun newDiscoveryClient(network: Network?): OkHttpClient {
+        val trustManager = CertificateUtils.getFingerprintCollectionTrustManager()
+        val ssl = SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf(trustManager), SecureRandom())
+        }
+
+        val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+            .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+            .allEnabledCipherSuites()
+            .build()
+
+        return OkHttpClient.Builder()
+            .sslSocketFactory(ssl.socketFactory, trustManager)
+            .connectionSpecs(listOf(tlsSpec))
+            .protocols(listOf(Protocol.HTTP_1_1))
+            .apply { network?.let { socketFactory(it.socketFactory) } }
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .build()
+    }
+
+    suspend fun pingBeforeRegister(ip: String, port: String): Boolean =
+        withContext(Dispatchers.IO) {
+            val network = pickWifiNetwork(appContext)
+            val client = newDiscoveryClient(network)
+
+            // Use the real path your server exposes; many backends use /api/v1/ping
+            val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
+
+            val req = Request.Builder()
+                .url("https://$ip:$port/api/v1/ping")
+                .post(okhttp3.RequestBody.create(null, ByteArray(0))) // or "".toRequestBody(null)
+                .build()
+
+            runCatching {
+                client.newCall(req).execute().use { resp ->
+                    if (resp.code == 429) {
+                        Timber.w("pingBeforeRegister: rate limited (429)")
+                    }
+                    // consider any HTTP code as “host reachable”
+                    Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
+                    resp.code in 100..599
+                }
+            }.getOrElse {
+                Timber.w(it, "Ping failed for $url")
+                false
+            }
+        }
+
+
+}

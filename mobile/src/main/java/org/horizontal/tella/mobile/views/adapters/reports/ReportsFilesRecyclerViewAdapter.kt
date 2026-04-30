@@ -129,12 +129,14 @@ open class ReportsFilesRecyclerViewAdapter(
             filePreviewImg.loadImage(vaultFile.thumb)
         }
 
-        fun ImageView.loadImage(thumb: ByteArray) {
-            Glide.with(this)
-                .load(thumb)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(this)
+        fun ImageView.loadImage(thumb: ByteArray?) {
+            if (thumb != null) {
+                Glide.with(this)
+                    .load(thumb)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(this)
+            }
         }
 
         private fun showAddLink() {

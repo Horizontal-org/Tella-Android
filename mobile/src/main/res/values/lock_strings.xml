@@ -45,7 +45,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
 done!</string>
   <string name="LockSuccess_Message_Hint">You can always change your lock option
  and further customize Tella in Settings.</string>
-  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,
  please try again</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to

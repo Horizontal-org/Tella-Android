@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tipsCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:background="@drawable/tips_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Badge -->
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+          >
+            <ImageView
+                android:id="@+id/tipsIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="7dp"
+                android:contentDescription="@null"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tipsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Tella_Main_White_TextLargeBold"
+                tools:text="TIPS TO CONNECT"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:letterSpacing="0.02"
+                android:textColor="@color/wa_white"/>
+
+            <TextView
+                android:id="@+id/tipsDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Tella_Main_White_Text.Small"
+                android:layout_marginTop="6dp"
+                tools:text="Learn more about connecting to Wi-Fi for Nearby Sharing."
+                android:lineSpacingExtra="2dp"
+                android:textColor="@color/wa_white"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

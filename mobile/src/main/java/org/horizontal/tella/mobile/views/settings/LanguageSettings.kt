@@ -49,7 +49,7 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
     private fun createLangViews() {
         if (languages.isEmpty()) {
             languages =
-                ArrayList(Arrays.asList(*resources.getStringArray(R.array.ra_lang_codes)))
+                ArrayList(listOf(*resources.getStringArray(R.array.ra_lang_codes)))
             languages.add(0, null)
 
             val prefferedLang = LocaleManager.getInstance().languageSetting
