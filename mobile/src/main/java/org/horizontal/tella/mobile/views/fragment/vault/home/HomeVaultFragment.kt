@@ -479,7 +479,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             ServerType.PEERTOPEER -> {
-                nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
+                nav().navigateSafe(R.id.action_homeScreen_to_peerToPeer_screen)
             }
 
             ServerType.ADD_BUTTON -> {

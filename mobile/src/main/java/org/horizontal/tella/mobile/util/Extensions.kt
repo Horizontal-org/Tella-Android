@@ -143,21 +143,18 @@ fun Context.isScreenReaderOn(): Boolean {
     return false
 }
 
-fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    val current = currentDestination ?: return
-    val isAction = current.getAction(destinationId) != null
-    val isDestination = graph.findNode(destinationId) != null
-    if (!isAction && !isDestination) {
-        Timber.w(
-            "navigateSafe: %d unreachable from destination %d (label=%s)",
-            destinationId, current.id, current.label
-        )
-        return
-    }
+fun NavController.navigateSafe(@IdRes destinationId: Int, args: Bundle? = null) {
     try {
-        navigate(destinationId, bundle)
+        navigate(destinationId, args)
     } catch (e: IllegalArgumentException) {
-        Timber.w(e, "navigateSafe: navigate(%d) failed (stale destination)", destinationId)
+        val destName = try {
+            context.resources.getResourceEntryName(destinationId)
+        } catch (ex: Exception) {
+            destinationId.toString()
+        }
+        Timber.w(
+            "[NavigationSafe] Skipped navigation to '$destName' from '${currentDestination?.label}' – $e"
+        )
     }
 }
 
