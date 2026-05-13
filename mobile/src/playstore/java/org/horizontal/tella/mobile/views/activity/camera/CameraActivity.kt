@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.view.OrientationEventListener
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -106,20 +108,30 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.attributes = window.attributes.apply {
+                layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            }
+        }
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.topBar) { view, insets ->
-            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
-            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
-            // Avoid ViewUtil.getStatusBarHeight() fallback — it duplicates inset when statusBars.top is 0
-            // under edge-to-edge, causing a black gap above the camera toolbar.
-            val top = maxOf(statusBars.top, cutout.top)
-            view.updatePadding(top = top)
-            insets
-        }
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
             val navBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.updatePadding(bottom = navBars.bottom)
+            val cutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            val mandatory = insets.getInsets(WindowInsetsCompat.Type.mandatorySystemGestures())
+            var top = maxOf(statusBars.top, cutout.top, mandatory.top)
+            if (top == 0) {
+                val ignoring = insets.getInsetsIgnoringVisibility(
+                    WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
+                )
+                top = maxOf(top, ignoring.top)
+            }
+            val bottom = maxOf(navBars.bottom, mandatory.bottom)
+            val left = maxOf(statusBars.left, navBars.left, cutout.left, mandatory.left)
+            val right = maxOf(statusBars.right, navBars.right, cutout.right, mandatory.right)
+            view.setPadding(left, top, right, bottom)
             insets
         }
         ViewCompat.requestApplyInsets(binding.root)

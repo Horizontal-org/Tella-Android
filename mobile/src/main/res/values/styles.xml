@@ -126,7 +126,6 @@
     </style>
 
     <style name="CameraTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
@@ -134,7 +133,6 @@
     </style>
 
     <style name="CameraTheme.LineSpacing" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
@@ -142,7 +140,6 @@
     </style>
 
     <style name="CameraTheme.Justify" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
@@ -150,7 +147,6 @@
     </style>
 
     <style name="CameraTheme.LineSpacingJustify" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/wa_black</item>
         <item name="android:fontFamily">@font/open_sans</item>
