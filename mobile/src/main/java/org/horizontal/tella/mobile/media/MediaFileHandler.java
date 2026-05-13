@@ -111,52 +111,49 @@ public class MediaFileHandler {
     }
 
     public static void startSelectMediaActivity(Activity activity, @NonNull String type, @Nullable String[] extraMimeType, int requestCode) {
+        launchFilePicker(activity, type, extraMimeType, true, requestCode);
+    }
+
+    private static void launchFilePicker(
+            @NonNull Activity activity,
+            @NonNull String type,
+            @Nullable String[] extraMimeType,
+            boolean allowMultiple,
+            int requestCode) {
         PackageManager pm = activity.getPackageManager();
-        
-        // Try ACTION_OPEN_DOCUMENT first (preferred for Android 4.4+)
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setType(type);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        
+
+        Intent getContent = new Intent(Intent.ACTION_GET_CONTENT)
+                .setType(type)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultiple);
         if (extraMimeType != null) {
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
+            getContent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
-        
-        // Check if any activity can handle this intent
-        if (intent.resolveActivity(pm) != null) {
-            // Use createChooser to show all available file pickers (including Fossify, etc.)
-            Intent chooser = Intent.createChooser(intent, activity.getString(R.string.select_file_picker));
+        if (getContent.resolveActivity(pm) != null) {
             try {
-                activity.startActivityForResult(chooser, requestCode);
+                activity.startActivityForResult(getContent, requestCode);
                 return;
             } catch (ActivityNotFoundException e) {
-                Timber.d(e, "ACTION_OPEN_DOCUMENT chooser failed");
+                Timber.d(e, "ACTION_GET_CONTENT failed");
             }
         }
-        
-        // Fallback to ACTION_GET_CONTENT (works with more apps, including older file managers)
-        Intent fallbackIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        fallbackIntent.setType(type);
-        fallbackIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        fallbackIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        
+
+        Intent openDocument = new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .setType(type)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultiple);
         if (extraMimeType != null) {
-            fallbackIntent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
+            openDocument.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
         }
-        
-        // Check if any activity can handle fallback intent
-        if (fallbackIntent.resolveActivity(pm) != null) {
-            Intent chooser = Intent.createChooser(fallbackIntent, activity.getString(R.string.select_file_picker));
+        if (openDocument.resolveActivity(pm) != null) {
             try {
-                activity.startActivityForResult(chooser, requestCode);
+                activity.startActivityForResult(openDocument, requestCode);
                 return;
             } catch (ActivityNotFoundException e) {
-                Timber.d(e, "ACTION_GET_CONTENT chooser failed");
+                Timber.d(e, "ACTION_OPEN_DOCUMENT failed");
             }
         }
-        
-        // If both fail, show helpful error message
+
         DialogUtils.showBottomMessage(
                 activity,
                 activity.getString(R.string.gallery_toast_fail_import_no_file_manager),
@@ -940,13 +937,11 @@ public class MediaFileHandler {
     }
 
     public static void startImportFiles(Activity context, Boolean multipleFile, String type) {
-        Intent intent = new Intent()
-                .setType(type)
-                .setAction(Intent.ACTION_OPEN_DOCUMENT)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multipleFile);
-
-        context.startActivityForResult(
-                Intent.createChooser(intent, "Import files"),
+        launchFilePicker(
+                context,
+                type != null ? type : "*/*",
+                null,
+                Boolean.TRUE.equals(multipleFile),
                 C.IMPORT_MULTIPLE_FILES
         );
     }

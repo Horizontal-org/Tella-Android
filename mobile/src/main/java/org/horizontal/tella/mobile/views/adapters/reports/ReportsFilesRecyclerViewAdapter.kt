@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -113,7 +114,7 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showVideoInfo(vaultFile: VaultFile) {
-            filePreviewImg.loadImage(vaultFile.thumb)
+            filePreviewImg.loadImage(vaultFile.thumb, R.drawable.ic_video)
             icAttachmentImg.setBackgroundResource(R.drawable.ic_play)
         }
 
@@ -126,17 +127,17 @@ open class ReportsFilesRecyclerViewAdapter(
         }
 
         private fun showImageInfo(vaultFile: VaultFile) {
-            filePreviewImg.loadImage(vaultFile.thumb)
+            filePreviewImg.loadImage(vaultFile.thumb, R.drawable.ic_gallery)
         }
 
-        fun ImageView.loadImage(thumb: ByteArray?) {
-            if (thumb != null) {
-                Glide.with(this)
-                    .load(thumb)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(this)
-            }
+        fun ImageView.loadImage(thumb: ByteArray?, @DrawableRes fallback: Int) {
+            Glide.with(this)
+                .load(thumb)
+                .fallback(fallback)
+                .error(fallback)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(this)
         }
 
         private fun showAddLink() {

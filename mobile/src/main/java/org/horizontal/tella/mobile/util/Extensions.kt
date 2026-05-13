@@ -144,22 +144,17 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(@IdRes destinationId: Int, args: Bundle? = null) {
-    val currentNode = currentDestination
-    val action = currentNode?.getAction(destinationId)
-
-    if (action != null) {
+    try {
         navigate(destinationId, args)
-    } else {
-        val resources = currentNode?.navigatorName?.let {
-            context.resources
-        }
-
+    } catch (e: IllegalArgumentException) {
         val destName = try {
-            resources?.getResourceEntryName(destinationId) ?: destinationId.toString()
-        } catch (e: Exception) {
+            context.resources.getResourceEntryName(destinationId)
+        } catch (ex: Exception) {
             destinationId.toString()
         }
-        Timber.w("[NavigationSafe] Skipping navigation to '$destName' from '${currentNode?.label}' – action not found")
+        Timber.w(
+            "[NavigationSafe] Skipped navigation to '$destName' from '${currentDestination?.label}' – $e"
+        )
     }
 }
 
