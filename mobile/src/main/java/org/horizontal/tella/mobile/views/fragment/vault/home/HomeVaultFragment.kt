@@ -60,6 +60,7 @@ import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActiviti
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.CollectFormEntryActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
+import org.horizontal.tella.mobile.views.activity.ServersSettingsActivity
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsActions
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsIntroActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
@@ -104,7 +105,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private var nextCloudServers: ArrayList<NextCloudServer>? = null
-    private var favoriteForms: ArrayList<CollectForm>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
@@ -477,6 +477,19 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
                 nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
             }
 
+            ServerType.PEERTOPEER -> {
+                nav().navigate(R.id.action_homeScreen_to_peerToPeer_screen)
+            }
+
+            ServerType.ADD_BUTTON -> {
+                baseActivity.startActivity(
+                    Intent(
+                        baseActivity,
+                        ServersSettingsActivity::class.java
+                    )
+                )
+            }
+
             else -> {}
         }
     }
@@ -760,14 +773,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections
             vaultAdapter.addConnectionServers(serversList!!)
-
         } else {
             vaultAdapter.removeConnectionServers()
         }
     }
 
     private fun handleServerCountsSuccess(serverCounts: ServerCounts) {
-        // Handle each server type
+        serversList?.clear()
+
         handleGoogleDriveServers(serverCounts.googleDriveServers)
         handleDropBoxServers(serverCounts.dropBoxServers)
         handleNextCloudServers(serverCounts.nextCloudServers)
@@ -775,9 +788,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         handleCollectServers(serverCounts.collectServers)
         handleUwaziServers(serverCounts.uwaziServers)
 
-        // Check if we need to show connections
+        if (Preferences.isEnableHomeNearby()) {
+            serversList?.add(ServerDataItem(emptyList(), ServerType.PEERTOPEER))
+        }
+
+        serversList?.add(ServerDataItem(emptyList(), ServerType.ADD_BUTTON))
+
         maybeShowConnections()
     }
+
 
     private fun handleServerCountsError(error: Throwable?) {
         error?.let {

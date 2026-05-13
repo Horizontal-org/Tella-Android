@@ -3,11 +3,13 @@ package org.hzontal.shared_ui.submission
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
@@ -50,9 +52,7 @@ class SubmittingItem @JvmOverloads  constructor(
         partSize = findViewById(R.id.partSize)
         uploadProgress = findViewById(R.id.uploadProgress)
         partCheckIcon = findViewById(R.id.partCheckIcon)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            uploadProgress.progressTintList = ColorStateList.valueOf(Color.GREEN);
-        }
+        uploadProgress.progressTintList = ColorStateList.valueOf(Color.GREEN);
     }
 
     private fun extractAttributes(attrs: AttributeSet?, defStyleAttr: Int) {

@@ -90,6 +90,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import java.io.FileNotFoundException
 
+const val VAULT_PARENT_ID = "vault_parent_id"
 
 @AndroidEntryPoint
 class AttachmentsFragment :
@@ -112,6 +113,7 @@ class AttachmentsFragment :
     private var importAndDelete = false
     private var uriToDelete: Uri? = null
     private var withMetadata = false
+    private var initialFolderTitle: String? = null
     private var selectMode = SelectMode.DESELECT_ALL
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isLaunchingPicker = false
@@ -220,9 +222,18 @@ class AttachmentsFragment :
         arguments?.getString(VAULT_FILTER)?.let {
             filterType = FilterType.valueOf(it)
         }
+        arguments?.getString(VAULT_PARENT_ID)?.let { parentId ->
+            currentRootID = parentId
+        }
         initSorting()
-        setToolbarLabel(filterType, binding.toolbar, baseActivity)
-        viewModel.getRootId()
+        if (currentRootID == null) {
+            setToolbarLabel(filterType, binding.toolbar, baseActivity)
+        } else {
+            viewModel.getFolderById(currentRootID!!)
+        }
+        if (currentRootID == null) {
+            viewModel.getRootId()
+        }
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
@@ -349,7 +360,6 @@ class AttachmentsFragment :
     private fun createVaultManageFilesAction(): VaultSheetUtils.IVaultManageFiles {
         return object : VaultSheetUtils.IVaultManageFiles {
             override fun goToCamera() {
-
                 val intent = Intent(activity, CameraActivity::class.java)
                 intent.putExtra(VAULT_CURRENT_ROOT_PARENT, currentRootID)
                 baseActivity.startActivity(intent)
@@ -431,6 +441,9 @@ class AttachmentsFragment :
             }
 
             SelectMode.ONE_SELECTION -> {
+                if (isHomeAllFilesSelectionStyle()) {
+                    attachmentsAdapter.clearSelected()
+                }
                 binding.checkBoxList.setCheckDrawable(R.drawable.ic_check_box_off, baseActivity)
             }
 
@@ -442,10 +455,29 @@ class AttachmentsFragment :
     }
 
     private fun changeSelectMode() {
+        if (isHomeAllFilesSelectionStyle()) {
+            when (selectMode) {
+                SelectMode.DESELECT_ALL -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.ONE_SELECTION
+                }
+
+                SelectMode.ONE_SELECTION -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.SELECT_ALL
+                }
+
+                SelectMode.SELECT_ALL -> {
+                    isListCheckOn = true
+                    selectMode = SelectMode.ONE_SELECTION
+                }
+            }
+            return
+        }
         when (selectMode) {
             SelectMode.DESELECT_ALL -> {
                 isListCheckOn = true
-                selectMode = SelectMode.ONE_SELECTION
+                selectMode = SelectMode.SELECT_ALL
 
             }
 
@@ -479,7 +511,11 @@ class AttachmentsFragment :
             }
         } else {
             binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-            setToolbarLabel(filterType, binding.toolbar, baseActivity)
+            if (initialFolderTitle != null) {
+                binding.toolbar.setStartTextTitle(initialFolderTitle!!)
+            } else {
+                setToolbarLabel(filterType, binding.toolbar, baseActivity)
+            }
             attachmentsAdapter.clearSelected()
             enableMoveTheme(false)
         }
@@ -561,6 +597,9 @@ class AttachmentsFragment :
     }
 
     override fun onSelectionNumChange(num: Int) {
+        if (isListCheckOn) {
+            updateAttachmentsToolbar(true)
+        }
     }
 
     override fun onMediaSelected(vaultFile: VaultFile) {
@@ -571,18 +610,52 @@ class AttachmentsFragment :
         handleSelectionModeWhenMediSelected()
     }
 
+    /**
+     * Keeps header checkbox + [selectMode] aligned with adapter selection without calling
+     * [handleSelectMode] (that would run [changeSelectMode] and re-apply select-all).
+     */
     private fun handleSelectionModeWhenMediSelected() {
         updateAttachmentsToolbar(true)
-        if (attachmentsAdapter.selectedMediaFiles.isNullOrEmpty() && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size == attachmentsAdapter.itemCount && selectMode != SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.ONE_SELECTION
-            handleSelectMode()
-        } else if (attachmentsAdapter.selectedMediaFiles.size < attachmentsAdapter.itemCount && selectMode == SelectMode.SELECT_ALL) {
-            selectMode = SelectMode.DESELECT_ALL
-            handleSelectMode()
+
+        val selected = attachmentsAdapter.selectedMediaFiles.size
+        val listSize = attachmentsAdapter.itemCount
+
+        if (selectMode == SelectMode.SELECT_ALL && selected == 0) {
+            syncSelectionChromeLeavingSelectModeFully()
+            return
         }
+        if (listSize == 0) return
+
+        if (selectMode == SelectMode.SELECT_ALL && selected < listSize) {
+            selectMode = SelectMode.ONE_SELECTION
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+            return
+        }
+
+        if (isListCheckOn && selectMode != SelectMode.SELECT_ALL && selected == listSize) {
+            selectMode = SelectMode.SELECT_ALL
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.ALL)
+        }
+    }
+
+    private enum class SelectAllCheckboxVisual { IDLE, PARTIAL, ALL }
+
+    private fun bindSelectAllCheckbox(visual: SelectAllCheckboxVisual) {
+        val icon = when (visual) {
+            SelectAllCheckboxVisual.IDLE -> R.drawable.ic_check
+            SelectAllCheckboxVisual.PARTIAL -> R.drawable.ic_check_box_off
+            SelectAllCheckboxVisual.ALL -> R.drawable.ic_check_box_on
+        }
+        binding.checkBoxList.setCheckDrawable(icon, baseActivity)
+    }
+    private fun syncSelectionChromeLeavingSelectModeFully() {
+        selectMode = SelectMode.DESELECT_ALL
+        isListCheckOn = false
+        attachmentsAdapter.enableSelectMode(false)
+        enableMoveTheme(false)
+        bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
+        updateAttachmentsToolbar(false)
+        baseActivity.invalidateOptionsMenu()
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
@@ -721,6 +794,10 @@ class AttachmentsFragment :
             viewModel.renameFileSuccess.observe(this, ::onRenameFileSuccess)
             viewModel.exportState.observe(this, ::onExportStarted)
             viewModel.mediaExported.observe(this, ::onMediaExported)
+            viewModel.currentFolder.observe(this) { folder ->
+                initialFolderTitle = folder.name
+                binding.toolbar.setStartTextTitle(folder.name)
+            }
             viewModel.onConfirmDeleteFiles.observe(this, ::onConfirmDeleteFiles)
             viewModel.duplicateErrorResId.observe(this, ::onDuplicateErrorResId)
             viewModel.importError.observe(this, ::onImportError)
@@ -917,7 +994,9 @@ class AttachmentsFragment :
             getString(R.string.Vault_Importing_SheetTitle),
             totalFilesToImport,
             resources.getQuantityString(
-                R.plurals.Vault_Importing_SheetProgress, totalFilesToImport
+                R.plurals.Vault_Importing_SheetProgress,
+                totalFilesToImport,
+                totalFilesToImport
             ),
             viewModel.counterData,
             getString(R.string.action_cancel).uppercase(),
@@ -1134,8 +1213,12 @@ class AttachmentsFragment :
 
         when {
             selectedFilesSize > 0 || (isListCheckOn) -> {
-                selectMode = SelectMode.SELECT_ALL
-                handleSelectMode()
+                if (isHomeAllFilesSelectionStyle()) {
+                    syncSelectionChromeLeavingSelectModeFully()
+                } else {
+                    selectMode = SelectMode.SELECT_ALL
+                    handleSelectMode()
+                }
             }
 
             breadcrumbsSize > 1 -> {
@@ -1237,6 +1320,10 @@ class AttachmentsFragment :
                 performFileSearch(isMultipleFiles, vaultFile)
             }
         }
+    }
+
+    private fun isHomeAllFilesSelectionStyle(): Boolean {
+        return filterType == FilterType.ALL
     }
 
     private fun showExportWithMetadataDialog(isMultipleFiles: Boolean, vaultFile: VaultFile?) {

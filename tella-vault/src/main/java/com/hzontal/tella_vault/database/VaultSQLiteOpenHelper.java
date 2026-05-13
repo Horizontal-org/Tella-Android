@@ -16,7 +16,7 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         super(context, password);
         Preferences preferences = new Preferences(context);
         if (!preferences.isAlreadyMigratedVaultDB()) {
-            migrateSqlCipher3To4IfNeeded(context, password);
+            migrateSqlCipher3To4IfNeeded(context, this.password);
         }
     }
 
@@ -28,12 +28,33 @@ public class VaultSQLiteOpenHelper extends CipherOpenHelper {
         }
     }
 
+    /**
+     * Returns the process-wide helper for this unlock session. If a helper already exists, the
+     * {@code password} argument is ignored—call {@link #closeAndReleaseInstance()} (or
+     * {@link VaultDataSource#releaseForLock()}) after key clear / lock before opening the vault
+     * again with new key material.
+     */
     public synchronized static VaultSQLiteOpenHelper getInstance(Context context, byte[] password) {
         if (dbHelper == null) {
             dbHelper = new VaultSQLiteOpenHelper(context, password);
         }
 
         return dbHelper;
+    }
+
+    /**
+     * Closes the vault DB and clears the helper's in-memory key copy. Always call when the main
+     * key is cleared (e.g. lock) so the next {@link #getInstance} can use a new key. The static
+     * reference is cleared even if {@link #close()} throws.
+     */
+    public static synchronized void closeAndReleaseInstance() {
+        if (dbHelper != null) {
+            try {
+                dbHelper.close();
+            } finally {
+                dbHelper = null;
+            }
+        }
     }
 
     @Override

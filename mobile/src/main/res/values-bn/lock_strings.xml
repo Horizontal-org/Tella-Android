@@ -45,7 +45,7 @@
  সম্পন্ন করেছেন!</string>
   <string name="LockSuccess_Message_Hint">আপনি যেকোনো সময় আপনার লক 
  পরিবর্তন করতে পারেন এবং সেটিংসে Tella কে আরও কাস্টমাইজ করতে পারেন৷</string>
-  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">ভুল পাসওয়ার্ড, 
  অনুগ্রহ করে আবার চেষ্টা করুন</string>
   <string name="UnlockPassword_Message_EnterPassword">Tella আনলক করতে 

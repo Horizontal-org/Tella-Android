@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/space_cadet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     >
 
     <com.google.android.material.appbar.AppBarLayout
