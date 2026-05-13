@@ -37,13 +37,6 @@ class TellaUploadServerDialogFragment : AppCompatDialogFragment(), ICheckTUSServ
     private var securityProviderUpgradeAttempted = false
     private var serverId: Long = 0
 
-
-    interface TellaUploadServerDialogHandler {
-        fun onTellaUploadServerDialogCreate(server: TellaReportServer?)
-        fun onTellaUploadServerDialogUpdate(server: TellaReportServer?)
-        fun onDialogDismiss()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

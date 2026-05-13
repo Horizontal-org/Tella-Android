@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.dialog
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.TextUtils
@@ -57,8 +56,6 @@ class CollectServerDialogFragment : AppCompatDialogFragment() {
     lateinit var advancedToggle: PanelToggleButton
     lateinit var advancedPanel: ViewGroup
 
-    private var context: Context? = null
-
     private var validated = true
 
     interface CollectServerDialogHandler {
@@ -98,7 +95,6 @@ class CollectServerDialogFragment : AppCompatDialogFragment() {
         val server = arguments?.getSerializable(OBJECT_KEY) as? CollectServer
 
         binding = DialogCollectServerBinding.inflate(inflater, container, false)
-        context = requireContext()
 
         initView()
         observeLiveData()

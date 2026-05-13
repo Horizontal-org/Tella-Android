@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+        app:arrowBackIconContentDescription="@string/action_go_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:startTitle="@string/connect_to_device" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="@style/Tella_Main_White_TextExtraLargeBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/qr_code_sender_instruction"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+
+    <!-- iOS: 215×215 QR, 16pt inset on white card (RecipientConnectToDeviceView) → 215+32=247dp outer. -->
+    <ImageView
+        android:id="@+id/qrCodeImageView"
+        android:layout_width="247dp"
+        android:layout_height="247dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/qr_scan_border"
+        android:contentDescription="@string/qr_code_sender_instruction"
+        android:keepScreenOn="true"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_circular"
+        style="@style/Tella_Progress_Circular"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/qrCodeImageView"
+        app:layout_constraintEnd_toEndOf="@id/qrCodeImageView"
+        app:layout_constraintStart_toStartOf="@id/qrCodeImageView"
+        app:layout_constraintTop_toTopOf="@id/qrCodeImageView" />
+
+    <!-- Troubleshooting Text -->
+    <TextView
+        android:id="@+id/helpTextView"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="@string/qr_code_issue_prompt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeImageView" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/connectManuallyButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="12dp"
+        app:text_all_caps="true"
+        app:default_background="@drawable/bg_rounded_information"
+        android:backgroundTint="@color/light_purple"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/helpTextView"
+        app:text="@string/connect_manually" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
