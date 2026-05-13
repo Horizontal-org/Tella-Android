@@ -146,7 +146,21 @@ fun Context.isScreenReaderOn(): Boolean {
 }
 
 fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle,)
+    val current = currentDestination ?: return
+    val isAction = current.getAction(destinationId) != null
+    val isDestination = graph.findNode(destinationId) != null
+    if (!isAction && !isDestination) {
+        Timber.w(
+            "navigateSafe: %d unreachable from destination %d (label=%s)",
+            destinationId, current.id, current.label
+        )
+        return
+    }
+    try {
+        navigate(destinationId, bundle)
+    } catch (e: IllegalArgumentException) {
+        Timber.w(e, "navigateSafe: navigate(%d) failed (stale destination)", destinationId)
+    }
 }
 
 private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"
