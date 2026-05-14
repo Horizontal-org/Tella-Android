@@ -206,6 +206,9 @@ public abstract class BaseVault {
 
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder, String parentId)
             throws VaultException, DuplicateVaultFileException {
+        if (parentId == null) {
+            parentId = VaultDataSource.ROOT_UID;
+        }
         try {
             VaultFile vaultFile = new VaultFile(builder);
 
