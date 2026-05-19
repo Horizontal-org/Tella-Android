@@ -3,7 +3,6 @@ package org.horizontal.tella.mobile.views.fragment.peertopeer.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.hzontal.tella_vault.VaultFile
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,6 +11,7 @@ import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterMan
 import org.horizontal.tella.mobile.databinding.ActivityPeerToPeerBinding
 import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.util.C
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -68,11 +68,11 @@ class PeerToPeerActivity : BaseLockActivity() {
                 getString(R.string.gallery_toast_fail_importing_file),
                 false
             )
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         } catch (e: Exception) {
             // Handle other exceptions
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
             Timber.e(e, "NullPointerException occurred: ${e.message}")
         }
     }
