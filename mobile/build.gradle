@@ -273,17 +273,12 @@ dependencies {
     // exo
     implementation "com.google.android.exoplayer:exoplayer:$versions.exoplayer"
 
-    // camera - CameraView for Play Store, CameraX for F-Droid
-    playstoreImplementation("com.otaliastudios:cameraview:$versions.cameraview") {
-        exclude module: "exifinterface"
-        exclude module: "animated-vector-drawble"
-    }
-    fdroidImplementation "androidx.camera:camera-core:$versions.camerax"
-    fdroidImplementation "androidx.camera:camera-camera2:$versions.camerax"
-    fdroidImplementation "androidx.camera:camera-video:$versions.camerax"
-    fdroidImplementation "androidx.camera:camera-extensions:$versions.camerax"
-    fdroidImplementation "androidx.camera:camera-lifecycle:$versions.camerax"
-    fdroidImplementation "androidx.camera:camera-view:$versions.camerax"
+    // camera - CameraX (open source)
+    implementation "androidx.camera:camera-core:$versions.camerax"
+    implementation "androidx.camera:camera-camera2:$versions.camerax"
+    implementation "androidx.camera:camera-video:$versions.camerax"
+    implementation "androidx.camera:camera-lifecycle:$versions.camerax"
+    implementation "androidx.camera:camera-view:$versions.camerax"
 
     // OpenStreetMap for F-Droid location picker (no Google Maps)
     fdroidImplementation "org.osmdroid:osmdroid-android:6.1.20"
