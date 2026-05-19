@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
@@ -27,6 +26,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.C
+import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.CAPTURE_WITH_AUTO_UPLOAD
 import org.horizontal.tella.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
@@ -212,7 +212,7 @@ class PrepareUploadFragment :
                     ).putExtra(VAULT_PICKER_SINGLE, false), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
     }
 
@@ -230,7 +230,7 @@ class PrepareUploadFragment :
                 baseActivity.startActivityForResult(intent, C.MEDIA_FILE_ID)
             }
         } catch (e: java.lang.Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
     }
 
@@ -248,7 +248,7 @@ class PrepareUploadFragment :
             bundle.putBoolean(REPORT_ENTRY, true)
             this.navManager().navigateToMicro()
         } catch (e: java.lang.Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+            CrashReporterProvider.get().recordException(e)
         }
         val intent = Intent(activity, MicActivity::class.java)
         intent.putExtra(PREPARE_UPLOAD_ENTRY, true)
