@@ -274,7 +274,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun resumeCameraPreview() {
         if (mode == CameraMode.VIDEO) {
-            setVideoQuality()
+            startVideo()
         } else {
             startCamera()
         }
@@ -766,12 +766,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
-    private fun setVideoQuality() {
-        if (mode == CameraMode.VIDEO) {
-            startVideo()
-        }
-    }
-
     private fun initVideoResolutionManager(localCameraProvider: ProcessCameraProvider) {
         val lensFacingInt = if (lensFacing == CameraSelector.DEFAULT_FRONT_CAMERA) {
             CameraCharacteristics.LENS_FACING_FRONT
@@ -850,11 +844,17 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                         divviupUtils.runVideoTakenEvent()
                     }
                 } else {
-                    setVideoQuality()
+                    if (videoCapture == null) {
+                        Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     videoRecording = true
                     lastClickTime = System.currentTimeMillis()
                     playCameraSound(MediaActionSound.START_VIDEO_RECORDING)
-                    recordVideo()
+                    if (!recordVideo()) {
+                        videoRecording = false
+                        return@setOnClickListener
+                    }
                     durationView.start()
                     captureButton.displayStopVideo()
                     gridButton.visibility = View.GONE
@@ -1057,47 +1057,60 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
-    private fun recordVideo() {
-        checkMicPermission()
+    private fun recordVideo(): Boolean {
         try {
             if (recording != null) {
                 recording?.stop()
-                return
+                return true
             }
 
-            tempFile = MediaFileHandler.getTempFile()
+            val capture = videoCapture ?: return false
 
+            tempFile = MediaFileHandler.getTempFile()
             val fileOutputOptions = FileOutputOptions.Builder(tempFile!!).build()
 
-            recording = videoCapture?.output
-                ?.prepareRecording(context, fileOutputOptions)
-                ?.withAudioEnabled()
-                ?.start(ContextCompat.getMainExecutor(context)) { event ->
-                    when (event) {
-                        is VideoRecordEvent.Finalize -> {
-                            if (!event.hasError()) {
-                                event.outputResults.outputUri.path?.let { File(it) }
-                                    ?.let { showConfirmVideoView(it) }
-                            } else {
-                                Timber.e("Video capture ends with error: ${event.error}")
-                            }
-                            recording?.close()
-                            recording = null
-                            captureButton.displayVideoButton()
-                            durationView.stop()
-                            videoRecording = false
-                            gridButton.visibility = View.VISIBLE
-                            switchButton.visibility = View.VISIBLE
-                            if (videoResolutionManager != null) {
-                                resolutionButton.visibility = View.VISIBLE
-                            }
+            var pendingRecording = capture.output.prepareRecording(context, fileOutputOptions)
+            if (hasAudioPermission()) {
+                pendingRecording = pendingRecording.withAudioEnabled()
+            }
+
+            val file = tempFile
+            recording = pendingRecording.start(ContextCompat.getMainExecutor(context)) { event ->
+                when (event) {
+                    is VideoRecordEvent.Finalize -> {
+                        if (!event.hasError()) {
+                            file?.takeIf { it.exists() && it.length() > 0L }
+                                ?.let { showConfirmVideoView(it) }
+                        } else {
+                            Timber.e(
+                                "Video capture ends with error: ${event.error}, cause: ${event.cause}"
+                            )
+                        }
+                        recording?.close()
+                        recording = null
+                        captureButton.displayVideoButton()
+                        durationView.stop()
+                        videoRecording = false
+                        gridButton.visibility = View.VISIBLE
+                        switchButton.visibility = View.VISIBLE
+                        if (videoResolutionManager != null) {
+                            resolutionButton.visibility = View.VISIBLE
                         }
                     }
                 }
-            isRecording = !isRecording
+            }
+            isRecording = recording != null
+            return recording != null
         } catch (e: Exception) {
-            Timber.e("Error recording video %s", e.message)
+            Timber.e(e, "Error recording video")
+            return false
         }
+    }
+
+    private fun hasAudioPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun hasCameraPermissions(context: Context): Boolean {
@@ -1116,12 +1129,4 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
-    private fun checkMicPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Timber.e("No audio recording permission")
-        }
-    }
 }
