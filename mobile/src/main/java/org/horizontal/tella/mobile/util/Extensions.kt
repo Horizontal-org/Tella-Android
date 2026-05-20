@@ -13,16 +13,14 @@ import android.view.WindowManager
 import android.view.accessibility.AccessibilityManager
 import android.widget.ImageView
 import androidx.annotation.ColorRes
+import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import org.horizontal.tella.mobile.R
 import com.google.gson.Gson
 import com.google.gson.JsonParseException
 import com.google.gson.reflect.TypeToken
-import org.horizontal.tella.mobile.R
-/*import org. cleaninsights.sdk.Campaign
-import org.cleaninsights.sdk.CleanInsights
-import org.cleaninsights.sdk.CleanInsightsConfiguration*/
 import timber.log.Timber
 
 
@@ -145,8 +143,28 @@ fun Context.isScreenReaderOn(): Boolean {
     return false
 }
 
-fun NavController.navigateSafe(destinationId: Int, bundle: Bundle? = null) {
-    navigate(destinationId, bundle,)
+fun NavController.navigateSafe(@IdRes destinationId: Int, args: Bundle? = null) {
+    try {
+        navigate(destinationId, args)
+    } catch (e: IllegalArgumentException) {
+        val destName = try {
+            context.resources.getResourceEntryName(destinationId)
+        } catch (ex: Exception) {
+            destinationId.toString()
+        }
+        Timber.w(
+            "[NavigationSafe] Skipped navigation to '$destName' from '${currentDestination?.label}' – $e"
+        )
+    }
+}
+
+fun String.formatHash(): String {
+    return this
+        .take(64) // take only the first 64 characters
+        .chunked(4) // split into groups of 4
+        .chunked(4) // make 4 lines
+        .joinToString("\n") { it.joinToString(" ") }
+
 }
 
 private const val NAME_DUPLICATE_VAULT_FILE = "com.hzontal.tella_vault.exceptions.DuplicateVaultFileException"

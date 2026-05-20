@@ -60,11 +60,12 @@ class AttachmentsViewModel @Inject constructor(
     val folderCreated: LiveData<VaultFile> = _folderCreated
     private val _rootId = MutableLiveData<VaultFile>()
     val rootId: LiveData<VaultFile> = _rootId
+    private val _currentFolder = MutableLiveData<VaultFile>()
+    val currentFolder: LiveData<VaultFile> = _currentFolder
     private val _duplicateErrorResId = MutableLiveData<Int?>()
     val duplicateErrorResId: LiveData<Int?> = _duplicateErrorResId
     val counterData = MutableLiveData<Int>()
 
-    //TODO AHLEM FIX THIS val counterData: LiveData<Int> = _counterData
     private val _progressPercent = MutableLiveData<Pair<Double, Int>>()
     val progressPercent: LiveData<Pair<Double, Int>> = _progressPercent
     private val _mediaImportedWithDelete = MutableLiveData<Uri>()
@@ -112,7 +113,6 @@ class AttachmentsViewModel @Inject constructor(
                 )
         )
     }
-
 
     fun moveFiles(parentId: String?, vaultFiles: List<VaultFile?>?) {
         if (vaultFiles == null || parentId == null) return
@@ -177,7 +177,6 @@ class AttachmentsViewModel @Inject constructor(
         )
     }
 
-
     private fun deleteFile(vaultFile: VaultFile): Single<Boolean> {
         return MyApplication.keyRxVault.rxVault
             .firstOrError()
@@ -185,7 +184,6 @@ class AttachmentsViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
 
     fun createFolder(folderName: String, parent: String) {
         disposables.add(
@@ -227,10 +225,26 @@ class AttachmentsViewModel @Inject constructor(
         )
     }
 
+    fun getFolderById(folderId: String) {
+        disposables.add(
+            MyApplication.keyRxVault.rxVault
+                .firstOrError()
+                .flatMap { it.get(folderId) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { vaultFile -> _currentFolder.postValue(vaultFile) },
+                    { throwable ->
+                        CrashReporterProvider.get().recordException(throwable)
+                        _error.postValue(throwable)
+                    }
+                )
+        )
+    }
+
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
-        // counterData.value = 0
-        //  var counter = 1
+
         var currentUri: Uri? = null
         var lastImportName: String? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->

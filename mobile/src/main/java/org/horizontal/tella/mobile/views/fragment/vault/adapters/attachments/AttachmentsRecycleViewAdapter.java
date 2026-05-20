@@ -232,9 +232,12 @@ public class AttachmentsRecycleViewAdapter extends RecyclerView.Adapter<Attachme
 
     public void selectAll() {
         for (VaultFile selection : files) {
-            selectMediaFile(selection);
-            galleryMediaHandler.onMediaSelected(selection);
+            if (!selected.contains(selection)) {
+                selected.add(selection);
+            }
         }
+        notifyDataSetChanged();
+        galleryMediaHandler.onSelectionNumChange(selected.size());
     }
 
     private void onMoreSelected(ViewHolder holder, VaultFile vaultFile) {

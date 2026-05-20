@@ -57,9 +57,11 @@ import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.util.FossFeatureSheetUtils
 import org.horizontal.tella.mobile.util.LockTimeoutManager
 import org.horizontal.tella.mobile.util.TopSheetTestUtils.showBackgroundActivitiesSheet
+import org.horizontal.tella.mobile.util.navigateSafe
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.CollectFormEntryActivity
 import org.horizontal.tella.mobile.views.activity.MainActivity
+import org.horizontal.tella.mobile.views.activity.ServersSettingsActivity
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsActions
 import org.horizontal.tella.mobile.views.activity.analytics.AnalyticsIntroActivity
 import org.horizontal.tella.mobile.views.activity.viewer.AudioPlayActivity
@@ -104,7 +106,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     private var googleDriveServers: ArrayList<GoogleDriveServer>? = null
     private var dropBoxServers: ArrayList<DropBoxServer>? = null
     private var nextCloudServers: ArrayList<NextCloudServer>? = null
-    private var favoriteForms: ArrayList<CollectForm>? = null
     private lateinit var disposables: EventCompositeDisposable
     private var reportServersCounted = false
     private var collectServersCounted = false
@@ -292,7 +293,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
         })
         panicModeView.setOnClickListener { onPanicClicked() }
-        toolbar.onLeftClickListener = { nav().navigate(R.id.main_settings) }
+        toolbar.onLeftClickListener = { nav().navigateSafe(R.id.main_settings) }
         toolbar.onRightClickListener = {
             MyApplication.getMainKeyHolder().timeout = LockTimeoutManager.IMMEDIATE_SHUTDOWN
             Preferences.setExitTimeout(true)
@@ -440,11 +441,11 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     override fun onServerItemClickListener(item: ServerDataItem) {
         when (item.type) {
             ServerType.ODK_COLLECT -> {
-                nav().navigate(R.id.action_homeScreen_to_forms_screen)
+                nav().navigateSafe(R.id.action_homeScreen_to_forms_screen)
             }
 
             ServerType.TELLA_UPLOAD -> {
-                nav().navigate(R.id.action_homeScreen_to_reports_screen)
+                nav().navigateSafe(R.id.action_homeScreen_to_reports_screen)
             }
 
             ServerType.UWAZI -> {
@@ -452,12 +453,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             ServerType.TELLA_RESORCES -> {
-                nav().navigate(R.id.action_homeScreen_to_resources_screen)
+                nav().navigateSafe(R.id.action_homeScreen_to_resources_screen)
             }
 
             ServerType.GOOGLE_DRIVE -> {
                 if (BuildConfig.ENABLE_GOOGLE_DRIVE) {
-                    nav().navigate(R.id.action_homeScreen_to_google_drive_screen)
+                    nav().navigateSafe(R.id.action_homeScreen_to_google_drive_screen)
                 } else {
                     FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
                         baseActivity.supportFragmentManager, requireContext(), null, null)
@@ -466,7 +467,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
             ServerType.DROP_BOX -> {
                 if (BuildConfig.ENABLE_DROPBOX) {
-                    nav().navigate(R.id.action_homeScreen_to_drop_box_screen)
+                    nav().navigateSafe(R.id.action_homeScreen_to_drop_box_screen)
                 } else {
                     FossFeatureSheetUtils.showFossFeatureUnavailableSheet(
                         baseActivity.supportFragmentManager, requireContext(), null, null)
@@ -474,7 +475,20 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
 
             ServerType.NEXTCLOUD -> {
-                nav().navigate(R.id.action_homeScreen_to_next_cloud_screen)
+                nav().navigateSafe(R.id.action_homeScreen_to_next_cloud_screen)
+            }
+
+            ServerType.PEERTOPEER -> {
+                nav().navigateSafe(R.id.action_homeScreen_to_peerToPeer_screen)
+            }
+
+            ServerType.ADD_BUTTON -> {
+                baseActivity.startActivity(
+                    Intent(
+                        baseActivity,
+                        ServersSettingsActivity::class.java
+                    )
+                )
             }
 
             else -> {}
@@ -493,7 +507,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             ImproveClickOptions.SETTINGS -> {
                 removeImprovementSection()
                 setIsAcceptedAnalytics(true)
-                nav().navigate(R.id.main_settings)
+                nav().navigateSafe(R.id.main_settings)
             }
         }
     }
@@ -760,14 +774,14 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         if (serversList?.isEmpty() == false) {
             // Use the vaultAdapter to check existing connections
             vaultAdapter.addConnectionServers(serversList!!)
-
         } else {
             vaultAdapter.removeConnectionServers()
         }
     }
 
     private fun handleServerCountsSuccess(serverCounts: ServerCounts) {
-        // Handle each server type
+        serversList?.clear()
+
         handleGoogleDriveServers(serverCounts.googleDriveServers)
         handleDropBoxServers(serverCounts.dropBoxServers)
         handleNextCloudServers(serverCounts.nextCloudServers)
@@ -775,9 +789,15 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         handleCollectServers(serverCounts.collectServers)
         handleUwaziServers(serverCounts.uwaziServers)
 
-        // Check if we need to show connections
+        if (Preferences.isEnableHomeNearby()) {
+            serversList?.add(ServerDataItem(emptyList(), ServerType.PEERTOPEER))
+        }
+
+        serversList?.add(ServerDataItem(emptyList(), ServerType.ADD_BUTTON))
+
         maybeShowConnections()
     }
+
 
     private fun handleServerCountsError(error: Throwable?) {
         error?.let {
@@ -878,7 +898,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
 
     private fun navigateToAttachmentsList(bundle: Bundle?) {
-        findNavController().navigate(R.id.action_homeScreen_to_attachments_screen, bundle)
+        findNavController().navigateSafe(R.id.action_homeScreen_to_attachments_screen, bundle)
     }
 
     private fun exportVaultFiles(vaultFile: VaultFile) {

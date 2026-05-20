@@ -14,7 +14,7 @@ public class VaultFile  implements Serializable {
     public long duration;
     public boolean anonymous;
     public Metadata metadata;
-    public byte[] thumb;
+    public byte[] thumb = null;
 
     public VaultFile() {
     }

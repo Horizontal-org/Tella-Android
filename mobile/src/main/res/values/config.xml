@@ -10,6 +10,7 @@
     <string name="config_analytics_learn_url" translatable="false">https://tella-app.org/security-and-privacy#analytics?</string>
     <string name="config_organizations_url" translatable="false">https://tella-app.org/for-organizations</string>
     <string name="config_connections_url" translatable="false">https://tella-app.org/for-organizations</string>
+    <string name="config_nearby_sharing_url" translatable="false">https://tella-app.org/nearby-sharing</string>
     <string-array name="ra_lang_codes" translatable="false">
         <item>ar</item>
         <item>az</item>
