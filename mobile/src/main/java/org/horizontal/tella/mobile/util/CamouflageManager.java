@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.util;
 
+import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_BLUE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_ORANGE_SKIN;
 import static com.hzontal.tella_locking_ui.ConstantsKt.CALCULATOR_ALIAS_YELLOW_SKIN;
@@ -119,6 +120,29 @@ public class CamouflageManager {
         return currentAlias == null || defaultAlias.equals(currentAlias);
     }
 
+    public boolean isCalculatorCamouflageActive() {
+        String currentAlias = Preferences.getAppAlias();
+        if (currentAlias == null) {
+            return false;
+        }
+        for (String alias : getCalculatorAliases()) {
+            if (alias.equals(currentAlias)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean disableCalculatorCamouflage(@NonNull Context context) {
+        if (!isCalculatorCamouflageActive()) {
+            return false;
+        }
+        Preferences.setSecretModeActive(false);
+        boolean changed = setDefaultLauncherActivityAlias(context);
+        disableAllCalculatorLauncherAliases(context);
+        return changed;
+    }
+
     @SuppressWarnings("UnusedReturnValue")
     public boolean setDefaultLauncherActivityAlias(@NonNull Context context) {
         //noinspection SimplifiableIfStatement
@@ -126,7 +150,36 @@ public class CamouflageManager {
             return false;
         }
 
-        return setLauncherActivityAlias(context, defaultAlias);
+        boolean changed = setLauncherActivityAlias(context, defaultAlias);
+        disableAllCalculatorLauncherAliases(context);
+        return changed;
+    }
+
+    private List<String> getCalculatorAliases() {
+        List<String> aliases = new ArrayList<>();
+        aliases.add(calculatorOption.alias);
+        aliases.add(getOptionAlias(CALC_ALIAS_BLUE_SKIN));
+        aliases.add(getOptionAlias(CALC_ALIAS_YELLOW_SKIN));
+        aliases.add(getOptionAlias(CALC_ALIAS_ORANGE_SKIN));
+        aliases.add(CALCULATOR_ALIAS);
+        aliases.add(CALCULATOR_ALIAS_BLUE_SKIN);
+        aliases.add(CALCULATOR_ALIAS_ORANGE_SKIN);
+        aliases.add(CALCULATOR_ALIAS_YELLOW_SKIN);
+        return aliases;
+    }
+
+    private void disableAllCalculatorLauncherAliases(@NonNull Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        String packageName = context.getApplicationContext().getPackageName();
+        for (String alias : getCalculatorAliases()) {
+            if (defaultAlias.equals(alias)) {
+                continue;
+            }
+            packageManager.setComponentEnabledSetting(
+                    new ComponentName(packageName, alias),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
     }
 
     public List<CamouflageOption> getOptions() {

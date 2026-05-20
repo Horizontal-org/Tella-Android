@@ -354,8 +354,7 @@ class SecuritySettings :
     private fun checkCamouflageAndLockSetting() {
         if ((baseActivity.applicationContext as IUnlockRegistryHolder).unlockRegistry.getActiveMethod(
                 baseActivity
-            ) == UnlockRegistry.Method.TELLA_PIN && Preferences.getAppAlias()
-                .equals(cm.getCalculatorOptionByTheme(Preferences.getCalculatorTheme()).alias)
+            ) == UnlockRegistry.Method.TELLA_PIN && cm.isCalculatorCamouflageActive
         ) {
             showConfirmSheet(
                 requireActivity().supportFragmentManager,
