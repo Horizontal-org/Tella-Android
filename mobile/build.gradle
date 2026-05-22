@@ -361,7 +361,7 @@ dependencies {
 
     // Add exclusions to prevent other libraries from pulling in xmlpull
     // JavaRosa - allow it to use xpp3
-    implementation ("org.opendatakit:opendatakit-javarosa:$versions.javarosa") {
+    implementation ("org.getodk:javarosa:$versions.javarosa") {
         exclude group: "xmlpull", module: "xmlpull"
         // NO xpp3 exclusion - JavaRosa needs it
     }
