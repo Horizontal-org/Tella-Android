@@ -26,31 +26,35 @@ public class JavaRosa {
      * Classes needed to serialize objects. Need to put anything from JR in here.
      */
     private static final String[] SERIALIABLE_CLASSES = {
-            "org.javarosa.core.services.locale.ResourceFileDataSource", // JavaRosaCoreModule
-            "org.javarosa.core.services.locale.TableLocaleSource", // JavaRosaCoreModule
+            "org.javarosa.core.model.SubmissionProfile",
             "org.javarosa.core.model.FormDef",
-            "org.javarosa.core.model.SubmissionProfile", // CoreModelModule
-            "org.javarosa.core.model.QuestionDef", // CoreModelModule
-            "org.javarosa.core.model.GroupDef", // CoreModelModule
-            "org.javarosa.core.model.instance.FormInstance", // CoreModelModule
-            "org.javarosa.core.model.data.BooleanData", // CoreModelModule
-            "org.javarosa.core.model.data.DateData", // CoreModelModule
-            "org.javarosa.core.model.data.DateTimeData", // CoreModelModule
-            "org.javarosa.core.model.data.DecimalData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoPointData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoShapeData", // CoreModelModule
-            "org.javarosa.core.model.data.GeoTraceData", // CoreModelModule
-            "org.javarosa.core.model.data.IntegerData", // CoreModelModule
-            "org.javarosa.core.model.data.LongData", // CoreModelModule
-            "org.javarosa.core.model.data.MultiPointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.PointerAnswerData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectMultiData", // CoreModelModule
-            "org.javarosa.core.model.data.SelectOneData", // CoreModelModule
-            "org.javarosa.core.model.data.StringData", // CoreModelModule
-            "org.javarosa.core.model.data.TimeData", // CoreModelModule
-            "org.javarosa.core.model.data.UncastData", // CoreModelModule
-            "org.javarosa.core.model.data.helper.BasicDataPointer", // CoreModelModule
-            "org.javarosa.core.model.actions.SetValueAction" // CoreModelModule
+            "org.javarosa.core.model.QuestionDef",
+            "org.javarosa.core.model.RangeQuestion",
+            "org.javarosa.core.model.GroupDef",
+            "org.javarosa.core.model.instance.TreeReference",
+            "org.javarosa.core.model.instance.FormInstance",
+            "org.javarosa.core.model.instance.ExternalDataInstance",
+            "org.javarosa.core.model.data.BooleanData",
+            "org.javarosa.core.model.data.DateData",
+            "org.javarosa.core.model.data.DateTimeData",
+            "org.javarosa.core.model.data.DecimalData",
+            "org.javarosa.core.model.data.GeoPointData",
+            "org.javarosa.core.model.data.GeoShapeData",
+            "org.javarosa.core.model.data.GeoTraceData",
+            "org.javarosa.core.model.data.IntegerData",
+            "org.javarosa.core.model.data.LongData",
+            "org.javarosa.core.model.data.MultiPointerAnswerData",
+            "org.javarosa.core.model.data.PointerAnswerData",
+            "org.javarosa.core.model.data.SelectMultiData",
+            "org.javarosa.core.model.data.MultipleItemsData",
+            "org.javarosa.core.model.data.SelectOneData",
+            "org.javarosa.core.model.data.StringData",
+            "org.javarosa.core.model.data.TimeData",
+            "org.javarosa.core.model.data.UncastData",
+            "org.javarosa.core.model.data.helper.BasicDataPointer",
+            "org.javarosa.core.model.actions.SetValueAction",
+            "org.javarosa.core.model.actions.setgeopoint.StubSetGeopointAction",
+            "org.javarosa.core.model.actions.recordaudio.RecordAudioAction"
     };
 
     private static boolean isJavaRosaInitialized = false;
