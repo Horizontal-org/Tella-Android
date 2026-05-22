@@ -1,0 +1,6 @@
+- Implemented Nearby Sharing: Nearby Sharing lets users securely share files in physical proximity. Nearby Sharing is fully offline, available across platforms and devices, and assures end-to-end encryption. https://tella-app.org/nearby-sharing/
+- Implemented security fixes detected by our most recent security audit (to be published soon!).
+- New languages support: Ukrainian.
+- Bug fixes and minor improvements.
+
+Full release notes: https://tella-app.org/releases

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/wa_purple">
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/wa_purple"
+        app:arrowBackIcon="@drawable/ic_back_white"
+        app:arrowBackIconContentDescription="@string/action_go_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:rightIconContentDescription="@string/action_save"
+        app:startTitle="@string/receive_files" />
+
+    <!-- Single column: hero + copy + actions move together and stay horizontally aligned (design). -->
+    <LinearLayout
+        android:id="@+id/content_column"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.42">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/clock_Img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/ic_files" />
+
+        <TextView
+            android:id="@+id/waiting_text"
+            style="@style/Tella_Main_White_TextExtraLargeBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            tools:text="The sender is trying to send you 6 files" />
+
+        <TextView
+            android:id="@+id/question_text"
+            style="@style/Tella_Main_White_Text.Meduim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:gravity="center"
+            android:text="@string/prepare_upload_question" />
+
+        <LinearLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_larger_margin"
+            android:orientation="vertical">
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/accept_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                app:check_state="false"
+                app:default_background="@drawable/bg_round_orange_btn"
+                app:text="@string/accept"
+                app:text_color="@color/btn_dark_letter" />
+
+            <org.hzontal.shared_ui.buttons.RoundButton
+                android:id="@+id/reject_btn"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:gravity="center"
+                app:check_state="false"
+                app:default_background="@drawable/bg_round_purple_secondary_btn"
+                app:text="@string/reject"
+                app:text_color="@color/wa_white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

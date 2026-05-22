@@ -265,7 +265,11 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
                 val bottomSheet =
                     (dialog as? BottomSheetDialog)?.findViewById<View>(R.id.design_bottom_sheet) as? FrameLayout
                 bottomSheet?.let {
-                    BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+                    // Keep regular sheets anchored from the bottom. Forcing expanded on all sheets
+                    // can make short-content sheets appear pinned at the top of the screen.
+                    if (isFullscreen) {
+                        BottomSheetBehavior.from(it).state = BottomSheetBehavior.STATE_EXPANDED
+                    }
                 }
             }
         }

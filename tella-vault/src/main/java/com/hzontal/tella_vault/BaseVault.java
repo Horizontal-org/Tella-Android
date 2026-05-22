@@ -206,6 +206,9 @@ public abstract class BaseVault {
 
     protected VaultFile baseCreate(BaseVaultFileBuilder<?, ?> builder, String parentId)
             throws VaultException, DuplicateVaultFileException {
+        if (parentId == null) {
+            parentId = VaultDataSource.ROOT_UID;
+        }
         try {
             VaultFile vaultFile = new VaultFile(builder);
 
@@ -237,10 +240,12 @@ public abstract class BaseVault {
             }
 
             // Check for duplicate using hash
-            VaultFile existing = database.getByHash(vaultFile.hash);
-            if (existing != null) {
-                throw new DuplicateVaultFileException(existing);
-            }
+            // commented this because we had an issue of uploading in the peertopeer
+            /* todo fix this later*/
+ //           VaultFile existing = database.getByHash(vaultFile.hash);
+//            if (existing != null) {
+//                throw new DuplicateVaultFileException(existing);
+//            }
 
             return database.create(parentId, vaultFile);
 

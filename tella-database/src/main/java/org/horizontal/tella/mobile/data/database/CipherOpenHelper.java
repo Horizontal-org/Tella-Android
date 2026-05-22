@@ -19,7 +19,10 @@ import net.zetetic.database.sqlcipher.SQLiteOpenHelper;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import timber.log.Timber;
 
@@ -31,10 +34,11 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
     final DatabasePreferences preferences;
 
     CipherOpenHelper(@NonNull Context context, byte[] password, @NonNull DatabasePreferences preferences) {
-        super(context, DATABASE_NAME, encodeRawKeyToStr(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
+        super(context, DATABASE_NAME, encodeRawKeyToUtf8Bytes(password), null, DATABASE_VERSION, MIN_DATABASE_VERSION, null, null, false);
 
         this.context = context.getApplicationContext();
-        this.password = password;
+        // Never retain the caller's array reference (e.g. MainKey material); close() can zero our copy.
+        this.password = Arrays.copyOf(password, password.length);
         this.preferences = preferences;
     }
 
@@ -46,11 +50,9 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         final String kSuffix;
 
         if (sqlcipher_uses_native_key) {
-            Timber.tag(TAG).d("sqlcipher uses native method to set key");
             kPrefix = "x'";
             kSuffix = "'";
         } else {
-            Timber.tag(TAG).d("sqlcipher uses PRAGMA to set key - SPECIAL HACK IN PROGRESS");
             kPrefix = "x''";
             kSuffix = "''";
         }
@@ -68,8 +70,17 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         return cb.array();
     }
 
-    public static String encodeRawKeyToStr(byte[] raw_key) {
-        return new String(encodeRawKey(raw_key));
+    /** UTF-8 bytes of the SQLCipher raw key literal (e.g. {@code x'...'}), same as the String-password API path. */
+    private static byte[] encodeRawKeyToUtf8Bytes(byte[] raw_key) {
+        char[] encoded = encodeRawKey(raw_key);
+        try {
+            ByteBuffer bb = StandardCharsets.UTF_8.encode(CharBuffer.wrap(encoded));
+            byte[] out = new byte[bb.remaining()];
+            bb.get(out);
+            return out;
+        } finally {
+            Arrays.fill(encoded, '\0');
+        }
     }
 
     private static final boolean sqlcipher_uses_native_key = check_sqlcipher_uses_native_key();
@@ -122,23 +133,46 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
 
         boolean migrationSuccess = false;
 
+        char[] keyChars = encodeRawKey(key);
         try {
-            SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(oldDbPath, encodeRawKeyToStr(key), null, null, new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                }
+            SQLiteDatabase oldDb = SQLiteDatabase.openOrCreateDatabase(
+                    oldDbPath,
+                    new String(keyChars),
+                    null,
+                    null,
+                    new SQLiteDatabaseHook() {
+                        @Override
+                        public void preKey(SQLiteConnection connection) {
+                        }
 
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(key) + "';", null, null);
-                    connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
-                    connection.execute("PRAGMA kdf_iter = 64000;", null, null);
-                    connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
-                    connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
-                }
-            });
+                        @Override
+                        public void postKey(SQLiteConnection connection) {
+                            char[] pragmaChars = encodeRawKey(key);
+                            try {
+                                connection.executeForString(
+                                        "PRAGMA key = '" + new String(pragmaChars) + "';",
+                                        null,
+                                        null
+                                );
+                                connection.execute("PRAGMA cipher_page_size = 1024;", null, null);
+                                connection.execute("PRAGMA kdf_iter = 64000;", null, null);
+                                connection.execute("PRAGMA cipher_hmac_algorithm = HMAC_SHA1;", null, null);
+                                connection.execute("PRAGMA cipher_kdf_algorithm = PBKDF2_HMAC_SHA1;", null, null);
+                            } finally {
+                                Arrays.fill(pragmaChars, '\0');
+                            }
+                        }
+                    }
+            );
 
-            oldDb.rawExecSQL(String.format("ATTACH DATABASE '%s' AS sqlcipher4 KEY '%s';", newDbPath, encodeRawKeyToStr(key)));
+            char[] attachChars = encodeRawKey(key);
+            try {
+                oldDb.rawExecSQL(
+                        "ATTACH DATABASE '" + newDbPath + "' AS sqlcipher4 KEY '" + new String(attachChars) + "';"
+                );
+            } finally {
+                Arrays.fill(attachChars, '\0');
+            }
             Cursor cursor = oldDb.rawQuery("SELECT sqlcipher_export('sqlcipher4');", null);
             if (cursor != null && cursor.moveToFirst()) {
                 cursor.close();
@@ -157,6 +191,8 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
             migrationSuccess = true;
         } catch (Exception e) {
             Timber.tag(TAG).e(e, "Error during migration");
+        } finally {
+            Arrays.fill(keyChars, '\0');
         }
 
         // Handle the result of the migration
@@ -169,22 +205,57 @@ abstract class CipherOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Closes the database. After this, do not use this helper again to open the DB; create a new
+     * helper with a fresh key material array if needed (e.g. after unlock).
+     */
+    @Override
+    public synchronized void close() {
+        try {
+            super.close();
+        } finally {
+            if (password != null) {
+                Arrays.fill(password, (byte) 0);
+            }
+        }
+    }
+
     @NonNull
     @Override
     public SQLiteDatabase getWritableDatabase() {
 
         if (preferences.isAlreadyMigratedMainDB()) {
+            char[] keyChars = encodeRawKey(password);
+            try {
+                return SQLiteDatabase.openDatabase(
+                        context.getDatabasePath(DATABASE_NAME).getPath(),
+                        new String(keyChars),
+                        null,
+                        SQLiteDatabase.OPEN_READWRITE,
+                        null,
+                        new SQLiteDatabaseHook() {
+                            @Override
+                            public void preKey(SQLiteConnection connection) {
+                            }
 
-            return SQLiteDatabase.openDatabase(context.getDatabasePath(DATABASE_NAME).getPath(), encodeRawKeyToStr(password), null, SQLiteDatabase.OPEN_READWRITE, null, new SQLiteDatabaseHook() {
-                @Override
-                public void preKey(SQLiteConnection connection) {
-                }
-
-                @Override
-                public void postKey(SQLiteConnection connection) {
-                    connection.executeForString("PRAGMA key = '" + encodeRawKeyToStr(password) + "';", null, null);
-                }
-            });
+                            @Override
+                            public void postKey(SQLiteConnection connection) {
+                                char[] pragmaChars = encodeRawKey(password);
+                                try {
+                                    connection.executeForString(
+                                            "PRAGMA key = '" + new String(pragmaChars) + "';",
+                                            null,
+                                            null
+                                    );
+                                } finally {
+                                    Arrays.fill(pragmaChars, '\0');
+                                }
+                            }
+                        }
+                );
+            } finally {
+                Arrays.fill(keyChars, '\0');
+            }
         } else {
             Timber.tag(TAG).d("Database is from a fresh install, not calling getWritableDatabase.");
             return super.getWritableDatabase(); // or handle appropriately

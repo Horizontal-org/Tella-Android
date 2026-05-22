@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -39,14 +40,14 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
         if (vaultFile.mimeType == null) return
         when {
             isImageFileType(vaultFile.mimeType) -> {
-                previewImageView.loadImage(vaultFile.thumb)
+                previewImageView.loadImage(vaultFile.thumb, R.drawable.ic_gallery)
             }
             isAudioFileType(vaultFile.mimeType) -> {
                 showAudioInfo(vaultFile)
             }
             isVideoFileType(vaultFile.mimeType) -> {
                 showVideoInfo()
-                previewImageView.loadImage(vaultFile.thumb)
+                previewImageView.loadImage(vaultFile.thumb, R.drawable.ic_video)
             }
             isTextFileType(vaultFile.mimeType) -> {
                 showDocumentInfo(vaultFile)
@@ -71,9 +72,11 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
         more.visibility = View.VISIBLE
     }
 
-    fun ImageView.loadImage(thumb: ByteArray) {
+    fun ImageView.loadImage(thumb: ByteArray?, @DrawableRes fallback: Int) {
         Glide.with(this)
             .load(thumb)
+            .fallback(fallback)
+            .error(fallback)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .into(this)

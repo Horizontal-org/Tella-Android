@@ -9,12 +9,15 @@ public class FormMediaFile extends VaultFile {
     public FormMediaFileStatus status; // break away from getters/setters :)
     public boolean uploading;
     public long uploadedSize;
+    public String transmissionId;
+
 
      public FormMediaFile() {
         super();
         status = FormMediaFileStatus.UNKNOWN;
         uploading = true;
         uploadedSize = 0;
+         transmissionId = "";
     }
 
     public static FormMediaFile fromMediaFile(@NonNull VaultFile vaultFile) {
