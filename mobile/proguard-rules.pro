@@ -159,7 +159,7 @@
 -dontwarn com.google.**
 -dontwarn au.com.bytecode.**
 -dontwarn org.joda.time.**
--dontwarn org.osmdroid.**
+-dontwarn org.mapsforge.**
 
 -keep class android.support.v7.widget.** { *; }
 

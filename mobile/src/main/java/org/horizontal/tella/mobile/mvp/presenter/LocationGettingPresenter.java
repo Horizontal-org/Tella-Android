@@ -8,15 +8,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Looper;
+
 import androidx.core.content.ContextCompat;
-import java.lang.ref.WeakReference;
+
 import org.horizontal.tella.mobile.data.sharedpref.Preferences;
 import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContract;
 import org.horizontal.tella.mobile.util.LocationUtil;
 
-/**
- * F-Droid implementation: uses only Android framework LocationManager (no Google Play Services).
- */
+import java.lang.ref.WeakReference;
+
 public class LocationGettingPresenter implements ILocationGettingPresenterContract.IPresenter {
     private static final long LOCATION_REQUEST_INTERVAL_MS = 100;
     private static final float LOCATION_MIN_DISTANCE_M = 0f;
@@ -25,17 +25,18 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
     private LocationManager locationManager;
     private LocationListener locationListener;
     private boolean listenerRegistered;
-    private boolean untilThreshold;
-    private float threshold;
+    private final boolean untilThreshold;
+    private final float threshold;
     private Location currentBestLocation;
 
     public LocationGettingPresenter(ILocationGettingPresenterContract.IView view, boolean untilThreshold) {
         this.view = view;
         this.untilThreshold = untilThreshold;
-        threshold = Preferences.getLocationAccuracyThreshold();
-        locationManager = (LocationManager) view.getContext().getApplicationContext()
+        this.threshold = Preferences.getLocationAccuracyThreshold();
+        this.locationManager = (LocationManager) view.getContext()
+                .getApplicationContext()
                 .getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new MyLocationListener(this);
+        this.locationListener = new MyLocationListener(this);
     }
 
     @Override
@@ -55,9 +56,9 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         currentBestLocation = null;
 
         if (useLastKnownLocation && locationManager != null) {
-            Location last = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (last != null) {
-                sendLocation(last);
+            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (lastLocation != null) {
+                sendLocation(lastLocation);
             }
         }
 
@@ -123,8 +124,10 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
     private boolean noLocationPermissions() {
         Context context = view.getContext();
-        return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) ||
-                (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED);
+        return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_DENIED)
+                || (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_DENIED);
     }
 
     @SuppressLint("MissingPermission")
@@ -132,6 +135,7 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         if (locationManager == null || listenerRegistered) {
             return;
         }
+
         try {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
@@ -149,6 +153,7 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         if (!listenerRegistered || locationManager == null || locationListener == null) {
             return;
         }
+
         try {
             locationManager.removeUpdates(locationListener);
         } catch (SecurityException ignored) {
@@ -165,19 +170,22 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
         @Override
         public void onLocationChanged(Location location) {
-            LocationGettingPresenter p = presenterRef.get();
-            if (p != null && location != null) {
-                p.sendLocation(location);
+            LocationGettingPresenter presenter = presenterRef.get();
+            if (presenter != null && location != null) {
+                presenter.sendLocation(location);
             }
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, android.os.Bundle extras) {}
+        public void onStatusChanged(String provider, int status, android.os.Bundle extras) {
+        }
 
         @Override
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+        }
 
         @Override
-        public void onProviderDisabled(String provider) {}
+        public void onProviderDisabled(String provider) {
+        }
     }
 }
