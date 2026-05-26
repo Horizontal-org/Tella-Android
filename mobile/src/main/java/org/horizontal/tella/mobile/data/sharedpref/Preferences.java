@@ -142,6 +142,14 @@ public class Preferences {
         setBoolean(SharedPrefs.SHOW_P2P_WIFI_CONFIRMATION_SHEET, value);
     }
 
+    public static boolean isShowMapFirstLoadSheet() {
+        return getBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, true);
+    }
+
+    public static void setShowMapFirstLoadSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, value);
+    }
+
     public static boolean isPanicGeolocationActive() {
         return getBoolean(SharedPrefs.PANIC_GEOLOCATION, true);
     }
