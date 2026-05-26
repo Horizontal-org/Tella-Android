@@ -25,6 +25,7 @@ import org.horizontal.tella.mobile.databinding.ActivityLocationMapBinding;
 import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContract;
 import org.horizontal.tella.mobile.mvp.presenter.LocationGettingPresenter;
 import org.horizontal.tella.mobile.util.C;
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils;
 import org.mapsforge.core.graphics.Canvas;
 import org.mapsforge.core.graphics.Paint;
 import org.mapsforge.core.graphics.Style;
@@ -51,7 +52,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     private Toolbar toolbar;
     private ProgressBar progressBar;
     private TextView hint;
-    private TextView loadingMessage;
     private FloatingActionButton faButton;
     private MapView mapView;
 
@@ -153,15 +153,22 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     public void onGettingLocationStart() {
         progressBar.setVisibility(View.VISIBLE);
         if (Preferences.isShowMapFirstLoadSheet()) {
-            loadingMessage.setVisibility(View.VISIBLE);
             Preferences.setShowMapFirstLoadSheet(false);
+            BottomSheetUtils.showStandardSheet(
+                    getSupportFragmentManager(),
+                    getString(R.string.collect_form_geopoint_first_load_title),
+                    getString(R.string.collect_form_geopoint_first_load_message),
+                    getString(R.string.action_ok),
+                    null,
+                    null,
+                    null
+            );
         }
     }
 
     @Override
     public void onGettingLocationEnd() {
         progressBar.setVisibility(View.GONE);
-        loadingMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -285,7 +292,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         toolbar = binding.toolbar;
         progressBar = binding.content.progressBar;
         hint = binding.content.info;
-        loadingMessage = binding.content.loadingMessage;
         faButton = binding.fabButton;
         mapView = binding.content.mapView;
     }

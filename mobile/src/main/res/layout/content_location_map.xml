@@ -28,17 +28,4 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/loadingMessage"
-        style="@style/TextMapHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="96dp"
-        android:gravity="center"
-        android:text="@string/collect_form_geopoint_first_load_inline_message"
-        android:visibility="gone" />
 </FrameLayout>

@@ -148,7 +148,8 @@ mode activation</string>
   <string name="collect.form_meta_file.size">File size: %s</string>
   <string name="collect.form_toast_fail.load.attachment">There was an error loading the attachment. Please try again</string>
   <string name="collect.form_geopoint_banner_touch.map.select.location">Touch anywhere for 3 seconds to record position.</string>
-  <string name="collect_form_geopoint_first_load_inline_message">The first map load may take a little longer. Please wait a moment, or place the pin manually if needed.</string>
+  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
+  <string name="collect_form_geopoint_first_load_message">When using maps in Tella for the first time, the app needs to download map data for your area and retrieve your current location from Android. This can take a little time. Please wait a moment, or place the pin manually if necessary.</string>
   <string name="gallery_action.desc_file.metadata">Verification information</string>
   <string name="verification.info_app.bar">Verification information</string>
   <string name="verification.info_field_filename">File name</string>
