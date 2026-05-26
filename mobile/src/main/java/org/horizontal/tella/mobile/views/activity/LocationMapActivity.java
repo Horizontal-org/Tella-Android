@@ -45,7 +45,6 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     public static final String SELECTED_LOCATION = "sl";
     public static final String CURRENT_LOCATION_ONLY = "ro";
 
-    private static final byte DEFAULT_WORLD_ZOOM = 2;
     private static final byte DEFAULT_LOCATION_ZOOM = 15;
     private static final float SELECTED_LOCATION_RADIUS_PX = 14f;
 
@@ -214,10 +213,14 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         mapView.getLayerManager().getLayers().add(new MapLongPressLayer());
         tileDownloadLayer.start();
 
-        mapView.setZoomLevelMin(tileSource.getZoomLevelMin());
-        mapView.setZoomLevelMax(tileSource.getZoomLevelMax());
+        byte minZoomLevel = tileSource.getZoomLevelMin();
+        byte maxZoomLevel = tileSource.getZoomLevelMax();
+        byte defaultZoomLevel = (byte) Math.max(minZoomLevel, maxZoomLevel - 1);
+
+        mapView.setZoomLevelMin(minZoomLevel);
+        mapView.setZoomLevelMax(maxZoomLevel);
         mapView.setCenter(new LatLong(0, 0));
-        mapView.setZoomLevel(DEFAULT_WORLD_ZOOM);
+        mapView.setZoomLevel(defaultZoomLevel);
     }
 
     private void showMyLocation(@NonNull MyLocation location) {
