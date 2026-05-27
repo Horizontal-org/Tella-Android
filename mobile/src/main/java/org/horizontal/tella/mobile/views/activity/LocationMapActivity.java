@@ -190,6 +190,11 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
     }
 
     @Override
+    protected int getGpsMetadataDialogMessageResId() {
+        return R.string.collect_form_geopoint_enable_gps_dialog_expl;
+    }
+
+    @Override
     public Context getContext() {
         return this;
     }
