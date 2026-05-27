@@ -149,7 +149,11 @@ mode activation</string>
   <string name="collect.form_toast_fail.load.attachment">There was an error loading the attachment. Please try again</string>
   <string name="collect.form_geopoint_banner_touch.map.select.location">Touch anywhere for 3 seconds to record position.</string>
   <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">When using maps in Tella for the first time, the app needs to download map data for your area and retrieve your current location from Android. This can take a little time. Please wait a moment, or place the pin manually if necessary.</string>
+  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.\n
+
+Please wait until the map finishes loading before selecting a location.\n
+
+Previously viewed areas may still be visible offline.</string>
   <string name="gallery_action.desc_file.metadata">Verification information</string>
   <string name="verification.info_app.bar">Verification information</string>
   <string name="verification.info_field_filename">File name</string>
@@ -427,7 +431,7 @@ connecting to a server</string>
   <string name="Rec_Exit_SheetTitle">Save recording?</string>
   <string name="Rec_Exit_SheetText">Your recording is not saved. Would you like to save it before exiting?</string>
   <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
-  <string name="Vault_Encryting_SheetText">%d% complete</string>
+  <string name="Vault_Encryting_SheetText">%1$d%% complete</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Cancel encryption and delete file?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">If you cancel, your file will be lost</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">RESUME ENCRYPTION</string>
