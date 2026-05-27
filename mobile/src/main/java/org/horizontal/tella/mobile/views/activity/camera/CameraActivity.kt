@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.views.activity.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +13,7 @@ import android.media.AudioManager
 import android.media.MediaActionSound
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.OrientationEventListener
@@ -136,6 +138,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var gridEnabled = false
     private var shutterSound: MediaActionSound? = null
     private var hasResumedOnce = false
+    private var pendingPhotoCaptureAfterLocationCheck = false
+    private var gpsPromptIgnoredForCurrentSession = false
 
     private lateinit var binding: ActivityCameraBinding
     private var captureWithAutoUpload = true
@@ -405,6 +409,18 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     override fun getContext(): Context {
         return this
+    }
+
+    override fun getGpsMetadataDialogMessageResId(): Int {
+        return R.string.verification_prompt_dialog_media_file_expl
+    }
+
+    override fun onGpsMetadataDialogConfirmed() {
+        gpsPromptIgnoredForCurrentSession = false
+    }
+
+    override fun onGpsMetadataDialogIgnored() {
+        gpsPromptIgnoredForCurrentSession = true
     }
 
     private fun onMediaFilesUploadScheduled() {
@@ -827,16 +843,10 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.close.setOnClickListener { closeCamera() }
 
         binding.captureButton.setOnClickListener {
-            if (Preferences.isShutterMute()) {
-                val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-                mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
-            }
-
             if (mode == CameraMode.PHOTO) {
-                playCameraSound(MediaActionSound.SHUTTER_CLICK)
-                captureImage()
-                divviupUtils.runPhotoTakenEvent()
+                maybeCapturePhoto()
             } else {
+                maybeMuteSystemShutterForCapture()
                 if (videoRecording) {
                     if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                         playCameraSound(MediaActionSound.STOP_VIDEO_RECORDING)
@@ -871,6 +881,53 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.flashButton.setOnClickListener { onFlashClicked() }
         binding.previewImage.setOnClickListener { onPreviewClicked() }
         binding.resolutionButton.setOnClickListener { chooseVideoResolution() }
+    }
+
+    private fun maybeCapturePhoto() {
+        if (!shouldCheckLocationBeforePhotoCapture()) {
+            takePhoto()
+            return
+        }
+
+        pendingPhotoCaptureAfterLocationCheck = true
+        if (!hasLocationPermission()) {
+            maybeChangeTemporaryTimeout()
+            requestLocationPermission(C.LOCATION_PERMISSION)
+            return
+        }
+
+        continuePhotoCaptureAfterLocationCheck()
+    }
+
+    private fun continuePhotoCaptureAfterLocationCheck() {
+        if (!pendingPhotoCaptureAfterLocationCheck) return
+
+        if (!hasLocationPermission()) {
+            takePhoto()
+            return
+        }
+
+        if (gpsPromptIgnoredForCurrentSession) {
+            takePhoto()
+            return
+        }
+
+        startLocationMetadataListening()
+        checkLocationSettings(C.START_CAMERA_CAPTURE) {
+            takePhoto()
+        }
+    }
+
+    private fun takePhoto() {
+        pendingPhotoCaptureAfterLocationCheck = false
+        maybeMuteSystemShutterForCapture()
+        playCameraSound(MediaActionSound.SHUTTER_CLICK)
+        captureImage()
+        divviupUtils.runPhotoTakenEvent()
+    }
+
+    private fun shouldCheckLocationBeforePhotoCapture(): Boolean {
+        return !Preferences.isAnonymousMode()
     }
 
     enum class CameraMode {
@@ -1012,6 +1069,59 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
+    private fun maybeMuteSystemShutterForCapture() {
+        if (!Preferences.isShutterMute()) return
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val notificationManager =
+                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            if (!notificationManager.isNotificationPolicyAccessGranted()) {
+                if (!Preferences.isShutterDndPromptDeclined()) {
+                    showShutterDndAccessSheet()
+                }
+                return
+            }
+        }
+
+        applySystemShutterMute()
+    }
+
+    private fun applySystemShutterMute() {
+        try {
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+        } catch (e: SecurityException) {
+            Timber.d(e, "Unable to mute system shutter stream")
+        }
+    }
+
+    private fun showShutterDndAccessSheet() {
+        BottomSheetUtils.showConfirmSheetWithActionRow(
+            fragmentManager = supportFragmentManager,
+            titleText = getString(R.string.settings_sec_camera_mute_switch),
+            descriptionText = getString(R.string.camera_shutter_dnd_camera_dialog_expl),
+            actionButtonLabel = getString(R.string.camera_shutter_dnd_enable_action),
+            cancelButtonLabel = getString(R.string.camera_shutter_dnd_disable_action),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        Preferences.setShutterDndPromptDeclined(false)
+                        maybeChangeTemporaryTimeout {
+                            try {
+                                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                            } catch (e: Exception) {
+                                Timber.e(e, "Unable to open notification policy settings")
+                            }
+                        }
+                    } else {
+                        Preferences.setShutterMute(false)
+                        Preferences.setShutterDndPromptDeclined(false)
+                    }
+                }
+            }
+        )
+    }
+
     private fun playCameraSound(soundName: Int) {
         if (Preferences.isShutterMute()) return
         try {
@@ -1119,6 +1229,12 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun requestCameraPermissions(requestCode: Int) {
         ActivityCompat.requestPermissions(
             this,
@@ -1127,6 +1243,32 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 Manifest.permission.RECORD_AUDIO
             ), requestCode
         )
+    }
+
+    private fun requestLocationPermission(requestCode: Int) {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            requestCode
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode != C.LOCATION_PERMISSION || !pendingPhotoCaptureAfterLocationCheck) {
+            return
+        }
+
+        if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            continuePhotoCaptureAfterLocationCheck()
+        } else {
+            takePhoto()
+        }
     }
 
 }

@@ -219,6 +219,7 @@ mode activation</string>
   <string name="collect.blank_action_unpin">Unpin from the top</string>
   <string name="collect.blank_action_pin">Pin to the top</string>
   <string name="verification.prompt_dialog.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the position of your evidence.</string>
+  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
   <string name="verification.prompt_action_ignore">Ignore</string>
   <string name="verification.prompt_action_enable.GPS">Turn on GPS</string>
   <string name="collect.blank_dialog.expl_updating.form.definitions">Updating the list of forms…</string>
@@ -294,6 +295,10 @@ mode activation</string>
   <string name="settings.select_lock_timeout">Lock Timeout</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
   <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
+  <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. \n\nTo enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” for the Tella app.</string>
+  <string name="camera_shutter_dnd_enable_action">Enable </string>
+  <string name="camera_shutter_dnd_disable_action">Disable</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>
@@ -725,6 +730,7 @@ they are uploaded to this project as a report.</string>
   <string name="Modified_Label">Modified</string>
   <string name="Snackbar_Submit_Report_Error">To submit a report, please type in a title and either add a description or attach a file.</string>
   <string name="action_open_settings">open settings</string>
+  <string name="action_go_to_settings">go to settings</string>
   <string name="action_refresh">refresh</string>
   <string name="action_check">check</string>
   <string name="action_show_location">show location</string>

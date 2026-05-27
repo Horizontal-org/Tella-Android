@@ -346,23 +346,35 @@ public abstract class MetadataActivity extends BaseLockActivity implements Senso
             final int requestCode,
             final LocationSettingsCheckDoneListener listener
     ) {
-        maybeChangeTemporaryTimeout(() -> {
-            BottomSheetUtils.showConfirmSheet(
-                    getSupportFragmentManager(),
-                    getString(R.string.verification_prompt_dialog_title),
-                    getString(R.string.verification_prompt_dialog_expl),
-                    getString(R.string.verification_prompt_action_enable_GPS),
-                    getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> {
-                        if (isConfirmed) {
+        BottomSheetUtils.showConfirmSheet(
+                getSupportFragmentManager(),
+                getString(R.string.verification_prompt_dialog_title),
+                getString(getGpsMetadataDialogMessageResId()),
+                getString(R.string.verification_prompt_action_enable_GPS),
+                getString(R.string.verification_prompt_action_ignore),
+                isConfirmed -> {
+                    if (isConfirmed) {
+                        maybeChangeTemporaryTimeout(() -> {
+                            onGpsMetadataDialogConfirmed();
                             manageLocationSettings(requestCode, listener);
-                        } else {
-                            listener.onContinue();
-                        }
+                            return Unit.INSTANCE;
+                        });
+                    } else {
+                        onGpsMetadataDialogIgnored();
+                        listener.onContinue();
                     }
-            );
-            return Unit.INSTANCE;
-        });
+                }
+        );
+    }
+
+    protected int getGpsMetadataDialogMessageResId() {
+        return R.string.verification_prompt_dialog_expl;
+    }
+
+    protected void onGpsMetadataDialogConfirmed() {
+    }
+
+    protected void onGpsMetadataDialogIgnored() {
     }
 
     public SensorData getLightSensorData() {

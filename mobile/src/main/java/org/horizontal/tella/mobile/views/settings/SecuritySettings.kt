@@ -1,14 +1,17 @@
 package org.horizontal.tella.mobile.views.settings
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.core.os.bundleOf
+import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.RETURN_ACTIVITY
@@ -50,6 +53,8 @@ class SecuritySettings :
     private val lockTimeoutManager by lazy { LockTimeoutManager() }
     private val failedUnlockManager by lazy { FailedUnlockManager() }
     private val cm = CamouflageManager.getInstance()
+    private var isUpdatingShutterMuteSwitch = false
+    private var pendingShutterMuteEnable = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -102,14 +107,7 @@ class SecuritySettings :
         val quickExitTellaSwitch = binding.quickDeleteSwitch
         setupQuickExitSwitch(quickExitTellaSwitch.mSwitch)
         setupQuickExitSettingsView(quickExitTellaSwitch.mSwitch)
-
-        val silentCameraTellaSwitch = binding.cameraSilentSwitch
-        silentCameraTellaSwitch.mSwitch.isChecked = Preferences.isShutterMute()
-        silentCameraTellaSwitch.mSwitch.apply {
-            setOnCheckedChangeListener { _, isChecked ->
-                Preferences.setShutterMute(isChecked)
-            }
-        }
+        setUpSilentCameraSwitch()
 
         val enableSecurityScreen = binding.securityScreenSwitch
         enableSecurityScreen.mSwitch.isChecked = Preferences.isSecurityScreenEnabled()
@@ -203,6 +201,11 @@ class SecuritySettings :
         setUpLockTypeText()
     }
 
+    override fun onResume() {
+        super.onResume()
+        syncShutterMuteSwitchState()
+    }
+
     private fun showLockTimeoutSettingDialog() {
         val optionConsumer = object : BottomSheetUtils.LockOptionConsumer {
             override fun accept(option: Long) {
@@ -222,6 +225,91 @@ class SecuritySettings :
                 optionConsumer
             )
         }
+    }
+
+    private fun setUpSilentCameraSwitch() {
+        syncShutterMuteSwitchState()
+        binding.cameraSilentSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isUpdatingShutterMuteSwitch) return@setOnCheckedChangeListener
+
+            if (!isChecked) {
+                pendingShutterMuteEnable = false
+                Preferences.setShutterMute(false)
+                return@setOnCheckedChangeListener
+            }
+
+            if (hasShutterDndAccess()) {
+                pendingShutterMuteEnable = false
+                Preferences.setShutterMute(true)
+            } else {
+                Preferences.setShutterMute(false)
+                setSilentCameraSwitchChecked(false)
+                showShutterDndAccessSheet()
+            }
+        }
+    }
+
+    private fun syncShutterMuteSwitchState() {
+        val hasShutterDndAccess = hasShutterDndAccess()
+        val isShutterMuteEnabled = Preferences.isShutterMute()
+
+        when {
+            pendingShutterMuteEnable -> {
+                Preferences.setShutterMute(hasShutterDndAccess)
+                pendingShutterMuteEnable = false
+            }
+
+            isShutterMuteEnabled && !hasShutterDndAccess -> {
+                Preferences.setShutterMute(false)
+            }
+        }
+
+        setSilentCameraSwitchChecked(Preferences.isShutterMute() && hasShutterDndAccess)
+    }
+
+    private fun setSilentCameraSwitchChecked(isChecked: Boolean) {
+        isUpdatingShutterMuteSwitch = true
+        binding.cameraSilentSwitch.mSwitch.isChecked = isChecked
+        isUpdatingShutterMuteSwitch = false
+    }
+
+    private fun hasShutterDndAccess(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true
+        }
+
+        val notificationManager =
+            baseActivity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.isNotificationPolicyAccessGranted
+    }
+
+    private fun showShutterDndAccessSheet() {
+        showConfirmSheet(
+            fragmentManager = requireActivity().supportFragmentManager,
+            titleText = getString(R.string.settings_sec_camera_mute_switch),
+            descriptionText = getString(R.string.camera_shutter_dnd_dialog_expl),
+            actionButtonLabel = getString(R.string.action_go_to_settings),
+            cancelButtonLabel = getString(R.string.action_cancel),
+            consumer = object : ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        baseActivity.maybeChangeTemporaryTimeout {
+                            pendingShutterMuteEnable = true
+                            try {
+                                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                            } catch (e: Exception) {
+                                pendingShutterMuteEnable = false
+                                Timber.e(e, "Unable to open notification policy settings")
+                            }
+                        }
+                    } else {
+                        pendingShutterMuteEnable = false
+                        Preferences.setShutterMute(false)
+                        setSilentCameraSwitchChecked(false)
+                    }
+                }
+            }
+        )
     }
 
     private fun showDeleteAfterFailedUnlockDialog() {

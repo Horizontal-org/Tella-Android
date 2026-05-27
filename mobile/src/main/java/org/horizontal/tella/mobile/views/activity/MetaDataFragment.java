@@ -345,23 +345,23 @@ public abstract class MetaDataFragment extends BaseFragment implements SensorEve
             final int requestCode,
             final MetadataActivity.LocationSettingsCheckDoneListener listener
     ) {
-        baseActivity.maybeChangeTemporaryTimeout(() -> {
-            BottomSheetUtils.showConfirmSheet(
-                    baseActivity.getSupportFragmentManager(),
-                    getString(R.string.verification_prompt_dialog_title),
-                    getString(R.string.verification_prompt_dialog_expl),
-                    getString(R.string.verification_prompt_action_enable_GPS),
-                    getString(R.string.verification_prompt_action_ignore),
-                    isConfirmed -> {
-                        if (isConfirmed) {
+        BottomSheetUtils.showConfirmSheet(
+                baseActivity.getSupportFragmentManager(),
+                getString(R.string.verification_prompt_dialog_title),
+                getString(R.string.verification_prompt_dialog_expl),
+                getString(R.string.verification_prompt_action_enable_GPS),
+                getString(R.string.verification_prompt_action_ignore),
+                isConfirmed -> {
+                    if (isConfirmed) {
+                        baseActivity.maybeChangeTemporaryTimeout(() -> {
                             manageLocationSettings(requestCode, listener);
-                        } else {
-                            listener.onContinue();
-                        }
+                            return Unit.INSTANCE;
+                        });
+                    } else {
+                        listener.onContinue();
                     }
-            );
-            return Unit.INSTANCE;
-        });
+                }
+        );
     }
 
     public SensorData getLightSensorData() {
