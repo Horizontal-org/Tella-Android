@@ -46,6 +46,7 @@ class BlankFormsListFragment :
     private var alertDialog: AlertDialog? = null
     private var noUpdatedForms = 0
     private var silentFormUpdates = false
+    private var isBlankFormsRefreshInProgress = false
     override fun getFormListType(): FormListInterface.Type {
         return FormListInterface.Type.BLANK
     }
@@ -119,7 +120,9 @@ class BlankFormsListFragment :
         model.showBlankFormRefreshLoading.observe(
             viewLifecycleOwner
         ) { show: Boolean? ->
-            if (!show!!) {
+            val isRefreshing = show == true
+            updateBlankFormsEmptyState(isRefreshing)
+            if (!isRefreshing) {
                 Preferences.setLastCollectRefresh(
                     System.currentTimeMillis()
                 )
@@ -128,6 +131,10 @@ class BlankFormsListFragment :
                 }
                 hideAlertDialog()
             } else {
+                if (!hasAnyBlankForms()) {
+                    hideAlertDialog()
+                    return@observe
+                }
                 if (alertDialog != null) return@observe
                 if (activity != null) {
                     //model.showFab.postValue(false)
@@ -183,6 +190,7 @@ class BlankFormsListFragment :
             )
         }
         model.onUserCancel.observe(viewLifecycleOwner) {
+            updateBlankFormsEmptyState(false)
             hideAlertDialog()
             DialogUtils.showBottomMessage(
                 baseActivity,
@@ -255,8 +263,6 @@ class BlankFormsListFragment :
         binding.blankFormView.visibility = View.VISIBLE
         downloadedForms!!.clear()
         availableForms!!.clear()
-        binding.blankFormsInfo.visibility =
-            if (listFormResult.forms.isEmpty()) View.VISIBLE else View.GONE
         for (form in listFormResult.forms) {
             if (form.isDownloaded) {
                 downloadedForms!!.add(form)
@@ -282,6 +288,7 @@ class BlankFormsListFragment :
                 Timber.d(error.exception, javaClass.name)
             }
         }
+        updateBlankFormsEmptyState()
     }
 
     private fun updateDownloadedFormList() {
@@ -313,12 +320,25 @@ class BlankFormsListFragment :
             if (availableForms!!.size > 0) View.VISIBLE else View.GONE
     }
 
+    private fun updateBlankFormsEmptyState(isRefreshing: Boolean = isBlankFormsRefreshInProgress) {
+        isBlankFormsRefreshInProgress = isRefreshing
+        binding.blankFormsLoading.visibility =
+            if (!hasAnyBlankForms() && isRefreshing) View.VISIBLE else View.GONE
+        binding.blankFormsInfo.visibility =
+            if (!hasAnyBlankForms() && !isRefreshing) View.VISIBLE else View.GONE
+    }
+
+    private fun hasAnyBlankForms(): Boolean {
+        return !availableForms.isNullOrEmpty() || !downloadedForms.isNullOrEmpty()
+    }
+
     private fun updateFormViews() {
         binding.downloadedForms.removeAllViews()
         binding.blankForms.removeAllViews()
         createCollectFormViews(availableForms!!, binding.blankForms)
         createCollectFormViews(downloadedForms!!, binding.downloadedForms)
         setViewsVisibility()
+        updateBlankFormsEmptyState()
     }
 
     private fun hideAlertDialog() {

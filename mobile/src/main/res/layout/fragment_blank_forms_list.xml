@@ -106,6 +106,25 @@
         android:text="@string/collect.blank_expl_no.forms"
         android:visibility="gone" />
 
+    <FrameLayout
+        android:id="@+id/blank_forms_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="80dp"
+            android:indeterminate="true"
+            app:indicatorColor="@color/tigers_eye"
+            app:trackColor="@color/wa_white"
+            app:trackThickness="4dp" />
+    </FrameLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
