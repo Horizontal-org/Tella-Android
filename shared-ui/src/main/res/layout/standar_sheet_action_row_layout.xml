@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/drag_anchor_drawable"
+    android:padding="24dp"
+    app:behavior_hideable="true">
+
+    <TextView
+        android:id="@+id/standard_sheet_title"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Camera silent mode" />
+
+    <TextView
+        android:id="@+id/standard_sheet_content"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
+        tools:text="For added security, you can silence the shutter sound on Tella's camera." />
+
+    <TextView
+        android:id="@+id/standard_sheet_cancel_btn"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        tools:text="DISABLE AND KEEP CAMERA SOUND" />
+
+    <TextView
+        android:id="@+id/standard_sheet_confirm_btn"
+        style="@style/Tella_Main_White_Text.MeduimbBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/standard_sheet_cancel_btn"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        tools:text="ENABLE AND GO TO SETTINGS" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

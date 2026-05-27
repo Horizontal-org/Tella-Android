@@ -95,11 +95,19 @@ public class Preferences {
     }
 
     public static boolean isShutterMute() {
-        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, true);
+        return getBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, false);
     }
 
     public static void setShutterMute(boolean value) {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
+    }
+
+    public static boolean isShutterDndPromptDeclined() {
+        return getBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, false);
+    }
+
+    public static void setShutterDndPromptDeclined(boolean value) {
+        setBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, value);
     }
 
     public static boolean isKeepExif() {

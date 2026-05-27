@@ -38,7 +38,6 @@ import com.hzontal.tella_vault.rx.RxVault;
 import com.hzontal.tella_vault.rx.RxVaultFileBuilder;
 import com.hzontal.utils.MediaFile;
 
-import org.apache.commons.io.IOUtils;
 import org.hzontal.shared_ui.utils.DialogUtils;
 
 import java.io.BufferedInputStream;
@@ -891,25 +890,14 @@ public class MediaFileHandler {
         ExifInterface ei = new ExifInterface(inputStream);
         int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotate(bitmap, 90);
-
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotate(bitmap, 180);
-
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotate(bitmap, 270);
-
-            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                return flip(bitmap, true, false);
-
-            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                return flip(bitmap, false, true);
-
-            default:
-                return bitmap;
-        }
+        return switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90 -> rotate(bitmap, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180 -> rotate(bitmap, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270 -> rotate(bitmap, 270);
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flip(bitmap, true, false);
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL -> flip(bitmap, false, true);
+            default -> bitmap;
+        };
     }
 
     private static Bitmap rotate(Bitmap bitmap, float degrees) {

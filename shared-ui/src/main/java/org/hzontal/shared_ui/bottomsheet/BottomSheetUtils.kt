@@ -639,6 +639,55 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
+    @JvmStatic
+    fun showConfirmSheetWithActionRow(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager)
+                .page(R.layout.standar_sheet_action_row_layout)
+                .cancellable(true)
+                .screenTag("ConfirmSheetActionRow")
+        customSheetFragment.holder(GenericSheetHolder(), object : Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        consumer.accept(isConfirmed = false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    cancelButton.visibility =
+                        if (cancelButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
 
     @JvmStatic
     fun showChooseImportSheet(
