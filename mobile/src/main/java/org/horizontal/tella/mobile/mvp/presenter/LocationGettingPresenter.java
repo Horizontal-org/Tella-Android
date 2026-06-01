@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.content.ContextCompat;
@@ -16,18 +17,23 @@ import org.horizontal.tella.mobile.mvp.contract.ILocationGettingPresenterContrac
 import org.horizontal.tella.mobile.util.LocationUtil;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocationGettingPresenter implements ILocationGettingPresenterContract.IPresenter {
     private static final long LOCATION_REQUEST_INTERVAL_MS = 100;
     private static final float LOCATION_MIN_DISTANCE_M = 0f;
+    private static final long LOCATION_TIMEOUT_MS = 15_000;
 
     private ILocationGettingPresenterContract.IView view;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private boolean listenerRegistered;
+    private final List<String> activeProviders = new ArrayList<>();
     private final boolean untilThreshold;
     private final float threshold;
     private Location currentBestLocation;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable locationTimeoutRunnable;
 
     public LocationGettingPresenter(ILocationGettingPresenterContract.IView view, boolean untilThreshold) {
         this.view = view;
@@ -47,16 +53,17 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
             return;
         }
 
-        if (!isGPSProviderEnabled()) {
+        if (!isGPSProviderEnabled() && !isNetworkProviderEnabled()) {
             view.onGPSProviderDisabled();
             return;
         }
 
         view.onGettingLocationStart();
         currentBestLocation = null;
+        scheduleLocationTimeout();
 
         if (useLastKnownLocation && locationManager != null) {
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location lastLocation = getBestLastKnownLocation();
             if (lastLocation != null) {
                 sendLocation(lastLocation);
             }
@@ -67,6 +74,7 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
     @Override
     public void stopGettingLocation() {
+        cancelLocationTimeout();
         stopLocationListening();
 
         if (view != null) {
@@ -84,8 +92,13 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
+    public boolean isNetworkProviderEnabled() {
+        return locationManager != null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
     @Override
     public void destroy() {
+        cancelLocationTimeout();
         stopLocationListening();
         view = null;
         locationListener = null;
@@ -94,11 +107,6 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
     private void sendLocation(Location location) {
         if (!LocationUtil.isBetterLocation(location, currentBestLocation)) {
-            return;
-        }
-
-        if (location == null) {
-            startGettingLocation(false);
             return;
         }
 
@@ -112,10 +120,7 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
             return;
         }
 
-        stopLocationListening();
-        if (view != null) {
-            view.onGettingLocationEnd();
-        }
+        stopGettingLocation();
     }
 
     private boolean thresholdReached(Location location) {
@@ -124,41 +129,95 @@ public class LocationGettingPresenter implements ILocationGettingPresenterContra
 
     private boolean noLocationPermissions() {
         Context context = view.getContext();
-        return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_DENIED)
-                || (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                == PackageManager.PERMISSION_DENIED);
+        boolean fineGranted = ContextCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+        boolean coarseGranted = ContextCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+        return !fineGranted && !coarseGranted;
+    }
+
+    @SuppressLint("MissingPermission")
+    private Location getBestLastKnownLocation() {
+        if (locationManager == null) {
+            return null;
+        }
+
+        Location best = null;
+        for (String provider : getAvailableProviders()) {
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (location != null && LocationUtil.isBetterLocation(location, best)) {
+                best = location;
+            }
+        }
+        return best;
+    }
+
+    private List<String> getAvailableProviders() {
+        List<String> providers = new ArrayList<>();
+        if (locationManager == null) {
+            return providers;
+        }
+        if (isGPSProviderEnabled()) {
+            providers.add(LocationManager.GPS_PROVIDER);
+        }
+        if (isNetworkProviderEnabled()) {
+            providers.add(LocationManager.NETWORK_PROVIDER);
+        }
+        return providers;
     }
 
     @SuppressLint("MissingPermission")
     private void startLocationListening() {
-        if (locationManager == null || listenerRegistered) {
+        if (locationManager == null) {
             return;
         }
 
-        try {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    LOCATION_REQUEST_INTERVAL_MS,
-                    LOCATION_MIN_DISTANCE_M,
-                    locationListener,
-                    Looper.getMainLooper()
-            );
-            listenerRegistered = true;
-        } catch (SecurityException ignored) {
+        for (String provider : getAvailableProviders()) {
+            if (activeProviders.contains(provider)) {
+                continue;
+            }
+            try {
+                locationManager.requestLocationUpdates(
+                        provider,
+                        LOCATION_REQUEST_INTERVAL_MS,
+                        LOCATION_MIN_DISTANCE_M,
+                        locationListener,
+                        Looper.getMainLooper()
+                );
+                activeProviders.add(provider);
+            } catch (SecurityException ignored) {
+            }
         }
     }
 
     private void stopLocationListening() {
-        if (!listenerRegistered || locationManager == null || locationListener == null) {
+        if (locationManager == null || locationListener == null || activeProviders.isEmpty()) {
+            activeProviders.clear();
             return;
         }
 
-        try {
-            locationManager.removeUpdates(locationListener);
-        } catch (SecurityException ignored) {
+        for (String provider : activeProviders) {
+            try {
+                locationManager.removeUpdates(locationListener);
+            } catch (SecurityException ignored) {
+            }
         }
-        listenerRegistered = false;
+        activeProviders.clear();
+    }
+
+    private void scheduleLocationTimeout() {
+        cancelLocationTimeout();
+        locationTimeoutRunnable = this::stopGettingLocation;
+        handler.postDelayed(locationTimeoutRunnable, LOCATION_TIMEOUT_MS);
+    }
+
+    private void cancelLocationTimeout() {
+        if (locationTimeoutRunnable != null) {
+            handler.removeCallbacks(locationTimeoutRunnable);
+            locationTimeoutRunnable = null;
+        }
     }
 
     private static class MyLocationListener implements LocationListener {

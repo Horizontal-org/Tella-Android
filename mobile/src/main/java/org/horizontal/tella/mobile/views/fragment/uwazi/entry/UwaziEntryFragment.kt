@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.entry
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -87,6 +86,21 @@ class UwaziEntryFragment :
         ) {
             val resultReceived = bundle.getString(UWAZI_RELATION_SHIP_ENTITIES) ?: ""
             putRelationShipEntitiesInForm(resultReceived)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == C.GPS_PROVIDER) {
+            if (hasLocationPermissions()) {
+                binding.root.post { uwaziFormView.resumePendingLocationActions() }
+            } else {
+                uwaziFormView.clearPendingLocationActions()
+            }
         }
     }
 
@@ -241,17 +255,23 @@ class UwaziEntryFragment :
         )
     }
 
-    private fun hasGpsPermissions(context: Context): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            context,
+    private fun hasLocationPermissions(): Boolean {
+        val fineGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        return fineGranted || coarseGranted
     }
 
     private fun requestGpsPermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ), requestCode
         )
     }
@@ -261,7 +281,7 @@ class UwaziEntryFragment :
             LocationPermissionRequiredEvent::class.java,
             object : EventObserver<LocationPermissionRequiredEvent?>() {
                 override fun onNext(event: LocationPermissionRequiredEvent) {
-                    if (!hasGpsPermissions(requireContext())) {
+                    if (!hasLocationPermissions()) {
                         baseActivity.maybeChangeTemporaryTimeout {
                             requestGpsPermissions(C.GPS_PROVIDER)
                         }

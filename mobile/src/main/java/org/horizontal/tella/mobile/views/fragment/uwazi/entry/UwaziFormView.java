@@ -24,6 +24,7 @@ import org.horizontal.tella.mobile.odk.FormController;
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity;
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziFileBinaryWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziMultiFileWidget;
+import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziGeoPointWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziQuestionWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziRelationShipWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziWidgetFactory;
@@ -239,5 +240,21 @@ public class UwaziFormView extends LinearLayout {
         return q.getPrompt().getIndex().equals(
                 FormController.getActive().getIndexWaitingForData()
         );
+    }
+
+    public void resumePendingLocationActions() {
+        for (UwaziQuestionWidget q : widgets) {
+            if (q instanceof UwaziGeoPointWidget) {
+                ((UwaziGeoPointWidget) q).resumePendingLocationAction();
+            }
+        }
+    }
+
+    public void clearPendingLocationActions() {
+        for (UwaziQuestionWidget q : widgets) {
+            if (q instanceof UwaziGeoPointWidget) {
+                ((UwaziGeoPointWidget) q).clearPendingLocationAction();
+            }
+        }
     }
 }

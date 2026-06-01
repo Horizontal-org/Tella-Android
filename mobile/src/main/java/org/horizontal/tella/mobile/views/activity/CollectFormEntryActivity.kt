@@ -363,11 +363,22 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         }
     }
 
-    /*   @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        CollectFormEntryActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }*/
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == C.GPS_PROVIDER) {
+            if (hasLocationPermissions()) {
+                binding.root.post { resumePendingGeopointActions() }
+            } else {
+                clearPendingGeopointActions()
+                formParser?.stopWaitingBinaryData()
+            }
+        }
+    }
+
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun startPermissionProcess() {
         manageLocationSettings(
@@ -1023,20 +1034,37 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         saveCurrentScreen(false)
     }
 
-    private fun hasGpsPermissions(context: Context): Boolean {
-        return ActivityCompat.checkSelfPermission(
-            context,
+    private fun hasLocationPermissions(): Boolean {
+        val fineGranted = ActivityCompat.checkSelfPermission(
+            this,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
+        val coarseGranted = ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        return fineGranted || coarseGranted
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun requestGpsPermissions(requestCode: Int) {
         requestPermissions(
             arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ), requestCode
         )
+    }
+
+    private fun resumePendingGeopointActions() {
+        if (currentScreenView is CollectFormView) {
+            (currentScreenView as CollectFormView).resumePendingLocationActions()
+        }
+    }
+
+    private fun clearPendingGeopointActions() {
+        if (currentScreenView is CollectFormView) {
+            (currentScreenView as CollectFormView).clearPendingLocationActions()
+        }
     }
 
     private fun onGpsPermissionsListener() {
@@ -1044,11 +1072,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             LocationPermissionRequiredEvent::class.java,
             object : EventObserver<LocationPermissionRequiredEvent?>() {
                 override fun onNext(event: LocationPermissionRequiredEvent) {
-                    if (!hasGpsPermissions(context)) {
+                    if (!hasLocationPermissions()) {
                         maybeChangeTemporaryTimeout {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                requestGpsPermissions(C.GPS_PROVIDER)
-                            }
+                            requestGpsPermissions(C.GPS_PROVIDER)
                         }
                     }
                 }

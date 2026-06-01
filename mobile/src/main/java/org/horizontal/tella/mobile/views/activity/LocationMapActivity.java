@@ -78,7 +78,8 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
         myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
         readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
-        locationGettingPresenter = new LocationGettingPresenter(this, readOnly);
+        // Do not block the map UI on accuracy threshold; the user can refresh via the FAB.
+        locationGettingPresenter = new LocationGettingPresenter(this, false);
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -91,7 +92,8 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         configureMap();
 
         faButton.setOnClickListener(view -> {
-            if (locationGettingPresenter.isGPSProviderEnabled()) {
+            if (locationGettingPresenter.isGPSProviderEnabled()
+                    || locationGettingPresenter.isNetworkProviderEnabled()) {
                 startGettingLocation();
             } else {
                 checkLocationSettings(C.GPS_PROVIDER, this::startGettingLocation);
