@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
@@ -50,11 +51,34 @@ class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding
                         val url = serverReports.url
                         projectSlug = url.substring(url.lastIndexOf('/') - 1)
                         serverReports.url = url.substring(0, url.lastIndexOf('/') - 1)
-                        viewModel.listServers(url)
+                        showHideProjectUrlSheet()
                     }
                 }
             }
         }
+    }
+
+    private fun showHideProjectUrlSheet() {
+        BottomSheetUtils.showStandardSheet(
+            fragmentManager = childFragmentManager,
+            titleText = getString(R.string.Show_Project_Url_Sheet_Title),
+            descriptionText = getString(R.string.Show_Project_Url_Sheet_Description),
+            actionButtonLabel = getString(R.string.Show_Project_Url_Sheet_Show_Url),
+            cancelButtonLabel = getString(R.string.Show_Project_Url_Sheet_Hide_Url),
+            onConfirmClick = {
+                serverReports.hideProjectUrl = false
+                proceedAfterUrlChoice()
+            },
+            onCancelClick = {
+                serverReports.hideProjectUrl = true
+                proceedAfterUrlChoice()
+            }
+        )
+    }
+
+    private fun proceedAfterUrlChoice() {
+        val fullUrl = serverReports.url + "p/" + projectSlug
+        viewModel.listServers(fullUrl)
     }
 
     private fun initObservers() {

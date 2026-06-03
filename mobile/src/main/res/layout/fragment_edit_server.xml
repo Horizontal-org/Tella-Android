@@ -72,6 +72,7 @@
                         tools:text="@string/Setting_Reports_Connection_Name" />
 
                     <View
+                        android:id="@+id/serverUrlTopDivider"
                         style="@style/SettingsMainShadowLine"
                         android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
 
@@ -96,6 +97,7 @@
                         android:text="@string/settings.docu_field_server.name" />
 
                     <View
+                        android:id="@+id/serverUrlBottomDivider"
                         style="@style/SettingsMainShadowLine"
                         android:layout_marginVertical="@dimen/collect_form_padding_vertical"
 

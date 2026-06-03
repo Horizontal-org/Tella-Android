@@ -2,6 +2,7 @@ package org.horizontal.tella.mobile.views.dialog.reports.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
@@ -25,9 +26,7 @@ internal const val EDIT_MODE_KEY = "edit_mode_key"
 class EditTellaServerFragment :
     BaseBindingFragment<FragmentEditServerBinding>(FragmentEditServerBinding::inflate) {
 
-    private val reportServer: TellaReportServer by lazy {
-        Gson().fromJson(requireArguments().getString(OBJECT_KEY), TellaReportServer::class.java)
-    }
+    private lateinit var reportServer: TellaReportServer
     private val isEditMode: Boolean by lazy {
         requireArguments().getBoolean(EDIT_MODE_KEY)
     }
@@ -61,9 +60,28 @@ class EditTellaServerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        reportServer = Gson().fromJson(
+            requireArguments().getString(OBJECT_KEY),
+            TellaReportServer::class.java
+        )
+        if (isEditMode && reportServer.id > 0) {
+            viewModel.loadedServer.observe(viewLifecycleOwner) { server ->
+                reportServer = server
+                bindServerDetails()
+            }
+            viewModel.loadServer(reportServer.id)
+        } else {
+            bindServerDetails()
+        }
         initData()
         initListeners()
+        setupBackNavigation()
+    }
+
+    private fun setupBackNavigation() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            baseActivity.finish()
+        }
     }
 
     private fun initData() {
@@ -91,11 +109,18 @@ class EditTellaServerFragment :
         }
     }
 
-    private fun initView() {
+    private fun bindServerDetails() {
         reportServer.apply {
             binding.apply {
                 serverNameTv.text = name.orEmpty()
-                serverUrlTv.text = url.orEmpty()
+                val showProjectUrl = !hideProjectUrl
+                serverUrlTopDivider.isVisible = showProjectUrl
+                serverUrlLabel.isVisible = showProjectUrl
+                serverUrlTv.isVisible = showProjectUrl
+                serverUrlBottomDivider.isVisible = true
+                if (showProjectUrl) {
+                    serverUrlTv.text = buildDisplayUrl()
+                }
                 userNameTv.text = username.orEmpty()
                 backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
                 shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
@@ -146,6 +171,16 @@ class EditTellaServerFragment :
         }
     }
 
+    private fun buildDisplayUrl(): String {
+        val baseUrl = reportServer.url.orEmpty()
+        val slug = reportServer.projectSlug
+        return if (slug.isNullOrEmpty()) {
+            baseUrl
+        } else {
+            "$baseUrl/p/$slug"
+        }
+    }
+
     private fun copyFields(server: TellaReportServer): TellaReportServer {
         server.url = reportServer.url
         server.username = reportServer.username
@@ -155,6 +190,7 @@ class EditTellaServerFragment :
         server.isActivatedBackgroundUpload = reportServer.isActivatedBackgroundUpload
         server.isAutoUpload = reportServer.isAutoUpload
         server.isAutoDelete = reportServer.isAutoDelete
+        server.hideProjectUrl = reportServer.hideProjectUrl
         return server
     }
 

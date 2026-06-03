@@ -701,6 +701,10 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Paused_Report">Paused</string>
   <string name="Report_Waiting_For_Connection">Waiting for connection</string>
   <string name="Project_Url_Screen_Title">Enter project URL</string>
+  <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.\n\nWARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
+  <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="Report_Dialog_Draft_Title">Exit report?</string>
   <string name="Report_Server_Already_Exist_Error">You are already connected to this project. Please enter another URL.</string>
   <string name="Report_Deleted_Confirmation"> %s has been deleted.</string>
