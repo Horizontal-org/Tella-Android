@@ -78,6 +78,7 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
 
         myLocation = (MyLocation) getIntent().getSerializableExtra(SELECTED_LOCATION);
         readOnly = getIntent().getBooleanExtra(CURRENT_LOCATION_ONLY, true);
+        // Do not block the map UI on accuracy threshold; the user can refresh via the FAB.
         locationGettingPresenter = new LocationGettingPresenter(this, false);
 
         setSupportActionBar(toolbar);

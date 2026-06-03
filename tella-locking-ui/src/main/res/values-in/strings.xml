@@ -33,7 +33,7 @@
     <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Please try again. Your passwords do not match.</string>
     <string name="LockSuccess_Message_AllDone">You\'re all\ndone!</string>
     <string name="LockSuccess_Message_Hint">You can always change your lock option\n and further customize Tella in Settings.</string>
-    <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
+    <string name="LockSuccess_Action_GoToTella">Go to tella</string>
     <string name="LockPasswordSet_Message_Error_IncorrectPassword">Incorrect password,\n please try again</string>
     <string name="UnlockPassword_Message_EnterPassword">Enter your password to \nunlock Tella</string>
     <string name="LockPasswordConfirm_Message_ConfirmPassword">Confirm your password</string>
