@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Exit form?</string>
   <string name="verification_prompt_dialog_title">Enable GPS?</string>
   <string name="collect_tab.title_blank">Blank</string>
-  <string name="action_cancel">cancel</string>
+  <string name="action_cancel">Cancel</string>
   <string name="settings_menu.item_contact">Contact us</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
-  <string name="action_delete">delete</string>
+  <string name="action_delete">Delete</string>
   <string name="collect.draft_tab.title">Draft</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">This field cannot be empty.</string>
