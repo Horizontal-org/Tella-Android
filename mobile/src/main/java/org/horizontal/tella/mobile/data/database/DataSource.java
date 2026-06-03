@@ -547,7 +547,8 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                             D.C_PROJECT_SLUG,
                             D.C_PROJECT_NAME,
                             D.C_PROJECT_ID,
-                            D.C_TELLA_WEB_API_VERSION
+                            D.C_TELLA_WEB_API_VERSION,
+                            D.C_HIDE_PROJECT_URL
                     },
                     null,
                     null,
@@ -638,7 +639,9 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
                                 D.C_BACKGROUND_UPLOAD,
                                 D.C_PROJECT_SLUG,
                                 D.C_PROJECT_NAME,
-                                D.C_PROJECT_ID},
+                                D.C_PROJECT_ID,
+                                D.C_TELLA_WEB_API_VERSION,
+                                D.C_HIDE_PROJECT_URL},
                         D.C_ID + "= ?",
                         new String[]{Long.toString(id)},
                         null, null, null, null)) {
@@ -928,6 +931,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_AUTO_DELETE, server.isAutoDelete() ? 1 : 0);
         values.put(D.C_AUTO_UPLOAD, server.isAutoUpload() ? 1 : 0);
         values.put(D.C_TELLA_WEB_API_VERSION, server.getVersion());
+        values.put(D.C_HIDE_PROJECT_URL, server.getHideProjectUrl() ? 1 : 0);
 
         server.setId(database.insert(D.T_TELLA_UPLOAD_SERVER, null, values));
 
@@ -2193,6 +2197,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         values.put(D.C_BACKGROUND_UPLOAD, server.isActivatedBackgroundUpload() ? 1 : 0);
         values.put(D.C_ACTIVATED_METADATA, server.isActivatedMetadata() ? 1 : 0);
         values.put(D.C_TELLA_WEB_API_VERSION, server.getVersion());
+        values.put(D.C_HIDE_PROJECT_URL, server.getHideProjectUrl() ? 1 : 0);
 
         database.update(D.T_TELLA_UPLOAD_SERVER, values, D.C_ID + "= ?", new String[]{Long.toString(server.getId())});
 
@@ -2342,6 +2347,7 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
         server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));
         server.setProjectName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_NAME)));
         server.setVersion(cursor.getString(cursor.getColumnIndexOrThrow(D.C_TELLA_WEB_API_VERSION)));
+        server.setHideProjectUrl(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_HIDE_PROJECT_URL)) > 0);
 
         return server;
     }

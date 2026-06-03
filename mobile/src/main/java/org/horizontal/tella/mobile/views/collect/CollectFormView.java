@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.odk.FormController;
+import org.horizontal.tella.mobile.views.collect.widgets.GeoPointWidget;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.collect.widgets.WidgetFactory;
 
@@ -166,6 +167,22 @@ public class CollectFormView extends LinearLayout {
         return q.getPrompt().getIndex().equals(
                 FormController.getActive().getIndexWaitingForData()
         );
+    }
+
+    public void resumePendingLocationActions() {
+        for (QuestionWidget q : widgets) {
+            if (q instanceof GeoPointWidget) {
+                ((GeoPointWidget) q).resumePendingLocationAction();
+            }
+        }
+    }
+
+    public void clearPendingLocationActions() {
+        for (QuestionWidget q : widgets) {
+            if (q instanceof GeoPointWidget) {
+                ((GeoPointWidget) q).clearPendingLocationAction();
+            }
+        }
     }
 
     private String getGroupTitle(FormEntryCaption[] groups) {

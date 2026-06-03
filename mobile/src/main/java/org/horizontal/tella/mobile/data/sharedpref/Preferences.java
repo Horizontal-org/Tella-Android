@@ -102,6 +102,14 @@ public class Preferences {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
     }
 
+    public static boolean isShutterDndPromptDeclined() {
+        return getBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, false);
+    }
+
+    public static void setShutterDndPromptDeclined(boolean value) {
+        setBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, value);
+    }
+
     public static boolean isKeepExif() {
         return getBoolean(SharedPrefs.KEEP_EXIF, false);
     }
@@ -140,6 +148,14 @@ public class Preferences {
 
     public static void setShowP2pWifiConfirmationSheet(boolean value) {
         setBoolean(SharedPrefs.SHOW_P2P_WIFI_CONFIRMATION_SHEET, value);
+    }
+
+    public static boolean isShowMapFirstLoadSheet() {
+        return getBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, true);
+    }
+
+    public static void setShowMapFirstLoadSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, value);
     }
 
     public static boolean isPanicGeolocationActive() {

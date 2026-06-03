@@ -53,6 +53,9 @@ public class ReportsDatabaseModule implements DatabaseModule {
 
         // DBv17
         db.execSQL(alterTableTellaUploadServerAddApiVersion());
+
+        // DBv18
+        db.execSQL(alterTableTellaUploadServerAddHideProjectUrl());
     }
 
     @Override
@@ -78,6 +81,9 @@ public class ReportsDatabaseModule implements DatabaseModule {
         }
         if (oldVersion < 17) {
             db.execSQL(alterTableTellaUploadServerAddApiVersion());
+        }
+        if (oldVersion < 18) {
+            db.execSQL(alterTableTellaUploadServerAddHideProjectUrl());
         }
     }
 
@@ -135,6 +141,11 @@ public class ReportsDatabaseModule implements DatabaseModule {
     private String alterTableTellaUploadServerAddApiVersion() {
         return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
                 cddl(D.C_TELLA_WEB_API_VERSION, D.TEXT);
+    }
+
+    private String alterTableTellaUploadServerAddHideProjectUrl() {
+        return "ALTER TABLE " + sq(D.T_TELLA_UPLOAD_SERVER) + " ADD COLUMN " +
+                cddl(D.C_HIDE_PROJECT_URL, D.INTEGER, true) + " DEFAULT 0";
     }
 
     private String createTableReportFormInstance() {

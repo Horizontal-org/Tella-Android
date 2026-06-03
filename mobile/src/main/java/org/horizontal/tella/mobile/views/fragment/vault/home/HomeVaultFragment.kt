@@ -192,6 +192,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
 
             // Observe favorite collect forms
             favoriteCollectForms.observe(viewLifecycleOwner) { forms ->
+                if (!Preferences.isShowFavoriteForms()) {
+                    vaultAdapter.removeFavoriteForms()
+                    return@observe
+                }
                 if (forms.isNullOrEmpty()) {
                     vaultAdapter.removeFavoriteForms()
                     return@observe
@@ -205,6 +209,10 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
             }
             // Observe favorite collect templates
             favoriteCollectTemplates.observe(viewLifecycleOwner) { templates ->
+                if (!Preferences.isShowFavoriteTemplates()) {
+                    vaultAdapter.removeFavoriteTemplates()
+                    return@observe
+                }
                 handleFavoriteCollectTemplatesSuccess(templates)
             }
 
@@ -303,6 +311,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     }
 
     private fun initData() {
+        // DO NOT CHANGE THIS SCROLL SHOULD BE ALWAYS ON TOP
+        vaultAdapter.onListSubmitted = { scrollHomeToTop() }
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
@@ -584,7 +594,12 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         maybeHideFilesTitle()
         maybeGetRecentTemplates()
         updateToolbarIcon()
+        scrollHomeToTop()
+    }
 
+    private fun scrollHomeToTop() {
+        val recyclerView = if (::vaultRecyclerView.isInitialized) vaultRecyclerView else null
+        HomeScreenScroll.scrollToTop(recyclerView)
     }
 
     private fun maybeGetFiles() {

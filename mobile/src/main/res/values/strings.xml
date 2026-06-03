@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Exit form?</string>
   <string name="verification_prompt_dialog_title">Enable GPS?</string>
   <string name="collect_tab.title_blank">Blank</string>
-  <string name="action_cancel">cancel</string>
+  <string name="action_cancel">Cancel</string>
   <string name="settings_menu.item_contact">Contact us</string>
   <string name="collect_dialog.text_download.progress">Downloading the form</string>
   <string name="collect_toast_download.completed">Download completed</string>
-  <string name="action_delete">delete</string>
+  <string name="action_delete">Delete</string>
   <string name="collect.draft_tab.title">Draft</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">This field cannot be empty.</string>
@@ -148,6 +148,8 @@ mode activation</string>
   <string name="collect.form_meta_file.size">File size: %s</string>
   <string name="collect.form_toast_fail.load.attachment">There was an error loading the attachment. Please try again</string>
   <string name="collect.form_geopoint_banner_touch.map.select.location">Touch anywhere for 3 seconds to record position.</string>
+  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
+  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.\nPlease wait until the map finishes loading before selecting a location.\nPreviously viewed areas may still be visible offline.</string>
   <string name="gallery_action.desc_file.metadata">Verification information</string>
   <string name="verification.info_app.bar">Verification information</string>
   <string name="verification.info_field_filename">File name</string>
@@ -217,6 +219,8 @@ mode activation</string>
   <string name="collect.blank_action_unpin">Unpin from the top</string>
   <string name="collect.blank_action_pin">Pin to the top</string>
   <string name="verification.prompt_dialog.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the position of your evidence.</string>
+  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
   <string name="verification.prompt_action_ignore">Ignore</string>
   <string name="verification.prompt_action_enable.GPS">Turn on GPS</string>
   <string name="collect.blank_dialog.expl_updating.form.definitions">Updating the list of forms…</string>
@@ -292,6 +296,10 @@ mode activation</string>
   <string name="settings.select_lock_timeout">Lock Timeout</string>
   <string name="settings.sec_camera.mute_switch">Camera silent mode</string>
   <string name="settings.sec_camera.mute_expl">Turn off the camera shutter sound to draw less attention when taking photos.</string>
+  <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
+  <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. \n\nTo enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” for the Tella app.</string>
+  <string name="camera_shutter_dnd_enable_action">Enable </string>
+  <string name="camera_shutter_dnd_disable_action">Disable</string>
   <string name="settings.sec_quick.delete_switch">Quick delete</string>
   <string name="settings.sec_quick.delete_expl">Shows a sliding button on Tella’s homescreen to quicky delete files in Tella in emergency situations. </string>
   <string name="settings.servers.title_server.settings">Servers</string>
@@ -420,7 +428,7 @@ connecting to a server</string>
   <string name="Rec_Exit_SheetTitle">Save recording?</string>
   <string name="Rec_Exit_SheetText">Your recording is not saved. Would you like to save it before exiting?</string>
   <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
-  <string name="Vault_Encryting_SheetText">%d% complete</string>
+  <string name="Vault_Encryting_SheetText">%1$d%% complete</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Cancel encryption and delete file?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">If you cancel, your file will be lost</string>
   <string name="Vault_Encrypting_Cancel_SheetAction_Resume">RESUME ENCRYPTION</string>
@@ -693,6 +701,10 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Paused_Report">Paused</string>
   <string name="Report_Waiting_For_Connection">Waiting for connection</string>
   <string name="Project_Url_Screen_Title">Enter project URL</string>
+  <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.\n\nWARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
+  <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="Report_Dialog_Draft_Title">Exit report?</string>
   <string name="Report_Server_Already_Exist_Error">You are already connected to this project. Please enter another URL.</string>
   <string name="Report_Deleted_Confirmation"> %s has been deleted.</string>
@@ -723,6 +735,7 @@ they are uploaded to this project as a report.</string>
   <string name="Modified_Label">Modified</string>
   <string name="Snackbar_Submit_Report_Error">To submit a report, please type in a title and either add a description or attach a file.</string>
   <string name="action_open_settings">open settings</string>
+  <string name="action_go_to_settings">go to settings</string>
   <string name="action_refresh">refresh</string>
   <string name="action_check">check</string>
   <string name="action_show_location">show location</string>

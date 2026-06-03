@@ -66,6 +66,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 
 import org.horizontal.tella.mobile.bus.TellaBus;
+import org.horizontal.tella.mobile.bus.event.CamouflageAliasChangedEvent;
 import org.horizontal.tella.mobile.data.database.KeyDataSource;
 import org.horizontal.tella.mobile.data.nextcloud.TempFileManager;
 import org.horizontal.tella.mobile.data.rest.BaseApi;
@@ -75,6 +76,7 @@ import org.horizontal.tella.mobile.javarosa.JavaRosa;
 import org.horizontal.tella.mobile.javarosa.PropertyManager;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
 import org.horizontal.tella.mobile.util.C;
+import org.horizontal.tella.mobile.util.CamouflageManager;
 import org.horizontal.tella.mobile.util.LocaleManager;
 import org.horizontal.tella.mobile.util.TellaUpgrader;
 import org.horizontal.tella.mobile.util.divviup.DivviupUtils;
@@ -325,9 +327,20 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     public void onLockUpdateSuccess(android.content.Context context) {
+        maybeDisableCalculatorCamouflageAfterLockChange(context);
         android.content.Intent intent = new android.content.Intent(context, org.horizontal.tella.mobile.views.activity.LockUpdateSuccessActivity.class);
         intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    private void maybeDisableCalculatorCamouflageAfterLockChange(Context context) {
+        if (getUnlockRegistry().getActiveMethod(context) == UnlockRegistry.Method.TELLA_PIN) {
+            return;
+        }
+        CamouflageManager cm = CamouflageManager.getInstance();
+        if (cm.disableCalculatorCamouflage(context)) {
+            bus().post(new CamouflageAliasChangedEvent());
+        }
     }
 
     @Override

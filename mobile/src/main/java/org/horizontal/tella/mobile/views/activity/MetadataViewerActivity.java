@@ -42,6 +42,7 @@ public class MetadataViewerActivity extends BaseLockActivity {
 
         ActivityMetadataViewerBinding binding = ActivityMetadataViewerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        applyEdgeToEdgeDarkBackground(binding.getRoot());
 
         overridePendingTransition(R.anim.slide_in_start, R.anim.fade_out);
 

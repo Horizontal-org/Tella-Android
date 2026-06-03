@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/wa_white"
-    android:fitsSystemWindows="true"
+    android:background="@color/wa_purple"
     tools:context="org.horizontal.tella.mobile.views.activity.MetadataHelpActivity">
 
     <com.google.android.material.appbar.AppBarLayout
