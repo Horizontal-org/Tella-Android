@@ -238,33 +238,24 @@ class SecuritySettings :
                 return@setOnCheckedChangeListener
             }
 
-            if (hasShutterDndAccess()) {
-                pendingShutterMuteEnable = false
-                Preferences.setShutterMute(true)
-            } else {
-                Preferences.setShutterMute(false)
-                setSilentCameraSwitchChecked(false)
+            Preferences.setShutterMute(true)
+            if (!hasShutterDndAccess()) {
                 showShutterDndAccessSheet()
+            } else {
+                pendingShutterMuteEnable = false
             }
         }
     }
 
     private fun syncShutterMuteSwitchState() {
-        val hasShutterDndAccess = hasShutterDndAccess()
-        val isShutterMuteEnabled = Preferences.isShutterMute()
-
-        when {
-            pendingShutterMuteEnable -> {
-                Preferences.setShutterMute(hasShutterDndAccess)
-                pendingShutterMuteEnable = false
-            }
-
-            isShutterMuteEnabled && !hasShutterDndAccess -> {
-                Preferences.setShutterMute(false)
+        if (pendingShutterMuteEnable) {
+            pendingShutterMuteEnable = false
+            if (hasShutterDndAccess()) {
+                Preferences.setShutterMute(true)
             }
         }
 
-        setSilentCameraSwitchChecked(Preferences.isShutterMute() && hasShutterDndAccess)
+        setSilentCameraSwitchChecked(Preferences.isShutterMute())
     }
 
     private fun setSilentCameraSwitchChecked(isChecked: Boolean) {
@@ -304,8 +295,6 @@ class SecuritySettings :
                         }
                     } else {
                         pendingShutterMuteEnable = false
-                        Preferences.setShutterMute(false)
-                        setSilentCameraSwitchChecked(false)
                     }
                 }
             }

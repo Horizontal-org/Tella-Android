@@ -255,6 +255,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             resumeCameraPreview()
         }
         hasResumedOnce = true
+        syncShutterMuteIfEnabled()
     }
 
     override fun onPause() {
@@ -1069,18 +1070,29 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
+    private fun syncShutterMuteIfEnabled() {
+        if (!Preferences.isShutterMute()) return
+        if (!hasShutterDndAccess()) return
+        applySystemShutterMute()
+    }
+
+    private fun hasShutterDndAccess(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true
+        }
+        val notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.isNotificationPolicyAccessGranted
+    }
+
     private fun maybeMuteSystemShutterForCapture() {
         if (!Preferences.isShutterMute()) return
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val notificationManager =
-                getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            if (!notificationManager.isNotificationPolicyAccessGranted()) {
-                if (!Preferences.isShutterDndPromptDeclined()) {
-                    showShutterDndAccessSheet()
-                }
-                return
+        if (!hasShutterDndAccess()) {
+            if (!Preferences.isShutterDndPromptDeclined()) {
+                showShutterDndAccessSheet()
             }
+            return
         }
 
         applySystemShutterMute()
