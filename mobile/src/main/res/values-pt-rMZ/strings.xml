@@ -1154,4 +1154,23 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
+  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
+  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
+Please wait until the map finishes loading before selecting a location.
+Previously viewed areas may still be visible offline.</string>
+  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
+  <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
+
+To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” for the Tella app.</string>
+  <string name="camera_shutter_dnd_enable_action">Enable </string>
+  <string name="camera_shutter_dnd_disable_action">Desactivar</string>
+  <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
+
+WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
+  <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
+  <string name="action_go_to_settings">go to settings</string>
 </resources>
