@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ကဟးထီၣ်ဖဲလံာ်ကွီၣ်ဒိအပူၤဧါ?</string>
   <string name="verification_prompt_dialog_title">ကအိးထီၣ်စူးကါ GPS ဧါ?</string>
   <string name="collect_tab.title_blank">တၢ်အိၣ်လီၤဟိ</string>
-  <string name="action_cancel">Cancel</string>
+  <string name="action_cancel">ဆိကတီၢ်</string>
   <string name="settings_menu.item_contact">တၢ်ဆဲးကျိးပှၤ</string>
   <string name="collect_dialog.text_download.progress">တၢ်ဟံးန့ၢ်ပာ်ဃာ်လံာ်ကွီၣ်ဒိအဖၢမုၢ်လီၤ</string>
   <string name="collect_toast_download.completed">တၢ်ဟံးန့ၢ်ပာ်ဃာ်အီၤဝံၤဝဲဒၣ်လံ</string>
-  <string name="action_delete">Delete</string>
+  <string name="action_delete">ထူးသံကွံာ်</string>
   <string name="collect.draft_tab.title">တၢ်အပတြီာ်</string>
   <string name="collect.blank_action_download.form">ဟံးန့ၢ်ပာ်ဃာ်</string>
   <string name="settings_text_empty.field">တၢ်လီၢ်တတီၤအံၤတၢ်ပာ် အိၣ်ကလီအီၤတသ့ဘၣ်န့ၣ်လီၤ.</string>
@@ -1164,10 +1164,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">ပံးတံာ်ဃာ်</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>

@@ -37,7 +37,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Silakan coba lagi. Kata sandi Anda tidak cocok.</string>
   <string name="LockSuccess_Message_AllDone">Anda selesai!</string>
   <string name="LockSuccess_Message_Hint">Anda selalu bisa mengubah opsi kunci Anda dan menyesuaikan Tella lebih lanjut di Pengaturan.</string>
-  <string name="LockSuccess_Action_GoToTella">Buka Tella</string>
+  <string name="LockSuccess_Action_GoToTella">Go to Tella</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Kata sandi salah, silakan coba lagi</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to
 unlock Tella</string>

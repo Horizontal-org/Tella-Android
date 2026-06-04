@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Ndau djo mashoko ho kumbhunda.</string>
   <string name="verification_prompt_dialog_title">Kuvhula GPS</string>
   <string name="collect_tab.title_blank">Pa chena</string>
-  <string name="action_cancel">Kuemessa</string>
+  <string name="action_cancel">Kuvhala</string>
   <string name="settings_menu.item_contact">Ti swake/Batanidzai nesu.</string>
   <string name="collect_dialog.text_download.progress">Djirikutorwa ndau djo mashoko.</string>
   <string name="collect_toast_download.completed">Kutola mashoko ka pera.</string>
-  <string name="action_delete">Kulassa</string>
+  <string name="action_delete">Kulassa/Bvisa</string>
   <string name="collect.draft_tab.title">Swassala</string>
   <string name="collect.blank_action_download.form">Kuthola</string>
   <string name="settings_text_empty.field">Pandiwani kugala passina chiro.</string>
@@ -1157,10 +1157,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">Kuemessa</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>
