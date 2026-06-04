@@ -41,6 +41,7 @@ object BottomSheetUtils {
     const val SHORT_TIMEOUT: Long = 1500
 
     @JvmStatic
+    @JvmOverloads
     fun showStandardSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -48,7 +49,8 @@ object BottomSheetUtils {
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
         onConfirmClick: (() -> Unit)? = null,
-        onCancelClick: (() -> Unit)? = null
+        onCancelClick: (() -> Unit)? = null,
+        secondaryDescriptionText: String? = null
     ) {
 
         val customSheetFragment =
@@ -60,6 +62,12 @@ object BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     description.text = descriptionText
+                    if (secondaryDescriptionText.isNullOrEmpty()) {
+                        secondaryDescription.visibility = View.GONE
+                    } else {
+                        secondaryDescription.text = secondaryDescriptionText
+                        secondaryDescription.visibility = View.VISIBLE
+                    }
                     actionButtonLabel?.let {
                         actionButton.text = it
                     }
@@ -96,12 +104,14 @@ object BottomSheetUtils {
         lateinit var cancelButton: TextView
         lateinit var title: TextView
         lateinit var description: TextView
+        lateinit var secondaryDescription: TextView
 
         override fun bindView(view: View) {
             actionButton = view.findViewById(R.id.standard_sheet_confirm_btn)
             cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
+            secondaryDescription = view.findViewById(R.id.standard_sheet_content_secondary)
         }
     }
 
