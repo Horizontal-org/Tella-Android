@@ -62,11 +62,13 @@ object BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     description.text = descriptionText
-                    if (secondaryDescriptionText.isNullOrEmpty()) {
-                        secondaryDescription.visibility = View.GONE
-                    } else {
-                        secondaryDescription.text = secondaryDescriptionText
-                        secondaryDescription.visibility = View.VISIBLE
+                    secondaryDescription?.let { secondary ->
+                        if (secondaryDescriptionText.isNullOrEmpty()) {
+                            secondary.visibility = View.GONE
+                        } else {
+                            secondary.text = secondaryDescriptionText
+                            secondary.visibility = View.VISIBLE
+                        }
                     }
                     actionButtonLabel?.let {
                         actionButton.text = it
@@ -104,7 +106,7 @@ object BottomSheetUtils {
         lateinit var cancelButton: TextView
         lateinit var title: TextView
         lateinit var description: TextView
-        lateinit var secondaryDescription: TextView
+        var secondaryDescription: TextView? = null
 
         override fun bindView(view: View) {
             actionButton = view.findViewById(R.id.standard_sheet_confirm_btn)
