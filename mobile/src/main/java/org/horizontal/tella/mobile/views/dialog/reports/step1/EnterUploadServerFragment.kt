@@ -63,6 +63,7 @@ class EnterUploadServerFragment : BaseBindingFragment<FragmentEnterServerBinding
             fragmentManager = childFragmentManager,
             titleText = getString(R.string.Show_Project_Url_Sheet_Title),
             descriptionText = getString(R.string.Show_Project_Url_Sheet_Description),
+            secondaryDescriptionText = getString(R.string.Show_Project_Url_Sheet_Description_Warning),
             actionButtonLabel = getString(R.string.Show_Project_Url_Sheet_Show_Url),
             cancelButtonLabel = getString(R.string.Show_Project_Url_Sheet_Hide_Url),
             onConfirmClick = {

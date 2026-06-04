@@ -512,8 +512,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
                 getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
                 getString(R.string.Collect_DialogAction_KeepSubmitting),
                 getString(R.string.Collect_DialogAction_StopAndExit),
-                null
-            ) { onDialogBackPressed() }
+                onConfirmClick = null,
+                onCancelClick = { onDialogBackPressed() }
+            )
         } else {
             onBackPressedWithoutCheck()
         }
@@ -958,7 +959,9 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_form_exit_dialog_expl),
             getString(R.string.collect_form_exit_dialog_action_save_exit),
             getString(R.string.collect_form_exit_dialog_action_exit_anyway),
-            { onSavePressed() }) { onExitPressed() }
+            onConfirmClick = { onSavePressed() },
+            onCancelClick = { onExitPressed() }
+        )
     }
 
     private fun onExitPressed() {
