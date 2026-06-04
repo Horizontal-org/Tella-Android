@@ -16,7 +16,6 @@ import org.horizontal.tella.mobile.views.base_ui.BaseFragment
 class OnBoardAllDoneFragment : BaseFragment() {
 
     private lateinit var startBtn: TextView
-    private lateinit var advancedBtn: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,14 +44,6 @@ class OnBoardAllDoneFragment : BaseFragment() {
                     baseActivity.finish()
                 }
             }
-        }
-        advancedBtn = view.findViewById(R.id.sheet_two_btn)
-        advancedBtn.setOnClickListener {
-            baseActivity.addFragment(
-                this,
-                OnBoardShareDataFragment(),
-                R.id.rootOnboard
-            )
         }
     }
 }
