@@ -77,7 +77,7 @@ mode hman theihna</string>
   <string name="collect_toast_fail.submission.unauthorized">He form thehlut tur hian phalna i nei lo. Tihpalh a ni in i hria a nih chuan, i organization be rawh</string>
   <string name="gallery_toast_fail.importing.file">File lakluh (import) theih a ni lo. Khawngaihin ti nawn leh rawh</string>
   <string name="collect.end_heading">Form tawpna</string>
-  <string name="collect.end_toast_notification.form.not.sent.no.connection">Internet i connect lo. I connect hunah i ti nawn leh dawn nia</string>
+  <string name="collect.end_toast_notification.form.not.sent.no.connection">Internet i connect lo. I connect hunah ti nawn leh rawh</string>
   <string name="collect.sent_dialog.expl_discard.unsent.form">Form pumin emaw a ṭhen thehluh a ni lo. I paih duh takzet em?</string>
   <string name="action_discard">Paih</string>
   <string name="collect.end_action_submit">Thehlut</string>
@@ -114,7 +114,7 @@ mode hman theihna</string>
   <string name="gallery_subheading_sort.by">Remdan</string>
   <string name="gallery_list.item_newest.to.oldest">A thar ber aṭanga a hlui ber</string>
   <string name="gallery_list.item_oldest.to.newest">A hlui ber aṭanga a thar ber</string>
-  <string name="action_exit">Chhuak</string>
+  <string name="action_exit">Chhuak rawh</string>
   <string name="settings.prot_select_camouflage">Inthupna</string>
   <string name="settings.docu_error_wrong.credentials">Username emaw password a dik lo.</string>
   <string name="settings.docu_error_domain.doesnt.exit">Server URL a dik lo.</string>
@@ -1229,10 +1229,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">Off</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>

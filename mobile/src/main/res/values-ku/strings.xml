@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">فۆڕمی دەرچوون؟</string>
   <string name="verification_prompt_dialog_title">GPS چالاک بکە؟</string>
   <string name="collect_tab.title_blank">بەتاڵ</string>
-  <string name="action_cancel">Cancel</string>
+  <string name="action_cancel">ڕەتکردنەوە</string>
   <string name="settings_menu.item_contact">پەیوەندیمان پێوە بکە</string>
   <string name="collect_dialog.text_download.progress">داگرتنی فۆرمەکە</string>
   <string name="collect_toast_download.completed">داگرتن تەواو بوو</string>
-  <string name="action_delete">Delete</string>
+  <string name="action_delete">سڕینەوە</string>
   <string name="collect.draft_tab.title">ڕەشنووس</string>
   <string name="collect.blank_action_download.form">داگرتن</string>
   <string name="settings_text_empty.field">ئەم فیڵدە نابێ بەتاڵ بێت.</string>
@@ -1176,10 +1176,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">ناچالاککردن</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>

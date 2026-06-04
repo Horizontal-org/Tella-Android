@@ -43,7 +43,7 @@ Avoid using numbers that can be guessed easily, such as your birthday.</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">ဝံသးစူၤမၤကဒီးအသီတဘျီတက့ၢ်. နလံာ်ဖျၢၣ်ခူသူၣ်အံၤတဘၣ်လိာ်ဖိးမံလိာ်သးဘၣ်န့ၣ်လီၤ.</string>
   <string name="LockSuccess_Message_AllDone">နမၤဝံၤဝဲဒၣ်ခဲလၢာ်လံ.</string>
   <string name="LockSuccess_Message_Hint">နဆီတလဲဃုထၢ နနီၣ်ဝံတံာ်အကျိၤအကျဲသ့ဝဲထီဘိဒီး နဆီတလဲမၤဂ့ၤအါထီၣ် Tellaအံၤ ဖဲ အတၢ်ဆီလီၤပာ်လီၤအလီၢ်အပူၤသ့ဝဲထီဘိန့ၣ်လီၤ.</string>
-  <string name="LockSuccess_Action_GoToTella">လဲဆူ Tella အအိၣ်</string>
+  <string name="LockSuccess_Action_GoToTella">နုာ်လီၤလၢTella အပူၤ</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">လံာ်ဖျၢၣ်ခူသူၣ်အံၤတဘၣ်ဝဲဘၣ်,
  ဝံသးစူၤကျဲးစၢးမၤကဒီးအသီတဘျီ</string>
   <string name="UnlockPassword_Message_EnterPassword">Enter your password to

@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ഫോമിൽ നിന്ന് പുറത്തുകടക്കണോ?</string>
   <string name="verification_prompt_dialog_title">ജിപിഎസ് പ്രവര്‍ത്തന സജ്ജമാക്കണോ?</string>
   <string name="collect_tab.title_blank">ശൂന്യം</string>
-  <string name="action_cancel">Cancel</string>
+  <string name="action_cancel">റദ്ദാക്കുക </string>
   <string name="settings_menu.item_contact">ഞങ്ങളെ സമാപിക്കു </string>
   <string name="collect_dialog.text_download.progress">ഫോം ഡൗൺലോഡുചെയ്യുന്നു</string>
   <string name="collect_toast_download.completed">ഡൗണ്‍ലോഡ് പൂര്‍ത്തിയായിരിക്കുന്നു</string>
-  <string name="action_delete">Delete</string>
+  <string name="action_delete">നീക്കം ചെയ്യുക</string>
   <string name="collect.draft_tab.title">കരട്</string>
   <string name="collect.blank_action_download.form">ഡൌണ്‍ലോഡ് </string>
   <string name="settings_text_empty.field">ഈ കളം ശൂന്യമായിരിക്കരുത്.</string>
@@ -1181,10 +1181,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">Disable</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>

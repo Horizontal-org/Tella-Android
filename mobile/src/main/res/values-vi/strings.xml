@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Thoát biểu mẫu?</string>
   <string name="verification_prompt_dialog_title">Bật GPS?</string>
   <string name="collect_tab.title_blank">Trống</string>
-  <string name="action_cancel">Cancel</string>
+  <string name="action_cancel">Hủy bỏ</string>
   <string name="settings_menu.item_contact">Liên hệ với chúng tôi</string>
   <string name="collect_dialog.text_download.progress">Đang tải xuống biểu mẫu</string>
   <string name="collect_toast_download.completed">Tải xuống hoàn tất</string>
-  <string name="action_delete">Delete</string>
+  <string name="action_delete">Xóa</string>
   <string name="collect.draft_tab.title">Bản nháp</string>
   <string name="collect.blank_action_download.form">Tải xuống</string>
   <string name="settings_text_empty.field">Trường này không được để trống.</string>
@@ -1172,10 +1172,9 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="camera_shutter_dnd_enable_action">Enable </string>
   <string name="camera_shutter_dnd_disable_action">Vô hiệu hóa</string>
   <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
-  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.
-
-WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
   <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>
