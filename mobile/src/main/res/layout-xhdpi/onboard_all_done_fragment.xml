@@ -60,7 +60,7 @@
         android:textAlignment="center"
         android:textColor="@color/wa_white"
         android:textSize="16sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guidelineCenter" />
@@ -85,27 +85,5 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/standard_sheet_content" />
-
-    <TextView
-        android:id="@+id/sheet_two_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/round_button_selector"
-        android:fontFamily="@font/open_sans"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/onboard.advanced_btn_all_done"
-        android:textAllCaps="true"
-        android:textColor="@color/wa_white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startBtn" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
