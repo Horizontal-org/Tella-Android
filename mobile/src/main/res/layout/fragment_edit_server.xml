@@ -71,30 +71,37 @@
                         android:padding="2dp"
                         tools:text="@string/Setting_Reports_Connection_Name" />
 
-                    <View
-                        android:id="@+id/serverUrlTopDivider"
-                        style="@style/SettingsMainShadowLine"
-                        android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
-
-                    <TextView
-                        android:id="@+id/serverUrlLabel"
-                        style="@style/Tella_Main_White_Text.Small"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/serverUrlSection"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
-                        android:gravity="start"
-                        android:padding="2dp"
-                        android:text="@string/settings.docu_field_server.url"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/serverUrlTv"
-                        style="@style/Tella_Main_White_Text.Meduim"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/collect_form_padding_vertical"
-                        android:padding="2dp"
-                        android:text="@string/settings.docu_field_server.name" />
+                        <View
+                            android:id="@+id/serverUrlTopDivider"
+                            style="@style/SettingsMainShadowLine"
+                            android:layout_marginVertical="@dimen/collect_form_padding_vertical" />
+
+                        <TextView
+                            android:id="@+id/serverUrlLabel"
+                            style="@style/Tella_Main_White_Text.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                            android:gravity="start"
+                            android:padding="2dp"
+                            android:text="@string/settings.docu_field_server.url"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/serverUrlTv"
+                            style="@style/Tella_Main_White_Text.Meduim"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/collect_form_padding_vertical"
+                            android:padding="2dp"
+                            tools:text="https://example.com/p/project" />
+                    </LinearLayout>
 
                     <View
                         android:id="@+id/serverUrlBottomDivider"
@@ -140,7 +147,6 @@
                     android:layout_marginTop="@dimen/activity_horizontal_medium_margin"
                     android:background="@drawable/rounded_light_purple_background"
                     android:orientation="vertical"
-                    android:animateLayoutChanges="true"
                     android:paddingTop="@dimen/collect_form_padding_vertical"
                     app:layout_constraintTop_toBottomOf="@id/credentialsContainer"
                     tools:layout_editor_absoluteX="16dp">

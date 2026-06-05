@@ -31,6 +31,7 @@ class EditTellaServerFragment :
         requireArguments().getBoolean(EDIT_MODE_KEY)
     }
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
+    private var isBindingServerDetails = false
 
     companion object {
         const val TAG = "EditTellaServerFragment"
@@ -64,7 +65,9 @@ class EditTellaServerFragment :
             requireArguments().getString(OBJECT_KEY),
             TellaReportServer::class.java
         )
+        initListeners()
         if (isEditMode && reportServer.id > 0) {
+            bindServerDetails()
             viewModel.loadedServer.observe(viewLifecycleOwner) { server ->
                 reportServer = server
                 bindServerDetails()
@@ -74,7 +77,6 @@ class EditTellaServerFragment :
             bindServerDetails()
         }
         initData()
-        initListeners()
         setupBackNavigation()
     }
 
@@ -110,26 +112,29 @@ class EditTellaServerFragment :
     }
 
     private fun bindServerDetails() {
-        reportServer.apply {
-            binding.apply {
-                serverNameTv.text = name.orEmpty()
-                val showProjectUrl = !hideProjectUrl
-                serverUrlTopDivider.isVisible = showProjectUrl
-                serverUrlLabel.isVisible = showProjectUrl
-                serverUrlTv.isVisible = showProjectUrl
-                serverUrlBottomDivider.isVisible = true
-                if (showProjectUrl) {
-                    serverUrlTv.text = buildDisplayUrl()
+        isBindingServerDetails = true
+        try {
+            reportServer.apply {
+                binding.apply {
+                    serverNameTv.text = name.orEmpty()
+                    val showProjectUrl = !hideProjectUrl
+                    serverUrlSection.isVisible = showProjectUrl
+                    serverUrlBottomDivider.isVisible = true
+                    if (showProjectUrl) {
+                        serverUrlTv.text = buildDisplayUrl()
+                    }
+                    userNameTv.text = username.orEmpty()
+                    backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
+                    shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
+                    autoReportSwitch.mSwitch.isChecked = isAutoUpload
+                    autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
                 }
-                userNameTv.text = username.orEmpty()
-                backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
-                shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
-                autoReportSwitch.mSwitch.isChecked = isAutoUpload
-                autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
             }
-        }
-        if (isEditMode) {
-            binding.credentialsContainer.show()
+            if (isEditMode) {
+                binding.credentialsContainer.show()
+            }
+        } finally {
+            isBindingServerDetails = false
         }
     }
 
@@ -148,10 +153,12 @@ class EditTellaServerFragment :
             }
 
             autoDeleteSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isAutoDelete = isChecked
             }
 
             autoReportSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isAutoUpload = isChecked
                 autoDeleteSeparator.isVisible = isChecked
                 updateTimeoutSetting(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
@@ -162,10 +169,12 @@ class EditTellaServerFragment :
             }
 
             backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isActivatedBackgroundUpload = isChecked
             }
 
             shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isActivatedMetadata = isChecked
             }
         }
