@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
+import org.hzontal.shared_ui.utils.ScreenSecurity
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.sharedpref.Preferences
@@ -203,20 +203,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        maybeEnableSecurityScreen()
-    }
-
-    private fun maybeEnableSecurityScreen() {
-        if (Preferences.isSecurityScreenEnabled()) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE
-            )
-        } else {
-            window.clearFlags(
-                WindowManager.LayoutParams.FLAG_SECURE
-            )
-        }
+        ScreenSecurity.applyToWindow(window, this)
     }
 
     private fun showTimeOutChangeDialog(confirm: () -> Unit) {
