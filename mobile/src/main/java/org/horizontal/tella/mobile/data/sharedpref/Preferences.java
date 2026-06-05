@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.hzontal.shared_ui.utils.CalculatorTheme;
+import org.hzontal.shared_ui.utils.ScreenSecurity;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -63,11 +64,11 @@ public class Preferences {
     }
 
     public static boolean isSecurityScreenEnabled() {
-        return getBoolean(SharedPrefs.SET_SECURITY_SCREEN, true);
+        return ScreenSecurity.isEnabled(sharedPrefs.getPref());
     }
 
     public static void setSecurityScreenEnabled(boolean value) {
-        setBoolean(SharedPrefs.SET_SECURITY_SCREEN, value);
+        setBoolean(ScreenSecurity.PREF_KEY, value);
     }
 
     public static boolean isFirstStart() {
