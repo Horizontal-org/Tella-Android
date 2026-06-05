@@ -110,7 +110,7 @@ public class MediaFileHandler {
     }
 
     public static void startSelectMediaActivity(Activity activity, @NonNull String type, @Nullable String[] extraMimeType, int requestCode) {
-        launchFilePicker(activity, type, extraMimeType, true, requestCode);
+        launchFilePicker(activity, type, extraMimeType, true, requestCode, false);
     }
 
     private static void launchFilePicker(
@@ -118,8 +118,30 @@ public class MediaFileHandler {
             @NonNull String type,
             @Nullable String[] extraMimeType,
             boolean allowMultiple,
-            int requestCode) {
+            int requestCode,
+            boolean deleteOriginal) {
         PackageManager pm = activity.getPackageManager();
+
+        if (deleteOriginal) {
+            Intent openDocument = new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                    .setType(type)
+                    .addCategory(Intent.CATEGORY_OPENABLE)
+                    .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, allowMultiple)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            | Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                            | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+            if (extraMimeType != null) {
+                openDocument.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeType);
+            }
+            if (openDocument.resolveActivity(pm) != null) {
+                try {
+                    activity.startActivityForResult(openDocument, requestCode);
+                    return;
+                } catch (ActivityNotFoundException e) {
+                    Timber.d(e, "ACTION_OPEN_DOCUMENT failed for import-and-delete");
+                }
+            }
+        }
 
         Intent getContent = new Intent(Intent.ACTION_GET_CONTENT)
                 .setType(type)
@@ -925,12 +947,17 @@ public class MediaFileHandler {
     }
 
     public static void startImportFiles(Activity context, Boolean multipleFile, String type) {
+        startImportFiles(context, multipleFile, type, false);
+    }
+
+    public static void startImportFiles(Activity context, Boolean multipleFile, String type, boolean deleteOriginal) {
         launchFilePicker(
                 context,
                 type != null ? type : "*/*",
                 null,
                 Boolean.TRUE.equals(multipleFile),
-                C.IMPORT_MULTIPLE_FILES
+                C.IMPORT_MULTIPLE_FILES,
+                deleteOriginal
         );
     }
 
