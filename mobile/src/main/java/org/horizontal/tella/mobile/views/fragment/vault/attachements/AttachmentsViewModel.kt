@@ -245,12 +245,11 @@ class AttachmentsViewModel @Inject constructor(
     fun importVaultFiles(uris: List<Uri>, parentId: String?, deleteOriginal: Boolean) {
         if (uris.isEmpty()) return
 
-        var currentUri: Uri? = null
         var lastImportName: String? = null
         disposables.add(Flowable.fromIterable(uris).flatMap { uri ->
             MediaFileHandler.importVaultFileUri(getApplication(), uri, parentId).toFlowable()
+                .map { vaultFile -> vaultFile to uri }
                 .doOnSubscribe {
-                    currentUri = uri
                     val file = MediaFileHandler.getUriInfo(application, uri)
                     lastImportName = file.name
                     val backgroundVideoFile = BackgroundActivityModel(
@@ -269,11 +268,11 @@ class AttachmentsViewModel @Inject constructor(
                     )
                 }
         }.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.computation())
-            .observeOn(AndroidSchedulers.mainThread()).subscribe({ vaultFile ->
+            .observeOn(AndroidSchedulers.mainThread()).subscribe({ (vaultFile, uri) ->
                 handleAddSuccess(vaultFile, BackgroundActivityStatus.COMPLETED)
 
                 if (deleteOriginal) {
-                    currentUri?.let { uri -> _mediaImportedWithDelete.postValue(uri) }
+                    _mediaImportedWithDelete.postValue(uri)
                 } else {
                     _mediaImported.postValue(vaultFile)
                 }
