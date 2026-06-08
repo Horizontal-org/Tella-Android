@@ -71,8 +71,9 @@ class FormSubmitActivity : BaseLockActivity() {
                     getString(R.string.Collect_DialogExpl_ExitingStopSubmission),
                     getString(R.string.Collect_DialogAction_KeepSubmitting),
                     getString(R.string.Collect_DialogAction_StopAndExit),
-                    null
-                ) { onDialogBackPressed() }
+                    onConfirmClick = null,
+                    onCancelClick = { onDialogBackPressed() }
+                )
             } else {
                 finish()
             }

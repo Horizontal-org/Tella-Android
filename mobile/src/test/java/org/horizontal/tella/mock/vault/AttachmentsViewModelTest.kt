@@ -10,6 +10,7 @@ import com.hzontal.tella_vault.VaultFile
 import com.hzontal.tella_vault.filter.FilterType
 import com.hzontal.tella_vault.filter.Sort
 import com.hzontal.tella_vault.rx.RxVault
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
@@ -28,6 +29,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations.openMocks
 import org.horizontal.tella.mobile.MyApplication
+import org.horizontal.tella.mobile.data.KeyRxVault
 import org.horizontal.tella.mobile.data.database.KeyDataSource
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.AttachmentsViewModel
 
@@ -57,6 +59,9 @@ class AttachmentsViewModelTest {
     lateinit var rxVault: RxVault
 
     @Mock
+    lateinit var keyRxVault: KeyRxVault
+
+    @Mock
     private lateinit var crashReporter: CrashReporter
 
     @Before
@@ -66,8 +71,9 @@ class AttachmentsViewModelTest {
         val application: Application = mock(Application::class.java)
         `when`(application.applicationContext).thenReturn(mock(Context::class.java))
 
-        // Create a mock instance of RxVault
-        MyApplication.rxVault = rxVault
+        // Wire KeyRxVault to return the mocked RxVault instance
+        MyApplication.keyRxVault = keyRxVault
+        `when`(keyRxVault.rxVault).thenReturn(Observable.just(rxVault))
 
         // Mock the behavior of rxVault.get() and rxVault.list()
         `when`(rxVault.get(anyString())).thenReturn(Single.just(mock(VaultFile::class.java)))
@@ -102,6 +108,7 @@ class AttachmentsViewModelTest {
 
     @After
     fun tearDown() {
+        MyApplication.keyRxVault = null
         CrashReporterProvider.setInstanceForTesting(null)
         RxAndroidPlugins.reset()
         viewModel.filesData.removeObserver(filesDataObserver)

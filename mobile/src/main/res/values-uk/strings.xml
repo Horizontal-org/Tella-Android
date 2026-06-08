@@ -2,15 +2,15 @@
 <resources>
   <string name="app_name">Tella</string>
   <string name="collect.blank_action_update.form">Оновити</string>
-  <string name="settings.about_app.bar">Про програму та Допомога</string>
+  <string name="settings.about_app.bar">Про програму та Довідка</string>
   <string name="collect.form_exit.unsaved_dialog.title">Вийти з форми?</string>
   <string name="verification_prompt_dialog_title">Увімкнути GPS?</string>
   <string name="collect_tab.title_blank">Порожні</string>
-  <string name="action_cancel">скасувати</string>
+  <string name="action_cancel">Скасувати</string>
   <string name="settings_menu.item_contact">Зв’язатися з нами</string>
   <string name="collect_dialog.text_download.progress">Завантаження форми</string>
   <string name="collect_toast_download.completed">Завантаження завершено</string>
-  <string name="action_delete">видалити</string>
+  <string name="action_delete">Видалити</string>
   <string name="collect.draft_tab.title">Чернетка</string>
   <string name="collect.blank_action_download.form">Завантажити</string>
   <string name="settings_text_empty.field">Це поле не може бути порожнім.</string>
@@ -66,7 +66,7 @@
   <string name="action_play">Відтворити</string>
   <string name="action_record">Записати</string>
   <string name="play.audio_app.bar">Відтворити аудіо</string>
-  <string name="collect_dialog.text_delete.sent.form">Ви впевнені, що хочете видалити цю форму з вашого пристрою? Майте на увазі, що оскільки вона вже була надіслана, дані залишаться на сервері вашої організації.</string>
+  <string name="collect_dialog.text_delete.sent.form">Ви впевнені, що хочете видалити цю форму з вашого пристрою? Оскільки її вже було надіслано, копія залишиться на сервері вашої організації.</string>
   <string name="collect_dialog.text_delete.draft.form">Ви впевнені, що хочете видалити цю чернетку?</string>
   <string name="collect_toast_form.deleted">Форму видалено</string>
   <string name="settings.lang_select.expl_default">Використовувати мову системи пристрою для Tella</string>
@@ -109,8 +109,8 @@
   <string name="settings.docu_error_not.valid.URL">Це недійсна URL-адреса.</string>
   <string name="home_action.label_quick.delete">Видалити</string>
   <string name="gallery_subheading_sort.by">Сортувати за</string>
-  <string name="gallery_list.item_newest.to.oldest">Від нових до старих</string>
-  <string name="gallery_list.item_oldest.to.newest">Від старих до нових</string>
+  <string name="gallery_list.item_newest.to.oldest">Спочатку нові</string>
+  <string name="gallery_list.item_oldest.to.newest">Спочатку старі</string>
   <string name="action_exit">Вихід</string>
   <string name="settings.prot_select_camouflage">Маскування</string>
   <string name="settings.docu_error_wrong.credentials">Неправильне ім’я користувача або пароль.</string>
@@ -1130,4 +1130,22 @@
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
+  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
+  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
+Please wait until the map finishes loading before selecting a location.
+Previously viewed areas may still be visible offline.</string>
+  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
+  <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
+
+To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” for the Tella app.</string>
+  <string name="camera_shutter_dnd_enable_action">Enable </string>
+  <string name="camera_shutter_dnd_disable_action">Вимкнути</string>
+  <string name="Show_Project_Url_Sheet_Title">Show project URL in settings?</string>
+  <string name="Show_Project_Url_Sheet_Description">For increased security, you can hide the project URL in the Tella settings.</string>
+  <string name="Show_Project_Url_Sheet_Hide_Url">Hide URL</string>
+  <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
+  <string name="action_go_to_settings">go to settings</string>
+  <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
 </resources>

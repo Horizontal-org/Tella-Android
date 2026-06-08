@@ -35,6 +35,7 @@ public class SharedPrefs {
 
     static final String ENABLE_HOME_NEARBY_SHARING = "enable_home_nearby_sharing";
     static final String SHOW_P2P_WIFI_CONFIRMATION_SHEET = "show_p2p_wifi_confirmation_sheet";
+    static final String SHOW_MAP_FIRST_LOAD_SHEET = "show_map_first_load_sheet";
     //private static final String AUTO_SAVE_DRAFT_FORM = "auto_save_draft_form";
     private static final String LANGUAGE = "language";
     static final String SECRET_MODE_ENABLED = "secret_password_enabled";
@@ -60,8 +61,8 @@ public class SharedPrefs {
     static final String AUTO_UPLOAD_PAUSED = "auto_upload_paused";
     static final String LOCK_TIMEOUT = "lock_timeout";
     static final String MUTE_CAMERA_SHUTTER = "mute_camera_shutter";
+    static final String SHUTTER_DND_PROMPT_DECLINED = "shutter_dnd_prompt_declined";
     static final String KEEP_EXIF = "keep_exif";
-    static final String SET_SECURITY_SCREEN = "set_security_screen";
     static final String SHOW_FAVORITE_FORMS = "show_favorite_forms";
     static final String SHOW_FAVORITE_TEMPLATES = "show_favorite_Templates";
     static final String SHOW_RECENT_FILES = "show_recent_files";

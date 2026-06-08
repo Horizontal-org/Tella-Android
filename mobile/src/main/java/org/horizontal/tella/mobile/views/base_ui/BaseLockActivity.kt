@@ -1,7 +1,6 @@
 package org.horizontal.tella.mobile.views.base_ui
 
 import android.content.Intent
-import android.view.WindowManager
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_BLUE_SKIN
 import com.hzontal.tella_locking_ui.CALCULATOR_ALIAS_ORANGE_SKIN
@@ -94,7 +93,6 @@ abstract class BaseLockActivity : BaseActivity() {
     override fun onResume() {
         Preferences.setUnlockTime(System.currentTimeMillis())
         restrictActivity()
-        maybeEnableSecurityScreen()
         super.onResume()
     }
 
@@ -105,19 +103,6 @@ abstract class BaseLockActivity : BaseActivity() {
             Preferences.setTempTimeout(false)
             // Immediately set the lock timeout to shut down the application
             LockTimeoutManager().lockTimeout = IMMEDIATE_SHUTDOWN
-        }
-    }
-
-    private fun maybeEnableSecurityScreen() {
-        if (Preferences.isSecurityScreenEnabled()) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE
-            )
-        } else {
-            window.clearFlags(
-                WindowManager.LayoutParams.FLAG_SECURE
-            )
         }
     }
 

@@ -1,6 +1,8 @@
 package org.horizontal.tella.mobile.views.dialog.reports
 
 import android.os.Bundle
+import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.NavHostFragment
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +25,7 @@ class ReportsConnectFlowActivity : BaseLockActivity() {
             val navController = navHostFragment.navController
             navController.navigate(R.id.reports_settings)
         } else {
+            findViewById<FragmentContainerView>(R.id.nav_host_fragment).isVisible = false
             intent.getStringExtra(OBJECT_KEY)?.let { reportServer ->
                 val server = Gson().fromJson(reportServer, TellaReportServer::class.java)
                 addFragment(

@@ -45,6 +45,11 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     private static final String APPEARANCE_MAP = "map";
     private static final String APPEARANCE_PLACEMENT_MAP = "placement-map";
 
+    private static final int PENDING_NONE = 0;
+    private static final int PENDING_MAP_CURRENT_ONLY = 1;
+    private static final int PENDING_MAP_PLACEMENT = 2;
+    private static final int PENDING_GATHER = 3;
+
     ImageButton selectButton;
     ImageButton clearButton;
     ProgressBar progressBar;
@@ -57,6 +62,7 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     private String appearance;
     private LocationGettingPresenter locationGettingPresenter;
     private boolean locationGathering;
+    private int pendingLocationAction = PENDING_NONE;
 
 
     public UwaziGeoPointWidget(Context context, @NonNull UwaziEntryPrompt formEntryPrompt) {
@@ -206,19 +212,49 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
         }
     }
 
+    public void resumePendingLocationAction() {
+        int action = pendingLocationAction;
+        pendingLocationAction = PENDING_NONE;
+        switch (action) {
+            case PENDING_MAP_CURRENT_ONLY:
+                showLocationMapActivity(true);
+                break;
+            case PENDING_MAP_PLACEMENT:
+                showLocationMapActivity(false);
+                break;
+            case PENDING_GATHER:
+                startLocationGathering();
+                break;
+            default:
+                waitingForAData = false;
+                break;
+        }
+    }
+
+    public void clearPendingLocationAction() {
+        pendingLocationAction = PENDING_NONE;
+        waitingForAData = false;
+    }
+
     private void showLocationMapActivity(boolean currentLocationOnly) {
         try {
             if (!locationGettingPresenter.isLocationPermissionAllowed()) {
+                pendingLocationAction = currentLocationOnly
+                        ? PENDING_MAP_CURRENT_ONLY
+                        : PENDING_MAP_PLACEMENT;
+                waitingForAData = true;
                 onNoLocationPermissions();
                 return;
             }
+            pendingLocationAction = PENDING_NONE;
 
             Activity activity = (Activity) getContext();
             waitingForAData = true;
 
             MyLocation myLocation = locationString != null ? parseLocationString() : null;
 
-            activity.startActivityForResult(new Intent(getContext(), LocationMapActivity.class)
+            activity.startActivityForResult(
+                    new Intent(getContext(), LocationMapActivity.class)
                             .putExtra(LocationMapActivity.SELECTED_LOCATION, myLocation)
                             .putExtra(LocationMapActivity.CURRENT_LOCATION_ONLY, currentLocationOnly),
                     C.SELECTED_LOCATION
@@ -293,6 +329,13 @@ public class UwaziGeoPointWidget extends UwaziQuestionWidget implements ILocatio
     }
 
     private void startLocationGathering() {
+        if (!locationGettingPresenter.isLocationPermissionAllowed()) {
+            pendingLocationAction = PENDING_GATHER;
+            waitingForAData = true;
+            onNoLocationPermissions();
+            return;
+        }
+        pendingLocationAction = PENDING_NONE;
         locationGettingPresenter.startGettingLocation(false);
     }
 

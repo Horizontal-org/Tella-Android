@@ -38,6 +38,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     androidx.recyclerview.widget.ListAdapter<DataItem, BaseViewHolder<*>>(
         ListDiffCallback()
     ) {
+    var onListSubmitted: (() -> Unit)? = null
     private val adapterScope = CoroutineScope(Dispatchers.Default)
     private var recentFiles = mutableListOf<DataItem.RecentFiles>()
     private var favoriteForms = mutableListOf<DataItem.FavoriteForms>()
@@ -85,6 +86,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun addRecentFiles(vaultFiles: List<VaultFile?>) {
+        if (!Preferences.isShowRecentFiles()) return
         val newRecentFilesItem = DataItem.RecentFiles(vaultFiles)
 
         // Check if the current recent files are the same as the new ones
@@ -104,18 +106,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun removeFavoriteForms() {
+        if (favoriteForms.isEmpty()) return
         favoriteForms.clear()
-        adapterScope.launch {
-            items.removeAll(favoriteForms)
-            updateItems()
-        }
+        updateItems()
     }
 
     fun removeFavoriteTemplates() {
-        adapterScope.launch {
-            items.removeAll(favoriteTemplates)
-            updateItems()
-        }
+        if (favoriteTemplates.isEmpty()) return
+        favoriteTemplates.clear()
+        updateItems()
     }
 
     fun removeTitle() {
@@ -150,6 +149,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun addFavoriteForms(forms: List<CollectForm>) {
+        if (!Preferences.isShowFavoriteForms()) return
         val newFavoriteFormsItem = DataItem.FavoriteForms(forms)
 
         // Check if the current favorite forms are the same as the new ones
@@ -168,6 +168,7 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     }
 
     fun addFavoriteTemplates(templates: List<UwaziTemplate>) {
+        if (!Preferences.isShowFavoriteTemplates()) return
         val newFavoriteTemplatesItem = DataItem.FavoriteTemplates(templates)
 
         // Check if the current favorite templates are the same as the new ones
@@ -183,11 +184,19 @@ class VaultAdapter(private val onClick: VaultClickListener) :
     private fun updateItems() {
         adapterScope.launch {
             val newItems = mutableListOf<DataItem>().apply {
-                addAll(analyticsBanner)
+                if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
+                    addAll(analyticsBanner)
+                }
                 addAll(connections)
-                addAll(favoriteForms)
-                addAll(favoriteTemplates)
-                addAll(recentFiles)
+                if (Preferences.isShowFavoriteForms()) {
+                    addAll(favoriteForms)
+                }
+                if (Preferences.isShowFavoriteTemplates()) {
+                    addAll(favoriteTemplates)
+                }
+                if (Preferences.isShowRecentFiles()) {
+                    addAll(recentFiles)
+                }
                 addAll(titles)
                 addAll(actions)
             }
@@ -196,7 +205,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             if (items != newItems) {
                 items = newItems
                 withContext(Dispatchers.Main.immediate) {
-                    submitList(items.toList())  // Ensures a fresh list is submitted
+                    submitList(items.toList()) {
+                        onListSubmitted?.invoke()
+                    }
                 }
             }
         }
@@ -222,7 +233,9 @@ class VaultAdapter(private val onClick: VaultClickListener) :
             }
 
             withContext(Dispatchers.Main) {
-                submitList(items)
+                submitList(items.toList()) {
+                    onListSubmitted?.invoke()
+                }
             }
         }
     }

@@ -34,7 +34,7 @@ yenə cəhd edin</string>
   <string name="LockPasswordConfirm_Message_Error_PasswordsNotMatch">Yenə cəhd edin. Parollarınız uyğun gəlmir.</string>
   <string name="LockSuccess_Message_AllDone">Hazırdır!</string>
   <string name="LockSuccess_Message_Hint">Ayarlara keçib kilid seçiminizi dəyişə və Tella-nı bir az da fərdiləşdirə bilərsiz.</string>
-  <string name="LockSuccess_Action_GoToTella">Tella-ya keç</string>
+  <string name="LockSuccess_Action_GoToTella">Tellaya keç</string>
   <string name="LockPasswordSet_Message_Error_IncorrectPassword">Parol yanlışdır, yenə cəhd edin</string>
   <string name="UnlockPassword_Message_EnterPassword">Tella-nı açmaq üçün
 parolu yazın</string>

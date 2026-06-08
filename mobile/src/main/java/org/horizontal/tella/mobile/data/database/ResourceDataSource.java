@@ -204,7 +204,8 @@ public class ResourceDataSource implements ITellaResourcesRepository {
                                 D.C_BACKGROUND_UPLOAD,
                                 D.C_PROJECT_SLUG,
                                 D.C_PROJECT_NAME,
-                                D.C_PROJECT_ID},
+                                D.C_PROJECT_ID,
+                                D.C_HIDE_PROJECT_URL},
                         D.C_ID + "= ?",
                         new String[]{Long.toString(id)},
                         null, null, null, null)) {
@@ -254,7 +255,8 @@ public class ResourceDataSource implements ITellaResourcesRepository {
                             D.C_BACKGROUND_UPLOAD,
                             D.C_PROJECT_SLUG,
                             D.C_PROJECT_NAME,
-                            D.C_PROJECT_ID
+                            D.C_PROJECT_ID,
+                            D.C_HIDE_PROJECT_URL
                     },
                     null,
                     null,
@@ -309,6 +311,7 @@ public class ResourceDataSource implements ITellaResourcesRepository {
         server.setProjectSlug(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_SLUG)));
         server.setProjectId(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_ID)));
         server.setProjectName(cursor.getString(cursor.getColumnIndexOrThrow(D.C_PROJECT_NAME)));
+        server.setHideProjectUrl(cursor.getInt(cursor.getColumnIndexOrThrow(D.C_HIDE_PROJECT_URL)) > 0);
 
         return server;
     }

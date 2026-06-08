@@ -94,6 +94,7 @@ class LoginReportsFragment :
         server.username = binding.username.text.toString().trim(' ')
         server.password = binding.password.text.toString()
         server.name = serverReports.name
+        server.hideProjectUrl = serverReports.hideProjectUrl
         serverReports = server
         return server
     }

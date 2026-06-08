@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.hzontal.shared_ui.utils.CalculatorTheme;
+import org.hzontal.shared_ui.utils.ScreenSecurity;
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -63,11 +64,11 @@ public class Preferences {
     }
 
     public static boolean isSecurityScreenEnabled() {
-        return getBoolean(SharedPrefs.SET_SECURITY_SCREEN, true);
+        return ScreenSecurity.isEnabled(sharedPrefs.getPref());
     }
 
     public static void setSecurityScreenEnabled(boolean value) {
-        setBoolean(SharedPrefs.SET_SECURITY_SCREEN, value);
+        setBoolean(ScreenSecurity.PREF_KEY, value);
     }
 
     public static boolean isFirstStart() {
@@ -100,6 +101,14 @@ public class Preferences {
 
     public static void setShutterMute(boolean value) {
         setBoolean(SharedPrefs.MUTE_CAMERA_SHUTTER, value);
+    }
+
+    public static boolean isShutterDndPromptDeclined() {
+        return getBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, false);
+    }
+
+    public static void setShutterDndPromptDeclined(boolean value) {
+        setBoolean(SharedPrefs.SHUTTER_DND_PROMPT_DECLINED, value);
     }
 
     public static boolean isKeepExif() {
@@ -140,6 +149,14 @@ public class Preferences {
 
     public static void setShowP2pWifiConfirmationSheet(boolean value) {
         setBoolean(SharedPrefs.SHOW_P2P_WIFI_CONFIRMATION_SHEET, value);
+    }
+
+    public static boolean isShowMapFirstLoadSheet() {
+        return getBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, true);
+    }
+
+    public static void setShowMapFirstLoadSheet(boolean value) {
+        setBoolean(SharedPrefs.SHOW_MAP_FIRST_LOAD_SHEET, value);
     }
 
     public static boolean isPanicGeolocationActive() {

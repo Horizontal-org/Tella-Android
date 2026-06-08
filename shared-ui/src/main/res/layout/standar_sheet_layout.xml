@@ -24,6 +24,14 @@
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
         tools:text="TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest " />
 
+    <TextView
+        android:id="@+id/standard_sheet_content_secondary"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        tools:text="WARNING: This setting is permanent." />
 
     <TextView
         android:id="@+id/standard_sheet_cancel_btn"
@@ -36,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/standard_sheet_confirm_btn"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content_secondary"
         tools:text="CANCEL" />
 
     <TextView
@@ -51,7 +59,7 @@
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content"
+        app:layout_constraintTop_toBottomOf="@id/standard_sheet_content_secondary"
         tools:text="SAVE TO DEVICE" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

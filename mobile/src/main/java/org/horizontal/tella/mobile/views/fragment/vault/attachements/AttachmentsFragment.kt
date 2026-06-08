@@ -3,12 +3,16 @@ package org.horizontal.tella.mobile.views.fragment.vault.attachements
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.RecoverableSecurityException
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.provider.DocumentsContract
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -118,6 +122,14 @@ class AttachmentsFragment :
     private lateinit var gridLayoutManager: GridLayoutManager
     private var isLaunchingPicker = false
     private var lastTreeUri: Uri? = null
+
+    private val deleteImportedSourceLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            uriToDelete?.let { deleteFileFromExternalStorage(it, afterConsent = true) }
+        }
+    }
 
     private val openTree = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree()
@@ -420,7 +432,7 @@ class AttachmentsFragment :
                 importAndDelete = true
                 baseActivity.maybeChangeTemporaryTimeout {
                     MediaFileHandler.startImportFiles(
-                        baseActivity, true, getCurrentType(filterType)
+                        baseActivity, true, getCurrentType(filterType), true
                     )
                 }
             }
@@ -845,13 +857,8 @@ class AttachmentsFragment :
     }
 
     private fun onMediaImportedWithDelete(uri: Uri) {
-        lifecycleScope.launch {
-            uri.let {
-                deleteFileFromExternalStorage(it)
-                uriToDelete = it
-            }
-        }
-
+        uriToDelete = uri
+        deleteFileFromExternalStorage(uri)
         onMediaFilesAdded()
     }
 
@@ -1150,6 +1157,15 @@ class AttachmentsFragment :
                     listVaultFilesUris.add(returnedUri)
                 }
             }
+            if (importAndDelete) {
+                val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                listVaultFilesUris.forEach { uri ->
+                    try {
+                        baseActivity.contentResolver.takePersistableUriPermission(uri, flags)
+                    } catch (_: SecurityException) {
+                    }
+                }
+            }
             viewModel.importVaultFiles(
                 listVaultFilesUris, currentRootID, importAndDelete
             )
@@ -1265,13 +1281,24 @@ class AttachmentsFragment :
         }
     }
 
-    private fun deleteFileFromExternalStorage(uri: Uri) {
-        val fileToDelete = DocumentFile.fromSingleUri(baseActivity, uri)
+    private fun deleteFileFromExternalStorage(uri: Uri, afterConsent: Boolean = false) {
         try {
-            fileToDelete?.delete()
-        } catch (exn: java.lang.Exception) {
-            exn.printStackTrace()
+            if (DocumentsContract.deleteDocument(baseActivity.contentResolver, uri)) {
+                return
+            }
+        } catch (e: SecurityException) {
+            if (!afterConsent && SDK_INT >= Build.VERSION_CODES.Q) {
+                (e as? RecoverableSecurityException)?.let { recoverable ->
+                    deleteImportedSourceLauncher.launch(
+                        IntentSenderRequest.Builder(
+                            recoverable.userAction.actionIntent.intentSender
+                        ).build()
+                    )
+                    return
+                }
+            }
         }
+        DocumentFile.fromSingleUri(baseActivity, uri)?.delete()
     }
 
     private fun maybeShowUploadIcon(menu: Menu) {

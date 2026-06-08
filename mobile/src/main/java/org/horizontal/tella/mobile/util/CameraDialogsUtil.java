@@ -6,24 +6,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatRadioButton;
-
-import com.otaliastudios.cameraview.size.SizeSelector;
-
-import java.util.ArrayList;
+import androidx.camera.video.QualitySelector;
 
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.presentation.entity.VideoResolutionOption;
 
+import java.util.ArrayList;
 
 public class CameraDialogsUtil {
 
-    public interface VideoSizeConsumer {
-        void accept(SizeSelector size);
+    public interface VideoQualityConsumer {
+        void accept(@NonNull QualitySelector qualitySelector);
     }
 
-    public static AlertDialog showVideoResolutionDialog(Context context, VideoSizeConsumer consumer, VideoResolutionManager videoResolutionManager) {
+    @NonNull
+    public static AlertDialog showVideoResolutionDialog(
+            @NonNull Context context,
+            @NonNull VideoQualityConsumer consumer,
+            @NonNull VideoResolutionManager videoResolutionManager
+    ) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.BrightBackgroundDarkLettersDialogTheme);
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -50,7 +54,7 @@ public class CameraDialogsUtil {
                     AppCompatRadioButton radioButton = radioGroup.findViewById(checkedRadioButtonId);
                     String key = (String) radioButton.getTag();
                     videoResolutionManager.putVideoQualityOption(key);
-                    consumer.accept(videoResolutionManager.getVideoSize(key));
+                    consumer.accept(videoResolutionManager.getQualitySelector(key));
                 })
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })

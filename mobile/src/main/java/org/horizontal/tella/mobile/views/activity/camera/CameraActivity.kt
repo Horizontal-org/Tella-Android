@@ -3,14 +3,19 @@ package org.horizontal.tella.mobile.views.activity.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.hardware.camera2.CameraCharacteristics
 import android.hardware.SensorManager
 import android.media.AudioManager
+import android.media.MediaActionSound
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.DisplayMetrics
+import android.view.MotionEvent
 import android.view.OrientationEventListener
 import android.view.Surface
 import android.view.View
@@ -21,9 +26,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
+import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -59,6 +67,8 @@ import org.horizontal.tella.mobile.mvp.contract.IMetadataAttachPresenterContract
 import org.horizontal.tella.mobile.mvp.presenter.MetadataAttacher
 import org.horizontal.tella.mobile.mvvm.viewmodel.TellaFileUploadSchedulerViewModel
 import org.horizontal.tella.mobile.util.C
+import org.horizontal.tella.mobile.util.CameraDialogsUtil
+import org.horizontal.tella.mobile.util.VideoResolutionManager
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.util.getDuplicateErrorMessageResId
 import org.horizontal.tella.mobile.util.isDuplicateNameOrFileExistsError
@@ -78,6 +88,7 @@ import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.ExecutionException
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -107,6 +118,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var capturedMediaFile: VaultFile? = null
     private var lastMediaFile: VaultFile? = null
     private var videoQualityDialog: AlertDialog? = null
+    private var videoResolutionManager: VideoResolutionManager? = null
     private var lastClickTime = System.currentTimeMillis()
     private var currentRootParent: String? = null
     private var tempFile: File? = null
@@ -121,7 +133,13 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private var lensFacing = CameraSelector.DEFAULT_BACK_CAMERA
     private var isBackCamera = true
     private var flashMode = ImageCapture.FLASH_MODE_OFF
+    private var flashSupportsAuto = true
+    private var flashSupportsTorch = true
     private var gridEnabled = false
+    private var shutterSound: MediaActionSound? = null
+    private var hasResumedOnce = false
+    private var pendingPhotoCaptureAfterLocationCheck = false
+    private var gpsPromptIgnoredForCurrentSession = false
 
     private lateinit var binding: ActivityCameraBinding
     private var captureWithAutoUpload = true
@@ -139,7 +157,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // SurfaceView (default performance mode) can paint above sibling views on API 31+ / some devices.
         binding.viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val statusBars = insets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -234,7 +251,11 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             maybeChangeTemporaryTimeout()
+        } else if (hasResumedOnce) {
+            resumeCameraPreview()
         }
+        hasResumedOnce = true
+        syncShutterMuteIfEnabled()
     }
 
     override fun onPause() {
@@ -244,12 +265,25 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         if (videoRecording) {
             captureButton.performClick()
         }
+        cameraProvider?.unbindAll()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         hideProgressDialog()
         hideVideoResolutionDialog()
+        shutterSound?.release()
+        shutterSound = null
+        cameraProvider?.unbindAll()
+    }
+
+    private fun resumeCameraPreview() {
+        if (mode == CameraMode.VIDEO) {
+            startVideo()
+        } else {
+            startCamera()
+        }
+        setCameraZoom()
     }
 
     @Deprecated("Deprecated in Java")
@@ -378,6 +412,18 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         return this
     }
 
+    override fun getGpsMetadataDialogMessageResId(): Int {
+        return R.string.verification_prompt_dialog_media_file_expl
+    }
+
+    override fun onGpsMetadataDialogConfirmed() {
+        gpsPromptIgnoredForCurrentSession = false
+    }
+
+    override fun onGpsMetadataDialogIgnored() {
+        gpsPromptIgnoredForCurrentSession = true
+    }
+
     private fun onMediaFilesUploadScheduled() {
         val isAutoUploadEnabled = Preferences.isAutoUploadEnabled()
         val isAutoDeleteEnabled = Preferences.isAutoDeleteEnabled()
@@ -400,6 +446,9 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         if (System.currentTimeMillis() - lastClickTime < CLICK_MODE_DELAY) return
         if (mode == CameraMode.PHOTO) return
 
+        if (mode == CameraMode.VIDEO) {
+            turnFlashDown()
+        }
         setPhotoActive()
         captureButton.displayPhotoButton()
         captureButton.contentDescription = context.getString(R.string.Uwazi_WidgetMedia_Take_Photo)
@@ -426,6 +475,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onGridClicked() {
         gridEnabled = !gridEnabled
+        updateGridOverlay()
         if (gridEnabled) {
             gridButton.displayGridOn()
             gridButton.contentDescription = getString(R.string.action_hide_gridview)
@@ -457,6 +507,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun onFlashClicked() {
         if (mode == CameraMode.VIDEO) {
+            if (!flashSupportsTorch) return
             if (flashMode == ImageCapture.FLASH_MODE_OFF) {
                 flashMode = ImageCapture.FLASH_MODE_ON
                 flashButton.displayFlashOn()
@@ -467,9 +518,15 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         } else {
             when (flashMode) {
                 ImageCapture.FLASH_MODE_OFF -> {
-                    flashMode = ImageCapture.FLASH_MODE_AUTO
-                    flashButton.displayFlashAuto()
-                    imageCapture?.flashMode = ImageCapture.FLASH_MODE_AUTO
+                    if (flashSupportsAuto) {
+                        flashMode = ImageCapture.FLASH_MODE_AUTO
+                        flashButton.displayFlashAuto()
+                        imageCapture?.flashMode = ImageCapture.FLASH_MODE_AUTO
+                    } else {
+                        flashMode = ImageCapture.FLASH_MODE_ON
+                        flashButton.displayFlashOn()
+                        imageCapture?.flashMode = ImageCapture.FLASH_MODE_ON
+                    }
                 }
                 ImageCapture.FLASH_MODE_AUTO -> {
                     flashMode = ImageCapture.FLASH_MODE_ON
@@ -549,6 +606,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             captureButton.displayVideoButton()
             startVideo()
         }
+        setupCameraGridButton()
+        setupPreviewTapToFocus()
         setOrientationListener()
         mSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -576,6 +635,92 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
     private fun setupImagePreview() {
         if (intentMode == IntentMode.COLLECT || intentMode == IntentMode.ODK) {
             previewView.visibility = View.GONE
+        }
+    }
+
+    private fun setupCameraGridButton() {
+        updateGridOverlay()
+        if (gridEnabled) {
+            gridButton.displayGridOn()
+            gridButton.contentDescription = getString(R.string.action_hide_gridview)
+        } else {
+            gridButton.displayGridOff()
+            gridButton.contentDescription = getString(R.string.action_show_gridview)
+        }
+    }
+
+    private fun updateGridOverlay() {
+        binding.gridOverlay.visibility = if (gridEnabled) View.VISIBLE else View.GONE
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupPreviewTapToFocus() {
+        binding.viewFinder.setOnTouchListener { _, event ->
+            if (event.action != MotionEvent.ACTION_UP) {
+                return@setOnTouchListener false
+            }
+            val cameraControl = camera?.cameraControl ?: return@setOnTouchListener false
+            val factory = binding.viewFinder.meteringPointFactory
+            val point = factory.createPoint(event.x, event.y)
+            val action = FocusMeteringAction.Builder(point, FocusMeteringAction.FLAG_AF)
+                .setAutoCancelDuration(3, TimeUnit.SECONDS)
+                .build()
+            cameraControl.startFocusAndMetering(action)
+            true
+        }
+    }
+
+    private fun updateCameraControlVisibility(localCameraProvider: ProcessCameraProvider) {
+        val hasFrontCamera = localCameraProvider.hasCamera(CameraSelector.DEFAULT_FRONT_CAMERA)
+        switchButton.visibility = if (hasFrontCamera) View.VISIBLE else View.GONE
+        updateFlashCapabilities(localCameraProvider)
+        val showFlash = deviceHasFlash(localCameraProvider) &&
+            (mode != CameraMode.VIDEO || flashSupportsTorch)
+        if (showFlash) {
+            flashButton.visibility = View.VISIBLE
+            updateFlashButtonIcon()
+        } else {
+            flashButton.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun updateFlashCapabilities(localCameraProvider: ProcessCameraProvider) {
+        val hasFlash = deviceHasFlash(localCameraProvider)
+        flashSupportsAuto = hasFlash && isBackCamera
+        flashSupportsTorch = hasFlash
+    }
+
+    private fun deviceHasFlash(localCameraProvider: ProcessCameraProvider): Boolean {
+        camera?.cameraInfo?.let { info ->
+            if (info.hasFlashUnit()) return true
+        }
+        val lensFacingInt = if (lensFacing == CameraSelector.DEFAULT_FRONT_CAMERA) {
+            CameraCharacteristics.LENS_FACING_FRONT
+        } else {
+            CameraCharacteristics.LENS_FACING_BACK
+        }
+        return localCameraProvider.availableCameraInfos.any { info ->
+            Camera2CameraInfo.from(info)
+                .getCameraCharacteristic(CameraCharacteristics.LENS_FACING) == lensFacingInt &&
+                Camera2CameraInfo.from(info)
+                    .getCameraCharacteristic(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+        }
+    }
+
+    private fun updateFlashButtonIcon() {
+        when (flashMode) {
+            ImageCapture.FLASH_MODE_AUTO -> {
+                flashButton.displayFlashAuto()
+                flashButton.contentDescription = getString(R.string.action_disable_flash)
+            }
+            ImageCapture.FLASH_MODE_ON -> {
+                flashButton.displayFlashOn()
+                flashButton.contentDescription = getString(R.string.action_disable_flash)
+            }
+            else -> {
+                flashButton.displayFlashOff()
+                flashButton.contentDescription = getString(R.string.action_enable_flash)
+            }
         }
     }
 
@@ -617,6 +762,47 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         photoLine.visibility = View.GONE
         videoModeText.alpha = 1f
         photoModeText.alpha = if (modeLocked) 0.1f else 0.5f
+        if (videoResolutionManager != null) {
+            resolutionButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun chooseVideoResolution() {
+        videoResolutionManager?.let { manager ->
+            videoQualityDialog = CameraDialogsUtil.showVideoResolutionDialog(
+                this,
+                CameraDialogsUtil.VideoQualityConsumer { applyVideoQuality() },
+                manager
+            )
+        }
+    }
+
+    private fun applyVideoQuality() {
+        if (mode == CameraMode.VIDEO) {
+            startVideo()
+        }
+    }
+
+    private fun initVideoResolutionManager(localCameraProvider: ProcessCameraProvider) {
+        val lensFacingInt = if (lensFacing == CameraSelector.DEFAULT_FRONT_CAMERA) {
+            CameraCharacteristics.LENS_FACING_FRONT
+        } else {
+            CameraCharacteristics.LENS_FACING_BACK
+        }
+        val cameraInfo: CameraInfo? = localCameraProvider.availableCameraInfos.find { info ->
+            Camera2CameraInfo.from(info)
+                .getCameraCharacteristic(CameraCharacteristics.LENS_FACING) == lensFacingInt
+        }
+        val supportedQualities = cameraInfo?.let { QualitySelector.getSupportedQualities(it) }
+            ?: emptyList()
+        videoResolutionManager = if (supportedQualities.isNotEmpty()) {
+            VideoResolutionManager(supportedQualities)
+        } else {
+            null
+        }
+        if (mode == CameraMode.VIDEO && videoResolutionManager != null) {
+            resolutionButton.visibility = View.VISIBLE
+        }
     }
 
     private fun hideVideoResolutionDialog() {
@@ -644,6 +830,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         switchButton = binding.switchButton
         switchButton.displayCamera(isBackCamera)
         flashButton = binding.flashButton
+        updateFlashButtonIcon()
         captureButton = binding.captureButton
         durationView = binding.durationView
         mSeekBar = binding.cameraZoom
@@ -657,24 +844,28 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.close.setOnClickListener { closeCamera() }
 
         binding.captureButton.setOnClickListener {
-            if (Preferences.isShutterMute()) {
-                val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-                mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
-            }
-
             if (mode == CameraMode.PHOTO) {
-                captureImage()
-                divviupUtils.runPhotoTakenEvent()
+                maybeCapturePhoto()
             } else {
+                maybeMuteSystemShutterForCapture()
                 if (videoRecording) {
                     if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
+                        playCameraSound(MediaActionSound.STOP_VIDEO_RECORDING)
                         recordVideo()
                         divviupUtils.runVideoTakenEvent()
                     }
                 } else {
+                    if (videoCapture == null) {
+                        Toast.makeText(context, "Error starting camera", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     videoRecording = true
                     lastClickTime = System.currentTimeMillis()
-                    recordVideo()
+                    playCameraSound(MediaActionSound.START_VIDEO_RECORDING)
+                    if (!recordVideo()) {
+                        videoRecording = false
+                        return@setOnClickListener
+                    }
                     durationView.start()
                     captureButton.displayStopVideo()
                     gridButton.visibility = View.GONE
@@ -690,7 +881,54 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         binding.switchButton.setOnClickListener { onSwitchClicked() }
         binding.flashButton.setOnClickListener { onFlashClicked() }
         binding.previewImage.setOnClickListener { onPreviewClicked() }
-        binding.resolutionButton.setOnClickListener { }
+        binding.resolutionButton.setOnClickListener { chooseVideoResolution() }
+    }
+
+    private fun maybeCapturePhoto() {
+        if (!shouldCheckLocationBeforePhotoCapture()) {
+            takePhoto()
+            return
+        }
+
+        pendingPhotoCaptureAfterLocationCheck = true
+        if (!hasLocationPermission()) {
+            maybeChangeTemporaryTimeout()
+            requestLocationPermission(C.LOCATION_PERMISSION)
+            return
+        }
+
+        continuePhotoCaptureAfterLocationCheck()
+    }
+
+    private fun continuePhotoCaptureAfterLocationCheck() {
+        if (!pendingPhotoCaptureAfterLocationCheck) return
+
+        if (!hasLocationPermission()) {
+            takePhoto()
+            return
+        }
+
+        if (gpsPromptIgnoredForCurrentSession) {
+            takePhoto()
+            return
+        }
+
+        startLocationMetadataListening()
+        checkLocationSettings(C.START_CAMERA_CAPTURE) {
+            takePhoto()
+        }
+    }
+
+    private fun takePhoto() {
+        pendingPhotoCaptureAfterLocationCheck = false
+        maybeMuteSystemShutterForCapture()
+        playCameraSound(MediaActionSound.SHUTTER_CLICK)
+        captureImage()
+        divviupUtils.runPhotoTakenEvent()
+    }
+
+    private fun shouldCheckLocationBeforePhotoCapture(): Boolean {
+        return !Preferences.isAnonymousMode()
     }
 
     enum class CameraMode {
@@ -777,10 +1015,12 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 .setTargetRotation(rotation)
                 .build()
 
-            val qualitySelector = QualitySelector.fromOrderedList(
-                listOf(Quality.UHD, Quality.FHD, Quality.HD, Quality.SD),
-                FallbackStrategy.lowerQualityOrHigherThan(Quality.SD)
-            )
+            initVideoResolutionManager(localCameraProvider)
+            val qualitySelector = videoResolutionManager?.qualitySelector
+                ?: QualitySelector.fromOrderedList(
+                    listOf(Quality.UHD, Quality.FHD, Quality.HD, Quality.SD),
+                    FallbackStrategy.lowerQualityOrHigherThan(Quality.SD)
+                )
             val recorder = Recorder.Builder()
                 .setExecutor(ContextCompat.getMainExecutor(context))
                 .setQualitySelector(qualitySelector)
@@ -797,6 +1037,7 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                     videoCapture,
                 )
                 preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+                updateCameraControlVisibility(localCameraProvider)
             } catch (e: Exception) {
                 Timber.e("Failed to bind use cases %s", e.message)
             }
@@ -823,8 +1064,86 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
                 imageCapture,
             )
             preview?.setSurfaceProvider(viewFinder.surfaceProvider)
+            updateCameraControlVisibility(localCameraProvider)
         } catch (e: Exception) {
             Timber.e("Failed to bind use cases")
+        }
+    }
+
+    private fun syncShutterMuteIfEnabled() {
+        if (!Preferences.isShutterMute()) return
+        if (!hasShutterDndAccess()) return
+        applySystemShutterMute()
+    }
+
+    private fun hasShutterDndAccess(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true
+        }
+        val notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        return notificationManager.isNotificationPolicyAccessGranted
+    }
+
+    private fun maybeMuteSystemShutterForCapture() {
+        if (!Preferences.isShutterMute()) return
+
+        if (!hasShutterDndAccess()) {
+            if (!Preferences.isShutterDndPromptDeclined()) {
+                showShutterDndAccessSheet()
+            }
+            return
+        }
+
+        applySystemShutterMute()
+    }
+
+    private fun applySystemShutterMute() {
+        try {
+            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
+            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
+        } catch (e: SecurityException) {
+            Timber.d(e, "Unable to mute system shutter stream")
+        }
+    }
+
+    private fun showShutterDndAccessSheet() {
+        BottomSheetUtils.showConfirmSheetWithActionRow(
+            fragmentManager = supportFragmentManager,
+            titleText = getString(R.string.settings_sec_camera_mute_switch),
+            descriptionText = getString(R.string.camera_shutter_dnd_camera_dialog_expl),
+            actionButtonLabel = getString(R.string.camera_shutter_dnd_enable_action),
+            cancelButtonLabel = getString(R.string.camera_shutter_dnd_disable_action),
+            consumer = object : BottomSheetUtils.ActionConfirmed {
+                override fun accept(isConfirmed: Boolean) {
+                    if (isConfirmed) {
+                        Preferences.setShutterDndPromptDeclined(false)
+                        maybeChangeTemporaryTimeout {
+                            try {
+                                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
+                            } catch (e: Exception) {
+                                Timber.e(e, "Unable to open notification policy settings")
+                            }
+                        }
+                    } else {
+                        Preferences.setShutterMute(false)
+                        Preferences.setShutterDndPromptDeclined(false)
+                    }
+                }
+            }
+        )
+    }
+
+    private fun playCameraSound(soundName: Int) {
+        if (Preferences.isShutterMute()) return
+        try {
+            if (shutterSound == null) {
+                shutterSound = MediaActionSound()
+            }
+            shutterSound?.load(soundName)
+            shutterSound?.play(soundName)
+        } catch (e: Exception) {
+            Timber.d(e, "Unable to play camera sound")
         }
     }
 
@@ -860,49 +1179,71 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
-    private fun recordVideo() {
-        checkMicPermission()
+    private fun recordVideo(): Boolean {
         try {
             if (recording != null) {
                 recording?.stop()
-                return
+                return true
             }
 
-            tempFile = MediaFileHandler.getTempFile()
+            val capture = videoCapture ?: return false
 
+            tempFile = MediaFileHandler.getTempFile()
             val fileOutputOptions = FileOutputOptions.Builder(tempFile!!).build()
 
-            recording = videoCapture?.output
-                ?.prepareRecording(context, fileOutputOptions)
-                ?.withAudioEnabled()
-                ?.start(ContextCompat.getMainExecutor(context)) { event ->
-                    when (event) {
-                        is VideoRecordEvent.Finalize -> {
-                            if (!event.hasError()) {
-                                event.outputResults.outputUri.path?.let { File(it) }
-                                    ?.let { showConfirmVideoView(it) }
-                            } else {
-                                Timber.e("Video capture ends with error: ${event.error}")
-                            }
-                            recording?.close()
-                            recording = null
-                            captureButton.displayVideoButton()
-                            durationView.stop()
-                            videoRecording = false
-                            gridButton.visibility = View.VISIBLE
-                            switchButton.visibility = View.VISIBLE
+            var pendingRecording = capture.output.prepareRecording(context, fileOutputOptions)
+            if (hasAudioPermission()) {
+                pendingRecording = pendingRecording.withAudioEnabled()
+            }
+
+            val file = tempFile
+            recording = pendingRecording.start(ContextCompat.getMainExecutor(context)) { event ->
+                when (event) {
+                    is VideoRecordEvent.Finalize -> {
+                        if (!event.hasError()) {
+                            file?.takeIf { it.exists() && it.length() > 0L }
+                                ?.let { showConfirmVideoView(it) }
+                        } else {
+                            Timber.e(
+                                "Video capture ends with error: ${event.error}, cause: ${event.cause}"
+                            )
+                        }
+                        recording?.close()
+                        recording = null
+                        captureButton.displayVideoButton()
+                        durationView.stop()
+                        videoRecording = false
+                        gridButton.visibility = View.VISIBLE
+                        switchButton.visibility = View.VISIBLE
+                        if (videoResolutionManager != null) {
+                            resolutionButton.visibility = View.VISIBLE
                         }
                     }
                 }
-            isRecording = !isRecording
+            }
+            isRecording = recording != null
+            return recording != null
         } catch (e: Exception) {
-            Timber.e("Error recording video %s", e.message)
+            Timber.e(e, "Error recording video")
+            return false
         }
+    }
+
+    private fun hasAudioPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun hasCameraPermissions(context: Context): Boolean {
         return ActivityCompat.checkSelfPermission(
             context, Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -916,12 +1257,30 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         )
     }
 
-    private fun checkMicPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Timber.e("No audio recording permission")
+    private fun requestLocationPermission(requestCode: Int) {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            requestCode
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode != C.LOCATION_PERMISSION || !pendingPhotoCaptureAfterLocationCheck) {
+            return
+        }
+
+        if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+            continuePhotoCaptureAfterLocationCheck()
+        } else {
+            takePhoto()
         }
     }
+
 }

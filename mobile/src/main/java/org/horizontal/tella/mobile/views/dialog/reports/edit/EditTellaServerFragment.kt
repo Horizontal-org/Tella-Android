@@ -2,6 +2,7 @@ package org.horizontal.tella.mobile.views.dialog.reports.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
@@ -25,13 +26,12 @@ internal const val EDIT_MODE_KEY = "edit_mode_key"
 class EditTellaServerFragment :
     BaseBindingFragment<FragmentEditServerBinding>(FragmentEditServerBinding::inflate) {
 
-    private val reportServer: TellaReportServer by lazy {
-        Gson().fromJson(requireArguments().getString(OBJECT_KEY), TellaReportServer::class.java)
-    }
+    private lateinit var reportServer: TellaReportServer
     private val isEditMode: Boolean by lazy {
         requireArguments().getBoolean(EDIT_MODE_KEY)
     }
     private val viewModel: ReportsConnectFlowViewModel by viewModels()
+    private var isBindingServerDetails = false
 
     companion object {
         const val TAG = "EditTellaServerFragment"
@@ -61,9 +61,29 @@ class EditTellaServerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
-        initData()
+        reportServer = Gson().fromJson(
+            requireArguments().getString(OBJECT_KEY),
+            TellaReportServer::class.java
+        )
         initListeners()
+        if (isEditMode && reportServer.id > 0) {
+            bindServerDetails()
+            viewModel.loadedServer.observe(viewLifecycleOwner) { server ->
+                reportServer = server
+                bindServerDetails()
+            }
+            viewModel.loadServer(reportServer.id)
+        } else {
+            bindServerDetails()
+        }
+        initData()
+        setupBackNavigation()
+    }
+
+    private fun setupBackNavigation() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            baseActivity.finish()
+        }
     }
 
     private fun initData() {
@@ -91,20 +111,30 @@ class EditTellaServerFragment :
         }
     }
 
-    private fun initView() {
-        reportServer.apply {
-            binding.apply {
-                serverNameTv.text = name.orEmpty()
-                serverUrlTv.text = url.orEmpty()
-                userNameTv.text = username.orEmpty()
-                backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
-                shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
-                autoReportSwitch.mSwitch.isChecked = isAutoUpload
-                autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
+    private fun bindServerDetails() {
+        isBindingServerDetails = true
+        try {
+            reportServer.apply {
+                binding.apply {
+                    serverNameTv.text = name.orEmpty()
+                    val showProjectUrl = !hideProjectUrl
+                    serverUrlSection.isVisible = showProjectUrl
+                    serverUrlBottomDivider.isVisible = true
+                    if (showProjectUrl) {
+                        serverUrlTv.text = buildDisplayUrl()
+                    }
+                    userNameTv.text = username.orEmpty()
+                    backgroundUploadSwitch.mSwitch.isChecked = isActivatedBackgroundUpload
+                    shareVerificationSwitch.mSwitch.isChecked = isActivatedMetadata
+                    autoReportSwitch.mSwitch.isChecked = isAutoUpload
+                    autoDeleteSwitch.mSwitch.isChecked = isAutoDelete
+                }
             }
-        }
-        if (isEditMode) {
-            binding.credentialsContainer.show()
+            if (isEditMode) {
+                binding.credentialsContainer.show()
+            }
+        } finally {
+            isBindingServerDetails = false
         }
     }
 
@@ -123,10 +153,12 @@ class EditTellaServerFragment :
             }
 
             autoDeleteSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isAutoDelete = isChecked
             }
 
             autoReportSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isAutoUpload = isChecked
                 autoDeleteSeparator.isVisible = isChecked
                 updateTimeoutSetting(isChecked || backgroundUploadSwitch.mSwitch.isChecked)
@@ -137,12 +169,24 @@ class EditTellaServerFragment :
             }
 
             backgroundUploadSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isActivatedBackgroundUpload = isChecked
             }
 
             shareVerificationSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
+                if (isBindingServerDetails) return@setOnCheckedChangeListener
                 reportServer.isActivatedMetadata = isChecked
             }
+        }
+    }
+
+    private fun buildDisplayUrl(): String {
+        val baseUrl = reportServer.url.orEmpty()
+        val slug = reportServer.projectSlug
+        return if (slug.isNullOrEmpty()) {
+            baseUrl
+        } else {
+            "$baseUrl/p/$slug"
         }
     }
 
@@ -155,6 +199,7 @@ class EditTellaServerFragment :
         server.isActivatedBackgroundUpload = reportServer.isActivatedBackgroundUpload
         server.isAutoUpload = reportServer.isAutoUpload
         server.isAutoDelete = reportServer.isAutoDelete
+        server.hideProjectUrl = reportServer.hideProjectUrl
         return server
     }
 

@@ -41,6 +41,7 @@ object BottomSheetUtils {
     const val SHORT_TIMEOUT: Long = 1500
 
     @JvmStatic
+    @JvmOverloads
     fun showStandardSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -48,7 +49,8 @@ object BottomSheetUtils {
         actionButtonLabel: String? = null,
         cancelButtonLabel: String? = null,
         onConfirmClick: (() -> Unit)? = null,
-        onCancelClick: (() -> Unit)? = null
+        onCancelClick: (() -> Unit)? = null,
+        secondaryDescriptionText: String? = null
     ) {
 
         val customSheetFragment =
@@ -60,6 +62,14 @@ object BottomSheetUtils {
                 with(holder) {
                     title.text = titleText
                     description.text = descriptionText
+                    secondaryDescription?.let { secondary ->
+                        if (secondaryDescriptionText.isNullOrEmpty()) {
+                            secondary.visibility = View.GONE
+                        } else {
+                            secondary.text = secondaryDescriptionText
+                            secondary.visibility = View.VISIBLE
+                        }
+                    }
                     actionButtonLabel?.let {
                         actionButton.text = it
                     }
@@ -96,12 +106,14 @@ object BottomSheetUtils {
         lateinit var cancelButton: TextView
         lateinit var title: TextView
         lateinit var description: TextView
+        var secondaryDescription: TextView? = null
 
         override fun bindView(view: View) {
             actionButton = view.findViewById(R.id.standard_sheet_confirm_btn)
             cancelButton = view.findViewById(R.id.standard_sheet_cancel_btn)
             title = view.findViewById(R.id.standard_sheet_title)
             description = view.findViewById(R.id.standard_sheet_content)
+            secondaryDescription = view.findViewById(R.id.standard_sheet_content_secondary)
         }
     }
 
@@ -631,6 +643,55 @@ object BottomSheetUtils {
                     actionButton.visibility =
                         if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
 
+                }
+            }
+        })
+
+        customSheetFragment.transparentBackground()
+        customSheetFragment.launch()
+    }
+
+    @JvmStatic
+    fun showConfirmSheetWithActionRow(
+        fragmentManager: FragmentManager,
+        titleText: String?,
+        descriptionText: String?,
+        actionButtonLabel: String? = null,
+        cancelButtonLabel: String? = null,
+        consumer: ActionConfirmed
+    ) {
+
+        val customSheetFragment =
+            CustomBottomSheetFragment.with(fragmentManager)
+                .page(R.layout.standar_sheet_action_row_layout)
+                .cancellable(true)
+                .screenTag("ConfirmSheetActionRow")
+        customSheetFragment.holder(GenericSheetHolder(), object : Binder<GenericSheetHolder> {
+            override fun onBind(holder: GenericSheetHolder) {
+                with(holder) {
+                    title.text = titleText
+                    description.text = descriptionText
+                    actionButtonLabel?.let {
+                        actionButton.text = it
+                    }
+                    cancelButtonLabel?.let {
+                        cancelButton.text = it
+                    }
+
+                    actionButton.setOnClickListener {
+                        consumer.accept(isConfirmed = true)
+                        customSheetFragment.dismiss()
+                    }
+
+                    cancelButton.setOnClickListener {
+                        consumer.accept(isConfirmed = false)
+                        customSheetFragment.dismiss()
+                    }
+
+                    actionButton.visibility =
+                        if (actionButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
+                    cancelButton.visibility =
+                        if (cancelButtonLabel.isNullOrEmpty()) View.GONE else View.VISIBLE
                 }
             }
         })

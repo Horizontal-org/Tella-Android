@@ -64,12 +64,19 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.otaliastudios.cameraview.CameraView
-            android:id="@+id/camera"
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:keepScreenOn="true"
-            app:cameraPreview="texture" />
+            app:implementationMode="compatible" />
+
+        <org.horizontal.tella.mobile.views.custom.CameraGridOverlayView
+            android:id="@+id/gridOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:importantForAccessibility="no" />
 
         <org.horizontal.tella.mobile.views.custom.CameraDurationTextView
             android:id="@+id/durationView"
