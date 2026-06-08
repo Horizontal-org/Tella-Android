@@ -1,4 +1,3 @@
-Android: Tella 3.1.0 (242) - Released on June 8, 2026
 - Replaced camera library and location provider with FOSS options.
 - Language support improvements: updated Ukrainian.
 - Fixed import and delete original bug that prevented the original file from being erased from the device in some cases.
