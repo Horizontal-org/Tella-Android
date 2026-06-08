@@ -1,0 +1,11 @@
+Android: Tella 3.1.0 (242) - Released on June 8, 2026
+- Replaced camera library and location provider with FOSS options.
+- Language support improvements: updated Ukrainian.
+- Fixed import and delete original bug that prevented the original file from being erased from the device in some cases.
+- Fixed screen security issue on onboarding (some screens were not hidden).
+- Corrected capitalization of buttons.
+- Fixed geo-location permission flow and solved a bug that prevented the geo-location flow from continuing the first time permission was granted.
+- Added option to hide Tella Web connection URL from connection settings.
+- Fixed bug that didn't properly remove camouflage when changing lock type.
+
+Full release notes: https://tella-app.org/releases
