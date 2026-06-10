@@ -1033,7 +1033,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="device_connection_instructions">The sender needs to input the following
  to connect to your device.</string>
   <string name="connect_code">Connect code</string>
-  <string name="pin">PIN</string>
+  <string name="pin">پین</string>
   <string name="port">Port</string>
   <string name="verification">Verification</string>
   <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
@@ -1084,7 +1084,7 @@ files</string>
   <string name="send_files_title">Send files</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
-  <string name="try_again">Try again</string>
+  <string name="try_again">دوباره امتحان کنید</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>

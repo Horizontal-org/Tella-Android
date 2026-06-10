@@ -429,7 +429,7 @@ mode hman theihna</string>
   <string name="Vault_Importing_SheetTitle">Lakluh leh encrypt mek a ni</string>
   <string name="Rec_Exit_SheetTitle">Recording save dawn em?</string>
   <string name="Rec_Exit_SheetText">I recording save a ni lo. I chhuah hmain save i duh em?</string>
-  <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
+  <string name="Vault_AudioRecordings_AppBar">Audio record-te</string>
   <string name="Vault_Encryting_SheetText">%d%% zawh a ni</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Encrypt lai titawpin file paih dawn em?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">I tihtawp chuan, i file a bo ang</string>
@@ -601,7 +601,7 @@ mode hman theihna</string>
   <string name="Uwazi_Templates_TabTitle">Templates</string>
   <string name="action_no">Aih</string>
   <string name="Vault_Items">{\"zero\":\"\",\"one\":\"item\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"item-te\"}</string>
-  <string name="Vault_DeleteFile_SheetTitle">{\"zero\":\"\",\"one\":\"File paih rawh?\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File-te paih rawh?\"}</string>
+  <string name="Vault_DeleteFile_SheetTitle">File paih dawn em?</string>
   <string name="Vault_deleteFile_SheetDesc">{\"zero\":\"\",\"one\":\"File thlan hi Tella atangin a hlenin paih a ni ang.\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File thlante hi Tella atangin a hlenin paih a ni ang.\"}</string>
   <string name="Uwazi_Info_UrlLabelEmpty">URL label a ruak.</string>
   <string name="Collect_EndSubtitleExpl_UncheckedItems">Nakina thehluh turin attachment te hi tick suh. I Outbox aṭangin i thehlut thei ang.</string>
@@ -655,7 +655,7 @@ mode hman theihna</string>
   <string name="gallery_list.items_show.only.audio">Audio record-te</string>
   <string name="onboard.camo_heading">Inthupna</string>
   <string name="settings.camo_calculator1">Easy Math</string>
-  <string name="settings.docu_dialog.action_hide">Thup rawh</string>
+  <string name="settings.docu_dialog.action_hide">Hide</string>
   <string name="settings.docu_auto.upload.server.selection_select">Server</string>
   <string name="upload_dialog.title_select.server">Server thlanna</string>
   <string name="settings.docu_connect.to.servers_enable_action">Server connect rawh</string>
@@ -971,7 +971,7 @@ Tella team hnênah analytics i ṭâwm duh em?</string>
   <string name="unavailable_connections">Inzawmna hman theih lohte</string>
   <string name="unavailable_connections_desc">A hnuaia hming (category) târ lante atân hian, rualin inzawmna (connection) pakhat chauh hman theih a ni. Inzawmna thar siam belh tûrin, khawngaihin Connections Settings-ah lûtin tûna i hman lai hi paih (delete) hmasa rawh.</string>
   <string name="no_permission_to_folder_google_drive">He folder-a upload tûr hian phalna i nei lo.</string>
-  <string name="settings.servers.title_server.settings2">Inzawmnate</string>
+  <string name="settings.servers.title_server.settings2">Connections</string>
   <string name="settings.servers.add_server.expl2">Pâwl (organization) nêna in thawk a nih chuan, file leh data thawn tûrin an server-ah inzawm rawh. I pâwl thawhpuite chuan server chanchin (details) an pe tûr che a ni.</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="go_to_dropbox">DOPBOX AH KAL RAWH</string>
@@ -1045,11 +1045,11 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
   <string name="onboard_lock_protect_sheet_message">I kalhna (lock) chu hriat reng tum la, a nih loh pawhin password manager ang hmun himah vawng ṭha rawh.</string>
   <string name="onboard_lock_protect_sheet_continue">CHHUNZAWM RAWH</string>
   <string name="lock_update_success_done">Zo ta</string>
-  <string name="onboard_lock_success_title">Success</string>
+  <string name="onboard_lock_success_title">Hlawhtlinna</string>
   <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
   <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">Entity paih tûr em ni?</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">I device aṭangin he form hi paih i duh chiang em? Thehluh tawh a nih avângin, data chu in pâwl (organization) server-ah a la awm reng thung ang.</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">He form hi i device aṭangin i paih duh takzet em? Thehluh tawh a nih avangin, a data erawh in organization server-ah a la awm ang.</string>
   <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" chu paih (delete) a ni tawh.</string>
   <string name="google_drive_shared_drive_migration_sheet_title">Google Drive folder thar siam rawh</string>
   <string name="google_drive_shared_drive_migration_sheet_message">Tella hian shared drive a thlâwp tawh lo. Google Drive-a report thehluh chhunzawm zêl tûrin, khawngaihin mimal folder thar siam rawh.</string>
@@ -1084,19 +1084,19 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
 3. VPN connection inzawm lai reng reng titâwp (disable) rawh.</string>
   <string name="current_wifi_network">Tûna Wi-Fi network hman lai</string>
   <string name="same_wifi_text">Aw, Wi-Fi network thuhmunah kan awm e</string>
-  <string name="NearBySharing">Nearby sharing</string>
+  <string name="NearBySharing">Nearby Sharing</string>
   <string name="share_files_description">Internet connection awm lo pawhin i kiang hnaia device-te nên file inthawn tawn rawh u
   1. Device pahnihte chu Wi-Fi network thuhmunah an inzawm ngei tûr a ni
   2. File i inṭâwmpui tûr chu i rin ngam mi a ni em tih finfiah rawh</string>
   <string name="send_files">File-te thawn rawh</string>
   <string name="receive_files">File-te dawng rawh</string>
   <string name="learn_more_about_nearby_sharing">Nearby sharing chungchâng hrechiang lehzual rawh</string>
-  <string name="nearby_sharing">Nearby sharing</string>
-  <string name="how_it_works">A thawh dân</string>
+  <string name="nearby_sharing">Nearby Sharing</string>
+  <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Network-a zawn hmuh nân dawngtu device
  chanchin (information) chhu lût rawh</string>
-  <string name="make_sure_sequence_matches">Hêng nambat indawt (sequence) hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="make_sure_sequence_matches">Hêng nambat indawt hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
   <string name="make_sure_sequence_matches_recipient">Hêng nambat indawt (sequence) hi dawngtu device-a lang nên a inmil thlap em tih finfiah rawh</string>
   <string name="discard_and_start_over">Hnâwl la ṭan ṭha leh rawh</string>
   <string name="waiting_for_the_sender_to_share_files">Thawntuin file a rawn thawn hun nghâk mêk</string>
@@ -1112,7 +1112,7 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
   <string name="recipient_rejected_the_files">Dawngtuin file-te a hnâwl.</string>
   <string name="receiving_and_encrypting_files">File dawngin a thupna (encryption) siam mêk a ni</string>
   <string name="sending_files">File thawn mêk a ni</string>
-  <string name="send_files_title">File thawnna</string>
+  <string name="send_files_title">File-te thawn rawh</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">WiFi SSID la tûrin location phalna (permission) neih a ngai.</string>
   <string name="failed_to_open_location_settings">Location settings hawn theih a ni lo.</string>
   <string name="try_again">Ti nawn leh rawh</string>

@@ -1067,7 +1067,7 @@ files</string>
   <string name="recipient_rejected_the_files">Recipient rejected the files.</string>
   <string name="receiving_and_encrypting_files">Receiving and encrypting files</string>
   <string name="sending_files">Sending files</string>
-  <string name="send_files_title">Send files</string>
+  <string name="send_files_title">Enviar archivos</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">No se ha podido abrir la configuración de la ubicación.</string>
   <string name="try_again">Intenta de nuevo</string>

@@ -9,9 +9,9 @@
   <string name="Vault_Others_Title">Autres</string>
   <string name="Vault_Select_Title">Sélectionnez les fichiers</string>
   <string name="Vault_RecentFiles">Fichiers récents</string>
-  <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
+  <string name="Vault_PhotosAndVideos_Title">Photos et Vidéos</string>
   <string name="Vault_FavoriteForms_Title">Formulaires favoris</string>
-  <string name="Vault_Empty_Msg">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
+  <string name="Vault_Empty_Msg">Vous n\'avez aucun fichier dans Tella actuellement. Clickez sur le bouton \"+\" ci-dessous pour importer votre premier fichier, ou accédez à l\'appareil photo ou au microphone pour en créer un. Vous pouvez aussi créer des dossiers pour garder vos fichiers organisés.</string>
   <string name="Vault_Move_SheetDesc">Déplacer vers un autre dossier</string>
   <string name="Vault_Rename_SheetAction">Renommer</string>
   <string name="Vault_Save_SheetAction">Sauvegarder</string>
@@ -28,12 +28,12 @@
   <string name="Vault_FilePath">Chemin du fichier</string>
   <string name="Vault_RenameFile_SheetTitle">Renommer le fichier</string>
   <plurals name="Vault_DeleteFile_SheetTitle">
-    <item quantity="one">Delete file?</item>
-    <item quantity="other"></item>
+    <item quantity="one">Supprimer le fichier ?</item>
+    <item quantity="other">Vide</item>
   </plurals>
   <plurals name="Vault_deleteFile_SheetDesc">
-    <item quantity="one">The selected file will be permanently delated from Tella.</item>
-    <item quantity="other"></item>
+    <item quantity="one">Le fichier sélectionné sera supprimé définitivement de Tella.</item>
+    <item quantity="other">Vide</item>
   </plurals>
   <string name="Vault_SortNameAsc_SheetAction">Nom A &gt; Z</string>
   <string name="Vault_SortNameDesc_SheetAction">Nom Z &gt; A</string>
@@ -46,20 +46,20 @@
   <string name="Vault_Import_SheetAction">Importer depuis l\'appareil</string>
   <string name="Vault_ImportDelete_SheetAction">Importer et supprimer le fichier d\'origine</string>
   <string name="Vault_CreateFolder_SheetTitle">Créer un nouveau dossier</string>
-  <string name="Vault_MoveHere">move here</string>
-  <string name="Vault_ViewerOther_SheetDesc">This file format cannot be opened in Tella. Would you like to save the file to your device to open it through a different app? This may expose the content of the file.</string>
-  <string name="Vault_Export_SheetAction">Export</string>
+  <string name="Vault_MoveHere">déplacer ici</string>
+  <string name="Vault_ViewerOther_SheetDesc">Ce format de fichier ne peut pas être lu dans Tella. Voulez-vous enregistrer ce fichier sur votre appareil pour l\'ouvrir avec une autre application? Cela peut exposer le contenu du fichier.</string>
+  <string name="Vault_Export_SheetAction">Exporter</string>
   <plurals name="Vault_Items">
-    <item quantity="one">item</item>
-    <item quantity="other">items</item>
+    <item quantity="one">fichier sélectionné</item>
+    <item quantity="other">fichiers sélectionnés</item>
   </plurals>
   <string name="Vault_No_Files_Title">Vous n\'avez pas encore de fichiers dans Tella.</string>
   <string name="Vault_FavoriteTemplates_Title">Modèles favoris</string>
   <plurals name="Vault_File_Successfully_Moved">
-    <item quantity="one">File successfully moved</item>
-    <item quantity="other">Files successfully moved</item>
+    <item quantity="one">Fichier déplacé avec succès</item>
+    <item quantity="other">Fichiers déplacés avec succès</item>
   </plurals>
-  <string name="Vault_Confirm_delete_Description">Certains des fichiers sélectionnés sont actuellement utilisés dans vos connexions. La suppression peut avoir un impact sur les formulaires et les rapports qui n\'ont pas encore été envoyés.</string>
+  <string name="Vault_Confirm_delete_Description">Certains des fichiers sélectionnés sont actuellement utilisés dans vos Connexions. La suppression peut avoir un impact sur les formulaires et les rapports qui n\'ont pas encore été envoyés.</string>
   <string name="Vault_Warning_Title">Avertissement</string>
   <string name="Vault_Delete_anyway">Supprimer quand même</string>
   <string name="Vault_Keep_Original">GARDER L\'ORIGINAL</string>
@@ -68,6 +68,6 @@
  
  Si vous le supprimez, le fichier importé dans Tella sera la seule copie restante. </string>
   <string name="Vault_FileEdit_SheetAction">Éditer</string>
-  <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
-  <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_SaveToDevice_SheetTitle">Enregistrer \"%1$d\" sur l\'appareil ?</string>
+  <string name="Vault_SaveToDevice_SheetAction">Enregistrer sur l\'appareil</string>
 </resources>

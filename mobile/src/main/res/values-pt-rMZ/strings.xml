@@ -376,7 +376,7 @@
   <string name="onboard.expl_lock_finish">O seu bloqueio está configurado! Pode alterá-lo a qualquer momento nas Definições.</string>
   <string name="onboard.title_all_done">Já está tudo feito!</string>
   <string name="onboard.expl_all_done">Pode ir para o Tella agora ou continuar a personalizar o Tella para configurar definições avançadas.</string>
-  <string name="onboard.go_btn_all_done">Ir para o Tella</string>
+  <string name="onboard.go_btn_all_done">Aceder o Tella</string>
   <string name="onboard.advanced_btn_all_done">Definições avançadas</string>
   <string name="onboard.title_share_data">Partilhe os dados que recolhe.</string>
   <string name="onboard.expl_share_data">Se trabalha com uma organização, conecte-se ao servidor da organização para enviar ficheiros e dados. A sua organização deve fornecer-lhe os detalhes do servidor.</string>
@@ -1073,7 +1073,7 @@ files</string>
   <string name="send_files_title">Send files</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
-  <string name="try_again">Try again</string>
+  <string name="try_again">Tente novamente</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
