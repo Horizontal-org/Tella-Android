@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -33,13 +34,30 @@ class RecipientVerificationFragment :
     }
 
     private fun initUI() = with(binding) {
-        // Simpler instruction text (update your string as needed)
-        sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_recipient)
-        hashContentTextView.text = viewModel.p2PState.hash.formatHash()
-
-        // IMPORTANT: button is enabled immediately
+        refreshVerificationUi()
         confirmAndConnectBtn.isEnabled = true
-        confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+    }
+
+    private fun refreshVerificationUi() = with(binding) {
+        val step = viewModel.p2PState.activeVerificationStep
+        if (step == P2PVerificationStep.SENDER_HASH) {
+            sequenceDescTextView.text = getString(R.string.verification_step2_sender_hash)
+            hashContentTextView.text = viewModel.p2PState.pinnedSenderHash
+                .ifBlank { viewModel.p2PState.localSenderHash }
+                .formatHash()
+        } else {
+            sequenceDescTextView.text = getString(R.string.verification_step1_recipient_hash)
+            hashContentTextView.text = viewModel.p2PState.localReceiverHash
+                .ifBlank { viewModel.p2PState.hash }
+                .formatHash()
+        }
+        confirmAndConnectBtn.setText(
+            if (step == P2PVerificationStep.SENDER_HASH) {
+                getString(R.string.confirm_and_connect)
+            } else {
+                getString(R.string.confirm_and_continue)
+            }
+        )
     }
 
     private fun initListeners() = with(binding) {
@@ -64,6 +82,14 @@ class RecipientVerificationFragment :
             if (success) {
                 navManager().navigateFromRecipientVerificationScreenToWaitingReceiverFragment()
             }
+        }
+
+        viewModel.getHashSuccess.observe(viewLifecycleOwner) {
+            refreshVerificationUi()
+        }
+
+        viewModel.incompatibleProtocolError.observe(viewLifecycleOwner) {
+            navigateBackAndStopServer()
         }
 
         viewModel.closeConnection.observe(viewLifecycleOwner) { closeConnection ->

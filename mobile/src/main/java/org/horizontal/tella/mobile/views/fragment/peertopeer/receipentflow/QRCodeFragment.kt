@@ -102,6 +102,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         handleConnectManually()
 
         viewModel.isManualConnection = false
+        viewModel.p2PState.isUsingManualConnection = false
+        viewModel.p2PState.receiverCanScanQr = true
 
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
@@ -173,7 +175,16 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         p2PSharedState.hash = certHash
         p2PSharedState.ip = advertiseToPeerPrimary
 
-        val json = PeerConnectionQrCodec.toJson(allIps, port, certHash, pinString)
+        p2PSharedState.localReceiverHash = certHash
+
+        val json = PeerConnectionQrCodec.toReceiverJson(
+            ipAddresses = allIps,
+            port = port,
+            certificateHash = certHash,
+            pin = pinString,
+            senderShowHash = false,
+        )
+        Timber.d("P2P receiver QR payload=%s", json)
         qrPayload = json
         generateQrCode(json)
     }
@@ -231,6 +242,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
 
     private fun connectManually() {
         val json = qrPayload ?: return
+        viewModel.p2PState.receiverCanScanQr = false
+        viewModel.p2PState.isUsingManualConnection = true
         bundle.putString("payload", json)
         navManager().navigateFromScanQrCodeToDeviceInfo()
     }

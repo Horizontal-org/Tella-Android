@@ -4,14 +4,19 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.engine.EmbeddedServer
 import io.ktor.server.engine.applicationEnvironment
+import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
-import io.ktor.server.engine.sslConnector
 import io.ktor.server.netty.Netty
+import io.netty.handler.ssl.SslHandler
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PConnectionPhase
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveStream
@@ -38,7 +43,6 @@ import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
 import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
-import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
@@ -49,7 +53,6 @@ import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.security.KeyPair
-import java.security.KeyStore
 import java.security.cert.X509Certificate
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -79,6 +82,7 @@ class TellaPeerToPeerServer(
     private val transferNonceManager = TransferNonceManager()
     private val registerPinFailuresByNonce = ConcurrentHashMap<String, Int>()
     private val rateLimiter = PeerTimedRateLimiter(rateLimitConfig)
+    private val nettyServerSslContext = PeerMtlsSsl.buildNettyServerSslContext(keyPair, certificate)
 
     override val certificatePem: String
         get() = CertificateUtils.certificateToPem(certificate)
@@ -100,33 +104,28 @@ class TellaPeerToPeerServer(
 
     override fun start() {
         Timber.e(
-            "SERVER STARTED bind=%s port=%d advertisedToPeer=%s",
+            "SERVER STARTED bind=%s port=%d advertisedToPeer=%s mTLS=REQUIRE",
             P2PNetworkAddressPolicy.INADDR_ANY_IPV4,
             serverPort,
             advertisedHost,
         )
-        val keyStore = KeyStore.getInstance("PKCS12").apply {
-            load(null, null)
-            setKeyEntry(
-                keyStoreConfig.alias, keyPair.private, keyStoreConfig.password, arrayOf(certificate)
-            )
-        }
-
         embedded = embeddedServer(
             Netty,
             environment = applicationEnvironment { },
             configure = {
                 enableHttp2 = false
                 enableH2c = false
-                sslConnector(
-                    keyStore = keyStore,
-                    keyAlias = keyStoreConfig.alias,
-                    keyStorePassword = { keyStoreConfig.password },
-                    privateKeyPassword = { keyStoreConfig.password },
-                ) {
+                connector {
                     host = P2PNetworkAddressPolicy.INADDR_ANY_IPV4
                     port = serverPort
-                    enabledProtocols = listOf("TLSv1.3", "TLSv1.2")
+                }
+                channelPipelineConfig = {
+                    if (get(SslHandler::class.java) == null) {
+                        addFirst("ssl", nettyServerSslContext.newHandler(channel().alloc()))
+                    }
+                    if (get("peer-cert-capture") == null) {
+                        addAfter("ssl", "peer-cert-capture", PeerClientCertCaptureHandler())
+                    }
                 }
             },
         ) {
@@ -160,11 +159,35 @@ class TellaPeerToPeerServer(
                     call.respondText("The server is running securely over HTTPS.")
                 }
 
-                // Client presence hint (optional)
+                // Legacy v1 — protocol §6 incompatibility handling
+                post(PeerApiRoutes.V1_REGISTER) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        PeerEventManager.emitIncompatibleProtocol()
+                    }
+                    call.respond(HttpStatusCode.Forbidden, "Rejected")
+                }
+
+                post(PeerApiRoutes.V1_PING) {
+                    if (p2PSharedState.connectionPhase != P2PConnectionPhase.MTLS_ESTABLISHED &&
+                        p2PSharedState.connectionPhase != P2PConnectionPhase.REGISTERED
+                    ) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            PeerEventManager.emitIncompatibleProtocol()
+                        }
+                    }
+                    // Ignore per protocol — do not respond
+                }
+
+                // Bootstrap route for manual flow: TLS/mTLS is enforced at the handshake layer;
+                // do NOT gate on pinned hashes here — the sender uses this 200 + the TLS server
+                // cert to learn and verify the receiver hash before /register.
                 post(PeerApiRoutes.PING) {
                     call.peerClientIpForRateLimit()
+                    val clientHash = call.peerClientCertificateHashHex()
+                    Timber.d("P2P ping: clientCertHash=%s", clientHash ?: "null")
                     CoroutineScope(Dispatchers.IO).launch {
-                        peerToPeerManager.notifyClientConnected(p2PSharedState.hash)
+                        peerToPeerManager.notifyClientConnected(p2PSharedState.localReceiverHash.ifBlank { p2PSharedState.hash })
+                        peerToPeerManager.notifyRecipientHashVerification()
                     }
                     call.respondText("ping", status = HttpStatusCode.OK)
                 }
@@ -198,7 +221,8 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
-                        if (!isValidPin(request.pin) || pin != request.pin) {
+                        val requestPin = request.pin.orEmpty()
+                        if (!isValidPin(requestPin) || pin != requestPin) {
                             val count = (registerPinFailuresByNonce[regNonce] ?: 0) + 1
                             registerPinFailuresByNonce[regNonce] = count
                             if (count >= MAX_REGISTER_PIN_ATTEMPTS) {
@@ -211,6 +235,31 @@ class TellaPeerToPeerServer(
 
                         registerPinFailuresByNonce.remove(regNonce)
 
+                        val clientCertHash = call.peerClientCertificateHashHex()
+                        Timber.d("P2P register: clientCertHash=%s", clientCertHash ?: "null")
+                        if (clientCertHash == null) {
+                            call.respond(HttpStatusCode.BadRequest, "Client certificate required")
+                            return@post
+                        }
+
+                        val pinnedSender = p2PSharedState.pinnedSenderHash
+                        Timber.d(
+                            "P2P register: receiverCanScanQr=%b senderShowHash=%b pinnedSenderHash=%s phase=%s clientCertHash=%s",
+                            p2PSharedState.receiverCanScanQr,
+                            p2PSharedState.senderShowHash,
+                            pinnedSender.ifBlank { "<blank>" },
+                            p2PSharedState.connectionPhase,
+                            clientCertHash,
+                        )
+                        if (pinnedSender.isNotBlank() && !pinnedSender.equals(clientCertHash, ignoreCase = true)) {
+                            Timber.w(
+                                "P2P register: 403 sender cert mismatch (stale pin?) pinned=%s actual=%s",
+                                pinnedSender, clientCertHash,
+                            )
+                            call.respond(HttpStatusCode.Forbidden, "Sender certificate mismatch")
+                            return@post
+                        }
+
                         val sessionId = UUID.randomUUID().toString()
                         val session = PeerResponse(sessionId)
                         if (p2PSharedState.session == null) {
@@ -219,12 +268,39 @@ class TellaPeerToPeerServer(
                         p2PSharedState.session?.sessionId = sessionId
                         serverSession = session
 
+                        val needsSenderHashVerification = pinnedSender.isBlank() &&
+                            (!p2PSharedState.receiverCanScanQr || p2PSharedState.senderShowHash)
+                        Timber.d("P2P register: needsSenderHashVerification=%b", needsSenderHashVerification)
+
+                        if (needsSenderHashVerification) {
+                            p2PSharedState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
+                            Timber.d("P2P register: awaiting receiver confirmation of sender hash %s", clientCertHash)
+                            val senderVerified = try {
+                                PeerEventManager.emitSenderHashVerification(clientCertHash)
+                            } catch (e: Exception) {
+                                Timber.e(e, "P2P register: emitSenderHashVerification failed")
+                                call.respond(HttpStatusCode.InternalServerError, "Internal error")
+                                return@post
+                            }
+                            Timber.d("P2P register: emitSenderHashVerification result=%b", senderVerified)
+                            if (!senderVerified) {
+                                call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
+                                return@post
+                            }
+                            p2PSharedState.pinSenderHash(clientCertHash)
+                        } else if (pinnedSender.isNotBlank()) {
+                            p2PSharedState.pinSenderHash(pinnedSender)
+                        }
+
+                        Timber.d("P2P register: awaiting registration acceptance")
                         val accepted = try {
                             PeerEventManager.emitIncomingRegistrationRequest(sessionId, request)
                         } catch (e: Exception) {
+                            Timber.e(e, "P2P register: emitIncomingRegistrationRequest failed")
                             call.respond(HttpStatusCode.InternalServerError, "Internal error")
                             return@post
                         }
+                        Timber.d("P2P register: registration accepted=%b", accepted)
 
                         if (!accepted) {
                             call.respond(
@@ -233,6 +309,7 @@ class TellaPeerToPeerServer(
                             return@post
                         }
 
+                        p2PSharedState.markRegistered()
                         launch { PeerEventManager.emitRegistrationSuccess() }
                         call.respond(HttpStatusCode.OK, session)
                     } catch (e: Exception) {
@@ -250,6 +327,8 @@ class TellaPeerToPeerServer(
                 // 2) Prepare upload → create receiving session, STATUS = SENDING
                 post(PeerApiRoutes.PREPARE_UPLOAD) {
                     try {
+                        if (!validateSenderClientCertificate(call)) return@post
+
                         val request = try {
                             call.receive<PrepareUploadRequest>()
                         } catch (e: Exception) {
@@ -328,6 +407,8 @@ class TellaPeerToPeerServer(
                 // 3) Upload each file (transport-only; recipient will SAVE later)
                 put(PeerApiRoutes.UPLOAD) {
                     try {
+                        if (!validateSenderClientCertificate(call)) return@put
+
                         val sessionId = call.parameters["sessionId"]
                         val fileId = call.parameters["fileId"]
                         val transmissionId = call.parameters["transmissionId"]
@@ -490,6 +571,8 @@ class TellaPeerToPeerServer(
 
                 // 4) Close session (transport finished/cancelled by sender)
                 post(PeerApiRoutes.CLOSE) {
+                    if (!validateSenderClientCertificate(call)) return@post
+
                     val payload = try {
                         call.receive<Map<String, String>>()
                     } catch (_: Exception) {
@@ -553,6 +636,26 @@ class TellaPeerToPeerServer(
     }
 
     private fun isValidPin(pin: String) = pin.length == 6
+
+    private suspend fun ApplicationCall.respondClientCertRejected() {
+        respond(HttpStatusCode.Forbidden, "Client certificate mismatch")
+    }
+
+    private suspend fun validateSenderClientCertificate(call: ApplicationCall): Boolean {
+        if (p2PSharedState.connectionPhase != P2PConnectionPhase.MTLS_ESTABLISHED &&
+            p2PSharedState.connectionPhase != P2PConnectionPhase.REGISTERED
+        ) {
+            return true
+        }
+        val expected = p2PSharedState.pinnedSenderHash
+        if (expected.isBlank()) return true
+        val actual = call.peerClientCertificateHashHex()
+        if (actual == null || !actual.equals(expected, ignoreCase = true)) {
+            call.respondClientCertRejected()
+            return false
+        }
+        return true
+    }
 
     /**
      * [File.createTempFile] requires prefix length ≥ 3; strip path-like characters for safety.

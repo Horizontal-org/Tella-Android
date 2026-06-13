@@ -52,7 +52,7 @@ object ServerPinger {
             val client = builder.build()
 
             val req = Request.Builder()
-                .url("https://$ip:$port/api/v1/ping")
+                .url("https://$ip:$port/api/v2/ping")
                 .post(RequestBody.create(null, ByteArray(0)))
                 .build()
 
@@ -86,7 +86,7 @@ object ServerPinger {
         )
 
         val req = Request.Builder()
-            .url("https://$ip:$port/api/v1/ping")
+            .url("https://$ip:$port/api/v2/ping")
             .post(RequestBody.create(null, ByteArray(0)))
             .build()
 
@@ -111,7 +111,7 @@ object ServerPinger {
         )
 
         val req = Request.Builder()
-            .url("https://$ip:$port/api/v1/ping")
+            .url("https://$ip:$port/api/v2/ping")
             .post(RequestBody.create(null, ByteArray(0)))
             .build()
 

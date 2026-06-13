@@ -39,6 +39,19 @@ object PeerEventManager {
 
     private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
+    private var senderHashVerificationDeferred: CompletableDeferred<Boolean>? = null
+
+    private val _senderHashVerificationRequests = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1,
+    )
+    val senderHashVerificationRequests = _senderHashVerificationRequests.asSharedFlow()
+
+    private val _incompatibleProtocol = MutableSharedFlow<Unit>(
+        replay = 1,
+        extraBufferCapacity = 1,
+    )
+    val incompatibleProtocol = _incompatibleProtocol.asSharedFlow()
 
     private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 0)
     val uploadProgressStateFlow = _uploadProgressStateFlow.asSharedFlow()
@@ -87,5 +100,21 @@ object PeerEventManager {
 
     fun confirmRegistration(registrationId: String, accepted: Boolean) {
         registrationDecisionMap.remove(registrationId)?.complete(accepted)
+    }
+
+    suspend fun emitSenderHashVerification(senderCertHash: String): Boolean {
+        val deferred = CompletableDeferred<Boolean>()
+        senderHashVerificationDeferred = deferred
+        _senderHashVerificationRequests.emit(senderCertHash)
+        return deferred.await()
+    }
+
+    fun confirmSenderHashVerification(accepted: Boolean) {
+        senderHashVerificationDeferred?.complete(accepted)
+        senderHashVerificationDeferred = null
+    }
+
+    suspend fun emitIncompatibleProtocol() {
+        _incompatibleProtocol.emit(Unit)
     }
 }

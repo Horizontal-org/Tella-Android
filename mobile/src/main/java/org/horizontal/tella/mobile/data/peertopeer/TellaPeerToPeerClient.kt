@@ -10,12 +10,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.ConnectionSpec
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.TlsVersion
 import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerMtlsSsl
+import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
@@ -36,6 +39,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
 class TellaPeerToPeerClient @Inject constructor(
     @ApplicationContext private val appContext: Context
@@ -56,8 +60,8 @@ class TellaPeerToPeerClient @Inject constructor(
         )
 
         val jsonPayload = Json.encodeToString(payload)
-        val requestBody = jsonPayload.toRequestBody()
-        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+        val requestBody = jsonPayload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
+        val client = getMtlsClient(ip, expectedFingerprint)
 
         val request = Request.Builder()
             .url(url)
@@ -67,9 +71,19 @@ class TellaPeerToPeerClient @Inject constructor(
             .addHeader("Connection", "close")
             .build()
 
+        Timber.d("registerPeerDevice payload=%s", jsonPayload)
+
         return@withContext try {
             client.newCall(request).execute().use { response ->
+                response.handshake?.let { hs ->
+                    Timber.d(
+                        "registerPeerDevice TLS localCerts=%d peerCerts=%d",
+                        hs.localCertificates.size,
+                        hs.peerCertificates.size,
+                    )
+                }
                 val body = response.body.string()
+                Timber.d("registerPeerDevice code=%d body=%s", response.code, body.take(300))
 
                 if (response.isSuccessful) {
                     when (val parsed = parseSessionIdFromResponse(body)) {
@@ -79,7 +93,7 @@ class TellaPeerToPeerClient @Inject constructor(
                     }
                 } else {
                     when (response.code) {
-                        400 -> RegisterPeerResult.InvalidFormat
+                        400 -> parseRegisterBadRequest(body)
                         401 -> RegisterPeerResult.InvalidPin
                         403 -> RegisterPeerResult.RejectedByReceiver
                         409 -> RegisterPeerResult.Conflict
@@ -112,8 +126,8 @@ class TellaPeerToPeerClient @Inject constructor(
             files = files,
         )
         val jsonPayload = Json.encodeToString(requestPayload)
-        val requestBody = jsonPayload.toRequestBody()
-        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+        val requestBody = jsonPayload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
+        val client = getMtlsClient(ip, expectedFingerprint)
 
         try {
             val request = Request.Builder()
@@ -157,7 +171,7 @@ class TellaPeerToPeerClient @Inject constructor(
             ip, port, sessionId, fileId, transmissionId, uploadNonce
         )
 
-        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+        val client = getMtlsClient(ip, expectedFingerprint)
         val requestBody = ProgressRequestBody(inputStream, fileSize, onProgress)
 
         val request = Request.Builder()
@@ -210,8 +224,8 @@ class TellaPeerToPeerClient @Inject constructor(
         val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.CLOSE)
 
         val payload = Json.encodeToString(mapOf("sessionId" to sessionId))
-        val requestBody = payload.toRequestBody()
-        val client = getClientWithFingerprintValidation(ip, expectedFingerprint)
+        val requestBody = payload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
+        val client = getMtlsClient(ip, expectedFingerprint)
 
         val request = Request.Builder()
             .url(url)
@@ -237,6 +251,13 @@ class TellaPeerToPeerClient @Inject constructor(
     }
 
     // ---------------- Internals ----------------
+
+    private fun parseRegisterBadRequest(body: String): RegisterPeerResult =
+        when {
+            body.contains("Client certificate required", ignoreCase = true) ->
+                RegisterPeerResult.ClientCertificateRequired
+            else -> RegisterPeerResult.InvalidFormat
+        }
 
     private fun parseSessionIdFromResponse(body: String): RegisterPeerResult {
         return try {
@@ -297,17 +318,28 @@ class TellaPeerToPeerClient @Inject constructor(
      *    considered for parity with iOS defaults, but would block Nearby Sharing on minSdk 21 devices where 1.3 is
      *    unavailable—so we keep 1.2+1.3, matching the product call on the cross-platform thread (Feb 18 discussion).
      */
-    private fun getClientWithFingerprintValidation(
+    private fun senderIdentity() = PeerKeyProvider.ensureSenderIdentity()
+
+    private fun getMtlsClient(
         ip: String,
-        expectedFingerprintHex: String
+        expectedFingerprintHex: String,
+        requirePinnedReceiver: Boolean = true,
+        serverCertCaptor: PeerServerCertCapturingTrustManager? = null,
     ): OkHttpClient {
-        val expected = normalizeHex(expectedFingerprintHex)
-
-        val trustManager = CertificateUtils.getLeafCertPinnedTrustManager(expected)
-
-        val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf(trustManager), SecureRandom())
+        val (senderKeyPair, senderCert) = senderIdentity()
+        val pinned = if (requirePinnedReceiver) normalizeHex(expectedFingerprintHex) else null
+        val baseTrustManager: X509TrustManager = if (pinned.isNullOrEmpty()) {
+            CertificateUtils.getFingerprintCollectionTrustManager()
+        } else {
+            CertificateUtils.getLeafCertPinnedTrustManager(pinned)
         }
+        val trustManager: X509TrustManager = serverCertCaptor ?: baseTrustManager
+        val sslContext = PeerMtlsSsl.createSenderSslContext(
+            senderKeyPair = senderKeyPair,
+            senderCertificate = senderCert,
+            pinnedReceiverHash = pinned,
+            trustManagerOverride = trustManager,
+        )
 
         val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
             .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
@@ -322,8 +354,6 @@ class TellaPeerToPeerClient @Inject constructor(
             .readTimeout(20, TimeUnit.SECONDS)
             .writeTimeout(20, TimeUnit.SECONDS)
 
-        // For LAN / hotspot peers, binding to an arbitrary "Wi‑Fi" Network can pick the wrong interface
-        // (e.g. secondary saved Wi‑Fi) and yield EHOSTUNREACH while the default network routes correctly.
         if (!isPrivateOrLinkLocalIpv4(ip)) {
             pickWifiNetwork(appContext)?.let { network ->
                 builder.socketFactory(network.socketFactory)
@@ -378,55 +408,55 @@ class TellaPeerToPeerClient @Inject constructor(
         hexLike.trim().replace(":", "").replace("\\s".toRegex(), "").lowercase()
 
 
-    /** Discovery client for /ping before we have a pin; uses system CA validation (no trust-all). */
-    private fun newDiscoveryClient(network: Network?): OkHttpClient {
-        val trustManager = CertificateUtils.getFingerprintCollectionTrustManager()
-        val ssl = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf(trustManager), SecureRandom())
-        }
-
-        val tlsSpec = ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-            .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
-            .allEnabledCipherSuites()
-            .build()
-
-        return OkHttpClient.Builder()
-            .sslSocketFactory(ssl.socketFactory, trustManager)
-            .connectionSpecs(listOf(tlsSpec))
-            .protocols(listOf(Protocol.HTTP_1_1))
-            .apply { network?.let { socketFactory(it.socketFactory) } }
-            .connectTimeout(3, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
-            .build()
-    }
-
-    suspend fun pingBeforeRegister(ip: String, port: String): Boolean =
+  /**
+   * Protocol v2 initial ping with sender client certificate attached.
+   * Returns the receiver leaf certificate hash extracted from the TLS handshake, or null on failure.
+   */
+    suspend fun pingAndFetchReceiverHash(ip: String, port: String): String? =
         withContext(Dispatchers.IO) {
-            val network = pickWifiNetwork(appContext)
-            val client = newDiscoveryClient(network)
-
-            // Use the real path your server exposes; many backends use /api/v1/ping
-            val url = PeerApiRoutes.buildUrl(ip, port, "/api/v1/ping", secure = true)
-
+            val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PING)
+            val serverCertCaptor = PeerServerCertCapturingTrustManager(
+                CertificateUtils.getFingerprintCollectionTrustManager()
+            )
+            val client = getMtlsClient(
+                ip,
+                expectedFingerprintHex = "",
+                requirePinnedReceiver = false,
+                serverCertCaptor = serverCertCaptor,
+            )
             val req = Request.Builder()
-                .url("https://$ip:$port/api/v1/ping")
-                .post(okhttp3.RequestBody.create(null, ByteArray(0))) // or "".toRequestBody(null)
+                .url(url)
+                .post(ByteArray(0).toRequestBody())
+                .addHeader("Connection", "close")
                 .build()
 
             runCatching {
                 client.newCall(req).execute().use { resp ->
                     if (resp.code == 429) {
-                        Timber.w("pingBeforeRegister: rate limited (429)")
+                        Timber.w("pingAndFetchReceiverHash: rate limited (429)")
                     }
-                    // consider any HTTP code as “host reachable”
-                    Timber.d("pingBeforeRegister $url -> HTTP %d", resp.code)
-                    resp.code in 100..599
+                    if (!resp.isSuccessful) {
+                        Timber.w("pingAndFetchReceiverHash $url -> HTTP %d", resp.code)
+                        return@withContext null
+                    }
+                    // SSLSession does not always expose peer certs (see sender log peerCerts=0),
+                    // so fall back to the cert recorded by our trust manager during the handshake.
+                    val handshakeCert = (resp.handshake?.peerCertificates?.firstOrNull()
+                        as? java.security.cert.X509Certificate)
+                        ?: serverCertCaptor.lastServerLeaf
+                    if (handshakeCert == null) {
+                        Timber.w("pingAndFetchReceiverHash: no server cert from handshake or captor")
+                    }
+                    handshakeCert?.let { CertificateUtils.getLeafCertificateDerSha256Hex(it) }
                 }
             }.getOrElse {
                 Timber.w(it, "Ping failed for $url")
-                false
+                null
             }
         }
+
+    suspend fun pingBeforeRegister(ip: String, port: String): Boolean =
+        pingAndFetchReceiverHash(ip, port) != null
 
 
 }

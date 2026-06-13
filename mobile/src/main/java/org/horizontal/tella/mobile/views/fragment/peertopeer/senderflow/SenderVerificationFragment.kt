@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -32,9 +33,20 @@ class SenderVerificationFragment :
     }
 
     private fun initView() {
-        binding.sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_sender)
-        binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
-        binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
+        refreshVerificationUi()
+    }
+
+    private fun refreshVerificationUi() {
+        val step = viewModel.p2PState.activeVerificationStep
+        if (step == P2PVerificationStep.SENDER_HASH) {
+            binding.sequenceDescTextView.text = getString(R.string.verification_step2_sender_hash)
+            binding.hashContentTextView.text = viewModel.p2PState.localSenderHash.formatHash()
+            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
+        } else {
+            binding.sequenceDescTextView.text = getString(R.string.verification_step1_recipient_hash)
+            binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
+            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
+        }
     }
 
     private fun initListeners() {
@@ -66,6 +78,10 @@ class SenderVerificationFragment :
                 binding.confirmAndConnectBtn.isEnabled = false
                 binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
             }
+        }
+
+        viewModel.getHashSuccess.observe(viewLifecycleOwner) {
+            refreshVerificationUi()
         }
 
         viewModel.registrationSuccess.observe(viewLifecycleOwner) { success ->
