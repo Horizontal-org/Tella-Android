@@ -7,15 +7,12 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
-import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SenderManualConnectionFragment :
@@ -23,15 +20,13 @@ class SenderManualConnectionFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
 
-    @Inject
-    lateinit var peerServerStarterManager: PeerServerStarterManager
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        peerServerStarterManager.stopServer()
-        PeerKeyProvider.reset()
-        viewModel.p2PState.clear()
+        // Do NOT reset the sender identity here: in flow C the receiver has already scanned the
+        // sender QR and pinned this session's certificate hash. Regenerating it would make the
+        // cert presented at /register differ from the pinned hash → 403 "Sender certificate
+        // mismatch". The session is already reset at entry (StartNearBySharing.resetConnectionState).
         initView()
         initListeners()
         initObservers()
