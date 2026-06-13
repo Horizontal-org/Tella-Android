@@ -395,6 +395,7 @@ class PeerToPeerViewModel @Inject constructor(
                 p2PState.connectionPhase,
             )
             startRegistration(params.ip, params.port, params.hash, params.pin)
+            showSenderHashAfterRegister()
             return
         }
 
@@ -406,16 +407,27 @@ class PeerToPeerViewModel @Inject constructor(
 
         if (hash.isNotBlank()) {
             startRegistration(ip, port, hash, pin)
+            showSenderHashAfterRegister()
         } else {
             viewModelScope.launch {
                 handleCertificate(ip, port, pin)
-                pendingParams?.let { startRegistration(it.ip, it.port, it.hash, it.pin) }
+                pendingParams?.let {
+                    startRegistration(it.ip, it.port, it.hash, it.pin)
+                    showSenderHashAfterRegister()
+                }
                     ?: run {
                         _waitingForOtherSide.postValue(false)
                         _canTapConfirm.postValue(true)
                     }
             }
         }
+    }
+
+    private fun showSenderHashAfterRegister() {
+        p2PState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
+        _getHashSuccess.postValue(p2PState.localSenderHash)
+        _waitingForOtherSide.postValue(false)
+        _canTapConfirm.postValue(true)
     }
 
 

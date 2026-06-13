@@ -21,6 +21,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.domain.peertopeer.PeerQrParseResult
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.PeerQrScanMode
+import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.QRCodeFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.utils.DialogUtils
@@ -198,7 +199,8 @@ class ScanQrCodeFragment :
         } else {
             binding.connectManuallyButton.setOnClickListener {
                 viewModel.p2PState.receiverCanScanQr = false
-                nav().popBackStack()
+                bundle.putBoolean(QRCodeFragment.ARG_SHOW_MANUAL_INFO, true)
+                navManager().navigateFromScanSenderQrToQrCodeScreen()
             }
         }
     }

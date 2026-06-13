@@ -186,7 +186,11 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         )
         Timber.d("P2P receiver QR payload=%s", json)
         qrPayload = json
-        generateQrCode(json)
+        if (arguments?.getBoolean(ARG_SHOW_MANUAL_INFO) == true) {
+            connectManually()
+        } else {
+            generateQrCode(json)
+        }
     }
 
 
@@ -246,6 +250,10 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         viewModel.p2PState.isUsingManualConnection = true
         bundle.putString("payload", json)
         navManager().navigateFromScanQrCodeToDeviceInfo()
+    }
+
+    companion object {
+        const val ARG_SHOW_MANUAL_INFO = "qr_show_manual_info"
     }
 
     private fun initObservers() {
