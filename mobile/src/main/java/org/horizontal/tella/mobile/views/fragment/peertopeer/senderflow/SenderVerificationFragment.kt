@@ -38,15 +38,27 @@ class SenderVerificationFragment :
 
     private fun refreshVerificationUi() {
         val step = viewModel.p2PState.activeVerificationStep
+        binding.sequenceDescTextView.text =
+            getString(R.string.nearbySharing_verifyConnection_sender)
         if (step == P2PVerificationStep.SENDER_HASH) {
-            binding.sequenceDescTextView.text = getString(R.string.verification_step2_sender_hash)
+            binding.sequenceTitleTextView.text = getString(R.string.verification_step2_sender_hash)
             binding.hashContentTextView.text = viewModel.p2PState.localSenderHash.formatHash()
-            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
         } else {
-            binding.sequenceDescTextView.text = getString(R.string.verification_step1_recipient_hash)
+            binding.sequenceTitleTextView.text =
+                getString(R.string.verification_step1_recipient_hash)
             binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
-            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
         }
+        setConfirmButtonForStep(step)
+    }
+
+    private fun setConfirmButtonForStep(step: P2PVerificationStep?) {
+        binding.confirmAndConnectBtn.setText(
+            if (step == P2PVerificationStep.SENDER_HASH) {
+                getString(R.string.confirm_and_connect)
+            } else {
+                getString(R.string.confirm_and_continue)
+            }
+        )
     }
 
     private fun initListeners() {
@@ -70,7 +82,7 @@ class SenderVerificationFragment :
         viewModel.canTapConfirm.observe(viewLifecycleOwner) { canTap ->
             binding.confirmAndConnectBtn.isEnabled = canTap
             if (canTap) {
-                binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+                setConfirmButtonForStep(viewModel.p2PState.activeVerificationStep)
             }
         }
         viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->

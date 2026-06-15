@@ -35,22 +35,28 @@ class RecipientVerificationFragment :
 
     private fun initUI() = with(binding) {
         refreshVerificationUi()
-        confirmAndConnectBtn.isEnabled = true
     }
+
+    private fun senderHash(): String =
+        viewModel.p2PState.pinnedSenderHash.ifBlank { viewModel.p2PState.localSenderHash }
 
     private fun refreshVerificationUi() = with(binding) {
         val step = viewModel.p2PState.activeVerificationStep
+        sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_recipient)
         if (step == P2PVerificationStep.SENDER_HASH) {
-            sequenceDescTextView.text = getString(R.string.verification_step2_sender_hash)
-            hashContentTextView.text = viewModel.p2PState.pinnedSenderHash
-                .ifBlank { viewModel.p2PState.localSenderHash }
-                .formatHash()
+            sequenceTitleTextView.text = getString(R.string.verification_step2_sender_hash)
+            hashContentTextView.text = senderHash().formatHash()
         } else {
-            sequenceDescTextView.text = getString(R.string.verification_step1_recipient_hash)
+            sequenceTitleTextView.text = getString(R.string.verification_step1_recipient_hash)
             hashContentTextView.text = viewModel.p2PState.localReceiverHash
                 .ifBlank { viewModel.p2PState.hash }
                 .formatHash()
         }
+        setConfirmButtonForStep(step)
+    }
+
+    private fun setConfirmButtonForStep(step: P2PVerificationStep?) = with(binding) {
+        confirmAndConnectBtn.isEnabled = true
         confirmAndConnectBtn.setText(
             if (step == P2PVerificationStep.SENDER_HASH) {
                 getString(R.string.confirm_and_connect)
@@ -60,6 +66,9 @@ class RecipientVerificationFragment :
         )
     }
 
+    private fun waitingTextForStep(step: P2PVerificationStep?): String =
+        getString(R.string.waiting_for_the_sender)
+
     private fun initListeners() = with(binding) {
         toolbar.backClickListener = { navigateBackAndStopServer() }
         discardBtn.setOnClickListener { navigateBackAndStopServer() }
@@ -67,7 +76,9 @@ class RecipientVerificationFragment :
         // Tap immediately — even if no incoming request yet
         confirmAndConnectBtn.setOnClickListener {
             confirmAndConnectBtn.isEnabled = false
-            confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_sender))
+            confirmAndConnectBtn.setText(
+                waitingTextForStep(viewModel.p2PState.activeVerificationStep)
+            )
             viewModel.onRecipientConfirmTapped()
         }
     }
@@ -100,13 +111,14 @@ class RecipientVerificationFragment :
         viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
             if (waiting) {
                 confirmAndConnectBtn.isEnabled = false
-                confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_sender))
+                confirmAndConnectBtn.setText(
+                    waitingTextForStep(viewModel.p2PState.activeVerificationStep)
+                )
             }
         }
         viewModel.canTapConfirm.observe(viewLifecycleOwner) { canTap ->
             if (canTap) {
-                confirmAndConnectBtn.isEnabled = true
-                confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+                setConfirmButtonForStep(viewModel.p2PState.activeVerificationStep)
             }
         }
     }
