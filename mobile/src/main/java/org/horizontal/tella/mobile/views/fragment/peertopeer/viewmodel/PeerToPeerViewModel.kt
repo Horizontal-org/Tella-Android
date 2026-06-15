@@ -238,7 +238,8 @@ class PeerToPeerViewModel @Inject constructor(
         viewModelScope.launch {
             PeerEventManager.senderHashVerificationRequests.collect { senderHash ->
                 p2PState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
-                p2PState.localSenderHash = senderHash
+                // Pending display until recipient confirms (server pins after confirm).
+                p2PState.hash = senderHash
                 _getHashSuccess.postValue(senderHash)
                 _canTapConfirm.postValue(true)
                 _waitingForOtherSide.postValue(false)
@@ -382,7 +383,8 @@ class PeerToPeerViewModel @Inject constructor(
         _waitingForOtherSide.postValue(true)
 
         if (p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) {
-            PeerEventManager.confirmSenderHashVerification(true)
+            _waitingForOtherSide.postValue(true)
+            _canTapConfirm.postValue(false)
             return
         }
 
