@@ -44,6 +44,10 @@ import javax.net.ssl.X509TrustManager
 class TellaPeerToPeerClient @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) {
+    companion object {
+        private const val REGISTER_READ_TIMEOUT_SEC = 120L
+    }
+
     suspend fun registerPeerDevice(
         ip: String,
         port: String,
@@ -61,7 +65,7 @@ class TellaPeerToPeerClient @Inject constructor(
 
         val jsonPayload = Json.encodeToString(payload)
         val requestBody = jsonPayload.toRequestBody(CONTENT_TYPE_JSON.toMediaType())
-        val client = getMtlsClient(ip, expectedFingerprint)
+        val client = getMtlsClient(ip, expectedFingerprint, forRegistration = true)
 
         val request = Request.Builder()
             .url(url)
@@ -325,6 +329,7 @@ class TellaPeerToPeerClient @Inject constructor(
         expectedFingerprintHex: String,
         requirePinnedReceiver: Boolean = true,
         serverCertCaptor: PeerServerCertCapturingTrustManager? = null,
+        forRegistration: Boolean = false,
     ): OkHttpClient {
         val (senderKeyPair, senderCert) = senderIdentity()
         val pinned = if (requirePinnedReceiver) normalizeHex(expectedFingerprintHex) else null
@@ -346,61 +351,34 @@ class TellaPeerToPeerClient @Inject constructor(
             .allEnabledCipherSuites()
             .build()
 
+        val readTimeoutSec = if (forRegistration) REGISTER_READ_TIMEOUT_SEC else 20L
         val builder = OkHttpClient.Builder()
             .sslSocketFactory(sslContext.socketFactory, trustManager)
             .connectionSpecs(listOf(tlsSpec))
             .protocols(listOf(Protocol.HTTP_1_1))
             .connectTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(readTimeoutSec, TimeUnit.SECONDS)
+            .writeTimeout(readTimeoutSec, TimeUnit.SECONDS)
 
-        if (!isPrivateOrLinkLocalIpv4(ip)) {
-            pickWifiNetwork(appContext)?.let { network ->
-                builder.socketFactory(network.socketFactory)
-            }
+        pickWifiNetworkForP2P(appContext)?.let { network ->
+            builder.socketFactory(network.socketFactory)
         }
 
         return builder.build()
     }
 
-    /** True for RFC1918 / link-local so we let the OS choose the socket's outgoing interface. */
-    private fun isPrivateOrLinkLocalIpv4(ip: String): Boolean {
-        val parts = ip.trim().split('.').mapNotNull { it.toIntOrNull() }
-        if (parts.size != 4) return false
-        val a = parts[0]
-        val b = parts[1]
-        return when {
-            a == 10 -> true
-            a == 172 && b in 16..31 -> true
-            a == 192 && b == 168 -> true
-            a == 169 && b == 254 -> true
-            a == 127 -> true
-            else -> false
-        }
-    }
-
+    /** Any Wi-Fi network — local-only / hotspot links often lack VALIDATED or INTERNET. */
     @Suppress("DEPRECATION")
-    private fun pickWifiNetwork(context: Context): Network? {
+    private fun pickWifiNetworkForP2P(context: Context): Network? {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        // Prefer active validated Wi-Fi on API 23+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            cm.activeNetwork?.let { n ->
-                cm.getNetworkCapabilities(n)?.let { caps ->
-                    if (caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
-                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                    ) return n
-                }
-            }
+            cm.allNetworks.firstOrNull { n ->
+                cm.getNetworkCapabilities(n)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true
+            }?.let { return it }
         }
-
-        // Otherwise, any Wi-Fi with INTERNET capability
         return cm.allNetworks.firstOrNull { n ->
-            cm.getNetworkCapabilities(n)?.let { caps ->
-                caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) &&
-                        caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            } == true
+            val info = cm.getNetworkInfo(n)
+            info?.isConnected == true && info.type == ConnectivityManager.TYPE_WIFI
         }
     }
 
