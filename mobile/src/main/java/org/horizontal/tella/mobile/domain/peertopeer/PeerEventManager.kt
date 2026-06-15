@@ -40,6 +40,7 @@ object PeerEventManager {
     private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private var senderHashVerificationDeferred: CompletableDeferred<Boolean>? = null
+    private var receiverHashConfirmationDeferred: CompletableDeferred<Boolean>? = null
 
     private val _senderHashVerificationRequests = MutableSharedFlow<String>(
         replay = 0,
@@ -102,7 +103,8 @@ object PeerEventManager {
         registrationDecisionMap.remove(registrationId)?.complete(accepted)
     }
 
-    suspend fun emitSenderHashVerification(senderCertHash: String): Boolean {
+    suspend fun emitSenderHashVerification(senderCertHash: String, alreadyConfirmed: Boolean = false): Boolean {
+        if (alreadyConfirmed) return true
         val deferred = CompletableDeferred<Boolean>()
         senderHashVerificationDeferred = deferred
         _senderHashVerificationRequests.emit(senderCertHash)
@@ -112,6 +114,31 @@ object PeerEventManager {
     fun confirmSenderHashVerification(accepted: Boolean) {
         senderHashVerificationDeferred?.complete(accepted)
         senderHashVerificationDeferred = null
+    }
+
+    /**
+     * Flow D: `/register` awaits this when sender hash verification is required but the
+     * recipient has not yet confirmed the receiver hash.
+     */
+    suspend fun awaitReceiverHashConfirmation(alreadyConfirmed: Boolean): Boolean {
+        if (alreadyConfirmed) return true
+        val deferred = CompletableDeferred<Boolean>()
+        receiverHashConfirmationDeferred = deferred
+        return try {
+            deferred.await()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    fun confirmReceiverHashVerification(accepted: Boolean) {
+        receiverHashConfirmationDeferred?.complete(accepted)
+        receiverHashConfirmationDeferred = null
+    }
+
+    fun resetReceiverHashConfirmation() {
+        receiverHashConfirmationDeferred?.cancel()
+        receiverHashConfirmationDeferred = null
     }
 
     suspend fun emitIncompatibleProtocol() {

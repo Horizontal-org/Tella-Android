@@ -22,6 +22,10 @@ class P2PSharedState(
     var senderCanScanQr: Boolean = true,
     /** From receiver QR — desktop receivers skip sender QR in step 2. */
     var senderShowHash: Boolean = false,
+    /** Recipient confirmed their own server cert hash (flow D step 1). */
+    var receiverHashConfirmed: Boolean = false,
+    /** Recipient confirmed sender cert hash (flow D step 2). */
+    var senderHashConfirmed: Boolean = false,
     var activeVerificationStep: P2PVerificationStep? = null,
 ) {
 
@@ -71,6 +75,8 @@ class P2PSharedState(
         receiverCanScanQr = true
         senderCanScanQr = true
         senderShowHash = false
+        receiverHashConfirmed = false
+        senderHashConfirmed = false
         activeVerificationStep = null
     }
 }
