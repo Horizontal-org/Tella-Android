@@ -48,22 +48,28 @@ class ShowDeviceInfoFragment :
 
     private fun initObservers() {
         lifecycleScope.launch {
-            viewModel.clientHash.collect { clientHash ->
-                with(viewModel.p2PState) {
-                    val p = parsedQr
-                    ip = p?.ipAddresses?.firstOrNull().orEmpty()
-                    port = p?.port?.toString().orEmpty()
-                    pin = p?.pin
-                    hash = clientHash
-                }
-                moveToVerificationIfNeeded()
+            viewModel.clientHash.collect {
+                moveToRecipientHashVerificationIfNeeded()
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.recipientHashVerification.collect {
+                moveToRecipientHashVerificationIfNeeded()
             }
         }
     }
 
-    private fun moveToVerificationIfNeeded() {
+    private fun moveToRecipientHashVerificationIfNeeded() {
         if (movedToVerification) return
         movedToVerification = true
+        with(viewModel.p2PState) {
+            val p = parsedQr
+            if (p != null) {
+                ip = p.ipAddresses.firstOrNull().orEmpty()
+                port = p.port.toString()
+                pin = p.pin
+            }
+        }
         viewModel.p2PState.activeVerificationStep =
             org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep.RECIPIENT_HASH
         navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()

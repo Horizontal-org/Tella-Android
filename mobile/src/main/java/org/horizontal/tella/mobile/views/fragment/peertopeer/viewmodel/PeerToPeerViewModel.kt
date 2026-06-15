@@ -86,6 +86,7 @@ class PeerToPeerViewModel @Inject constructor(
         hasNavigatedFromWaitingToPrepareSuccess
 
     val clientHash = peerToPeerManager.clientConnected
+    val recipientHashVerification = peerToPeerManager.recipientHashVerification
     private val networkInfoManager = NetworkInfoManager(context)
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
 
@@ -197,6 +198,7 @@ class PeerToPeerViewModel @Inject constructor(
         registrationNonceContext = null
         pendingParams = null
         preConfirmRegistration = false
+        PeerEventManager.resetReceiverHashConfirmation()
     }
 
     fun prepareSenderSession() {
@@ -438,10 +440,19 @@ class PeerToPeerViewModel @Inject constructor(
         _waitingForOtherSide.postValue(true)
 
         if (p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) {
-            // Confirming the sender hash is the manual flow's human verification; the
-            // registration request that immediately follows must not wait for a second tap.
+            p2PState.senderHashConfirmed = true
             preConfirmRegistration = true
             PeerEventManager.confirmSenderHashVerification(true)
+            return
+        }
+
+        if (p2PState.activeVerificationStep == P2PVerificationStep.RECIPIENT_HASH ||
+            p2PState.isUsingManualConnection
+        ) {
+            // Flow D step 1 — unblocks /register held on the server (iOS confirmReceiverHashVerification).
+            p2PState.receiverHashConfirmed = true
+            PeerEventManager.confirmReceiverHashVerification(true)
+            preConfirmRegistration = true
             return
         }
 

@@ -273,10 +273,33 @@ class TellaPeerToPeerServer(
                         Timber.d("P2P register: needsSenderHashVerification=%b", needsSenderHashVerification)
 
                         if (needsSenderHashVerification) {
+                            if (!p2PSharedState.receiverHashConfirmed) {
+                                Timber.d("P2P register: holding for receiver hash confirmation (flow D)")
+                                val receiverHashOk = try {
+                                    PeerEventManager.awaitReceiverHashConfirmation(
+                                        alreadyConfirmed = p2PSharedState.receiverHashConfirmed,
+                                    )
+                                } catch (e: Exception) {
+                                    Timber.e(e, "P2P register: awaitReceiverHashConfirmation failed")
+                                    call.respond(HttpStatusCode.InternalServerError, "Internal error")
+                                    return@post
+                                }
+                                if (!receiverHashOk) {
+                                    call.respond(
+                                        HttpStatusCode.Forbidden,
+                                        "Receiver rejected the registration",
+                                    )
+                                    return@post
+                                }
+                                p2PSharedState.receiverHashConfirmed = true
+                            }
                             p2PSharedState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
                             Timber.d("P2P register: awaiting receiver confirmation of sender hash %s", clientCertHash)
                             val senderVerified = try {
-                                PeerEventManager.emitSenderHashVerification(clientCertHash)
+                                PeerEventManager.emitSenderHashVerification(
+                                    clientCertHash,
+                                    alreadyConfirmed = p2PSharedState.senderHashConfirmed,
+                                )
                             } catch (e: Exception) {
                                 Timber.e(e, "P2P register: emitSenderHashVerification failed")
                                 call.respond(HttpStatusCode.InternalServerError, "Internal error")
@@ -287,6 +310,7 @@ class TellaPeerToPeerServer(
                                 call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
                                 return@post
                             }
+                            p2PSharedState.senderHashConfirmed = true
                             p2PSharedState.pinSenderHash(clientCertHash)
                         } else if (pinnedSender.isNotBlank()) {
                             p2PSharedState.pinSenderHash(pinnedSender)
