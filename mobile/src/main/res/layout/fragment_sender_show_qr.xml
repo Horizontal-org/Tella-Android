@@ -50,14 +50,16 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_marginTop="32dp"
-        android:backgroundTint="@color/light_purple"
-        android:textColor="@android:color/white"
-        app:default_background="@drawable/bg_rounded_information"
+        android:backgroundTint="@color/wa_orange"
+        android:textColor="@color/btn_dark_letter"
+        app:default_background="@drawable/bg_round_orange_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/qrCodeImageView"
-        app:text="@string/scan_recipient_qr_code"
-        app:text_all_caps="true" />
+        app:text="@string/continue_to_step_2"
+        app:text_all_caps="true"
+        app:text_color="@color/btn_dark_letter"
+        app:text_round_bold="true" />
 
     <TextView
         android:id="@+id/helpTextView"
@@ -65,25 +67,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="@string/qr_code_issue_prompt"
+        app:layout_constraintBottom_toTopOf="@id/connectManuallyButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scanRecipientQrButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <org.hzontal.shared_ui.buttons.RoundButton
         android:id="@+id/connectManuallyButton"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/light_purple"
         android:textColor="@android:color/white"
         app:default_background="@drawable/bg_rounded_information"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/helpTextView"
         app:text="@string/connect_manually"
         app:text_all_caps="true" />
 

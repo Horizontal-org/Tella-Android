@@ -1034,6 +1034,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
   <string name="qr_code_scan_instruction">Step 2: Scan the recipient’s QR code</string>
   <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
   <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
   <string name="connection_failed">Connection failed</string>
   <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
