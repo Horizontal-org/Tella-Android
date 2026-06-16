@@ -45,6 +45,7 @@ import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
+import org.horizontal.tella.mobile.domain.peertopeer.PeerPingResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerResponse
 import org.horizontal.tella.mobile.domain.peertopeer.TellaServer
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.state.UploadProgressState
@@ -184,12 +185,20 @@ class TellaPeerToPeerServer(
                 post(PeerApiRoutes.PING) {
                     call.peerClientIpForRateLimit()
                     val clientHash = call.peerClientCertificateHashHex()
-                    Timber.d("P2P ping: clientCertHash=%s", clientHash ?: "null")
+                    // iOS parity (NearbySharingServer.handlePingRequest): senderShowHash is a sticky
+                    // server-state flag, defaulting to false. Set it true once we see the receiver has
+                    // NOT pinned the sender (flow D — no sender QR scanned); it stays false when the
+                    // sender QR was already scanned (flow C).
+                    if (p2PSharedState.pinnedSenderHash.isBlank()) {
+                        p2PSharedState.senderShowHash = true
+                    }
+                    val senderShowHash = p2PSharedState.senderShowHash
+                    Timber.d("P2P ping: clientCertHash=%s senderShowHash=%b", clientHash ?: "null", senderShowHash)
                     CoroutineScope(Dispatchers.IO).launch {
                         peerToPeerManager.notifyClientConnected(p2PSharedState.localReceiverHash.ifBlank { p2PSharedState.hash })
                         peerToPeerManager.notifyRecipientHashVerification()
                     }
-                    call.respondText("ping", status = HttpStatusCode.OK)
+                    call.respond(HttpStatusCode.OK, PeerPingResponse(senderShowHash))
                 }
 
                 // 1) Register a session

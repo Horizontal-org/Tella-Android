@@ -26,6 +26,7 @@ import org.horizontal.tella.mobile.data.peertopeer.network.ProgressRequestBody
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerPingResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
@@ -388,9 +389,13 @@ class TellaPeerToPeerClient @Inject constructor(
 
   /**
    * Protocol v2 initial ping with sender client certificate attached.
-   * Returns the receiver leaf certificate hash extracted from the TLS handshake, or null on failure.
+   * Returns the receiver leaf cert hash (from the TLS handshake) plus the `senderShowHash` flag
+   * parsed from the response body (protocol §3.1), or null on failure.
+   *
+   * Per the protocol security note, callers must only act on [PeerPingResult.senderShowHash] AFTER the
+   * receiver hash has been verified — the ping channel isn't authenticated until then.
    */
-    suspend fun pingAndFetchReceiverHash(ip: String, port: String): String? =
+    suspend fun pingAndFetchReceiverHash(ip: String, port: String): PeerPingResult? =
         withContext(Dispatchers.IO) {
             val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PING)
             val serverCertCaptor = PeerServerCertCapturingTrustManager(
@@ -417,6 +422,11 @@ class TellaPeerToPeerClient @Inject constructor(
                         Timber.w("pingAndFetchReceiverHash $url -> HTTP %d", resp.code)
                         return@withContext null
                     }
+                    val body = resp.body.string()
+                    // Defaults to false when the field/body is absent (older or non-conforming peer),
+                    val senderShowHash = runCatching {
+                        JSONObject(body).optBoolean("senderShowHash", false)
+                    }.getOrDefault(false)
                     // SSLSession does not always expose peer certs (see sender log peerCerts=0),
                     // so fall back to the cert recorded by our trust manager during the handshake.
                     val handshakeCert = (resp.handshake?.peerCertificates?.firstOrNull()
@@ -424,8 +434,10 @@ class TellaPeerToPeerClient @Inject constructor(
                         ?: serverCertCaptor.lastServerLeaf
                     if (handshakeCert == null) {
                         Timber.w("pingAndFetchReceiverHash: no server cert from handshake or captor")
+                        return@withContext null
                     }
-                    handshakeCert?.let { CertificateUtils.getLeafCertificateDerSha256Hex(it) }
+                    val receiverHash = CertificateUtils.getLeafCertificateDerSha256Hex(handshakeCert)
+                    PeerPingResult(receiverHash = receiverHash, senderShowHash = senderShowHash)
                 }
             }.getOrElse {
                 Timber.w(it, "Ping failed for $url")

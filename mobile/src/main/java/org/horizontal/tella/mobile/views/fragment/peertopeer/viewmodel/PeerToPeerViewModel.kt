@@ -358,9 +358,12 @@ class PeerToPeerViewModel @Inject constructor(
             p2PState.senderCanScanQr = false
             p2PState.activeVerificationStep = P2PVerificationStep.RECIPIENT_HASH
 
-            val receiverHash = peerClient.pingAndFetchReceiverHash(ip, port)
-            Timber.d("P2P manual ping receiverHash=%s", receiverHash ?: "null")
-            if (receiverHash.isNullOrBlank()) {
+            val pingResult = peerClient.pingAndFetchReceiverHash(ip, port)
+            Timber.d(
+                "P2P manual ping receiverHash=%s senderShowHash=%s",
+                pingResult?.receiverHash ?: "null", pingResult?.senderShowHash,
+            )
+            if (pingResult == null || pingResult.receiverHash.isBlank()) {
                 bottomSheetError.postValue(
                     context.getString(R.string.connection_failed) to
                         context.getString(R.string.peer_to_peer_manual_ping_failed)
@@ -368,6 +371,10 @@ class PeerToPeerViewModel @Inject constructor(
                 return@launch
             }
 
+            // Protocol §3.1 security note: store senderShowHash now, but only act on it AFTER the
+            // receiver hash is verified (done in onUserTappedConfirmAndConnect / showSenderHashAfterRegister).
+            p2PState.senderShowHash = pingResult.senderShowHash
+            val receiverHash = pingResult.receiverHash
             p2PState.hash = receiverHash
             _getHashSuccess.postValue(receiverHash)
             pendingParams = PendingConnectParams(ip, port, receiverHash, pin)
@@ -399,7 +406,7 @@ class PeerToPeerViewModel @Inject constructor(
                 p2PState.connectionPhase,
             )
             startRegistration(params.ip, params.port, params.hash, params.pin)
-            showSenderHashAfterRegister()
+            if (p2PState.senderShowHash) showSenderHashAfterRegister()
             return
         }
 
@@ -411,13 +418,13 @@ class PeerToPeerViewModel @Inject constructor(
 
         if (hash.isNotBlank()) {
             startRegistration(ip, port, hash, pin)
-            showSenderHashAfterRegister()
+            if (p2PState.senderShowHash) showSenderHashAfterRegister()
         } else {
             viewModelScope.launch {
                 handleCertificate(ip, port, pin)
                 pendingParams?.let {
                     startRegistration(it.ip, it.port, it.hash, it.pin)
-                    showSenderHashAfterRegister()
+                    if (p2PState.senderShowHash) showSenderHashAfterRegister()
                 }
                     ?: run {
                         _waitingForOtherSide.postValue(false)
@@ -427,6 +434,12 @@ class PeerToPeerViewModel @Inject constructor(
         }
     }
 
+    /**
+     * iOS parity (ManuallyVerificationViewModel → receiverHash/.sendRegister): after the manual sender
+     * sends /register, show this device's OWN hash for sender-hash verification so both parties can
+     * cross-check it. Only invoked when the ping reported `senderShowHash == true` (flow D); in flow C
+     * the receiver already pinned the sender via QR, so this screen is skipped entirely (no flash).
+     */
     private fun showSenderHashAfterRegister() {
         p2PState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
         _getHashSuccess.postValue(p2PState.localSenderHash)
