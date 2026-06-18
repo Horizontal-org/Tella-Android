@@ -8,6 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
 import org.horizontal.tella.mobile.data.peertopeer.managers.ReceiverSessionSetup
@@ -38,6 +40,9 @@ class ShowDeviceInfoFragment :
     private var startedOwnServer = false
     private var serverStartRequested = false
 
+    private val serverSetupMutex = Mutex()
+    private var serverSetupDone = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.p2PState.isUsingManualConnection = true
@@ -54,6 +59,7 @@ class ShowDeviceInfoFragment :
     private fun ensureServer() {
         if (receiverSessionSetup.hasRunningSession()) {
             // Reuse the server already started by the QR screen.
+            serverSetupDone = true
             showCredentials()
             return
         }
@@ -71,12 +77,21 @@ class ShowDeviceInfoFragment :
 
     private fun startServer(primaryIpHint: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            val json = receiverSessionSetup.start(
-                primaryIpHint = primaryIpHint,
-                discoveredIps = viewModel.collectLocalIpv4AddressesForNearbySharing(),
-            ) ?: return@launch
-            startedOwnServer = true
-            showCredentials()
+
+            serverSetupMutex.withLock {
+                if (serverSetupDone || receiverSessionSetup.hasRunningSession()) {
+                    serverSetupDone = true
+                    showCredentials()
+                    return@withLock
+                }
+                val json = receiverSessionSetup.start(
+                    primaryIpHint = primaryIpHint,
+                    discoveredIps = viewModel.collectLocalIpv4AddressesForNearbySharing(),
+                ) ?: return@withLock
+                startedOwnServer = true
+                serverSetupDone = true
+                showCredentials()
+            }
         }
     }
 
