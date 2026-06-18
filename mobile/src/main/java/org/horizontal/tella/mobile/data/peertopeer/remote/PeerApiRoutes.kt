@@ -13,6 +13,20 @@ object PeerApiRoutes {
     const val V1_REGISTER = "/api/v1/register"
     const val V1_PING = "/api/v1/ping"
 
+    fun apiVersion(path: String): Int? {
+        val components = path.split("/").filter { it.isNotEmpty() }
+        if (components.size < 2) return null
+        if (components[0] != "api") return null
+        val versionSegment = components[1]
+        if (!versionSegment.startsWith("v")) return null
+        return versionSegment.drop(1).toIntOrNull()
+    }
+
+    fun isPingOrRegister(path: String): Boolean {
+        val last = path.split("/").lastOrNull { it.isNotEmpty() } ?: return false
+        return last == "ping" || last == "register"
+    }
+
 
     fun buildUrl(ip: String, port: String, endpoint: String, secure: Boolean = true): String {
         val scheme = if (secure) "https" else "http"
@@ -31,7 +45,13 @@ object PeerApiRoutes {
         nonce: String,
     ): String {
         val base = buildUrl(ip, port, UPLOAD).toHttpUrlOrNull()
-            ?: return "${buildUrl(ip, port, UPLOAD)}?sessionId=$sessionId&fileId=$fileId&transmissionId=$transmissionId&nonce=$nonce"
+            ?: return "${
+                buildUrl(
+                    ip,
+                    port,
+                    UPLOAD
+                )
+            }?sessionId=$sessionId&fileId=$fileId&transmissionId=$transmissionId&nonce=$nonce"
         return base.newBuilder()
             .addQueryParameter("sessionId", sessionId)
             .addQueryParameter("fileId", fileId)

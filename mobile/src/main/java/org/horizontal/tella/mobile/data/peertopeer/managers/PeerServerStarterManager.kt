@@ -81,7 +81,6 @@ class PeerServerStarterManager @Inject constructor(
                 keyPair = keyPair,
                 pin = pin,
                 certificate = cert,
-                keyStoreConfig = config,
                 peerToPeerManager = peerToPeerManager,
                 p2PSharedState = p2PSharedState,
                 receiveDir = receiveDir,

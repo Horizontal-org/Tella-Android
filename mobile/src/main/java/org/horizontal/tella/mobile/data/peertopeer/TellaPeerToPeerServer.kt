@@ -18,6 +18,7 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PConnectionPhase
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
 import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.path
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveStream
 import io.ktor.server.response.respond
@@ -25,6 +26,7 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
+import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -157,16 +159,16 @@ class TellaPeerToPeerServer(
                 get("/") {
                     call.respondText("The server is running securely over HTTPS.")
                 }
-
-                // Legacy v1 — protocol §6 incompatibility handling
+                
                 post(PeerApiRoutes.V1_REGISTER) {
                     CoroutineScope(Dispatchers.IO).launch {
                         PeerEventManager.emitIncompatibleProtocol()
                     }
-                    call.respond(HttpStatusCode.Forbidden, "Rejected")
+                    call.respond(HttpStatusCode.Forbidden, "Unsupported version")
                 }
 
                 post(PeerApiRoutes.V1_PING) {
+                    // Guard the emit so a stray v1 ping can't disrupt an already-established session.
                     if (p2PSharedState.connectionPhase != P2PConnectionPhase.MTLS_ESTABLISHED &&
                         p2PSharedState.connectionPhase != P2PConnectionPhase.REGISTERED
                     ) {
@@ -174,7 +176,7 @@ class TellaPeerToPeerServer(
                             PeerEventManager.emitIncompatibleProtocol()
                         }
                     }
-                    // Ignore per protocol — do not respond
+                    call.respond(HttpStatusCode.Forbidden, "Unsupported version")
                 }
 
                 post(PeerApiRoutes.PING) {
@@ -681,6 +683,24 @@ class TellaPeerToPeerServer(
                     } catch (e: Exception) {
                         Timber.e(e, "Error while closing session")
                         call.respond(HttpStatusCode.InternalServerError, "Server error")
+                    }
+                }
+
+                // Fallback for any unmatched route.
+                // a non-current ping/register (e.g. /api/v100/ping) -> 406 "Unsupported version";
+                // everything else -> 404 "Not found".
+                route("{...}") {
+                    handle {
+                        val path = call.request.path()
+                        val version = PeerApiRoutes.apiVersion(path)
+                        if (version != null &&
+                            version != PeerProtocolConstants.PROTOCOL_VERSION &&
+                            PeerApiRoutes.isPingOrRegister(path)
+                        ) {
+                            call.respond(HttpStatusCode.NotAcceptable, "Unsupported version")
+                        } else {
+                            call.respond(HttpStatusCode.NotFound, "Not found")
+                        }
                     }
                 }
 
