@@ -56,15 +56,24 @@ class RecipientVerificationFragment :
         setConfirmButtonForStep(step)
     }
 
-    private fun setConfirmButtonForStep(step: P2PVerificationStep?) = with(binding) {
-        confirmAndConnectBtn.isEnabled = true
-        confirmAndConnectBtn.setText(
-            if (step == P2PVerificationStep.SENDER_HASH) {
+    private fun setConfirmButtonForStep(step: P2PVerificationStep?) {
+
+        applyConfirmButtonState(
+            enabled = true,
+            title = if (step == P2PVerificationStep.SENDER_HASH) {
                 getString(R.string.confirm_and_connect)
             } else {
                 getString(R.string.confirm_and_continue)
-            }
+            },
         )
+    }
+
+    private fun applyConfirmButtonState(enabled: Boolean, title: String) = with(binding) {
+        confirmAndConnectBtn.isEnabled = enabled
+        confirmAndConnectBtn.setBackgroundResource(
+            if (enabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled
+        )
+        confirmAndConnectBtn.setText(title)
     }
 
     private fun waitingTextForStep(step: P2PVerificationStep?): String =
@@ -76,9 +85,9 @@ class RecipientVerificationFragment :
 
         // Tap immediately — even if no incoming request yet
         confirmAndConnectBtn.setOnClickListener {
-            confirmAndConnectBtn.isEnabled = false
-            confirmAndConnectBtn.setText(
-                waitingTextForStep(viewModel.p2PState.activeVerificationStep)
+            applyConfirmButtonState(
+                enabled = false,
+                title = waitingTextForStep(viewModel.p2PState.activeVerificationStep),
             )
             viewModel.onRecipientConfirmTapped()
         }
@@ -110,9 +119,9 @@ class RecipientVerificationFragment :
 
         viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
             if (waiting) {
-                confirmAndConnectBtn.isEnabled = false
-                confirmAndConnectBtn.setText(
-                    waitingTextForStep(viewModel.p2PState.activeVerificationStep)
+                applyConfirmButtonState(
+                    enabled = false,
+                    title = waitingTextForStep(viewModel.p2PState.activeVerificationStep),
                 )
             }
         }

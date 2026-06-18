@@ -55,21 +55,26 @@ class SenderVerificationFragment :
         val step = viewModel.p2PState.activeVerificationStep
         val waiting = viewModel.waitingForOtherSide.value == true
         val canTap = viewModel.canTapConfirm.value == true
+
         if (step == P2PVerificationStep.SENDER_HASH || waiting) {
-            binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_disabled)
-            binding.confirmAndConnectBtn.isEnabled = false
-            binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
+            applyConfirmButtonState(false, getString(R.string.waiting_for_the_recipient))
         } else {
-            binding.confirmAndConnectBtn.isEnabled = canTap
-            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
+            applyConfirmButtonState(canTap, getString(R.string.confirm_and_continue))
         }
+    }
+
+    private fun applyConfirmButtonState(enabled: Boolean, title: String) {
+        binding.confirmAndConnectBtn.isEnabled = enabled
+        binding.confirmAndConnectBtn.setBackgroundResource(
+            if (enabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled
+        )
+        binding.confirmAndConnectBtn.setText(title)
     }
 
     private fun initListeners() {
         binding.confirmAndConnectBtn.setOnClickListener {
             if (viewModel.p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) return@setOnClickListener
-            binding.confirmAndConnectBtn.isEnabled = false
-            binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
+            applyConfirmButtonState(false, getString(R.string.waiting_for_the_recipient))
             viewModel.onUserTappedConfirmAndConnect()
         }
 
