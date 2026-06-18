@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_scanSenderQrScreen_to_qrCodeScreen"
             app:destination="@id/qrCodeScreen" />
+        <action
+            android:id="@+id/action_scanSenderQrScreen_to_deviceInfoScreen"
+            app:destination="@id/deviceInfoScreen" />
     </fragment>
 
     <fragment

@@ -1,49 +1,89 @@
 package org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.managers.ReceiverSessionSetup
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
 import org.horizontal.tella.mobile.databinding.ShowDeviceInfoLayoutBinding
-import org.horizontal.tella.mobile.domain.peertopeer.ParsedReceiverQr
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
-import timber.log.Timber
+import javax.inject.Inject
 
+/**
+ * Recipient "Connect manually" screen. Standalone counterpart to [QRCodeFragment]: it brings up its
+ * own receiver server (or reuses the one already started by the QR screen) and shows the IP / PIN /
+ * port the sender must type in. When the sender pings, it moves on to recipient-hash verification.
+ */
+@AndroidEntryPoint
 class ShowDeviceInfoFragment :
     BaseBindingFragment<ShowDeviceInfoLayoutBinding>(ShowDeviceInfoLayoutBinding::inflate) {
+
     private val viewModel: PeerToPeerViewModel by activityViewModels()
 
-    private var parsedQr: ParsedReceiverQr? = null
+    @Inject
+    lateinit var receiverSessionSetup: ReceiverSessionSetup
+
+    @Inject
+    lateinit var peerServerStarterManager: PeerServerStarterManager
+
     private var movedToVerification = false
+    private var startedOwnServer = false
+    private var serverStartRequested = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("payload")?.let { payloadJson ->
-            parsedQr = PeerConnectionQrCodec.parse(payloadJson)
-        }
+        viewModel.p2PState.isUsingManualConnection = true
+        viewModel.p2PState.receiverCanScanQr = false
         initListeners()
-        initView()
         initObservers()
-    }
-
-    private fun initView() {
-        val parsed = parsedQr
-        if (parsed != null) {
-            binding.connectCode.setRightText(parsed.ipAddresses.joinToString(", "))
-            binding.pin.setRightText(parsed.pin)
-            binding.port.setRightText(parsed.port.toString())
-        } else {
-            binding.connectCode.setRightText(viewModel.p2PState.ip)
-            binding.pin.setRightText(viewModel.p2PState.pin)
-            binding.port.setRightText(viewModel.p2PState.port)
-        }
+        ensureServer()
     }
 
     private fun initListeners() {
-        binding.toolbar.backClickListener = { nav().popBackStack() }
+        binding.toolbar.backClickListener = { navigateBack() }
+    }
+
+    private fun ensureServer() {
+        if (receiverSessionSetup.hasRunningSession()) {
+            // Reuse the server already started by the QR screen.
+            showCredentials()
+            return
+        }
+        if (serverStartRequested) return
+        serverStartRequested = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            viewModel.networkInfo.observe(viewLifecycleOwner) { info ->
+                startServer(info.ipAddress.orEmpty())
+            }
+            viewModel.updateNetworkInfo()
+        } else {
+            startServer(viewModel.currentNetworkInfo?.ipAddress.orEmpty())
+        }
+    }
+
+    private fun startServer(primaryIpHint: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val json = receiverSessionSetup.start(
+                primaryIpHint = primaryIpHint,
+                discoveredIps = viewModel.collectLocalIpv4AddressesForNearbySharing(),
+            ) ?: return@launch
+            startedOwnServer = true
+            showCredentials()
+        }
+    }
+
+    private fun showCredentials() = with(binding) {
+        connectCode.setRightText(viewModel.p2PState.ip)
+        pin.setRightText(viewModel.p2PState.pin)
+        port.setRightText(viewModel.p2PState.port)
     }
 
     private fun initObservers() {
@@ -62,16 +102,20 @@ class ShowDeviceInfoFragment :
     private fun moveToRecipientHashVerificationIfNeeded() {
         if (movedToVerification) return
         movedToVerification = true
-        with(viewModel.p2PState) {
-            val p = parsedQr
-            if (p != null) {
-                ip = p.ipAddresses.firstOrNull().orEmpty()
-                port = p.port.toString()
-                pin = p.pin
-            }
-        }
-        viewModel.p2PState.activeVerificationStep =
-            org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep.RECIPIENT_HASH
+        viewModel.p2PState.activeVerificationStep = P2PVerificationStep.RECIPIENT_HASH
         navManager().navigateFromDeviceInfoScreenTRecipientVerificationScreen()
+    }
+
+    private fun navigateBack() {
+        // Only tear down the server if this screen started it; if it was reused from the QR screen,
+        // leave that screen's server running.
+        if (startedOwnServer) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                withContext(Dispatchers.IO) { peerServerStarterManager.stopServer() }
+                nav().popBackStack()
+            }
+        } else {
+            nav().popBackStack()
+        }
     }
 }

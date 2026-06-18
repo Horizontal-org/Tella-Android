@@ -22,6 +22,7 @@ class RecipientVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
@@ -107,7 +108,6 @@ class RecipientVerificationFragment :
             if (closeConnection) navigateBackAndStopServer()
         }
 
-        // Optional: reflect VM UI flags if you want the button text/state to be VM-driven
         viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
             if (waiting) {
                 confirmAndConnectBtn.isEnabled = false

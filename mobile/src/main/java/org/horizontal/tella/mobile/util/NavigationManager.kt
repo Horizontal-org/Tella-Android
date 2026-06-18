@@ -190,6 +190,10 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_scanSenderQrScreen_to_qrCodeScreen)
     }
 
+    fun navigateFromScanSenderQrToDeviceInfoScreen() {
+        navigateToWithBundle(R.id.action_scanSenderQrScreen_to_deviceInfoScreen)
+    }
+
     fun navigateFromScanQrCodeToSenderVerification() {
         navigateToWithBundle(R.id.action_scanQrCodeScreen_to_connectManuallyVerificationFragment)
     }

@@ -87,6 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:text="@string/connect_manually"
-        app:text_all_caps="true" />
+        app:text_all_caps="true"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
