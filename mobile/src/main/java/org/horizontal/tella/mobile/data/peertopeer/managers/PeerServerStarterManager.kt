@@ -25,6 +25,7 @@ class PeerServerStarterManager @Inject constructor(
 
     /** Last credentials the running server was started with (avoids redundant stop/start). */
     private var listeningAdvertisedHost: String? = null
+
     /** SHA-256 of UTF-8 PIN; raw PIN is not retained after a successful start. */
     private var listeningPinSha256: ByteArray? = null
 
@@ -52,6 +53,9 @@ class PeerServerStarterManager @Inject constructor(
         ) {
             return true
         }
+
+        peerToPeerManager.clearClientConnected()
+        peerToPeerManager.clearRecipientHashVerification()
         val hadServer = server != null
         server?.let {
             try {
@@ -113,6 +117,8 @@ class PeerServerStarterManager @Inject constructor(
         server = null
         listeningAdvertisedHost = null
         listeningPinSha256 = null
+        peerToPeerManager.clearClientConnected()
+        peerToPeerManager.clearRecipientHashVerification()
         Timber.d("P2P embedded server: stopped (holder cleared)")
     }
 

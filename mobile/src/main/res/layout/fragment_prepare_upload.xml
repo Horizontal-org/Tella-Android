@@ -105,7 +105,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/tella_main_vertical"
             android:layout_marginVertical="@dimen/activity_vertical_large_margin"
-            android:background="@drawable/bg_round_orange16_btn"
+            android:background="@drawable/bg_round_orange_disabled"
             android:fontFamily="@font/open_sans"
             android:gravity="center"
             android:text="@string/send_files_title"

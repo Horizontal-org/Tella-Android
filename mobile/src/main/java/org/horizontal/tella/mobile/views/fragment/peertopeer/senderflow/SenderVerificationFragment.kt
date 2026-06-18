@@ -56,6 +56,7 @@ class SenderVerificationFragment :
         val waiting = viewModel.waitingForOtherSide.value == true
         val canTap = viewModel.canTapConfirm.value == true
         if (step == P2PVerificationStep.SENDER_HASH || waiting) {
+            binding.confirmAndConnectBtn.setBackgroundResource(R.drawable.bg_round_orange_disabled)
             binding.confirmAndConnectBtn.isEnabled = false
             binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
         } else {

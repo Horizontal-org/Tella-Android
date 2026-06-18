@@ -162,7 +162,7 @@ class SendFeedbackFragment :
         val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
 
         // Determine the background resource based on the value of isSubmitEnabled
-        binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding.sendFeedbackBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled)
         binding.sendFeedbackBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
         binding.sendFeedbackBtn.isEnabled = isSubmitEnabled
     }
