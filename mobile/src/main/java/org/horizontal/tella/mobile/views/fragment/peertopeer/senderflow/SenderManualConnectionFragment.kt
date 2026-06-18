@@ -19,6 +19,7 @@ class SenderManualConnectionFragment :
     BaseBindingFragment<SenderManualConnectionBinding>(SenderManualConnectionBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+    private var waitingForOtherSide = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +61,11 @@ class SenderManualConnectionFragment :
     }
 
     private fun initObservers() {
+        viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
+            waitingForOtherSide = waiting
+            updateNextButtonState()
+        }
+
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
             bundle.putString("payload", hash)
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
@@ -90,7 +96,7 @@ class SenderManualConnectionFragment :
     }
 
     private fun updateNextButtonState() = with(binding) {
-        val enabled = isInputValid()
+        val enabled = isInputValid() && !waitingForOtherSide
         nextBtn.isEnabled = enabled
         nextBtn.setTextColor(
             ContextCompat.getColor(

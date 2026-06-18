@@ -6,7 +6,11 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.ConnectionSpec
@@ -24,16 +28,19 @@ import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_T
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
 import org.horizontal.tella.mobile.data.peertopeer.network.ProgressRequestBody
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerManualPingSession
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerUploadOutcome
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerPingResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadResult
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.P2PFile
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
 import org.json.JSONObject
 import timber.log.Timber
+import java.io.IOException
 import java.io.InputStream
 import java.security.SecureRandom
 import java.util.UUID
@@ -48,6 +55,9 @@ class TellaPeerToPeerClient @Inject constructor(
     companion object {
         private const val REGISTER_READ_TIMEOUT_SEC = 120L
     }
+
+    /** Background scope that keeps a manual ping open while its HTTP response is held server-side. */
+    private val manualPingScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     suspend fun registerPeerDevice(
         ip: String,
@@ -101,6 +111,9 @@ class TellaPeerToPeerClient @Inject constructor(
                         400 -> parseRegisterBadRequest(body)
                         401 -> RegisterPeerResult.InvalidPin
                         403 -> RegisterPeerResult.RejectedByReceiver
+                        // 406 Unsupported version / 404 unknown (e.g. older v1-only) route — the
+                        // peer runs an incompatible protocol (protocol §6).
+                        404, 406 -> RegisterPeerResult.IncompatibleProtocol
                         409 -> RegisterPeerResult.Conflict
                         429 -> RegisterPeerResult.TooManyRequests
                         500 -> RegisterPeerResult.ServerError
@@ -406,6 +419,9 @@ class TellaPeerToPeerClient @Inject constructor(
                 expectedFingerprintHex = "",
                 requirePinnedReceiver = false,
                 serverCertCaptor = serverCertCaptor,
+                // The receiver now HOLDS the ping until the recipient confirms the receiver hash
+                // (iOS parity), so use the long human-gated read timeout like register.
+                forRegistration = true,
             )
             val req = Request.Builder()
                 .url(url)
@@ -417,6 +433,13 @@ class TellaPeerToPeerClient @Inject constructor(
                 client.newCall(req).execute().use { resp ->
                     if (resp.code == 429) {
                         Timber.w("pingAndFetchReceiverHash: rate limited (429)")
+                    }
+                    // 406 Unsupported version / 404 unknown route — peer runs an incompatible
+                    // protocol (protocol §6). Signal it so the UI can surface the version mismatch.
+                    if (resp.code == 406 || resp.code == 404) {
+                        Timber.w("pingAndFetchReceiverHash $url -> incompatible protocol (HTTP %d)", resp.code)
+                        PeerEventManager.emitIncompatibleProtocol()
+                        return@withContext null
                     }
                     if (!resp.isSuccessful) {
                         Timber.w("pingAndFetchReceiverHash $url -> HTTP %d", resp.code)
@@ -447,6 +470,95 @@ class TellaPeerToPeerClient @Inject constructor(
 
     suspend fun pingBeforeRegister(ip: String, port: String): Boolean =
         pingAndFetchReceiverHash(ip, port) != null
+
+    /**
+     * Starts a manual `/api/v2/ping` and returns immediately (iOS parity: `startManualPing`).
+     *
+     * The returned [PeerManualPingSession] exposes the receiver hash from the TLS handshake right
+     * away (so the sender can show the receiver-hash verification screen), while the HTTP request
+     * stays open in the background until the recipient confirms — at which point the held body yields
+     * `senderShowHash`.
+     */
+    fun startManualPing(ip: String, port: String): PeerManualPingSession {
+        val receiverHashDeferred = CompletableDeferred<String>()
+        val senderShowHashDeferred = CompletableDeferred<Boolean>()
+
+        val job = manualPingScope.launch {
+            val url = PeerApiRoutes.buildUrl(ip, port, PeerApiRoutes.PING)
+            val captor = PeerServerCertCapturingTrustManager(
+                CertificateUtils.getFingerprintCollectionTrustManager(),
+                onServerLeafCaptured = { leaf ->
+                    if (!receiverHashDeferred.isCompleted) {
+                        receiverHashDeferred.complete(
+                            CertificateUtils.getLeafCertificateDerSha256Hex(leaf)
+                        )
+                    }
+                },
+            )
+            val client = getMtlsClient(
+                ip,
+                expectedFingerprintHex = "",
+                requirePinnedReceiver = false,
+                serverCertCaptor = captor,
+                forRegistration = true,
+            )
+            val req = Request.Builder()
+                .url(url)
+                .post(ByteArray(0).toRequestBody())
+                .addHeader("Connection", "close")
+                .build()
+
+            try {
+                client.newCall(req).execute().use { resp ->
+                    if (resp.code == 406 || resp.code == 404) {
+                        Timber.w("startManualPing %s -> incompatible protocol (HTTP %d)", url, resp.code)
+                        PeerEventManager.emitIncompatibleProtocol()
+                        val ex = IOException("incompatible protocol (HTTP ${resp.code})")
+                        receiverHashDeferred.completeExceptionallyIfActive(ex)
+                        senderShowHashDeferred.completeExceptionallyIfActive(ex)
+                        return@launch
+                    }
+                    if (!resp.isSuccessful) {
+                        Timber.w("startManualPing %s -> HTTP %d", url, resp.code)
+                        val ex = IOException("ping HTTP ${resp.code}")
+                        receiverHashDeferred.completeExceptionallyIfActive(ex)
+                        senderShowHashDeferred.completeExceptionallyIfActive(ex)
+                        return@launch
+                    }
+                    // Fallback in case the trust manager callback didn't fire (older builds).
+                    if (!receiverHashDeferred.isCompleted) {
+                        val cert = (resp.handshake?.peerCertificates?.firstOrNull()
+                            as? java.security.cert.X509Certificate)
+                            ?: captor.lastServerLeaf
+                        if (cert != null) {
+                            receiverHashDeferred.complete(
+                                CertificateUtils.getLeafCertificateDerSha256Hex(cert)
+                            )
+                        } else {
+                            receiverHashDeferred.completeExceptionallyIfActive(
+                                IOException("no server cert from handshake or captor")
+                            )
+                        }
+                    }
+                    val body = resp.body.string()
+                    val senderShowHash = runCatching {
+                        JSONObject(body).optBoolean("senderShowHash", false)
+                    }.getOrDefault(false)
+                    senderShowHashDeferred.complete(senderShowHash)
+                }
+            } catch (e: Exception) {
+                Timber.w(e, "startManualPing failed for %s", url)
+                receiverHashDeferred.completeExceptionallyIfActive(e)
+                senderShowHashDeferred.completeExceptionallyIfActive(e)
+            }
+        }
+
+        return PeerManualPingSession(receiverHashDeferred, senderShowHashDeferred, job)
+    }
+
+    private fun <T> CompletableDeferred<T>.completeExceptionallyIfActive(ex: Throwable) {
+        if (!isCompleted) completeExceptionally(ex)
+    }
 
 
 }

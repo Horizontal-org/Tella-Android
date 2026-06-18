@@ -41,7 +41,6 @@ import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PeerApiRoutes
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
 import org.horizontal.tella.mobile.domain.peertopeer.FileInfo
-import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
 import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingTransferConfig
 import org.horizontal.tella.mobile.domain.peertopeer.PeerPrepareUploadResponse
 import org.horizontal.tella.mobile.domain.peertopeer.PeerRegisterPayload
@@ -71,7 +70,6 @@ class TellaPeerToPeerServer(
     private val pin: String,
     private val keyPair: KeyPair,
     private val certificate: X509Certificate,
-    private val keyStoreConfig: KeyStoreConfig,
     private val peerToPeerManager: PeerToPeerManager,
     private val p2PSharedState: P2PSharedState,
     private val receiveDir: File,
@@ -179,24 +177,40 @@ class TellaPeerToPeerServer(
                     // Ignore per protocol — do not respond
                 }
 
-                // Bootstrap route for manual flow: TLS/mTLS is enforced at the handshake layer;
-                // do NOT gate on pinned hashes here — the sender uses this 200 + the TLS server
-                // cert to learn and verify the receiver hash before /register.
                 post(PeerApiRoutes.PING) {
                     call.peerClientIpForRateLimit()
                     val clientHash = call.peerClientCertificateHashHex()
-                    // iOS parity (NearbySharingServer.handlePingRequest): senderShowHash is a sticky
-                    // server-state flag, defaulting to false. Set it true once we see the receiver has
-                    // NOT pinned the sender (flow D — no sender QR scanned); it stays false when the
-                    // sender QR was already scanned (flow C).
+                    p2PSharedState.isUsingManualConnection = true
                     if (p2PSharedState.pinnedSenderHash.isBlank()) {
                         p2PSharedState.senderShowHash = true
                     }
                     val senderShowHash = p2PSharedState.senderShowHash
-                    Timber.d("P2P ping: clientCertHash=%s senderShowHash=%b", clientHash ?: "null", senderShowHash)
+                    Timber.d(
+                        "P2P ping: clientCertHash=%s senderShowHash=%b (holding for receiver hash confirmation)",
+                        clientHash ?: "null", senderShowHash,
+                    )
                     CoroutineScope(Dispatchers.IO).launch {
                         peerToPeerManager.notifyClientConnected(p2PSharedState.localReceiverHash.ifBlank { p2PSharedState.hash })
                         peerToPeerManager.notifyRecipientHashVerification()
+                    }
+                    val confirmed = if (p2PSharedState.receiverHashConfirmed) {
+                        true
+                    } else {
+                        try {
+                            PeerEventManager.holdPingForReceiverHash()
+                        } catch (e: Exception) {
+                            Timber.e(e, "P2P ping: holdPingForReceiverHash failed")
+                            try {
+                                call.respond(HttpStatusCode.InternalServerError, "Internal error")
+                            } catch (_: Exception) {
+                            }
+                            return@post
+                        }
+                    }
+                    Timber.d("P2P ping: receiver hash confirmed=%b -> responding", confirmed)
+                    if (!confirmed) {
+                        call.respond(HttpStatusCode.Forbidden, "Rejected")
+                        return@post
                     }
                     call.respond(HttpStatusCode.OK, PeerPingResponse(senderShowHash))
                 }
@@ -245,22 +259,21 @@ class TellaPeerToPeerServer(
                         registerPinFailuresByNonce.remove(regNonce)
 
                         val clientCertHash = call.peerClientCertificateHashHex()
-                        Timber.d("P2P register: clientCertHash=%s", clientCertHash ?: "null")
-                        if (clientCertHash == null) {
-                            call.respond(HttpStatusCode.BadRequest, "Client certificate required")
-                            return@post
-                        }
-
                         val pinnedSender = p2PSharedState.pinnedSenderHash
+                        val manual = p2PSharedState.isUsingManualConnection
                         Timber.d(
-                            "P2P register: receiverCanScanQr=%b senderShowHash=%b pinnedSenderHash=%s phase=%s clientCertHash=%s",
+                            "P2P register: manual=%b receiverCanScanQr=%b senderShowHash=%b pinnedSenderHash=%s phase=%s clientCertHash=%s",
+                            manual,
                             p2PSharedState.receiverCanScanQr,
                             p2PSharedState.senderShowHash,
                             pinnedSender.ifBlank { "<blank>" },
                             p2PSharedState.connectionPhase,
-                            clientCertHash,
+                            clientCertHash ?: "null",
                         )
-                        if (pinnedSender.isNotBlank() && !pinnedSender.equals(clientCertHash, ignoreCase = true)) {
+
+                        if (pinnedSender.isNotBlank() && clientCertHash != null &&
+                            !pinnedSender.equals(clientCertHash, ignoreCase = true)
+                        ) {
                             Timber.w(
                                 "P2P register: 403 sender cert mismatch (stale pin?) pinned=%s actual=%s",
                                 pinnedSender, clientCertHash,
@@ -277,11 +290,23 @@ class TellaPeerToPeerServer(
                         p2PSharedState.session?.sessionId = sessionId
                         serverSession = session
 
-                        val needsSenderHashVerification = pinnedSender.isBlank() &&
-                            (!p2PSharedState.receiverCanScanQr || p2PSharedState.senderShowHash)
-                        Timber.d("P2P register: needsSenderHashVerification=%b", needsSenderHashVerification)
+                        // manual (ping-based) connections. QR flows accept immediately. Sender-hash
+                        // verification (flow D) happens only when the sender cert was not pinned via QR.
+                        val needsSenderHashVerification = manual && pinnedSender.isBlank()
+                        Timber.d(
+                            "P2P register: needsSenderHashVerification=%b",
+                            needsSenderHashVerification
+                        )
 
                         if (needsSenderHashVerification) {
+                            // Flow D needs the client cert to pin the sender after verification.
+                            if (clientCertHash == null) {
+                                call.respond(
+                                    HttpStatusCode.BadRequest,
+                                    "Client certificate required"
+                                )
+                                return@post
+                            }
                             if (!p2PSharedState.receiverHashConfirmed) {
                                 Timber.d("P2P register: holding for receiver hash confirmation (flow D)")
                                 val receiverHashOk = try {
@@ -289,8 +314,14 @@ class TellaPeerToPeerServer(
                                         alreadyConfirmed = p2PSharedState.receiverHashConfirmed,
                                     )
                                 } catch (e: Exception) {
-                                    Timber.e(e, "P2P register: awaitReceiverHashConfirmation failed")
-                                    call.respond(HttpStatusCode.InternalServerError, "Internal error")
+                                    Timber.e(
+                                        e,
+                                        "P2P register: awaitReceiverHashConfirmation failed"
+                                    )
+                                    call.respond(
+                                        HttpStatusCode.InternalServerError,
+                                        "Internal error"
+                                    )
                                     return@post
                                 }
                                 if (!receiverHashOk) {
@@ -303,7 +334,10 @@ class TellaPeerToPeerServer(
                                 p2PSharedState.receiverHashConfirmed = true
                             }
                             p2PSharedState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
-                            Timber.d("P2P register: awaiting receiver confirmation of sender hash %s", clientCertHash)
+                            Timber.d(
+                                "P2P register: awaiting receiver confirmation of sender hash %s",
+                                clientCertHash
+                            )
                             val senderVerified = try {
                                 PeerEventManager.emitSenderHashVerification(
                                     clientCertHash,
@@ -314,9 +348,15 @@ class TellaPeerToPeerServer(
                                 call.respond(HttpStatusCode.InternalServerError, "Internal error")
                                 return@post
                             }
-                            Timber.d("P2P register: emitSenderHashVerification result=%b", senderVerified)
+                            Timber.d(
+                                "P2P register: emitSenderHashVerification result=%b",
+                                senderVerified
+                            )
                             if (!senderVerified) {
-                                call.respond(HttpStatusCode.Forbidden, "Receiver rejected the registration")
+                                call.respond(
+                                    HttpStatusCode.Forbidden,
+                                    "Receiver rejected the registration"
+                                )
                                 return@post
                             }
                             p2PSharedState.senderHashConfirmed = true

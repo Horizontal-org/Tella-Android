@@ -41,6 +41,7 @@ object PeerEventManager {
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private var senderHashVerificationDeferred: CompletableDeferred<Boolean>? = null
     private var receiverHashConfirmationDeferred: CompletableDeferred<Boolean>? = null
+    private var pingReceiverHashDeferred: CompletableDeferred<Boolean>? = null
 
     private val _senderHashVerificationRequests = MutableSharedFlow<String>(
         replay = 0,
@@ -131,12 +132,27 @@ object PeerEventManager {
         }
     }
 
+    suspend fun holdPingForReceiverHash(): Boolean {
+        val deferred = CompletableDeferred<Boolean>()
+        pingReceiverHashDeferred = deferred
+        return try {
+            deferred.await()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
     fun confirmReceiverHashVerification(accepted: Boolean) {
+        // Release both the held ping (receiver-hash handshake) and any register held on the same gate.
+        pingReceiverHashDeferred?.complete(accepted)
+        pingReceiverHashDeferred = null
         receiverHashConfirmationDeferred?.complete(accepted)
         receiverHashConfirmationDeferred = null
     }
 
     fun resetReceiverHashConfirmation() {
+        pingReceiverHashDeferred?.cancel()
+        pingReceiverHashDeferred = null
         receiverHashConfirmationDeferred?.cancel()
         receiverHashConfirmationDeferred = null
     }

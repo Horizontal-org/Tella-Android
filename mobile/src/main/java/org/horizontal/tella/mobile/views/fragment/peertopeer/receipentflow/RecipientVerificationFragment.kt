@@ -38,7 +38,7 @@ class RecipientVerificationFragment :
     }
 
     private fun senderHash(): String =
-        viewModel.p2PState.pinnedSenderHash.ifBlank { viewModel.p2PState.localSenderHash }
+        viewModel.p2PState.pinnedSenderHash.ifBlank { viewModel.p2PState.hash }
 
     private fun refreshVerificationUi() = with(binding) {
         val step = viewModel.p2PState.activeVerificationStep

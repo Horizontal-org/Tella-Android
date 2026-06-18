@@ -48,22 +48,25 @@ class SenderVerificationFragment :
                 getString(R.string.verification_step1_recipient_hash)
             binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
         }
-        setConfirmButtonForStep(step)
+        updateConfirmButton()
     }
 
-    private fun setConfirmButtonForStep(step: P2PVerificationStep?) {
-        binding.confirmAndConnectBtn.setText(
-            if (step == P2PVerificationStep.SENDER_HASH) {
-                getString(R.string.confirm_and_connect)
-            } else {
-                getString(R.string.confirm_and_continue)
-            }
-        )
+    private fun updateConfirmButton() {
+        val step = viewModel.p2PState.activeVerificationStep
+        val waiting = viewModel.waitingForOtherSide.value == true
+        val canTap = viewModel.canTapConfirm.value == true
+        if (step == P2PVerificationStep.SENDER_HASH || waiting) {
+            binding.confirmAndConnectBtn.isEnabled = false
+            binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
+        } else {
+            binding.confirmAndConnectBtn.isEnabled = canTap
+            binding.confirmAndConnectBtn.setText(getString(R.string.confirm_and_continue))
+        }
     }
 
     private fun initListeners() {
         binding.confirmAndConnectBtn.setOnClickListener {
-            // Disable & show waiting immediately
+            if (viewModel.p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) return@setOnClickListener
             binding.confirmAndConnectBtn.isEnabled = false
             binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
             viewModel.onUserTappedConfirmAndConnect()
@@ -78,18 +81,12 @@ class SenderVerificationFragment :
         // Manual mode
         viewModel.isManualConnection = true
 
-        // Button enable/disable from VM
-        viewModel.canTapConfirm.observe(viewLifecycleOwner) { canTap ->
-            binding.confirmAndConnectBtn.isEnabled = canTap
-            if (canTap) {
-                setConfirmButtonForStep(viewModel.p2PState.activeVerificationStep)
-            }
+        // Button enable/disable + label from VM
+        viewModel.canTapConfirm.observe(viewLifecycleOwner) {
+            updateConfirmButton()
         }
-        viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
-            if (waiting) {
-                binding.confirmAndConnectBtn.isEnabled = false
-                binding.confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_recipient))
-            }
+        viewModel.waitingForOtherSide.observe(viewLifecycleOwner) {
+            updateConfirmButton()
         }
 
         viewModel.getHashSuccess.observe(viewLifecycleOwner) {

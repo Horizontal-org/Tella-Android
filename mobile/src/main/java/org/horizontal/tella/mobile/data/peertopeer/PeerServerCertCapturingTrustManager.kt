@@ -11,6 +11,12 @@ import javax.net.ssl.X509TrustManager
  */
 internal class PeerServerCertCapturingTrustManager(
     private val delegate: X509TrustManager,
+    /**
+     * Fired the moment the server leaf is seen during the TLS handshake — before the (possibly
+     * server-held) HTTP response is read.
+     * so the manual sender can show the receiver-hash verification screen immediately.
+     */
+    private val onServerLeafCaptured: ((X509Certificate) -> Unit)? = null,
 ) : X509TrustManager {
 
     @Volatile
@@ -22,7 +28,9 @@ internal class PeerServerCertCapturingTrustManager(
 
     override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
         delegate.checkServerTrusted(chain, authType)
-        lastServerLeaf = chain?.firstOrNull()
+        val leaf = chain?.firstOrNull()
+        lastServerLeaf = leaf
+        if (leaf != null) onServerLeafCaptured?.invoke(leaf)
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = delegate.acceptedIssuers
