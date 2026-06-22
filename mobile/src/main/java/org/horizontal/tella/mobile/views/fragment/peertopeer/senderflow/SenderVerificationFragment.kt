@@ -43,10 +43,12 @@ class SenderVerificationFragment :
         if (step == P2PVerificationStep.SENDER_HASH) {
             binding.sequenceTitleTextView.text = getString(R.string.verification_step2_sender_hash)
             binding.hashContentTextView.text = viewModel.p2PState.localSenderHash.formatHash()
+            binding.hashContentTextView.setBackgroundResource(R.drawable.bg_verification_hash_step2)
         } else {
             binding.sequenceTitleTextView.text =
                 getString(R.string.verification_step1_recipient_hash)
             binding.hashContentTextView.text = viewModel.p2PState.hash.formatHash()
+            binding.hashContentTextView.setBackgroundResource(org.hzontal.shared_ui.R.drawable.bg_dual_text_check)
         }
         updateConfirmButton()
     }
