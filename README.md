@@ -76,7 +76,6 @@ A detailed list of features for Tella Android, Tella FOSS and Tella iOS can be f
 ### Tella for Android
 Tella for Android can be downloaded:
 - directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella).
-- from [F-Droid](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/) (Tella FOSS, `org.hzontal.tellaFOSS`).
 - from [this folder](https://web.tresorit.com/l/JgMjK#FV9IoIZdDxwAUPqtupJzsQ) or from our [Telegram channel](https://t.me/tellaapp), as an APK, to be installed manually.
 
 ### Tella FOSS (F-droid)
