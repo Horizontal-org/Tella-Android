@@ -223,6 +223,7 @@ class PeerToPeerViewModel @Inject constructor(
         p2PState.pin = parsed.pin
         p2PState.port = parsed.port.toString()
         p2PState.ip = parsed.ipAddresses.firstOrNull().orEmpty()
+        p2PState.advertisedIpAddresses = parsed.ipAddresses
         p2PState.senderShowHash = parsed.senderShowHash
         p2PState.pinReceiverHash(parsed.certificateHash)
 

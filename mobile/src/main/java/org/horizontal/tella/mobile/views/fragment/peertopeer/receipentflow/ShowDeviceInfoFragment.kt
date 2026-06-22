@@ -96,7 +96,11 @@ class ShowDeviceInfoFragment :
     }
 
     private fun showCredentials() = with(binding) {
-        connectCode.setRightText(viewModel.p2PState.ip)
+        val ips = viewModel.p2PState.advertisedIpAddresses
+            .takeIf { it.isNotEmpty() }
+            ?.joinToString(", ")
+            ?: viewModel.p2PState.ip
+        connectCode.setRightText(ips)
         pin.setRightText(viewModel.p2PState.pin)
         port.setRightText(viewModel.p2PState.port)
     }

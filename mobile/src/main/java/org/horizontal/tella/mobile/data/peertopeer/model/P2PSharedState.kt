@@ -2,6 +2,8 @@ package org.horizontal.tella.mobile.data.peertopeer.model
 
 class P2PSharedState(
     var ip: String = "",
+    /** All site-local IPv4s advertised to the peer (QR + manual info). Primary is [ip]. */
+    var advertisedIpAddresses: List<String> = emptyList(),
     var port: String = "",
     /** Pinned receiver (server) certificate hash — used by sender for TLS pinning. */
     var hash: String = "",
@@ -61,6 +63,7 @@ class P2PSharedState(
 
     fun clear() {
         ip = ""
+        advertisedIpAddresses = emptyList()
         port = ""
         hash = ""
         pin = null

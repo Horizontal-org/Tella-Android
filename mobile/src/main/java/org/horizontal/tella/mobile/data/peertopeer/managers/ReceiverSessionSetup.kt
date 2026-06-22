@@ -67,6 +67,7 @@ class ReceiverSessionSetup @Inject constructor(
         p2PSharedState.port = port.toString()
         p2PSharedState.hash = certHash
         p2PSharedState.ip = advertiseToPeerPrimary
+        p2PSharedState.advertisedIpAddresses = allIps
         p2PSharedState.localReceiverHash = certHash
 
         return PeerConnectionQrCodec.toReceiverJson(
