@@ -119,14 +119,14 @@ This software uses the following open source packages:
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
 
 ## Translating the app <a id="translating"></a>
-Tella is currently available in [20 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
+Tella is currently available in [more than 25 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
 
 If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator). 
 
 ## Contact us <a id="contact"></a>
 We love hearing from users, designers, and developers!
 
-We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us). 
+We offer different ways to [contact us](https://tella-app.org/contact-us). 
 
  If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
 
