@@ -69,7 +69,7 @@ Tella is currently available on Android, iOS and the F-Droid store. We also shar
 
 ## Detailed list of features <a id="features"></a>
 
-A detailed list of features for Tella Android, Tella FOSS and Tella iOS can be found [on the documentation](https://tella-app.org/features).
+A detailed list of features for Tella Android, Tella Android FOSS and Tella iOS can be found [on the documentation](https://tella-app.org/features).
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
@@ -78,16 +78,18 @@ Tella for Android can be downloaded:
 - directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella).
 - from [this folder](https://web.tresorit.com/l/JgMjK#FV9IoIZdDxwAUPqtupJzsQ) or from our [Telegram channel](https://t.me/tellaapp), as an APK, to be installed manually.
 
-### Tella FOSS (F-droid)
-We also maintain a version of Tella in the [F-droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/) (`org.hzontal.tellaFOSS`). It is built from **this repository** using the `fdroid` product flavor (see below). The former [Tella-Android-FOSS](https://github.com/Horizontal-org/Tella-Android-FOSS) codebase has been merged here.
+### Tella Android FOSS (F-Droid)
+We also maintain **Tella Android FOSS** in the [F-Droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/) (`org.hzontal.tellaFOSS`). It is built from **this repository** using the `fdroid` product flavor (see below). The former [Tella-Android-FOSS](https://github.com/Horizontal-org/Tella-Android-FOSS) codebase has been merged here.
 
 ### Play Store vs F-Droid (build flavors)
-Both the Play Store app and Tella FOSS share one codebase. Two **`distribution`** flavors in `mobile/build.gradle`:
+**Tella Android** and **Tella Android FOSS** share one codebase. Two **`distribution`** flavors in `mobile/build.gradle`:
 
-| Flavor | Application id | Notes |
-|--------|----------------|-------|
-| **`playstore`** | `org.hzontal.tella` | Google Play build; includes Firebase Crashlytics, Google Drive, Dropbox, and Google sign-in |
-| **`fdroid`** | `org.hzontal.tellaFOSS` | F-Droid / Tella FOSS; excludes proprietary Google and Dropbox SDKs |
+| Flavor | Name | Application id | Notes |
+|--------|------|----------------|-------|
+| **`playstore`** | Tella Android | `org.hzontal.tella` | Includes Firebase Crashlytics, Google Drive, Dropbox, and Google sign-in |
+| **`fdroid`** | Tella Android FOSS | `org.hzontal.tellaFOSS` | Excludes proprietary Google and Dropbox SDKs; published on F-Droid |
+
+Details about features available in each version can be found on the [Tella documentation](https://tella-app.org/features).
 
 F-Droid release builds pass `-Pfdroid` (see `fastlane/README.md` and `docs/fdroid-release-verification.md`).
 
