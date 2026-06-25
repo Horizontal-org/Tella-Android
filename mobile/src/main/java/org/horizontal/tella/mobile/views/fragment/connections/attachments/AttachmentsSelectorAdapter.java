@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.uwazi.attachments;
+package org.horizontal.tella.mobile.views.fragment.connections.attachments;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -348,4 +348,3 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         }
     }
 }
-

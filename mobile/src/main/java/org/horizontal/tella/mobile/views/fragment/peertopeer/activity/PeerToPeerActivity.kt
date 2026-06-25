@@ -13,7 +13,7 @@ import org.horizontal.tella.mobile.mvvm.media.MediaImportViewModel
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
 import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber
 import javax.inject.Inject

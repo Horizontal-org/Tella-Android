@@ -11,10 +11,10 @@ import org.horizontal.tella.mobile.domain.entity.EntityStatus
 import org.horizontal.tella.mobile.domain.entity.UWaziUploadServer
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.BUNDLE_IS_FROM_UWAZI_ENTRY
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.SharedUwaziSubmissionViewModel
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.UwaziFormEndView
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -97,7 +97,7 @@ class UwaziSendFragment :
                         entityInstance?.status = EntityStatus.SUBMISSION_ERROR
                         entityInstance?.let { viewModel.saveEntityInstance(it) }
                         handleBackButton()
-                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
                     }
 
                     EntityStatus.SUBMISSION_PENDING -> {

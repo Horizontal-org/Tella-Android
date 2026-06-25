@@ -1,8 +1,8 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.widgets;
 
-import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILES_FILTER;
-import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_FILE_KEY;
-import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
+import static org.horizontal.tella.mobile.views.fragment.connections.attachments.VaultFilePickerContractKt.VAULT_FILES_FILTER;
+import static org.horizontal.tella.mobile.views.fragment.connections.attachments.VaultFilePickerContractKt.VAULT_FILE_KEY;
+import static org.horizontal.tella.mobile.views.fragment.connections.attachments.VaultFilePickerContractKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -46,7 +46,7 @@ import org.horizontal.tella.mobile.views.activity.camera.CameraActivity;
 import org.horizontal.tella.mobile.views.base_ui.BaseActivity;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.custom.CollectAttachmentPreviewView;
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector;
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.AttachmentsActivitySelector;
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
 

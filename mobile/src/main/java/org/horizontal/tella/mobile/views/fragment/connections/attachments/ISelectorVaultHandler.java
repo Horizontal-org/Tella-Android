@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.uwazi.attachments;
+package org.horizontal.tella.mobile.views.fragment.connections.attachments;
 
 import com.hzontal.tella_vault.VaultFile;
 

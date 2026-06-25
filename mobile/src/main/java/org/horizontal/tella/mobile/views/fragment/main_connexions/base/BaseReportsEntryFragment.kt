@@ -36,11 +36,11 @@ import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity.Companion.CAPTURE_WITH_AUTO_UPLOAD
 import org.horizontal.tella.mobile.views.adapters.reports.ReportsFilesRecyclerViewAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VaultFilePickerContract
 import org.horizontal.tella.mobile.views.fragment.recorder.REPORT_ENTRY
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
 import org.horizontal.tella.mobile.views.interfaces.IReportAttachmentsHandler
 
 const val BUNDLE_REPORT_FORM_INSTANCE = "bundle_report_form_instance"
@@ -335,7 +335,7 @@ abstract class BaseReportsEntryFragment :
                         false
                     )
                     nav().popBackStack()
-                    SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                    SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
                 }
 
                 else -> {}
@@ -403,11 +403,11 @@ abstract class BaseReportsEntryFragment :
     private fun showAttachmentsActivity() {
         try {
             baseActivity.startActivityForResult(
-                Intent(activity, AttachmentsActivitySelector::class.java)
-                    // .putExtra(VAULT_FILE_KEY, Gson().toJson(ids))
-                    .putExtra(
-                        VAULT_FILES_FILTER, FilterType.ALL_WITHOUT_DIRECTORY
-                    ).putExtra(VAULT_PICKER_SINGLE, false), C.MEDIA_FILE_ID
+                VaultFilePickerContract.createIntent(
+                    requireContext(),
+                    FilterType.ALL_WITHOUT_DIRECTORY,
+                    singleSelection = false
+                ), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
             CrashReporterProvider.get().recordException(e)

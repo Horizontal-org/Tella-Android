@@ -37,10 +37,8 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OnNavBckL
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.FileTransferViewModel
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.REPORT_ENTRY
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelector
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILES_FILTER
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_PICKER_SINGLE
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VaultFilePickerContract
 import org.horizontal.tella.mobile.views.interfaces.IReportAttachmentsHandler
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.VaultSheetUtils.IVaultFilesSelector
@@ -205,11 +203,11 @@ class PrepareUploadFragment :
     private fun showAttachmentsActivity() {
         try {
             baseActivity.startActivityForResult(
-                Intent(activity, AttachmentsActivitySelector::class.java)
-                    // .putExtra(VAULT_FILE_KEY, Gson().toJson(ids))
-                    .putExtra(
-                        VAULT_FILES_FILTER, FilterType.ALL_WITHOUT_DIRECTORY
-                    ).putExtra(VAULT_PICKER_SINGLE, false), C.MEDIA_FILE_ID
+                VaultFilePickerContract.createIntent(
+                    requireContext(),
+                    FilterType.ALL_WITHOUT_DIRECTORY,
+                    singleSelection = false
+                ), C.MEDIA_FILE_ID
             )
         } catch (e: Exception) {
             CrashReporterProvider.get().recordException(e)

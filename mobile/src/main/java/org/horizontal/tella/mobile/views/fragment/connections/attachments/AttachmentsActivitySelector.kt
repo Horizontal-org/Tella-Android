@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.uwazi.attachments
+package org.horizontal.tella.mobile.views.fragment.connections.attachments
 
 import android.app.Activity
 import android.content.Intent
@@ -26,11 +26,6 @@ import org.horizontal.tella.mobile.views.fragment.vault.attachements.helpers.Sel
 import org.hzontal.shared_ui.breadcrumb.DefaultBreadcrumbsCallback
 import org.hzontal.shared_ui.breadcrumb.model.BreadcrumbItem
 import org.hzontal.shared_ui.breadcrumb.model.Item
-
-const val RETURN_ODK = "rodk"
-const val VAULT_FILE_KEY = "vfk"
-const val VAULT_FILES_FILTER = "vff"
-const val VAULT_PICKER_SINGLE = "vps"
 
 @AndroidEntryPoint
 class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.OnClickListener {

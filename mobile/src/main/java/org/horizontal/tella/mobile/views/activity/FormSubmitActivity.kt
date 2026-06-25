@@ -25,11 +25,10 @@ import org.horizontal.tella.mobile.javarosa.FormUtils
 import org.horizontal.tella.mobile.util.configureAppBar
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity
 import org.horizontal.tella.mobile.views.collect.CollectFormEndView
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
 import org.horizontal.tella.mobile.views.fragment.forms.SharedFormsViewModel
 import org.horizontal.tella.mobile.views.fragment.forms.SubmitFormsViewModel
-import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.hzontal.shared_ui.utils.DialogUtils
 
 @AndroidEntryPoint
@@ -101,7 +100,7 @@ class FormSubmitActivity : BaseLockActivity() {
     }
 
     private fun onDialogBackPressed() {
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
         super.onBackPressed()
         return
     }
@@ -196,7 +195,7 @@ class FormSubmitActivity : BaseLockActivity() {
     private fun onStopClick() {
         //onBackPressed();
         submitModel.userStopReSubmission()
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
     }
 
     private fun formReSubmitError(error: Throwable) {
@@ -211,7 +210,7 @@ class FormSubmitActivity : BaseLockActivity() {
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
                 finish()
             }
         }
@@ -223,7 +222,7 @@ class FormSubmitActivity : BaseLockActivity() {
             R.string.collect_end_toast_notification_form_not_sent_no_connection,
             Toast.LENGTH_LONG
         ).show()
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
         finish()
     }
 
@@ -270,7 +269,7 @@ class FormSubmitActivity : BaseLockActivity() {
     private fun formPartsResubmitEnded(instance: CollectFormInstance) {
         Toast.makeText(this, getString(R.string.collect_toast_form_submitted), Toast.LENGTH_LONG)
             .show()
-        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.SUBMITTED)
         finish()
     }
 

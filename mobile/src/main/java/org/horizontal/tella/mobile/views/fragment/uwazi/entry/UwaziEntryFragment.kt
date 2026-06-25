@@ -28,12 +28,10 @@ import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.LocationMapActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
 import org.horizontal.tella.mobile.views.fragment.uwazi.send.SEND_ENTITY
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.OnEntityClickInEntryListener
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -155,19 +153,19 @@ class UwaziEntryFragment :
             progress.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_ERROR -> {
-                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
                         nav().popBackStack()
                         progress.postValue(EntityStatus.UNKNOWN)
                     }
 
                     EntityStatus.SUBMITTED -> {
-                        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.SUBMITTED)
                         nav().popBackStack()
                         progress.postValue(EntityStatus.UNKNOWN)
                     }
 
                     EntityStatus.DRAFT -> {
-                        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.DRAFTS)
                         nav().popBackStack()
                         showSavedDialog()
                         progress.postValue(EntityStatus.UNKNOWN)

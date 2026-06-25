@@ -7,6 +7,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentUwaziBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
@@ -43,12 +45,12 @@ class UwaziFragment : BaseBindingFragment<FragmentUwaziBinding>(FragmentUwaziBin
             }
         }
 
-        SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
-            when (position) {
-                TEMPLATES_LIST_PAGE_INDEX -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
-                DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
-                OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+        SharedConnectionLiveData.updateViewPagerPosition.observe(baseActivity) { tab ->
+            when (tab) {
+                ConnectionTab.TEMPLATES -> setCurrentTab(TEMPLATES_LIST_PAGE_INDEX)
+                ConnectionTab.DRAFTS -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                ConnectionTab.OUTBOX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                ConnectionTab.SUBMITTED -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
             }
         }
 

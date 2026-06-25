@@ -7,6 +7,8 @@ import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.MainReportConnexionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
@@ -56,11 +58,12 @@ abstract class MainReportFragment :
             }
             binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
 
-            SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->
-                when (position) {
-                    DRAFT_LIST_PAGE_INDEX -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
-                    OUTBOX_LIST_PAGE_INDEX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
-                    SUBMITTED_LIST_PAGE_INDEX -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+            SharedConnectionLiveData.updateViewPagerPosition.observe(baseActivity) { tab ->
+                when (tab) {
+                    ConnectionTab.DRAFTS -> setCurrentTab(DRAFT_LIST_PAGE_INDEX)
+                    ConnectionTab.OUTBOX -> setCurrentTab(OUTBOX_LIST_PAGE_INDEX)
+                    ConnectionTab.SUBMITTED -> setCurrentTab(SUBMITTED_LIST_PAGE_INDEX)
+                    else -> {}
                 }
             }
 

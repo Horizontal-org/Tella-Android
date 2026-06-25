@@ -82,7 +82,7 @@ import org.horizontal.tella.mobile.views.custom.CameraFlashButton
 import org.horizontal.tella.mobile.views.custom.CameraGridButton
 import org.horizontal.tella.mobile.views.custom.CameraResolutionButton
 import org.horizontal.tella.mobile.views.custom.CameraSwitchButton
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import timber.log.Timber

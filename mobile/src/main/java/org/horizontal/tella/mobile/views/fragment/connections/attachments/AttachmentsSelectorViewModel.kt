@@ -1,4 +1,4 @@
-package org.horizontal.tella.mobile.views.fragment.uwazi.attachments
+package org.horizontal.tella.mobile.views.fragment.connections.attachments
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

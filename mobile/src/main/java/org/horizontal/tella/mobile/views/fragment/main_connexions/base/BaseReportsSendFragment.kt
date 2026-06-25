@@ -10,6 +10,8 @@ import org.horizontal.tella.mobile.domain.entity.EntityStatus
 import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
+import org.horizontal.tella.mobile.views.fragment.connections.SharedConnectionLiveData
 import org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.ReportsFormEndView
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
@@ -38,11 +40,11 @@ abstract class BaseReportsSendFragment :
                 when (instance.status) {
                     EntityStatus.SUBMITTED -> {
                         handleBackButton()
-                        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.SUBMITTED)
                     }
 
                     EntityStatus.SUBMISSION_PARTIAL_PARTS, EntityStatus.SUBMISSION_PENDING -> {
-                        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+                        SharedConnectionLiveData.updateViewPagerPosition.postValue(ConnectionTab.OUTBOX)
                         handleBackButton()
                     }
 

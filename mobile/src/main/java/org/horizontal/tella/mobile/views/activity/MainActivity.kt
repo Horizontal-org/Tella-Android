@@ -49,7 +49,7 @@ import org.horizontal.tella.mobile.views.fragment.peertopeer.receipentflow.PeerT
 import org.horizontal.tella.mobile.views.fragment.recorder.MicFragment
 import org.horizontal.tella.mobile.views.fragment.reports.send.ReportsSendFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.SubmittedPreviewFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
+import org.horizontal.tella.mobile.views.fragment.connections.attachments.VAULT_FILE_KEY
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.DownloadedTemplatesFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryFragment
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt

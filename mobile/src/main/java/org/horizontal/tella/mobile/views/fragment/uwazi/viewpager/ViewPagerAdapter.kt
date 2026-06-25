@@ -2,12 +2,13 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import org.horizontal.tella.mobile.views.fragment.connections.ConnectionTab
 import org.horizontal.tella.mobile.views.fragment.uwazi.*
 
-const val TEMPLATES_LIST_PAGE_INDEX = 0
-const val DRAFT_LIST_PAGE_INDEX = 1
-const val OUTBOX_LIST_PAGE_INDEX = 2
-const val SUBMITTED_LIST_PAGE_INDEX = 3
+val TEMPLATES_LIST_PAGE_INDEX = ConnectionTab.uwaziPageIndex(ConnectionTab.TEMPLATES)
+val DRAFT_LIST_PAGE_INDEX = ConnectionTab.uwaziPageIndex(ConnectionTab.DRAFTS)
+val OUTBOX_LIST_PAGE_INDEX = ConnectionTab.uwaziPageIndex(ConnectionTab.OUTBOX)
+val SUBMITTED_LIST_PAGE_INDEX = ConnectionTab.uwaziPageIndex(ConnectionTab.SUBMITTED)
 
 class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
