@@ -87,14 +87,12 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
         bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
         updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
-        // Nearby sharing and reports expect to start with active multi-select.
-        if (!isMultiplePicker) {
-            isListCheckOn = true
-            selectMode = SelectMode.ONE_SELECTION
-            attachmentsAdapter.enableSelectMode(true)
-            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
-            updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
-        }
+        // Start in selection mode so files can be picked in both single and multi selection modes.
+        isListCheckOn = true
+        selectMode = SelectMode.ONE_SELECTION
+        attachmentsAdapter.enableSelectMode(true)
+        bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
+        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
     private fun initObservers() {

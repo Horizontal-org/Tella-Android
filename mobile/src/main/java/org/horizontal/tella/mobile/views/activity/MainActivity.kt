@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -218,13 +219,23 @@ class MainActivity : MetadataActivity(), IMetadataAttachPresenterContract.IView,
     private fun handleImportResult(requestCode: Int, data: Intent?) {
         try {
             if (data != null) {
-                val uri = data.data
-                if (uri != null) {
+                val uris = ArrayList<Uri>()
+                val clipData = data.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        clipData.getItemAt(i).uri?.let { uris.add(it) }
+                    }
+                } else {
+                    data.data?.let { uris.add(it) }
+                }
+                if (uris.isNotEmpty()) {
                     divviupUtils.runFileImportEvent()
-                    when (requestCode) {
-                        C.IMPORT_VIDEO -> mediaImportViewModel.importVideo(uri)
-                        C.IMPORT_IMAGE -> mediaImportViewModel.importImage(uri)
-                        C.IMPORT_FILE -> mediaImportViewModel.importFile(uri)
+                    uris.forEach { uri ->
+                        when (requestCode) {
+                            C.IMPORT_VIDEO -> mediaImportViewModel.importVideo(uri)
+                            C.IMPORT_IMAGE -> mediaImportViewModel.importImage(uri)
+                            C.IMPORT_FILE -> mediaImportViewModel.importFile(uri)
+                        }
                     }
                 }
             }
