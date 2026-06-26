@@ -69,7 +69,7 @@ Tella is currently available on Android, iOS and the F-Droid store. We also shar
 
 ## Detailed list of features <a id="features"></a>
 
-A detailed list of features for Tella Android, Tella FOSS and Tella iOS can be found [on the documentation](https://tella-app.org/features).
+A detailed list of features for Tella Android, Tella Android FOSS and Tella iOS can be found [on the documentation](https://tella-app.org/features).
 
 ## How to get Tella and start using it? <a id="use-tella"></a>
 
@@ -78,8 +78,20 @@ Tella for Android can be downloaded:
 - directly from the [Google Play Store](https://play.google.com/store/apps/details?id=org.hzontal.tella).
 - from [this folder](https://web.tresorit.com/l/JgMjK#FV9IoIZdDxwAUPqtupJzsQ) or from our [Telegram channel](https://t.me/tellaapp), as an APK, to be installed manually.
 
-### Tella FOSS (F-droid)
-We also maintain a version of Tella in the [F-droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/). And the code for it can be found here: https://github.com/Horizontal-org/Tella-Android-FOSS
+### Tella Android FOSS (F-Droid)
+We also maintain **Tella Android FOSS** in the [F-Droid store](https://f-droid.org/en/packages/org.hzontal.tellaFOSS/) (`org.hzontal.tellaFOSS`). It is built from **this repository** using the `fdroid` product flavor (see below). The former [Tella-Android-FOSS](https://github.com/Horizontal-org/Tella-Android-FOSS) codebase has been merged here.
+
+### Play Store vs F-Droid (build flavors)
+**Tella Android** and **Tella Android FOSS** share one codebase. Two **`distribution`** flavors in `mobile/build.gradle`:
+
+| Flavor | Name | Application id | Notes |
+|--------|------|----------------|-------|
+| **`playstore`** | Tella Android | `org.hzontal.tella` | Includes Firebase Crashlytics, Google Drive, Dropbox, and Google sign-in |
+| **`fdroid`** | Tella Android FOSS | `org.hzontal.tellaFOSS` | Excludes proprietary Google and Dropbox SDKs; published on F-Droid |
+
+Details about features available in each version can be found on the [Tella documentation](https://tella-app.org/features).
+
+F-Droid release builds pass `-Pfdroid` (see `fastlane/README.md` and `docs/fdroid-release-verification.md`).
 
 
 ### Get started on Tella Android
@@ -92,7 +104,7 @@ This software uses the following open source packages:
 - [SQLCipher](https://github.com/sqlcipher/sqlcipher) for our encrypted database.
 - [CacheWord](https://guardianproject.info/code/cacheword/) for passphrase caching and management.
 - [ODK JavaRosa](https://github.com/getodk/javarosa) to work with XForms.
-- [CameraView](https://github.com/natario1/CameraView), [ExoPlayer](https://github.com/google/ExoPlayer), [RxJava](https://github.com/ReactiveX/RxJava), [OkHttp](https://github.com/square/okhttp), [Retrofit](https://github.com/square/retrofit), [PermissionDispatcher](https://github.com/permissions-dispatcher/PermissionsDispatcher), [PatternLock](https://github.com/zhanghai/PatternLock) and a lot of other excellent [libraries](https://github.com/Horizontal-org/Tella-Android/blob/master/mobile/build.gradle) helping all of us in Android application development.
+- [CameraX](https://developer.android.com/jetpack/androidx/releases/camera), [ExoPlayer](https://github.com/google/ExoPlayer), [RxJava](https://github.com/ReactiveX/RxJava), [OkHttp](https://github.com/square/okhttp), [Retrofit](https://github.com/square/retrofit), [Glide](https://github.com/bumptech/glide), [Hilt](https://dagger.dev/hilt/), [Ktor](https://ktor.io/), [WorkManager](https://developer.android.com/jetpack/androidx/releases/work), [Mapsforge](https://github.com/mapsforge/mapsforge), [Nextcloud Android library](https://github.com/nextcloud/android), [PermissionDispatcher](https://github.com/permissions-dispatcher/PermissionsDispatcher), [PatternLock](https://github.com/zhanghai/PatternLock) (vendored in `tella-locking-ui`), and other libraries listed in [mobile/build.gradle](mobile/build.gradle).
 
 ## Contributing to the code <a id="contributing"></a>
 
@@ -109,14 +121,14 @@ This software uses the following open source packages:
 **Step 6: Pushing your branch and creating a pull request** Push your branch up and create a pull request. Please indicate which issue your PR addresses in the title.
 
 ## Translating the app <a id="translating"></a>
-Tella is currently available in [20 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
+Tella is currently available in [more than 25 languages](https://tella-app.org/translating-tella). We are always looking to translate Tella into more languages. 
 
 If you are interested in adding a new language, or if you noticed a mistake or a missing translation, you can join [follow our contributing guidelines](https://tella-app.org/translating-tella/#how-do-i-become-a-translator). 
 
 ## Contact us <a id="contact"></a>
 We love hearing from users, designers, and developers!
 
-We host monthly [community meetings](https://tella-app.org/community-meetings) and we offer different ways to [contact-us](https://tella-app.org/contact-us). 
+We offer different ways to [contact us](https://tella-app.org/contact-us). 
 
  If you have any question, ideas or suggestions on how we can improve or what new features we should add, or if you need support deploying Tella, don't hesitate to reach out!
 
