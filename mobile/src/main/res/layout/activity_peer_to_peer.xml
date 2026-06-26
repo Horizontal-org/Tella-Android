@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_purple"
-    android:fitsSystemWindows="true"
     android:textDirection="locale"
     tools:context="org.horizontal.tella.mobile.views.fragment.peertopeer.activity.PeerToPeerActivity">
 

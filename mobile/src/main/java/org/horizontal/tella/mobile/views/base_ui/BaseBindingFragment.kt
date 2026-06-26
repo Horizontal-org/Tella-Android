@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.viewbinding.ViewBinding
@@ -61,14 +59,7 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
      * Override this method if a fragment needs custom edge-to-edge handling.
      */
     protected open fun applyEdgeToEdgeIfNeeded(view: View) {
-        // Apply window insets to handle edge-to-edge display
-        // Window background is set to transparent in BaseActivity, so fragment backgrounds show through
-        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Apply padding to root view to prevent content from being drawn under system bars
-            v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
-            insets
-        }
+        FragmentEdgeToEdge.apply(view, baseActivity)
     }
 
     override fun onAttach(context: Context) {

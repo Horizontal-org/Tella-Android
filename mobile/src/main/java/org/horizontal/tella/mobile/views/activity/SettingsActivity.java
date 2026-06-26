@@ -5,6 +5,8 @@ import static com.hzontal.tella_locking_ui.ConstantsKt.IS_CAMOUFLAGE;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import org.hzontal.shared_ui.appbar.ToolbarComponent;
@@ -20,6 +22,7 @@ import org.horizontal.tella.mobile.bus.event.GoToReportsScreenEvent;
 import org.horizontal.tella.mobile.bus.event.LocaleChangedEvent;
 import org.horizontal.tella.mobile.databinding.ActivitySettingsBinding;
 import org.horizontal.tella.mobile.util.CamouflageManager;
+import org.horizontal.tella.mobile.views.base_ui.AppBarInsetActivity;
 import org.horizontal.tella.mobile.views.base_ui.BaseLockActivity;
 import org.horizontal.tella.mobile.views.fragment.feedback.SendFeedbackFragment;
 import org.horizontal.tella.mobile.views.settings.ChangeRemoveCamouflage;
@@ -29,7 +32,7 @@ import org.horizontal.tella.mobile.views.settings.OnFragmentSelected;
 import org.horizontal.tella.mobile.views.settings.SecuritySettings;
 
 @AndroidEntryPoint
-public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected {
+public class SettingsActivity extends BaseLockActivity implements OnFragmentSelected, AppBarInsetActivity {
     private final CamouflageManager cm = CamouflageManager.getInstance();
     protected boolean isCamouflage = false;
     private ActivitySettingsBinding binding;
@@ -40,6 +43,11 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appbar, (v, insets) -> {
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+            v.setPadding(v.getPaddingLeft(), topInset, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
         binding.toolbar.setBackClickListener(() -> {
             onBackPressed();
             return null;
