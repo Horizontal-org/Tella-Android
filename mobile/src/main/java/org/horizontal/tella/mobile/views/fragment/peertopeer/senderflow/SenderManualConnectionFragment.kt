@@ -10,6 +10,7 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.common.IpAddressMaskEditText
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
@@ -21,6 +22,7 @@ class SenderManualConnectionFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var waitingForOtherSide = false
+    private lateinit var ipAddressMask: IpAddressMaskEditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,13 +37,7 @@ class SenderManualConnectionFragment :
     }
 
     private fun initView() = with(binding) {
-        if (port.text.isNullOrBlank()) {
-            val preloadedPort = viewModel.p2PState.port.takeIf { it.isNotBlank() }
-                ?: PeerToPeerConstants.NEARBY_SHARING_TLS_PORT.toString()
-            port.setText(preloadedPort)
-        }
-
-        ipAddress.onChange { updateNextButtonState() }
+        ipAddressMask = IpAddressMaskEditText.attach(ipAddress) { updateNextButtonState() }
         pin.onChange { updateNextButtonState() }
         port.onChange { updateNextButtonState() }
 
@@ -53,7 +49,7 @@ class SenderManualConnectionFragment :
         toolbar.backClickListener = { nav().popBackStack() }
 
         nextBtn.setOnClickListener {
-            val ip = ipAddress.text.toString()
+            val ip = ipAddressMask.canonicalIp.orEmpty()
             val port = port.text.toString()
             val pin = this.pin.text.toString()
 
@@ -98,9 +94,8 @@ class SenderManualConnectionFragment :
     }
 
     private fun isInputValid(): Boolean = with(binding) {
-        ipAddress.text?.isNotBlank() == true &&
-                pin.text?.isNotBlank() == true &&
-                port.text?.isNotBlank() == true
+        ipAddressMask.isComplete &&
+                pin.text?.isNotBlank() == true
     }
 
     private fun updateNextButtonState() = with(binding) {
