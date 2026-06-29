@@ -27,6 +27,7 @@ class WaitingSenderFragment :
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setStartTextTitle(getString(R.string.send_files))
         binding.waitingText.text = getString(R.string.waiting_for_the_recipient_to_accept_files)
 

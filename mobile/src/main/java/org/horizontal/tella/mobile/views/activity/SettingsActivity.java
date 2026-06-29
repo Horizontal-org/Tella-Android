@@ -46,7 +46,7 @@ public class SettingsActivity extends BaseLockActivity implements OnFragmentSele
         ViewCompat.setOnApplyWindowInsetsListener(binding.appbar, (v, insets) -> {
             int topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
             v.setPadding(v.getPaddingLeft(), topInset, v.getPaddingRight(), v.getPaddingBottom());
-            return insets;
+            return WindowInsetsCompat.CONSUMED;
         });
         binding.toolbar.setBackClickListener(() -> {
             onBackPressed();

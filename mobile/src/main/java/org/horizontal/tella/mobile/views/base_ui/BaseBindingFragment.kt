@@ -39,15 +39,12 @@ abstract class BaseBindingFragment<VB : ViewBinding>(
         return _binding?.root ?: inflate.invoke(inflater, container, false).also {
             _binding = it
             rootView = it.root
+            applyEdgeToEdgeIfNeeded(it.root)
         }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Apply edge-to-edge handling to prevent white spaces at top/bottom
-        // This ensures content respects system bars when edge-to-edge is enabled
-        applyEdgeToEdgeIfNeeded(view)
 
         if (!isViewInitialized) {
             isViewInitialized = true

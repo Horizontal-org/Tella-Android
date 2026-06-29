@@ -10,23 +10,31 @@ internal object FragmentEdgeToEdge {
 
     fun apply(view: View, activity: BaseActivity) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottomInset = maxOf(systemBars.bottom, ime.bottom)
+
             if (activity is AppBarInsetActivity) {
-                v.setPadding(bars.left, 0, bars.right, bars.bottom)
+                v.setPadding(systemBars.left, 0, systemBars.right, bottomInset)
             } else {
-                applyFragmentInsets(v, bars)
+                applyFragmentInsets(v, systemBars, bottomInset)
             }
-            insets
+            WindowInsetsCompat.CONSUMED
         }
+        ViewCompat.requestApplyInsets(view)
     }
 
-    private fun applyFragmentInsets(view: View, bars: androidx.core.graphics.Insets) {
+    private fun applyFragmentInsets(
+        view: View,
+        systemBars: androidx.core.graphics.Insets,
+        bottomInset: Int,
+    ) {
         val appBar = view.findViewById<View>(R.id.appbar)
         if (appBar != null) {
-            view.setPadding(bars.left, 0, bars.right, bars.bottom)
+            view.setPadding(systemBars.left, 0, systemBars.right, bottomInset)
             appBar.setPadding(
                 appBar.paddingLeft,
-                bars.top,
+                systemBars.top,
                 appBar.paddingRight,
                 appBar.paddingBottom
             )
@@ -34,20 +42,26 @@ internal object FragmentEdgeToEdge {
         }
 
         val toolbar = view.findViewById<View>(R.id.toolbar)
-        if (toolbar != null && toolbar.parent === view) {
-            view.setPadding(bars.left, 0, bars.right, bars.bottom)
-            applyTopInsetAsMargin(toolbar, bars.top)
+        if (toolbar != null) {
+            view.setPadding(systemBars.left, 0, systemBars.right, bottomInset)
+            applyTopInset(toolbar, systemBars.top)
             return
         }
 
-        view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+        view.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomInset)
     }
 
-    private fun applyTopInsetAsMargin(view: View, topInset: Int) {
-        val params = view.layoutParams as? ViewGroup.MarginLayoutParams ?: return
-        if (params.topMargin != topInset) {
-            params.topMargin = topInset
-            view.layoutParams = params
+    private fun applyTopInset(view: View, topInset: Int) {
+        val params = view.layoutParams as? ViewGroup.MarginLayoutParams
+        if (params != null) {
+            if (params.topMargin != topInset) {
+                params.topMargin = topInset
+                view.layoutParams = params
+            }
+            return
+        }
+        if (view.paddingTop != topInset) {
+            view.setPadding(view.paddingLeft, topInset, view.paddingRight, view.paddingBottom)
         }
     }
 }
