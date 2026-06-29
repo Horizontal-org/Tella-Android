@@ -149,6 +149,9 @@ class PeerToPeerViewModel @Inject constructor(
 
     private var pendingParams: PendingConnectParams? = null
 
+    private var manualConnectionPinInvalid = false
+    private var pinResetRequired = false
+
     /** Live manual ping : receiver hash from TLS now, senderShowHash on confirm. */
     private var manualPingSession: PeerManualPingSession? = null
 
@@ -208,6 +211,31 @@ class PeerToPeerViewModel @Inject constructor(
         manualPingSession = null
         preConfirmRegistration = false
         PeerEventManager.resetReceiverHashConfirmation()
+        manualConnectionPinInvalid = false
+        pinResetRequired = false
+    }
+
+    fun clearStaleManualConnectionWaitingState() {
+        if (manualPingSession == null && _isRegistering.value != true) {
+            _waitingForOtherSide.postValue(false)
+        }
+    }
+
+    fun clearManualConnectionWaitingOnDiscard() {
+        _waitingForOtherSide.postValue(false)
+        if (manualConnectionPinInvalid) {
+            manualConnectionPinInvalid = false
+            pinResetRequired = true
+            p2PState.pin = null
+            pendingParams = null
+            registrationNonceContext = null
+        }
+    }
+
+    fun consumeManualConnectionPinReset(): Boolean {
+        if (!pinResetRequired) return false
+        pinResetRequired = false
+        return true
     }
 
     fun prepareSenderSession() {
@@ -565,6 +593,11 @@ class PeerToPeerViewModel @Inject constructor(
                         }
 
                         RegisterPeerResult.InvalidPin -> {
+                            if (p2PState.isUsingManualConnection) {
+                                manualConnectionPinInvalid = true
+                                _waitingForOtherSide.postValue(false)
+                                _canTapConfirm.postValue(true)
+                            }
                             bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
                             return@launch
                         }

@@ -31,12 +31,29 @@ class SenderManualConnectionFragment :
         // sender QR and pinned this session's certificate hash. Regenerating it would make the
         // cert presented at /register differ from the pinned hash → 403 "Sender certificate
         // mismatch". The session is already reset at entry (StartNearBySharing.resetConnectionState).
+        viewModel.clearStaleManualConnectionWaitingState()
         initView()
         initListeners()
         initObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.clearStaleManualConnectionWaitingState()
+        updateNextButtonState()
+    }
+
     private fun initView() = with(binding) {
+        if (port.text.isNullOrBlank()) {
+            val preloadedPort = viewModel.p2PState.port.takeIf { it.isNotBlank() }
+                ?: PeerToPeerConstants.NEARBY_SHARING_TLS_PORT.toString()
+            port.setText(preloadedPort)
+        }
+
+        if (viewModel.consumeManualConnectionPinReset()) {
+            pin.text?.clear()
+        }
+
         ipAddressMask = IpAddressMaskEditText.attach(ipAddress) { updateNextButtonState() }
         pin.onChange { updateNextButtonState() }
         port.onChange { updateNextButtonState() }
@@ -95,7 +112,8 @@ class SenderManualConnectionFragment :
 
     private fun isInputValid(): Boolean = with(binding) {
         ipAddressMask.isComplete &&
-                pin.text?.isNotBlank() == true
+                pin.text?.isNotBlank() == true &&
+                port.text?.isNotBlank() == true
     }
 
     private fun updateNextButtonState() = with(binding) {
