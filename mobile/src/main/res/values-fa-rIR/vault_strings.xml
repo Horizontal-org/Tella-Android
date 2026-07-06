@@ -70,4 +70,5 @@
   <string name="Vault_FileEdit_SheetAction">ویرایش</string>
   <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
   <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>

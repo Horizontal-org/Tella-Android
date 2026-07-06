@@ -70,4 +70,5 @@ Loko u yi tima, arkivho leli nghenisiweke ka Tella hi lona ntsena leyi nga ta sa
   <string name="Vault_FileEdit_SheetAction">Editara</string>
   <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
   <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>

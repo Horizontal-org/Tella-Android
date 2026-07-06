@@ -12,7 +12,6 @@
   <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
   <string name="Vault_FavoriteForms_Title">Favorite forms</string>
   <string name="Vault_Empty_Msg">Tap the \"+\" button below to import your first file, or go to the Camera or Recorder to create one. You can also create folders to keep your files organized.</string>
-  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
   <string name="Vault_Move_SheetDesc">Move to another folder</string>
   <string name="Vault_Rename_SheetAction">Rename</string>
   <string name="Vault_Save_SheetAction">Save</string>
@@ -71,4 +70,5 @@
   <string name="Vault_FileEdit_SheetAction">Edit</string>
   <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
   <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>

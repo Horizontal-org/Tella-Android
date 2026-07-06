@@ -216,7 +216,9 @@ mode activation</string>
   <string name="collect_toast_form.saved.for.later.submission">Form saved for later submission</string>
   <string name="collect.blank_action_unpin">Unpin from the top</string>
   <string name="collect.blank_action_pin">Pin to the top</string>
-  <string name="verification.prompt_dialog.expl">In verification mode, GPS is required to record geolocation information.\n\nTurn on GPS so Tella can record the position of your evidence.</string>
+  <string name="verification.prompt_dialog.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="verification.prompt_action_ignore">Ignore</string>
   <string name="verification.prompt_action_enable.GPS">Enable GPS</string>
   <string name="collect.blank_dialog.expl_updating.form.definitions">Updating the list of forms…</string>
@@ -1030,23 +1032,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
-  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
-  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
   <string name="qr_code_scan_instruction">Step 2: Scan the recipient’s QR code</string>
-  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
-  <string name="continue_to_step_2">Continue to step 2</string>
-  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
-  <string name="connection_failed">Connection failed</string>
-  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
-  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
-  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
-  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
-  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
-  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
-  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
-  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
-  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
-  <string name="confirm_and_continue">Confirm and continue</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information</string>
@@ -1187,8 +1173,9 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
   <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
   <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
-  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
-  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.\n\nTurn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
   <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
@@ -1202,4 +1189,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
+  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
+  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
+  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
+  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
+  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
+  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
+  <string name="confirm_and_continue">Confirm and continue</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>
