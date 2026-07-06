@@ -11,7 +11,7 @@
   <string name="Vault_RecentFiles">Ndai laman na lamang nhtan (file) ni</string>
   <string name="Vault_PhotosAndVideos_Title">Photos and Videos</string>
   <string name="Vault_FavoriteForms_Title">Ra dik hkrang laika ni</string>
-  <string name="Vault_Empty_Msg">You don’t have any files on your Tella yet. Click the “+” button below to import your first file, or go to the Camera or Microphone to create one. You can also create folders to keep your files organized.</string>
+  <string name="Vault_Empty_Msg">Tap the \"+\" button below to import your first file, or go to the Camera or Recorder to create one. You can also create folders to keep your files organized.</string>
   <string name="Vault_Move_SheetDesc">Kaga laika nhtan (folder) de htawt sit u</string>
   <string name="Vault_Rename_SheetAction">Mying bai shamying u</string>
   <string name="Vault_Save_SheetAction">Matsing bang da u</string>
@@ -70,4 +70,5 @@
   <string name="Vault_FileEdit_SheetAction">Jep shagrin u</string>
   <string name="Vault_SaveToDevice_SheetTitle">Save \"%1$s\" to device?</string>
   <string name="Vault_SaveToDevice_SheetAction">SAVE TO DEVICE</string>
+  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>

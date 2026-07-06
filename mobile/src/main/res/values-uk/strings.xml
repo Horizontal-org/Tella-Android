@@ -396,7 +396,7 @@
   <string name="onboard.hide_behind_calculator_not_possible">Маскування під Калькулятор можливе лише за умови використання PIN-коду.</string>
   <string name="onboard.calculator_button">Вибрати калькулятор</string>
   <string name="onboard.calculator_expl">Tella буде прихована за функціональною програмою Калькулятор. Розблокуйте Tella, ввівши свій PIN-код на калькуляторі, а потім натиснувши «=»</string>
-  <string name="settings.general_recent_files_switch_title">Нещодавні файли</string>
+  <string name="settings.general_recent_files_switch_title">Останні файли</string>
   <string name="settings.general_recent_files_switch_expl">Показувати попередній перегляд та ярлик до нещодавніх файлів на головному екрані Tella.</string>
   <string name="settings.general_favorite_forms_switch_title">Обрані форми</string>
   <string name="settings.general_favorite_forms_switch_expl">Показувати ярлики до ваших обраних форм на головному екрані Tella.</string>
@@ -514,7 +514,7 @@
   <string name="Uwazi_Submitted_Header_Text">Це сутності, які ви вже надіслали.</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Виберіть, як ви хочете додати файли</string>
   <string-array name="Uwazi_Language_Array">
-    <item>English</item>
+    <item>Англійська</item>
     <item>العربية</item>
     <item>Français</item>
   </string-array>
@@ -633,7 +633,7 @@
   <string name="gallery_list.items_show.only.audio">Аудіозаписи</string>
   <string name="onboard.camo_heading">Маскування</string>
   <string name="settings.camo_calculator1">Проста математика</string>
-  <string name="settings.docu_dialog.action_hide">Приховати</string>
+  <string name="settings.docu_dialog.action_hide">Hide</string>
   <string name="settings.docu_auto.upload.server.selection_select">Сервер</string>
   <string name="upload_dialog.title_select.server">Вибір сервера</string>
   <string name="settings.docu_connect.to.servers_enable_action">Під’єднатися до серверів</string>
@@ -827,7 +827,7 @@
   <string name="thanks_for_your_feedback">Дякуємо за ваш відгук!</string>
   <string name="save_draft">Зберегти чернетку?</string>
   <string name="description_submit_feedback">Ви можете повернутися в будь-який час, щоб надіслати свій відгук.</string>
-  <string name="feedback">Відгук</string>
+  <string name="feedback">Зворотний зв’язок</string>
   <string name="not_internet_msg">Ви не під’єднані до інтернету. Ваш відгук буде надіслано автоматично, щойно з’явиться мережа.</string>
   <string name="feedback_title">Зворотний зв’язок</string>
   <string name="feedback_sent_msg">Ваш відгук надіслано</string>
@@ -1033,7 +1033,7 @@
   <string name="receive_files">Отримати файли</string>
   <string name="learn_more_about_nearby_sharing">Дізнатися більше про обмін поблизу</string>
   <string name="nearby_sharing">Обмін поблизу</string>
-  <string name="how_it_works">Як це працює</string>
+  <string name="how_it_works">Обмін поблизу</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Введіть інформацію про пристрій отримувача, щоб знайти його в мережі</string>
   <string name="make_sure_sequence_matches">Переконайтеся, що ця послідовність збігається з тією, що відображається на пристрої відправника.</string>
@@ -1130,12 +1130,12 @@
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
-  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
-Please wait until the map finishes loading before selecting a location.
-Previously viewed areas may still be visible offline.</string>
-  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
-  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
+  <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
 
@@ -1148,4 +1148,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
+  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
+  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
+  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
+  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
+  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
+  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
+  <string name="confirm_and_continue">Confirm and continue</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>

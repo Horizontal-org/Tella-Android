@@ -429,7 +429,7 @@ mode hman theihna</string>
   <string name="Vault_Importing_SheetTitle">Lakluh leh encrypt mek a ni</string>
   <string name="Rec_Exit_SheetTitle">Recording save dawn em?</string>
   <string name="Rec_Exit_SheetText">I recording save a ni lo. I chhuah hmain save i duh em?</string>
-  <string name="Vault_AudioRecordings_AppBar">Audio recordings</string>
+  <string name="Vault_AudioRecordings_AppBar">Audio record-te</string>
   <string name="Vault_Encryting_SheetText">%d%% zawh a ni</string>
   <string name="Vault_Encrypting_Cancel_SheetTitle">Encrypt lai titawpin file paih dawn em?</string>
   <string name="Vault_Encrypting_Cancel_SheetText">I tihtawp chuan, i file a bo ang</string>
@@ -601,7 +601,7 @@ mode hman theihna</string>
   <string name="Uwazi_Templates_TabTitle">Templates</string>
   <string name="action_no">Aih</string>
   <string name="Vault_Items">{\"zero\":\"\",\"one\":\"item\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"item-te\"}</string>
-  <string name="Vault_DeleteFile_SheetTitle">{\"zero\":\"\",\"one\":\"File paih rawh?\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File-te paih rawh?\"}</string>
+  <string name="Vault_DeleteFile_SheetTitle">File paih dawn em?</string>
   <string name="Vault_deleteFile_SheetDesc">{\"zero\":\"\",\"one\":\"File thlan hi Tella atangin a hlenin paih a ni ang.\",\"two\":\"\",\"few\":\"\",\"many\":\"\",\"other\":\"File thlante hi Tella atangin a hlenin paih a ni ang.\"}</string>
   <string name="Uwazi_Info_UrlLabelEmpty">URL label a ruak.</string>
   <string name="Collect_EndSubtitleExpl_UncheckedItems">Nakina thehluh turin attachment te hi tick suh. I Outbox aṭangin i thehlut thei ang.</string>
@@ -655,7 +655,7 @@ mode hman theihna</string>
   <string name="gallery_list.items_show.only.audio">Audio record-te</string>
   <string name="onboard.camo_heading">Inthupna</string>
   <string name="settings.camo_calculator1">Easy Math</string>
-  <string name="settings.docu_dialog.action_hide">Thup rawh</string>
+  <string name="settings.docu_dialog.action_hide">Hide</string>
   <string name="settings.docu_auto.upload.server.selection_select">Server</string>
   <string name="upload_dialog.title_select.server">Server thlanna</string>
   <string name="settings.docu_connect.to.servers_enable_action">Server connect rawh</string>
@@ -971,7 +971,7 @@ Tella team hnênah analytics i ṭâwm duh em?</string>
   <string name="unavailable_connections">Inzawmna hman theih lohte</string>
   <string name="unavailable_connections_desc">A hnuaia hming (category) târ lante atân hian, rualin inzawmna (connection) pakhat chauh hman theih a ni. Inzawmna thar siam belh tûrin, khawngaihin Connections Settings-ah lûtin tûna i hman lai hi paih (delete) hmasa rawh.</string>
   <string name="no_permission_to_folder_google_drive">He folder-a upload tûr hian phalna i nei lo.</string>
-  <string name="settings.servers.title_server.settings2">Inzawmnate</string>
+  <string name="settings.servers.title_server.settings2">Connections</string>
   <string name="settings.servers.add_server.expl2">Pâwl (organization) nêna in thawk a nih chuan, file leh data thawn tûrin an server-ah inzawm rawh. I pâwl thawhpuite chuan server chanchin (details) an pe tûr che a ni.</string>
   <string name="settings.docu_add.server_dialog.select_tella_dropbox" translatable="false">Dropbox</string>
   <string name="go_to_dropbox">DOPBOX AH KAL RAWH</string>
@@ -1045,11 +1045,11 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
   <string name="onboard_lock_protect_sheet_message">I kalhna (lock) chu hriat reng tum la, a nih loh pawhin password manager ang hmun himah vawng ṭha rawh.</string>
   <string name="onboard_lock_protect_sheet_continue">CHHUNZAWM RAWH</string>
   <string name="lock_update_success_done">Zo ta</string>
-  <string name="onboard_lock_success_title">Success</string>
+  <string name="onboard_lock_success_title">Hlawhtlinna</string>
   <string name="onboard_lock_success_message">Your lock is set up! You can change it anytime in the Tella Settings.</string>
   <string name="onboard_lock_success_learn_more">Learn more about Tella\'s lock</string>
   <string name="Uwazi_DeleteEntity_SheetTitle">Entity paih tûr em ni?</string>
-  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">I device aṭangin he form hi paih i duh chiang em? Thehluh tawh a nih avângin, data chu in pâwl (organization) server-ah a la awm reng thung ang.</string>
+  <string name="Uwazi_Subtitle_RemoveSubmittedEntity">He form hi i device aṭangin i paih duh takzet em? Thehluh tawh a nih avangin, a data erawh in organization server-ah a la awm ang.</string>
   <string name="Uwazi_Entity_Deleted_Toast">\"%1$s\" chu paih (delete) a ni tawh.</string>
   <string name="google_drive_shared_drive_migration_sheet_title">Google Drive folder thar siam rawh</string>
   <string name="google_drive_shared_drive_migration_sheet_message">Tella hian shared drive a thlâwp tawh lo. Google Drive-a report thehluh chhunzawm zêl tûrin, khawngaihin mimal folder thar siam rawh.</string>
@@ -1084,19 +1084,19 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
 3. VPN connection inzawm lai reng reng titâwp (disable) rawh.</string>
   <string name="current_wifi_network">Tûna Wi-Fi network hman lai</string>
   <string name="same_wifi_text">Aw, Wi-Fi network thuhmunah kan awm e</string>
-  <string name="NearBySharing">Nearby sharing</string>
+  <string name="NearBySharing">Nearby Sharing</string>
   <string name="share_files_description">Internet connection awm lo pawhin i kiang hnaia device-te nên file inthawn tawn rawh u
   1. Device pahnihte chu Wi-Fi network thuhmunah an inzawm ngei tûr a ni
   2. File i inṭâwmpui tûr chu i rin ngam mi a ni em tih finfiah rawh</string>
   <string name="send_files">File-te thawn rawh</string>
   <string name="receive_files">File-te dawng rawh</string>
   <string name="learn_more_about_nearby_sharing">Nearby sharing chungchâng hrechiang lehzual rawh</string>
-  <string name="nearby_sharing">Nearby sharing</string>
-  <string name="how_it_works">A thawh dân</string>
+  <string name="nearby_sharing">Nearby Sharing</string>
+  <string name="how_it_works">Nearby Sharing</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Network-a zawn hmuh nân dawngtu device
  chanchin (information) chhu lût rawh</string>
-  <string name="make_sure_sequence_matches">Hêng nambat indawt (sequence) hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
+  <string name="make_sure_sequence_matches">Hêng nambat indawt hi thawntu device-a lang nên a inmil thlap em tih finfiah rawh.</string>
   <string name="make_sure_sequence_matches_recipient">Hêng nambat indawt (sequence) hi dawngtu device-a lang nên a inmil thlap em tih finfiah rawh</string>
   <string name="discard_and_start_over">Hnâwl la ṭan ṭha leh rawh</string>
   <string name="waiting_for_the_sender_to_share_files">Thawntuin file a rawn thawn hun nghâk mêk</string>
@@ -1112,7 +1112,7 @@ I kalhna i theihnghilh chuan, tûnah rih chuan dawn kîr theihna kawng a awm lo.
   <string name="recipient_rejected_the_files">Dawngtuin file-te a hnâwl.</string>
   <string name="receiving_and_encrypting_files">File dawngin a thupna (encryption) siam mêk a ni</string>
   <string name="sending_files">File thawn mêk a ni</string>
-  <string name="send_files_title">File thawnna</string>
+  <string name="send_files_title">File-te thawn rawh</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">WiFi SSID la tûrin location phalna (permission) neih a ngai.</string>
   <string name="failed_to_open_location_settings">Location settings hawn theih a ni lo.</string>
   <string name="try_again">Ti nawn leh rawh</string>
@@ -1216,12 +1216,12 @@ Wi-Fi network thuhmunah in inzawm em tih finfiah rawh u.</string>
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
-  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
-Please wait until the map finishes loading before selecting a location.
-Previously viewed areas may still be visible offline.</string>
-  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
-  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
+  <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
 
@@ -1234,4 +1234,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
+  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
+  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
+  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
+  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
+  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
+  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
+  <string name="confirm_and_continue">Confirm and continue</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>
