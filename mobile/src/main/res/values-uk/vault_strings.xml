@@ -70,4 +70,5 @@
   <string name="Vault_FileEdit_SheetAction">Редагувати</string>
   <string name="Vault_SaveToDevice_SheetTitle">Зберегти \"%1$s\" на пристрій?</string>
   <string name="Vault_SaveToDevice_SheetAction">ЗБЕРЕГТИ НА ПРИСТРІЙ</string>
+  <string name="Vault_Folder_Empty_Msg">This folder is empty! Tap the + button below to import a file or create a folder.</string>
 </resources>
