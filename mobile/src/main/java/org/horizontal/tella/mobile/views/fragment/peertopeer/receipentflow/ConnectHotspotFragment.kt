@@ -82,9 +82,11 @@ class ConnectHotspotFragment :
 
 
     private fun onNextClicked() {
-        if (viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT)
-            navManager().navigateFromActionConnectHotspotScreenToQrCodeScreen()
-        else navManager().navigateFromActionConnectHotspotScreenToScanQrCodeScreen()
+        if (viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT) {
+            navManager().navigateFromActionConnectHotspotScreenToScanSenderQrScreen()
+        } else {
+            navManager().navigateFromActionConnectHotspotScreenToSenderShowQrScreen()
+        }
 
     }
 

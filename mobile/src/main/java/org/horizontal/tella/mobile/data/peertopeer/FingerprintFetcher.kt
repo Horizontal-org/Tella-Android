@@ -19,6 +19,7 @@ import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketTimeoutException
+import java.security.KeyPair
 import java.security.MessageDigest
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -28,6 +29,7 @@ import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
+import org.horizontal.tella.mobile.data.peertopeer.PeerMtlsSsl
 import kotlin.coroutines.resume
 
 /**
@@ -48,15 +50,34 @@ object FingerprintFetcher {
     // Public: PRE-PIN handshake to read cert (no HTTP), then compute hashes
     // ---------------------------------------------------------------------
     suspend fun fetch(context: Context, ip: String, port: Int): Result<FingerprintResult> =
-        withContext(Dispatchers.IO) {
+        fetchWithClientIdentity(context, ip, port, clientKeyPair = null, clientCertificate = null)
+
+    /**
+     * TLS handshake that optionally presents a sender client certificate (mTLS).
+     */
+    suspend fun fetchWithClientIdentity(
+        context: Context,
+        ip: String,
+        port: Int,
+        clientKeyPair: KeyPair?,
+        clientCertificate: X509Certificate?,
+        pinnedReceiverHash: String? = null,
+    ): Result<FingerprintResult> = withContext(Dispatchers.IO) {
             try {
                 val wifi = getWifiNetworkPreferringValidated(context)
 
                 // 1) Quick TCP probe (fail fast if nothing listening)
                 probeTcp(ip, port, wifi)
 
-                // 2) TLS handshake (system CA validation) to read leaf cert
-                createBoundTlsSocket(ip, port, wifi).use { tls ->
+                // 2) TLS handshake to read peer leaf cert
+                createBoundTlsSocket(
+                    ip = ip,
+                    port = port,
+                    wifi = wifi,
+                    clientKeyPair = clientKeyPair,
+                    clientCertificate = clientCertificate,
+                    pinnedReceiverHash = pinnedReceiverHash,
+                ).use { tls ->
                     val cert = tls.session.peerCertificates.first() as X509Certificate
                     return@withContext Result.success(fingerprintFromCert(cert))
                 }
@@ -92,11 +113,21 @@ object FingerprintFetcher {
     fun buildClientPinnedByCertHash(
         expectedCertSha256Hex: String,
         hostForRequests: String,
-        network: Network? = null
+        network: Network? = null,
+        clientKeyPair: KeyPair? = null,
+        clientCertificate: X509Certificate? = null,
     ): OkHttpClient {
-        val trustManager = CertificateUtils.getLeafCertPinnedTrustManager(expectedCertSha256Hex)
-        val sslContext = SSLContext.getInstance("TLS").apply {
-            init(null, arrayOf(trustManager), SecureRandom())
+        val trustManager: X509TrustManager = if (expectedCertSha256Hex.isBlank()) {
+            CertificateUtils.getFingerprintCollectionTrustManager()
+        } else {
+            CertificateUtils.getLeafCertPinnedTrustManager(expectedCertSha256Hex)
+        }
+        val sslContext = if (clientKeyPair != null && clientCertificate != null) {
+            PeerMtlsSsl.createSenderSslContext(clientKeyPair, clientCertificate, expectedCertSha256Hex.takeIf { it.isNotBlank() })
+        } else {
+            SSLContext.getInstance("TLS").apply {
+                init(null, arrayOf(trustManager), SecureRandom())
+            }
         }
 
         val builder = OkHttpClient.Builder()
@@ -180,8 +211,19 @@ object FingerprintFetcher {
     // Internals used by fetch()
     // ---------------------------------------------------------------------
 
-    private fun createBoundTlsSocket(ip: String, port: Int, wifi: Network?): SSLSocket {
-        val sslContext = CertificateUtils.getFingerprintCollectionSSLContext()
+    private fun createBoundTlsSocket(
+        ip: String,
+        port: Int,
+        wifi: Network?,
+        clientKeyPair: KeyPair? = null,
+        clientCertificate: X509Certificate? = null,
+        pinnedReceiverHash: String? = null,
+    ): SSLSocket {
+        val sslContext = if (clientKeyPair != null && clientCertificate != null) {
+            PeerMtlsSsl.createSenderSslContext(clientKeyPair, clientCertificate, pinnedReceiverHash)
+        } else {
+            CertificateUtils.getFingerprintCollectionSSLContext()
+        }
         val factory = sslContext.socketFactory as SSLSocketFactory
 
         val s = factory.createSocket() as SSLSocket

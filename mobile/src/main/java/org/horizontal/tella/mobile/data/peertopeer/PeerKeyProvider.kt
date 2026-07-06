@@ -5,15 +5,18 @@ import java.security.KeyPair
 import java.security.cert.X509Certificate
 
 object PeerKeyProvider {
-    private var keyPair: KeyPair? = null
-    private var certificate: X509Certificate? = null
-    private var certificateKey: String? = null
+    private var receiverKeyPair: KeyPair? = null
+    private var receiverCertificate: X509Certificate? = null
+    private var receiverCertificateKey: String? = null
+
+    private var senderKeyPair: KeyPair? = null
+    private var senderCertificate: X509Certificate? = null
 
     fun getKeyPair(): KeyPair {
-        if (keyPair == null) {
-            keyPair = CertificateUtils.generateKeyPair()
+        if (receiverKeyPair == null) {
+            receiverKeyPair = CertificateUtils.generateKeyPair()
         }
-        return keyPair!!
+        return receiverKeyPair!!
     }
 
     fun getCertificate(ipAddress: String): X509Certificate =
@@ -22,17 +25,31 @@ object PeerKeyProvider {
     fun getCertificate(ipAddresses: List<String>): X509Certificate {
         val key = ipAddresses.map { it.trim() }.filter { it.isNotEmpty() }.distinct().sorted().joinToString(",")
         require(key.isNotEmpty())
-        if (certificate == null || certificateKey != key) {
-            certificate = CertificateUtils.generateSelfSignedCertificate(getKeyPair(), ipAddresses)
-            certificateKey = key
+        if (receiverCertificate == null || receiverCertificateKey != key) {
+            receiverCertificate = CertificateUtils.generateSelfSignedCertificate(getKeyPair(), ipAddresses)
+            receiverCertificateKey = key
         }
-        return certificate!!
+        return receiverCertificate!!
     }
+
+    fun ensureSenderIdentity(): Pair<KeyPair, X509Certificate> {
+        if (senderKeyPair == null) {
+            senderKeyPair = CertificateUtils.generateKeyPair()
+            senderCertificate = CertificateUtils.generateSelfSignedClientCertificate(senderKeyPair!!)
+        }
+        return senderKeyPair!! to senderCertificate!!
+    }
+
+    fun getSenderCertificate(): X509Certificate = ensureSenderIdentity().second
+
+    fun getSenderCertificateHash(): String =
+        CertificateUtils.getLeafCertificateDerSha256Hex(getSenderCertificate())
 
     fun reset() {
-        keyPair = null
-        certificate = null
-        certificateKey = null
+        receiverKeyPair = null
+        receiverCertificate = null
+        receiverCertificateKey = null
+        senderKeyPair = null
+        senderCertificate = null
     }
 }
-

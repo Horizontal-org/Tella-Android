@@ -2,9 +2,11 @@ package org.horizontal.tella.mobile.certificate
 
 import android.util.Base64
 import org.bouncycastle.asn1.x500.X500Name
+import org.bouncycastle.asn1.x509.ExtendedKeyUsage
 import org.bouncycastle.asn1.x509.Extension
 import org.bouncycastle.asn1.x509.GeneralName
 import org.bouncycastle.asn1.x509.GeneralNames
+import org.bouncycastle.asn1.x509.KeyPurposeId
 import org.bouncycastle.asn1.x509.KeyUsage
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder
@@ -30,6 +32,31 @@ object CertificateUtils {
         return keyPairGenerator.generateKeyPair()
     }
 
+
+    /** Session client certificate for the sender role (no IP SAN required). */
+    fun generateSelfSignedClientCertificate(keyPair: KeyPair): X509Certificate {
+        val now = Date()
+        val until = Date(now.time + 365L * 24 * 60 * 60 * 1000)
+        val serial = BigInteger(128, SecureRandom())
+        val dn = X500Name("CN=Tella P2P Client, O=Tella, C=US")
+        val certBuilder = JcaX509v3CertificateBuilder(
+            dn, serial, now, until, dn, keyPair.public
+        )
+        certBuilder.addExtension(
+            Extension.basicConstraints, true, org.bouncycastle.asn1.x509.BasicConstraints(false)
+        )
+        certBuilder.addExtension(
+            Extension.keyUsage, true, KeyUsage(KeyUsage.digitalSignature or KeyUsage.keyEncipherment)
+        )
+        // Some TLS stacks refuse client certs that carry KeyUsage but no clientAuth EKU.
+        certBuilder.addExtension(
+            Extension.extendedKeyUsage, false, ExtendedKeyUsage(KeyPurposeId.id_kp_clientAuth)
+        )
+        val signer = JcaContentSignerBuilder("SHA256WithRSAEncryption").build(keyPair.private)
+        val certHolder = certBuilder.build(signer)
+        return JcaX509CertificateConverter().setProvider(org.bouncycastle.jce.provider.BouncyCastleProvider())
+            .getCertificate(certHolder)
+    }
 
     fun generateSelfSignedCertificate(keyPair: KeyPair, ipAddresses: List<String>): X509Certificate {
         val uniqueIps = ipAddresses.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
@@ -105,6 +132,41 @@ object CertificateUtils {
             }
         }
     }
+
+    /**
+     * Server-side trust manager that accepts only TLS client certificates whose leaf DER hash
+     * matches [expectedLeafCertSha256Hex]. Used after the receiver pins the sender hash.
+     */
+    fun getLeafCertPinnedClientTrustManager(expectedLeafCertSha256Hex: String): X509TrustManager {
+        val expected = normalizeHex(expectedLeafCertSha256Hex)
+        return object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                val leaf = chain?.firstOrNull()
+                    ?: throw CertificateException("Empty client certificate chain")
+                leaf.checkValidity()
+                val actual = normalizeHex(getLeafCertificateDerSha256Hex(leaf))
+                if (actual != expected) {
+                    throw CertificateException("Client certificate hash mismatch")
+                }
+            }
+        }
+    }
+
+    /**
+     * Accepts any valid client certificate (for extracting sender hash before pinning).
+     */
+    fun getClientFingerprintCollectionTrustManager(): X509TrustManager =
+        object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                val leaf = chain?.firstOrNull()
+                    ?: throw CertificateException("Empty client certificate chain")
+                leaf.checkValidity()
+            }
+        }
 
     /**
      * Bootstrap trust manager for first-contact fingerprint collection:

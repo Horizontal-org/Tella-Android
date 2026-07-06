@@ -23,10 +23,12 @@ import kotlinx.coroutines.launch
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.MyApplication
 import org.horizontal.tella.mobile.bus.SingleLiveEvent
-import org.horizontal.tella.mobile.data.peertopeer.FingerprintFetcher
-import org.horizontal.tella.mobile.data.peertopeer.FingerprintResult
-import org.horizontal.tella.mobile.data.peertopeer.ServerPinger
+import org.horizontal.tella.mobile.certificate.CertificateUtils
+import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.TellaPeerToPeerClient
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
+import org.horizontal.tella.mobile.domain.peertopeer.ParsedReceiverQr
+import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PFileStatus
 import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
@@ -34,10 +36,10 @@ import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState.Companio
 import org.horizontal.tella.mobile.data.peertopeer.model.ProgressFile
 import org.horizontal.tella.mobile.data.peertopeer.model.SessionStatus
 import org.horizontal.tella.mobile.data.peertopeer.remote.PrepareUploadRequest
+import org.horizontal.tella.mobile.data.peertopeer.remote.PeerManualPingSession
 import org.horizontal.tella.mobile.data.peertopeer.remote.RegisterPeerResult
 import org.horizontal.tella.mobile.domain.peertopeer.IncomingRegistration
 import org.horizontal.tella.mobile.domain.peertopeer.NearbySharingIpPreference
-import org.horizontal.tella.mobile.domain.peertopeer.PeerEventManager
 import org.horizontal.tella.mobile.media.MediaFileHandler
 import org.horizontal.tella.mobile.util.NetworkInfo
 import org.horizontal.tella.mobile.util.NetworkInfoManager
@@ -85,6 +87,7 @@ class PeerToPeerViewModel @Inject constructor(
         hasNavigatedFromWaitingToPrepareSuccess
 
     val clientHash = peerToPeerManager.clientConnected
+    val recipientHashVerification = peerToPeerManager.recipientHashVerification
     private val networkInfoManager = NetworkInfoManager(context)
     val networkInfo: LiveData<NetworkInfo> get() = networkInfoManager.networkInfo
 
@@ -101,8 +104,10 @@ class PeerToPeerViewModel @Inject constructor(
     val bottomMessageError = SingleLiveEvent<String>()
     val bottomSheetError = SingleLiveEvent<Pair<String, String>>()
 
-    private val _incomingPrepareRequest = MutableSharedFlow<PrepareUploadRequest>(replay = 1, extraBufferCapacity = 1)
-    val incomingPrepareRequest: SharedFlow<PrepareUploadRequest> = _incomingPrepareRequest.asSharedFlow()
+    private val _incomingPrepareRequest =
+        MutableSharedFlow<PrepareUploadRequest>(replay = 1, extraBufferCapacity = 1)
+    val incomingPrepareRequest: SharedFlow<PrepareUploadRequest> =
+        _incomingPrepareRequest.asSharedFlow()
 
     private val _incomingRequest = MutableStateFlow<IncomingRegistration?>(null)
     val incomingRequest: StateFlow<IncomingRegistration?> get() = _incomingRequest
@@ -123,6 +128,14 @@ class PeerToPeerViewModel @Inject constructor(
     private val _waitingForOtherSide = MutableLiveData(false)
     val waitingForOtherSide: LiveData<Boolean> get() = _waitingForOtherSide
 
+    private val _navigateToSenderVerification = SingleLiveEvent<Boolean>()
+    val navigateToSenderVerification: SingleLiveEvent<Boolean> get() = _navigateToSenderVerification
+
+    val incompatibleProtocolError = SingleLiveEvent<Unit>()
+
+    private val _isRegistering = MutableLiveData(false)
+    val isRegistering: LiveData<Boolean> get() = _isRegistering
+
     // Cache for "pre-accept" when recipient taps before the request arrives
     private var preConfirmRegistration: Boolean = false
 
@@ -133,9 +146,16 @@ class PeerToPeerViewModel @Inject constructor(
         val hash: String,
         val pin: String
     )
+
     private var pendingParams: PendingConnectParams? = null
 
-    /** Reuse registration nonce for the same target until registration succeeds (iOS RegistrationNonceContext). */
+    private var manualConnectionPinInvalid = false
+    private var pinResetRequired = false
+
+    /** Live manual ping : receiver hash from TLS now, senderShowHash on confirm. */
+    private var manualPingSession: PeerManualPingSession? = null
+
+    /** Reuse registration nonce for the same target until registration succeeds  */
     private data class RegistrationNonceContext(
         val ip: String,
         val port: String,
@@ -177,6 +197,100 @@ class PeerToPeerViewModel @Inject constructor(
         observeRegistrationRequests()
         observeUploadProgress()
         observeCloseConnectionEvents()
+        observeSenderHashVerification()
+        observeIncompatibleProtocol()
+    }
+
+    fun resetConnectionState() {
+        PeerKeyProvider.reset()
+        p2PState.clear()
+        isManualConnection = true
+        registrationNonceContext = null
+        pendingParams = null
+        manualPingSession?.cancel()
+        manualPingSession = null
+        preConfirmRegistration = false
+        PeerEventManager.resetReceiverHashConfirmation()
+        manualConnectionPinInvalid = false
+        pinResetRequired = false
+    }
+
+    fun clearStaleManualConnectionWaitingState() {
+        if (manualPingSession == null && _isRegistering.value != true) {
+            _waitingForOtherSide.postValue(false)
+        }
+    }
+
+    fun clearManualConnectionWaitingOnDiscard() {
+        _waitingForOtherSide.postValue(false)
+        if (manualConnectionPinInvalid) {
+            manualConnectionPinInvalid = false
+            pinResetRequired = true
+            p2PState.pin = null
+            pendingParams = null
+            registrationNonceContext = null
+        }
+    }
+
+    fun consumeManualConnectionPinReset(): Boolean {
+        if (!pinResetRequired) return false
+        pinResetRequired = false
+        return true
+    }
+
+    fun prepareSenderSession() {
+        val (_, cert) = PeerKeyProvider.ensureSenderIdentity()
+        p2PState.localSenderHash = CertificateUtils.getLeafCertificateDerSha256Hex(cert)
+    }
+
+    fun onSenderQrScanned(senderHash: String) {
+        p2PState.pinSenderHash(senderHash)
+    }
+
+    fun onReceiverQrScanned(parsed: ParsedReceiverQr) {
+        p2PState.pin = parsed.pin
+        p2PState.port = parsed.port.toString()
+        p2PState.ip = parsed.ipAddresses.firstOrNull().orEmpty()
+        p2PState.advertisedIpAddresses = parsed.ipAddresses
+        p2PState.senderShowHash = parsed.senderShowHash
+        p2PState.pinReceiverHash(parsed.certificateHash)
+
+        if (parsed.senderShowHash) {
+            _navigateToSenderVerification.postValue(true)
+            return
+        }
+
+        startRegistrationWithIpCandidates(
+            rawCandidates = parsed.ipAddresses,
+            port = parsed.port.toString(),
+            hash = parsed.certificateHash,
+            pin = parsed.pin,
+        )
+    }
+
+    fun showIncompatibleProtocolError() {
+        incompatibleProtocolError.call()
+    }
+
+    private fun observeSenderHashVerification() {
+        viewModelScope.launch {
+            PeerEventManager.senderHashVerificationRequests.collect { senderHash ->
+                p2PState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
+                // Pending display until recipient confirms (server pins after confirm).
+                p2PState.hash = senderHash
+                _getHashSuccess.postValue(senderHash)
+                _canTapConfirm.postValue(true)
+                _waitingForOtherSide.postValue(false)
+            }
+        }
+    }
+
+    private fun observeIncompatibleProtocol() {
+        viewModelScope.launch {
+            PeerEventManager.incompatibleProtocol.collect {
+                showIncompatibleProtocolError()
+            }
+        }
     }
 
     // ------------------- Observers -------------------
@@ -219,8 +333,11 @@ class PeerToPeerViewModel @Inject constructor(
 
                 _incomingRequest.value = IncomingRegistration(registrationId, payload)
 
-                if (!p2PState.isUsingManualConnection) {
-                    // Auto mode: accept immediately
+                if (p2PState.pinnedSenderHash.isNotBlank()) {
+                    Timber.d(
+                        "P2P registration auto-accepted (pinnedSenderHash set, manual=%b)",
+                        p2PState.isUsingManualConnection,
+                    )
                     PeerEventManager.confirmRegistration(registrationId, true)
                     _registrationSuccess.postValue(true)
                     PeerEventManager.clearRegistrationRequest()
@@ -265,86 +382,144 @@ class PeerToPeerViewModel @Inject constructor(
     // ------------------- Manual verification entry points -------------------
 
     /**
-     * Called after IP/port/PIN are entered and TLS cert is fetched.
-     * In manual mode we DO NOT auto-register. We enable the "Confirm & connect" button instead.
+     * Called after IP/port/PIN are entered. →
+     * startManualPing): the receiver hash is read from the TLS handshake, so we navigate to the
+     * receiver-hash verification screen immediately — before the recipient confirms. The held HTTP
+     * body (senderShowHash) is awaited later, when the sender taps "Confirm and continue".
      */
     fun handleCertificate(ip: String, port: String, pin: String) {
         viewModelScope.launch {
-            val reachable = runCatching { peerClient.pingBeforeRegister(ip, port) }.getOrDefault(false)
-            if (!reachable) {
-                bottomSheetError.postValue(
-                    "Connection failed" to "Host not reachable on this Wi-Fi. Check IP/Port and that both devices are on the same network."
-                )
-                return@launch
-            }
-
-            val fpRes: Result<FingerprintResult> = FingerprintFetcher.fetch(context, ip, port.toInt())
-            if (fpRes.isFailure) {
-                bottomSheetError.postValue(
-                    "Connection failed" to ("Couldn’t read peer certificate. " + (fpRes.exceptionOrNull()?.message ?: ""))
-                )
-                return@launch
-            }
-
-            val fp = fpRes.getOrNull()!!
-            p2PState.hash = fp.certHex
-            _getHashSuccess.postValue(fp.certHex)
-
-            val pinnedPingOk = runCatching {
-                ServerPinger.notifyServerPinnedByCert(
-                    context = context,
-                    ip = ip,
-                    port = port.toInt(),
-                    expectedCertSha256Hex = fp.certHex
-                )
-            }.isSuccess
-
-            // Manual verification path: wait for user tap
+            prepareSenderSession()
             p2PState.isUsingManualConnection = true
-            pendingParams = PendingConnectParams(ip, port, fp.certHex, pin)
-            _canTapConfirm.postValue(true)
+            p2PState.senderCanScanQr = false
+            p2PState.activeVerificationStep = P2PVerificationStep.RECIPIENT_HASH
+            // Brief wait while the TLS handshake completes (receiver hash comes from the handshake).
+            _waitingForOtherSide.postValue(true)
+
+            manualPingSession?.cancel()
+            val session = peerClient.startManualPing(ip, port)
+            manualPingSession = session
+
+            val receiverHash = try {
+                session.awaitReceiverHash()
+            } catch (e: Exception) {
+                Timber.w(e, "P2P manual ping: receiver hash failed")
+                manualPingSession = null
+                _waitingForOtherSide.postValue(false)
+                bottomSheetError.postValue(
+                    context.getString(R.string.connection_failed) to
+                            context.getString(R.string.peer_to_peer_manual_ping_failed)
+                )
+                return@launch
+            }
+
+            Timber.d("P2P manual ping: receiverHash=%s (from handshake)", receiverHash)
+            p2PState.hash = receiverHash
+            pendingParams = PendingConnectParams(ip, port, receiverHash, pin)
+            _getHashSuccess.postValue(receiverHash)   // navigate to Step 1 (recipient hash)
+            _canTapConfirm.postValue(true)            // enable "Confirm and continue"
             _waitingForOtherSide.postValue(false)
         }
     }
 
-    /** Sender tapped confirm: actually initiate /register on peer (using cached params). */
-    // In PeerToPeerViewModel
+    /**
+     * Sender tapped confirm.
+     * - Step 2 (sender hash) is passive — just wait for the recipient.
+     * - Step 1 (recipient hash): pin the receiver hash, then await the held ping body for
+     *   `senderShowHash` (released once the recipient confirms), then /register.
+     */
     fun onUserTappedConfirmAndConnect() {
         _canTapConfirm.postValue(false)
         _waitingForOtherSide.postValue(true)
 
-        val params = pendingParams
-        if (params != null) {
-            startRegistration(params.ip, params.port, params.hash, params.pin)
+        if (p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) {
             return
         }
 
-        // Fallback: try using current state or re-run handshake
+        val params = pendingParams
+        val session = manualPingSession
+        if (params != null && session != null) {
+            viewModelScope.launch {
+                p2PState.pinReceiverHash(params.hash)
+                val senderShowHash = try {
+                    session.awaitSenderShowHash()
+                } catch (e: Exception) {
+                    Timber.w(e, "P2P manual ping: senderShowHash failed")
+                    manualPingSession = null
+                    _waitingForOtherSide.postValue(false)
+                    bottomSheetError.postValue(
+                        context.getString(R.string.connection_failed) to
+                                context.getString(R.string.peer_to_peer_manual_ping_failed)
+                    )
+                    return@launch
+                }
+                manualPingSession = null
+                p2PState.senderShowHash = senderShowHash
+                Timber.d(
+                    "P2P manual confirm: receiverHash=%s senderShowHash=%b",
+                    params.hash, senderShowHash,
+                )
+                startRegistration(params.ip, params.port, params.hash, params.pin)
+                if (senderShowHash) showSenderHashAfterRegister()
+            }
+            return
+        }
+
+        // Fallback: params cached but no live ping session — register directly.
+        if (params != null) {
+            p2PState.pinReceiverHash(params.hash)
+            startRegistration(params.ip, params.port, params.hash, params.pin)
+            if (p2PState.senderShowHash) showSenderHashAfterRegister()
+            return
+        }
+
         val ip = p2PState.ip
         val port = p2PState.port
         val pin = p2PState.pin.orEmpty()
         val hash = p2PState.hash
-
         if (hash.isNotBlank()) {
             startRegistration(ip, port, hash, pin)
+            if (p2PState.senderShowHash) showSenderHashAfterRegister()
         } else {
-            viewModelScope.launch {
-                handleCertificate(ip, port, pin)
-                pendingParams?.let { startRegistration(it.ip, it.port, it.hash, it.pin) }
-                    ?: run {
-                        _waitingForOtherSide.postValue(false)
-                        _canTapConfirm.postValue(true)
-                    }
-            }
+            handleCertificate(ip, port, pin)
         }
     }
 
+    /**
+     * After the manual sender sends /register, show this device's own hash on step 2 so the recipient
+     * can cross-check it. The sender takes no action on this step — they wait for the recipient to
+     * confirm. Only invoked when the ping reported `senderShowHash == true` (flow D); in flow C the
+     * receiver already pinned the sender via QR, so this screen is skipped entirely.
+     */
+    private fun showSenderHashAfterRegister() {
+        p2PState.activeVerificationStep = P2PVerificationStep.SENDER_HASH
+        _getHashSuccess.postValue(p2PState.localSenderHash)
+        _waitingForOtherSide.postValue(true)
+        _canTapConfirm.postValue(false)
+    }
 
 
     /** Recipient tapped confirm: allow pre-accept before request arrives. */
     fun onRecipientConfirmTapped() {
         _canTapConfirm.postValue(false)
-        _waitingForOtherSide.postValue(true) // "Waiting for the sender…"
+        _waitingForOtherSide.postValue(true)
+
+        if (p2PState.activeVerificationStep == P2PVerificationStep.SENDER_HASH) {
+            p2PState.senderHashConfirmed = true
+            preConfirmRegistration = true
+            PeerEventManager.confirmSenderHashVerification(true)
+            return
+        }
+
+        if (p2PState.activeVerificationStep == P2PVerificationStep.RECIPIENT_HASH ||
+            p2PState.isUsingManualConnection
+        ) {
+            // Flow D step 1 — unblocks /register held on the server.
+            p2PState.receiverHashConfirmed = true
+            PeerEventManager.confirmReceiverHashVerification(true)
+            preConfirmRegistration = true
+            return
+        }
 
         val current = _incomingRequest.value
         if (current != null) {
@@ -381,7 +556,12 @@ class PeerToPeerViewModel @Inject constructor(
      * Tries `/register` for each candidate IP in order. Candidates are reordered so addresses on the same
      * IPv4 /24-style subnet as this device are tried first, then the rest.
      */
-    fun startRegistrationWithIpCandidates(rawCandidates: List<String>, port: String, hash: String, pin: String) {
+    fun startRegistrationWithIpCandidates(
+        rawCandidates: List<String>,
+        port: String,
+        hash: String,
+        pin: String
+    ) {
         val distinct = rawCandidates.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
         if (distinct.isEmpty()) return
         val candidates = NearbySharingIpPreference.preferredNearbySharingIPOrder(
@@ -390,55 +570,81 @@ class PeerToPeerViewModel @Inject constructor(
         )
         val pinTrimmed = pin.trim()
         viewModelScope.launch {
-            candidates.forEachIndexed { index, ip ->
-                val nonce = registrationNonceFor(ip, port, pinTrimmed)
-                when (val result = peerClient.registerPeerDevice(ip, port, hash, pinTrimmed, nonce)) {
-                    is RegisterPeerResult.Success -> {
-                        registrationNonceContext = null
-                        if (p2PState.session == null) p2PState.session = P2PSharedState.createNewSession()
-                        p2PState.session?.sessionId = result.sessionId
-                        p2PState.ip = ip
-                        _registrationSuccess.postValue(true)
-                        return@launch
-                    }
-                    RegisterPeerResult.InvalidPin -> {
-                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
-                        return@launch
-                    }
-                    RegisterPeerResult.InvalidFormat -> {
-                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
-                        return@launch
-                    }
-                    RegisterPeerResult.RejectedByReceiver -> {
-                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_receiver_rejected_registration))
-                        return@launch
-                    }
-                    RegisterPeerResult.Conflict -> {
-                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
-                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
-                        return@launch
-                    }
-                    RegisterPeerResult.TooManyRequests -> {
-                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
-                        bottomSheetError.postValue(
-                            "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                        )
-                        return@launch
-                    }
-                    RegisterPeerResult.ServerError -> {
-                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
-                        bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
-                        return@launch
-                    }
-                    is RegisterPeerResult.Failure -> {
-                        if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
-                        Timber.e(result.exception, "Connection failure")
-                        bottomSheetError.postValue(
-                            "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
-                        )
-                        return@launch
+            _isRegistering.postValue(true)
+            try {
+                candidates.forEachIndexed { index, ip ->
+                    val nonce = registrationNonceFor(ip, port, pinTrimmed)
+                    when (val result =
+                        peerClient.registerPeerDevice(ip, port, hash, pinTrimmed, nonce)) {
+                        is RegisterPeerResult.Success -> {
+                            registrationNonceContext = null
+                            if (p2PState.session == null) p2PState.session =
+                                P2PSharedState.createNewSession()
+                            p2PState.session?.sessionId = result.sessionId
+                            p2PState.ip = ip
+                            p2PState.markRegistered()
+                            _registrationSuccess.postValue(true)
+                            return@launch
+                        }
+
+                        RegisterPeerResult.IncompatibleProtocol -> {
+                            showIncompatibleProtocolError()
+                            return@launch
+                        }
+
+                        RegisterPeerResult.InvalidPin -> {
+                            if (p2PState.isUsingManualConnection) {
+                                manualConnectionPinInvalid = true
+                                _waitingForOtherSide.postValue(false)
+                                _canTapConfirm.postValue(true)
+                            }
+                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_pin))
+                            return@launch
+                        }
+
+                        RegisterPeerResult.InvalidFormat,
+                        RegisterPeerResult.ClientCertificateRequired -> {
+                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_invalid_request_format))
+                            return@launch
+                        }
+
+                        RegisterPeerResult.RejectedByReceiver -> {
+                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_receiver_rejected_registration))
+                            return@launch
+                        }
+
+                        RegisterPeerResult.Conflict -> {
+                            if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_active_session_exists))
+                            return@launch
+                        }
+
+                        RegisterPeerResult.TooManyRequests -> {
+                            if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                            bottomSheetError.postValue(
+                                "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                            )
+                            return@launch
+                        }
+
+                        RegisterPeerResult.ServerError -> {
+                            if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                            bottomMessageError.postValue(context.getString(R.string.peer_to_peer_server_error_try_later))
+                            return@launch
+                        }
+
+                        is RegisterPeerResult.Failure -> {
+                            if (index < candidates.lastIndex && shouldRetryRegisterWithNextIp(result)) return@forEachIndexed
+                            Timber.e(result.exception, "Connection failure")
+                            bottomSheetError.postValue(
+                                "Connection failed" to "Please make sure your connection details are correct and that you are on the same Wi-Fi network."
+                            )
+                            return@launch
+                        }
                     }
                 }
+            } finally {
+                _isRegistering.postValue(false)
             }
         }
     }
@@ -448,7 +654,8 @@ class PeerToPeerViewModel @Inject constructor(
         RegisterPeerResult.TooManyRequests,
         RegisterPeerResult.ServerError,
         is RegisterPeerResult.Failure,
-        -> true
+            -> true
+
         else -> false
     }
 
@@ -545,7 +752,10 @@ class PeerToPeerViewModel @Inject constructor(
      * QuickTime / `.mov` is not handled by [MediaFileHandler.saveMp4Video] (MP4 pipeline). Store the file as-is
      * so it lands in the transfer folder; in-app playback depends on codecs, same as other opaque imports.
      */
-    private fun shouldStoreP2pVideoAsOpaqueContainer(pf: ProgressFile, receivedFile: File): Boolean {
+    private fun shouldStoreP2pVideoAsOpaqueContainer(
+        pf: ProgressFile,
+        receivedFile: File
+    ): Boolean {
         val mime = pf.file.fileType.lowercase(Locale.US)
         if (mime.contains("quicktime")) return true
         return vaultDisplayNameForP2pReceive(pf, receivedFile).lowercase(Locale.US).endsWith(".mov")
@@ -743,8 +953,8 @@ class PeerToPeerViewModel @Inject constructor(
         // Server progress still says SENDING after a failed hash check; we must still close the UI.
         val canFinalize =
             sessionIsTerminal(triggerStatus) ||
-                triggerStatus == SessionStatus.SENDING ||
-                triggerStatus == SessionStatus.SAVING
+                    triggerStatus == SessionStatus.SENDING ||
+                    triggerStatus == SessionStatus.SAVING
         if (!canFinalize) return
 
         if (session.status == SessionStatus.FINISHED ||

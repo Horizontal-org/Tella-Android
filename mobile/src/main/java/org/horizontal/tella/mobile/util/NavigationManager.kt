@@ -170,6 +170,34 @@ class NavigationManager(
         navigateToWithBundle(R.id.action_startNearBySharingFragment_to_scanQrCodeScreen)
     }
 
+    fun navigateFromStartNearBySharingFragmentToSenderShowQrScreen() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_senderShowQrScreen)
+    }
+
+    fun navigateFromStartNearBySharingFragmentToScanSenderQrScreen() {
+        navigateToWithBundle(R.id.action_startNearBySharingFragment_to_scanSenderQrScreen)
+    }
+
+    fun navigateFromSenderShowQrToScanReceiverQrScreen() {
+        navigateToWithBundle(R.id.action_senderShowQrScreen_to_scanQrCodeScreen)
+    }
+
+    fun navigateFromSenderShowQrToSenderManualConnectionScreen() {
+        navigateToWithBundle(R.id.action_senderShowQrScreen_to_senderManualConnectionScreen)
+    }
+
+    fun navigateFromScanSenderQrToQrCodeScreen() {
+        navigateToWithBundle(R.id.action_scanSenderQrScreen_to_qrCodeScreen)
+    }
+
+    fun navigateFromScanSenderQrToDeviceInfoScreen() {
+        navigateToWithBundle(R.id.action_scanSenderQrScreen_to_deviceInfoScreen)
+    }
+
+    fun navigateFromScanQrCodeToSenderVerification() {
+        navigateToWithBundle(R.id.action_scanQrCodeScreen_to_connectManuallyVerificationFragment)
+    }
+
     fun navigateFromStartNearBySharingFragmentToTipsToConnectFragment() {
         navigateToWithBundle(R.id.action_startNearBySharingFragment_to_tipsToConnectFragment)
     }
@@ -180,6 +208,14 @@ class NavigationManager(
 
     fun navigateFromActionConnectHotspotScreenToScanQrCodeScreen() {
         navigateToWithBundle(R.id.action_connectHotspotScreen_to_scanQrCodeScreen)
+    }
+
+    fun navigateFromActionConnectHotspotScreenToSenderShowQrScreen() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_senderShowQrScreen)
+    }
+
+    fun navigateFromActionConnectHotspotScreenToScanSenderQrScreen() {
+        navigateToWithBundle(R.id.action_connectHotspotScreen_to_scanSenderQrScreen)
     }
 
     fun navigateFromScanQrCodeToDeviceInfo() {

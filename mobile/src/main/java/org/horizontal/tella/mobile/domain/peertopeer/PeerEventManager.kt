@@ -39,6 +39,21 @@ object PeerEventManager {
 
     private val decisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
     private val registrationDecisionMap = mutableMapOf<String, CompletableDeferred<Boolean>>()
+    private var senderHashVerificationDeferred: CompletableDeferred<Boolean>? = null
+    private var receiverHashConfirmationDeferred: CompletableDeferred<Boolean>? = null
+    private var pingReceiverHashDeferred: CompletableDeferred<Boolean>? = null
+
+    private val _senderHashVerificationRequests = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1,
+    )
+    val senderHashVerificationRequests = _senderHashVerificationRequests.asSharedFlow()
+
+    private val _incompatibleProtocol = MutableSharedFlow<Unit>(
+        replay = 1,
+        extraBufferCapacity = 1,
+    )
+    val incompatibleProtocol = _incompatibleProtocol.asSharedFlow()
 
     private val _uploadProgressStateFlow = MutableSharedFlow<UploadProgressState>(replay = 0)
     val uploadProgressStateFlow = _uploadProgressStateFlow.asSharedFlow()
@@ -87,5 +102,62 @@ object PeerEventManager {
 
     fun confirmRegistration(registrationId: String, accepted: Boolean) {
         registrationDecisionMap.remove(registrationId)?.complete(accepted)
+    }
+
+    suspend fun emitSenderHashVerification(senderCertHash: String, alreadyConfirmed: Boolean = false): Boolean {
+        if (alreadyConfirmed) return true
+        val deferred = CompletableDeferred<Boolean>()
+        senderHashVerificationDeferred = deferred
+        _senderHashVerificationRequests.emit(senderCertHash)
+        return deferred.await()
+    }
+
+    fun confirmSenderHashVerification(accepted: Boolean) {
+        senderHashVerificationDeferred?.complete(accepted)
+        senderHashVerificationDeferred = null
+    }
+
+    /**
+     * Flow D: `/register` awaits this when sender hash verification is required but the
+     * recipient has not yet confirmed the receiver hash.
+     */
+    suspend fun awaitReceiverHashConfirmation(alreadyConfirmed: Boolean): Boolean {
+        if (alreadyConfirmed) return true
+        val deferred = CompletableDeferred<Boolean>()
+        receiverHashConfirmationDeferred = deferred
+        return try {
+            deferred.await()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    suspend fun holdPingForReceiverHash(): Boolean {
+        val deferred = CompletableDeferred<Boolean>()
+        pingReceiverHashDeferred = deferred
+        return try {
+            deferred.await()
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    fun confirmReceiverHashVerification(accepted: Boolean) {
+        // Release both the held ping (receiver-hash handshake) and any register held on the same gate.
+        pingReceiverHashDeferred?.complete(accepted)
+        pingReceiverHashDeferred = null
+        receiverHashConfirmationDeferred?.complete(accepted)
+        receiverHashConfirmationDeferred = null
+    }
+
+    fun resetReceiverHashConfirmation() {
+        pingReceiverHashDeferred?.cancel()
+        pingReceiverHashDeferred = null
+        receiverHashConfirmationDeferred?.cancel()
+        receiverHashConfirmationDeferred = null
+    }
+
+    suspend fun emitIncompatibleProtocol() {
+        _incompatibleProtocol.emit(Unit)
     }
 }
