@@ -39,6 +39,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private lateinit var gridLayoutManager: GridLayoutManager
     private val viewModel: AttachmentsSelectorViewModel by viewModels()
     private var currentRootID: String? = null
+    private var vaultRootId: String? = null
     private var isMultiplePicker = false
     private var isOdkSelect = false
     private var filterType = FilterType.ALL
@@ -99,6 +100,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         with(viewModel) {
             rootVaultFile.observe(this@AttachmentsActivitySelector) { vaultFile ->
                 vaultFile?.let { root ->
+                    vaultRootId = root.id
                     currentRootID = root.id
                     getFiles(root.id, filterType, null)
                     binding.breadcrumbsView.addItem(
@@ -116,6 +118,7 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 if (files.isEmpty()) {
                     binding.attachmentsRecyclerView.visibility = View.GONE
                     binding.emptyViewMsgContainer.visibility = View.VISIBLE
+                    updateEmptyStateMessage()
                 } else {
                     binding.attachmentsRecyclerView.visibility = View.VISIBLE
                     binding.emptyViewMsgContainer.visibility = View.GONE
@@ -130,6 +133,13 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
                 }
             }
         }
+    }
+
+    private fun updateEmptyStateMessage() {
+        val isAtRoot = currentRootID == vaultRootId
+        binding.emptyViewTitle.visibility = if (isAtRoot) View.VISIBLE else View.GONE
+        binding.emptyViewDescription.visibility = if (isAtRoot) View.VISIBLE else View.GONE
+        binding.emptyViewFolderMsg.visibility = if (isAtRoot) View.GONE else View.VISIBLE
     }
 
     override fun onMoreClicked(vaultFile: VaultFile) {
