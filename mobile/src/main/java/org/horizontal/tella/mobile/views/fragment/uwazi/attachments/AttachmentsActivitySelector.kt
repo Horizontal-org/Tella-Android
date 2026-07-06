@@ -138,7 +138,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
     private fun updateEmptyStateMessage() {
         val isAtRoot = currentRootID == vaultRootId
         binding.emptyViewTitle.visibility = if (isAtRoot) View.VISIBLE else View.GONE
-        binding.emptyViewDescription.visibility = if (isAtRoot) View.VISIBLE else View.GONE
         binding.emptyViewFolderMsg.visibility = if (isAtRoot) View.GONE else View.VISIBLE
     }
 

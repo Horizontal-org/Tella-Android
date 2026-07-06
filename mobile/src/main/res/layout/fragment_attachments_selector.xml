@@ -149,16 +149,6 @@
             android:text="@string/Vault_No_Files_Title" />
 
         <TextView
-            android:id="@+id/emptyViewDescription"
-            style="@style/Tella_Main_White_Text.Meduim"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:textColor="@color/wa_white_88"
-            android:text="@string/Vault_Empty_Msg" />
-
-        <TextView
             android:id="@+id/emptyViewFolderMsg"
             style="@style/Tella_Main_White_Text.Meduim"
             android:layout_width="wrap_content"
