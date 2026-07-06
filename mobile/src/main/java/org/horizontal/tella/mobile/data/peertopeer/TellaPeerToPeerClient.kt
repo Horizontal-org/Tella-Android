@@ -21,8 +21,6 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.TlsVersion
 import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.PeerMtlsSsl
-import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_JSON
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants.CONTENT_TYPE_OCTET
@@ -42,11 +40,9 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.io.IOException
 import java.io.InputStream
-import java.security.SecureRandom
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 class TellaPeerToPeerClient @Inject constructor(

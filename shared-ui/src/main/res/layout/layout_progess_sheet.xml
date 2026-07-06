@@ -34,13 +34,29 @@
     <TextView
         android:id="@+id/tv_progress_indicator"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/progress_circular"
         app:layout_constraintTop_toBottomOf="@id/standard_sheet_title"
         tools:text="90% complete" />
+
+    <TextView
+        android:id="@+id/tv_progress_secondary"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_progress_indicator"
+        app:layout_constraintTop_toBottomOf="@id/tv_progress_indicator"
+        tools:text="This may take some time, depending on your Internet connection."
+        tools:visibility="visible" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_linear"
@@ -49,10 +65,17 @@
         android:layout_marginTop="30dp"
         app:indicatorColor="@color/green"
         app:layout_constraintStart_toStartOf="@id/tv_progress_indicator"
-        app:layout_constraintTop_toBottomOf="@id/tv_progress_indicator"
+        app:layout_constraintTop_toBottomOf="@id/tv_progress_secondary"
         app:trackColor="@color/wa_white"
         app:trackCornerRadius="2dp"
         app:trackThickness="4dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/progress_sheet_bottom_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_progress_secondary,progress_linear" />
 
     <TextView
         android:id="@+id/tv_cancel"
@@ -62,7 +85,7 @@
         android:layout_marginTop="40dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_linear"
+        app:layout_constraintTop_toBottomOf="@id/progress_sheet_bottom_barrier"
         tools:text="CANCEL" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

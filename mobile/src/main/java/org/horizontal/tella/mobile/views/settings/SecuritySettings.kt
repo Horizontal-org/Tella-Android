@@ -1,11 +1,8 @@
 package org.horizontal.tella.mobile.views.settings
 
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.widget.CheckBox
@@ -54,7 +51,6 @@ class SecuritySettings :
     private val failedUnlockManager by lazy { FailedUnlockManager() }
     private val cm = CamouflageManager.getInstance()
     private var isUpdatingShutterMuteSwitch = false
-    private var pendingShutterMuteEnable = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -232,29 +228,11 @@ class SecuritySettings :
         binding.cameraSilentSwitch.mSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isUpdatingShutterMuteSwitch) return@setOnCheckedChangeListener
 
-            if (!isChecked) {
-                pendingShutterMuteEnable = false
-                Preferences.setShutterMute(false)
-                return@setOnCheckedChangeListener
-            }
-
-            Preferences.setShutterMute(true)
-            if (!hasShutterDndAccess()) {
-                showShutterDndAccessSheet()
-            } else {
-                pendingShutterMuteEnable = false
-            }
+            Preferences.setShutterMute(isChecked)
         }
     }
 
     private fun syncShutterMuteSwitchState() {
-        if (pendingShutterMuteEnable) {
-            pendingShutterMuteEnable = false
-            if (hasShutterDndAccess()) {
-                Preferences.setShutterMute(true)
-            }
-        }
-
         setSilentCameraSwitchChecked(Preferences.isShutterMute())
     }
 
@@ -262,43 +240,6 @@ class SecuritySettings :
         isUpdatingShutterMuteSwitch = true
         binding.cameraSilentSwitch.mSwitch.isChecked = isChecked
         isUpdatingShutterMuteSwitch = false
-    }
-
-    private fun hasShutterDndAccess(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-
-        val notificationManager =
-            baseActivity.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        return notificationManager.isNotificationPolicyAccessGranted
-    }
-
-    private fun showShutterDndAccessSheet() {
-        showConfirmSheet(
-            fragmentManager = requireActivity().supportFragmentManager,
-            titleText = getString(R.string.settings_sec_camera_mute_switch),
-            descriptionText = getString(R.string.camera_shutter_dnd_dialog_expl),
-            actionButtonLabel = getString(R.string.action_go_to_settings),
-            cancelButtonLabel = getString(R.string.action_cancel),
-            consumer = object : ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    if (isConfirmed) {
-                        baseActivity.maybeChangeTemporaryTimeout {
-                            pendingShutterMuteEnable = true
-                            try {
-                                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
-                            } catch (e: Exception) {
-                                pendingShutterMuteEnable = false
-                                Timber.e(e, "Unable to open notification policy settings")
-                            }
-                        }
-                    } else {
-                        pendingShutterMuteEnable = false
-                    }
-                }
-            }
-        )
     }
 
     private fun showDeleteAfterFailedUnlockDialog() {

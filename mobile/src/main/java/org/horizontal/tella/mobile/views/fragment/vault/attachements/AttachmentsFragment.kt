@@ -111,6 +111,7 @@ class AttachmentsFragment :
     private lateinit var sort: Sort
     private var vaultFile: VaultFile? = null
     private var currentRootID: String? = null
+    private var vaultRootId: String? = null
     private var currentMove: String? = null
     private var isListCheckOn = false
     private var isMoveModeEnabled = false
@@ -243,9 +244,7 @@ class AttachmentsFragment :
         } else {
             viewModel.getFolderById(currentRootID!!)
         }
-        if (currentRootID == null) {
-            viewModel.getRootId()
-        }
+        viewModel.getRootId()
         onFileDeletedEventListener()
         onFileRenameEventListener()
         onCaptureEventListener()
@@ -843,6 +842,7 @@ class AttachmentsFragment :
         if (files.isEmpty()) {
             recyclerView.visibility = View.GONE
             emptyViewContainer.visibility = View.VISIBLE
+            updateEmptyStateMessage()
         } else {
             recyclerView.visibility = View.VISIBLE
             emptyViewContainer.visibility = View.GONE
@@ -850,6 +850,19 @@ class AttachmentsFragment :
 
         attachmentsAdapter.setFiles(files)
         attachmentsAdapter.enableSelectMode(isListCheckOn)
+    }
+
+    private fun updateEmptyStateMessage() {
+        val isAtRoot = currentRootID == null || currentRootID == vaultRootId
+        binding.emptyViewTitle.visibility = if (isAtRoot) View.VISIBLE else View.GONE
+        binding.emptyViewDescription.visibility = if (isAtRoot) View.VISIBLE else View.GONE
+        binding.emptyViewFolderMsg.visibility = if (isAtRoot) View.GONE else View.VISIBLE
+    }
+
+    private fun refreshEmptyStateIfVisible() {
+        if (binding.emptyViewMsgContainer.visibility == View.VISIBLE) {
+            updateEmptyStateMessage()
+        }
     }
 
     private fun onMediaImported(vaultFile: VaultFile) {
@@ -968,9 +981,14 @@ class AttachmentsFragment :
     }
 
     private fun onGetRootIdSuccess(vaultFile: VaultFile?) {
-        currentRootID = vaultFile?.id
-        binding.breadcrumbsView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile?.id)))
-        onMediaFilesAdded()
+        vaultRootId = vaultFile?.id
+        if (currentRootID == null) {
+            currentRootID = vaultFile?.id
+            binding.breadcrumbsView.addItem(BreadcrumbItem.createSimpleItem(Item("", vaultFile?.id)))
+            onMediaFilesAdded()
+        } else {
+            refreshEmptyStateIfVisible()
+        }
     }
 
     private fun onMoveFilesSuccess(filesSize: Int) {

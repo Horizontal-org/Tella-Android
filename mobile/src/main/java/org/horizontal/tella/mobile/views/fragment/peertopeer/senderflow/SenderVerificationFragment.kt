@@ -81,6 +81,7 @@ class SenderVerificationFragment :
         }
 
         binding.discardBtn.setOnClickListener {
+            viewModel.clearManualConnectionWaitingOnDiscard()
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
     }

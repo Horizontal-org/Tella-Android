@@ -7,8 +7,10 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.peertopeer.common.IpAddressMaskEditText
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
 import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
@@ -20,6 +22,7 @@ class SenderManualConnectionFragment :
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var waitingForOtherSide = false
+    private lateinit var ipAddressMask: IpAddressMaskEditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,13 +31,30 @@ class SenderManualConnectionFragment :
         // sender QR and pinned this session's certificate hash. Regenerating it would make the
         // cert presented at /register differ from the pinned hash → 403 "Sender certificate
         // mismatch". The session is already reset at entry (StartNearBySharing.resetConnectionState).
+        viewModel.clearStaleManualConnectionWaitingState()
         initView()
         initListeners()
         initObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.clearStaleManualConnectionWaitingState()
+        updateNextButtonState()
+    }
+
     private fun initView() = with(binding) {
-        ipAddress.onChange { updateNextButtonState() }
+        if (port.text.isNullOrBlank()) {
+            val preloadedPort = viewModel.p2PState.port.takeIf { it.isNotBlank() }
+                ?: PeerToPeerConstants.NEARBY_SHARING_TLS_PORT.toString()
+            port.setText(preloadedPort)
+        }
+
+        if (viewModel.consumeManualConnectionPinReset()) {
+            pin.text?.clear()
+        }
+
+        ipAddressMask = IpAddressMaskEditText.attach(ipAddress) { updateNextButtonState() }
         pin.onChange { updateNextButtonState() }
         port.onChange { updateNextButtonState() }
 
@@ -46,7 +66,7 @@ class SenderManualConnectionFragment :
         toolbar.backClickListener = { nav().popBackStack() }
 
         nextBtn.setOnClickListener {
-            val ip = ipAddress.text.toString()
+            val ip = ipAddressMask.canonicalIp.orEmpty()
             val port = port.text.toString()
             val pin = this.pin.text.toString()
 
@@ -91,8 +111,9 @@ class SenderManualConnectionFragment :
     }
 
     private fun isInputValid(): Boolean = with(binding) {
-        ipAddress.text?.isNotBlank() == true &&
-                pin.text?.isNotBlank() == true
+        ipAddressMask.isComplete &&
+                pin.text?.isNotBlank() == true &&
+                port.text?.isNotBlank() == true
     }
 
     private fun updateNextButtonState() = with(binding) {
