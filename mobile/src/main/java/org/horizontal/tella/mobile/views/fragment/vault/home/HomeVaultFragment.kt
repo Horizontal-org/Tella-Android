@@ -792,6 +792,7 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         } else {
             vaultAdapter.removeConnectionServers()
         }
+        scrollHomeToTop()
     }
 
     private fun handleServerCountsSuccess(serverCounts: ServerCounts) {

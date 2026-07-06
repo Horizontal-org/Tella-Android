@@ -219,14 +219,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
                     addAll(analyticsBanner)
                 }
+                addAll(connections)
                 if (Preferences.isShowFavoriteForms()) {
                     addAll(favoriteForms)
                 }
-                if (Preferences.isShowRecentFiles()) {
-                    addAll(recentFiles)
-                }
                 if (Preferences.isShowFavoriteTemplates()) {
                     addAll(favoriteTemplates)
+                }
+                if (Preferences.isShowRecentFiles()) {
+                    addAll(recentFiles)
                 }
                 addAll(titles)
                 addAll(actions)

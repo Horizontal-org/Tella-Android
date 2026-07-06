@@ -1,5 +1,6 @@
 package org.horizontal.tella.mock.vault.home
 
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.horizontal.tella.mobile.views.fragment.vault.home.HomeScreenScroll
 import org.junit.Assert.assertEquals
@@ -10,6 +11,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -17,6 +19,9 @@ class HomeScreenScrollTest {
 
     @Mock
     private lateinit var recyclerView: RecyclerView
+
+    @Mock
+    private lateinit var layoutManager: LinearLayoutManager
 
     @Test
     fun homeScrollPosition_isAlwaysZero() {
@@ -26,12 +31,14 @@ class HomeScreenScrollTest {
     @Test
     fun scrollToTop_postsRunnableThatScrollsToHomePosition() {
         val runnableCaptor = ArgumentCaptor.forClass(Runnable::class.java)
+        `when`(recyclerView.layoutManager).thenReturn(layoutManager)
 
         HomeScreenScroll.scrollToTop(recyclerView)
 
         verify(recyclerView).post(runnableCaptor.capture())
         runnableCaptor.value.run()
-        verify(recyclerView).scrollToPosition(HomeScreenScroll.HOME_SCROLL_POSITION)
+        verify(layoutManager).scrollToPositionWithOffset(HomeScreenScroll.HOME_SCROLL_POSITION, 0)
+        verify(recyclerView, org.mockito.Mockito.times(2)).post(any())
     }
 
     @Test
