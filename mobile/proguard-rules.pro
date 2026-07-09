@@ -355,6 +355,11 @@
 
 ########## NEXTCLOUD / OWNCloud – FULL KEEP ##########
 
+# Apache Commons Logging: R8 can break adapter discovery → OwnCloudClient ExceptionInInitializerError
+-keep class org.apache.commons.logging.** { *; }
+-keepclassmembers class org.apache.commons.logging.impl.** { *; }
+-dontwarn org.apache.commons.logging.impl.Log4JLogger
+
 # Keep the whole OwnCloud / Nextcloud Android library
 -keep class com.owncloud.android.lib.** { *; }
 -dontwarn com.owncloud.android.lib.**
