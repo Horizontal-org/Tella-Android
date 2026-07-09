@@ -10,10 +10,10 @@ import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.base_ui.FragmentEdgeToEdge
 import org.horizontal.tella.mobile.views.fragment.peertopeer.common.IpAddressMaskEditText
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
 
 @AndroidEntryPoint
@@ -23,6 +23,12 @@ class SenderManualConnectionFragment :
     private val viewModel: PeerToPeerViewModel by activityViewModels()
     private var waitingForOtherSide = false
     private lateinit var ipAddressMask: IpAddressMaskEditText
+
+    // This form pins the Next button to the bottom of the screen, so it must ride above the
+    // keyboard when a field is focused. Opt into IME-aware insets for this screen only.
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        FragmentEdgeToEdge.apply(view, baseActivity, applyImeInset = true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +65,6 @@ class SenderManualConnectionFragment :
         port.onChange { updateNextButtonState() }
 
         updateNextButtonState()
-        KeyboardUtil(root)
     }
 
     private fun initListeners() = with(binding) {

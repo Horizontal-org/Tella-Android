@@ -8,11 +8,24 @@ import org.horizontal.tella.mobile.R
 
 internal object FragmentEdgeToEdge {
 
-    fun apply(view: View, activity: BaseActivity) {
+    /**
+     * Applies edge-to-edge system-bar insets to [view].
+     *
+     * @param applyImeInset when true, the keyboard (IME) inset is folded into the bottom
+     * padding so a bottom-pinned action bar rides above the keyboard. This resizes the
+     * fragment root when the keyboard opens, so only screens that host a bottom action bar
+     * over a scrollable form should opt in. Defaults to false, which keeps the whole screen
+     * from being pushed up when a text field is focused.
+     */
+    fun apply(view: View, activity: BaseActivity, applyImeInset: Boolean = false) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val bottomInset = maxOf(systemBars.bottom, ime.bottom)
+            val bottomInset = if (applyImeInset) {
+                val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+                maxOf(systemBars.bottom, ime.bottom)
+            } else {
+                systemBars.bottom
+            }
 
             if (activity is AppBarInsetActivity) {
                 v.setPadding(systemBars.left, 0, systemBars.right, bottomInset)
