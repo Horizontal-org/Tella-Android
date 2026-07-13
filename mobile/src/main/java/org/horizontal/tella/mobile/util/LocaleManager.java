@@ -70,7 +70,15 @@ public class LocaleManager {
             return savedLocale != null ? savedLocale : NONE_LANGUAGE;
         }).subscribeOn(Schedulers.io()).blockingGet();
 
-        return NONE_LANGUAGE.equals(localeTag) ? null : localeTag;
+        if (NONE_LANGUAGE.equals(localeTag)) {
+            return null;
+        }
+
+        String normalizedLocaleTag = normalizeLocaleTag(localeTag);
+        if (!normalizedLocaleTag.equals(localeTag)) {
+            setLanguageSetting(normalizedLocaleTag);
+        }
+        return normalizedLocaleTag;
     }
 
     /**
@@ -111,6 +119,14 @@ public class LocaleManager {
     private Locale loadSavedLocale() {
         String localeTag = getLanguageSetting();
         return (localeTag != null) ? Locale.forLanguageTag(localeTag) : null;
+    }
+
+    private static String normalizeLocaleTag(String localeTag) {
+        if ("ku".equals(localeTag)) {
+            // Kurdish macrolanguage code was replaced by Central Kurdish (Sorani).
+            return "ckb";
+        }
+        return localeTag;
     }
 
     private Context getLocalizedContext(Context context, Locale locale) {
