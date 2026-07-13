@@ -77,13 +77,7 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
             langName.setText(R.string.settings_lang_select_default)
             langInfo.setText(R.string.settings_lang_select_expl_default)
         } else {
-            // Properly handle locales with language-region codes
-            val locale = if (language.contains("-")) {
-                val parts = language.split("-")
-                Locale(parts[0], parts[1]) // Example: "pt-MZ" → Locale("pt", "MZ")
-            } else {
-                Locale(language) // Example: "fr" → Locale("fr")
-            }
+            val locale = localeForLanguageCode(language)
 
             langName.text = StringUtils.capitalize(locale.displayName, locale)
             langInfo.text = StringUtils.capitalize(locale.getDisplayName(locale), locale)
@@ -105,13 +99,7 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
 
     private fun setAppLanguage(language: String?) {
         val locale = if (!language.isNullOrEmpty()) {
-            if (language.contains("-")) {
-                // Split the language code into parts (e.g., "pt-MZ" → "pt" and "MZ")
-                val parts = language.split("-")
-                Locale(parts[0], parts[1]) // Create a Locale with language and region
-            } else {
-                Locale(language) // Create a Locale with just the language (e.g., "pt")
-            }
+            localeForLanguageCode(language)
         } else {
             null // Handle the default language case
         }
@@ -125,6 +113,10 @@ class LanguageSettings : BaseFragment(), View.OnClickListener {
 
         LocaleManager.getInstance().setLocale(locale)
         MyApplication.bus().post(LocaleChangedEvent(locale))
+    }
+
+    private fun localeForLanguageCode(language: String): Locale {
+        return Locale.forLanguageTag(language.replace('_', '-'))
     }
 
 }
