@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -15,6 +16,7 @@ import com.hzontal.utils.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentAttachmentsSelectorBinding
+import org.horizontal.tella.mobile.util.hide
 import org.horizontal.tella.mobile.util.setCheckDrawable
 import org.horizontal.tella.mobile.util.setMargins
 import org.horizontal.tella.mobile.views.activity.camera.CameraActivity
@@ -70,6 +72,9 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             this@AttachmentsActivitySelector, this,
             gridLayoutManager, false, isMultiplePicker
         )
+
+        binding.checkBoxList.isVisible = !isMultiplePicker
+
         with(binding) {
 
             attachmentsRecyclerView.apply {
@@ -191,29 +196,26 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
 
     private fun updateAttachmentsToolbar(itemsSize: Int) {
         binding.toolbar.setToolbarNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        if (itemsSize == 0) {
-            val titleRes = if (isListCheckOn) {
-                R.string.Vault_Select_Title
-            } else {
-                when (filterType) {
-                    FilterType.ALL -> R.string.Vault_AllFiles_Title
-                    FilterType.ALL_WITHOUT_DIRECTORY -> R.string.Vault_Files_Title
-                    FilterType.PHOTO -> R.string.Vault_Images_Title
-                    FilterType.VIDEO -> R.string.Vault_Videos_Title
-                    FilterType.AUDIO -> R.string.Vault_Audios_Title
-                    FilterType.DOCUMENTS -> R.string.Vault_Documents_Title
-                    FilterType.OTHERS -> R.string.Vault_Others_Title
-                    FilterType.PHOTO_VIDEO -> R.string.Vault_PhotosAndVideos_Title
-                    FilterType.AUDIO_VIDEO -> R.string.Vault_AllFiles_Title
-                    FilterType.PDF -> R.string.Vault_Documents_Title
-                }
+        val titleRes = if (isListCheckOn) {
+            R.string.Vault_Select_Title
+        } else {
+            when (filterType) {
+                FilterType.ALL -> R.string.Vault_AllFiles_Title
+                FilterType.ALL_WITHOUT_DIRECTORY -> R.string.Vault_Files_Title
+                FilterType.PHOTO -> R.string.Vault_Images_Title
+                FilterType.VIDEO -> R.string.Vault_Videos_Title
+                FilterType.AUDIO -> R.string.Vault_Audios_Title
+                FilterType.DOCUMENTS -> R.string.Vault_Documents_Title
+                FilterType.OTHERS -> R.string.Vault_Others_Title
+                FilterType.PHOTO_VIDEO -> R.string.Vault_PhotosAndVideos_Title
+                FilterType.AUDIO_VIDEO -> R.string.Vault_AllFiles_Title
+                FilterType.PDF -> R.string.Vault_Documents_Title
             }
-            binding.toolbar.setStartTextTitle(getString(titleRes))
+        }
+        binding.toolbar.setStartTextTitle(getString(titleRes))
+        if (itemsSize == 0) {
             binding.toolbar.setRightIcon(-1)
         } else {
-            binding.toolbar.setStartTextTitle(
-                attachmentsAdapter.selectedMediaFiles.size.toString() + " " + getString(R.string.Vault_Items)
-            )
             binding.toolbar.setRightIcon(R.drawable.ic_check_white)
             binding.toolbar.rightIconContentDescription = R.string.action_check
         }
@@ -260,21 +262,24 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
         updateAttachmentsToolbar(selected)
         val selectable = attachmentsAdapter.selectableNonDirectoryCount()
 
-        if (selectMode == SelectMode.SELECT_ALL && selected == 0) {
-            syncSelectionChromeLeavingSelectModeFully()
-            return
-        }
         if (selectable == 0) return
 
-        if (selectMode == SelectMode.SELECT_ALL && selected < selectable) {
+        if (selectMode == SelectMode.SELECT_ALL && selected == 0) {
+            // Stay in selection mode so taps keep toggling checkboxes (picker must not open files).
             selectMode = SelectMode.ONE_SELECTION
             bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
             return
         }
 
-        if (isListCheckOn && selectMode != SelectMode.SELECT_ALL && selected == selectable) {
+        if (selected == selectable) {
             selectMode = SelectMode.SELECT_ALL
             bindSelectAllCheckbox(SelectAllCheckboxVisual.ALL)
+            return
+        }
+
+        if (selectMode == SelectMode.SELECT_ALL && selected < selectable) {
+            selectMode = SelectMode.ONE_SELECTION
+            bindSelectAllCheckbox(SelectAllCheckboxVisual.PARTIAL)
         }
     }
 
@@ -287,14 +292,6 @@ class AttachmentsActivitySelector : BaseActivity(), ISelectorVaultHandler, View.
             SelectAllCheckboxVisual.ALL -> R.drawable.ic_check_box_on
         }
         binding.checkBoxList.setCheckDrawable(icon, this)
-    }
-
-    private fun syncSelectionChromeLeavingSelectModeFully() {
-        selectMode = SelectMode.DESELECT_ALL
-        isListCheckOn = false
-        attachmentsAdapter.enableSelectMode(false)
-        bindSelectAllCheckbox(SelectAllCheckboxVisual.IDLE)
-        updateAttachmentsToolbar(attachmentsAdapter.selectedMediaFiles.size)
     }
 
     private fun handleSelectMode() {
