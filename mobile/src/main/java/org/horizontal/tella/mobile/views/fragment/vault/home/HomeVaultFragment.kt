@@ -316,6 +316,8 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         vaultRecyclerView.apply {
             adapter = vaultAdapter
             layoutManager = LinearLayoutManager(baseActivity)
+            // Avoid insert/remove/move animations when home sections change (e.g. settings toggles).
+            itemAnimator = null
         }
         //Uncomment to add improvement section
         vaultAdapter.addAnalyticsBanner()
@@ -634,19 +636,9 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
     }
 
     private fun maybeCountServers() {
-        clearServerCount()
+        // Refresh server counts in place; clearing connections first caused a visible
+        // flash when returning from settings (remove then re-add with animation).
         homeVaultViewModel.countAllServers()
-    }
-
-    private fun clearServerCount() {
-        googleDriveServersCounted = false
-        dropBoxServersCounted = false
-        nextCloudServersCounted = false
-        reportServersCounted = false
-        collectServersCounted = false
-        uwaziServersCounted = false
-        serversList?.clear()
-        vaultAdapter.removeConnectionServers()
     }
 
     private fun maybeClosePanic(): Boolean {
@@ -792,7 +784,6 @@ class HomeVaultFragment : BaseFragment(), VaultClickListener {
         } else {
             vaultAdapter.removeConnectionServers()
         }
-        scrollHomeToTop()
     }
 
     private fun handleServerCountsSuccess(serverCounts: ServerCounts) {

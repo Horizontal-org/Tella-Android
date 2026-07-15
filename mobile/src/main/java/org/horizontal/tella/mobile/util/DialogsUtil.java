@@ -18,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.horizontal.tella.mobile.R;
@@ -38,9 +37,8 @@ public class DialogsUtil {
      * Per Android guidance (see AOSP SecureDialogActivity / issuetracker 143778149) the flag
      * must be set before the dialog is shown, so callers must secure() before show().
      */
-    private static <T extends Dialog> T secure(Context context, T dialog) {
+    private static <T extends Dialog> void secure(Context context, T dialog) {
         ScreenSecurity.applyToDialog(dialog, context);
-        return dialog;
     }
 
     /**
