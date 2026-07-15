@@ -49,11 +49,11 @@
     <TextView
         android:id="@+id/titleDescTextView"
         style="@style/Tella_Main_White_Text.Meduim"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
+        android:paddingHorizontal="@dimen/activity_horizontal_margin"
         android:text="@string/device_connection_instructions"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/connectCode"
