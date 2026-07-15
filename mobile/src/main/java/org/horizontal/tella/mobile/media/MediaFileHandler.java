@@ -110,7 +110,11 @@ public class MediaFileHandler {
     }
 
     public static void startSelectMediaActivity(Activity activity, @NonNull String type, @Nullable String[] extraMimeType, int requestCode) {
-        launchFilePicker(activity, type, extraMimeType, true, requestCode, false);
+        startSelectMediaActivity(activity, type, extraMimeType, requestCode, true);
+    }
+
+    public static void startSelectMediaActivity(Activity activity, @NonNull String type, @Nullable String[] extraMimeType, int requestCode, boolean allowMultiple) {
+        launchFilePicker(activity, type, extraMimeType, allowMultiple, requestCode, false);
     }
 
     private static void launchFilePicker(

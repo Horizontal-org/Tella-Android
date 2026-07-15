@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 import org.horizontal.tella.mobile.MyApplication;
 import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.media.MediaFileHandler;
@@ -131,9 +132,12 @@ public class VideoWidget extends MediaFileBinaryWidget {
     }
 
     public void importVideo() {
-        Activity activity = (Activity) getContext();
-        FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
-        MediaFileHandler.startSelectMediaActivity(activity, "video/mp4", null, C.IMPORT_VIDEO);
+        BaseActivity activity = (BaseActivity) getContext();
+        activity.maybeChangeTemporaryTimeout(() -> {
+            FormController.getActive().setIndexWaitingForData(formEntryPrompt.getIndex());
+            MediaFileHandler.startSelectMediaActivity(activity, "video/mp4", null, C.IMPORT_VIDEO, false);
+            return Unit.INSTANCE;
+        });
     }
 
     private void showPreview() {

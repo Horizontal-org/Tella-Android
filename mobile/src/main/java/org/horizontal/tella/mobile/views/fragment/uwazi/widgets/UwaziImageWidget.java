@@ -180,7 +180,7 @@ public class UwaziImageWidget extends UwaziFileBinaryWidget {
         BaseActivity activity = (BaseActivity) getContext();
         activity.maybeChangeTemporaryTimeout(() -> {
             waitingForAData = true;
-            MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE);
+            MediaFileHandler.startSelectMediaActivity(activity, "image/*", null, C.IMPORT_IMAGE, false);
             return Unit.INSTANCE;
         });
     }

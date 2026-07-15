@@ -139,6 +139,7 @@ class RecipientVerificationFragment :
             withContext(Dispatchers.IO) {
                 peerServerStarterManager.stopServer()
             }
+            viewModel.clearManualConnectionWaitingOnDiscard()
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
     }

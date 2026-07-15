@@ -4,6 +4,9 @@ import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.domain.entity.collect.CollectForm
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.ID_CONNECTIONS
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.ID_FAVORITE_FORMS
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.ID_FAVORITE_TEMPLATES
+import org.horizontal.tella.mobile.views.fragment.vault.adapters.ID_RECENT_FILES
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.connections.ServerDataItem
 
 sealed class DataItem {
@@ -14,15 +17,15 @@ sealed class DataItem {
     }
 
     data class RecentFiles(val vaultFiles: List<VaultFile?>) : DataItem() {
-        override val id = vaultFiles[0]?.id.toString()
+        override val id = ID_RECENT_FILES
     }
 
     data class FavoriteForms(val forms: List<CollectForm>) : DataItem() {
-        override val id: String = forms[0].id.toString()
+        override val id: String = ID_FAVORITE_FORMS
     }
 
     data class FavoriteTemplates(val templates: List<UwaziTemplate>) : DataItem() {
-        override val id: String = templates[0].id.toString()
+        override val id: String = ID_FAVORITE_TEMPLATES
     }
 
     data class FileActions(val idActions: String) : DataItem() {

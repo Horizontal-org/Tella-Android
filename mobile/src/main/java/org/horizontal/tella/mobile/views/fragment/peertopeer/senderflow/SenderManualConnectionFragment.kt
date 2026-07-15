@@ -117,8 +117,13 @@ class SenderManualConnectionFragment :
 
     private fun isInputValid(): Boolean = with(binding) {
         ipAddressMask.isComplete &&
-                pin.text?.isNotBlank() == true &&
+                isPinValid() &&
                 port.text?.isNotBlank() == true
+    }
+
+    private fun isPinValid(): Boolean {
+        val pin = binding.pin.text?.toString().orEmpty()
+        return pin.length == 6 && pin.all { it.isDigit() }
     }
 
     private fun updateNextButtonState() = with(binding) {

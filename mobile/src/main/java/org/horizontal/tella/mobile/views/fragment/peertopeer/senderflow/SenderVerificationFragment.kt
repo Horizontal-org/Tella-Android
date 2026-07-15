@@ -80,10 +80,13 @@ class SenderVerificationFragment :
             viewModel.onUserTappedConfirmAndConnect()
         }
 
-        binding.discardBtn.setOnClickListener {
-            viewModel.clearManualConnectionWaitingOnDiscard()
-            navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
-        }
+        binding.toolbar.backClickListener = { discardAndStartOver() }
+        binding.discardBtn.setOnClickListener { discardAndStartOver() }
+    }
+
+    private fun discardAndStartOver() {
+        viewModel.clearManualConnectionWaitingOnDiscard()
+        navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
     }
 
     private fun initObservers() {

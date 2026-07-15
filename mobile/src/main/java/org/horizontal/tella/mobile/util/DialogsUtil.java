@@ -1,6 +1,7 @@
 package org.horizontal.tella.mobile.util;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.horizontal.tella.mobile.R;
@@ -28,9 +28,29 @@ import org.horizontal.tella.mobile.domain.entity.collect.CollectFormInstanceStat
 import org.horizontal.tella.mobile.domain.entity.ServerType;
 
 import org.horizontal.tella.mobile.views.custom.CameraPreviewAnonymousButton;
+import org.hzontal.shared_ui.utils.ScreenSecurity;
 
 
 public class DialogsUtil {
+
+    /**
+     * Per Android guidance (see AOSP SecureDialogActivity / issuetracker 143778149) the flag
+     * must be set before the dialog is shown, so callers must secure() before show().
+     */
+    private static <T extends Dialog> void secure(Context context, T dialog) {
+        ScreenSecurity.applyToDialog(dialog, context);
+    }
+
+    /**
+     * Builds the dialog, applies screen security to its window, then shows it. This guarantees
+     * FLAG_SECURE is set before the window surface is created.
+     */
+    private static AlertDialog showSecure(Context context, AlertDialog.Builder builder) {
+        AlertDialog dialog = builder.create();
+        secure(context, dialog);
+        dialog.show();
+        return dialog;
+    }
 
     static void showMessageOKCancel(Context context, String message, DialogInterface.OnClickListener okListener) {
         AlertDialog.Builder builder =
@@ -39,30 +59,28 @@ public class DialogsUtil {
         builder.setPositiveButton(R.string.action_ok, okListener);
         builder.setNegativeButton(R.string.action_cancel, null);
         builder.setCancelable(true);
-        builder.show();
+        showSecure(context, builder);
     }
 
     public static AlertDialog showMessageOKCancelWithTitle(Context context, String message, String title, String positiveButton, String negativeButton,
                                                            DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
-        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
+        return showSecure(context, new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(message)
                 .setTitle(title)
                 .setPositiveButton(positiveButton, okListener)
                 .setNegativeButton(negativeButton, cancelListener)
-                .setCancelable(true)
-                .show();
+                .setCancelable(true));
     }
 
     public static AlertDialog showThreeOptionDialogWithTitle(Context context, String message, String title, String positiveButton, String neutralButton, String negativeButton,
                                                              DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener neutralListener, DialogInterface.OnClickListener cancelListener) {
-        return new AlertDialog.Builder(context)
+        return showSecure(context, new AlertDialog.Builder(context)
                 .setMessage(message)
                 .setTitle(title)
                 .setPositiveButton(positiveButton, okListener)
                 .setNeutralButton(neutralButton, neutralListener)
                 .setNegativeButton(negativeButton, cancelListener)
-                .setCancelable(false)
-                .show();
+                .setCancelable(false));
     }
 
     public static AlertDialog showDialog(
@@ -72,12 +90,11 @@ public class DialogsUtil {
             String negativeButton,
             DialogInterface.OnClickListener okListener,
             DialogInterface.OnClickListener cancelListener) {
-        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
+        return showSecure(context, new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(message)
                 .setPositiveButton(positiveButton, okListener)
                 .setNegativeButton(negativeButton, cancelListener)
-                .setCancelable(true)
-                .show();
+                .setCancelable(true));
     }
 
     public static ProgressDialog showLightProgressDialog(Context context, String text) {
@@ -85,6 +102,7 @@ public class DialogsUtil {
         dialog.setIndeterminate(true);
         dialog.setMessage(text);
         dialog.setCancelable(true);
+        secure(context, dialog);
         dialog.show();
         return dialog;
     }
@@ -94,6 +112,7 @@ public class DialogsUtil {
         dialog.setIndeterminate(true);
         dialog.setMessage(text);
         dialog.setCancelable(true);
+        secure(context, dialog);
         dialog.show();
         return dialog;
     }
@@ -118,6 +137,7 @@ public class DialogsUtil {
                 .setCancelable(true);
 
         final AlertDialog alertDialog = builder.create();
+        secure(context, alertDialog);
         alertDialog.show();
 
         return alertDialog;
@@ -150,6 +170,7 @@ public class DialogsUtil {
                 .setCancelable(true);
 
         final AlertDialog alertDialog = builder.create();
+        secure(context, alertDialog);
         alertDialog.show();
 
         return alertDialog;
@@ -201,6 +222,7 @@ public class DialogsUtil {
 
 
         final AlertDialog alertDialog = builder.create();
+        secure(context, alertDialog);
         alertDialog.show();
 
         return alertDialog;
@@ -222,6 +244,7 @@ public class DialogsUtil {
 
         final AlertDialog alertDialog = builder.create();
         alertDialog.setOnShowListener(arg0 -> alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(context.getResources().getColor(R.color.dark_purple)));
+        secure(context, alertDialog);
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.purple_background));
 
@@ -243,6 +266,7 @@ public class DialogsUtil {
         final AlertDialog alertDialog = builder.create();
 
         alertDialog.setOnShowListener(arg0 -> alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(context.getResources().getColor(R.color.dark_purple)));
+        secure(context, alertDialog);
         alertDialog.show();
         alertDialog.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.purple_background));
 
@@ -261,25 +285,23 @@ public class DialogsUtil {
             msgResId = R.string.collect_dialog_text_delete_draft_form;
         }
 
-        return new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
+        return showSecure(context, new AlertDialog.Builder(context, R.style.PurpleBackgroundLightLettersDialogTheme)
                 .setMessage(msgResId)
                 .setPositiveButton(R.string.action_delete, listener)
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
-                .setCancelable(true)
-                .show();
+                .setCancelable(true));
     }
 
 
     public static AlertDialog showExportMediaDialog(@NonNull Context context, @NonNull DialogInterface.OnClickListener listener) {
-        return new AlertDialog.Builder(context)
+        return showSecure(context, new AlertDialog.Builder(context)
                 .setTitle(R.string.gallery_save_to_device_dialog_title)
                 .setMessage(R.string.gallery_save_to_device_dialog_expl)
                 .setPositiveButton(R.string.action_save, listener)
                 .setNegativeButton(R.string.action_cancel, (dialog, which) -> {
                 })
-                .setCancelable(true)
-                .show();
+                .setCancelable(true));
     }
 
     public interface autoUploadServerConsumer {
@@ -324,6 +346,7 @@ public class DialogsUtil {
             radioGroup.setOnCheckedChangeListener((group, checkedId) -> errorMessage.setVisibility(View.GONE));
         });
 
+        secure(context, alertDialog);
         alertDialog.show();
 
         return alertDialog;
@@ -367,6 +390,7 @@ public class DialogsUtil {
             radioGroup.setOnCheckedChangeListener((group, checkedId) -> errorMessage.setVisibility(View.GONE));
         });
 
+        secure(context, alertDialog);
         alertDialog.show();
 
         return alertDialog;

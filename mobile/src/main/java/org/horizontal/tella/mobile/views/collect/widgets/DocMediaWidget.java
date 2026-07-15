@@ -211,7 +211,8 @@ public class DocMediaWidget extends MediaFileBinaryWidget {
                     activity,
                     "*/*",  // No specific type, use MIME type filter
                     mimeTypes,
-                    C.IMPORT_FILE
+                    C.IMPORT_FILE,
+                    false
             );
 
             return Unit.INSTANCE;

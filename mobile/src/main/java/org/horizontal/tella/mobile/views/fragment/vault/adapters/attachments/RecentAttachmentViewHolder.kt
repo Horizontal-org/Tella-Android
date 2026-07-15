@@ -11,7 +11,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.hzontal.tella_vault.VaultFile
 import com.hzontal.utils.MediaFile.isAudioFileType
 import com.hzontal.utils.MediaFile.isImageFileType
-import com.hzontal.utils.MediaFile.isTextFileType
 import com.hzontal.utils.MediaFile.isVideoFileType
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.views.fragment.vault.adapters.VaultClickListener
@@ -37,8 +36,14 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
     }
 
     private fun icPreview(vaultFile: VaultFile) {
-        if (vaultFile.mimeType == null) return
         when {
+            vaultFile.mimeType == null -> {
+                if (vaultFile.type == VaultFile.Type.DIRECTORY) {
+                    icAttachmentImg.setBackgroundResource(R.drawable.ic_folder_24px)
+                } else {
+                    showDocumentInfo(vaultFile)
+                }
+            }
             isImageFileType(vaultFile.mimeType) -> {
                 previewImageView.loadImage(vaultFile.thumb, R.drawable.ic_gallery)
             }
@@ -49,7 +54,7 @@ class RecentAttachmentViewHolder(val view: View) : BaseViewHolder<VaultFile?>(vi
                 showVideoInfo()
                 previewImageView.loadImage(vaultFile.thumb, R.drawable.ic_video)
             }
-            isTextFileType(vaultFile.mimeType) -> {
+            else -> {
                 showDocumentInfo(vaultFile)
             }
         }
