@@ -1045,7 +1045,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Enter the recipient’s device
 
- information to find it on the network.</string>
+ information to find it on the network</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
