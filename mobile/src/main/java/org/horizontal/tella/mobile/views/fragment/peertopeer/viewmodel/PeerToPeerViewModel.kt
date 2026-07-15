@@ -213,6 +213,7 @@ class PeerToPeerViewModel @Inject constructor(
         PeerEventManager.resetReceiverHashConfirmation()
         manualConnectionPinInvalid = false
         pinResetRequired = false
+        _waitingForOtherSide.postValue(false)
     }
 
     fun clearStaleManualConnectionWaitingState() {
