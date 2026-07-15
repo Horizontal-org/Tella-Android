@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">သန့ထံး</string>
+    <string name="Home_BottomNav_Rec">တၢ်ဖှီၣ်တၢ်ကလုၢ်</string>
+    <string name="Home_BottomNav_Camera">ခဲမရၢ်</string>
+    <string name="Home_BottomNav_Forms">လံာ်ကွီၣ်ဒိတဖၣ်</string>
+    <string name="Home_BottomNav_Reports">တၢ်ပာ်ဖျါတဖၣ်</string>
+    <string name="Rename_name_Hint">မံၤ</string>
+    <string name="action_go_to_homescreen">ကလဲၤဆူ စခရံၣ်န်အမဲာ်သၣ်ဂံၢ်ထံးန့ၣ်လီၤ.</string>
+    <string name="action_cancel">ဆိကတီၢ်</string>
+    <string name="action_show_password">ပာ်ဖျါထီၣ် လံာ်ဖျၢၣ်ခူသူၣ်</string>
+    <string name="action_hide_password">ပာ်ခူသူၣ် လံာ်ဖျၢၣ်ခူသူၣ်</string>
+    <string name="action_show_pin">ပာ်ဖျါထီၣ် PIN နီၣ်ဂံၢ်</string>
+    <string name="action_hide_pin">ပာ်ခူသူၣ် PIN နီၣ်ဂံၢ်</string>
+    <string name="action_delete">ထူးသံကွံာ်</string>
+    <string name="action_go_back">က့ၤကဒါက့ၤဆူလီၢ်ခံ</string>
+</resources>

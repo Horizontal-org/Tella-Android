@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Вийти з форми?</string>
   <string name="verification_prompt_dialog_title">Увімкнути GPS?</string>
   <string name="collect_tab.title_blank">Порожні</string>
-  <string name="action_cancel">Скасувати</string>
+  
   <string name="settings_menu.item_contact">Зв’язатися з нами</string>
   <string name="collect_dialog.text_download.progress">Завантаження форми</string>
   <string name="collect_toast_download.completed">Завантаження завершено</string>
-  <string name="action_delete">Видалити</string>
+  
   <string name="collect.draft_tab.title">Чернетка</string>
   <string name="collect.blank_action_download.form">Завантажити</string>
   <string name="settings_text_empty.field">Це поле не може бути порожнім.</string>
@@ -404,11 +404,11 @@
   <string name="settings.sec_confirm_camouflage_desc">Щоб знову відкрити Tella, шукайте значок програми %s серед ваших програм.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Щоб знову відкрити Tella, шукайте значок програми Калькулятор серед ваших програм. Розблокуйте Tella, ввівши свій PIN-код у Калькуляторі, а потім натиснувши «=».</string>
   <string name="settings.sec_confirm_exit_tella">Вийти з Tella</string>
-  <string name="Home_BottomNav_Home">Головна</string>
-  <string name="Home_BottomNav_Rec">Запис</string>
-  <string name="Home_BottomNav_Camera">Камера</string>
-  <string name="Home_BottomNav_Forms">Форми</string>
-  <string name="Home_BottomNav_Reports">Звіти</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Перемістити \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Створити</string>
   <string name="ServerSettings_ServerName_ToolTip">Дайте назву вашому серверу, щоб розпізнати його, якщо ви додасте більше серверів пізніше. Це може бути назва організації, назва проєкту тощо.</string>
@@ -604,7 +604,6 @@
   <string name="settings.serv_add.server.selection_dialog.description">Якщо ви не впевнені, будь ласка, запитайте у вашій організації.</string>
   <string name="Timeout_Warning_Title">Попередження</string>
   <string name="Timeout_Warning_Description">Для виконання цієї дії Tella залишатиметься розблокованою протягом 3 хвилин.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Як ви хочете налаштувати Tella?</string>
   <string name="onboard_full_setup">ПОВНЕ НАЛАШТУВАННЯ</string>
   <string name="onboard_quick_setup">ШВИДКЕ НАЛАШТУВАННЯ</string>
@@ -773,13 +772,13 @@
   <string name="yellow_theme">жовта тема</string>
   <string name="settings.sec_keep.exif_switch">Зберігати метадані при імпорті</string>
   <string name="settings.sec_keep.exif_expl">Зберігати метадані EXIF під час імпорту фото та відео в Tella. Сюди входить інформація про час створення зображення, налаштування камери, місцезнаходження та ваш пристрій.</string>
-  <string name="Rename_name_Hint">Назва</string>
-  <string name="action_go_to_homescreen">перейти на головний екран</string>
-  <string name="action_show_password">показати пароль</string>
-  <string name="action_hide_password">приховати пароль</string>
-  <string name="action_show_pin">показати PIN-код</string>
-  <string name="action_hide_pin">приховати PIN-код</string>
-  <string name="action_go_back">повернутися</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Показувати кількість спроб розблокування</string>
   <string name="Settings_unlock_screen_instructions">На екрані розблокування показувати кількість невдалих спроб, що залишилися до того, як увесь вміст Tella буде видалено</string>
   <string name="Settings_Delete_After_Failed_Unlock">Видалити після невдалого розблокування</string>
@@ -867,7 +866,6 @@
   <string name="Sensitive_Chnage_Title">⚠️ Важливі зміни у наступному випуску</string>
   <string name="Sensitive_Chnage_Description">Наступна версія Tella (реліз 15 липня 2024 року) міститиме суттєві технічні покращення. Ці зміни несуть невеликий ризик втрати деяких файлів під час оновлення.Якщо ви зберігаєте важливі файли в Tella, радимо скопіювати їх у безпечне місце за межами програми перед оновленням.Натисніть «Дізнатися більше» нижче для отримання детальної інформації про майбутні зміни та інструкцій щодо експорту всіх файлів із Tella.</string>
   <string name="Learn_More">ДІЗНАТИСЯ БІЛЬШЕ</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">Вибрано %1$d сутність</item>
     <item quantity="few">Вибрано %1$d сутності</item>
@@ -902,8 +900,6 @@
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Ви погодилися ділитися аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
   <string name="Settings_Analytics_turn_off_dialog">Ви більше не ділитиметеся аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Розблокувати</string>
   <string name="Onboard_Collect_Data">Збір інформації</string>
   <string name="Onboard_Collect_Data_Exp">Якщо ви працюєте з організацією, надсилайте форми, звіти та файли безпосередньо з Tella до вашої організації.</string>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">خانه</string>
+    <string name="Home_BottomNav_Rec">ضبط</string>
+    <string name="Home_BottomNav_Camera">دوربین</string>
+    <string name="Home_BottomNav_Forms">فرم‌ها</string>
+    <string name="Home_BottomNav_Reports">گزارش‌ها</string>
+    <string name="Rename_name_Hint">نام</string>
+    <string name="action_go_to_homescreen">برو به صفحه اصلی</string>
+    <string name="action_cancel">لغو</string>
+    <string name="action_show_password">نمایش گذرواژه</string>
+    <string name="action_hide_password">پنهان کردن گذرواژه</string>
+    <string name="action_show_pin">نمایش پین</string>
+    <string name="action_hide_pin">پنهان کردن پین</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_go_back">بازگشت</string>
+</resources>

@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Sortir du formulaire ?</string>
   <string name="verification_prompt_dialog_title">Activer le GPS ?</string>
   <string name="collect_tab.title_blank">Vierges</string>
-  <string name="action_cancel">Annuler</string>
+  
   <string name="settings_menu.item_contact">Nous contacter</string>
   <string name="collect_dialog.text_download.progress">Téléchargement du formulaire</string>
   <string name="collect_toast_download.completed">Le téléchargement est terminé</string>
-  <string name="action_delete">Supprimer</string>
+  
   <string name="collect.draft_tab.title">Brouillons</string>
   <string name="collect.blank_action_download.form">Télécharger</string>
   <string name="settings_text_empty.field">Ce champ ne peut pas être vide.</string>
@@ -401,11 +401,11 @@ en application de calculatrice</string>
   <string name="settings.sec_confirm_camouflage_desc">Pour rouvrir Tella, recherchez l\'icône de l\'application %s parmi vos applications.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Pour rouvrir Tella, recherchez l\'icône de l\'application Calculatrice parmi vos applications. Déverrouillez Tella en entrant votre code PIN dans la calculatrice suivi de \"=\".</string>
   <string name="settings.sec_confirm_exit_tella">Quitter Tella</string>
-  <string name="Home_BottomNav_Home">Accueil</string>
-  <string name="Home_BottomNav_Rec">Dictaphone</string>
-  <string name="Home_BottomNav_Camera">Appareil photo</string>
-  <string name="Home_BottomNav_Forms">Formulaires</string>
-  <string name="Home_BottomNav_Reports">Rapports</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Déplacez \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Créer</string>
   <string name="ServerSettings_ServerName_ToolTip">Donnez un nom à votre serveur pour le reconnaître si vous ajoutez d\'autres serveurs par la suite. Il peut s\'agir du nom de l\'organisation, du nom du projet, etc.</string>
@@ -590,7 +590,6 @@ en application de calculatrice</string>
   <string name="settings.serv_add.server.selection_dialog.description">Si vous n\'êtes pas sûr, veuillez demander à votre organisation.</string>
   <string name="Timeout_Warning_Title">Avertissement</string>
   <string name="Timeout_Warning_Description">Pour effectuer cette action, Tella restera déverrouillée pendant 3 minutes.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Comment souhaitez-vous mettre en place Tella ?</string>
   <string name="onboard_full_setup">CONFIGURATION COMPLÈTE</string>
   <string name="onboard_quick_setup">CONFIGURATION RAPIDE</string>
@@ -755,13 +754,13 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">thème jaune</string>
   <string name="settings.sec_keep.exif_switch">Conserver les métadonnées lors de l’importation</string>
   <string name="settings.sec_keep.exif_expl">Conservez les métadonnées EXIF lorsque vous importez des photos et des vidéos dans Tella. Ces métadonnées comprennent les données relatives à la date de création de l\'image, aux paramètres de l\'appareil photo, à la localisation et à votre appareil.</string>
-  <string name="Rename_name_Hint">Nom</string>
-  <string name="action_go_to_homescreen">Retour a l\'accueil</string>
-  <string name="action_show_password">afficher le mot de passe</string>
-  <string name="action_hide_password">cacher le mot de passe</string>
-  <string name="action_show_pin">afficher le pin</string>
-  <string name="action_hide_pin">cacher le pin</string>
-  <string name="action_go_back">Retour</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Afficher les tentatives de déverrouillage restantes</string>
   <string name="Settings_unlock_screen_instructions">Sur l’écran de déverrouillage, affichez le nombre restant de tentatives de déverrouillage infructueuses avant que tout ce qui se trouve à l’intérieur de Tella ne soit supprimé</string>
   <string name="Settings_Delete_After_Failed_Unlock">Suppression après échec du déverrouillage</string>
@@ -863,7 +862,6 @@ Si vous stockez des fichiers importants dans Tella, nous vous recommandons de le
 
 Appuyez sur le bouton \"En savoir plus\" situé ci-dessous pour avoir plus d\'informations sur les changements à venir et sur comment exporter tous les fichiers à l\'extérieur de Tella.</string>
   <string name="Learn_More">EN SAVOIR PLUS</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entité selectionnée</item>
     <item quantity="other">%1$d entités selectionnées</item>
@@ -905,8 +903,6 @@ Voulez-vous partager des données d\'utilisation avec l\'équipe de Tella ?</str
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Vous vous êtes inscrits pour partager des données d\'utilisation. Vous pouvez toujours changer ce choix dans les paramètres.</string>
   <string name="Settings_Analytics_turn_off_dialog">Vous n\'allez plus partager de données d\'utilisation. Vous pouvez toujours changer cela dans les paramètres.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Déverrouiller</string>
   <string name="Onboard_Collect_Data">Données d\'utilisation collectées</string>
   <string name="Onboard_Collect_Data_Exp">Si vous travaillez avec une organisation, envoyez des formulaires, rapports et autres fichiers directement de Tella à votre organisation.</string>

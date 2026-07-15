@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">می‌خواهید از فرم خارج شوید؟</string>
   <string name="verification_prompt_dialog_title">GPS فعال شود؟</string>
   <string name="collect_tab.title_blank">خالی</string>
-  <string name="action_cancel">لغو</string>
+  
   <string name="settings_menu.item_contact">تماس با ما</string>
   <string name="collect_dialog.text_download.progress">دانلود فرم</string>
   <string name="collect_toast_download.completed">دانلود پایان یافت</string>
-  <string name="action_delete">حذف</string>
+  
   <string name="collect.draft_tab.title">پیش‌نویس</string>
   <string name="collect.blank_action_download.form">دانلود</string>
   <string name="settings_text_empty.field">این قسمت نمی‌تواند خالی باشد.</string>
@@ -404,11 +404,11 @@
   <string name="settings.sec_confirm_camouflage_desc">برای باز کردن دوباره Tella، در بین برنامه‌ها به دنبال نماد برنامه %s بگردید.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">برای باز کردن دوباره Tella، بین برنامه‌ها به دنبال نماد برنامه «ماشین‌حساب» بگردید. برای باز کردن قفل Tella، ابتدا پین و سپس علامت «مساوی» (=) را در ماشین‌حساب وارد کنید.</string>
   <string name="settings.sec_confirm_exit_tella">خروج از Tella</string>
-  <string name="Home_BottomNav_Home">خانه</string>
-  <string name="Home_BottomNav_Rec">ضبط</string>
-  <string name="Home_BottomNav_Camera">دوربین</string>
-  <string name="Home_BottomNav_Forms">فرم‌ها</string>
-  <string name="Home_BottomNav_Reports">گزارش‌ها</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">انتقال \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">ایجاد</string>
   <string name="ServerSettings_ServerName_ToolTip">برای سرور خود نامی انتخاب کنید تا در صورت افزایش تعداد سرورها بتوانید آن را شناسایی کنید. می‌توانید نام سازمان، نام پروژه و... را به سرور بدهید.</string>
@@ -594,7 +594,6 @@ button to add a new template.</string>
   <string name="settings.serv_add.server.selection_dialog.description">اگر مطمئن نیستید، از سازمان خود بپرسید.</string>
   <string name="Timeout_Warning_Title">هشدار</string>
   <string name="Timeout_Warning_Description">برای انجام دادن این کار، قفل Tella به‌مدت 3 دقیقه باز می‌ماند.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">چگونه می‌خواهید Tella را راه‌اندازی کنید؟</string>
   <string name="onboard_full_setup">راه‌اندازی کامل</string>
   <string name="onboard_quick_setup">راه‌اندازی سریع</string>
@@ -758,13 +757,13 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">زمینه زرد</string>
   <string name="settings.sec_keep.exif_switch">حفظ اَبَرداده هنگام وارد کردن</string>
   <string name="settings.sec_keep.exif_expl">اَبَرداده‌های EXIF را هنگام وارد کردن عکس و ویدئو در Tella حفظ می‌کند. این شامل داده‌های مربوط به زمان ایجاد تصویر، تنظیمات دوربین، مکان و دستگاه می‌شود.</string>
-  <string name="Rename_name_Hint">نام</string>
-  <string name="action_go_to_homescreen">برو به صفحه اصلی</string>
-  <string name="action_show_password">نمایش گذرواژه</string>
-  <string name="action_hide_password">پنهان کردن گذرواژه</string>
-  <string name="action_show_pin">نمایش پین</string>
-  <string name="action_hide_pin">پنهان کردن پین</string>
-  <string name="action_go_back">بازگشت</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
@@ -868,7 +867,6 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
 
  Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -910,8 +908,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
   <string name="Onboard_Collect_Data">Collect data</string>
   <string name="Onboard_Collect_Data_Exp">If you work with an organization, send

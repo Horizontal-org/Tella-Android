@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Huma ka formulariyo?</string>
   <string name="verification_prompt_dialog_title">Ligara GPS?</string>
   <string name="collect_tab.title_blank">Akunanchumu</string>
-  <string name="action_cancel">Kanselara</string>
+  
   <string name="settings_menu.item_contact">Vulavula na hina</string>
   <string name="collect_dialog.text_download.progress">Kubaxara formulariyo</string>
   <string name="collect_toast_download.completed">Kubaxara kuhelile</string>
-  <string name="action_delete">Tima</string>
+  
   <string name="collect.draft_tab.title">Raxkunyo</string>
   <string name="collect.blank_action_download.form">Baxara</string>
   <string name="settings_text_empty.field">Ndhawu leyi yilava uyitsala.</string>
@@ -401,11 +401,11 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="settings.sec_confirm_camouflage_desc">Kutlhela upfula Tella, lavisisa xifaniso xa aplikativho %s xikarhi ka maaplikativho ya wena.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Kutlhela upfula Tella, lavisisa xifaniso xa aplikativho xa Kalkuladora xikarhi ka maaplikativho ya wena. Pfulela Tella hi kunghenisa PIN ya wena eka Kalkuladora ugama utsala \"=\".</string>
   <string name="settings.sec_confirm_exit_tella">Huma ka Tella</string>
-  <string name="Home_BottomNav_Home">Kaya</string>
-  <string name="Home_BottomNav_Rec">Gravhara</string>
-  <string name="Home_BottomNav_Camera">Kamera</string>
-  <string name="Home_BottomNav_Forms">Maformulariyo</string>
-  <string name="Home_BottomNav_Reports">Marelatoriyo</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Rhurhisa \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Vumba</string>
   <string name="ServerSettings_ServerName_ToolTip">Nyika servhidor ya wena vito lesvaku yi ta tiviwa loko u engetela maservhidori nkama un\'wana. kungava vito la nhlangano, vito la proxjeto, etc.</string>
@@ -589,7 +589,6 @@ yi fanele ku kunyika vuthsokothsoko bya servhidor.</string>
   <string name="settings.serv_add.server.selection_dialog.description">Loko u nga tiyiseki, vutisa nhlangano wa wena.</string>
   <string name="Timeout_Warning_Title">Xibasopiso</string>
   <string name="Timeout_Warning_Description">Ku endla xiendlo lexi, Tella yi ta tshama yi pfulekile ku ringana timinete tinharhu.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Unga rhandza ku veka Tella njhani?</string>
   <string name="onboard_full_setup">KULUNGHISA HINKWASVO</string>
   <string name="onboard_quick_setup">KULUNGHISA HI KUHATLISA</string>
@@ -753,13 +752,13 @@ XIBASOPISO: Loko yi pfaliwile, Tella yi ta tshama yi pfulekile ku fikela loko ma
   <string name="yellow_theme">muhlovo wa amarelo</string>
   <string name="settings.sec_keep.exif_switch">Tshama na wutshokoko la  wutshokoko loko u nghenisa</string>
   <string name="settings.sec_keep.exif_expl">Tshama ni EXIF metadata loko u nghenisa svifaniso ni mavhidiyo ka Tella. Lesvi svipatsa wutshokotshoko hi nkarhi lowu xifaniso xi tumbuluxiweke ha wona, kulunghisa ka khamera, ndhawu ni xitirhisiwa xa wena.</string>
-  <string name="Rename_name_Hint">Vito</string>
-  <string name="action_go_to_homescreen">yana ka tela lakusungula</string>
-  <string name="action_show_password">kombisa kodiko</string>
-  <string name="action_hide_password">fihla kodiko</string>
-  <string name="action_show_pin">kombisa PIN</string>
-  <string name="action_hide_pin">fihla PIN</string>
-  <string name="action_go_back">tlhelela ndzhaku</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Kombisa kuringisa kupfula loku kusaleke</string>
   <string name="Settings_unlock_screen_instructions">Ka tela ya kupfula, kombisa mkhambi ya kufalhara na hinkwaswo ndzeni ka Tella svi ga se timiwa</string>
   <string name="Settings_Delete_After_Failed_Unlock">Tima ndzhaku ka ku tsandzeka kupfula</string>
@@ -852,7 +851,6 @@ Loko uhlayisa maarkivho lawa manga ni wuxokoxoko la lisima ngopfu ni xihundla ka
 
 Deketa ‘Tiva Svin\'wana’ laha hansi kuva u kuma mahungu man\'wana hi ku cinca loku ku taka ni nkongomiso wa ndlela ya kuhumesa maarkivho hinkwawo ka Tella.</string>
   <string name="Learn_More">TIVA SVIN\'WANA</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -892,8 +890,6 @@ Deketa ‘Tiva Svin\'wana’ laha hansi kuva u kuma mahungu man\'wana hi ku cinc
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Unghene kuva u partilhara wuxopaxopi. Nkama wini na wini unga ha cinca lesvi ka Madefininsawu.</string>
   <string name="Settings_Analytics_turn_off_dialog">A wu nge he partilhari a wuxopaxopi. Nkama wini na wini unga ha cinca lesvi ka Madefininsawu.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Pfula</string>
   <string name="Onboard_Collect_Data">Hlengeleta rungula</string>
   <string name="Onboard_Collect_Data_Exp">Loko u tirha ni nhlengeletanu, rhumela maformulariyo, marelatoriyo, ni maarkivho hi ku kongoma ku suka ka Tella ku ya ka nhlengeletanu ya wena.</string>

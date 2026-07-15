@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Página inicial</string>
+    <string name="Home_BottomNav_Rec">Gravar</string>
+    <string name="Home_BottomNav_Camera">Câmera.</string>
+    <string name="Home_BottomNav_Forms">Formulários</string>
+    <string name="Home_BottomNav_Reports">Relatórios</string>
+    <string name="Rename_name_Hint">Nome</string>
+    <string name="action_go_to_homescreen">ir para o ecrã inicial</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_show_password">mostrar a palavra-passe</string>
+    <string name="action_hide_password">ocultar a palavra-passe</string>
+    <string name="action_show_pin">mostrar o pin</string>
+    <string name="action_hide_pin">ocultar o pin</string>
+    <string name="action_delete">Apagar</string>
+    <string name="action_go_back">voltar</string>
+</resources>

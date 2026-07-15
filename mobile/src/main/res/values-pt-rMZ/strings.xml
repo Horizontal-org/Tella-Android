@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Sair do formulário?</string>
   <string name="verification_prompt_dialog_title">Activar o GPS?</string>
   <string name="collect_tab.title_blank">Vazio</string>
-  <string name="action_cancel">Cancelar</string>
+  
   <string name="settings_menu.item_contact">Contacte-nos</string>
   <string name="collect_dialog.text_download.progress">Descarregando o formulário</string>
   <string name="collect_toast_download.completed">Descarregamento concluído</string>
-  <string name="action_delete">Apagar</string>
+  
   <string name="collect.draft_tab.title">Rascunho</string>
   <string name="collect.blank_action_download.form">Baixar</string>
   <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
@@ -402,11 +402,11 @@ se conectar a um servidor.</string>
   <string name="settings.sec_confirm_camouflage_desc">Para reabrir o Tella, procure o ícone do aplicativo %s entre os seus aplicativos.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Para reabrir o Tella, procure o ícone do aplicativo da Calculadora entre os seus aplicativos. Desbloqueie o Tella introduzindo o seu PIN na Calculadora seguido de “=”.</string>
   <string name="settings.sec_confirm_exit_tella">Sair do Tella</string>
-  <string name="Home_BottomNav_Home">Página inicial</string>
-  <string name="Home_BottomNav_Rec">Gravar</string>
-  <string name="Home_BottomNav_Camera">Câmera.</string>
-  <string name="Home_BottomNav_Forms">Formulários</string>
-  <string name="Home_BottomNav_Reports">Relatórios</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Mover “%s”</string>
   <string name="Vault_CreateFolder_SheetAction">Criar</string>
   <string name="ServerSettings_ServerName_ToolTip">Atribua um nome ao seu servidor para o reconhecer se adicionar mais servidores mais tarde. Pode ser o nome da organização, o nome do projecto, etc.</string>
@@ -591,7 +591,6 @@ se conectar a um servidor.</string>
  organização.</string>
   <string name="Timeout_Warning_Title">Aviso</string>
   <string name="Timeout_Warning_Description">Para realizar esta acção, o Tella permanecerá desbloqueado durante 3 minutos.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Como gostaria de configurar o Tella?</string>
   <string name="onboard_full_setup">CONFIGURAÇÃO COMPLETA</string>
   <string name="onboard_quick_setup">CONFIGURAÇÃO RÁPIDA</string>
@@ -755,13 +754,13 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
   <string name="yellow_theme">fundo amarelo</string>
   <string name="settings.sec_keep.exif_switch">Preservar os metadados ao importar.</string>
   <string name="settings.sec_keep.exif_expl">Mantenha os metadados EXIF ao importar fotos e vídeos para o Tella. Isto inclui dados sobre quando a imagem foi criada, definições da câmara, localização e o seu dispositivo.</string>
-  <string name="Rename_name_Hint">Nome</string>
-  <string name="action_go_to_homescreen">ir para o ecrã inicial</string>
-  <string name="action_show_password">mostrar a palavra-passe</string>
-  <string name="action_hide_password">ocultar a palavra-passe</string>
-  <string name="action_show_pin">mostrar o pin</string>
-  <string name="action_hide_pin">ocultar o pin</string>
-  <string name="action_go_back">voltar</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Mostrar as tentativas de desbloqueio remanescentes.</string>
   <string name="Settings_unlock_screen_instructions">No ecrã de desbloqueio, mostrar o número remanescente de tentativas de desbloqueio falhadas antes de tudo o que está no Tella ser apagado.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Apagar após desbloqueio falhado</string>
@@ -796,7 +795,6 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
 </string>
   <string name="incorrect_pin">Pin incorrecto.</string>
   <string name="incorrect_password">Palavra-passe incorrecta.
-
 
 </string>
   <string name="attempts_remaining_singular">Tem mais 1 tentativa até que
@@ -861,7 +859,6 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
 
  Toque em ‘Saiba mais’ abaixo para obter mais informações sobre as próximas alterações e orientações sobre como exportar todos os ficheiros do Tella.</string>
   <string name="Learn_More">SAIBA MAIS</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -904,8 +901,6 @@ Gostaria de partilhar dados com a equipa do Tella?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> Inscreveu-se para partilhar dados analíticos. Pode sempre alterar isto nas Definições.</string>
   <string name="Settings_Analytics_turn_off_dialog">Deixará de partilhar os dados analíticos. Pode sempre alterar isto nas Definições.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Desbloquear</string>
   <string name="Onboard_Collect_Data">Recolha de dados</string>
   <string name="Onboard_Collect_Data_Exp">Se trabalha com uma organização, envie formulários, relatórios e arquivos directamente do Tella para a sua organização.</string>

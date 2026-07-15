@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Nhumba</string>
+    <string name="Home_BottomNav_Camera">Camera lo vhissa pikija</string>
+    <string name="Home_BottomNav_Forms">Chiemo</string>
+    <string name="Home_BottomNav_Reports">Chipanguidjiro</string>
+    <string name="Home_BottomNav_Uwazi">Panovhigwa mashoko nokumagwarira</string>
+    <string name="Rename_name_Hint">Zina</string>
+    <string name="action_go_to_homescreen">Enda pa Tella lo kuthanga</string>
+    <string name="action_cancel">Kuvhala</string>
+    <string name="action_show_password">Kukhombidja numba jo pass</string>
+    <string name="action_hide_password">Vhiga numba jo pass</string>
+    <string name="action_show_pin">Kukhombidja pass</string>
+    <string name="action_hide_pin">Vhiga pass</string>
+    <string name="action_delete">Kulassa/Bvisa</string>
+    <string name="action_go_back">Hwirira</string>
+</resources>
