@@ -1,5 +1,6 @@
 package org.hzontal.shared_ui.utils
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.Window
@@ -35,5 +36,15 @@ object ScreenSecurity {
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
+    }
+
+    /**
+     * Applies the screen-security flag to a [Dialog]'s own window. Dialogs (including bottom
+     * sheets and alert dialogs) live in a window separate from the hosting activity, so the
+     * activity's FLAG_SECURE does not propagate to them and must be set explicitly.
+     */
+    @JvmStatic
+    fun applyToDialog(dialog: Dialog, context: Context) {
+        dialog.window?.let { applyToWindow(it, context) }
     }
 }

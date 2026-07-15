@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.hzontal.tella_locking_ui.IS_CAMOUFLAGE
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
@@ -31,9 +34,33 @@ open class BaseActivity : AppCompatActivity() {
     protected val registry: UnlockRegistry by lazy { TellaKeysUI.getUnlockRegistry() }
 
 
+    private val dialogScreenSecurityCallbacks =
+        object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fm: FragmentManager,
+                f: Fragment,
+                v: View,
+                savedInstanceState: Bundle?
+            ) {
+                applyScreenSecurityIfDialog(f)
+            }
+
+            override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
+                applyScreenSecurityIfDialog(f)
+            }
+        }
+
+    private fun applyScreenSecurityIfDialog(fragment: Fragment) {
+        (fragment as? DialogFragment)?.dialog?.let {
+            ScreenSecurity.applyToDialog(it, this)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("** %s: %s **", javaClass, "onCreate()")
         super.onCreate(savedInstanceState)
+        // Dialogs/bottom sheets live in their own windows; apply screen security to each.
+        supportFragmentManager.registerFragmentLifecycleCallbacks(dialogScreenSecurityCallbacks, true)
         WindowCompat.enableEdgeToEdge(window)
         overridePendingTransition(R.anim.`in`, R.anim.out)
     }

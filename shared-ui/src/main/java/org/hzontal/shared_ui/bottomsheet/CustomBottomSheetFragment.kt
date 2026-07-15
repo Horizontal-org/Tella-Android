@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
 import org.hzontal.shared_ui.R
+import org.hzontal.shared_ui.utils.ScreenSecurity
 import java.util.*
 
 open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
@@ -259,6 +260,9 @@ open class CustomBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
 
+        // The bottom sheet lives in its own window, so the activity's FLAG_SECURE does not
+        // apply to it. Set screen security explicitly on this dialog's window.
+        ScreenSecurity.applyToDialog(dialog, requireContext())
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         dialog.setOnShowListener {
             lifecycleScope.launch {
