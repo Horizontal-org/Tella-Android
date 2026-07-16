@@ -32,6 +32,7 @@ class WaitingReceiverFragment :
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         observeIncomingPrepareRequest()
         observeReceiverRejection()

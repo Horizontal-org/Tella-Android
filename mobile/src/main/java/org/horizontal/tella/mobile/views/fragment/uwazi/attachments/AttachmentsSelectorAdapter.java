@@ -113,6 +113,8 @@ public class AttachmentsSelectorAdapter extends RecyclerView.Adapter<Attachments
         } else {
             if (VaultFile.Type.fromValue(vaultFile.type.getValue()) == VaultFile.Type.DIRECTORY) {
                 holder.showFolderInfo();
+            } else {
+                holder.showDocumentInfo();
             }
         }
 

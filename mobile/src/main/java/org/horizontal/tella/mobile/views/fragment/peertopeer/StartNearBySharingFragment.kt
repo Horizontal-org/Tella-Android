@@ -105,10 +105,11 @@ class StartNearBySharingFragment : BaseBindingFragment<StartNearBySharingFragmen
     }
 
     private fun navigateToNextStep() {
+        viewModel.resetConnectionState()
         if (viewModel.peerToPeerParticipant == PeerToPeerParticipant.RECIPIENT) {
-            navManager().navigateFromStartNearBySharingFragmentToQrCodeScreen()
+            navManager().navigateFromStartNearBySharingFragmentToScanSenderQrScreen()
         } else {
-            navManager().navigateFromStartNearBySharingFragmentToScanQrCodeScreen()
+            navManager().navigateFromStartNearBySharingFragmentToSenderShowQrScreen()
         }
     }
 }

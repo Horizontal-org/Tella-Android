@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">ماڵەوە</string>
+    <string name="Home_BottomNav_Rec">تۆمارکردن</string>
+    <string name="Home_BottomNav_Camera">کامێرا</string>
+    <string name="Home_BottomNav_Forms">فۆرمەکان</string>
+    <string name="Home_BottomNav_Reports">ڕاپۆرتەکان</string>
+    <string name="Home_BottomNav_Uwazi">ئووازی</string>
+    <string name="Rename_name_Hint">ناو</string>
+    <string name="action_go_to_homescreen">بڕۆ بۆ شاشەی سەرەکی</string>
+    <string name="action_cancel">ڕەتکردنەوە</string>
+    <string name="action_show_password">وشەی نهێنی پیشان بدە</string>
+    <string name="action_hide_password">شاردنەوەی وشەی نهێنی</string>
+    <string name="action_show_pin">pin پیشاندان بە</string>
+    <string name="action_hide_pin">pin بشارەوە</string>
+    <string name="action_delete">سڕینەوە</string>
+    <string name="action_go_back">بگەڕێوە دواوە</string>
+</resources>

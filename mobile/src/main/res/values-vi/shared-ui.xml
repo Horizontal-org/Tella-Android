@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Trang chủ</string>
+    <string name="Home_BottomNav_Camera">Máy ảnh</string>
+    <string name="Home_BottomNav_Forms">Các hình thức</string>
+    <string name="Home_BottomNav_Reports">Báo cáo</string>
+    <string name="Rename_name_Hint">Tên</string>
+    <string name="action_go_to_homescreen">Đi đến màn hình chính</string>
+    <string name="action_cancel">Hủy bỏ</string>
+    <string name="action_show_password">hiện mật khẩu</string>
+    <string name="action_hide_password">ẩn mật khẩu</string>
+    <string name="action_show_pin">hiện mã pin</string>
+    <string name="action_hide_pin">giấu mã pin</string>
+    <string name="action_delete">Xóa</string>
+    <string name="action_go_back">quay lại</string>
+</resources>

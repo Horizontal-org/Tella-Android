@@ -622,7 +622,17 @@ object BottomSheetUtils {
             override fun onBind(holder: GenericSheetHolder) {
                 with(holder) {
                     title.text = titleText
-                    description.text = descriptionText
+                    val descriptionParts = descriptionText?.split("\n\n", limit = 2).orEmpty()
+                    description.text = descriptionParts.getOrNull(0)?.trim()
+                    secondaryDescription?.let { secondary ->
+                        val secondaryText = descriptionParts.getOrNull(1)?.trim()
+                        if (secondaryText.isNullOrEmpty()) {
+                            secondary.visibility = View.GONE
+                        } else {
+                            secondary.text = secondaryText
+                            secondary.visibility = View.VISIBLE
+                        }
+                    }
                     actionButtonLabel?.let {
                         actionButton.text = it
                     }
@@ -747,6 +757,8 @@ object BottomSheetUtils {
         customSheetFragment.launch()
     }
 
+    @JvmStatic
+    @JvmOverloads
     fun showProgressImportSheet(
         fragmentManager: FragmentManager,
         titleText: String?,
@@ -755,32 +767,50 @@ object BottomSheetUtils {
         progressStatus: MutableLiveData<Int>,
         cancelText: String,
         lifecycleOwner: LifecycleOwner,
-        onCancelImport: (() -> Unit)
-
+        secondaryDescriptionText: String? = null,
+        indeterminateOnly: Boolean = false,
+        onCancelImport: (() -> Unit),
     ) {
         val customSheetFragment =
             CustomBottomSheetFragment.with(fragmentManager).page(R.layout.layout_progess_sheet)
-                .cancellable(true).statusBarColor(R.color.space_cadet)
+                .cancellable(true)
+                .apply {
+                    if (indeterminateOnly) showOnTop()
+                    else statusBarColor(R.color.space_cadet)
+                }
         customSheetFragment.holder(DownloadStatustHolder(), object : Binder<DownloadStatustHolder> {
             @SuppressLint("SetTextI18n")
             override fun onBind(holder: DownloadStatustHolder) {
                 with(holder) {
-                    progressStatus.observe(lifecycleOwner) { status ->
-                        subtitle.text = "$status/$totalProgress $progressNumberText"
-                        val statusPercent = status * 100 / totalProgress
-                        circularProgress.setProgressPercent(statusPercent, true)
-                        linearProgress.setProgressPercent(statusPercent, true)
-                        if ((status == totalProgress) && (customSheetFragment.isAdded)) {
-                            customSheetFragment.dismiss()
-                        }
-                    }
                     title.text = titleText
                     cancelTextView.text = cancelText
                     cancelTextView.setOnClickListener {
                         onCancelImport.invoke()
                         customSheetFragment.dismiss()
                     }
-
+                    if (indeterminateOnly) {
+                        subtitle.text = progressNumberText
+                        circularProgress.isIndeterminate = true
+                        linearProgress.visibility = View.GONE
+                        secondaryDescription?.let { secondary ->
+                            if (secondaryDescriptionText.isNullOrEmpty()) {
+                                secondary.visibility = View.GONE
+                            } else {
+                                secondary.text = secondaryDescriptionText
+                                secondary.visibility = View.VISIBLE
+                            }
+                        }
+                    } else {
+                        progressStatus.observe(lifecycleOwner) { status ->
+                            subtitle.text = "$status/$totalProgress $progressNumberText"
+                            val statusPercent = status * 100 / totalProgress
+                            circularProgress.setProgressPercent(statusPercent, true)
+                            linearProgress.setProgressPercent(statusPercent, true)
+                            if ((status == totalProgress) && customSheetFragment.isAdded) {
+                                customSheetFragment.dismiss()
+                            }
+                        }
+                    }
                 }
             }
         })
@@ -1264,6 +1294,7 @@ object BottomSheetUtils {
         lateinit var cancelTextView: TextView
         lateinit var circularProgress: CircularProgressIndicator
         lateinit var linearProgress: LinearProgressIndicator
+        var secondaryDescription: TextView? = null
 
 
         override fun bindView(view: View) {
@@ -1272,6 +1303,7 @@ object BottomSheetUtils {
             cancelTextView = view.findViewById(R.id.tv_cancel)
             circularProgress = view.findViewById(R.id.progress_circular)
             linearProgress = view.findViewById(R.id.progress_linear)
+            secondaryDescription = view.findViewById(R.id.tv_progress_secondary)
         }
     }
 

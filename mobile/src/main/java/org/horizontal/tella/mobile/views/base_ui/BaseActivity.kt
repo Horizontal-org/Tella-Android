@@ -14,7 +14,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -41,8 +43,33 @@ abstract class BaseActivity : AppCompatActivity() {
     private lateinit var loading: View
     @Inject
     lateinit var divviupUtils: DivviupUtils
+
+    private val dialogScreenSecurityCallbacks =
+        object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentViewCreated(
+                fm: FragmentManager,
+                f: Fragment,
+                v: View,
+                savedInstanceState: Bundle?
+            ) {
+                applyScreenSecurityIfDialog(f)
+            }
+
+            override fun onFragmentStarted(fm: FragmentManager, f: Fragment) {
+                applyScreenSecurityIfDialog(f)
+            }
+        }
+
+    private fun applyScreenSecurityIfDialog(fragment: Fragment) {
+        (fragment as? DialogFragment)?.dialog?.let {
+            ScreenSecurity.applyToDialog(it, this)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(dialogScreenSecurityCallbacks, true)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 BottomMessageManager.events.collect { stringRes ->

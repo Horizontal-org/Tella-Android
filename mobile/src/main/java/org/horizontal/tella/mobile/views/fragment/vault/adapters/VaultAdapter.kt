@@ -33,6 +33,9 @@ private const val ID_FILES_ACTIONS = "2"
 private const val ID_PANIC_MODE = "3"
 private const val ID_FILES_TITLE = "4"
 private const val ID_IMPROVEMENT = "5"
+const val ID_RECENT_FILES = "6"
+const val ID_FAVORITE_FORMS = "7"
+const val ID_FAVORITE_TEMPLATES = "8"
 
 class VaultAdapter(private val onClick: VaultClickListener) :
     androidx.recyclerview.widget.ListAdapter<DataItem, BaseViewHolder<*>>(
@@ -219,14 +222,15 @@ class VaultAdapter(private val onClick: VaultClickListener) :
                 if ((isShowVaultAnalyticsSection() && !hasAcceptedAnalytics()) || isTimeToShowReminderAnalytics()) {
                     addAll(analyticsBanner)
                 }
+                addAll(connections)
                 if (Preferences.isShowFavoriteForms()) {
                     addAll(favoriteForms)
                 }
-                if (Preferences.isShowRecentFiles()) {
-                    addAll(recentFiles)
-                }
                 if (Preferences.isShowFavoriteTemplates()) {
                     addAll(favoriteTemplates)
+                }
+                if (Preferences.isShowRecentFiles()) {
+                    addAll(recentFiles)
                 }
                 addAll(titles)
                 addAll(actions)

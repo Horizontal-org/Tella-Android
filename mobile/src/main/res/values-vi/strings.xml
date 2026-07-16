@@ -6,11 +6,9 @@
   <string name="collect.form_exit.unsaved_dialog.title">Thoát biểu mẫu?</string>
   <string name="verification_prompt_dialog_title">Bật GPS?</string>
   <string name="collect_tab.title_blank">Trống</string>
-  <string name="action_cancel">Hủy bỏ</string>
   <string name="settings_menu.item_contact">Liên hệ với chúng tôi</string>
   <string name="collect_dialog.text_download.progress">Đang tải xuống biểu mẫu</string>
   <string name="collect_toast_download.completed">Tải xuống hoàn tất</string>
-  <string name="action_delete">Xóa</string>
   <string name="collect.draft_tab.title">Bản nháp</string>
   <string name="collect.blank_action_download.form">Tải xuống</string>
   <string name="settings_text_empty.field">Trường này không được để trống.</string>
@@ -404,11 +402,6 @@ kết nối với máy chủ</string>
   <string name="settings.sec_confirm_camouflage_desc">Để mở lại Tella, hãy tìm biểu tượng ứng dụng %s trong số các ứng dụng của bạn.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Để mở lại Tella, hãy tìm biểu tượng ứng dụng Máy tính trong số các ứng dụng của bạn. Mở khóa Tella bằng cách nhập mã PIN của bạn vào Máy tính rồi nhấn “=”.</string>
   <string name="settings.sec_confirm_exit_tella">Thoát Tella</string>
-  <string name="Home_BottomNav_Home">Trang chủ</string>
-  <string name="Home_BottomNav_Rec">Rec</string>
-  <string name="Home_BottomNav_Camera">Máy ảnh</string>
-  <string name="Home_BottomNav_Forms">Các hình thức</string>
-  <string name="Home_BottomNav_Reports">Báo cáo</string>
   <string name="Vault_Move_AppBar">Di chuyển \" %s \"</string>
   <string name="Vault_CreateFolder_SheetAction">Tạo</string>
   <string name="ServerSettings_ServerName_ToolTip">Đặt tên cho máy chủ để phân biệt nếu bạn thêm nhiều máy chủ sau này. Đó có thể là tên tổ chức, tên dự án, v.v.</string>
@@ -594,7 +587,6 @@ Nhấn vào một thực thể để tiếp tục hoàn thành nó.</string>
   <string name="settings.serv_add.server.selection_dialog.description">Nếu bạn không chắc chắn, hãy hỏi tổ chức của bạn.</string>
   <string name="Timeout_Warning_Title">Cảnh báo</string>
   <string name="Timeout_Warning_Description">Để thực hiện hành động này, Tella sẽ được mở khóa trong 3 phút.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Bạn muốn thiết lập Tella như thế nào?</string>
   <string name="onboard_full_setup">THIẾT LẬP ĐẦY ĐỦ</string>
   <string name="onboard_quick_setup">CÀI ĐẶT NHANH</string>
@@ -758,13 +750,6 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">Giao diện màu vàng</string>
   <string name="settings.sec_keep.exif_switch">Giữ nguyên siêu dữ liệu khi nhập tệp.</string>
   <string name="settings.sec_keep.exif_expl">Giữ lại siêu dữ liệu EXIF khi nhập ảnh và video vào Tella. Điều này bao gồm dữ liệu về thời gian tạo ảnh, cài đặt máy ảnh, vị trí và thiết bị của bạn.</string>
-  <string name="Rename_name_Hint">Tên</string>
-  <string name="action_go_to_homescreen">Đi đến màn hình chính</string>
-  <string name="action_show_password">hiện mật khẩu</string>
-  <string name="action_hide_password">ẩn mật khẩu</string>
-  <string name="action_show_pin">hiện mã pin</string>
-  <string name="action_hide_pin">giấu mã pin</string>
-  <string name="action_go_back">quay lại</string>
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">Trên màn hình mở khóa, hiển thị số lần mở khóa thất bại còn lại trước khi mọi thứ bên trong Tella bị xóa.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Xóa sau khi mở khóa thất bại.</string>
@@ -794,8 +779,7 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="Edit_Dialog_confirm_exit_title">Các thay đổi chưa được lưu</string>
   <string name="Edit_Dialog_confirm_exit">Các thay đổi của bạn chưa được lưu. Bạn có muốn lưu trước khi thoát không?</string>
   <string name="action_exit_without_saving">Thoát mà không lưu </string>
-  <string name="incorrect_pattern">Incorrect Pattern.
-
+  <string name="incorrect_pattern">Mẫu khóa không đúng
 </string>
   <string name="incorrect_pin">Mã pin không đúng. 
 
@@ -862,7 +846,6 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
 
  Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -904,8 +887,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
   <string name="Onboard_Collect_Data">Collect data</string>
   <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
@@ -1020,7 +1001,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
-  <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
+  <string name="qr_code_scan_instruction">Step 2: Scan the recipient’s QR code</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information</string>
@@ -1032,7 +1013,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="verification">Verification</string>
   <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
-  <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+  <string name="nearbySharing_verifyConnection_recipient">To ensure the connection is safe, make sure the sequence of characters above matches the sequence on the sender’s device.</string>
   <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
   <string name="confirm_and_connect">Confirm and connect</string>
   <string name="wifi">Wi-Fi</string>
@@ -1056,7 +1037,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Enter the recipient’s device
 
- information to find it on the network.</string>
+ information to find it on the network</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
@@ -1078,7 +1059,7 @@ files</string>
   <string name="send_files_title">Send files</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
-  <string name="try_again">Try again</string>
+  <string name="try_again">Thử lại</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
@@ -1159,12 +1140,12 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
-  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
-Please wait until the map finishes loading before selecting a location.
-Previously viewed areas may still be visible offline.</string>
-  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
-  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
+  <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
 
@@ -1177,4 +1158,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
+  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
+  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
+  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
+  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
+  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
+  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
+  <string name="confirm_and_continue">Confirm and continue</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>

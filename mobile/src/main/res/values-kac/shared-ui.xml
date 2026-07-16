@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Madung laika man (pat man)</string>
+    <string name="Home_BottomNav_Rec">Nsen rim na</string>
+    <string name="Home_BottomNav_Camera">Sumla dem jak (Kemra)</string>
+    <string name="Home_BottomNav_Forms">Hkrang laika ni</string>
+    <string name="Home_BottomNav_Reports">Munghtawn laika ni</string>
+    <string name="action_cancel">Dawm kau u</string>
+    <string name="action_delete">Shaprai hkau u</string>
+</resources>

@@ -3,17 +3,14 @@ package org.horizontal.tella.mobile.views.activity.camera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.SensorManager
-import android.media.AudioManager
 import android.media.MediaActionSound
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.OrientationEventListener
@@ -255,7 +252,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             resumeCameraPreview()
         }
         hasResumedOnce = true
-        syncShutterMuteIfEnabled()
     }
 
     override fun onPause() {
@@ -847,7 +843,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
             if (mode == CameraMode.PHOTO) {
                 maybeCapturePhoto()
             } else {
-                maybeMuteSystemShutterForCapture()
                 if (videoRecording) {
                     if (System.currentTimeMillis() - lastClickTime >= CLICK_DELAY) {
                         playCameraSound(MediaActionSound.STOP_VIDEO_RECORDING)
@@ -921,7 +916,6 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
 
     private fun takePhoto() {
         pendingPhotoCaptureAfterLocationCheck = false
-        maybeMuteSystemShutterForCapture()
         playCameraSound(MediaActionSound.SHUTTER_CLICK)
         captureImage()
         divviupUtils.runPhotoTakenEvent()
@@ -1070,72 +1064,8 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         }
     }
 
-    private fun syncShutterMuteIfEnabled() {
-        if (!Preferences.isShutterMute()) return
-        if (!hasShutterDndAccess()) return
-        applySystemShutterMute()
-    }
-
-    private fun hasShutterDndAccess(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
-        val notificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        return notificationManager.isNotificationPolicyAccessGranted
-    }
-
-    private fun maybeMuteSystemShutterForCapture() {
-        if (!Preferences.isShutterMute()) return
-
-        if (!hasShutterDndAccess()) {
-            if (!Preferences.isShutterDndPromptDeclined()) {
-                showShutterDndAccessSheet()
-            }
-            return
-        }
-
-        applySystemShutterMute()
-    }
-
-    private fun applySystemShutterMute() {
-        try {
-            val mgr = getSystemService(AUDIO_SERVICE) as AudioManager
-            mgr.setStreamMute(AudioManager.STREAM_SYSTEM, true)
-        } catch (e: SecurityException) {
-            Timber.d(e, "Unable to mute system shutter stream")
-        }
-    }
-
-    private fun showShutterDndAccessSheet() {
-        BottomSheetUtils.showConfirmSheetWithActionRow(
-            fragmentManager = supportFragmentManager,
-            titleText = getString(R.string.settings_sec_camera_mute_switch),
-            descriptionText = getString(R.string.camera_shutter_dnd_camera_dialog_expl),
-            actionButtonLabel = getString(R.string.camera_shutter_dnd_enable_action),
-            cancelButtonLabel = getString(R.string.camera_shutter_dnd_disable_action),
-            consumer = object : BottomSheetUtils.ActionConfirmed {
-                override fun accept(isConfirmed: Boolean) {
-                    if (isConfirmed) {
-                        Preferences.setShutterDndPromptDeclined(false)
-                        maybeChangeTemporaryTimeout {
-                            try {
-                                startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
-                            } catch (e: Exception) {
-                                Timber.e(e, "Unable to open notification policy settings")
-                            }
-                        }
-                    } else {
-                        Preferences.setShutterMute(false)
-                        Preferences.setShutterDndPromptDeclined(false)
-                    }
-                }
-            }
-        )
-    }
-
     private fun playCameraSound(soundName: Int) {
-        if (Preferences.isShutterMute()) return
+        if (!shouldPlayCameraSound(soundName)) return
         try {
             if (shutterSound == null) {
                 shutterSound = MediaActionSound()
@@ -1145,6 +1075,23 @@ class CameraActivity : MetadataActivity(), IMetadataAttachPresenterContract.IVie
         } catch (e: Exception) {
             Timber.d(e, "Unable to play camera sound")
         }
+    }
+
+    private fun shouldPlayCameraSound(soundName: Int): Boolean {
+        if (mustPlayShutterSound(soundName)) {
+            return true
+        }
+
+        return !Preferences.isShutterMute()
+    }
+
+    private fun mustPlayShutterSound(soundName: Int): Boolean {
+        val isCaptureSound = soundName == MediaActionSound.SHUTTER_CLICK ||
+                soundName == MediaActionSound.START_VIDEO_RECORDING
+
+        return isCaptureSound &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                MediaActionSound.mustPlayShutterSound()
     }
 
     private fun captureImage() {

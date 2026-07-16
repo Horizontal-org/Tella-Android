@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">ပင်မစခရင်</string>
+    <string name="Home_BottomNav_Rec">အသံသွင်းမည်</string>
+    <string name="Home_BottomNav_Camera">ကင်မရာ</string>
+    <string name="Home_BottomNav_Forms">ပုံစံများ</string>
+    <string name="Home_BottomNav_Reports">အစီရင်ခံချက်များ</string>
+    <string name="Rename_name_Hint">အမည်</string>
+    <string name="action_go_to_homescreen">ပင်မစခရင်သို့ သွားမည်</string>
+    <string name="action_cancel">ပယ်ဖျက်ပါ</string>
+    <string name="action_show_password">စကားဝှက်ကို ပြမည်</string>
+    <string name="action_hide_password">စကားဝှက်ကို ဝှက်မည်</string>
+    <string name="action_show_pin">ပင်ကို ပြမည်</string>
+    <string name="action_hide_pin">ပင်ကို ဝှက်မည်</string>
+    <string name="action_delete">ဖျက်ရန်</string>
+    <string name="action_go_back">ပြန်သွားမည်</string>
+</resources>

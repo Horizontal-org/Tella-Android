@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple">
+
+    <org.hzontal.shared_ui.appbar.ToolbarComponent
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:arrowBackIcon="@drawable/ic_arrow_back_white_24dp"
+        app:arrowBackIconContentDescription="@string/action_go_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:startTitle="@string/connect_to_device" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        style="@style/Tella_Main_White_TextExtraLargeBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="@string/qr_code_sender_show_instruction"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <ImageView
+        android:id="@+id/qrCodeImageView"
+        android:layout_width="247dp"
+        android:layout_height="247dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/qr_scan_border"
+        android:contentDescription="@string/qr_code_sender_show_instruction"
+        android:keepScreenOn="true"
+        android:padding="16dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/scanRecipientQrButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/wa_orange"
+        android:textColor="@color/btn_dark_letter"
+        app:default_background="@drawable/bg_round_orange_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeImageView"
+        app:text="@string/continue_to_step_2"
+        app:text_all_caps="true"
+        app:text_color="@color/btn_dark_letter"
+        app:text_round_bold="true" />
+
+    <TextView
+        android:id="@+id/helpTextView"
+        style="@style/Tella_Main_White_Text.Meduim"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="@string/qr_code_issue_prompt"
+        app:layout_constraintBottom_toTopOf="@id/connectManuallyButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <org.hzontal.shared_ui.buttons.RoundButton
+        android:id="@+id/connectManuallyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/light_purple"
+        android:textColor="@android:color/white"
+        app:default_background="@drawable/bg_rounded_information"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:text="@string/connect_manually"
+        app:text_all_caps="true"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

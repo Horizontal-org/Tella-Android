@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.model.P2PVerificationStep
 import org.horizontal.tella.mobile.databinding.ConnectManuallyVerificationBinding
 import org.horizontal.tella.mobile.util.formatHash
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -21,6 +22,7 @@ class RecipientVerificationFragment :
     BaseBindingFragment<ConnectManuallyVerificationBinding>(ConnectManuallyVerificationBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+
     @Inject
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
@@ -33,14 +35,51 @@ class RecipientVerificationFragment :
     }
 
     private fun initUI() = with(binding) {
-        // Simpler instruction text (update your string as needed)
-        sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_recipient)
-        hashContentTextView.text = viewModel.p2PState.hash.formatHash()
-
-        // IMPORTANT: button is enabled immediately
-        confirmAndConnectBtn.isEnabled = true
-        confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+        refreshVerificationUi()
     }
+
+    private fun senderHash(): String =
+        viewModel.p2PState.pinnedSenderHash.ifBlank { viewModel.p2PState.hash }
+
+    private fun refreshVerificationUi() = with(binding) {
+        val step = viewModel.p2PState.activeVerificationStep
+        sequenceDescTextView.text = getString(R.string.nearbySharing_verifyConnection_recipient)
+        if (step == P2PVerificationStep.SENDER_HASH) {
+            sequenceTitleTextView.text = getString(R.string.verification_step2_sender_hash)
+            hashContentTextView.text = senderHash().formatHash()
+            hashContentTextView.setBackgroundResource(R.drawable.bg_verification_hash_step2)
+        } else {
+            sequenceTitleTextView.text = getString(R.string.verification_step1_recipient_hash)
+            hashContentTextView.text = viewModel.p2PState.localReceiverHash
+                .ifBlank { viewModel.p2PState.hash }
+                .formatHash()
+            hashContentTextView.setBackgroundResource(org.hzontal.shared_ui.R.drawable.bg_dual_text_check)
+        }
+        setConfirmButtonForStep(step)
+    }
+
+    private fun setConfirmButtonForStep(step: P2PVerificationStep?) {
+
+        applyConfirmButtonState(
+            enabled = true,
+            title = if (step == P2PVerificationStep.SENDER_HASH) {
+                getString(R.string.confirm_and_connect)
+            } else {
+                getString(R.string.confirm_and_continue)
+            },
+        )
+    }
+
+    private fun applyConfirmButtonState(enabled: Boolean, title: String) = with(binding) {
+        confirmAndConnectBtn.isEnabled = enabled
+        confirmAndConnectBtn.setBackgroundResource(
+            if (enabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled
+        )
+        confirmAndConnectBtn.setText(title)
+    }
+
+    private fun waitingTextForStep(step: P2PVerificationStep?): String =
+        getString(R.string.waiting_for_the_sender)
 
     private fun initListeners() = with(binding) {
         toolbar.backClickListener = { navigateBackAndStopServer() }
@@ -48,8 +87,10 @@ class RecipientVerificationFragment :
 
         // Tap immediately — even if no incoming request yet
         confirmAndConnectBtn.setOnClickListener {
-            confirmAndConnectBtn.isEnabled = false
-            confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_sender))
+            applyConfirmButtonState(
+                enabled = false,
+                title = waitingTextForStep(viewModel.p2PState.activeVerificationStep),
+            )
             viewModel.onRecipientConfirmTapped()
         }
     }
@@ -66,21 +107,29 @@ class RecipientVerificationFragment :
             }
         }
 
+        viewModel.getHashSuccess.observe(viewLifecycleOwner) {
+            refreshVerificationUi()
+        }
+
+        viewModel.incompatibleProtocolError.observe(viewLifecycleOwner) {
+            navigateBackAndStopServer()
+        }
+
         viewModel.closeConnection.observe(viewLifecycleOwner) { closeConnection ->
             if (closeConnection) navigateBackAndStopServer()
         }
 
-        // Optional: reflect VM UI flags if you want the button text/state to be VM-driven
         viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
             if (waiting) {
-                confirmAndConnectBtn.isEnabled = false
-                confirmAndConnectBtn.setText(getString(R.string.waiting_for_the_sender))
+                applyConfirmButtonState(
+                    enabled = false,
+                    title = waitingTextForStep(viewModel.p2PState.activeVerificationStep),
+                )
             }
         }
         viewModel.canTapConfirm.observe(viewLifecycleOwner) { canTap ->
             if (canTap) {
-                confirmAndConnectBtn.isEnabled = true
-                confirmAndConnectBtn.setText(getString(R.string.confirm_and_connect))
+                setConfirmButtonForStep(viewModel.p2PState.activeVerificationStep)
             }
         }
     }
@@ -90,6 +139,7 @@ class RecipientVerificationFragment :
             withContext(Dispatchers.IO) {
                 peerServerStarterManager.stopServer()
             }
+            viewModel.clearManualConnectionWaitingOnDiscard()
             navManager().navigateBackToStartNearBySharingFragmentAndClearBackStack()
         }
     }

@@ -77,6 +77,7 @@ class PrepareUploadFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         onAudioRecordingListener()
     }
@@ -285,7 +286,7 @@ class PrepareUploadFragment :
         val disabled: Float = context?.getString(R.string.alpha_disabled)?.toFloat() ?: 1.0f
         val enabled: Float = context?.getString(R.string.alpha_enabled)?.toFloat() ?: 1.0f
 
-        binding.sendReportBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange16_btn)
+        binding.sendReportBtn.setBackgroundResource(if (isSubmitEnabled) R.drawable.bg_round_orange_btn else R.drawable.bg_round_orange_disabled)
         binding.sendReportBtn.alpha = (if (isSubmitEnabled) enabled else disabled)
 
         initClickListeners(isSubmitEnabled)

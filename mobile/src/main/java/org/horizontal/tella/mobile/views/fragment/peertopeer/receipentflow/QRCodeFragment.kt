@@ -18,16 +18,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.horizontal.tella.mobile.certificate.CertificateUtils
-import org.horizontal.tella.mobile.data.peertopeer.P2PNetworkAddressPolicy
-import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
 import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
-import org.horizontal.tella.mobile.data.peertopeer.managers.PeerToPeerManager
-import org.horizontal.tella.mobile.data.peertopeer.model.P2PSharedState
-import org.horizontal.tella.mobile.data.peertopeer.port
+import org.horizontal.tella.mobile.data.peertopeer.managers.ReceiverSessionSetup
 import org.horizontal.tella.mobile.databinding.FragmentQrCodeBinding
-import org.horizontal.tella.mobile.domain.peertopeer.KeyStoreConfig
-import org.horizontal.tella.mobile.domain.peertopeer.PeerConnectionQrCodec
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import timber.log.Timber
@@ -44,10 +37,7 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     lateinit var peerServerStarterManager: PeerServerStarterManager
 
     @Inject
-    lateinit var peerToPeerManager: PeerToPeerManager
-
-    @Inject
-    lateinit var p2PSharedState: P2PSharedState
+    lateinit var receiverSessionSetup: ReceiverSessionSetup
 
     /** Ensures only one setup runs at a time so server PIN and QR payload cannot diverge. */
     private val qrSetupMutex = Mutex()
@@ -102,6 +92,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
         handleConnectManually()
 
         viewModel.isManualConnection = false
+        viewModel.p2PState.isUsingManualConnection = false
+        viewModel.p2PState.receiverCanScanQr = true
 
         viewModel.registrationServerSuccess.observe(viewLifecycleOwner) { success ->
             if (success) {
@@ -123,57 +115,11 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private suspend fun setupServerAndQr(primaryIpHint: String) {
-        // New receiver session: drop any stale ping event from a previous attempt.
-        peerToPeerManager.clearClientConnected()
-        Timber.d("P2P receiver session started: cleared stale ping replay cache")
-
-        val discovered = viewModel.collectLocalIpv4AddressesForNearbySharing()
-        val hint = primaryIpHint.trim()
-        val mergedForSelection = buildList {
-            if (hint.isNotEmpty()) add(hint)
-            for (a in discovered) {
-                if (a.isNotBlank() && a !in this) add(a)
-            }
-        }
-        val allIps = P2PNetworkAddressPolicy.filterAndOrderForAdvertise(mergedForSelection)
-        if (allIps.isEmpty()) {
-            Timber.e(
-                "P2P QR: no site-local (RFC1918) IPv4 for certificate/QR after policy filter; raw merged=%s",
-                mergedForSelection.joinToString(),
-            )
-            return
-        }
-        val advertiseToPeerPrimary = allIps.first()
-        val keyPair = PeerKeyProvider.getKeyPair()
-        val certificate = PeerKeyProvider.getCertificate(allIps)
-        val config = KeyStoreConfig()
-
-        val certHash = CertificateUtils.getLeafCertificateDerSha256Hex(certificate)
-        val pin = (100000..999999).random()
-        val port = port
-        val pinString = pin.toString()
-
-        val started = withContext(Dispatchers.IO) {
-            peerServerStarterManager.startServer(
-                advertiseToPeerPrimary,
-                keyPair,
-                pinString,
-                certificate,
-                config,
-                p2PSharedState
-            )
-        }
-        if (!started) {
-            Timber.e("P2P QR: server failed to start; not updating PIN/QR")
-            return
-        }
-
-        p2PSharedState.pin = pinString
-        p2PSharedState.port = port.toString()
-        p2PSharedState.hash = certHash
-        p2PSharedState.ip = advertiseToPeerPrimary
-
-        val json = PeerConnectionQrCodec.toJson(allIps, port, certHash, pinString)
+        val json = receiverSessionSetup.start(
+            primaryIpHint = primaryIpHint,
+            discoveredIps = viewModel.collectLocalIpv4AddressesForNearbySharing(),
+        ) ?: return
+        Timber.d("P2P receiver QR payload=%s", json)
         qrPayload = json
         generateQrCode(json)
     }
@@ -230,8 +176,8 @@ class QRCodeFragment : BaseBindingFragment<FragmentQrCodeBinding>(FragmentQrCode
     }
 
     private fun connectManually() {
-        val json = qrPayload ?: return
-        bundle.putString("payload", json)
+        viewModel.p2PState.receiverCanScanQr = false
+        viewModel.p2PState.isUsingManualConnection = true
         navManager().navigateFromScanQrCodeToDeviceInfo()
     }
 

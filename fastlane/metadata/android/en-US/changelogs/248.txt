@@ -1,0 +1,4 @@
+• Implemented mTLS and enforced certificate pinning for both the sender and receiver in Nearby Sharing. This is a mitigation for man-in-the-middle attacks detected in our most recent security audit: https://tella-app.org/security-and-privacy
+• Bug fixes and minor improvements:
+    • Simplified the Nearby Sharing manual connection flow: pre-filled the port field and added automatic dot insertion after each octet while typing the IP address.
+• Full notes: https://tella-app.org/releases

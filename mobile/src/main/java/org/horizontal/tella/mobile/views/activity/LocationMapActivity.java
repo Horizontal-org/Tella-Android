@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hzontal.tella_vault.MyLocation;
@@ -41,6 +42,8 @@ import org.mapsforge.map.layer.cache.TileCache;
 import org.mapsforge.map.layer.download.TileDownloadLayer;
 import org.mapsforge.map.layer.download.tilesource.OpenStreetMapMapnik;
 import org.mapsforge.map.layer.overlay.FixedPixelCircle;
+
+import kotlin.Unit;
 
 public class LocationMapActivity extends MetadataActivity implements ILocationGettingPresenterContract.IView {
     public static final String SELECTED_LOCATION = "sl";
@@ -156,14 +159,17 @@ public class LocationMapActivity extends MetadataActivity implements ILocationGe
         progressBar.setVisibility(View.VISIBLE);
         if (Preferences.isShowMapFirstLoadSheet()) {
             Preferences.setShowMapFirstLoadSheet(false);
-            BottomSheetUtils.showStandardSheet(
+            BottomSheetUtils.showProgressImportSheet(
                     getSupportFragmentManager(),
                     getString(R.string.collect_form_geopoint_first_load_title),
+                    0,
                     getString(R.string.collect_form_geopoint_first_load_message),
+                    new MutableLiveData<>(0),
                     getString(R.string.action_ok),
-                    null,
-                    null,
-                    null
+                    this,
+                    getString(R.string.collect_form_geopoint_first_load_message_secondary),
+                    true,
+                    () -> Unit.INSTANCE
             );
         }
     }

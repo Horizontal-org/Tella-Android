@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Sair do formulário?</string>
   <string name="verification_prompt_dialog_title">Activar o GPS?</string>
   <string name="collect_tab.title_blank">Vazio</string>
-  <string name="action_cancel">Cancelar</string>
+  
   <string name="settings_menu.item_contact">Contacte-nos</string>
   <string name="collect_dialog.text_download.progress">Descarregando o formulário</string>
   <string name="collect_toast_download.completed">Descarregamento concluído</string>
-  <string name="action_delete">Apagar</string>
+  
   <string name="collect.draft_tab.title">Rascunho</string>
   <string name="collect.blank_action_download.form">Baixar</string>
   <string name="settings_text_empty.field">Este campo não pode estar vazio.</string>
@@ -376,7 +376,7 @@
   <string name="onboard.expl_lock_finish">O seu bloqueio está configurado! Pode alterá-lo a qualquer momento nas Definições.</string>
   <string name="onboard.title_all_done">Já está tudo feito!</string>
   <string name="onboard.expl_all_done">Pode ir para o Tella agora ou continuar a personalizar o Tella para configurar definições avançadas.</string>
-  <string name="onboard.go_btn_all_done">Ir para o Tella</string>
+  <string name="onboard.go_btn_all_done">Aceder o Tella</string>
   <string name="onboard.advanced_btn_all_done">Definições avançadas</string>
   <string name="onboard.title_share_data">Partilhe os dados que recolhe.</string>
   <string name="onboard.expl_share_data">Se trabalha com uma organização, conecte-se ao servidor da organização para enviar ficheiros e dados. A sua organização deve fornecer-lhe os detalhes do servidor.</string>
@@ -402,11 +402,11 @@ se conectar a um servidor.</string>
   <string name="settings.sec_confirm_camouflage_desc">Para reabrir o Tella, procure o ícone do aplicativo %s entre os seus aplicativos.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Para reabrir o Tella, procure o ícone do aplicativo da Calculadora entre os seus aplicativos. Desbloqueie o Tella introduzindo o seu PIN na Calculadora seguido de “=”.</string>
   <string name="settings.sec_confirm_exit_tella">Sair do Tella</string>
-  <string name="Home_BottomNav_Home">Página inicial</string>
-  <string name="Home_BottomNav_Rec">Gravar</string>
-  <string name="Home_BottomNav_Camera">Câmera.</string>
-  <string name="Home_BottomNav_Forms">Formulários</string>
-  <string name="Home_BottomNav_Reports">Relatórios</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Mover “%s”</string>
   <string name="Vault_CreateFolder_SheetAction">Criar</string>
   <string name="ServerSettings_ServerName_ToolTip">Atribua um nome ao seu servidor para o reconhecer se adicionar mais servidores mais tarde. Pode ser o nome da organização, o nome do projecto, etc.</string>
@@ -591,7 +591,6 @@ se conectar a um servidor.</string>
  organização.</string>
   <string name="Timeout_Warning_Title">Aviso</string>
   <string name="Timeout_Warning_Description">Para realizar esta acção, o Tella permanecerá desbloqueado durante 3 minutos.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Como gostaria de configurar o Tella?</string>
   <string name="onboard_full_setup">CONFIGURAÇÃO COMPLETA</string>
   <string name="onboard_quick_setup">CONFIGURAÇÃO RÁPIDA</string>
@@ -755,13 +754,13 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
   <string name="yellow_theme">fundo amarelo</string>
   <string name="settings.sec_keep.exif_switch">Preservar os metadados ao importar.</string>
   <string name="settings.sec_keep.exif_expl">Mantenha os metadados EXIF ao importar fotos e vídeos para o Tella. Isto inclui dados sobre quando a imagem foi criada, definições da câmara, localização e o seu dispositivo.</string>
-  <string name="Rename_name_Hint">Nome</string>
-  <string name="action_go_to_homescreen">ir para o ecrã inicial</string>
-  <string name="action_show_password">mostrar a palavra-passe</string>
-  <string name="action_hide_password">ocultar a palavra-passe</string>
-  <string name="action_show_pin">mostrar o pin</string>
-  <string name="action_hide_pin">ocultar o pin</string>
-  <string name="action_go_back">voltar</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Mostrar as tentativas de desbloqueio remanescentes.</string>
   <string name="Settings_unlock_screen_instructions">No ecrã de desbloqueio, mostrar o número remanescente de tentativas de desbloqueio falhadas antes de tudo o que está no Tella ser apagado.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Apagar após desbloqueio falhado</string>
@@ -796,7 +795,6 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
 </string>
   <string name="incorrect_pin">Pin incorrecto.</string>
   <string name="incorrect_password">Palavra-passe incorrecta.
-
 
 </string>
   <string name="attempts_remaining_singular">Tem mais 1 tentativa até que
@@ -861,7 +859,6 @@ AVISO: se esta opção estiver activada, o Tella permanecerá desbloqueado até 
 
  Toque em ‘Saiba mais’ abaixo para obter mais informações sobre as próximas alterações e orientações sobre como exportar todos os ficheiros do Tella.</string>
   <string name="Learn_More">SAIBA MAIS</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -904,8 +901,6 @@ Gostaria de partilhar dados com a equipa do Tella?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> Inscreveu-se para partilhar dados analíticos. Pode sempre alterar isto nas Definições.</string>
   <string name="Settings_Analytics_turn_off_dialog">Deixará de partilhar os dados analíticos. Pode sempre alterar isto nas Definições.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Desbloquear</string>
   <string name="Onboard_Collect_Data">Recolha de dados</string>
   <string name="Onboard_Collect_Data_Exp">Se trabalha com uma organização, envie formulários, relatórios e arquivos directamente do Tella para a sua organização.</string>
@@ -1015,7 +1010,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
-  <string name="qr_code_scan_instruction">Scan the recipient’s QR code</string>
+  <string name="qr_code_scan_instruction">Step 2: Scan the recipient’s QR code</string>
   <string name="qr_code_issue_prompt">Having trouble with the QR code?</string>
   <string name="connect_manually">Connect manually</string>
   <string name="show_device_information">Show your device information</string>
@@ -1027,7 +1022,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="verification">Verification</string>
   <string name="verify_sequence_match">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="nearbySharing_verifyConnection_sender">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the recipient’s device.</string>
-  <string name="nearbySharing_verifyConnection_recipient">To ensure that the connection is safe, make sure that the sequence of numbers above matches what is shown on the other device.</string>
+  <string name="nearbySharing_verifyConnection_recipient">To ensure the connection is safe, make sure the sequence of characters above matches the sequence on the sender’s device.</string>
   <string name="nearbySharing_verifyConnection_warning">If the sequences do not match, the connection may not be secure and should be discarded.</string>
   <string name="confirm_and_connect">Confirm and connect</string>
   <string name="wifi">Wi-Fi</string>
@@ -1051,7 +1046,7 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Enter the recipient’s device
 
- information to find it on the network.</string>
+ information to find it on the network</string>
   <string name="make_sure_sequence_matches">Make sure that this sequence matches what is shown on the sender’s device.</string>
   <string name="make_sure_sequence_matches_recipient">Make sure that this sequence matches what is shown on the recipient’s device.</string>
   <string name="discard_and_start_over">Discard and start over</string>
@@ -1073,7 +1068,7 @@ files</string>
   <string name="send_files_title">Send files</string>
   <string name="location_permission_is_required_to_get_wifi_ssid">Location permission is required to get WiFi SSID.</string>
   <string name="failed_to_open_location_settings">Failed to open location settings.</string>
-  <string name="try_again">Try again</string>
+  <string name="try_again">Tente novamente</string>
   <string name="stop_sharing_files">Stop sharing files?</string>
   <string name="nearby_sharing_will_be_stopped_the_recipient_will_not_have_access_to_files_that_were_not_fully_transferred">Nearby Sharing will be stopped. The recipient will not have access to files that were not fully transferred.</string>
   <string name="stop">stop</string>
@@ -1154,12 +1149,12 @@ No. The Wi-Fi network does not need to have internet access. As long as the Wi-F
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
-  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
-Please wait until the map finishes loading before selecting a location.
-Previously viewed areas may still be visible offline.</string>
-  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
-  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
+  <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
 
@@ -1172,4 +1167,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Step 1: Show this QR code for the recipient to scan</string>
+  <string name="qr_code_recipient_show_instruction">Step 2: Show this QR code for the sender to scan</string>
+  <string name="scan_recipient_qr_code">Scan recipient QR code</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Step 1: Scan the sender’s QR code</string>
+  <string name="connection_failed">Connection failed</string>
+  <string name="peer_to_peer_manual_ping_failed">Could not reach the other device. Check the connection details and that both devices are on the same Wi-Fi network.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Incompatible versions</string>
+  <string name="peer_to_peer_incompatible_versions_message">The other device is running an older, incompatible version of Tella. Both devices need to be updated to use Nearby Sharing.</string>
+  <string name="peer_to_peer_invalid_qr_code">This QR code is not valid for Nearby Sharing.</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Scan the recipient\'s QR code (the one that shows their IP address and PIN), not the sender QR from step 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Scan the sender\'s QR code (certificate only), not the recipient\'s connection QR.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">The scanner read a number, not a connection QR. Center the square QR on the recipient screen (not the PIN text), avoid scanning a laptop/emulator display if possible, and wait until the QR fully loads.</string>
+  <string name="verification_step1_recipient_hash">Step 1: Confirm recipient hash</string>
+  <string name="verification_step2_sender_hash">Step 2: Confirm sender hash</string>
+  <string name="confirm_and_continue">Confirm and continue</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Главная</string>
+    <string name="Home_BottomNav_Rec">запись</string>
+    <string name="Home_BottomNav_Forms">Формы</string>
+    <string name="Home_BottomNav_Reports">Отчеты</string>
+    <string name="Home_BottomNav_Uwazi">Увази</string>
+    <string name="Rename_name_Hint">Имя</string>
+    <string name="action_go_to_homescreen">перейти на Главный экран</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_show_password">показать пароль</string>
+    <string name="action_hide_password">скрыть пароль</string>
+    <string name="action_show_pin">показать PIN</string>
+    <string name="action_hide_pin">hide PIN</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_go_back">Назад</string>
+</resources>

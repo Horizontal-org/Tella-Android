@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.vault.home
 
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -20,6 +21,17 @@ object HomeScreenScroll {
     fun scrollToTop(recyclerView: RecyclerView?) {
         if (recyclerView == null) return
         recyclerView.post {
+            scrollToTopImmediate(recyclerView)
+            // ListAdapter may adjust scroll after the first layout pass when items are inserted.
+            recyclerView.post { scrollToTopImmediate(recyclerView) }
+        }
+    }
+
+    private fun scrollToTopImmediate(recyclerView: RecyclerView) {
+        val layoutManager = recyclerView.layoutManager as? LinearLayoutManager
+        if (layoutManager != null) {
+            layoutManager.scrollToPositionWithOffset(HOME_SCROLL_POSITION, 0)
+        } else {
             recyclerView.scrollToPosition(HOME_SCROLL_POSITION)
         }
     }

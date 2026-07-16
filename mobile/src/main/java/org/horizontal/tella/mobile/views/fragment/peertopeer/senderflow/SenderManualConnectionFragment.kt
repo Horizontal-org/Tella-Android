@@ -7,50 +7,71 @@ import androidx.fragment.app.activityViewModels
 import com.hzontal.tella_locking_ui.common.extensions.onChange
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.data.peertopeer.PeerKeyProvider
-import org.horizontal.tella.mobile.data.peertopeer.managers.PeerServerStarterManager
+import org.horizontal.tella.mobile.data.peertopeer.PeerToPeerConstants
 import org.horizontal.tella.mobile.databinding.SenderManualConnectionBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.base_ui.FragmentEdgeToEdge
+import org.horizontal.tella.mobile.views.fragment.peertopeer.common.IpAddressMaskEditText
 import org.horizontal.tella.mobile.views.fragment.peertopeer.viewmodel.PeerToPeerViewModel
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showStandardSheet
-import org.hzontal.shared_ui.bottomsheet.KeyboardUtil
 import org.hzontal.shared_ui.utils.DialogUtils
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SenderManualConnectionFragment :
     BaseBindingFragment<SenderManualConnectionBinding>(SenderManualConnectionBinding::inflate) {
 
     private val viewModel: PeerToPeerViewModel by activityViewModels()
+    private var waitingForOtherSide = false
+    private lateinit var ipAddressMask: IpAddressMaskEditText
 
-    @Inject
-    lateinit var peerServerStarterManager: PeerServerStarterManager
+    // This form pins the Next button to the bottom of the screen, so it must ride above the
+    // keyboard when a field is focused. Opt into IME-aware insets for this screen only.
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        FragmentEdgeToEdge.apply(view, baseActivity, applyImeInset = true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        peerServerStarterManager.stopServer()
-        PeerKeyProvider.reset()
-        viewModel.p2PState.clear()
+        // Do NOT reset the sender identity here: in flow C the receiver has already scanned the
+        // sender QR and pinned this session's certificate hash. Regenerating it would make the
+        // cert presented at /register differ from the pinned hash → 403 "Sender certificate
+        // mismatch". The session is already reset at entry (StartNearBySharing.resetConnectionState).
+        viewModel.clearStaleManualConnectionWaitingState()
         initView()
         initListeners()
         initObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.clearStaleManualConnectionWaitingState()
+        updateNextButtonState()
+    }
+
     private fun initView() = with(binding) {
-        ipAddress.onChange { updateNextButtonState() }
+        if (port.text.isNullOrBlank()) {
+            val preloadedPort = viewModel.p2PState.port.takeIf { it.isNotBlank() }
+                ?: PeerToPeerConstants.NEARBY_SHARING_TLS_PORT.toString()
+            port.setText(preloadedPort)
+        }
+
+        if (viewModel.consumeManualConnectionPinReset()) {
+            pin.text?.clear()
+        }
+
+        ipAddressMask = IpAddressMaskEditText.attach(ipAddress) { updateNextButtonState() }
         pin.onChange { updateNextButtonState() }
         port.onChange { updateNextButtonState() }
 
         updateNextButtonState()
-        KeyboardUtil(root)
     }
 
     private fun initListeners() = with(binding) {
         toolbar.backClickListener = { nav().popBackStack() }
 
         nextBtn.setOnClickListener {
-            val ip = ipAddress.text.toString()
+            val ip = ipAddressMask.canonicalIp.orEmpty()
             val port = port.text.toString()
             val pin = this.pin.text.toString()
 
@@ -65,6 +86,11 @@ class SenderManualConnectionFragment :
     }
 
     private fun initObservers() {
+        viewModel.waitingForOtherSide.observe(viewLifecycleOwner) { waiting ->
+            waitingForOtherSide = waiting
+            updateNextButtonState()
+        }
+
         viewModel.getHashSuccess.observe(viewLifecycleOwner) { hash ->
             bundle.putString("payload", hash)
             navManager().navigateFromSenderManualConnectionToConnectManuallyVerification()
@@ -90,12 +116,18 @@ class SenderManualConnectionFragment :
     }
 
     private fun isInputValid(): Boolean = with(binding) {
-        ipAddress.text?.isNotBlank() == true &&
-                pin.text?.isNotBlank() == true
+        ipAddressMask.isComplete &&
+                isPinValid() &&
+                port.text?.isNotBlank() == true
+    }
+
+    private fun isPinValid(): Boolean {
+        val pin = binding.pin.text?.toString().orEmpty()
+        return pin.length == 6 && pin.all { it.isDigit() }
     }
 
     private fun updateNextButtonState() = with(binding) {
-        val enabled = isInputValid()
+        val enabled = isInputValid() && !waitingForOtherSide
         nextBtn.isEnabled = enabled
         nextBtn.setTextColor(
             ContextCompat.getColor(

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Uwazi">ಉವಾಜಿ</string>
+    <string name="Rename_name_Hint">ಹೆಸರು</string>
+    <string name="action_cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="action_delete">ಅಳಿಸುವುದಾ</string>
+    <string name="action_go_back">ಹಿಂತಿರುಗಿ</string>
+</resources>

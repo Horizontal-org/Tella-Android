@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Вийти з форми?</string>
   <string name="verification_prompt_dialog_title">Увімкнути GPS?</string>
   <string name="collect_tab.title_blank">Порожні</string>
-  <string name="action_cancel">Скасувати</string>
+  
   <string name="settings_menu.item_contact">Зв’язатися з нами</string>
   <string name="collect_dialog.text_download.progress">Завантаження форми</string>
   <string name="collect_toast_download.completed">Завантаження завершено</string>
-  <string name="action_delete">Видалити</string>
+  
   <string name="collect.draft_tab.title">Чернетка</string>
   <string name="collect.blank_action_download.form">Завантажити</string>
   <string name="settings_text_empty.field">Це поле не може бути порожнім.</string>
@@ -396,7 +396,7 @@
   <string name="onboard.hide_behind_calculator_not_possible">Маскування під Калькулятор можливе лише за умови використання PIN-коду.</string>
   <string name="onboard.calculator_button">Вибрати калькулятор</string>
   <string name="onboard.calculator_expl">Tella буде прихована за функціональною програмою Калькулятор. Розблокуйте Tella, ввівши свій PIN-код на калькуляторі, а потім натиснувши «=»</string>
-  <string name="settings.general_recent_files_switch_title">Нещодавні файли</string>
+  <string name="settings.general_recent_files_switch_title">Останні файли</string>
   <string name="settings.general_recent_files_switch_expl">Показувати попередній перегляд та ярлик до нещодавніх файлів на головному екрані Tella.</string>
   <string name="settings.general_favorite_forms_switch_title">Обрані форми</string>
   <string name="settings.general_favorite_forms_switch_expl">Показувати ярлики до ваших обраних форм на головному екрані Tella.</string>
@@ -404,11 +404,11 @@
   <string name="settings.sec_confirm_camouflage_desc">Щоб знову відкрити Tella, шукайте значок програми %s серед ваших програм.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Щоб знову відкрити Tella, шукайте значок програми Калькулятор серед ваших програм. Розблокуйте Tella, ввівши свій PIN-код у Калькуляторі, а потім натиснувши «=».</string>
   <string name="settings.sec_confirm_exit_tella">Вийти з Tella</string>
-  <string name="Home_BottomNav_Home">Головна</string>
-  <string name="Home_BottomNav_Rec">Запис</string>
-  <string name="Home_BottomNav_Camera">Камера</string>
-  <string name="Home_BottomNav_Forms">Форми</string>
-  <string name="Home_BottomNav_Reports">Звіти</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Перемістити \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Створити</string>
   <string name="ServerSettings_ServerName_ToolTip">Дайте назву вашому серверу, щоб розпізнати його, якщо ви додасте більше серверів пізніше. Це може бути назва організації, назва проєкту тощо.</string>
@@ -514,7 +514,7 @@
   <string name="Uwazi_Submitted_Header_Text">Це сутності, які ви вже надіслали.</string>
   <string name="Uwazi_MiltiFileWidget_ChooseHowToAddFiles">Виберіть, як ви хочете додати файли</string>
   <string-array name="Uwazi_Language_Array">
-    <item>English</item>
+    <item>Англійська</item>
     <item>العربية</item>
     <item>Français</item>
   </string-array>
@@ -604,7 +604,6 @@
   <string name="settings.serv_add.server.selection_dialog.description">Якщо ви не впевнені, будь ласка, запитайте у вашій організації.</string>
   <string name="Timeout_Warning_Title">Попередження</string>
   <string name="Timeout_Warning_Description">Для виконання цієї дії Tella залишатиметься розблокованою протягом 3 хвилин.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Як ви хочете налаштувати Tella?</string>
   <string name="onboard_full_setup">ПОВНЕ НАЛАШТУВАННЯ</string>
   <string name="onboard_quick_setup">ШВИДКЕ НАЛАШТУВАННЯ</string>
@@ -633,7 +632,7 @@
   <string name="gallery_list.items_show.only.audio">Аудіозаписи</string>
   <string name="onboard.camo_heading">Маскування</string>
   <string name="settings.camo_calculator1">Проста математика</string>
-  <string name="settings.docu_dialog.action_hide">Приховати</string>
+  <string name="settings.docu_dialog.action_hide">Hide</string>
   <string name="settings.docu_auto.upload.server.selection_select">Сервер</string>
   <string name="upload_dialog.title_select.server">Вибір сервера</string>
   <string name="settings.docu_connect.to.servers_enable_action">Під’єднатися до серверів</string>
@@ -773,13 +772,13 @@
   <string name="yellow_theme">жовта тема</string>
   <string name="settings.sec_keep.exif_switch">Зберігати метадані при імпорті</string>
   <string name="settings.sec_keep.exif_expl">Зберігати метадані EXIF під час імпорту фото та відео в Tella. Сюди входить інформація про час створення зображення, налаштування камери, місцезнаходження та ваш пристрій.</string>
-  <string name="Rename_name_Hint">Назва</string>
-  <string name="action_go_to_homescreen">перейти на головний екран</string>
-  <string name="action_show_password">показати пароль</string>
-  <string name="action_hide_password">приховати пароль</string>
-  <string name="action_show_pin">показати PIN-код</string>
-  <string name="action_hide_pin">приховати PIN-код</string>
-  <string name="action_go_back">повернутися</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Показувати кількість спроб розблокування</string>
   <string name="Settings_unlock_screen_instructions">На екрані розблокування показувати кількість невдалих спроб, що залишилися до того, як увесь вміст Tella буде видалено</string>
   <string name="Settings_Delete_After_Failed_Unlock">Видалити після невдалого розблокування</string>
@@ -827,7 +826,7 @@
   <string name="thanks_for_your_feedback">Дякуємо за ваш відгук!</string>
   <string name="save_draft">Зберегти чернетку?</string>
   <string name="description_submit_feedback">Ви можете повернутися в будь-який час, щоб надіслати свій відгук.</string>
-  <string name="feedback">Відгук</string>
+  <string name="feedback">Зворотний зв’язок</string>
   <string name="not_internet_msg">Ви не під’єднані до інтернету. Ваш відгук буде надіслано автоматично, щойно з’явиться мережа.</string>
   <string name="feedback_title">Зворотний зв’язок</string>
   <string name="feedback_sent_msg">Ваш відгук надіслано</string>
@@ -867,7 +866,6 @@
   <string name="Sensitive_Chnage_Title">⚠️ Важливі зміни у наступному випуску</string>
   <string name="Sensitive_Chnage_Description">Наступна версія Tella (реліз 15 липня 2024 року) міститиме суттєві технічні покращення. Ці зміни несуть невеликий ризик втрати деяких файлів під час оновлення.Якщо ви зберігаєте важливі файли в Tella, радимо скопіювати їх у безпечне місце за межами програми перед оновленням.Натисніть «Дізнатися більше» нижче для отримання детальної інформації про майбутні зміни та інструкцій щодо експорту всіх файлів із Tella.</string>
   <string name="Learn_More">ДІЗНАТИСЯ БІЛЬШЕ</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">Вибрано %1$d сутність</item>
     <item quantity="few">Вибрано %1$d сутності</item>
@@ -902,8 +900,6 @@
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Ви погодилися ділитися аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
   <string name="Settings_Analytics_turn_off_dialog">Ви більше не ділитиметеся аналітикою. Ви завжди можете змінити це в налаштуваннях.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Розблокувати</string>
   <string name="Onboard_Collect_Data">Збір інформації</string>
   <string name="Onboard_Collect_Data_Exp">Якщо ви працюєте з організацією, надсилайте форми, звіти та файли безпосередньо з Tella до вашої організації.</string>
@@ -1033,7 +1029,7 @@
   <string name="receive_files">Отримати файли</string>
   <string name="learn_more_about_nearby_sharing">Дізнатися більше про обмін поблизу</string>
   <string name="nearby_sharing">Обмін поблизу</string>
-  <string name="how_it_works">Як це працює</string>
+  <string name="how_it_works">Обмін поблизу</string>
   <string name="peerToPeer_documentation_url" translatable="false">https://tella-app.org/nearby-sharing/</string>
   <string name="enter_recipient_info">Введіть інформацію про пристрій отримувача, щоб знайти його в мережі</string>
   <string name="make_sure_sequence_matches">Переконайтеся, що ця послідовність збігається з тією, що відображається на пристрої відправника.</string>
@@ -1130,12 +1126,12 @@
   <string name="tips_more_item_2">Check out Tella\'s documentation to learn more about Nearby Sharing.</string>
   <string name="nearbysharing_stop_receiving_files">Stop receiving files?</string>
   <string name="nearbysharing_stop_receiving_files_description">Nearby Sharing will be stopped. You will not have access to files that were not fully transferred.</string>
-  <string name="collect_form_geopoint_first_load_title">Setting up maps in Tella</string>
-  <string name="collect_form_geopoint_first_load_message">The first time you use maps in Tella, the app needs to load map data for your area. This may take some time depending on your internet connection.
-Please wait until the map finishes loading before selecting a location.
-Previously viewed areas may still be visible offline.</string>
-  <string name="verification.prompt_dialog.media.file.expl">Verification mode is ON but GPS is OFF. Turn ON GPS in order to record the geolocation of your media file.</string>
-  <string name="collect.form_geopoint_enable_gps_dialog.expl">Turn on GPS to get your location on the map.</string>
+  <string name="collect_form_geopoint_first_load_title">Loading map data for your area</string>
+  <string name="collect_form_geopoint_first_load_message">Please wait until the map finishes loading before selecting a location.</string>
+  <string name="verification.prompt_dialog.media.file.expl">In verification mode, GPS is required to record geolocation information.
+
+Turn on GPS so Tella can record the geolocation of your media file.</string>
+  <string name="collect.form_geopoint_enable_gps_dialog.expl">Enable GPS to get your location on the map.</string>
   <string name="camera_shutter_dnd_dialog_expl">To enable camera silent mode, please go to your device’s settings and turn on “Do Not Disturb” mode for the Tella app.</string>
   <string name="camera_shutter_dnd_camera_dialog_expl">For added security, you can silence the shutter sound on Tella’s camera. 
 
@@ -1148,4 +1144,21 @@ To enable camera silent mode, please go to your device’s settings and turn on 
   <string name="Show_Project_Url_Sheet_Show_Url">Show URL</string>
   <string name="action_go_to_settings">go to settings</string>
   <string name="Show_Project_Url_Sheet_Description_Warning">WARNING: This setting is permanent. To change it, you will have to delete this Connection and start over.</string>
+  <string name="qr_code_sender_show_instruction">Крок 1: Покажіть цей QR-код одержувачу для сканування</string>
+  <string name="qr_code_recipient_show_instruction">Крок 2: Покажіть цей QR-код відправнику для сканування</string>
+  <string name="scan_recipient_qr_code">Відсканувати QR-код одержувача</string>
+  <string name="continue_to_step_2">Continue to step 2</string>
+  <string name="qr_code_scan_sender_instruction">Крок 1: Відскануйте QR-код відправника</string>
+  <string name="connection_failed">Помилка з\'єднання</string>
+  <string name="peer_to_peer_manual_ping_failed">Не вдалося зв\'язатися з іншим пристроєм. Перевірте параметри підключення та переконайтеся, що обидва пристрої підключені до однієї мережі Wi-Fi.</string>
+  <string name="peer_to_peer_incompatible_versions_title">Несумісні версії</string>
+  <string name="peer_to_peer_incompatible_versions_message">На іншому пристрої встановлено застарілу й несумісну версію Tella. Для використання функції «Обмін поблизу» необхідно оновити додаток на обох пристроях.</string>
+  <string name="peer_to_peer_invalid_qr_code">Цей QR-код недійсний для «Обміну поблизу».</string>
+  <string name="peer_to_peer_scan_recipient_qr_expected">Відскануйте QR-код одержувача (той, що показує його IP-адресу та PIN-код), а не QR-код відправника з кроку 1.</string>
+  <string name="peer_to_peer_scan_sender_qr_expected">Відскануйте QR-код відправника (лише сертифікат), а не QR-код підключення одержувача.</string>
+  <string name="peer_to_peer_qr_scanned_number_not_json">Сканер розпізнав число, а не QR-код підключення. Помістіть квадратний QR-код з екрана одержувача по центру (не текст із PIN-кодом), за можливості уникайте сканування з екрана ноутбука чи емулятора та зачекайте, поки QR-код повністю завантажиться.</string>
+  <string name="verification_step1_recipient_hash">Крок 1: Підтвердьте хеш одержувача</string>
+  <string name="verification_step2_sender_hash">Крок 2: Підтвердьте хеш відправника</string>
+  <string name="confirm_and_continue">Підтвердити й продовжити</string>
+  <string name="collect_form_geopoint_first_load_message_secondary">This may take some time, depending on your Internet connection.</string>
 </resources>

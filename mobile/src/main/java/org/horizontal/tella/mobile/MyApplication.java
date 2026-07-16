@@ -24,7 +24,9 @@ import androidx.multidex.MultiDexApplication;
 import androidx.work.Configuration;
 
 import com.bumptech.glide.Glide;
+
 import org.horizontal.tella.mobile.util.crash.CrashReporterProvider;
+
 import com.hzontal.tella_locking_ui.TellaKeysUI;
 import com.hzontal.tella_locking_ui.common.CredentialsCallback;
 import com.hzontal.tella_locking_ui.ui.AppCompatActivityUnlocker;
@@ -170,6 +172,8 @@ public class MyApplication extends MultiDexApplication implements IUnlockRegistr
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.defaultlog", "error");
         MultiDex.install(this);
         CommonPrefs.getInstance().init(newBase);
         SharedPrefs.getInstance().init(newBase);
