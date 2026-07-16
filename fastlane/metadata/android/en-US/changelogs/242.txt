@@ -1,5 +1,5 @@
-- Replaced camera library and location provider with FOSS options.
-- Language support improvements: updated Ukrainian.
+- Replaced geo-location provider.
+- Solved crash on camera that was affecting some models of Pixel phones.
 - Fixed import and delete original bug that prevented the original file from being erased from the device in some cases.
 - Fixed screen security issue on onboarding (some screens were not hidden).
 - Corrected capitalization of buttons.
