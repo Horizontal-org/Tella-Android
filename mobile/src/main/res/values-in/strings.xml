@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Keluar dari formulir?</string>
   <string name="verification_prompt_dialog_title">Aktifkan GPS?</string>
   <string name="collect_tab.title_blank">Laman kosong</string>
-  <string name="action_cancel">Batalkan</string>
+  
   <string name="settings_menu.item_contact">Hubungi kami</string>
   <string name="collect_dialog.text_download.progress">Mengunduh formulir</string>
   <string name="collect_toast_download.completed">Unduhan selesai</string>
-  <string name="action_delete">Hapus</string>
+  
   <string name="collect.draft_tab.title">Bagan</string>
   <string name="collect.blank_action_download.form">Unduh</string>
   <string name="settings_text_empty.field">Kolom ini tidak boleh kosong.</string>
@@ -404,11 +404,7 @@ connecting to a server</string>
   <string name="settings.sec_confirm_camouflage_desc">To re-open Tella, look for the %s app icon among your apps.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">To re-open Tella, look for the Calculator app icon among your apps. Unlock Tella by entering your PIN in the Calculator followed by “=”. </string>
   <string name="settings.sec_confirm_exit_tella">Exit Tella</string>
-  <string name="Home_BottomNav_Home">Beranda</string>
-  <string name="Home_BottomNav_Rec">Rekam</string>
-  <string name="Home_BottomNav_Camera">Kamera</string>
-  <string name="Home_BottomNav_Forms">Forms</string>
-  <string name="Home_BottomNav_Reports">Laporan</string>
+  
   <string name="Vault_Move_AppBar">Pindahkan \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Buat</string>
   <string name="ServerSettings_ServerName_ToolTip">Berikan peladen Anda sebuah nama untuk mengenalinya jika Anda menambahkan peladen lainnya di kemudian hari. Namanya bisa berupa nama organisasi, nama proyek, dll.</string>
@@ -591,7 +587,6 @@ button to add a new template.</string>
   <string name="settings.serv_add.server.selection_dialog.description">Jika Anda tidak yakin, harap tanyakan ke organisasi Anda.</string>
   <string name="Timeout_Warning_Title">Peringatan</string>
   <string name="Timeout_Warning_Description">Untuk melakukan tindakan ini, Tella akan tetap terbuka selama 3 menit.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Bagaimana Anda ingin menyiapkan Tella?</string>
   <string name="onboard_full_setup">PENGATURAN MENYELURUH</string>
   <string name="onboard_quick_setup">PENGATURAN CEPAT</string>
@@ -755,13 +750,13 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">tema kuning</string>
   <string name="settings.sec_keep.exif_switch">Pertahankan metadata saat mengimpor</string>
   <string name="settings.sec_keep.exif_expl">Mempertahankan metadata EXIF saat mengimpor foto dan video ke Tella. Ini termasuk data tentang kapan gambar dibuat, pengaturan kamera, lokasi, dan perangkat Anda.</string>
-  <string name="Rename_name_Hint">Nama</string>
-  <string name="action_go_to_homescreen">pergi ke layar utama</string>
-  <string name="action_show_password">tampilkan kata sandi</string>
-  <string name="action_hide_password">sembunyikan kata sandi</string>
-  <string name="action_show_pin">tampilkan pin</string>
-  <string name="action_hide_pin">sembunyikan pin</string>
-  <string name="action_go_back">kembali</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">Pada layar tidak terkunci, tampilkan sisa percobaan dari kegagalan membuka kunci sebelum semua isi di dalam Tella dihapus.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Hapus setelah gagal membuka kunci</string>
@@ -863,7 +858,6 @@ Anda akan dikirim secara otomatis saat Anda terhubung.</string>
  
  Ketuk \'Pelajari Lebih Lanjut\' di bawah untuk informasi lebih lanjut tentang perubahan yang akan datang dan panduan tentang cara mengekspor semua berkas dari Tella.</string>
   <string name="Learn_More">PELAJARI LEBIH LANJUT</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -905,8 +899,6 @@ Apakah Anda ingin membagikan analitik kepada tim Tella?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> Anda telah mendaftar untuk membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
   <string name="Settings_Analytics_turn_off_dialog">Anda tidak lagi bisa membagikan analitik. Anda selalu bisa mengubah ini di Pengaturan.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Buka kunci</string>
   <string name="Onboard_Collect_Data">Kumpulkan data</string>
   <string name="Onboard_Collect_Data_Exp">Jika Anda bekerja dengan organisasi, kirimkan formulir, laporan, dan berkas langsung dari Tella ke organisasi Anda.</string>

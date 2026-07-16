@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">首页</string>
+    <string name="Home_BottomNav_Rec">录音</string>
+    <string name="Home_BottomNav_Camera">相机</string>
+    <string name="Home_BottomNav_Forms">表单</string>
+    <string name="Home_BottomNav_Reports">报告</string>
+    <string name="Rename_name_Hint">名称</string>
+    <string name="action_go_to_homescreen">返回主屏幕</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_show_password">显示密码</string>
+    <string name="action_hide_password">隐藏密码</string>
+    <string name="action_show_pin">显示 pin 码</string>
+    <string name="action_hide_pin">隐藏 pin 码</string>
+    <string name="action_delete">删除</string>
+    <string name="action_go_back">返回</string>
+</resources>

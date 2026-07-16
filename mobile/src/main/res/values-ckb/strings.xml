@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">فۆڕمی دەرچوون؟</string>
   <string name="verification_prompt_dialog_title">GPS چالاک بکە؟</string>
   <string name="collect_tab.title_blank">بەتاڵ</string>
-  <string name="action_cancel">ڕەتکردنەوە</string>
+  
   <string name="settings_menu.item_contact">پەیوەندیمان پێوە بکە</string>
   <string name="collect_dialog.text_download.progress">داگرتنی فۆرمەکە</string>
   <string name="collect_toast_download.completed">داگرتن تەواو بوو</string>
-  <string name="action_delete">سڕینەوە</string>
+  
   <string name="collect.draft_tab.title">ڕەشنووس</string>
   <string name="collect.blank_action_download.form">داگرتن</string>
   <string name="settings_text_empty.field">ئەم فیڵدە نابێ بەتاڵ بێت.</string>
@@ -403,11 +403,11 @@
   <string name="settings.sec_confirm_camouflage_desc">بۆ دووبارەکردنەوەی تێلا، لەناو ئەپەکانتدا بەدوای ئایکۆنی ئەپی %sدا بگەڕێ.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">بۆ دووبارەکردنەوەی تێلا لەناو ئەپەکانتدا بەدوای ئایکۆنی ئەپی ژمێرەرەکەدا بگەڕێ. بە داخڵکردنی PINـەکەت لە ژمێرەرەکەدا قفڵی تێلا بکەرەوە و دواتر “=”.</string>
   <string name="settings.sec_confirm_exit_tella">دەرچوون لە تێلا</string>
-  <string name="Home_BottomNav_Home">ماڵەوە</string>
-  <string name="Home_BottomNav_Rec">تۆمارکردن</string>
-  <string name="Home_BottomNav_Camera">کامێرا</string>
-  <string name="Home_BottomNav_Forms">فۆرمەکان</string>
-  <string name="Home_BottomNav_Reports">ڕاپۆرتەکان</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">جووڵان \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">دروستکردن</string>
   <string name="ServerSettings_ServerName_ToolTip">ناوێک بدە بە سێرڤەرەکەت کە ئەگەر دواتر سێرڤەری دیکەت زیاد کرد، بیناسیتەوە. ئەو ناوە دەتوانێت ناوی ڕێکخراوەکە، ناوی پرۆژەکە، و هتد بێت.</string>
@@ -592,7 +592,7 @@ button to add a new template.</string>
   <string name="settings.serv_add.server.selection_dialog.description">ئەگەر دڵنیا نیت، تکایە لە ڕێکخراوەکەت بپرسە.</string>
   <string name="Timeout_Warning_Title">ئاگاداری</string>
   <string name="Timeout_Warning_Description">بۆ ئەنجامدانی ئەم چالاکییە، تێلا بۆ ماوەی 3 خولەک بە کراوەیی دەمێنێتەوە.</string>
-  <string name="Home_BottomNav_Uwazi">ئووازی</string>
+  
   <string name="onboard_setup_text">حەز دەکەیت چۆن تێلا دابمەزرێنیت؟</string>
   <string name="onboard_full_setup">دامەزراندنی تەواو</string>
   <string name="onboard_quick_setup">دامەزراندنی خێرا</string>
@@ -756,13 +756,13 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">تێمی زەرد</string>
   <string name="settings.sec_keep.exif_switch">پاراستنی مێتاداتا لەکاتی هاوردەکردندا</string>
   <string name="settings.sec_keep.exif_expl">لە کاتی هاوردەکردنی وێنە و ڤیدیۆ بۆ ناو Tella، میتاداتای EXIF بهێڵەوە. ئەمەش داتاکانی تیابەت بە ئەوەی کە وێنەکە دروست کراوە، ڕێکخستنەکانی کامێرا، شوێن و ئامێرەکەت دەگرێتەوە.</string>
-  <string name="Rename_name_Hint">ناو</string>
-  <string name="action_go_to_homescreen">بڕۆ بۆ شاشەی سەرەکی</string>
-  <string name="action_show_password">وشەی نهێنی پیشان بدە</string>
-  <string name="action_hide_password">شاردنەوەی وشەی نهێنی</string>
-  <string name="action_show_pin">pin پیشاندان بە</string>
-  <string name="action_hide_pin">pin بشارەوە</string>
-  <string name="action_go_back">بگەڕێوە دواوە</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">On the unlock screen, show the remaining number of failed unlocking attempts before everything inside Tella is deleted</string>
   <string name="Settings_Delete_After_Failed_Unlock">Delete after failed unlock</string>
@@ -866,7 +866,6 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
 
  Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -908,8 +907,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
   <string name="Onboard_Collect_Data">Collect data</string>
   <string name="Onboard_Collect_Data_Exp">If you work with an organization, send

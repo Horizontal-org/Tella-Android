@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Ndau djo mashoko ho kumbhunda.</string>
   <string name="verification_prompt_dialog_title">Kuvhula GPS</string>
   <string name="collect_tab.title_blank">Pa chena</string>
-  <string name="action_cancel">Kuvhala</string>
+  
   <string name="settings_menu.item_contact">Ti swake/Batanidzai nesu.</string>
   <string name="collect_dialog.text_download.progress">Djirikutorwa ndau djo mashoko.</string>
   <string name="collect_toast_download.completed">Kutola mashoko ka pera.</string>
-  <string name="action_delete">Kulassa/Bvisa</string>
+  
   <string name="collect.draft_tab.title">Swassala</string>
   <string name="collect.blank_action_download.form">Kuthola</string>
   <string name="settings_text_empty.field">Pandiwani kugala passina chiro.</string>
@@ -402,11 +402,9 @@ Pa nowanika albamu wakassiana  keta ispwa kuti uvure Tella.</string>
   <string name="settings.sec_confirm_camouflage_desc">Kuti uvhula Tella swaga %s pa foni hako.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Kuti umbeule swe pa Tella swanga chokutaka maconta vulo Tella hako pakunkanda cod hako \"=\".</string>
   <string name="settings.sec_confirm_exit_tella">Kubhudha pa Tella.</string>
-  <string name="Home_BottomNav_Home">Nhumba</string>
-  <string name="Home_BottomNav_Rec">Rec</string>
-  <string name="Home_BottomNav_Camera">Camera lo vhissa pikija</string>
-  <string name="Home_BottomNav_Forms">Chiemo</string>
-  <string name="Home_BottomNav_Reports">Chipanguidjiro</string>
+  
+  
+  
   <string name="Vault_Move_AppBar">kuvhissa \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Kuvhaka</string>
   <string name="ServerSettings_ServerName_ToolTip">Ipa sevha yako zita kuti uizive kana ukawedzera masevha akawanda gare gare. Rinogona kunge riri zita resangano, zita reprojekti, zvichingodaro.</string>
@@ -590,7 +588,7 @@ Keta mamueni no mamueni kuti ulambe weswichanda</string>
   <string name="settings.serv_add.server.selection_dialog.description">Kana usina chokwadi, ndapota bvunza sangano renyu.</string>
   <string name="Timeout_Warning_Title">Chizivisso/Nyevero</string>
   <string name="Timeout_Warning_Description">Kuti uite ichi chiito, Tella ichagara yakavhurika kwemaminitsi matatu.</string>
-  <string name="Home_BottomNav_Uwazi">Panovhigwa mashoko nokumagwarira</string>
+  
   <string name="onboard_setup_text">Munodha kumisa Tella sei?</string>
   <string name="onboard_full_setup">Kuseta kapera</string>
   <string name="onboard_quick_setup">Seti hokukassika</string>
@@ -754,13 +752,13 @@ KUZIVISSA: kana ya twarwa Tella unolamba wakadjima kuswikira mashoko ako esse ha
   <string name="yellow_theme">Scrim yo zinhanjane.</string>
   <string name="settings.sec_keep.exif_switch">Kugharira mupikidja no bassikopo pa unotumira.</string>
   <string name="settings.sec_keep.exif_expl">Siya mufodo, baskopo pa Tella, panonga pe panguinja nguwa ijakaviswa, kamera no kukombidja paunonga uri.</string>
-  <string name="Rename_name_Hint">Zina</string>
-  <string name="action_go_to_homescreen">Enda pa Tella lo kuthanga</string>
-  <string name="action_show_password">Kukhombidja numba jo pass</string>
-  <string name="action_hide_password">Vhiga numba jo pass</string>
-  <string name="action_show_pin">Kukhombidja pass</string>
-  <string name="action_hide_pin">Vhiga pass</string>
-  <string name="action_go_back">Hwirira</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Kukombija kueja ko kuvhula kassala.</string>
   <string name="Settings_unlock_screen_instructions">Pa chidzitiro chekuvhura, ratidza nhamba yasara yemiedzo yekukundika kuvhura kusati zvinhu zvese zviri muTella zvabviswa​.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Kulassa swsse pakawanika swakashata pa kuvhula.</string>
@@ -854,7 +852,6 @@ Kudari munochengeta mafaira anokosha muTella, tinokurairai kuti muakope ku ndau 
 
 Dzvanya ‘Jijira zhinji’ pazasi kuti uwane mamwe mashoko pamusoro pe shanduko dziri kuuya uye ndhungamiro yekuti ungatumira sei mafaira ese kubva kuTella.</string>
   <string name="Learn_More">Ziva swimueni/Jijira zhinji</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -897,8 +894,6 @@ Wainda kupaurirana maonere no chikwatha Tella?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Hewe wa swinhoressa kuti u paurerane maonero. Unokwanissa kuswijinja pa maitiro eku shandisa.</string>
   <string name="Settings_Analytics_turn_off_dialog">Ussa paurira maonero unokuanissa kuswichinja pa maitiro eku shandisa.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Kuvhala</string>
   <string name="Onboard_Collect_Data">Tola mashoko</string>
   <string name="Onboard_Collect_Data_Exp">Kana weshanda no batho timira chikomichiro cho mashoko pa chikwama.</string>

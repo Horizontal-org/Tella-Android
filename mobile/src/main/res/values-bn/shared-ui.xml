@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">মূল পাতা</string>
+    <string name="Home_BottomNav_Rec">রেকর্ড</string>
+    <string name="Home_BottomNav_Camera">ক্যামেরা</string>
+    <string name="Home_BottomNav_Forms">ফরম</string>
+    <string name="Home_BottomNav_Reports">রিপোর্ট</string>
+    <string name="Rename_name_Hint">নাম</string>
+    <string name="action_go_to_homescreen">হোম স্ক্রিনে যান</string>
+    <string name="action_cancel">বাতিল</string>
+    <string name="action_show_password">পাসওয়ার্ড দেখান</string>
+    <string name="action_hide_password">পাসওয়ার্ড লুকান</string>
+    <string name="action_show_pin">পিন দেখান</string>
+    <string name="action_hide_pin">পিন লুকান</string>
+    <string name="action_delete">মুছুন</string>
+    <string name="action_go_back">ফিরে যান</string>
+</resources>

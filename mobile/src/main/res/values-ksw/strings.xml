@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ကဟးထီၣ်ဖဲလံာ်ကွီၣ်ဒိအပူၤဧါ?</string>
   <string name="verification_prompt_dialog_title">ကအိးထီၣ်စူးကါ GPS ဧါ?</string>
   <string name="collect_tab.title_blank">တၢ်အိၣ်လီၤဟိ</string>
-  <string name="action_cancel">ဆိကတီၢ်</string>
+  
   <string name="settings_menu.item_contact">တၢ်ဆဲးကျိးပှၤ</string>
   <string name="collect_dialog.text_download.progress">တၢ်ဟံးန့ၢ်ပာ်ဃာ်လံာ်ကွီၣ်ဒိအဖၢမုၢ်လီၤ</string>
   <string name="collect_toast_download.completed">တၢ်ဟံးန့ၢ်ပာ်ဃာ်အီၤဝံၤဝဲဒၣ်လံ</string>
-  <string name="action_delete">ထူးသံကွံာ်</string>
+  
   <string name="collect.draft_tab.title">တၢ်အပတြီာ်</string>
   <string name="collect.blank_action_download.form">ဟံးန့ၢ်ပာ်ဃာ်</string>
   <string name="settings_text_empty.field">တၢ်လီၢ်တတီၤအံၤတၢ်ပာ် အိၣ်ကလီအီၤတသ့ဘၣ်န့ၣ်လီၤ.</string>
@@ -403,11 +403,11 @@
   <string name="settings.sec_confirm_camouflage_desc">လၢတၢ်အိးထီၣ်ကဒါက့ၤ Tella အဂီၢ်, ဃုကွၢ် %s အအဲး(ပ်)တၢ်ပနီၣ်ဖဲနအဲး(ပ်)တဖၣ်အသိးအကျါတက့ၢ်.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">လၢတၢ်အိးထီၣ်ကဒါက့ၤ Tella အဂီၢ်, ဃုကွၢ် စဲးဒွးနီၣ်ဂံၢ် အအဲး(ပ်)တၢ်ပနီၣ် ဖဲနအဲး(ပ်)တဖၣ်အသိးအကျါတက့ၢ်. အိးထီၣ် Tellaအံၤ ခီဖျိတၢ်ထၢနုာ်လီၤန PIN အနီၣ်ဂံၢ်ဖဲ စဲးဒွးနီၣ်ဂံၢ်အပူၤမ့ၢ်ဝံၤအပိာ်ထွဲထီၣ်ဒီး “=” တၢ်ပနီၣ်န့ၣ်တက့ၢ်.</string>
   <string name="settings.sec_confirm_exit_tella">ဟးထီၣ်လၢ Tella ပူၤ</string>
-  <string name="Home_BottomNav_Home">သန့ထံး</string>
-  <string name="Home_BottomNav_Rec">တၢ်ဖှီၣ်တၢ်ကလုၢ်</string>
-  <string name="Home_BottomNav_Camera">ခဲမရၢ်</string>
-  <string name="Home_BottomNav_Forms">လံာ်ကွီၣ်ဒိတဖၣ်</string>
-  <string name="Home_BottomNav_Reports">တၢ်ပာ်ဖျါတဖၣ်</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">သုးကွံ၁်\"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">တ့ထီၣ်</string>
   <string name="ServerSettings_ServerName_ToolTip">ယုာ်န့ၢ်နအ့ထၢၣ်နဲးအပှာ်ယဲၤသန့အမံၤ ဒ်သိးတၢ်ကွၢ်နီၣ်အီၤကဘၣ်ဝဲလၢခံ ဖဲလၢနထၢနုာ်လီၤအါထီၣ် အ့ထၢၣ်နဲးအပှာ်ယဲၤသန့အခါန့ၣ်တက့ၢ်ႋ တၢ်အံၤကမ့ၢ်၀ဲဒၣ် တၢ်ကရၢကရိအမံၤ ပရီကၠဲးအမံၤ ဒီး တၢ်အဂုအၤဂၤ သ့ဝဲန့ၣ်လီၤႋ</string>
@@ -590,7 +590,6 @@ button to add a new template.</string>
   <string name="settings.serv_add.server.selection_dialog.description">နမ့ၢ်တလီၤတံၢ်ဘၣ်န့ၣ်ဒီး, ဝံၤသးစူၤသံကွၢ်ဘၣ်နတၢ်ကရၢကရိန့ၣ်တက့ၢ်.</string>
   <string name="Timeout_Warning_Title">တၢ်ဟ့ၣ်ပလီၢ်</string>
   <string name="Timeout_Warning_Description">ဒ်သိးနကရဲၣ်ကျဲၤမၤဝဲ တၢ်ဟူးတၢ်ဂဲၤအဝဲအံၤအဂီၢ်,Tella အံၤကအိးထီၣ်ဃာ်အသး ၃ မံးနံးဖိလီၤ.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">မ့ၢ်နကအဲၣ်ဒိး ကျဲလီၤပာ်လီၤTella ဒ်လဲၣ်?</string>
   <string name="onboard_full_setup">တၢ်ကျဲလီၤပာ်လီၤအလၢအပှဲၤ</string>
   <string name="onboard_quick_setup">တၢ်ကျဲလီၤပာ်လီၤလၢအချ့</string>
@@ -754,13 +753,13 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
   <string name="yellow_theme">တၢ်ကယၢကယဲ အလွဲၢ်အဘီ</string>
   <string name="settings.sec_keep.exif_switch">ထၢနုာ်လီၤပာ်ကီၤဃုာ်ဒီး မံၤတာ်တၢ်ဂ့ၢ်တၢ်ကျိၤတဖၣ် တဘျီလၢ်လၢ်ဖဲလၢတၢ်ဆှၢနုာ်လီၤတၢ်ဂ့ၢ်တၢ်ကျိၤအခါန့ၣ်တက့ၢ်.</string>
   <string name="settings.sec_keep.exif_expl">ထၢနုာ်လီၤဃုာ်ဒီး EXIF မံၤတာ်တၢ်ဂ့ၢ်တၢ်ကျိၤ ဖဲလၢနဆှၢနုာ်လီၤ တၢ်ဂီၤတဖၣ်ဒီး တၢ်ဂီၤမူတဖၣ်အံၤဆူ Tella ပူၤအခါန့ၣ်တက့ၢ်. တၢ်အံၤကပၣ်ဃုာ်ဝဲဒီး တၢ်ဂ့ၢ်တၢ်ကျိၤဘၣ်ဃး တၢ်ဂီၤအံၤမ့ၢ်အဘၣ်တၢ်ဒိအီၤလၢဆၢကတီၢ်ဖဲလဲၣ်, ခဲမရၢ်အတၢ်ဆီလီၤပာ်လီၤတဖၣ်, တၢ်လီၢ်တၢ်ကျဲ ဒီး စဲးဖီကဟၣ်တၢ်ပီးတၢ်လီအမံၤ တဖၣ်န့ၣ်လီၤ. </string>
-  <string name="Rename_name_Hint">မံၤ</string>
-  <string name="action_go_to_homescreen">ကလဲၤဆူ စခရံၣ်န်အမဲာ်သၣ်ဂံၢ်ထံးန့ၣ်လီၤ.</string>
-  <string name="action_show_password">ပာ်ဖျါထီၣ် လံာ်ဖျၢၣ်ခူသူၣ်</string>
-  <string name="action_hide_password">ပာ်ခူသူၣ် လံာ်ဖျၢၣ်ခူသူၣ်</string>
-  <string name="action_show_pin">ပာ်ဖျါထီၣ် PIN နီၣ်ဂံၢ်</string>
-  <string name="action_hide_pin">ပာ်ခူသူၣ် PIN နီၣ်ဂံၢ်</string>
-  <string name="action_go_back">က့ၤကဒါက့ၤဆူလီၢ်ခံ</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Show unlock attempts remaining</string>
   <string name="Settings_unlock_screen_instructions">တချုးလၢတၢ်ကထူးသံကွံာ်တၢ်ဂ့ၢ်တၢ်ကျိၤလၢ Tellaအဲးပ်ပူၤအံၤဒံးဘၣ်န့ၣ်, တၢ်နုာ်လီၤအိးထီၣ်တၢ်ဂ့ၢ်တၢ်ကျိၤ ကမၣ်န့ၢ်ဝဲပှဲၤဘျီလဲၣ်န့ၣ် ပာ်ဖျါထီၣ်ဘၣ်အီၤလၢ      စခရံၣ်န်အမဲာ်ဖံးခိၣ်လၢအအိးထီၣ်အသး အဖီခိၣ်အံၤန့ၣ်တက့ၢ်. </string>
   <string name="Settings_Delete_After_Failed_Unlock">ကထူးသံကွံာ်ဝဲ ဖဲလၢအအိးထီၣ်သးတန့ၢ်ဝဲအလီၢ်ခံန့ၣ်လီၤ</string>
@@ -854,7 +853,6 @@ WARNING: If enabled, Tella will remain unlocked until all reports are fully uplo
 
  Tap ‘Learn More’ below for more information on the upcoming changes and guidance on how to export all files from Tella.</string>
   <string name="Learn_More">LEARN MORE</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -896,8 +894,6 @@ Would you like to share analytics with the Tella team?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Unlock</string>
   <string name="Onboard_Collect_Data">Collect data</string>
   <string name="Onboard_Collect_Data_Exp">If you work with an organization, send

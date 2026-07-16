@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Camera">Câmera</string>
+    <string name="Home_BottomNav_Reports">Relatórios</string>
+    <string name="action_go_to_homescreen">vá para a tela inicial</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_show_password">mostrar senha</string>
+    <string name="action_hide_password">esconder a senha</string>
+    <string name="action_show_pin">mostrar alfinete</string>
+    <string name="action_hide_pin">ocultar alfinete</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_go_back">volte</string>
+</resources>

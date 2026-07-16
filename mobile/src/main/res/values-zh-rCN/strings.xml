@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">退出表格？</string>
   <string name="verification_prompt_dialog_title">启用 GPS？</string>
   <string name="collect_tab.title_blank">空白</string>
-  <string name="action_cancel">取消</string>
+  
   <string name="settings_menu.item_contact">联系我们</string>
   <string name="collect_dialog.text_download.progress">正在下载表格</string>
   <string name="collect_toast_download.completed">下载完成</string>
-  <string name="action_delete">删除</string>
+  
   <string name="collect.draft_tab.title">草稿</string>
   <string name="collect.blank_action_download.form">下载</string>
   <string name="settings_text_empty.field">此字段不能为空。</string>
@@ -400,11 +400,11 @@
   <string name="settings.sec_confirm_camouflage_desc">要重新打开 Tella，请从应用中查找 %s 应用图标。</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">要重新打开 Tella，从应用中查找计算器图标。请在计算器中输入 PIN 码，然后输入“=”，即可解锁 Tella。</string>
   <string name="settings.sec_confirm_exit_tella">退出 Tella</string>
-  <string name="Home_BottomNav_Home">首页</string>
-  <string name="Home_BottomNav_Rec">录音</string>
-  <string name="Home_BottomNav_Camera">相机</string>
-  <string name="Home_BottomNav_Forms">表单</string>
-  <string name="Home_BottomNav_Reports">报告</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">移动”%s“</string>
   <string name="Vault_CreateFolder_SheetAction">创建</string>
   <string name="ServerSettings_ServerName_ToolTip">为了以后添加更多服务器并进行区分，请命名您的服务器。可使用组织名或项目名等。</string>
@@ -581,7 +581,6 @@
   <string name="settings.serv_add.server.selection_dialog.description">如果不确定，请咨询您的组织。</string>
   <string name="Timeout_Warning_Title">警告</string>
   <string name="Timeout_Warning_Description">为了执行此操作，Tella 将保持解锁状态 3 分钟。</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">您想如何设置 Tella？</string>
   <string name="onboard_full_setup">完整设置</string>
   <string name="onboard_quick_setup">快速设置</string>
@@ -741,13 +740,13 @@
   <string name="yellow_theme">黄色主题</string>
   <string name="settings.sec_keep.exif_switch">导入时保留元数据</string>
   <string name="settings.sec_keep.exif_expl">将照片和视频导入 Tella 时，保留 EXIF 元数据，包括图像创建时间、相机设置、位置和设备等数据。</string>
-  <string name="Rename_name_Hint">名称</string>
-  <string name="action_go_to_homescreen">返回主屏幕</string>
-  <string name="action_show_password">显示密码</string>
-  <string name="action_hide_password">隐藏密码</string>
-  <string name="action_show_pin">显示 pin 码</string>
-  <string name="action_hide_pin">隐藏 pin 码</string>
-  <string name="action_go_back">返回</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">显示剩余解锁尝试次数</string>
   <string name="Settings_unlock_screen_instructions">在解锁界面，显示剩余的解锁失败次数，之后将删除 Tella 中的所有内容。</string>
   <string name="Settings_Delete_After_Failed_Unlock">解锁失败后删除</string>
@@ -846,7 +845,6 @@
 
 点击下方的“了解更多”，查看关于这次更新更多信息以及如何从 Tella 导出所有文件的指南。</string>
   <string name="Learn_More">了解更多</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="other">选中 %1$d 个实体</item>
   </plurals>
@@ -887,8 +885,6 @@
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog"> 您已选择分享分析数据。可随时在“设置”中更改此设置。</string>
   <string name="Settings_Analytics_turn_off_dialog">您将不再分享分析数据。可随时在“设置”中更改此设置。</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">解锁</string>
   <string name="Onboard_Collect_Data">收集数据</string>
   <string name="Onboard_Collect_Data_Exp">如果您和某个组织合作，请直接从 Tella 向该组织发送表单、报告和文件。</string>

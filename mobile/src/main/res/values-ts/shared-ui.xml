@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Kaya</string>
+    <string name="Home_BottomNav_Rec">Gravhara</string>
+    <string name="Home_BottomNav_Camera">Kamera</string>
+    <string name="Home_BottomNav_Forms">Maformulariyo</string>
+    <string name="Home_BottomNav_Reports">Marelatoriyo</string>
+    <string name="Rename_name_Hint">Vito</string>
+    <string name="action_go_to_homescreen">yana ka tela lakusungula</string>
+    <string name="action_cancel">Kanselara</string>
+    <string name="action_show_password">kombisa kodiko</string>
+    <string name="action_hide_password">fihla kodiko</string>
+    <string name="action_show_pin">kombisa PIN</string>
+    <string name="action_hide_pin">fihla PIN</string>
+    <string name="action_delete">Tima</string>
+    <string name="action_go_back">tlhelela ndzhaku</string>
+</resources>

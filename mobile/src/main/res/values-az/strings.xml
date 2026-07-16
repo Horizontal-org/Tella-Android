@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Formadan çıxsın?</string>
   <string name="verification_prompt_dialog_title">GPS açılsın?</string>
   <string name="collect_tab.title_blank">Boş</string>
-  <string name="action_cancel">Ləğv et</string>
+  
   <string name="settings_menu.item_contact">Əlaqə</string>
   <string name="collect_dialog.text_download.progress">Forma yüklənir</string>
   <string name="collect_toast_download.completed">Yükləmə bitdi</string>
-  <string name="action_delete">Sil</string>
+  
   <string name="collect.draft_tab.title">Qaralama</string>
   <string name="collect.blank_action_download.form">Yüklə</string>
   <string name="settings_text_empty.field">Bu sahə boş qala bilməz.</string>
@@ -401,11 +401,11 @@
   <string name="settings.sec_confirm_camouflage_desc">Tella-nı yenidən açmaq üçün tətbiqləriniz arasında %s tətbiqinin təsvirini axtarın.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Tella-nı yenidən açmaq üçün tətbiqlər arasında Kalkulyator təsvirini tapın. Kalkulyatorda PIN-i, sonra “=” yazıb, Tella-nı açın.</string>
   <string name="settings.sec_confirm_exit_tella">Telladan çıx</string>
-  <string name="Home_BottomNav_Home">Əsas</string>
-  <string name="Home_BottomNav_Rec">Yaz</string>
-  <string name="Home_BottomNav_Camera">Kamera</string>
-  <string name="Home_BottomNav_Forms">Formalar</string>
-  <string name="Home_BottomNav_Reports">Hesabatlar</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">Köçür \"%s\"</string>
   <string name="Vault_CreateFolder_SheetAction">Yarat</string>
   <string name="ServerSettings_ServerName_ToolTip">Serverinizi adlandırın ki, onu sonra əlavə edəcəyiniz serverlərdən fərqləndirəsiz. Təşkilat adı, layihə adı və s. ola bilər.</string>
@@ -589,7 +589,6 @@ Obyekt üzərində işə davam etmək üçün onun üstünə tıklayın.</string
   <string name="settings.serv_add.server.selection_dialog.description">Əmin deyilsizsə, təşkilatınızdan soruşun.</string>
   <string name="Timeout_Warning_Title">Xəbərdarlıq</string>
   <string name="Timeout_Warning_Description">Bu əməliyyatı yerinə yetirmək üçün Tella 3 dəqiqə kilidsiz qalacaq.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Tella-nı necə quraşdırmaq istərdiz?</string>
   <string name="onboard_full_setup">TAM QURAŞDIRMA</string>
   <string name="onboard_quick_setup">TEZ QURAŞDIRMA</string>
@@ -753,13 +752,13 @@ XƏBƏRDARLIQ: Aktivləşibsə, Tella kilidi bütün hesabatlar tam yüklənən�
   <string name="yellow_theme">sarı tema</string>
   <string name="settings.sec_keep.exif_switch">Köçürmə zamanı metadatanı saxlay</string>
   <string name="settings.sec_keep.exif_expl">Foto və videoları Tella-ya köçürəndə EXİF metadatasını saxlayın. Bura şəklin çəkildiyi vaxt, məkan, kamera parametrləri və cihazınız haqda məlumatlar daxildir.</string>
-  <string name="Rename_name_Hint">Ad</string>
-  <string name="action_go_to_homescreen">əsas ekrana keç</string>
-  <string name="action_show_password">parolu göstər</string>
-  <string name="action_hide_password">parolu gizlət</string>
-  <string name="action_show_pin">pini göstər</string>
-  <string name="action_hide_pin">pini gizlət</string>
-  <string name="action_go_back">geri qayıt</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Kilidaçma cəhdlərinin qaldığını göstərir</string>
   <string name="Settings_unlock_screen_instructions">Kilidaçma ekranında, Tella daxilindəki məlumatlar silinməzdən əvvəl uğursuz kilidaçma cəhdlərinin qalan sayını göstərin.</string>
   <string name="Settings_Delete_After_Failed_Unlock">Uğursuz cəhddən sonra sil</string>
@@ -852,7 +851,6 @@ Tella-da vacib fayllarınız varsa, yenilənmədən əvvəl onları Tella-dan k�
 
 Növbəti dəyişikliklər haqqında ətraflı məlumat almaq və Tella-dakı faylları ixrac etmək qaydası ilə tanış olmaq üçün \"Ətraflı məlumat alın\" üzərinə klikləyin.</string>
   <string name="Learn_More">ƏTRAFLI MƏLUMAT AL</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">obyekt seçilib</item>
     <item quantity="other">obyekt seçilib</item>
@@ -894,8 +892,6 @@ Analizi Tella komandası ilə böluşmək istərdizmi?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Analizi paylaşmaq üçün qeydiyyatdan keçdiz. Ayarlarda buna dəyişiklik edə bilərsiz.</string>
   <string name="Settings_Analytics_turn_off_dialog">Bundan sonra analizləri paylaşmayacaqsız. Ayarlarda buna dəyişiklik edə bilərsiz.</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Kilidi açın</string>
   <string name="Onboard_Collect_Data">Datanı topla</string>
   <string name="Onboard_Collect_Data_Exp">Hansısa təşkilatla çalışırsızsa, formaları, hesabat və faylları təşkilatınıza Tella-dan göndərin</string>

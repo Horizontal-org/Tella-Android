@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="Home_BottomNav_Home">Beranda</string>
+    <string name="Home_BottomNav_Rec">Rekam</string>
+    <string name="Home_BottomNav_Camera">Kamera</string>
+    <string name="Home_BottomNav_Reports">Laporan</string>
+    <string name="Rename_name_Hint">Nama</string>
+    <string name="action_go_to_homescreen">pergi ke layar utama</string>
+    <string name="action_cancel">Batalkan</string>
+    <string name="action_show_password">tampilkan kata sandi</string>
+    <string name="action_hide_password">sembunyikan kata sandi</string>
+    <string name="action_show_pin">tampilkan pin</string>
+    <string name="action_hide_pin">sembunyikan pin</string>
+    <string name="action_delete">Hapus</string>
+    <string name="action_go_back">kembali</string>
+</resources>

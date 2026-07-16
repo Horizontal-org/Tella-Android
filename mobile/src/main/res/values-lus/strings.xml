@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">Form aṭangin chhuak dawn em?</string>
   <string name="verification_prompt_dialog_title">GPS on tur em?</string>
   <string name="collect_tab.title_blank">Ruak</string>
-  <string name="action_cancel">Sut</string>
+  
   <string name="settings_menu.item_contact">Min be rawh</string>
   <string name="collect_dialog.text_download.progress">Form download mek a ni</string>
   <string name="collect_toast_download.completed">Download zawh a ni</string>
-  <string name="action_delete">Paih</string>
+  
   <string name="collect.draft_tab.title">Draft</string>
   <string name="collect.blank_action_download.form">Download</string>
   <string name="settings_text_empty.field">He hmun hi a ruak tur a ni lo.</string>
@@ -410,11 +410,6 @@ mode hman theihna</string>
   <string name="settings.sec_confirm_camouflage_desc">Tella hawng leh turin, i app zingah %s app icon hi zawng ang che.</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Tella hawng leh turin, i app zingah Calculator app icon hi zawng ang che. Tella hawng turin Calculator-ah i PIN chhu lut la, “=” hmet ang che.</string>
   <string name="settings.sec_confirm_exit_tella">Tella aṭangin chhuak rawh</string>
-  <string name="Home_BottomNav_Home">Home</string>
-  <string name="Home_BottomNav_Rec">Rec</string>
-  <string name="Home_BottomNav_Camera">Camera</string>
-  <string name="Home_BottomNav_Forms">Forms</string>
-  <string name="Home_BottomNav_Reports">Reports</string>
   <string name="Vault_Move_AppBar">\"%s\" sawn rawh</string>
   <string name="Vault_CreateFolder_SheetAction">Siam rawh</string>
   <string name="ServerSettings_ServerName_ToolTip">Nakinah server dang i belh huna i hriat hran theih nan i server hi hming pe rawh. Organization hming emaw, project hming emaw a ni thei.</string>
@@ -626,7 +621,6 @@ mode hman theihna</string>
   <string name="settings.serv_add.server.selection_dialog.description">I chian loh chuan, i organization zawt rawh.</string>
   <string name="Timeout_Warning_Title">Fimkhur</string>
   <string name="Timeout_Warning_Description">He thil hi i tih chhung chuan, Tella hi minute 3 chhung a in-unlock ang.</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">Tella hi engtin nge set up i duh?</string>
   <string name="onboard_full_setup">FULL SETUP</string>
   <string name="onboard_quick_setup">QUICK SETUP</string>
@@ -802,13 +796,13 @@ FIMKHUR: Hei i on chuan, report zawng zawng upload zawh a nih hma chu Tella a in
   <string name="yellow_theme">yellow theme</string>
   <string name="settings.sec_keep.exif_switch">Lakluh in metadata vawngṭha rawh</string>
   <string name="settings.sec_keep.exif_expl">Tella-ah thlalak leh video lakluh a nihin EXIF metadata vawngṭha rawh. Hemi ah hian image siam hun, camera settings, awmna leh i device thuchian a tel.</string>
-  <string name="Rename_name_Hint">Hming</string>
-  <string name="action_go_to_homescreen">home screen-ah kal rawh</string>
-  <string name="action_show_password">password tarlang rawh</string>
-  <string name="action_hide_password">password thup rawh</string>
-  <string name="action_show_pin">pin tarlang rawh</string>
-  <string name="action_hide_pin">pin thup rawh</string>
-  <string name="action_go_back">let leh rawh</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">Unlock theih zat bang tarlang rawh</string>
   <string name="Settings_unlock_screen_instructions">Unlock screen-ah, Tella chhunga thil awm zawng zawng paih a nih hmaa unlock theih zat bang tarlang rawh</string>
   <string name="Settings_Delete_After_Failed_Unlock">Unlock theih loh hnuah paih rawh</string>
@@ -902,7 +896,6 @@ File pawimawh tak Tella-ah i dah a nih chuan, update hmain Tella pawn lamah him 
 
 Inthlak danglamna awm tur leh Tella aṭanga file zawng zawng dahchhuah dan hriatchian lehzual nan a hnuaia ‘Hriatchian Lehzual Nan’ hi hmet rawh.</string>
   <string name="Learn_More">HRIATCHIAN LEHZUAL NAN</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="zero"></item>
     <item quantity="one">Entity %1$d thlan a ni</item>
@@ -949,8 +942,6 @@ Tella team hnênah analytics i ṭâwm duh em?</string>
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">Analytics i inṭâwmpui (share) chhunzawm tawh lo vang. Hei hi Settings aṭangin i thlâk danglam thei reng e.</string>
   <string name="Settings_Analytics_turn_off_dialog">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">Hawng rawh</string>
   <string name="Onboard_Collect_Data">Data khâwm rawh</string>
   <string name="Onboard_Collect_Data_Exp">Pâwl (organization) nêna in thawk a nih chuan, form, report, leh file-te chu Tella aṭangin i pâwl hnênah thawn nghâl rawh.</string>

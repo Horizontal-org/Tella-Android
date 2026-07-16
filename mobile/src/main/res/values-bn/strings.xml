@@ -6,11 +6,11 @@
   <string name="collect.form_exit.unsaved_dialog.title">ফর্ম থেকে প্রস্থান করবেন?</string>
   <string name="verification_prompt_dialog_title">GPS চালু করবেন?</string>
   <string name="collect_tab.title_blank">খালি</string>
-  <string name="action_cancel">বাতিল</string>
+  
   <string name="settings_menu.item_contact">আমাদের সাথে যোগাযোগ করুন</string>
   <string name="collect_dialog.text_download.progress">ফর্ম ডাউনলোড করা হচ্ছে</string>
   <string name="collect_toast_download.completed">ডাউনলোড সম্পন্ন হয়েছে</string>
-  <string name="action_delete">মুছুন</string>
+  
   <string name="collect.draft_tab.title">খসড়া</string>
   <string name="collect.blank_action_download.form">ডাউনলোড</string>
   <string name="settings_text_empty.field">এই ক্ষেত্র খালি রাখা যাবে না</string>
@@ -403,11 +403,11 @@
   <string name="settings.sec_confirm_camouflage_desc">Tella পুনরায় খুলতে, আপনার অ্যাপগুলির মধ্যে %s অ্যাপ আইকনটি সন্ধান করুন৷</string>
   <string name="settings.sec_confirm_calc_camouflage_desc">Tella পুনরায় খুলতে, আপনার অ্যাপগুলির মধ্যে ক্যালকুলেটর অ্যাপ আইকনটি বের করুন৷ ক্যালকুলেটরে আপনার পিন লিখে \"=\"  চাপুন।</string>
   <string name="settings.sec_confirm_exit_tella">Tella বন্ধ করুন</string>
-  <string name="Home_BottomNav_Home">মূল পাতা</string>
-  <string name="Home_BottomNav_Rec">রেকর্ড</string>
-  <string name="Home_BottomNav_Camera">ক্যামেরা</string>
-  <string name="Home_BottomNav_Forms">ফরম</string>
-  <string name="Home_BottomNav_Reports">রিপোর্ট</string>
+  
+  
+  
+  
+  
   <string name="Vault_Move_AppBar">\" %s \" সরান</string>
   <string name="Vault_CreateFolder_SheetAction">তৈরি করুন</string>
   <string name="ServerSettings_ServerName_ToolTip">আপনি যদি পরে আরও সার্ভার যোগ করেন তাহলে আপনার সার্ভারকে এটি সনাক্ত করার জন্য একটি নাম দিন। এটি প্রতিষ্ঠানের নাম, প্রজেক্টের নাম ইত্যাদি হতে পারে।</string>
@@ -593,7 +593,6 @@
   <string name="settings.serv_add.server.selection_dialog.description">আপনি যদি নিশ্চিত না হন, অনুগ্রহ করে আপনার প্রতিষ্ঠানকেে জিজ্ঞাসা করুন৷</string>
   <string name="Timeout_Warning_Title">সতর্কতা</string>
   <string name="Timeout_Warning_Description">এই কাজটি সম্পাদন করতে, Tella ৩ মিনিটের জন্য আনলক থাকবে।</string>
-  <string name="Home_BottomNav_Uwazi">Uwazi</string>
   <string name="onboard_setup_text">আপনি কিভাবে Tella সেট আপ করতে চান?</string>
   <string name="onboard_full_setup">সম্পূর্ণ সেটআপ</string>
   <string name="onboard_quick_setup">দ্রুত সেটআপ</string>
@@ -757,13 +756,13 @@
   <string name="yellow_theme">হলুদ থিম</string>
   <string name="settings.sec_keep.exif_switch">ইমপোর্ট করার সময় মেটাডেটা সংরক্ষণ করুন</string>
   <string name="settings.sec_keep.exif_expl">Tella তে ফটো এবং ভিডিও ইমপোর্ট করার সময় EXIF মেটাডেটা ঠিক রাখুন। এর মধ্যে ছবিটি কখন তোলা হয়েছিল, ক্যামেরা সেটিংস, অবস্থান এবং আপনার ডিভাইসের ডেটা অন্তর্ভুক্ত থাকবে৷</string>
-  <string name="Rename_name_Hint">নাম</string>
-  <string name="action_go_to_homescreen">হোম স্ক্রিনে যান</string>
-  <string name="action_show_password">পাসওয়ার্ড দেখান</string>
-  <string name="action_hide_password">পাসওয়ার্ড লুকান</string>
-  <string name="action_show_pin">পিন দেখান</string>
-  <string name="action_hide_pin">পিন লুকান</string>
-  <string name="action_go_back">ফিরে যান</string>
+  
+  
+  
+  
+  
+  
+  
   <string name="Settings_show_unlock_attempts_remaining">বাকি আনলক প্রচেষ্টা দেখান</string>
   <string name="Settings_unlock_screen_instructions">Tella-এর ভিতরের সবকিছু মুছে ফেলার আগে আনলক স্ক্রিনে কতবার আনলক করার প্রচেষ্টার অবশিষ্ট রয়েছে তা দেখান</string>
   <string name="Settings_Delete_After_Failed_Unlock">আনলক ব্যর্থ হওয়ার পরে মুছুন</string>
@@ -856,7 +855,6 @@
  
  আসন্ন পরিবর্তন সম্পর্কে আরও তথ্যের জন্য এবং কীভাবে টেলা থেকে সমস্ত ফাইল এক্সপোর্ট করা যায় সে সম্পর্কে নির্দেশিকা পেতে নীচে \'আরো জানুন\' এ আলতো চাপুন।</string>
   <string name="Learn_More">আরও জানুন</string>
-  <string name="Home_BottomNav_Settings" translatable="false">Settings</string>
   <plurals name="Uwazi_RelationShipWidget_EntitiesAttached">
     <item quantity="one">%1$d entity selected</item>
     <item quantity="other">%1$d entities selected</item>
@@ -898,8 +896,6 @@
   <string name="could_not_find_uwazientryfragment" translatable="false">Could not find UwaziEntryFragment</string>
   <string name="Settings_Analytics_turn_on_dialog">আপনি অ্যানালিটিক্স শেয়ার করতে সাইন আপ করেছেন। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
   <string name="Settings_Analytics_turn_off_dialog">আপনি আর অ্যানালিটিক্স শেয়ার করবেন না। আপনি সেটিংসে যেকোনো সময় এটি পরিবর্তন করতে পারবেন।</string>
-  <string name="Migration_Failed_Title" translatable="false">Migration Failed\"</string>
-  <string name="Migration_Failed_Description" translatable="false">The database migration failed. If you have a backup of your files, please reinstall Tella and re-import your files into Tella. If you don\'t have a backup and you lost your files, do not delete Tella and contact us: contact@tella-app.org</string>
   <string name="unlock">আনলক করুন</string>
   <string name="Onboard_Collect_Data">তথ্য সংগ্রহ করুন</string>
   <string name="Onboard_Collect_Data_Exp">আপনি যদি কোনো প্রতিষ্ঠানের সাথে কাজ করেন, তাহলে Tella থেকে সরাসরি আপনার প্রতিষ্ঠানে ফর্ম, রিপোর্ট এবং ফাইল পাঠান।</string>
