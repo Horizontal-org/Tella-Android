@@ -1048,7 +1048,12 @@ public class DataSource implements IServersRepository, ITellaUploadServersReposi
 
             if (cursor.moveToFirst()) {
                 // todo: check if byte[] is empty and return null
-                return deserializeFormDef(cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF)));
+                byte[] data = cursor.getBlob(cursor.getColumnIndexOrThrow(D.C_FORM_DEF));
+                if(data.length == 0) {
+                    Timber.e("Empty");
+
+                }
+                return deserializeFormDef(data);
             }
         } catch (Exception e) {
             Timber.e(e, getClass().getName());

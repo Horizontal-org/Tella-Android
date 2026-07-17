@@ -44,7 +44,7 @@ buildscript {
     versions.cacheword = '0.1.1'
     versions.glide = '4.15.0'
     versions.burgstallerOkhttpDigest = '3.1.1'
-    versions.javarosa = '2.6.0'
+    versions.javarosa = '4.4.0'
     versions.commonsIo = '2.6'
     versions.rxandroid = '2.1.1'
     versions.rxrelay = '2.1.1'
@@ -93,6 +93,7 @@ buildscript {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' } // required for Nextcloud
+
     }
 
     def isFdroid = project.hasProperty('fdroid')

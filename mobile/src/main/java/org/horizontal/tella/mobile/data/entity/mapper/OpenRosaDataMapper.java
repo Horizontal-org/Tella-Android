@@ -3,6 +3,7 @@ package org.horizontal.tella.mobile.data.entity.mapper;
 import android.net.Uri;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import timber.log.Timber;
+
 import org.horizontal.tella.mobile.data.entity.OpenRosaResponseEntity;
 import org.horizontal.tella.mobile.data.entity.XFormEntity;
 import org.horizontal.tella.mobile.data.http.HttpStatus;
@@ -74,7 +77,12 @@ public class OpenRosaDataMapper {
 
         try {
             return XFormUtils.getFormFromInputStream(responseBody.byteStream());
-        } finally {
+        }
+        catch(XFormParser.ParseException e) {
+            Timber.e(e, getClass().getSimpleName());
+            return null;
+        }
+        finally {
             responseBody.close();
         }
     }

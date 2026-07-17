@@ -118,6 +118,10 @@ public class WidgetFactory {
                 questionWidget = new DocMediaWidget(context, fep);
                 break;
 
+            case Constants.CONTROL_RANGE:
+                questionWidget = new RangeWidget(context, fep);
+                break;
+
             default:
                 questionWidget = new StringWidget(context, fep, readOnlyOverride);
                 break;

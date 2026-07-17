@@ -297,14 +297,6 @@ public class FormController {
     }
 
 
-    /**
-     * This fires off the jr:preload actions and events to save values like the
-     * end time of a form.
-     */
-    public boolean postProcessInstance() {
-        return formEntryController.getModel().getForm().postProcessInstance();
-    }
-
 
     /**
      * TODO: We need a good description of what this does, exactly, and why.
