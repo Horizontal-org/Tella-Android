@@ -15,7 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiv
 import org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
-class OutboxDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
+class OutboxDropBoxFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val outboxDropBoxViewModel: DropBoxViewModel by viewModels()

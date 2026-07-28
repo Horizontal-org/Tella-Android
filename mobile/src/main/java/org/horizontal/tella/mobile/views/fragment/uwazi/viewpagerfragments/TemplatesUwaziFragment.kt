@@ -1,5 +1,6 @@
-package org.horizontal.tella.mobile.views.fragment.uwazi
+package org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -11,54 +12,67 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.ActionSeleceted
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils.showEditDeleteMenuSheet
 import org.horizontal.tella.mobile.R
-import org.horizontal.tella.mobile.databinding.FragmentTemplatesUwaziBinding
+import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.views.adapters.uwazi.UwaziTemplatesAdapter
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.EmptyMessageVisibilityHandler
+import org.horizontal.tella.mobile.views.fragment.uwazi.UwaziViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.COLLECT_TEMPLATE
 
+/**
+ * Uwazi's extra first tab. It lists downloaded templates rather than instances, so it does not
+ * extend [org.horizontal.tella.mobile.views.fragment.main_connexions.base.BaseReportsFragment],
+ * but it reuses the same list layout and empty-state handling as the other tabs.
+ */
 @AndroidEntryPoint
-class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding>(
-    FragmentTemplatesUwaziBinding::inflate
+class TemplatesUwaziFragment : BaseBindingFragment<FragmentReportsListBinding>(
+    FragmentReportsListBinding::inflate
 ) {
-    private val viewModel: SharedUwaziViewModel by viewModels()
+    private val viewModel: UwaziViewModel by viewModels()
     private val uwaziTemplatesAdapter: UwaziTemplatesAdapter by lazy { UwaziTemplatesAdapter() }
+    private var visibilityHandler: EmptyMessageVisibilityHandler? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        visibilityHandler = parentFragment as? EmptyMessageVisibilityHandler
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        visibilityHandler = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!hasInitializedRootView) {
-            hasInitializedRootView = true
-            initView()
-        }
+        initView()
         initObservers()
     }
 
     private fun initObservers() {
         with(viewModel) {
+            progress.observe(viewLifecycleOwner) { isLoading ->
+                binding.progress.isVisible = isLoading
+            }
 
-            templates.observe(viewLifecycleOwner) {
-                if (it.size == 1) {
-                    binding.textViewEmpty.isVisible = true
-                    binding.templatesRecyclerView.isVisible = false
-                } else {
-                    binding.textViewEmpty.isVisible = false
-                    binding.templatesRecyclerView.isVisible = true
-                    uwaziTemplatesAdapter.setEntityTemplates(it)
+            templates.observe(viewLifecycleOwner) { items ->
+                // The first entry is the header message, so a single entry means "no templates".
+                val isEmpty = items.size <= 1
+                binding.draftsRecyclerView.isVisible = !isEmpty
+                visibilityHandler?.setEmptyTextViewMessageVisibility(isEmpty)
+                if (!isEmpty) {
+                    uwaziTemplatesAdapter.setEntityTemplates(items)
                 }
             }
 
-            showSheetMore.observe(viewLifecycleOwner) {
-                showDownloadedMenu(it)
-            }
+            showSheetMore.observe(viewLifecycleOwner) { showDownloadedMenu(it) }
 
-            openEntity.observe(viewLifecycleOwner) {
-                openEntity(it)
-            }
+            openEntity.observe(viewLifecycleOwner) { openEntity(it) }
         }
     }
 
     private fun initView() {
-        binding.templatesRecyclerView.apply {
+        binding.draftsRecyclerView.apply {
             layoutManager = LinearLayoutManager(baseActivity)
             adapter = uwaziTemplatesAdapter
         }
@@ -93,9 +107,7 @@ class TemplatesUwaziFragment : BaseBindingFragment<FragmentTemplatesUwaziBinding
     }
 
     private fun openEntity(template: UwaziTemplate) {
-        val gsonTemplate = Gson().toJson(template)
-        bundle.putString(COLLECT_TEMPLATE, gsonTemplate)
+        bundle.putString(COLLECT_TEMPLATE, Gson().toJson(template))
         navManager().navigateFromUwaziScreenToUwaziEntryScreen()
     }
-
 }

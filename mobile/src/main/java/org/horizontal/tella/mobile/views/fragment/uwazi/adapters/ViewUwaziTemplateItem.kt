@@ -1,6 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.adapters
 
-data class ViewEntityTemplateItem(
+data class ViewUwaziTemplateItem(
     val id: Long,
     val serverId: Long,
     val templateName: String,

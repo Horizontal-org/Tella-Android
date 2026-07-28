@@ -4,8 +4,8 @@ import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziTemplate
 import org.horizontal.tella.mobile.domain.entity.uwazi.Language
 import org.horizontal.tella.mobile.domain.entity.uwazi.UwaziEntityInstance
 import org.horizontal.tella.mobile.views.adapters.uwazi.ViewLanguageItem
-import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityInstanceItem
-import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewEntityTemplateItem
+import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
+import org.horizontal.tella.mobile.views.fragment.uwazi.adapters.ViewUwaziTemplateItem
 import org.horizontal.tella.mobile.views.fragment.uwazi.download.adapter.ViewTemplateItem
 
 fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicked: () -> Unit) =
@@ -21,11 +21,11 @@ fun UwaziTemplate.toViewTemplateItem(onMoreClicked: () -> Unit, onDownloadClicke
         onMoreClicked = onMoreClicked
     )
 
-fun UwaziTemplate.toViewEntityTemplateItem(
+fun UwaziTemplate.toViewUwaziTemplateItem(
     onFavoriteClicked: () -> Unit,
     onMoreClicked: () -> Unit,
     onOpenEntityClicked: () -> Unit
-) = ViewEntityTemplateItem(
+) = ViewUwaziTemplateItem(
     id = id,
     serverId = serverId,
     templateName = entityRow.name,
@@ -44,17 +44,22 @@ fun Language.toViewLanguageItem(onLanguageClicked: () -> Unit) = ViewLanguageIte
     default = default,
     onLanguageClicked = onLanguageClicked)
 
+/**
+ * Maps a Uwazi entity onto the row model the shared draft/outbox/submitted list renders. The
+ * entity's template name takes the `description` slot, which the shared adapter shows as the
+ * row's secondary line.
+ */
 fun UwaziEntityInstance.toViewEntityInstanceItem(
     onMoreClicked: () -> Unit,
     onOpenClicked: () -> Unit
-) = ViewEntityInstanceItem(
+) = ViewEntityTemplateItem(
     id = id,
-    instanceName = title,
-    serverId = collectTemplate?.serverId,
+    serverId = serverId,
+    title = title,
+    description = collectTemplate?.entityRow?.translatedName ?: "",
+    serverName = collectTemplate?.serverName ?: "",
     updated = updated,
     status = status,
-    translatedTemplateName = collectTemplate?.entityRow?.translatedName ?: "",
-    serverName = collectTemplate?.serverName ?: "",
     onMoreClicked = onMoreClicked,
-    onOpenClicked = onOpenClicked
+    onOpenEntityClicked = onOpenClicked
 )

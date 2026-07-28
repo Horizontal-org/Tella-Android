@@ -14,7 +14,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUt
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 
 @AndroidEntryPoint
-class DraftsGoogleDriveFragment : BaseReportsFragment<GoogleDriveViewModel>() {
+class DraftsGoogleDriveFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val draftGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
