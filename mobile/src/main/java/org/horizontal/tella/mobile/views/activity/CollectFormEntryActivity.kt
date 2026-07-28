@@ -54,9 +54,9 @@ import org.horizontal.tella.mobile.views.fragment.forms.viewpager.OUTBOX_LIST_PA
 import org.horizontal.tella.mobile.views.fragment.recorder.COLLECT_ENTRY
 import org.horizontal.tella.mobile.views.fragment.recorder.MicActivity
 import org.horizontal.tella.mobile.views.fragment.recorder.MicFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.DRAFT_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.SUBMITTED_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.forms.viewpager.CollectSharedLiveData
 import org.horizontal.tella.mobile.views.interfaces.ICollectEntryInterface
 import org.horizontal.tella.mobile.views.interfaces.IMainNavigationInterface
 import org.horizontal.tella.mobile.views.interfaces.VerificationWorkStatusCallback
@@ -589,7 +589,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             false
         )
         formParser!!.startFormChangeTracking()
-        SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
     }
 
     override fun formInstanceAutoSaveSuccess(instance: CollectFormInstance) {
@@ -636,7 +636,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             errorMessage,
             true
         )
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -646,7 +646,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_end_toast_notification_form_not_sent_no_connection),
             true
         )
-        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -678,7 +678,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_toast_form_submitted),
             false
         )
-        SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -686,7 +686,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
         refreshFormEndView(false)
         hideFormCancelButton()
         showFormEndButtons()
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
     override fun formConstraintViolation(formIndex: FormIndex, errorString: String) {
@@ -709,7 +709,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
             getString(R.string.collect_toast_form_saved_for_later_submission),
             false
         )
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         finish()
     }
 
@@ -769,7 +769,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
     }
 
     override fun formSavedOnExit() {
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
         closeAlertDialog()
         onBackPressedWithoutCheck()
     }
@@ -984,7 +984,7 @@ class CollectFormEntryActivity : MetadataActivity(), ICollectEntryInterface,
 
     private fun stopSubmission() {
         viewModel.stopSubmission()
-        SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
+        CollectSharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
     }
 
     private fun userStoppedSubmission(): Boolean {

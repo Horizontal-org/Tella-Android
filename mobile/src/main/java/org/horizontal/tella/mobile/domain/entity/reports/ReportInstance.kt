@@ -1,24 +1,25 @@
 package org.horizontal.tella.mobile.domain.entity.reports
 
 import org.horizontal.tella.mobile.domain.entity.EntityStatus
+import org.horizontal.tella.mobile.domain.entity.IEntityInstance
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFile
 import org.horizontal.tella.mobile.domain.entity.collect.FormMediaFileStatus
 import java.io.Serializable
 
 data class ReportInstance(
-    var id: Long = -1,
-    var serverId: Long = -1,
+    override var id: Long = -1,
+    override var serverId: Long = -1,
     //TODO REPLACEMENT
     var reportApiId: String = "",
-    var updated: Long = 0,
+    override var updated: Long = 0,
     var metadata: Map<String, List<Any>> = mutableMapOf(),
-    var status: EntityStatus = EntityStatus.UNKNOWN,
-    var widgetMediaFiles: List<FormMediaFile> = mutableListOf(),
+    override var status: EntityStatus = EntityStatus.UNKNOWN,
+    override var widgetMediaFiles: List<FormMediaFile> = mutableListOf(),
     var formPartStatus: FormMediaFileStatus = FormMediaFileStatus.UNKNOWN,
-    var title: String = "",
+    override var title: String = "",
     var description: String = "",
     var current: Long = 0
-) : Serializable {
+) : Serializable, IEntityInstance {
 
 
     companion object {

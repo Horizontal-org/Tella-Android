@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.hzontal.tella_vault.MyLocation
+import dagger.hilt.android.AndroidEntryPoint
 import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 import org.horizontal.tella.mobile.MyApplication
@@ -28,12 +29,13 @@ import org.horizontal.tella.mobile.presentation.uwazi.UwaziRelationShipEntity
 import org.horizontal.tella.mobile.util.C
 import org.horizontal.tella.mobile.views.activity.LocationMapActivity
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.uwazi.SharedLiveData
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.DRAFT_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OUTBOX_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SUBMITTED_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData
+import org.horizontal.tella.mobile.views.fragment.uwazi.UwaziViewModel
 import org.horizontal.tella.mobile.views.fragment.uwazi.attachments.VAULT_FILE_KEY
 import org.horizontal.tella.mobile.views.fragment.uwazi.send.SEND_ENTITY
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.DRAFT_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.OUTBOX_LIST_PAGE_INDEX
-import org.horizontal.tella.mobile.views.fragment.uwazi.viewpager.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.widgets.OnEntityClickInEntryListener
 import org.horizontal.tella.mobile.views.fragment.vault.attachements.OnNavBckListener
 
@@ -49,11 +51,12 @@ const val UWAZI_ENTRY_PROMPT_ID = "uwazi_entry_prompt_id"
 const val UWAZI_ENTRY_PROMPT_TITLE = "uwazi_entry_prompt_title"
 const val UWAZI_SELECTED_ENTITIES = "uwazi_selected_entities"
 
+@AndroidEntryPoint
 class UwaziEntryFragment :
     BaseBindingFragment<UwaziEntryFragmentBinding>(UwaziEntryFragmentBinding::inflate),
     OnNavBckListener, OnEntityClickInEntryListener {
 
-    private val viewModel: SharedUwaziSubmissionViewModel by viewModels()
+    private val viewModel: UwaziViewModel by viewModels()
 
     private val uwaziParser: UwaziParser by lazy { UwaziParser(context) }
     private var screenView: ViewGroup? = null
@@ -152,36 +155,36 @@ class UwaziEntryFragment :
 
     private fun initObservers() {
         with(viewModel) {
-            progress.observe(viewLifecycleOwner) { status ->
+            saveStatus.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     EntityStatus.SUBMISSION_PENDING, EntityStatus.SUBMISSION_ERROR -> {
                         SharedLiveData.updateViewPagerPosition.postValue(OUTBOX_LIST_PAGE_INDEX)
                         nav().popBackStack()
-                        progress.postValue(EntityStatus.UNKNOWN)
+                        saveStatus.postValue(EntityStatus.UNKNOWN)
                     }
 
                     EntityStatus.SUBMITTED -> {
                         SharedLiveData.updateViewPagerPosition.postValue(SUBMITTED_LIST_PAGE_INDEX)
                         nav().popBackStack()
-                        progress.postValue(EntityStatus.UNKNOWN)
+                        saveStatus.postValue(EntityStatus.UNKNOWN)
                     }
 
                     EntityStatus.DRAFT -> {
                         SharedLiveData.updateViewPagerPosition.postValue(DRAFT_LIST_PAGE_INDEX)
                         nav().popBackStack()
                         showSavedDialog()
-                        progress.postValue(EntityStatus.UNKNOWN)
+                        saveStatus.postValue(EntityStatus.UNKNOWN)
                     }
 
                     else -> {}
                 }
             }
-            templates.observe(viewLifecycleOwner) { list ->
+            refreshedTemplates.observe(viewLifecycleOwner) { list ->
                 result = list.templates
                 result = result.filter { (it.id.equals(uwaziParser.getTemplate()?.id)) }
                 if (!result.isEmpty()) uwaziParser.setTemplate(result.get(0))
             }
-            progressRefresh.observe(viewLifecycleOwner) {
+            refreshProgress.observe(viewLifecycleOwner) {
                 binding.progressCircular.isVisible = it
             }
         }

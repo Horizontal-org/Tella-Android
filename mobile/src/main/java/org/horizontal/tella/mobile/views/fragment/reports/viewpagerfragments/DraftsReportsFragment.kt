@@ -12,7 +12,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiv
 import org.horizontal.tella.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class DraftsReportsFragment : BaseReportsFragment<ReportsViewModel>() {
+class DraftsReportsFragment : BaseReportsFragment<ReportInstance>() {
 
     private val draftReportsDriveViewModel: ReportsViewModel by viewModels()
 

@@ -15,7 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiv
 import org.horizontal.tella.mobile.views.fragment.nextCloud.NextCloudViewModel
 
 @AndroidEntryPoint
-class SubmittedNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
+class SubmittedNextCloudFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val submittedNextCloudViewModel: NextCloudViewModel by viewModels()

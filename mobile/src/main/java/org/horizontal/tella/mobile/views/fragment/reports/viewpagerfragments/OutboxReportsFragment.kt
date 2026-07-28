@@ -17,7 +17,7 @@ import org.horizontal.tella.mobile.views.fragment.reports.ReportsViewModel
 const val BUNDLE_IS_FROM_OUTBOX = "bundle_is_from_outbox"
 
 @AndroidEntryPoint
-class OutboxReportsFragment : BaseReportsFragment<ReportsViewModel>() {
+class OutboxReportsFragment : BaseReportsFragment<ReportInstance>() {
 
     private val outboxReportsViewModel by viewModels<ReportsViewModel>()
 

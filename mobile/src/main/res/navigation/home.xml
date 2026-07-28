@@ -143,7 +143,7 @@
         android:id="@+id/uwaziSendScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
-        tools:layout="@layout/uwazi_send_fragment" />
+        tools:layout="@layout/fragment_send_report" />
 
     <activity
         android:id="@+id/peerToPeerScreen"

@@ -15,7 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUt
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 
 @AndroidEntryPoint
-class SubmittedDropBoxFragment : BaseReportsFragment<DropBoxViewModel>() {
+class SubmittedDropBoxFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val submittedGoogleDriveViewModel: DropBoxViewModel by viewModels()

@@ -6,9 +6,9 @@
     app:startDestination="@+id/uwaziScreen">
     <fragment
         android:id="@+id/uwaziScreen"
-        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.UwaziFragment"
+        android:name="org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments.UwaziTabsFragment"
         android:label="Uwazi"
-        tools:layout="@layout/fragment_uwazi">
+        tools:layout="@layout/main_report_connexion">
         <action
             android:id="@+id/action_uwaziScreen_to_uwaziDownloadScreen"
             app:destination="@id/uwaziDownloadScreen" />
@@ -55,7 +55,7 @@
         android:id="@+id/uwaziSendScreen"
         android:name="org.horizontal.tella.mobile.views.fragment.uwazi.send.UwaziSendFragment"
         android:label="Send"
-        tools:layout="@layout/uwazi_send_fragment" />
+        tools:layout="@layout/fragment_send_report" />
 
     <fragment
         android:id="@+id/uwaziSubmittedPreviewScreen"

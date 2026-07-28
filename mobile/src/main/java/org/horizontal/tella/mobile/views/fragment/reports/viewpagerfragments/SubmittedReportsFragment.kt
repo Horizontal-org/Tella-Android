@@ -15,7 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiv
 import org.horizontal.tella.mobile.views.fragment.reports.ReportsViewModel
 
 @AndroidEntryPoint
-class SubmittedReportsFragment : BaseReportsFragment<ReportsViewModel>() {
+class SubmittedReportsFragment : BaseReportsFragment<ReportInstance>() {
 
     private val submittedReportsViewModel by viewModels<ReportsViewModel>()
 

@@ -15,7 +15,7 @@ import org.horizontal.tella.mobile.views.fragment.nextCloud.NextCloudViewModel
 import org.horizontal.tella.mobile.views.fragment.reports.viewpagerfragments.BUNDLE_IS_FROM_OUTBOX
 
 @AndroidEntryPoint
-class OutboxNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
+class OutboxNextCloudFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val outboxNextCloudViewModel: NextCloudViewModel by viewModels()

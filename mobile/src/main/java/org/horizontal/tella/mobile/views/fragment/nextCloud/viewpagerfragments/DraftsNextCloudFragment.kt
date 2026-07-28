@@ -14,7 +14,7 @@ import org.horizontal.tella.mobile.views.fragment.main_connexions.base.ReportsUt
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateDraftTitle
 
 @AndroidEntryPoint
-class DraftsNextCloudFragment : BaseReportsFragment<NextCloudViewModel>() {
+class DraftsNextCloudFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val draftNextCloudViewModel: NextCloudViewModel by viewModels()
