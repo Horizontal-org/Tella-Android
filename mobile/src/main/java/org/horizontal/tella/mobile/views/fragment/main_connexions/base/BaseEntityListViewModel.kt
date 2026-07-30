@@ -30,13 +30,13 @@ abstract class BaseEntityListViewModel<I : IEntityInstance> : ViewModel() {
     protected val _reportCounts = SingleLiveEvent<ReportCounts>()
     val reportCounts: LiveData<ReportCounts> get() = _reportCounts
 
-    protected val _draftListReportFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
+    protected val _draftListReportFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val draftListReportFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _draftListReportFormInstance
 
-    protected val _outboxReportListFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
+    protected val _outboxReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val outboxReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _outboxReportListFormInstance
 
-    protected val _submittedReportListFormInstance = SingleLiveEvent<List<ViewEntityTemplateItem>>()
+    protected val _submittedReportListFormInstance = MutableLiveData<List<ViewEntityTemplateItem>>()
     val submittedReportListFormInstance: LiveData<List<ViewEntityTemplateItem>> get() = _submittedReportListFormInstance
 
     protected val _onMoreClickedFormInstance = SingleLiveEvent<I>()

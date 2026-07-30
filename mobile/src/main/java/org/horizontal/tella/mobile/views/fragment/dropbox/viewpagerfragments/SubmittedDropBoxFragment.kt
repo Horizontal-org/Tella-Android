@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.dropbox.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -19,11 +17,6 @@ class SubmittedDropBoxFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val submittedGoogleDriveViewModel: DropBoxViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
 
     override fun getViewModel(): DropBoxViewModel {
         return submittedGoogleDriveViewModel

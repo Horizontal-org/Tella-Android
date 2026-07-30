@@ -12,8 +12,6 @@ import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
 import org.horizontal.tella.mobile.domain.entity.IEntityInstance
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateOutboxTitle
-import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SharedLiveData.updateSubmittedTitle
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.EntityAdapter
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.ViewEntityTemplateItem
 
@@ -76,22 +74,11 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
             loadEntityInstance(instance)
         }
-
-        getViewModel().outboxReportListFormInstance.observe(viewLifecycleOwner) { outboxes ->
-            handleReportList(outboxes)
-            updateOutboxTitle.postValue(outboxes.size)
-        }
-
-
-        getViewModel().submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
-            handleReportList(submitted)
-            updateSubmittedTitle.postValue(submitted.size)
-        }
     }
 
     @SuppressLint("BinaryOperationInTimber")
-    protected fun handleReportList(reports: List<ViewEntityTemplateItem>) {
-        if (reports.isEmpty()) {
+    protected fun handleReportList(reports: List<ViewEntityTemplateItem>?) {
+        if (reports.isNullOrEmpty()) {
             showEmptyMessage()
         } else {
             entityAdapter.setEntities(

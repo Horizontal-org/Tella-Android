@@ -191,7 +191,7 @@ class UwaziViewModel @Inject constructor() : BaseEntityListViewModel<UwaziEntity
 
     private fun listInstances(
         query: (UwaziDataSource) -> Single<List<UwaziEntityInstance>>,
-        target: SingleLiveEvent<List<ViewEntityTemplateItem>>
+        target: MutableLiveData<List<ViewEntityTemplateItem>>
     ) {
         disposables.add(keyDataSource.uwaziDataSource
             .subscribeOn(Schedulers.io())
