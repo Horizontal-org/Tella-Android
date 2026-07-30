@@ -1,7 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,11 +18,6 @@ class SubmittedUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
 
     override fun getViewModel(): UwaziViewModel {
         return submittedUwaziViewModel
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
     }
 
     override fun getEmptyMessage(): Int {
@@ -48,6 +41,7 @@ class SubmittedUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
         with(submittedUwaziViewModel) {
             submittedReportListFormInstance.observe(viewLifecycleOwner) { submitted ->
                 updateSubmittedTitle.postValue(submitted.size)
+                handleReportList(submitted)
             }
 
             onMoreClickedInstance.observe(viewLifecycleOwner) { instance ->

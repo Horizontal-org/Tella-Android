@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.googledrive.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -19,11 +17,6 @@ class OutboxGoogleDriveFragment : BaseReportsFragment<ReportInstance>() {
 
     // Use the ViewModel provided by Hilt
     private val outboxGoogleDriveViewModel: GoogleDriveViewModel by viewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
-    }
 
     // Provide the specific ViewModel to the base class
     override fun getViewModel(): GoogleDriveViewModel {

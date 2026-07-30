@@ -1,7 +1,5 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,11 +18,6 @@ class DraftsUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
 
     override fun getViewModel(): UwaziViewModel {
         return draftUwaziViewModel
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
     }
 
     override fun getEmptyMessage(): Int {

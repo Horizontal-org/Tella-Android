@@ -1,8 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.nextCloud.viewpagerfragments
 
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.horizontal.tella.mobile.R
@@ -21,11 +19,6 @@ class DraftsNextCloudFragment : BaseReportsFragment<ReportInstance>() {
 
     override fun getViewModel(): NextCloudViewModel {
         return draftNextCloudViewModel
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initData()
     }
 
     override fun getEmptyMessage(): Int {
