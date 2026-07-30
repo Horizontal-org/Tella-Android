@@ -2,7 +2,6 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.widgets;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -28,6 +27,7 @@ import org.horizontal.tella.mobile.R;
 import org.horizontal.tella.mobile.data.entity.uwazi.answer.UwaziDateRange;
 import org.horizontal.tella.mobile.presentation.uwazi.UwaziValue;
 import org.horizontal.tella.mobile.util.Util;
+import org.horizontal.tella.mobile.views.base_ui.BaseActivity;
 import org.horizontal.tella.mobile.views.collect.widgets.QuestionWidget;
 import org.horizontal.tella.mobile.views.fragment.uwazi.entry.UwaziEntryPrompt;
 
@@ -267,6 +267,9 @@ public class UwaziDateRangeWidget extends UwaziQuestionWidget {
     }
 
     void showDateConstraint() {
-        DialogUtils.showBottomMessage((Activity) getContext(), getContext().getString(R.string.Uwazi_WidgetDateRange_Constraint), true);
+        BaseActivity activity = getBaseActivity();
+        if (activity != null) {
+            DialogUtils.showBottomMessage(activity, getContext().getString(R.string.Uwazi_WidgetDateRange_Constraint), true);
+        }
     }
 }

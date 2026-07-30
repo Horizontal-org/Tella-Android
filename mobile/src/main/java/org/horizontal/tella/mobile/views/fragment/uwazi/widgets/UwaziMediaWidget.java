@@ -4,7 +4,6 @@ import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.Attac
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -142,8 +141,10 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
     private void showAttachmentsFragment() {
         try {
-
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
             List<VaultFile> files = new ArrayList<>();
             RxVault rxVault = MyApplication.keyRxVault.getRxVault().blockingFirst();
@@ -155,7 +156,7 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
             files.add(vaultFile);
 
-            activity.startActivityForResult(new Intent(getContext(), AttachmentsActivitySelector.class)
+            activity.startActivityForResult(new Intent(activity, AttachmentsActivitySelector.class)
                         //    .putExtra(VAULT_FILE_KEY, new Gson().toJson(files))
                             .putExtra(VAULT_FILES_FILTER, FilterType.AUDIO_VIDEO)
                             .putExtra(VAULT_PICKER_SINGLE,true),
@@ -167,7 +168,10 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
     }
 
     public void importMedia() {
-        BaseActivity activity = (BaseActivity) getContext();
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         waitingForAData = true;
         activity.maybeChangeTemporaryTimeout(() -> {
             MediaFileHandler.startSelectMediaActivity(activity,"video/*",null, C.IMPORT_VIDEO, false);
@@ -177,10 +181,13 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
     private void showVideoActivity() {
         try {
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
 
-            activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
+            activity.startActivityForResult(new Intent(activity, CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
                             .putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.VIDEO.name()),
                     C.MEDIA_FILE_ID
@@ -192,18 +199,22 @@ public class UwaziMediaWidget extends UwaziFileBinaryWidget {
 
     private void showAudioRecorderActivity() {
         try {
-            ICollectEntryInterface activity = (ICollectEntryInterface) getContext();
-
-            activity.openAudioRecorder();
-
+            BaseActivity activity = getBaseActivity();
+            if (activity instanceof ICollectEntryInterface) {
+                ((ICollectEntryInterface) activity).openAudioRecorder();
+            }
         } catch (Exception e) {
             CrashReporterProvider.INSTANCE.get().recordException(e);
         }
     }
 
     private void showSelectFilesSheet(){
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         VaultSheetUtils.showVaultSelectFilesSheet(
-                ((BaseActivity) getContext()).getSupportFragmentManager(),
+                activity.getSupportFragmentManager(),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Take_Video),
                 null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                 getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
