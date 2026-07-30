@@ -10,6 +10,7 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.FragmentReportsListBinding
 import org.horizontal.tella.mobile.domain.entity.IEntityInstance
+import org.horizontal.tella.mobile.domain.entity.reports.ReportInstance
 import org.horizontal.tella.mobile.util.show
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 import org.horizontal.tella.mobile.views.fragment.reports.adapter.EntityAdapter
@@ -68,7 +69,7 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
         }
 
         getViewModel().reportInstance.observe(viewLifecycleOwner) { instance ->
-            navigateToReportScreen(instance)
+            openEntityInstance(instance)
         }
 
         getViewModel().onOpenClickedInstance.observe(viewLifecycleOwner) { instance ->
@@ -139,6 +140,13 @@ abstract class BaseReportsFragment<I : IEntityInstance> :
             getString(R.string.action_cancel),
             R.drawable.ic_eye_white
         )
+    }
+
+    private fun openEntityInstance(reportInstance: I) {
+        if (reportInstance is ReportInstance) {
+            bundle.putSerializable(BUNDLE_REPORT_FORM_INSTANCE, reportInstance)
+        }
+        navigateToReportScreen(reportInstance)
     }
 
     protected fun loadEntityInstance(reportInstance: I) {
