@@ -5,7 +5,6 @@ import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.Attac
 import static org.horizontal.tella.mobile.views.fragment.uwazi.attachments.AttachmentsActivitySelectorKt.VAULT_PICKER_SINGLE;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -160,8 +159,10 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     private void showAttachmentsFragment() {
         try {
-
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
 
             String[] ids = getFileIds() != null ? getFileIds() : null;
@@ -179,10 +180,13 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
 
     private void showCameraActivity() {
         try {
-            Activity activity = (Activity) getContext();
+            BaseActivity activity = getBaseActivity();
+            if (activity == null) {
+                return;
+            }
             waitingForAData = true;
 
-            activity.startActivityForResult(new Intent(getContext(), CameraActivity.class)
+            activity.startActivityForResult(new Intent(activity, CameraActivity.class)
                             .putExtra(CameraActivity.INTENT_MODE, CameraActivity.IntentMode.COLLECT.name())
                     ,  //.putExtra(CameraActivity.CAMERA_MODE, CameraActivity.CameraMode.PHOTO.name())
                     C.MEDIA_FILE_ID
@@ -220,9 +224,13 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     }
 
     private void showSelectFilesSheet() {
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         if (isPdf) {
             VaultSheetUtils.showVaultSelectFilesSheet(
-                    ((BaseActivity) getContext()).getSupportFragmentManager(),
+                    activity.getSupportFragmentManager(),
                     null,
                     null,
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
@@ -254,7 +262,7 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
             );
         } else {
             VaultSheetUtils.showVaultSelectFilesSheet(
-                    ((BaseActivity) getContext()).getSupportFragmentManager(),
+                    activity.getSupportFragmentManager(),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Take_Photo),
                     null, //getContext().getString(R.string.Vault_RecordAudio_SheetAction),
                     getContext().getString(R.string.Uwazi_WidgetMedia_Select_From_Device),
@@ -288,7 +296,10 @@ public class UwaziMultiFileWidget extends UwaziQuestionWidget {
     }
 
     public void importMedia() {
-        BaseActivity activity = (BaseActivity) getContext();
+        BaseActivity activity = getBaseActivity();
+        if (activity == null) {
+            return;
+        }
         activity.maybeChangeTemporaryTimeout(() -> {
             waitingForAData = true;
             MediaFileHandler.startSelectMediaActivity(activity, isPdf ? "application/pdf" : "*/*", null, C.IMPORT_FILE);
