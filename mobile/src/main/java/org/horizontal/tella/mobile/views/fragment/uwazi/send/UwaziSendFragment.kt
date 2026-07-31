@@ -2,6 +2,7 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.send
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,9 @@ class UwaziSendFragment : BaseEntitySendFragment<UwaziEntityInstance>() {
         isFromEntryScreen = arguments?.getBoolean(BUNDLE_IS_FROM_UWAZI_ENTRY) ?: false
 
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.setStartTextTitle(getString(R.string.Uwazi_Submitted_Entity_Header_Title))
+        setupSubmitLaterButton()
 
         viewModel.progressCallBack.observe(viewLifecycleOwner) { (partName, total) ->
             endView.showUploadProgress(partName)
@@ -83,11 +87,37 @@ class UwaziSendFragment : BaseEntitySendFragment<UwaziEntityInstance>() {
     override fun getSubmittedMessage(): String =
         getString(R.string.form_successfully_submitted, reportInstance?.title.orEmpty())
 
+    override fun pauseResumeLabel(reportFormInstance: UwaziEntityInstance?) {
+        binding.nextBtn.text = if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
+            getString(R.string.Reports_Pause)
+        } else {
+            getString(R.string.collect_end_action_submit)
+        }
+    }
+
     override fun navigateBack() {
         if (isFromEntryScreen) {
             nav().popBackStack(R.id.uwaziEntryScreen, true)
         } else {
             nav().popBackStack()
+        }
+    }
+
+    private fun setupSubmitLaterButton() {
+        if (reportInstance?.status == EntityStatus.SUBMITTED) {
+            binding.cancelBtn.isVisible = false
+            return
+        }
+        binding.cancelBtn.isVisible = true
+        binding.cancelBtn.text = getString(R.string.Uwazi_Submit_Later)
+        binding.cancelBtn.setOnClickListener {
+            val entity = reportInstance ?: return@setOnClickListener
+            if (entity.status != EntityStatus.SUBMISSION_PENDING) {
+                entity.status = EntityStatus.SUBMISSION_PENDING
+                viewModel.saveEntityInstance(entity)
+            } else {
+                navigateBack()
+            }
         }
     }
 
