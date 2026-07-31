@@ -101,13 +101,14 @@ abstract class BaseEntitySendFragment<I : IEntityInstance> :
 
         if (reportInstance?.status == EntityStatus.SUBMITTED) {
             binding.nextBtn.hide()
+            binding.cancelBtn.visibility = View.GONE
         }
         highlightSubmitButton()
     }
 
     private fun checkAndSubmitEntity(isOnline: Boolean) {
         if (!isOnline) {
-            binding.nextBtn.text = getString(R.string.Reports_Resume)
+            pauseResumeLabel(reportInstance)
             return
         } else {
             if (isFromDraft) {
@@ -129,7 +130,7 @@ abstract class BaseEntitySendFragment<I : IEntityInstance> :
         pauseResumeLabel(reportInstance)
     }
 
-    protected fun pauseResumeLabel(reportFormInstance: I?) {
+    protected open fun pauseResumeLabel(reportFormInstance: I?) {
         if (reportFormInstance?.status == EntityStatus.SUBMISSION_IN_PROGRESS) {
             binding.nextBtn.text = getString(R.string.Reports_Pause)
         } else {

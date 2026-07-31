@@ -40,6 +40,8 @@ abstract class MainReportFragment :
 
     protected open fun getNewButtonText(): Int = R.string.New_Reports_Text
 
+    protected open fun configurePrimaryActionButton() {}
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -65,6 +67,7 @@ abstract class MainReportFragment :
             binding.newReportBtn.setOnClickListener {
                 navigateToNewReportScreen()
             }
+            configurePrimaryActionButton()
             binding.viewPagerComponent.setOnToolbarBackClickListener { back() }
 
             SharedLiveData.updateViewPagerPosition.observe(baseActivity) { position ->

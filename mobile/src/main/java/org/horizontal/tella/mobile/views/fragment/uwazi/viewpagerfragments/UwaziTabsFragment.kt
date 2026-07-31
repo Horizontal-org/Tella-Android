@@ -1,5 +1,6 @@
 package org.horizontal.tella.mobile.views.fragment.uwazi.viewpagerfragments
 
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import org.horizontal.tella.mobile.R
@@ -27,10 +28,16 @@ internal class UwaziTabsFragment : MainReportFragment() {
         getString(R.string.collect_sent_tab_title)
     )
 
-    override fun getNewButtonText(): Int = R.string.Uwazi_Dowload_Temapltes_Header_Title
-
     override fun navigateToNewReportScreen() {
         this.navManager().navigateFromUwaziScreenToDownloadScreen()
+    }
+
+    override fun configurePrimaryActionButton() {
+        binding.newReportBtn.visibility = View.GONE
+        binding.fabButton.apply {
+            visibility = View.VISIBLE
+            setOnClickListener { navigateToNewReportScreen() }
+        }
     }
 
     override fun getEmptyMessageIcon(): Int {
