@@ -35,21 +35,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="RtlCompat" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <org.horizontal.tella.mobile.views.custom.TellaFloatingActionButton
         android:id="@+id/fab_button"
         style="@style/Main_Floating_Action_Button_Style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="60dp"
         android:contentDescription="@string/action_add"
         android:visibility="gone"
-        app:backgroundTint="@color/dark_orange"
-        app:fabCustomSize="50dp"
-        app:maxImageSize="30dp"
-        app:srcCompat="@drawable/ic_plus"
-        app:useCompatPadding="true"
-        tools:ignore="VectorDrawableCompat"
+        app:fabIcon="@drawable/ic_plus"
+        app:fabIconTint="@color/wa_white"
         tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

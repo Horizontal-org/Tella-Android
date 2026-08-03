@@ -458,21 +458,19 @@
     </style>
 
     <style name="Main_Floating_Action_Button_Style">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:layout_marginHorizontal">@dimen/tella_main_vertical</item>
         <item name="android:layout_marginBottom">@dimen/tella_main_vertical</item>
-        <item name="android:background">@color/dark_orange</item>
     </style>
 
     <style name="Move_Floating_Action_Button_Style">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end|bottom</item>
         <item name="android:layout_marginEnd">@dimen/move_fab_horizontal_margin</item>
         <item name="android:layout_marginBottom">@dimen/move_fab_bottom_margin</item>
-        <item name="android:background">@color/dark_orange</item>
     </style>
 
     <!-- styles for Forms section -->
