@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <ImageView
+        android:id="@+id/info_card_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/onboarding_info_icon_content_description"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_info_24px" />
+
+    <TextView
+        android:id="@+id/info_card_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/open_sans"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/wa_white"
+        android:textSize="14sp"
+        tools:text="Info message" />
+
+</merge>

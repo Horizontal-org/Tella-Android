@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.size
@@ -14,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.viewpager2.widget.ViewPager2
 import com.hzontal.tella_locking_ui.IS_FROM_SETTINGS
 import com.hzontal.tella_locking_ui.IS_ONBOARD_LOCK_SET
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,12 +37,12 @@ import org.hzontal.shared_ui.bottomsheet.BottomSheetUtils
 import org.hzontal.shared_ui.utils.DialogUtils
 
 private const val ONBOARDING_INTRODUCTION_VIEW_INDEX = 0
-private const val ONBOARDING_CAMERA_VIEW_INDEX = 1
-private const val ONBOARDING_RECORDER_VIEW_INDEX = 2
-private const val ONBOARDING_FILES_VIEW_INDEX = 3
-private const val ONBOARDING_COLLECT_DATA_VIEW = 4
-private const val ONBOARDING_NEARBY_SHARING_VIEW_INDEX = 5
-private const val ONBOARDING_LOCK_VIEW_INDEX = 6
+private const val ONBOARDING_RECORD_VIEW_INDEX = 1
+private const val ONBOARDING_FILES_VIEW_INDEX = 2
+private const val ONBOARDING_COLLECT_DATA_VIEW = 3
+private const val ONBOARDING_NEARBY_SHARING_VIEW_INDEX = 4
+private const val ONBOARDING_LOCK_VIEW_INDEX = 5
+private const val ONBOARDING_PROGRESS_DOT_COUNT = 5
 
 
 @AndroidEntryPoint
@@ -62,9 +64,9 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             com.hzontal.tella_locking_ui.R.anim.`in`, com.hzontal.tella_locking_ui.R.anim.out
         )
         setContentView(binding.root)
-        applyEdgeToEdge(binding.root)
+        applyOnboardingInsets()
         // Instantiate a ViewPager and a Tablayout
-        if (!isOnboardLockSet && !isFromSettings) initViewPager(7)
+        if (!isOnboardLockSet && !isFromSettings) initViewPager(6)
 
         // Instantiate next and back buttons
         initButtons()
@@ -86,6 +88,20 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         initReportsEvents()
     }
 
+    private fun applyOnboardingInsets() {
+        applyEdgeToEdgeDarkBackground(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.onboardBottomBar) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, view.paddingTop, bars.right, bars.bottom)
+            insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.viewPager) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(bars.left, bars.top, bars.right, 0)
+            insets
+        }
+    }
+
     private fun initButtons() {
         binding.backBtn.setOnClickListener {
             onBackPressed()
@@ -102,22 +118,20 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     private fun setupIndicators(indicatorCount: Int) {
         binding.indicatorsContainer.removeAllViews()
-        val indicators = arrayOfNulls<ImageView>(indicatorCount)
-        val layoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.setMargins(12, 0, 12, 0)
-        for (i in indicators.indices) {
-            indicators[i] = ImageView(applicationContext)
-            indicators[i].apply {
-                this?.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext, R.drawable.onboarding_indicator_inactive
-                    )
+        val dotSize = resources.getDimensionPixelSize(R.dimen.onboarding_indicator_dot_size)
+        val spacing = resources.getDimensionPixelSize(R.dimen.onboarding_indicator_spacing)
+        for (i in 0 until indicatorCount) {
+            val indicator = ImageView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(dotSize, dotSize).apply {
+                    marginStart = if (i == 0) 0 else spacing
+                    marginEnd = 0
+                }
+                setImageDrawable(
+                    ContextCompat.getDrawable(this@OnBoardingActivity, R.drawable.default_dot)
                 )
-                this?.layoutParams = layoutParams
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
-            binding.indicatorsContainer.addView(indicators[i])
+            binding.indicatorsContainer.addView(indicator)
         }
     }
 
@@ -164,11 +178,9 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     fun onNextPressed() {
-        if (binding.viewPager.currentItem != viewpagerItemsCount) {
-            // select the Next step in the viewpager
+        if (binding.viewPager.currentItem < viewpagerItemsCount - 1) {
             binding.viewPager.currentItem += 1
         }
-
     }
 
     override fun setCurrentIndicator(index: Int) {
@@ -178,13 +190,13 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
             if (i == index) {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                        applicationContext, R.drawable.onboarding_indicator_active
+                        applicationContext, R.drawable.selected_dot
                     )
                 )
             } else {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                        applicationContext, R.drawable.onboarding_indicator_inactive
+                        applicationContext, R.drawable.default_dot
                     )
                 )
             }
@@ -251,13 +263,27 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun initViewPager(itemCount: Int) {
         viewpagerItemsCount = itemCount
-        // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager, this.lifecycle)
         binding.viewPager.adapter = pagerAdapter
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ ->
-        }.attach()
+
+        initProgress(ONBOARDING_PROGRESS_DOT_COUNT)
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                updateProgressForPage(position)
+            }
+        })
+        updateProgressForPage(ONBOARDING_INTRODUCTION_VIEW_INDEX)
 
         binding.viewPager.visibility = View.VISIBLE
+    }
+
+    private fun updateProgressForPage(position: Int) {
+        if (position == ONBOARDING_INTRODUCTION_VIEW_INDEX) {
+            hideProgress()
+        } else {
+            showProgress()
+            setCurrentIndicator(position - 1)
+        }
     }
 
     override fun showLoading() {
@@ -327,7 +353,6 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun enableSwipe(isSwipeable: Boolean, isTabLayoutVisible: Boolean) {
         binding.viewPager.isUserInputEnabled = isSwipeable
-        binding.tabLayout.isVisible = isTabLayoutVisible
     }
 
     override fun showButtons(isNextButtonVisible: Boolean, isBackButtonVisible: Boolean) {
@@ -359,8 +384,7 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         override fun createFragment(position: Int): Fragment {
             val fragment: Fragment = when (position) {
                 ONBOARDING_INTRODUCTION_VIEW_INDEX -> OnBoardIntroFragment()
-                ONBOARDING_CAMERA_VIEW_INDEX -> OnBoardCameraFragment()
-                ONBOARDING_RECORDER_VIEW_INDEX -> OnBoardRecorderFragment()
+                ONBOARDING_RECORD_VIEW_INDEX -> OnBoardCameraFragment()
                 ONBOARDING_FILES_VIEW_INDEX -> OnBoardFilesFragment()
                 ONBOARDING_COLLECT_DATA_VIEW -> OnboardCollectDataFragment()
                 ONBOARDING_NEARBY_SHARING_VIEW_INDEX -> OnBoardNearbySharingFragment()

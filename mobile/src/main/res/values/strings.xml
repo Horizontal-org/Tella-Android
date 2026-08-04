@@ -368,12 +368,14 @@ Turn on GPS so Tella can record the position of your evidence.</string>
   <string name="recorder_toast_recording.saved">The audio recording was saved to your Tella files</string>
   <string name="onboard.intro_title">Welcome to Tella</string>
   <string name="onboard.intro_get_started">Get started</string>
-  <string name="onboard.title_camera">Camera</string>
-  <string name="onboard.expl_camera">Take photos and videos directly in Tella. These files are automatically encrypted and saved in Tella, and will not be visible from your phone’s regular gallery.</string>
+  <string name="onboard.title_camera">Record</string>
+  <string name="onboard.expl_camera">Capture photos, videos and audio directly in Tella.</string>
+  <string name="onboard.expl_camera_info">These files are saved in Tella, and cannot be seen from your phone\'s regular gallery.</string>
   <string name="onboard.title_recorder">Recorder</string>
   <string name="onboard.expl_recorder">Record interviews or any sound around you with Tella’s voice recorder.  The audio files are automatically encrypted and saved in Tella’s hidden folder.</string>
-  <string name="onboard.title_files">Encrypted files &amp; folders</string>
-  <string name="onboard.expl_files">Securely store and organize all your files. As long as Tella is locked, your files and folders will remain inaccessible to someone seizing or searching the device.</string>
+  <string name="onboard.title_files">Store files safely</string>
+  <string name="onboard.expl_files">Your Tella files are encrypted. As long as Tella is locked, no one else (not even the Tella team) can access your data.</string>
+  <string name="onboard.expl_files_info">By default, your Tella files are stored only on your device, not online.</string>
   <string name="onboard.title_lock_finish">Lock</string>
   <string name="onboard.expl_lock_finish">Your lock is set up! You can change it anytime in Settings.</string>
   <string name="onboard.title_all_done">You’re all done!</string>
@@ -904,10 +906,9 @@ Would you like to share analytics with the Tella team?</string>
   <string name="Settings_Analytics_turn_on_dialog"> You have signed up to share analytics. You can always change this in Settings.</string>
   <string name="Settings_Analytics_turn_off_dialog">You will not longer be sharing analytics. You can always change this in Settings.</string>
 <string name="unlock">Unlock</string>
-  <string name="Onboard_Collect_Data">Collect data</string>
-  <string name="Onboard_Collect_Data_Exp">If you work with an organization, send
- forms, reports, and files directly from Tella
- to your organization.</string>
+  <string name="Onboard_Collect_Data">Share data</string>
+  <string name="Onboard_Collect_Data_Exp">Send reports, forms and files to your organization, or back up files to a personal cloud.</string>
+  <string name="onboard.share_data_connections">Tella supports server Connections to:</string>
   <string name="action_flip_vertically">Flip vertically</string>
   <string name="action_flip_horizontally">Flip horizontally</string>
   <string name="settings.docu_add.server_dialog.select_tella_google_drive" translatable="false">Google drive</string>
@@ -1013,7 +1014,8 @@ If you forget your lock, there is currently no way to recover it. Your data insi
   <string name="google_drive_shared_drive_migration_sheet_message">Tella no longer supports shared drives. To continue submitting reports to Google Drive, please create a new personal folder.</string>
   <string name="google_drive_reconnect_sheet_title">Reconnect Google Drive</string>
   <string name="google_drive_reconnect_sheet_message">This folder is no longer accessible. To continue submitting reports, please create a new folder or reconnect your account.</string>
-  <string name="onboard.nearby_sharing_expl">Share files with devices near you, without an Internet connection.</string>
+  <string name="onboard.title_nearby_sharing">Share files nearby</string>
+  <string name="onboard.nearby_sharing_expl">With Nearby Sharing, send files to people near you, without needing an internet connection.</string>
   <string name="Snackbar_Submit_Files_Error">To submit a report, please type in a title and attach a file.</string>
   <string name="connect_to_device">Connect to device</string>
   <string name="qr_code_sender_instruction">Show this QR code for the sender to scan</string>
