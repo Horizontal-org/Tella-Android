@@ -17,5 +17,6 @@
     <dimen name="default_vertical_spacing">0dp</dimen>
     <dimen name="dimen_25">25dp</dimen>
     <dimen name="onboarding_info_card_padding">16dp</dimen>
+    <dimen name="onboarding_info_card_corner_radius">16dp</dimen>
 
 </resources>

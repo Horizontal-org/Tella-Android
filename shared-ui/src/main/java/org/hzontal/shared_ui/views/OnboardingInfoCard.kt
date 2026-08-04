@@ -18,7 +18,7 @@ class OnboardingInfoCard @JvmOverloads constructor(
     init {
         orientation = HORIZONTAL
         gravity = android.view.Gravity.CENTER_VERTICAL
-        setBackgroundResource(R.drawable.bg_information_button)
+        setBackgroundResource(R.drawable.bg_onboarding_info_card)
         val padding = resources.getDimensionPixelSize(R.dimen.onboarding_info_card_padding)
         setPadding(padding, padding, padding, padding)
         inflate(context, R.layout.onboarding_info_card, this)
