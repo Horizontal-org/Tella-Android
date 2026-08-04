@@ -3,7 +3,6 @@ package org.horizontal.tella.mobile.views.fragment.uwazi.entry
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
-import com.hzontal.tella_vault.VaultFile
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.data.uwazi.UwaziConstants
 import org.horizontal.tella.mobile.data.uwazi.UwaziConstants.UWAZI_DATATYPE_RELATIONSHIP
@@ -88,62 +87,80 @@ class UwaziParser(private val context: Context?) {
     }
 
     fun fillAnswersToForm(formView: UwaziFormView) {
-        val files = mutableMapOf<String, FormMediaFile>()
-        for (file in entityInstance.widgetMediaFiles) {
-            files[file.name] = file
-        }
+        putAnswersToForm(formView)
+    }
+
+    fun putAnswersToForm(formView: UwaziFormView) {
+        val filesByName = entityInstance.widgetMediaFiles.associateBy { it.name }
 
         formView.setBinaryData(UWAZI_TITLE, entityInstance.title)
 
-        for (answer in entityInstance.metadata) {
-            val answerList = answer.value as List<*>
-            if (answerList.isNotEmpty()) {
-                if (answerList.size > 1) {
-                    formView.setBinaryData(answer.key, answerList)
-                } else {
-                    val uwaziValue: UwaziValue = answerList[0] as UwaziValue
-                    val stringVal = uwaziValue.value
-                    if (files.containsKey(stringVal)) {
-                        formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
-                    } else {
-                        formView.setBinaryData(answer.key, stringVal)
-                    }
-                }
-            } else {
-                // Handle the case where answer.value is an empty list
-                // You can set a default value, log a warning, or skip this entry
-                formView.setBinaryData(answer.key, "") // Example: setting an empty string
-            }
+        for ((key, values) in entityInstance.metadata) {
+            restoreAnswerToForm(formView, key, values, filesByName)
         }
 
         hashCode = formView.answers.hashCode()
     }
 
-
-    fun putAnswersToForm(formView: UwaziFormView) {
-        val files = mutableMapOf<String, FormMediaFile>()
-        for (file in entityInstance.widgetMediaFiles) {
-            files[file.name] = file
+    /**
+     * Restores a saved metadata answer onto the matching widget.
+     * After Gson round-trips, attachment answers become LinkedTreeMaps with both
+     * "value" (filename) and "attachment" (index) — those must be unwrapped so
+     * image/media widgets receive a FormMediaFile (or a plain value), not the raw list.
+     */
+    private fun restoreAnswerToForm(
+        formView: UwaziFormView,
+        key: String,
+        values: List<Any>,
+        filesByName: Map<String, FormMediaFile>
+    ) {
+        if (values.isEmpty()) {
+            formView.setBinaryData(key, "")
+            return
         }
 
-        formView.setBinaryData(UWAZI_TITLE, entityInstance.title)
-        for (answer in entityInstance.metadata) {
-
-            val stringVal = if (((entityInstance.metadata[answer.key] as ArrayList).size == 1) && ((entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>).size == 1)){
-                (entityInstance.metadata[answer.key]?.get(0) as LinkedTreeMap<*, *>)["value"]
-            } else {
-                (entityInstance.metadata[answer.key])
+        try {
+            if (values.size > 1) {
+                formView.setBinaryData(key, values)
+                return
             }
 
-            if (files.containsKey(stringVal)) {
-                formView.setBinaryData(answer.key, files[stringVal] as VaultFile)
-            } else {
-                if (stringVal != null) {
-                    formView.setBinaryData(answer.key, stringVal)
+            val extracted = extractAnswerValue(values[0]) ?: return
+
+            when {
+                extracted is String && filesByName.containsKey(extracted) -> {
+                    formView.setBinaryData(key, filesByName.getValue(extracted))
                 }
+                extracted is Array<*> -> {
+                    val ids = extracted.filterIsInstance<String>()
+                    if (ids.isNotEmpty()) {
+                        formView.setBinaryData(key, ArrayList(ids))
+                    }
+                }
+                extracted is List<*> -> {
+                    val ids = extracted.filterIsInstance<String>()
+                    if (ids.isNotEmpty()) {
+                        formView.setBinaryData(key, ArrayList(ids))
+                    } else {
+                        formView.setBinaryData(key, extracted)
+                    }
+                }
+                else -> formView.setBinaryData(key, extracted)
             }
+        } catch (e: Exception) {
+            // Keep restoring other answers if one widget fails.
+            android.util.Log.e("UwaziParser", "Failed to restore answer for $key", e)
         }
-        hashCode = formView.answers.hashCode()
+    }
+
+    private fun extractAnswerValue(raw: Any?): Any? {
+        return when (raw) {
+            is UwaziValueAttachment -> raw.value
+            is UwaziValue -> raw.value
+            is LinkedTreeMap<*, *> -> raw["value"] ?: raw
+            is Map<*, *> -> raw["value"] ?: raw
+            else -> raw
+        }
     }
 
     fun getAnswersFromForm(

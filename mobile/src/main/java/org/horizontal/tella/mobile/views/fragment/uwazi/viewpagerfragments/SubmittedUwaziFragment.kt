@@ -51,7 +51,9 @@ class SubmittedUwaziFragment : BaseReportsFragment<UwaziEntityInstance>() {
                     viewText = getString(R.string.Uwazi_Action_ViewEntity),
                     deleteText = getString(R.string.Uwazi_Action_DeleteEntity),
                     deleteConfirmation = getString(R.string.Uwazi_Subtitle_RemoveSubmittedEntity),
-                    deleteActionText = getString(R.string.Uwazi_DeleteEntity_SheetTitle)
+                    deleteActionText = getString(R.string.Uwazi_DeleteEntity_SheetTitle),
+                    confirmButtonLabel = getString(R.string.action_yes),
+                    cancelButtonLabel = getString(R.string.action_no),
                 )
             }
 
