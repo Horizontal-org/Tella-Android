@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import org.horizontal.tella.mobile.R
 import org.horizontal.tella.mobile.databinding.OnboardCollectDataBinding
 import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
@@ -14,12 +16,17 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 class OnboardCollectDataFragment :
     BaseBindingFragment<OnboardCollectDataBinding>(OnboardCollectDataBinding::inflate) {
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyCarouselSlide(view)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
     }
 
     private fun initView(view: View) {
+        ViewCompat.setAccessibilityPaneTitle(binding.root, getString(R.string.Onboard_Collect_Data))
         ViewCompat.setAccessibilityHeading(binding.sheetTitle, true)
         ViewCompat.setAccessibilityHeading(binding.connectionsHeading, true)
         bindConnections()
@@ -36,30 +43,95 @@ class OnboardCollectDataFragment :
         )
 
         val inflater = LayoutInflater.from(requireContext())
-        connections.chunked(3).forEach { rowItems ->
+        val rows = connections.chunked(3)
+        rows.forEachIndexed { rowIndex, rowItems ->
             val row = LinearLayout(requireContext()).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
             }
-            rowItems.forEach { (iconRes, labelRes) ->
+            rowItems.forEachIndexed { columnIndex, (iconRes, labelRes) ->
                 val item = inflater.inflate(R.layout.onboard_connection_item, row, false)
-                item.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                item.layoutParams =
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
                 val label = getString(labelRes).trim()
                 item.findViewById<ImageView>(R.id.connection_icon).setImageResource(iconRes)
                 item.findViewById<TextView>(R.id.connection_label).text = label
-                item.contentDescription = label
+                applyConnectionItemAccessibility(item, label, rowIndex, columnIndex)
                 row.addView(item)
             }
             repeat(3 - rowItems.size) {
-                row.addView(View(requireContext()).apply {
-                    layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
-                    importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                })
+                row.addView(
+                    View(requireContext()).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
+                        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                    }
+                )
             }
             binding.connectionsContainer.addView(row)
         }
+        applyConnectionsGridAccessibility(rows.size)
+    }
+
+    private fun applyConnectionItemAccessibility(
+        item: View,
+        label: String,
+        rowIndex: Int,
+        columnIndex: Int,
+    ) {
+        item.isClickable = false
+        ViewCompat.setAccessibilityDelegate(
+            item,
+            object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(
+                    host: View,
+                    info: AccessibilityNodeInfoCompat,
+                ) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.contentDescription = label
+                    info.isClickable = false
+                    info.setCollectionItemInfo(
+                        AccessibilityNodeInfoCompat.CollectionItemInfoCompat.obtain(
+                            rowIndex,
+                            1,
+                            columnIndex,
+                            1,
+                            false,
+                        ),
+                    )
+                }
+            },
+        )
+    }
+
+    private fun applyConnectionsGridAccessibility(rowCount: Int) {
+        binding.connectionsContainer.importantForAccessibility =
+            View.IMPORTANT_FOR_ACCESSIBILITY_YES
+        ViewCompat.setAccessibilityDelegate(
+            binding.connectionsContainer,
+            object : AccessibilityDelegateCompat() {
+                override fun onInitializeAccessibilityNodeInfo(
+                    host: View,
+                    info: AccessibilityNodeInfoCompat,
+                ) {
+                    super.onInitializeAccessibilityNodeInfo(host, info)
+                    info.setCollectionInfo(
+                        AccessibilityNodeInfoCompat.CollectionInfoCompat.obtain(
+                            rowCount,
+                            GRID_COLUMN_COUNT,
+                            false,
+                            AccessibilityNodeInfoCompat.CollectionInfoCompat.SELECTION_MODE_NONE,
+                        ),
+                    )
+                }
+            },
+        )
+    }
+
+    private companion object {
+        const val GRID_COLUMN_COUNT = 3
     }
 }
