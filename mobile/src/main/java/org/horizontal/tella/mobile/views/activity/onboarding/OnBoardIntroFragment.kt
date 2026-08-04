@@ -23,28 +23,14 @@ class OnBoardIntroFragment : BaseFragment() {
         initView(view)
     }
 
-    override fun onResume() {
-        super.onResume()
-        (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = false, isTabLayoutVisible = false
-        )
-        (baseActivity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = false, isBackButtonVisible = false
-        )
-    }
-
     override fun initView(view: View) {
-        (baseActivity as OnBoardActivityInterface).hideProgress()
-
         val enterCodeButton = view.findViewById<TextView>(R.id.sheet_two_btn)
         enterCodeButton.setOnClickListener {
             (baseActivity as OnBoardActivityInterface).enterCustomizationCode()
         }
 
-        val startBtn = view.findViewById<TextView>(R.id.startBtn)
-        startBtn.setOnClickListener {
+        view.findViewById<TextView>(R.id.startBtn).setOnClickListener {
             (baseActivity as OnBoardingActivity).onNextPressed()
-
         }
     }
 }
