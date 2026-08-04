@@ -168,20 +168,15 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (binding.viewPager.currentItem == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed()
-        } else {
-            // Otherwise, select the previous step.
-            if (binding.viewPager.size > 0)
-                binding.viewPager.currentItem -= 1
+        } else if (binding.viewPager.size > 0) {
+            binding.viewPager.setCurrentItem(binding.viewPager.currentItem - 1, true)
         }
-
     }
 
     fun onNextPressed() {
         if (binding.viewPager.currentItem < viewpagerItemsCount - 1) {
-            binding.viewPager.currentItem += 1
+            binding.viewPager.setCurrentItem(binding.viewPager.currentItem + 1, true)
         }
     }
 
@@ -267,11 +262,20 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
         viewpagerItemsCount = itemCount
         val pagerAdapter = ScreenSlidePagerAdapter(supportFragmentManager, this.lifecycle)
         binding.viewPager.adapter = pagerAdapter
+        binding.viewPager.offscreenPageLimit = 1
 
         initProgress(ONBOARDING_PROGRESS_DOT_COUNT)
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                updateProgressForPage(position)
+                if (position in ONBOARDING_RECORD_VIEW_INDEX until ONBOARDING_LOCK_VIEW_INDEX) {
+                    setCurrentIndicator(position - 1)
+                }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    updateProgressForPage(binding.viewPager.currentItem)
+                }
             }
         })
         updateProgressForPage(ONBOARDING_INTRODUCTION_VIEW_INDEX)
@@ -280,11 +284,24 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun updateProgressForPage(position: Int) {
-        if (position == ONBOARDING_INTRODUCTION_VIEW_INDEX) {
-            hideProgress()
-        } else {
-            showProgress()
-            setCurrentIndicator(position - 1)
+        when (position) {
+            ONBOARDING_INTRODUCTION_VIEW_INDEX -> {
+                hideProgress()
+                binding.viewPager.isUserInputEnabled = false
+                showButtons(isNextButtonVisible = false, isBackButtonVisible = false)
+            }
+            ONBOARDING_LOCK_VIEW_INDEX -> {
+                showProgress()
+                setCurrentIndicator(position - 1)
+                binding.viewPager.isUserInputEnabled = true
+                showButtons(isNextButtonVisible = false, isBackButtonVisible = true)
+            }
+            else -> {
+                showProgress()
+                setCurrentIndicator(position - 1)
+                binding.viewPager.isUserInputEnabled = true
+                showButtons(isNextButtonVisible = true, isBackButtonVisible = true)
+            }
         }
     }
 
@@ -358,8 +375,12 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     override fun showButtons(isNextButtonVisible: Boolean, isBackButtonVisible: Boolean) {
-        binding.nextBtn.isVisible = isNextButtonVisible
-        binding.backBtn.isVisible = isBackButtonVisible
+        binding.nextBtn.visibility = if (isNextButtonVisible) View.VISIBLE else View.INVISIBLE
+        binding.backBtn.visibility = if (isBackButtonVisible) View.VISIBLE else View.INVISIBLE
+        binding.nextBtn.isEnabled = isNextButtonVisible
+        binding.backBtn.isEnabled = isBackButtonVisible
+        binding.nextBtn.isClickable = isNextButtonVisible
+        binding.backBtn.isClickable = isBackButtonVisible
     }
 
     override fun hideViewpager() {

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     android:background="@color/wa_purple"
     android:fitsSystemWindows="false">
 
@@ -26,6 +25,7 @@
         android:id="@+id/onboard_bottom_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/onboarding_bottom_bar_min_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -48,16 +48,15 @@
             android:id="@+id/back_btn"
             style="@style/Onboarding_BottomNavButton"
             android:text="@string/LockSelect_Action_Back"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/next_btn"
             style="@style/Onboarding_BottomNavButton"
-            android:layout_marginEnd="@dimen/onboarding_nav_horizontal_margin"
             android:text="@string/action_next"
-            android:visibility="gone"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

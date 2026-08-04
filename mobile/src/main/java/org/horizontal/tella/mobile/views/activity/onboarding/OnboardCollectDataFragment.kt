@@ -19,16 +19,6 @@ class OnboardCollectDataFragment :
         initView(view)
     }
 
-    override fun onResume() {
-        super.onResume()
-        (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true, isTabLayoutVisible = false
-        )
-        (baseActivity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = true, isBackButtonVisible = true
-        )
-    }
-
     private fun initView(view: View) {
         ViewCompat.setAccessibilityHeading(binding.sheetTitle, true)
         ViewCompat.setAccessibilityHeading(binding.connectionsHeading, true)

@@ -19,15 +19,5 @@ class OnBoardCameraFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
-        (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true, isTabLayoutVisible = false
-        )
-        (baseActivity as OnBoardActivityInterface).showButtons(
-            isNextButtonVisible = true, isBackButtonVisible = true
-        )
-    }
-
     override fun initView(view: View) = Unit
 }
