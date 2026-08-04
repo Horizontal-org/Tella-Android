@@ -439,7 +439,7 @@ connecting to a server</string>
   <string name="collect.outbox_tab.title">Outbox</string>
   <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
   <string name="fragment_uwazi">Uwazi</string>
-  <string name="Uwazi_Dowload_Temapltes_Header_Title">Download templates</string>
+  <string name="Uwazi_Dowload_Temapltes_Header_Title">Add templates</string>
   <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
   <string name="Uwazi_Action_FillEntity">Create an entity</string>
   <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
@@ -456,6 +456,7 @@ button to add a new template.</string>
   <string name="Uwazi_Draft_Entities_Empty_Description">You have no draft entities.</string>
   <string name="Uwazi_Action_Save_Draft">Save draft</string>
   <string name="Uwazi_Subtitle_RemoveDraft">Are you sure you want to remove this draft?</string>
+  <string name="Uwazi_Subtitle_RemoveOutboxEntity">Are you sure you want to delete this entity?</string>
   <string name="Uwazi_Form_MediaHeader">Attached file</string>
   <string name="Uwazi_EntryInstance_SavedInfo">Entity is saved as draft.</string>
   <string name="Uwazi_Action_EditDraft">Edit draft</string>
@@ -543,6 +544,8 @@ button to add a new template.</string>
   </plurals>
   <string name="Util_ellapsedTime_Seconds">A few seconds ago</string>
   <string name="Donwload_Templates_Title_Description">These are the templates available on the Uwazi instances you are connected to.</string>
+  <string name="Download_Templates_You_Can">You can</string>
+  <string name="Download_Templates_Manage_Instances">manage your Uwazi instances here.</string>
   <string name="Uwazi_Templates_HeaderMessage">These are Uwazi templates you can fill out.</string>
   <string name="Vault_Filter_Name">Name</string>
   <string name="Server_Url_Screen_Title">Enter the server URL</string>

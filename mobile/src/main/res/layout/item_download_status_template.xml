@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:contentDescription="@string/action_download"
-        android:src="@drawable/ic_save_alt_24px"
+        android:src="@drawable/ic_add_circle_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
