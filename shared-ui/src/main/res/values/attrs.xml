@@ -151,4 +151,8 @@
         <attr name="tipsTextColor" format="color|reference" />
         <attr name="tipsCornerRadius" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="OnboardingInfoCard">
+        <attr name="infoMessage" format="reference|string" />
+    </declare-styleable>
 </resources>

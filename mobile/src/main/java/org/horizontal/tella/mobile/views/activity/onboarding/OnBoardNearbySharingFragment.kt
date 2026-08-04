@@ -10,25 +10,15 @@ class OnBoardNearbySharingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
     }
 
     override fun onResume() {
         super.onResume()
         (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true, isTabLayoutVisible = true
+            isSwipeable = true, isTabLayoutVisible = false
         )
         (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = true, isBackButtonVisible = true
         )
-    }
-
-    private fun initView() {
-        binding.backBtn.setOnClickListener {
-            baseActivity.onBackPressed()
-        }
-        binding.nextBtn.setOnClickListener {
-            (baseActivity as OnBoardingActivity).onNextPressed()
-        }
     }
 }

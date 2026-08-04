@@ -43,7 +43,7 @@ class OnBoardLockFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         (baseActivity as OnBoardActivityInterface).enableSwipe(
-            isSwipeable = true, isTabLayoutVisible = true)
+            isSwipeable = true, isTabLayoutVisible = false)
         (baseActivity as OnBoardActivityInterface).showButtons(
             isNextButtonVisible = false, isBackButtonVisible = true)
     }
@@ -76,7 +76,6 @@ class OnBoardLockFragment : BaseFragment() {
         }
 
         cancelBtn.setOnClickListener {
-            (baseActivity as OnBoardActivityInterface).setCurrentIndicator(2)
             baseActivity.onBackPressed()
         }
     }
