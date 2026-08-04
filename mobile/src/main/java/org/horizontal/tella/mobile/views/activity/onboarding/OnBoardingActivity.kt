@@ -126,6 +126,8 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
                     marginStart = if (i == 0) 0 else spacing
                     marginEnd = 0
                 }
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                adjustViewBounds = true
                 setImageDrawable(
                     ContextCompat.getDrawable(this@OnBoardingActivity, R.drawable.default_dot)
                 )

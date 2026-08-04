@@ -37,16 +37,16 @@ class OnboardCollectDataFragment :
 
     private fun bindConnections() {
         val connections = listOf(
-            R.drawable.ic_dropbox_small to R.string.settings_docu_add_server_dialog_select_tella_dropbox,
-            R.drawable.ic_google_drive_small to R.string.google_drive,
-            R.drawable.ic_nextcloud_small to R.string.NextCloud,
-            org.hzontal.shared_ui.R.drawable.ic_uwazi_small to R.string.settings_docu_add_server_dialog_select_tella_uwazi,
-            R.drawable.ic_servers_icon to R.string.settings_docu_add_server_dialog_select_tella_web,
-            R.drawable.ic_collect_menu to R.string.settings_docu_add_server_dialog_select_odk,
+            R.drawable.ic_onboard_dropbox to R.string.settings_docu_add_server_dialog_select_tella_dropbox,
+            R.drawable.ic_onboard_google_drive to R.string.google_drive,
+            R.drawable.ic_onboard_nextcloud to R.string.NextCloud,
+            R.drawable.ic_onboard_uwazi to R.string.settings_docu_add_server_dialog_select_tella_uwazi,
+            R.drawable.ic_onboard_tella_web to R.string.settings_docu_add_server_dialog_select_tella_web,
+            R.drawable.ic_onboard_odk to R.string.settings_docu_add_server_dialog_select_odk,
         )
 
         val inflater = LayoutInflater.from(requireContext())
-        connections.chunked(2).forEach { rowItems ->
+        connections.chunked(3).forEach { rowItems ->
             val row = LinearLayout(requireContext()).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
@@ -57,13 +57,13 @@ class OnboardCollectDataFragment :
             rowItems.forEach { (iconRes, labelRes) ->
                 val item = inflater.inflate(R.layout.onboard_connection_item, row, false)
                 item.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                val label = getString(labelRes)
+                val label = getString(labelRes).trim()
                 item.findViewById<ImageView>(R.id.connection_icon).setImageResource(iconRes)
                 item.findViewById<TextView>(R.id.connection_label).text = label
                 item.contentDescription = label
                 row.addView(item)
             }
-            if (rowItems.size == 1) {
+            repeat(3 - rowItems.size) {
                 row.addView(View(requireContext()).apply {
                     layoutParams = LinearLayout.LayoutParams(0, 0, 1f)
                     importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
