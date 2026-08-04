@@ -74,13 +74,12 @@
 
     <TextView
         android:id="@+id/nextBtn"
+        style="@style/Onboarding_BottomNavButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Unlock_White_Text_Next"
         android:text="@string/action_next"
         android:textColor="@color/wa_white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-         />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
