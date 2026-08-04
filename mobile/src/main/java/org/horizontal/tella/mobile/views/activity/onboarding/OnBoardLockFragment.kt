@@ -35,6 +35,14 @@ class OnBoardLockFragment : BaseFragment() {
         return inflater.inflate(R.layout.onboard_lock_fragment, container, false)
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        if (arguments?.getBoolean(IS_FROM_SETTINGS, false) == true) {
+            OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+        } else {
+            OnboardingInsets.applyCarouselSlide(view)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)

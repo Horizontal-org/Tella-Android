@@ -27,6 +27,10 @@ class OnBoardLockSuccessFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Keep success content hidden until user taps "Continue" on the bottom sheet

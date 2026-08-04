@@ -8,6 +8,10 @@ import org.horizontal.tella.mobile.views.base_ui.BaseBindingFragment
 class OnBoardNearbySharingFragment :
     BaseBindingFragment<OnboardNearbySharingFragmentBinding>(OnboardNearbySharingFragmentBinding::inflate) {
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyCarouselSlide(view)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }

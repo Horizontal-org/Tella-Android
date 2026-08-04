@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.view.size
@@ -89,17 +90,35 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
     }
 
     private fun applyOnboardingInsets() {
-        applyEdgeToEdgeDarkBackground(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.onboardBottomBar) { view, insets ->
-            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(bars.left, view.paddingTop, bars.right, bars.bottom)
-            insets
+        WindowInsetsControllerCompat(window, binding.root).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
         }
+        val navHorizontal =
+            resources.getDimensionPixelSize(R.dimen.onboarding_nav_horizontal_margin)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets -> insets }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.viewPager) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(bars.left, bars.top, bars.right, 0)
             insets
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.onboardBottomBar) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(
+                bars.left + navHorizontal,
+                view.paddingTop,
+                bars.right + navHorizontal,
+                bars.bottom
+            )
+            insets
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootOnboard) { _, insets -> insets }
+
+        ViewCompat.requestApplyInsets(binding.root)
     }
 
     private fun initButtons() {
@@ -385,10 +404,12 @@ class OnBoardingActivity : BaseActivity(), OnBoardActivityInterface,
 
     override fun hideViewpager() {
         binding.viewPager.visibility = View.GONE
+        binding.onboardBottomBar.visibility = View.GONE
     }
 
     override fun showViewpager() {
         binding.viewPager.visibility = View.VISIBLE
+        binding.onboardBottomBar.visibility = View.VISIBLE
     }
 
     private fun handleCustomizationCode(code: String) {

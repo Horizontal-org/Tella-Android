@@ -60,7 +60,7 @@
         android:layout_height="@dimen/onboarding_get_started_height"
         android:layout_marginTop="40dp"
         android:layout_marginHorizontal="@dimen/onboarding_get_started_horizontal_margin"
-        android:background="@drawable/round_orange_button_selector"
+        android:background="@drawable/bg_onboarding_get_started_selector"
         android:clickable="true"
         android:contentDescription="@string/onboard.intro_get_started"
         android:focusable="true"

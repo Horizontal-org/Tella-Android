@@ -18,6 +18,10 @@ class OnBoardIntroFragment : BaseFragment() {
         return inflater.inflate(R.layout.onboard_intro_fragment_1, container, false)
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyCarouselSlide(view)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)

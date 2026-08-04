@@ -17,6 +17,10 @@ class OnBoardFilesFragment : BaseFragment() {
         return inflater.inflate(R.layout.onboard_files_fragment, container, false)
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyCarouselSlide(view)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }

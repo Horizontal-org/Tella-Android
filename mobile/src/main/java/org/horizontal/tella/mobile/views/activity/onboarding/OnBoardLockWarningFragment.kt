@@ -37,6 +37,10 @@ class OnBoardLockWarningFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun applyEdgeToEdgeIfNeeded(view: View) {
+        OnboardingInsets.applyFullscreenOverlay(view, baseActivity)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
