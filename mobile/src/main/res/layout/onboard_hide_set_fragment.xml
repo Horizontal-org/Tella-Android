@@ -35,16 +35,15 @@
 
     <TextView
         android:id="@+id/sheet_title"
+        style="@style/Typography.Heading1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/hide_tella_big_margin"
         android:layout_marginBottom="@dimen/hide_tella_big_margin"
-        android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:padding="6dp"
         android:text="@string/settings.servers_hide_tella_title"
         android:textColor="@color/wa_white"
-        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/sheet_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,14 +51,13 @@
 
     <TextView
         android:id="@+id/sheet_subtitle"
+        style="@style/Typography.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/open_sans"
         android:gravity="center"
         android:padding="@dimen/hide_tella_small_margin"
         android:text="@string/onboard.expl_hide_tella_set"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineCenter"
