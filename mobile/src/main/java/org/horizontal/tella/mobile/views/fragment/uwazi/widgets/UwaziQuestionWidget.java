@@ -6,7 +6,6 @@ import static org.hzontal.shared_ui.pinview.ResourceUtils.getDrawable;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.FormIndex;
 
@@ -82,7 +82,12 @@ public abstract class UwaziQuestionWidget extends RelativeLayout {
         if (formEntryPrompt.isRequired()) {
             builder.append(" *");
             int end = builder.length();
-            builder.setSpan(new ForegroundColorSpan(Color.RED), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(
+                    new ForegroundColorSpan(ContextCompat.getColor(context, R.color.wa_orange)),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            );
         }
         questionTitleView.setText(builder);
         helpTextView = findViewById(R.id.questionHelpText);

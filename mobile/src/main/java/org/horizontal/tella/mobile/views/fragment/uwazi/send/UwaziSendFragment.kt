@@ -35,6 +35,10 @@ class UwaziSendFragment : BaseEntitySendFragment<UwaziEntityInstance>() {
         binding.toolbar.setStartTextTitle(getString(R.string.Uwazi_Submitted_Entity_Header_Title))
         setupSubmitLaterButton()
 
+        if (isFromEntryScreen) {
+            binding.toolbar.backClickListener = { nav().popBackStack() }
+        }
+
         viewModel.progressCallBack.observe(viewLifecycleOwner) { (partName, total) ->
             endView.showUploadProgress(partName)
             endView.setUploadProgress(partName, total)
@@ -62,6 +66,14 @@ class UwaziSendFragment : BaseEntitySendFragment<UwaziEntityInstance>() {
                 else -> {}
             }
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (isFromEntryScreen) {
+            nav().popBackStack()
+            return true
+        }
+        return super.onBackPressed()
     }
 
     override fun readInstanceFromArguments(arguments: Bundle): UwaziEntityInstance? =
