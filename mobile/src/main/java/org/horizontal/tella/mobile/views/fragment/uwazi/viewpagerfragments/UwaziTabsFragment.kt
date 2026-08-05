@@ -4,7 +4,10 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import org.hzontal.shared_ui.veiw_pager_component.fragments.FragmentProvider
 import org.horizontal.tella.mobile.R
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.DRAFT_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.main_connexions.base.MainReportFragment
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.OUTBOX_LIST_PAGE_INDEX
+import org.horizontal.tella.mobile.views.fragment.main_connexions.base.SUBMITTED_LIST_PAGE_INDEX
 import org.horizontal.tella.mobile.views.fragment.uwazi.UwaziViewModel
 
 internal class UwaziTabsFragment : MainReportFragment() {
@@ -45,9 +48,14 @@ internal class UwaziTabsFragment : MainReportFragment() {
     }
 
     override fun getEmptyMessageForTab(position: Int): String? =
-        if (position == TEMPLATES_TAB_INDEX) {
-            getString(R.string.Uwazi_Templates_Empty_Description)
-        } else {
-            super.getEmptyMessageForTab(position)
+        when (position) {
+            TEMPLATES_TAB_INDEX -> getString(R.string.Uwazi_Templates_Empty_Description)
+            DRAFT_LIST_PAGE_INDEX + listTabOffset ->
+                getString(R.string.Uwazi_Draft_Entities_Empty_Description)
+            OUTBOX_LIST_PAGE_INDEX + listTabOffset ->
+                getString(R.string.Uwazi_Outbox_Entities_Empty_Description)
+            SUBMITTED_LIST_PAGE_INDEX + listTabOffset ->
+                getString(R.string.Uwazi_Submitted_Entities_Empty_Description)
+            else -> null
         }
 }

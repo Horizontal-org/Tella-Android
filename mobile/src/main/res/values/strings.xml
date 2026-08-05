@@ -104,6 +104,7 @@ mode activation</string>
   <string name="collect.form_exit_dialog.action_save.exit">SAVE AND EXIT</string>
   <string name="collect.form_exit_dialog.action_exit.anyway">EXIT ANYWAY</string>
   <string name="settings.docu_error_not.valid.URL">This is not a valid URL.</string>
+  <string name="settings_invalid_url">Error: The server URL is incorrect</string>
   <string name="home_action.label_quick.delete">Delete</string>
   <string name="gallery_subheading_sort.by">Sort by</string>
   <string name="gallery_list.item_newest.to.oldest">Newest to oldest</string>
@@ -441,7 +442,7 @@ connecting to a server</string>
   <string name="collect.outbox_tab.title">Outbox</string>
   <string name="Collect_RemoveForm_SheetTitle">Remove form?</string>
   <string name="fragment_uwazi">Uwazi</string>
-  <string name="Uwazi_Dowload_Temapltes_Header_Title">Add templates</string>
+  <string name="Uwazi_Dowload_Temapltes_Header_Title">Add Templates</string>
   <string name="Uwazi_RemoveTemplate_SheetTitle">Remove from device</string>
   <string name="Uwazi_Action_FillEntity">Create an entity</string>
   <string name="Uwazi_Action_RemoveTemplate">Delete Template</string>
