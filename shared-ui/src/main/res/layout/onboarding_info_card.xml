@@ -13,14 +13,12 @@
 
     <TextView
         android:id="@+id/info_card_message"
+        style="@style/Typography.Body1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_weight="1"
-        android:fontFamily="@font/open_sans"
-        android:lineSpacingExtra="2dp"
         android:textColor="@color/wa_white"
-        android:textSize="14sp"
         tools:text="Info message" />
 
 </merge>
