@@ -22,6 +22,8 @@
     <color name="delimiter">#47426F</color>
     <color name="onboardingIndicatorInactive">#DCDCDC</color>
     <color name="onboardingIndicatorActive">#D6933B</color>
+    <color name="onboarding_indicator_inactive">#66FFFFFF</color>
+    <color name="onboarding_indicator_active">@color/wa_yellow</color>
     <color name="btn_dark_letter">#FF071013</color>
     <color name="nearby_sharing_hash_step2_bg">#66071013</color>
 
